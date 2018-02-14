@@ -55,9 +55,17 @@ zero.core.util = {
 	    zero.core.camera.render(); 
 	    requestAnimationFrame(zero.core.util.animate);
 	},
+	person: function(body_generator, name, pos) {
+		var body = body_generator();
+		body.position = [pos, 0, 0];
+		return {
+			name: name,
+			body: body
+		};
+	},
 	script: function(script) {
 		var step = script.shift();
-		zero.core.util.people[step.person].say(step.line, script.length && function() {
+		if (step) zero.core.util.people[step.person].say(step.line, function() {
 			zero.core.util.script(script);
 		});
 	},
