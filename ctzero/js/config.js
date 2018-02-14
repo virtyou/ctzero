@@ -19,5 +19,6 @@
 		}],
 		"objects": []
 	},
-	"people": []
+	"people": [],
+	"script": []
 }

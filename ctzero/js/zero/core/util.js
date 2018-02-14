@@ -55,6 +55,12 @@ zero.core.util = {
 	    zero.core.camera.render(); 
 	    requestAnimationFrame(zero.core.util.animate);
 	},
+	script: function(script) {
+		var step = script.shift();
+		zero.core.util.people[step.person].say(step.line, script.length && function() {
+			zero.core.util.script(script);
+		});
+	},
 	frameCount: function() {
 		var zcu = zero.core.util;
 		if (!zcu._counter)
