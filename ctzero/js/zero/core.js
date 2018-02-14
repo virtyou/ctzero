@@ -15,6 +15,7 @@ CT.require("zero.core.Brain");
 CT.require("zero.core.Body");
 CT.require("zero.core.Person");
 
+CT.require("zero.core.Controller");
 CT.require("zero.core.Spring");
 CT.require("zero.core.Aspect");
 CT.require("zero.core.Ticker");

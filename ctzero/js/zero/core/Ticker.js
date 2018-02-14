@@ -46,42 +46,13 @@ zero.core.Ticker = CT.Class({
 		this.tick();
 	}
 });
-var ticker = zero.core.tickerController = {
-	_: {
-		collection: {}
-	},
-	tick: function() {
-		var c = ticker._.collection;
-		for (var n in c) {
-			for (var i = 0; i < c[n].length; i++)
-				c[n][i].tick();
-		}
-	},
-	get: function(name, index) {
-		if (typeof index == "number")
-			return ticker._.collection[name][index];
-		return ticker._.collection[name];
-	},
-	add: function(opts, name, parent) {
-		var t = new zero.core.Ticker({
+
+var ticker = zero.core.tickerController = new zero.core.Controller({
+	initializer: function(opts, name, parent) {
+		return new zero.core.Ticker({
 			name: name,
 			parent: parent,
 			conditions: opts
 		});
-		if (!ticker._.collection[opts.name])
-			ticker._.collection[opts.name] = [];
-		ticker._.collection[opts.name].push(t);
-		return t;
-	},
-	remove: function(name, index) {
-		var c = ticker._.collection[name];
-		if (typeof index == "number") {
-			c[index].stop();
-			CT.data.remove(c, index);
-		} else {
-			for (var i = 0; i < c.length; i++)
-				c[i].stop();
-			c.length = 0;
-		}
 	}
-};
+});
