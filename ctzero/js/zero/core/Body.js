@@ -20,6 +20,8 @@ zero.core.Body = CT.Class({
 					joints[name].part = spine[i];
 				}
 			});
+			var pos = this.position();
+			this.bone.position.set(pos.x, pos.y, pos.z);
 			this.allbones = this.thring.skeleton.bones;
 		}
 	},
