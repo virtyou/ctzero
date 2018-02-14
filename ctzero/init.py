@@ -12,3 +12,10 @@ routes = {
 	"/maps": "maps",
 	"/models": "models"
 }
+cfg = {
+	"asr": {
+		"mode": "gcloud", # or "baidu" -- default "gcloud" mode requires gcloud to be installed and configured
+		"id": None,       # baidu only
+		"secret": None    # baidu only
+	}
+}
