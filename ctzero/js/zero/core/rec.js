@@ -7,12 +7,13 @@ var rec = zero.core.rec = {
 				stream.stop();
 			};
 			recorder.ondataavailable = function(data) {
-				CT.net.formUp(data, {
+				CT.net.formUp(data.data, {
 					path: "/_zero",
 					params: {
 						action: "rec",
 						language: rec._.language
-					}
+					},
+					cb: rec._.cb
 				});
 			};
 			recorder.start();
