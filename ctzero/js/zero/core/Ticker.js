@@ -27,13 +27,13 @@ zero.core.Ticker = CT.Class({
 					delete this.oncers[s];
 				this.oncers[direction] = true;
 			}
-			s = spring.get(this.name);
+			s = this.parent.springs[this.name];
 			["target", "k"].forEach(function(property) {
 				up(s, opts, property);
 			});
 			if (opts.boost) {
 				for (s in opts.boost)
-					up(spring.get(s), opts.boost[s]);
+					up(this.parent.springs[s], opts.boost[s]);
 			}
 		}
 	},
@@ -51,10 +51,15 @@ var ticker = zero.core.tickerController = {
 		collection: {}
 	},
 	tick: function() {
-		for (var t in ticker._.collection)
-			ticker._.collection[t].tick();
+		var c = ticker._.collection;
+		for (var n in c) {
+			for (var i = 0; i < c[n].length; i++)
+				c[n][i].tick();
+		}
 	},
-	get: function(name) {
+	get: function(name, index) {
+		if (typeof index == "number")
+			return ticker._.collection[name][index];
 		return ticker._.collection[name];
 	},
 	add: function(opts, name, parent) {
@@ -63,11 +68,20 @@ var ticker = zero.core.tickerController = {
 			parent: parent,
 			conditions: opts
 		});
-		ticker._.collection[opts.name] = t;
+		if (!ticker._.collection[opts.name])
+			ticker._.collection[opts.name] = [];
+		ticker._.collection[opts.name].push(t);
 		return t;
 	},
-	remove: function(name) {
-		ticker._.collection[name].stop();
-		delete ticker._.collection[name];
+	remove: function(name, index) {
+		var c = ticker._.collection[name];
+		if (typeof index == "number") {
+			c[index].stop();
+			CT.data.remove(c, index);
+		} else {
+			for (var i = 0; i < c.length; i++)
+				c[i].stop();
+			c.length = 0;
+		}
 	}
 };

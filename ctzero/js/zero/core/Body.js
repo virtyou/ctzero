@@ -3,21 +3,23 @@ zero.core.Body = CT.Class({
 	_assembled: function() {
 		this.log("built body!");
 		if (this.opts.joints.length) {
-			var dim, name, h = this,
+			var dim, name, h = this, head,
 				spine = this.spine = [],
 				joints = this.joints = {};
 			this.opts.joints.forEach(function(part, i) {
 				if (i) // hack
 					h = h[part.name];
 				spine.push(part.name);
+			});
+			head = this.head = h.head;
+			this.head.body = this;
+			this.opts.joints.forEach(function(part, i) {
 				for (dim in part.rotation) {
 					name = part.name + "_" + dim;
-					joints[name] = aspect.add(part.rotation[dim], name);
-					joints[name].part = h;
+					joints[name] = aspect.add(part.rotation[dim], name, head);
+					joints[name].part = spine[i];
 				}
 			});
-			this.head = h.head;
-			this.head.body = this;
 			this.allbones = this.thring.skeleton.bones;
 		}
 	},

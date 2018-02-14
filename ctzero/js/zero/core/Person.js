@@ -65,7 +65,7 @@ zero.core.Person = CT.Class({
 	},
 	init: function(opts) {
 		this.log("init", opts.name);
-		thiz = this;
+		var thiz = this;
 		this.opts = opts;
 		this.name = opts.name;
 		this.body = new zero.core.Body(CT.merge(opts.body, {
