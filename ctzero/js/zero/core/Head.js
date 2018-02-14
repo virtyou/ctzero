@@ -18,10 +18,11 @@ zero.core.Head = CT.Class({
 	updaters: {
 		eyes: function() {
 			var gL = this.eyeGroupL, eyeL = gL.eyeL, cubeL = gL.cubeLeyeDummy,
-				gR = this.eyeGroupR, eyeR = gR.eyeR, cubeR = gR.cubeReyeDummy;
+				gR = this.eyeGroupR, eyeR = gR.eyeR, cubeR = gR.cubeReyeDummy,
+				eyeMorph = 0.05 * Math.sin(zero.core.util.ticker / 20);
 
-			eyeL.morph(1, 0.05 * Math.sin(2 * lightTicker));
-			eyeR.morph(1, 0.05 * Math.sin(2 * lightTicker));
+			eyeL.morph(1, eyeMorph);
+			eyeR.morph(1, eyeMorph);
 
 			//moves rotation center to correct place on parent --- every time, really? <---- !!!!
 //			gR.position([11.5, 24.5, 28]);

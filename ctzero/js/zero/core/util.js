@@ -1,7 +1,7 @@
-var lightTicker = 0,
-    lastTime, dmax = dts = 0.016;
+var lastTime, dmax = dts = 0.016;
 
 zero.core.util = {
+	ticker: 0,
 	coords: function(xyz, cb) {
 	    ["x", "y", "z"].forEach(function(dim, i) {
 	        cb(dim, xyz[dim] != undefined ? xyz[dim] : xyz[i]);
@@ -44,7 +44,7 @@ zero.core.util = {
 	    if (lastTime)
 	        dts = Math.min(dmax, (now - lastTime) / 1000);
 	    lastTime = now;
-	    lightTicker += 0.01;
+	    zero.core.util.ticker += 1;
 
 	    zero.core.springController.tick(dts);
 	    zero.core.aspectController.tick();
@@ -54,5 +54,35 @@ zero.core.util = {
 	    zero.core.camera.tick();
 	    zero.core.camera.render(); 
 	    requestAnimationFrame(zero.core.util.animate);
+	},
+	frameCount: function() {
+		var zcu = zero.core.util;
+		if (!zcu._counter)
+			zcu._counter = new zero.core.util.FrameCounter();
+		zcu._counter.on();
 	}
 };
+
+zero.core.util.FrameCounter = CT.Class({
+	CLASSNAME: "zero.core.util.FrameCounter",
+	on: function() {
+		if (this._active) return;
+		this._active = true;
+		CT.dom.show(this.node);
+		this._interval = setInterval(this.tick, 1000);
+	},
+	off: function() {
+		this._active = false;
+		CT.dom.hide(this.node);
+		clearInterval(this._interval);
+	},
+	tick: function() {
+		if (this.lastTick)
+			CT.dom.setContent(this.node, zero.core.util.ticker - this.lastTick);
+		this.lastTick = zero.core.util.ticker;
+	},
+	init: function() {
+		this.node = CT.dom.div(null, "abs ctl gigantic bold mosthigh");
+		CT.dom.addContent(document.body, this.node);
+	}
+});
