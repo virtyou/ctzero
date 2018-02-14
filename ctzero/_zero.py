@@ -27,16 +27,24 @@ CMDS = {
     },
     "baidu_token": 'wget "https://openapi.baidu.com/oauth/2.0/token?grant_type=client_credentials&client_id=%s&client_secret=%s&" -O baidu.token' # id, secret
 }
+BAIDU_TOKEN_LIFE = 2592000
+
+def load_token(now):
+    tdata = json.loads(read("baidu.token"))
+    cfg.token = tdata["access_token"]
+    cfg.expiration = tdata["expires_in"] + now
 
 def baidu_token():
     cfg = config.ctzero.asr
     now = time.time()
+    if not cfg.token and os.path.exists("baidu.token"):
+        ts = os.path.getmtime("baidu.token")
+        if ts + BAIDU_TOKEN_LIFE > now:
+            load_token(ts)
     if not cfg.token or cfg.expiration < now:
         log("acquiring baidu token")
         cmd(CMDS["baidu_token"]%(cfg.id, cfg.secret))
-        tdata = json.loads(read("baidu.token"))
-        cfg.token = tdata["access_token"]
-        cfg.expiration = tdata["expires_in"] + now
+        load_token(now)
 
 def response():
     action = cgi_get("action", choices=["say", "rec"])
