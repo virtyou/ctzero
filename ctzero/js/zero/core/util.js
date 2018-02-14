@@ -60,6 +60,7 @@ zero.core.util = {
 		if (!zcu._counter)
 			zcu._counter = new zero.core.util.FrameCounter();
 		zcu._counter.on();
+		return zcu._counter;
 	}
 };
 
