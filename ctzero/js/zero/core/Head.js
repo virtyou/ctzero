@@ -1,22 +1,22 @@
-var blinkTicker=0;
-var blinkWait=1;
-var blinkDuration=0.1;
-
-var lookDown=0;
-var lookUp=0;
-var lookDown_oncer=0;
-var lookDown_oncer2=0;
-var lookDownTicker=0;
-var lookDown_pause=2;
-var lookUp_pause=2;
-var lookDown_pause_factor=3;
-var lookUp_pause_factor=2;
-// TODO: transmute above vars, plus updaters[eyes|spontanimation], to Tickers
-
 zero.core.Head = CT.Class({
 	CLASSNAME: "zero.core.Head",
+
+	blinkTicker: 0,
+	blinkWait: 1,
+	blinkDuration: 0.1,
+
+	lookDown: 0,
+	lookUp: 0,
+	lookDown_oncer: 0,
+	lookDown_oncer2: 0,
+	lookDownTicker: 0,
+	lookDown_pause: 2,
+	lookUp_pause: 2,
+	lookDown_pause_factor: 3,
+	lookUp_pause_factor: 2,
+
 	updaters: {
-		eyes: function() {
+		eyes: function() { // TODO: Tickerize some of this....
 			var gL = this.eyeGroupL, eyeL = gL.eyeL, cubeL = gL.cubeLeyeDummy,
 				gR = this.eyeGroupR, eyeR = gR.eyeR, cubeR = gR.cubeReyeDummy,
 				eyeMorph = 0.05 * Math.sin(zero.core.util.ticker / 20);
@@ -25,8 +25,6 @@ zero.core.Head = CT.Class({
 			eyeR.morph(1, eyeMorph);
 
 			//moves rotation center to correct place on parent --- every time, really? <---- !!!!
-//			gR.position([11.5, 24.5, 28]);
-//			gL.position([-11.5, 24.5, 28.6]);
 			gR.position([3, 6, 7.22]);
 			gL.position([-3, 6, 7.22]);
 
@@ -40,36 +38,36 @@ zero.core.Head = CT.Class({
 				});
 			});
 
-			var cpos = camera.position();
-			lookDownTarget = { x: cpos.x, y: cpos.y - 90, z: cpos.z };
-			lookUpTarget = { x: cpos.x + 100, y: cpos.y + 100, z: cpos.z };
+			var cpos = camera.position(),
+				lookDownTarget = { x: cpos.x, y: cpos.y - 90, z: cpos.z },
+				lookUpTarget = { x: cpos.x + 100, y: cpos.y + 100, z: cpos.z };
 
 			cubeL.thring.lookAt(cpos);
 			cubeR.thring.lookAt(cpos);
 
-			if (lookDown == 1) {
-				lookDownTicker += 0.01;
-				if (lookDown_oncer == 0) {
-					lookDown_pause = lookDown_pause_factor * Math.random();
-					lookUp_pause = lookUp_pause_factor * Math.random();
-					lookDown_oncer = 1;
-					lookDown_oncer2 = 0;
+			if (this.lookDown == 1) {
+				this.lookDownTicker += 0.01;
+				if (this.lookDown_oncer == 0) {
+					this.lookDown_pause = this.lookDown_pause_factor * Math.random();
+					this.lookUp_pause = this.lookUp_pause_factor * Math.random();
+					this.lookDown_oncer = 1;
+					this.lookDown_oncer2 = 0;
 				}
-				if (lookDownTicker < lookDown_pause){
+				if (this.lookDownTicker < this.lookDown_pause){
 					cubeL.thring.lookAt(lookDownTarget);
 					cubeR.thring.lookAt(lookDownTarget);
 				}
-				else if (!(lookDownTicker < (lookDown_pause + lookUp_pause))) {
-					lookDown_oncer = 0;
-					lookDownTicker = 0;
+				else if (!(this.lookDownTicker < (this.lookDown_pause + this.lookUp_pause))) {
+					this.lookDown_oncer = 0;
+					this.lookDownTicker = 0;
 				}
 			}
-			else if (lookDown_oncer2 == 0) {
-				lookDown_oncer = 0;
-				lookDown_oncer2 = 1;
-				lookDownTicker = 0
+			else if (this.lookDown_oncer2 == 0) {
+				this.lookDown_oncer = 0;
+				this.lookDown_oncer2 = 1;
+				this.lookDownTicker = 0
 			}
-			if (lookUp == 1) {
+			if (this.lookUp == 1) {
 				cubeL.thring.lookAt(lookUpTarget);
 				cubeR.thring.lookAt(lookUpTarget);
 			}
@@ -131,7 +129,7 @@ zero.core.Head = CT.Class({
 			}
 			geo.verticesNeedUpdate = true;
 		},
-		spontanimation: function() { // TODO: use Tickers for this (and top vars)!
+		spontanimation: function() { // TODO: use Tickers or something for this (and top vars)!
 			var shake = this.springs.shake,
 			    nod = this.springs.nod,
 			    lids = this.springs.lids,
@@ -145,16 +143,16 @@ zero.core.Head = CT.Class({
 				this.springs.smileEyes.target -= 5 * eyeRot.x;
 			else
 				lids.target = -0.2;
-			blinkTicker += 0.01;
-			if (blinkTicker > 0.04)
+			this.blinkTicker += 0.01;
+			if (this.blinkTicker > 0.04)
 				lids.k = 220;
-			if (blinkTicker > blinkWait && blinkTicker < (blinkWait + blinkDuration)) {
+			if (this.blinkTicker > this.blinkWait && this.blinkTicker < (this.blinkWait + this.blinkDuration)) {
 				lids.target = 1; // blink
 				lids.k = 2000;
 			} else {
-				blinkWait = 3 * Math.random();
-				blinkDuration = 0.1 * Math.random();
-				blinkTicker = 0;
+				this.blinkWait = 3 * Math.random();
+				this.blinkDuration = 0.1 * Math.random();
+				this.blinkTicker = 0;
 			}
 		}
 	},
