@@ -48,6 +48,7 @@ zero.core.Person = CT.Class({
 	},
 	say: function(data, cb) {
 		zero.core.rec.cancel();
+		this.watch();
 		if (data.audio)
 			this._.playClip(this.brain.say_data(data, cb));
 		else
