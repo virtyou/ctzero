@@ -123,6 +123,6 @@ var camera = zero.core.camera = {
 			camera.register(p, config.camera.patterns[p]);
 		if ("initial" in config.camera.patterns)
 			camera.set("initial");
-		window.addEventListener("resize", function() { camera.resize(); }, false);
+		window.addEventListener("resize", camera.update, false);
 	}
 };
