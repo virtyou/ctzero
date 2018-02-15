@@ -7,6 +7,13 @@ zero.core.util = {
 	        cb(dim, xyz[dim] != undefined ? xyz[dim] : xyz[i]);
 	    });
 	},
+	vector: function(p1, p2) { // p2 - p1
+		return {
+			x: p2.x - p1.x,
+			y: p2.y - p1.y,
+			z: p2.z - p1.z
+		};
+	},
 	b64toBlob: function(b64Data, contentType, sliceSize) {
 		// from: https://stackoverflow.com/questions/16245767/creating-a-blob-from-a-base64-string-in-javascript
 		contentType = contentType || '';
@@ -35,7 +42,7 @@ zero.core.util = {
 						person.watch();
 						requestAnimationFrame(zero.core.util.animate);
 					}
-					onbuild && onbuild(person, room);
+					onbuild && onbuild(person, room, i);
 				}
 			}));
 		});
@@ -66,7 +73,7 @@ zero.core.util = {
 	script: function(script) {
 		var step = script.shift();
 		if (step) zero.core.util.people[step.person].say(step.line, function() {
-			zero.core.util.script(script);
+			setTimeout(zero.core.util.script, step.pause || 0, script);
 		});
 	},
 	frameCount: function() {
