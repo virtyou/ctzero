@@ -2,7 +2,10 @@ var camera = zero.core.camera = {
 	_: {
 		profiles: {}
 	},
-	springs: {},
+	springs: {
+		position: {},
+		rotation: {}
+	},
 	render: function() {
 		var _ = camera._;
 		_.renderer.render(camera.scene, _.camera);
@@ -30,21 +33,22 @@ var camera = zero.core.camera = {
 		if (camera._.useControls)
 			camera._.controls.update();
 		else {
+			var s = camera.springs.position;
 			camera.position({
-				x: camera.springs.x.value,
-				y: camera.springs.y.value,
-				z: camera.springs.z.value
+				x: s.x.value,
+				y: s.y.value,
+				z: s.z.value
 			});
 			if (camera._.subject)
 				camera.look(camera._.subject.position(null, true));
 		}
 	},
-	random: function(dimension, target, factor) {
-		camera.springs[dimension].target = target + factor * Math.random();
+	random: function(dimension, target, factor, aspect) {
+		camera.springs[aspect || "position"][dimension].target = target + factor * Math.random();
 	},
 	move: function(pos) {
 		zero.core.util.coords(pos, function(dim, val) {
-			camera.springs[dim].target = val;
+			camera.springs.position[dim].target = val;
 		});
 	},
 	position: function(pos) {
@@ -65,7 +69,7 @@ var camera = zero.core.camera = {
 						target = pad.target || 0;
 					if (pad.factor)
 						target += pad.factor * Math.random();
-					camera.springs[dimension].target = target;
+					camera.springs[aspect][dimension].target = target;
 				}
 			}
 		});
@@ -90,12 +94,12 @@ var camera = zero.core.camera = {
 	controls: function(useThem) {
 		camera._.useControls = useThem;
 		if (useThem) {
-			zero.core.util.coords(camera.springs, function(dim, s) {
+			zero.core.util.coords(camera.springs.position, function(dim, s) {
 				camera._.controls.position0[dim] = s.value;
 			});
 		} else {
 			zero.core.util.coords(camera._.camera.position, function(dim, val) {
-				var s = camera.springs[dim];
+				var s = camera.springs.position[dim];
 				s.target = s.value;
 				s.value = val;
 			});
@@ -117,8 +121,10 @@ var camera = zero.core.camera = {
 
 		for (var k in config.camera.controls)
 			_.controls[k] = config.camera.controls[k];
-		for (var s in config.camera.springs)
-			camera.springs[s] = zero.core.springController.add(config.camera.springs[s], "camera" + s);
+		for (var a in config.camera.springs) {
+			for (var s in config.camera.springs[a])
+				camera.springs[a][s] = zero.core.springController.add(config.camera.springs[a][s], "camera" + a + s);
+		}
 		for (var p in config.camera.patterns)
 			camera.register(p, config.camera.patterns[p]);
 		if ("initial" in config.camera.patterns)
