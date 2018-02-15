@@ -4,7 +4,8 @@ var camera = zero.core.camera = {
 	},
 	springs: {
 		position: {},
-		rotation: {}
+		rotation: {},
+		looker: {}
 	},
 	render: function() {
 		var _ = camera._;
@@ -22,7 +23,9 @@ var camera = zero.core.camera = {
 			camera._.controls.handleResize();
 	},
 	look: function(pos) {
-		camera._.camera.lookAt(pos);
+		zero.core.util.coords(pos, function(dim, val) {
+			camera.springs.looker[dim].target = val;
+		});
 	},
 	follow: function(thing) {
 		if (!thing)
@@ -33,14 +36,21 @@ var camera = zero.core.camera = {
 		if (camera._.useControls)
 			camera._.controls.update();
 		else {
-			var s = camera.springs.position;
+			var s = camera.springs;
 			camera.position({
-				x: s.x.value,
-				y: s.y.value,
-				z: s.z.value
+				x: s.position.x.value,
+				y: s.position.y.value,
+				z: s.position.z.value
 			});
-			if (camera._.subject)
+			if (camera._.subject) {
 				camera.look(camera._.subject.position(null, true));
+				camera.looker({
+					x: s.looker.x.value,
+					y: s.looker.y.value,
+					z: s.looker.z.value
+				});
+				camera._.camera.lookAt(camera._.looker.position());
+			}
 		}
 	},
 	random: function(dimension, target, factor, aspect) {
@@ -51,12 +61,32 @@ var camera = zero.core.camera = {
 			camera.springs.position[dim].target = val;
 		});
 	},
+	looker: function(pos) {
+		if (!pos)
+			return camera._.looker.position();
+		zero.core.util.coords(pos, function(dim, val) {
+			camera._.looker.adjust("position", dim, val);
+		});
+	},
 	position: function(pos) {
 		var _ = camera._;
 		if (!pos)
 			return _.camera.position;
 		zero.core.util.coords(pos, function(dim, val) {
 			_.camera.position[dim] = val;
+		});
+	},
+	rotate: function(rot) {
+		zero.core.util.coords(rot, function(dim, val) {
+			camera.springs.rotation[dim].target = val;
+		});
+	},
+	rotation: function(rot) {
+		var _ = camera._;
+		if (!rot)
+			return _.camera.rotation;
+		zero.core.util.coords(rot, function(dim, val) {
+			_.camera.rotation[dim] = val;
 		});
 	},
 	target: function(profile) {
@@ -118,6 +148,14 @@ var camera = zero.core.camera = {
 		CT.dom.addContent(document.body, _.container);
 		_.container.appendChild(_.renderer.domElement);
 		_.controls = new THREE.TrackballControls(_.camera);
+		_.looker = new zero.core.Thing({
+			name: "looker",
+			geometry: new THREE.CubeGeometry(1, 1, 15),
+			material: {
+				color: 0x00ff00,
+				visible: false
+			}
+		});
 
 		for (var k in config.camera.controls)
 			_.controls[k] = config.camera.controls[k];
