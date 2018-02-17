@@ -87,14 +87,15 @@ zero.core.Head = CT.Class({
 		},
 		mouth: function() {
 			var cur = this.currentPhoneme, vis = this._viseme,
-				t, talking = cur != "pau" && cur !== "sil";
+				t, talking = cur != "pau" && cur !== "sil", changed;
 			if (talking != this.talking) {
+				changed = true;
 				this.talking = talking;
 				for (t in this.tickers)
 					this.tickers[t].tick();
 			} else
 				this.talking = talking;
-			phonemes.forEach(function(pdata) {
+			(talking || changed) && phonemes.forEach(function(pdata) {
 				if (pdata.phones.indexOf(cur) != -1) {
 					vis(pdata, "target");
 					vis(pdata, "k");
@@ -115,7 +116,7 @@ zero.core.Head = CT.Class({
 				}
 			}
 		},
-		aspects: function() {
+		morphs: function() {
 			var geo = this.body.thring.geometry, a, i, val, dim,
 				vert = geo.vertices[0], dims = ["x", "y", "z"];
 			for (i = 0; i < geo.vertices.length * 3; i++) {
@@ -164,7 +165,7 @@ zero.core.Head = CT.Class({
 		if (!this.isReady()) return;
 		this.updaters.eyes();
 		this.updaters.mouth();
-		this.updaters.aspects();
+		this.updaters.morphs();
 		this.updaters.spontanimation();
 	},
 	init: function(opts) {
