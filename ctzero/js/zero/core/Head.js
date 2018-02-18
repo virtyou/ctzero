@@ -117,17 +117,18 @@ zero.core.Head = CT.Class({
 			}
 		},
 		morphs: function() {
-			var geo = this.body.thring.geometry, a, i, val, dim,
-				vert = geo.vertices[0], dims = ["x", "y", "z"];
-			for (i = 0; i < geo.vertices.length * 3; i++) {
-				val = base[i];
-				for (a in this.aspects)
-					val += (morphStack[a][i] - base[i]) * this.aspects[a].value;
-				dim = dims[i % 3];
-				if (dim == "x")
-					vert = geo.vertices[i / 3];
-				vert[dim] = val;
+			var geo = this.body.thring.geometry, modz = {},
+				dimz = ["x", "y", "z"], a, i, val, stack;
+			for (a in this.morphs) {
+				val = this.aspects[a].value;
+				stack = this.morphs[a];
+				for (i in stack) {
+					modz[i] = modz[i] || base[i];
+					modz[i] += (stack[i] - base[i]) * val;
+				}
 			}
+			for (i in modz)
+				geo.vertices[Math.floor(i / 3)][dimz[i % 3]] = modz[i];
 			geo.verticesNeedUpdate = true;
 		},
 		spontanimation: function() { // TODO: use Tickers or something for this (and top vars)!
@@ -157,6 +158,19 @@ zero.core.Head = CT.Class({
 			}
 		}
 	},
+	_delta: function(a) {
+		var m = morphStack[a],
+			morphz = this.morphs[a] = {};
+		base.forEach(function(b, i) {
+			if (b != m[i])
+				morphz[i] = m[i];
+		});
+	},
+	_morphs: function() {
+		this.morphs = {};
+		for (var a in this.aspects)
+			this._delta(a);
+	},
 	_viseme: function(vdata, vtype) {
 		for (var k in vdata[vtype] || {})
 			this.springs[k][vtype] = vdata[vtype][k];
@@ -171,5 +185,6 @@ zero.core.Head = CT.Class({
 	init: function(opts) {
 		for (var p in phonemes.forms)
 			this.springs[p] = spring.add(phonemes.forms[p], p);
+		this._morphs();
 	}
 }, zero.core.Thing);
