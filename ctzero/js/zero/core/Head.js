@@ -116,7 +116,23 @@ zero.core.Head = CT.Class({
 				}
 			}
 		},
+		morphsIos: function() {
+			var geo = this.body.thring.geometry, a, i, val, dim,
+				vert = geo.vertices[0], dims = ["x", "y", "z"];
+			for (i = 0; i < geo.vertices.length * 3; i++) {
+				val = base[i];
+				for (a in this.aspects)
+					val += (morphStack[a][i] - base[i]) * this.aspects[a].value;
+				dim = dims[i % 3];
+				if (dim == "x")
+					vert = geo.vertices[i / 3];
+				vert[dim] = val;
+			}
+			geo.verticesNeedUpdate = true;
+		},
 		morphs: function() {
+			if (CT.info.iOs)
+				return this.updaters.morphsIos();
 			var geo = this.body.thring.geometry, modz = {},
 				dimz = ["x", "y", "z"], a, i, val, stack;
 			for (a in this.morphs) {
@@ -185,6 +201,6 @@ zero.core.Head = CT.Class({
 	init: function(opts) {
 		for (var p in phonemes.forms)
 			this.springs[p] = spring.add(phonemes.forms[p], p);
-		this._morphs();
+		CT.info.iOS || this._morphs();
 	}
 }, zero.core.Thing);
