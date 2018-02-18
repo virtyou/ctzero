@@ -1,4 +1,4 @@
-var lastTime, dmax = dts = 0.016;
+var lastTime, dmax = dts = 0.032;//0.016;
 
 zero.core.util = {
 	ticker: 0,
