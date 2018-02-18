@@ -5,16 +5,6 @@ zero.core.Head = CT.Class({
 	blinkWait: 1,
 	blinkDuration: 0.1,
 
-	lookDown: 0,
-	lookUp: 0,
-	lookDown_oncer: 0,
-	lookDown_oncer2: 0,
-	lookDownTicker: 0,
-	lookDown_pause: 2,
-	lookUp_pause: 2,
-	lookDown_pause_factor: 3,
-	lookUp_pause_factor: 2,
-
 	updaters: {
 		eyes: function() { // TODO: Tickerize some of this....
 			var gL = this.eyeGroupL, eyeL = gL.eyeL, cubeL = gL.cubeLeyeDummy,
@@ -38,39 +28,9 @@ zero.core.Head = CT.Class({
 				});
 			});
 
-			var cpos = camera.position(),
-				lookDownTarget = { x: cpos.x, y: cpos.y - 90, z: cpos.z },
-				lookUpTarget = { x: cpos.x + 100, y: cpos.y + 100, z: cpos.z };
-
-			cubeL.thring.lookAt(cpos);
-			cubeR.thring.lookAt(cpos);
-
-			if (this.lookDown == 1) {
-				this.lookDownTicker += 0.01;
-				if (this.lookDown_oncer == 0) {
-					this.lookDown_pause = this.lookDown_pause_factor * Math.random();
-					this.lookUp_pause = this.lookUp_pause_factor * Math.random();
-					this.lookDown_oncer = 1;
-					this.lookDown_oncer2 = 0;
-				}
-				if (this.lookDownTicker < this.lookDown_pause){
-					cubeL.thring.lookAt(lookDownTarget);
-					cubeR.thring.lookAt(lookDownTarget);
-				}
-				else if (!(this.lookDownTicker < (this.lookDown_pause + this.lookUp_pause))) {
-					this.lookDown_oncer = 0;
-					this.lookDownTicker = 0;
-				}
-			}
-			else if (this.lookDown_oncer2 == 0) {
-				this.lookDown_oncer = 0;
-				this.lookDown_oncer2 = 1;
-				this.lookDownTicker = 0
-			}
-			if (this.lookUp == 1) {
-				cubeL.thring.lookAt(lookUpTarget);
-				cubeR.thring.lookAt(lookUpTarget);
-			}
+			var cpos = camera.position(null, true);
+			cubeL.look(cpos);
+			cubeR.look(cpos);
 
 			if (gL.rotation.x > -0.2)
 				this.springs.lids.target += gL.rotation.x;
