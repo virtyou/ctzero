@@ -12,6 +12,14 @@ zero.core.Thing = CT.Class({
 	isReady: function() {
 		return this._.ready;
 	},
+	look: function(pos) {
+		var myPos = this.position(null, true);
+		this.thring.lookAt({
+			x: pos.x - myPos.x,
+			y: pos.y - myPos.y,
+			z: pos.z - myPos.z
+		});
+	},
 	// position(), rotation(), scale(): getters _and_ setters
 	position: function(position, world) {
 		if (position)
