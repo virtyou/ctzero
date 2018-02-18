@@ -11,8 +11,10 @@ CT.require("zero.core.Thing");
 CT.require("zero.core.Light");
 CT.require("zero.core.Room");
 CT.require("zero.core.Head");
-CT.require("zero.core.Brain");
 CT.require("zero.core.Body");
+
+CT.require("zero.core.Brain");
+CT.require("zero.core.Energy");
 CT.require("zero.core.Person");
 
 CT.require("zero.core.Controller");

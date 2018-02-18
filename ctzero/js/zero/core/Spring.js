@@ -1,11 +1,14 @@
-var moodMaster_k = 1; // 4; // 2; //1
-var moodMaster_damp = 1; // 2; // 2;  // 1
-var moodMaster_magnitude = 1;
-// TODO: Mood Master!! (zero.core.Mood)
-
 zero.core.Spring = CT.Class({
 	CLASSNAME: "zero.core.Spring",
 	tick: function(dts) {
+		if (this.parent) {
+			var mood = this.parent.energy();
+				moodMaster_damp = mood.damp,
+				moodMaster_k = mood.k;
+		} else {
+			var moodMaster_damp = 1,
+				moodMaster_k = 1;
+		}
 		this.target += this.boost;
 		this.value += this.velocity * dts;
 		this.velocity += (this.k * moodMaster_k * (this.target - this.value)
@@ -18,7 +21,7 @@ zero.core.Spring = CT.Class({
 		}
 	},
 	init: function(opts) {
-		this.opts = opts = CT.merge(opts, {
+		this.opts = opts = CT.merge(opts, { // also, parent
 			k: 0,
 			damp: 0,
 			boost: 0,
@@ -32,6 +35,7 @@ zero.core.Spring = CT.Class({
 		this.damp = opts.damp;
 		this.boost = opts.boost;
 		this.value = opts.value;
+		this.parent = opts.parent;
 		this.breaks = opts.breaks;
 		this.target =  opts.target;
 		this.velocity = opts.velocity;

@@ -71,11 +71,17 @@ zero.core.Person = CT.Class({
 		this.name = opts.name;
 		this.body = new zero.core.Body(CT.merge(opts.body, {
 			onbuild: function() {
+				thiz.head = thiz.body.head;
+				thiz.body.person = thiz.head.person = thiz;
 				opts.onbuild && opts.onbuild(thiz);
 			}
 		}));
 		this.brain = new zero.core.Brain({
 			person: this
+		});
+		this.energy = new zero.core.Energy({
+			k: 1,
+			damp: 1
 		});
 		this._.initSpeech();
 		camera.register(this.name, this.watch);

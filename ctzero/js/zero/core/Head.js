@@ -191,6 +191,9 @@ zero.core.Head = CT.Class({
 		for (var k in vdata[vtype] || {})
 			this.springs[k][vtype] = vdata[vtype][k];
 	},
+	energy: function() {
+		return this.person.energy;
+	},
 	tick: function() {
 		if (!this.isReady()) return;
 		this.updaters.eyes();
@@ -200,7 +203,7 @@ zero.core.Head = CT.Class({
 	},
 	init: function(opts) {
 		for (var p in phonemes.forms)
-			this.springs[p] = spring.add(phonemes.forms[p], p);
+			this.springs[p] = spring.add(phonemes.forms[p], p, this);
 		CT.info.iOS || this._morphs();
 	}
 }, zero.core.Thing);
