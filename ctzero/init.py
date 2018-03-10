@@ -1,5 +1,5 @@
 copies = {
-	".": ["sound", "sound_in", "maps", "models"]
+	".": ["sound", "sound_in", "maps", "models", "morphs"] 
 }
 
 syms = {
@@ -10,7 +10,8 @@ routes = {
 	"/_zero": "_zero.py",
 	"/sound": "sound",
 	"/maps": "maps",
-	"/models": "models"
+	"/models": "models",
+	"/morphs": "morphs"
 }
 cfg = {
 	"asr": {
