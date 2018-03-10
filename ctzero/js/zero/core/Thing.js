@@ -195,6 +195,7 @@ zero.core.Thing = CT.Class({
 			springs: {},
 			aspects: {},
 			tickers: {},
+			morphStack: null,
 			iterator: null,
 			onbuild: null // also supports: "onassemble"
 		});
