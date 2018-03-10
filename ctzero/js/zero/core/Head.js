@@ -79,7 +79,7 @@ zero.core.Head = CT.Class({
 		morphsIos: function() {
 			var geo = this.body.thring.geometry, a, i, val, dim,
 				vert = geo.vertices[0], dims = ["x", "y", "z"],
-				morphStack = this.opts.morphStack;
+				morphStack = this.morphStack, base = this.base;
 			for (i = 0; i < geo.vertices.length * 3; i++) {
 				val = base[i];
 				for (a in this.aspects)
@@ -95,7 +95,7 @@ zero.core.Head = CT.Class({
 			if (CT.info.iOs)
 				return this.updaters.morphsIos();
 			var geo = this.body.thring.geometry, modz = {},
-				dimz = ["x", "y", "z"], a, i, val, stack;
+				dimz = ["x", "y", "z"], a, i, val, stack, base = this.base;
 			for (a in this.morphs) {
 				val = this.aspects[a].value;
 				stack = this.morphs[a];
@@ -136,9 +136,9 @@ zero.core.Head = CT.Class({
 		}
 	},
 	_delta: function(a) {
-		var m = this.opts.morphStack[a],
+		var m = this.morphStack[a],
 			morphz = this.morphs[a] = {};
-		base.forEach(function(b, i) {
+		this.base.forEach(function(b, i) {
 			if (b != m[i])
 				morphz[i] = m[i];
 		});

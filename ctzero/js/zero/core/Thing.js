@@ -206,6 +206,11 @@ zero.core.Thing = CT.Class({
 			for (name in opts[iz])
 				thiz[iz][name] = zero.core[influence + "Controller"].add(opts[iz][name], name, thiz);
 		});
+		if (opts.morphStack) { // required for Head (for instance)
+			var ms = CT.require("morphs." + opts.morphStack, true);
+			this.morphStack = ms.stack; 
+			this.base = ms.base;
+		}
 		setTimeout(this.build); // next post-init tick
 	}
 });
