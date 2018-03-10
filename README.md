@@ -5,7 +5,8 @@ This package contains the core zero libraries.
 # Back (Init Config)
 
     copies = {
-    	".": ["sound", "sound_in", "maps", "models"]
+    	".": ["sound", "sound_in", "maps", "models"],
+    	"js": ["morphs"]
     }
     
     syms = {
@@ -51,5 +52,6 @@ This package contains the core zero libraries.
     		}],
     		"objects": []
     	},
-    	"people": []
+    	"people": [],
+    	"script": []
     }
