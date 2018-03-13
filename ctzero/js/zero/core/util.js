@@ -34,15 +34,16 @@ zero.core.util = {
 	init: function(onbuild) {
 		zero.core.camera.init();
 		var cfg = core.config.ctzero, people = zero.core.util.people = {},
-			room = zero.core.util.room = new zero.core.Room(cfg.room);
+			room = zero.core.util.room = new zero.core.Room(cfg.room), isLast;
 		cfg.people.forEach(function(pobj, i) {
 			people[pobj.name] = new zero.core.Person(CT.merge(pobj, {
 				onbuild: function(person) {
-					if (i == cfg.people.length - 1) {
+					isLast = i == cfg.people.length - 1;
+					if (isLast) {
 						person.watch();
 						requestAnimationFrame(zero.core.util.animate);
 					}
-					onbuild && onbuild(person, room, i);
+					onbuild && onbuild(person, room, i, isLast);
 				}
 			}));
 		});
