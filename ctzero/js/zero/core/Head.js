@@ -28,7 +28,7 @@ zero.core.Head = CT.Class({
 				});
 			});
 
-			var cpos = camera.position(null, true);
+			var cpos = (this.person.subject || camera).position(null, true);
 			cubeL.look(cpos);
 			cubeR.look(cpos);
 

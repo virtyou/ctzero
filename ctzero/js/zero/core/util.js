@@ -65,7 +65,7 @@ zero.core.util = {
 	},
 	person: function(body_generator, name, pos) {
 		var body = body_generator();
-		body.position = [pos, 0, 0];
+		body.position = pos;
 		return {
 			name: name,
 			body: body

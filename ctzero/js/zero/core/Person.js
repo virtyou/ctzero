@@ -57,12 +57,21 @@ zero.core.Person = CT.Class({
 	tick: function() {
 		this.body.tick();
 	},
-	watch: function(nofollow) {
+	watch: function(nofollow, noroom) {
 		var cube = this.body.looker;
 		if (nofollow)
 			camera.look(cube.position());
 		else
 			camera.follow(cube);
+		if (!noroom) {
+			var pz = zero.core.util.people;
+			for (var p in pz)
+				if (p != this.name)
+					 pz[p].look(cube);
+		}
+	},
+	look: function(subject) {
+		this.subject = subject;
 	},
 	init: function(opts) {
 		this.log("init", opts.name);
