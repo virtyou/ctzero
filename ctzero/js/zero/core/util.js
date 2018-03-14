@@ -41,7 +41,7 @@ zero.core.util = {
 					isLast = i == cfg.people.length - 1;
 					if (isLast) {
 						person.watch();
-						requestAnimationFrame(zero.core.util.animate);
+						setTimeout(requestAnimationFrame, 0, zero.core.util.animate);
 					}
 					onbuild && onbuild(person, room, i, isLast);
 				}
