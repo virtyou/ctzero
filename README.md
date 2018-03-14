@@ -4,9 +4,11 @@ This package contains the core zero libraries.
 
 # Back (Init Config)
 
+    import os
+    mdir = os.path.join("js", "morphs")
+    dirs = ["sound", "sound_in", "maps", "models", mdir]
     copies = {
-    	".": ["sound", "sound_in", "maps", "models"],
-    	"js": ["morphs"]
+    	mdir: ["head1.js"]
     }
     
     syms = {
