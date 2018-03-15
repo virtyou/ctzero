@@ -34,9 +34,14 @@ zero.core.Body = CT.Class({
 			bonez[this.spine.indexOf(name)].rotation[axis] = joint.value;
 		}
 	},
+	energy: function() {
+		return this.person && this.person.energy;
+	},
 	tick: function() {
 		this._setRotation();
 		this.head.tick();
+		if (this.springs.bob)
+			this.bone.position.y = this.springs.bob.value;
 	},
 	init: function(opts) {
 		this.opts = opts = CT.merge(this.opts, opts, {
