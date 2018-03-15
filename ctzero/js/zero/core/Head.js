@@ -153,7 +153,7 @@ zero.core.Head = CT.Class({
 			this.springs[k][vtype] = vdata[vtype][k];
 	},
 	energy: function() {
-		return this.person.energy;
+		return this.person && this.person.energy;
 	},
 	tick: function() {
 		if (!this.isReady()) return;
