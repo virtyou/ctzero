@@ -4,7 +4,8 @@ zero.core.util = {
 	ticker: 0,
 	coords: function(xyz, cb) {
 	    ["x", "y", "z"].forEach(function(dim, i) {
-	        cb(dim, xyz[dim] != undefined ? xyz[dim] : xyz[i]);
+	        var val = xyz[dim] != undefined ? xyz[dim] : xyz[i];
+	        val != undefined && cb(dim, val);
 	    });
 	},
 	vector: function(p1, p2) { // p2 - p1
