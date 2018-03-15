@@ -35,18 +35,23 @@ zero.core.util = {
 		zero.core.camera.init();
 		var cfg = core.config.ctzero, people = zero.core.util.people = {},
 			room = zero.core.util.room = new zero.core.Room(cfg.room), isLast;
-		cfg.people.forEach(function(pobj, i) {
-			people[pobj.name] = new zero.core.Person(CT.merge(pobj, {
-				onbuild: function(person) {
-					isLast = i == cfg.people.length - 1;
-					if (isLast) {
-						person.watch();
-						setTimeout(requestAnimationFrame, 0, zero.core.util.animate);
+		if (cfg.people.length) {
+			cfg.people.forEach(function(pobj, i) {
+				people[pobj.name] = new zero.core.Person(CT.merge(pobj, {
+					onbuild: function(person) {
+						isLast = i == cfg.people.length - 1;
+						if (isLast) {
+							person.watch();
+							setTimeout(requestAnimationFrame, 0, zero.core.util.animate);
+						}
+						onbuild && onbuild(person, room, i, isLast);
 					}
-					onbuild && onbuild(person, room, i, isLast);
-				}
-			}));
-		});
+				}));
+			});
+		} else {
+			setTimeout(requestAnimationFrame, 0, zero.core.util.animate);
+			onbuild && onbuild();
+		}
 	},
 	animate: function(now) {
 	    if (lastTime)
@@ -62,6 +67,15 @@ zero.core.util = {
 	    zero.core.camera.tick();
 	    zero.core.camera.render(); 
 	    requestAnimationFrame(zero.core.util.animate);
+	},
+	join: function(person, onready) {
+		var fullp = new zero.core.Person(CT.merge(person, {
+			onbuild: function() {
+				zero.core.util.people[person.name] = fullp;
+				fullp.watch();
+				onready && onready();
+			}
+		}));
 	},
 	person: function(body_generator, name, pos) {
 		var body = body_generator();
