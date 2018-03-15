@@ -9,7 +9,36 @@
 			"staticMoving": true,
 			"dynamicDampingFactor": 0.3
 		},
-		"springs": {},
+		"springs": {
+			"position": {
+				"x": {
+					"k": 20,
+					"damp": 40
+				},
+				"y": {
+					"k": 20,
+					"damp": 40
+				},
+				"z": {
+					"k": 20,
+					"damp": 40
+				}
+			},
+			"looker": {
+				"x": {
+					"k": 20,
+					"damp": 5
+				},
+				"y": {
+					"k": 20,
+					"damp": 5
+				},
+				"z": {
+					"k": 20,
+					"damp": 5
+				}
+			}
+		},
 		"patterns": {}
 	},
 	"room": {
