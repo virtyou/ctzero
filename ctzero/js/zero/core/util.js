@@ -73,7 +73,7 @@ zero.core.util = {
 			onbuild: function() {
 				zero.core.util.people[person.name] = fullp;
 				fullp.watch();
-				onready && onready();
+				onready && onready(fullp);
 			}
 		}));
 	},
