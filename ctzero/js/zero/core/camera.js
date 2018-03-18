@@ -117,6 +117,9 @@ var camera = zero.core.camera = {
 			}
 		});
 	},
+	get: function(which) {
+		return camera._[which || "camera"];
+	},
 	set: function(name) {
 		CT.log("camera set " + name);
 		var _ = camera._, profile = _.profiles[name];
