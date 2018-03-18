@@ -32,25 +32,38 @@ var camera = zero.core.camera = {
 			return camera._.subject;
 		camera._.subject = thing;
 	},
+	perspective: function(person) {
+		camera._.perspective = person;
+	},
+	_tickPerspective: function() {
+		if (camera._.perspective)
+			zero.core.util.coords(camera._.perspective.head.eyeGroupR.position(null, true),
+				function(dim, val) { camera.springs.position[dim].target = val; });
+	},
+	_tickSubject: function() {
+		if (camera._.subject) {
+			var looker = camera.springs.looker;
+			camera.look(camera._.subject.position(null, true));
+			camera.looker({
+				x: looker.x.value,
+				y: looker.y.value,
+				z: looker.z.value
+			});
+			camera._.camera.lookAt(camera._.looker.position());
+		}
+	},
 	tick: function() {
 		if (camera._.useControls)
 			camera._.controls.update();
 		else {
+			camera._tickPerspective();
 			var s = camera.springs;
 			camera.position({
 				x: s.position.x.value,
 				y: s.position.y.value,
 				z: s.position.z.value
 			});
-			if (camera._.subject) {
-				camera.look(camera._.subject.position(null, true));
-				camera.looker({
-					x: s.looker.x.value,
-					y: s.looker.y.value,
-					z: s.looker.z.value
-				});
-				camera._.camera.lookAt(camera._.looker.position());
-			}
+			camera._tickSubject();
 		}
 	},
 	random: function(dimension, target, factor, aspect) {
