@@ -10,7 +10,9 @@ zero.core.Room = CT.Class({
 		this.log("adding object");
 		if (this.opts.objects.indexOf(obj) == -1)
 			this.opts.objects.push(obj);
-		this.objects.push(new zero.core.Thing(obj));
+		var thing = new zero.core[obj.thing || "Thing"](obj);
+		this.objects.push(thing);
+		this[thing.name] = thing;
 	},
 	addCamera: function(cam) {
 		this.log("adding camera");
@@ -18,6 +20,11 @@ zero.core.Room = CT.Class({
 			this.opts.cameras.push(cam);
 		this.cameras.push(cam);
 		this._cam = -1;
+	},
+	tick: function(dts) {
+		this.objects.forEach(function(obj) {
+			obj.tick && obj.tick(dts);
+		});
 	},
 	cut: function(index) {
 		if (typeof index != "number")
