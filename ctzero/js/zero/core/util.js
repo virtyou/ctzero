@@ -62,6 +62,8 @@ zero.core.util = {
 
 	    zero.core.springController.tick(dts);
 	    zero.core.aspectController.tick();
+	    if (zero.core.util.room)
+	    	zero.core.util.room.tick(dts);
 	    for (var p in zero.core.util.people)
 	    	zero.core.util.people[p].tick();
 
