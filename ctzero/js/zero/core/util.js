@@ -8,6 +8,11 @@ zero.core.util = {
 	        val != undefined && cb(dim, val);
 	    });
 	},
+	update: function(xyza, xyzb) {
+		zero.core.util.coords(xyza, function(dim, val) {
+			xyzb[dim] = val;
+		});
+	},
 	vector: function(p1, p2) { // p2 - p1
 		return {
 			x: p2.x - p1.x,
