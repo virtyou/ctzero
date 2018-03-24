@@ -3,14 +3,15 @@ zero.core.Pool = CT.Class({
 	tick: function(dts) {
 		var timeP = dts * this.opts.factor, i,
 			geo = this.thring.geometry, vertices = geo.vertices,
-			campos = zero.core.camera.position();
+			mainCam = zero.core.camera, campos = mainCam.position();
 		for (i = 0; i < vertices.length; i ++)
 			vertices[i].z = 2 * Math.sin(i / 2 + (timeP + i) / 5);
 		geo.computeFaceNormals();
 		geo.computeVertexNormals();
 		geo.verticesNeedUpdate = true;
-		this.cam.position.y = -campos.y-112;
-		this.cam.position.z = campos.z+22;
+		this.cam.updateCubeMap(mainCam.get("renderer"), mainCam.scene);
+		this.cam.position.y = -campos.y;//-112;
+		this.cam.position.z = campos.z;//+22;
 		this.cam.position.x = campos.x;
 	},
 	init: function(opts) {
