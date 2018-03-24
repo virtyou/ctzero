@@ -8,6 +8,7 @@ CT.require("zero.core.phonemes");
 
 CT.require("zero.core.Thing");
 CT.require("zero.core.Light");
+CT.require("zero.core.Pool");
 CT.require("zero.core.Room");
 CT.require("zero.core.Head");
 CT.require("zero.core.Body");
