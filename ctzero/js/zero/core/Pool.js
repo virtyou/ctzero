@@ -10,7 +10,7 @@ zero.core.Pool = CT.Class({
 		geo.computeVertexNormals();
 		geo.verticesNeedUpdate = true;
 		this.cam.updateCubeMap(mainCam.get("renderer"), mainCam.scene);
-		this.cam.position.y = -campos.y;//-112;
+		this.cam.position.y = -campos.y + 28;//-112;
 		this.cam.position.z = campos.z;//+22;
 		this.cam.position.x = campos.x;
 	},
