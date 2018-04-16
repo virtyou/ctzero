@@ -36,10 +36,8 @@ zero.core.Room = CT.Class({
 		this.opts = opts = CT.merge(this.opts, opts, {
 			lights: [],  // Lights
 			objects: [], // regular Things
-			cameras: [],
-			floor: null,
-			wall: null
-		});
+			cameras: []
+		}, opts.environment && CT.require("environments." + opts.environment, true));
 		if (opts.floor)
 			this.floor = new zero.core.Thing(opts.floor);
 		if (opts.wall) {

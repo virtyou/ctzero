@@ -1,5 +1,6 @@
 import os
 mdir = os.path.join("js", "morphs")
+edir = os.path.join("js", "environments")
 dirs = ["sound", "sound_in", "maps", "models", mdir]
 copies = {
 	mdir: ["head1.js"]
