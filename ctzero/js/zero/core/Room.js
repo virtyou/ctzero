@@ -36,8 +36,22 @@ zero.core.Room = CT.Class({
 		this.opts = opts = CT.merge(this.opts, opts, {
 			lights: [],  // Lights
 			objects: [], // regular Things
-			cameras: []
+			cameras: [],
+			floor: null,
+			wall: null
 		});
+		if (opts.floor)
+			this.floor = new zero.core.Thing(opts.floor);
+		if (opts.wall) {
+			var wall = opts.wall, dz = wall.dimensions;
+			this.walls = wall.sides.map(function(side) {
+				return new zero.core.Thing(CT.merge(side, {
+					texture: wall.texture,
+					material: wall.material,
+					geometry: new THREE.CubeGeometry(dz[0], dz[1], dz[2], dz[3], dz[4]) // ugh
+				}));
+			});
+		}
 		this.lights = [];
 		this.objects = [];
 		this.cameras = [];
