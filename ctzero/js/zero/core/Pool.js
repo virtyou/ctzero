@@ -10,7 +10,7 @@ zero.core.Pool = CT.Class({
 		geo.computeVertexNormals();
 		geo.verticesNeedUpdate = true;
 		this.cam.updateCubeMap(mainCam.get("renderer"), mainCam.scene);
-		this.cam.position.y = -campos.y + 28;//-112;
+		this.cam.position.y = -campos.y - 80;
 		this.cam.position.z = campos.z;//+22;
 		this.cam.position.x = campos.x;
 	},
@@ -21,7 +21,7 @@ zero.core.Pool = CT.Class({
 			plane: [800, 800, 22, 44],
 			cam: [1, 1000000, 512],
 			camPos: {
-				z: -66
+//				z: -66
 			}
 		});
 		if (opts.plane && !opts.geometry) {
