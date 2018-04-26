@@ -43,6 +43,10 @@ zero.core.Body = CT.Class({
 		this.head.tick();
 		if (this.springs.bob)
 			this.bone.position.y = this.springs.bob.value;
+		if (this.springs.weave)
+			this.bone.position.x = this.springs.weave.value;
+		if (this.springs.slide)
+			this.bone.position.z = this.springs.slide.value;
 	},
 	init: function(opts) {
 		this.opts = opts = CT.merge(this.opts, opts, {
