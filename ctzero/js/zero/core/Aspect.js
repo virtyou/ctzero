@@ -6,7 +6,8 @@ zero.core.Aspect = CT.Class({
 			this.value += this.parent.springs[s].value * this.springs[s];
 		for (var a in this.aspects)
 			this.value += this.parent.aspects[a].value * this.aspects[a];
-		this.value = Math.max(Math.min(this.value, this.max), this.min);
+		if (!this.unbounded)
+			this.value = Math.max(Math.min(this.value, this.max), this.min);
 	},
 	init: function(opts) {
 		this.opts = opts = CT.merge(opts, {
@@ -23,6 +24,7 @@ zero.core.Aspect = CT.Class({
 		this.parent = opts.parent;
 		this.springs = opts.springs;
 		this.aspects = opts.aspects;
+		this.unbounded = opts.unbounded;
 	}
 });
 
