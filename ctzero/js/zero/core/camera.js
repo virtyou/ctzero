@@ -34,6 +34,7 @@ var camera = zero.core.camera = {
 	},
 	perspective: function(person) {
 		camera._.perspective = person;
+		camera.follow(person.body.looker);
 	},
 	_tickPerspective: function() {
 		if (camera._.perspective)
