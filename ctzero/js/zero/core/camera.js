@@ -38,7 +38,7 @@ var camera = zero.core.camera = {
 	},
 	_tickPerspective: function() {
 		if (camera._.perspective)
-			zero.core.util.coords(camera._.perspective.head.eyeGroupR.position(null, true),
+			zero.core.util.coords(camera._.perspective.head.eyeGroupR.cubeReyeDummy.position(null, true),
 				function(dim, val) { camera.springs.position[dim].target = val; });
 	},
 	_tickSubject: function() {
