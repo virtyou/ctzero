@@ -34,11 +34,11 @@ var camera = zero.core.camera = {
 	},
 	perspective: function(person) {
 		camera._.perspective = person;
-		camera.follow(person.body.looker);
+		camera.follow(person.body.lookAt);
 	},
 	_tickPerspective: function() {
 		if (camera._.perspective)
-			zero.core.util.coords(camera._.perspective.head.eyeGroupR.cubeReyeDummy.position(null, true),
+			zero.core.util.coords(camera._.perspective.body.looker.position(null, true),
 				function(dim, val) { camera.springs.position[dim].target = val; });
 	},
 	_tickSubject: function() {
@@ -151,6 +151,14 @@ var camera = zero.core.camera = {
 				s.value = val;
 			});
 		}
+	},
+	setSprings: function(val, prop, which, axes) {
+		prop = prop || "k";
+		which = which || "position";
+		axes = axes || ["x", "y", "z"];
+		axes.forEach(function(dim) {
+			camera.springs[which][dim][prop] = val;
+		});
 	},
 	init: function() {
 		var _ = camera._, config = core.config.ctzero,
