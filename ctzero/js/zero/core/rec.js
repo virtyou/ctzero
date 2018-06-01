@@ -37,7 +37,16 @@ var rec = zero.core.rec = {
 		else
 			rec._.language = lang;
 	},
+	local: function(cb) {
+		var recognition = new webkitSpeechRecognition();
+		recognition.onresult = function(event) { 
+			cb(event.results[0][0].transcript);
+		};
+		recognition.start();
+	},
 	listen: function(cb) {
+		if (window.webkitSpeechRecognition)
+			return rec.local(cb);
 		rec._.cb = cb;
 		navigator.getUserMedia({ audio: true }, rec._.record, rec._.oops);
 	}
