@@ -14,8 +14,11 @@ zero.core.Brain = CT.Class({
 		return this.data2clip(data);
 	},
 	say: function(utterances, cb, playClip) {
-		if (!Array.isArray(utterances))
+		if (!Array.isArray(utterances)) {
+			if (!cb && !playClip && window.speechSynthesis)
+				return speechSynthesis.speak(new SpeechSynthesisUtterance(utterances));
 			utterances = [utterances];
+		}
 		var doNext = function() {
 			var words = utterances.shift();
 			if (!words)
