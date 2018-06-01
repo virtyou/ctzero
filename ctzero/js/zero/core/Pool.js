@@ -1,11 +1,13 @@
 zero.core.Pool = CT.Class({
 	CLASSNAME: "zero.core.Pool",
 	tick: function(dts) {
-		var timeP = dts * this.opts.factor, i,
+		this.age += dts;
+		var timeP = this.age * this.opts.factor,
+			amp = this.opts.amplitude, i,
 			geo = this.thring.geometry, vertices = geo.vertices,
 			mainCam = zero.core.camera, campos = mainCam.position();
 		for (i = 0; i < vertices.length; i ++)
-			vertices[i].z = 2 * Math.sin(i / 2 + (timeP + i) / 5);
+			vertices[i].z = amp * Math.sin(i / 2 + (timeP + i) / 5);
 		geo.computeFaceNormals();
 		geo.computeVertexNormals();
 		geo.verticesNeedUpdate = true;
@@ -17,6 +19,7 @@ zero.core.Pool = CT.Class({
 	init: function(opts) {
 		this.opts = opts = CT.merge(this.opts, opts, {
 			factor: 75,
+			amplitude: 2,
 			watermat: true,
 			plane: [800, 800, 22, 44],
 			cam: [1, 1000000, 512],
@@ -36,6 +39,7 @@ zero.core.Pool = CT.Class({
 				reflectivity: 0.87
 			});
 		}
+		this.age = 0; // bad name?
 		var c = opts.cam,
 			cubeCam = this.cam = new THREE.CubeCamera(c[0], c[1], c[2]);
 		zero.core.util.update(opts.camPos, cubeCam.position);
