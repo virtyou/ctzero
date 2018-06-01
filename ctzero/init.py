@@ -10,6 +10,9 @@ syms = {
 	".": ["_zero.py"],
 	"js": ["zero"]
 }
+model = {
+	"ctzero.model": ["*"]
+}
 routes = {
 	"/_zero": "_zero.py",
 	"/sound": "sound",
