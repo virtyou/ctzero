@@ -1,4 +1,5 @@
 CT.require("zero.lib.three");
+CT.require("zero.lib.Projector");
 CT.require("zero.lib.TrackballControls");
 
 CT.require("zero.core.util");
