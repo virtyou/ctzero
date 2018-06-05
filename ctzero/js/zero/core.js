@@ -3,6 +3,7 @@ CT.require("zero.lib.TrackballControls");
 
 CT.require("zero.core.util");
 CT.require("zero.core.camera");
+CT.require("zero.core.click");
 CT.require("zero.core.rec");
 CT.require("zero.core.phonemes");
 
