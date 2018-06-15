@@ -41,7 +41,7 @@ zero.core.morphs = {
 	},
 	init: function(thing) {
 		// try shader mode first!
-		if (!CT.info.iOS) {
+		if (!CT.info.iOs) {
 			thing.morphs = {};
 			for (var a in thing.aspects)
 				zero.core.morphs.delta(thing, a);
