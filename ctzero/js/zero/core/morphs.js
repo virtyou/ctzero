@@ -30,5 +30,21 @@ zero.core.morphs = {
 		for (i in modz)
 			geo.vertices[Math.floor(i / 3)][dimz[i % 3]] = modz[i];
 		geo.verticesNeedUpdate = true;
+	},
+	delta: function(thing, a) {
+		var m = thing.morphStack[a],
+			morphz = thing.morphs[a] = {};
+		thing.base.forEach(function(b, i) {
+			if (b != m[i])
+				morphz[i] = m[i];
+		});
+	},
+	init: function(thing) {
+		// try shader mode first!
+		if (!CT.info.iOS) {
+			thing.morphs = {};
+			for (var a in thing.aspects)
+				zero.core.morphs.delta(thing, a);
+		}
 	}
 };

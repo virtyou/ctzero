@@ -103,19 +103,6 @@ zero.core.Head = CT.Class({
 			}
 		}
 	},
-	_delta: function(a) {
-		var m = this.morphStack[a],
-			morphz = this.morphs[a] = {};
-		this.base.forEach(function(b, i) {
-			if (b != m[i])
-				morphz[i] = m[i];
-		});
-	},
-	_morphs: function() {
-		this.morphs = {};
-		for (var a in this.aspects)
-			this._delta(a);
-	},
 	_viseme: function(vdata, vtype) {
 		for (var k in vdata[vtype] || {})
 			this.springs[k][vtype] = vdata[vtype][k];
@@ -133,6 +120,6 @@ zero.core.Head = CT.Class({
 	init: function(opts) {
 		for (var p in phonemes.forms)
 			this.springs[p] = spring.add(phonemes.forms[p], p, this);
-		CT.info.iOS || this._morphs();
+		zero.core.morphs.init(this);
 	}
 }, zero.core.Thing);
