@@ -76,38 +76,6 @@ zero.core.Head = CT.Class({
 				}
 			}
 		},
-		morphsIos: function() {
-			var geo = this.body.thring.geometry, a, i, val, dim,
-				vert = geo.vertices[0], dims = ["x", "y", "z"],
-				morphStack = this.morphStack, base = this.base;
-			for (i = 0; i < geo.vertices.length * 3; i++) {
-				val = base[i];
-				for (a in this.aspects)
-					val += (morphStack[a][i] - base[i]) * this.aspects[a].value;
-				dim = dims[i % 3];
-				if (dim == "x")
-					vert = geo.vertices[i / 3];
-				vert[dim] = val;
-			}
-			geo.verticesNeedUpdate = true;
-		},
-		morphs: function() {
-			if (CT.info.iOs)
-				return this.updaters.morphsIos();
-			var geo = this.body.thring.geometry, modz = {},
-				dimz = ["x", "y", "z"], a, i, val, stack, base = this.base;
-			for (a in this.morphs) {
-				val = this.aspects[a].value;
-				stack = this.morphs[a];
-				for (i in stack) {
-					modz[i] = modz[i] || base[i];
-					modz[i] += (stack[i] - base[i]) * val;
-				}
-			}
-			for (i in modz)
-				geo.vertices[Math.floor(i / 3)][dimz[i % 3]] = modz[i];
-			geo.verticesNeedUpdate = true;
-		},
 		spontanimation: function() { // TODO: use Tickers or something for this (and top vars)!
 			var shake = this.springs.shake,
 			    nod = this.springs.nod,
@@ -159,8 +127,8 @@ zero.core.Head = CT.Class({
 		if (!this.isReady()) return;
 		this.updaters.eyes();
 		this.updaters.mouth();
-		this.updaters.morphs();
 		this.updaters.spontanimation();
+		zero.core.morphs.tick(this);
 	},
 	init: function(opts) {
 		for (var p in phonemes.forms)
