@@ -8,7 +8,7 @@ copies = {
 
 syms = {
 	".": ["_zero.py"],
-	"js": ["zero"]
+	"js": ["zero", "shaders"]
 }
 model = {
 	"ctzero.model": ["*"]

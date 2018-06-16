@@ -148,8 +148,13 @@ zero.core.Thing = CT.Class({
 	build: function() {
 		var oz = this.opts;
 		if (oz.geometry || oz.stripset) {
-			var meshname = "Mesh" + oz.matcat + "Material",
+			var meshname = (oz.shader ? "Shader"
+				: ("Mesh" + oz.matcat)) + "Material",
 				map, meshopts = oz.material;
+			if (oz.shader) {
+				meshopts.vertexShader = CT.net.get("/js/shaders/basic.vert");
+				meshopts.fragmentShader = CT.net.get("/js/shaders/basic.frag");
+			}
 			if (oz.texture) {
 				map = THREE.ImageUtils.loadTexture(oz.texture);
 				if (oz.repeat) {
