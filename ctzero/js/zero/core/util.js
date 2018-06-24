@@ -100,10 +100,10 @@ zero.core.util = {
 			setTimeout(zero.core.util.script, step.pause || 0, script);
 		});
 	},
-	frameCount: function() {
+	frameCount: function(className) {
 		var zcu = zero.core.util;
 		if (!zcu._counter)
-			zcu._counter = new zero.core.util.FrameCounter();
+			zcu._counter = new zero.core.util.FrameCounter(className);
 		zcu._counter.on();
 		return zcu._counter;
 	}
@@ -127,8 +127,11 @@ zero.core.util.FrameCounter = CT.Class({
 			CT.dom.setContent(this.node, zero.core.util.ticker - this.lastTick);
 		this.lastTick = zero.core.util.ticker;
 	},
-	init: function() {
-		this.node = CT.dom.div(null, "abs ctl gigantic bold mosthigh");
+	init: function(className) {
+		var cname = "abs ctl gigantic bold mosthigh";
+		if (className)
+			cname += " " + className;
+		this.node = CT.dom.div(null, cname);
 		CT.dom.addContent(document.body, this.node);
 	}
 });
