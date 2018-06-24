@@ -116,6 +116,8 @@ zero.core.Head = CT.Class({
 		this.updaters.mouth();
 		this.updaters.spontanimation();
 		zero.core.morphs.tick(this);
+		var skeleton = this.body.thring.skeleton;
+		this._.customs.forEach(function(c) { c.tick(skeleton); });
 	},
 	init: function(opts) {
 		for (var p in phonemes.forms)
