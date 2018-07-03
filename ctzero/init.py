@@ -24,5 +24,11 @@ cfg = {
 		"mode": "gcloud", # or "baidu" -- default "gcloud" mode requires gcloud to be installed and configured
 		"id": None,       # baidu only
 		"secret": None    # baidu only
+	},
+	"chat": {             # currently supports pandorabots mode
+		"host": "aiaas.pandorabots.com",
+		"appid": None,
+		"userkey": None,
+		"botname": None
 	}
 }

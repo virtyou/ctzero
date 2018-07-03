@@ -30,6 +30,7 @@ CMDS = {
 BAIDU_TOKEN_LIFE = 2592000
 
 def load_token(now):
+    cfg = config.ctzero.asr
     tdata = json.loads(read("baidu.token"))
     cfg.token = tdata["access_token"]
     cfg.expiration = tdata["expires_in"] + now
@@ -47,7 +48,11 @@ def baidu_token():
         load_token(now)
 
 def response():
-    action = cgi_get("action", choices=["say", "rec"])
+    action = cgi_get("action", choices=["say", "rec", "chat"])
+    if action == "chat":
+        from pb_py import main as PB
+        cfg = config.ctzero.chat
+        succeed(PB.talk(cfg.userkey, cfg.appid, cfg.host, cfg.botname, cgi_get("question"))["response"])
     language = cgi_get("language")
     comz = CMDS[action]
     if action == "say":
