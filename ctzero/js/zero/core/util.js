@@ -58,6 +58,8 @@ zero.core.util = {
 			setTimeout(requestAnimationFrame, 0, zero.core.util.animate);
 			onbuild && onbuild();
 		}
+		if (cfg.framecount)
+			zero.core.util.frameCount(typeof cfg.framecount == "string" && cfg.framecount);
 	},
 	animate: function(now) {
 	    if (lastTime)
