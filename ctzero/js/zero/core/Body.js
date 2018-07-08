@@ -47,6 +47,8 @@ zero.core.Body = CT.Class({
 			this.bone.position.x = this.springs.weave.value;
 		if (this.springs.slide)
 			this.bone.position.z = this.springs.slide.value;
+		var skeleton = this.thring.skeleton;
+		this._.customs.forEach(function(c) { c.tick(skeleton); });
 	},
 	init: function(opts) {
 		this.opts = opts = CT.merge(this.opts, opts, {

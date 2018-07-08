@@ -1,6 +1,7 @@
 zero.core.Thing = CT.Class({
 	CLASSNAME: "zero.core.Thing",
 	_: {
+		customs: [], // stored here, only tick()ed in Thing subclasses that implement tick()
 		ready: false,
 		built: function() {
 			this.opts.onassemble && this.opts.onassemble();
@@ -125,7 +126,7 @@ zero.core.Thing = CT.Class({
 	},
 	assemble: function() {
 		if (this.opts.parts.length && !this.parts) {
-			var group, thiz = this, i = 0, iterator = function() {
+			var group, childopts, thing, thiz = this, i = 0, iterator = function() {
 				i += 1;
 				if (i >= thiz.opts.parts.length) {
 					if (!thiz.bone && i == thiz.opts.parts.length)
@@ -135,11 +136,19 @@ zero.core.Thing = CT.Class({
 			};
 			group = this.group = this.bone || new THREE.Object3D();
 			this.parts = this.opts.parts.map(function(child) {
-				var thing = new zero.core[child.thing || "Thing"](CT.merge(child, {
+				childopts = CT.merge(child, {
 					scene: group,
 					iterator: iterator,
 					bones: thiz.bones || []
-				}));
+				});
+				if (child.custom) {
+					 // custom() must:
+					 // - call iterator() post-init
+					 // - return object w/ name and tick()
+					thing = child.custom(childopts);
+					thiz._.customs.push(thing);
+				} else
+					thing = new zero.core[child.thing || "Thing"](childopts);
 				thiz[thing.name] = thing;
 				return thing;
 			});

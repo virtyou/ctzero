@@ -6,6 +6,7 @@ This package contains the core zero libraries.
 
     import os
     mdir = os.path.join("js", "morphs")
+    edir = os.path.join("js", "environments")
     dirs = ["sound", "sound_in", "maps", "models", mdir]
     copies = {
     	mdir: ["head1.js"]
@@ -14,6 +15,9 @@ This package contains the core zero libraries.
     syms = {
     	".": ["_zero.py"],
     	"js": ["zero"]
+    }
+    model = {
+    	"ctzero.model": ["*"]
     }
     routes = {
     	"/_zero": "_zero.py",

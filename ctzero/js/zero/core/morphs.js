@@ -21,10 +21,12 @@ zero.core.morphs = {
 			dimz = ["x", "y", "z"], a, i, val, stack, base = thing.base;
 		for (a in thing.morphs) {
 			val = thing.aspects[a].value;
-			stack = thing.morphs[a];
-			for (i in stack) {
-				modz[i] = modz[i] || base[i];
-				modz[i] += (stack[i] - base[i]) * val;
+			if (val) { // should be safe...
+				stack = thing.morphs[a];
+				for (i in stack) {
+					modz[i] = modz[i] || base[i];
+					modz[i] += (stack[i] - base[i]) * val;
+				}
 			}
 		}
 		for (i in modz)
