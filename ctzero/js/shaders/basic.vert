@@ -1,5 +1,8 @@
-void main() 
+varying vec2 vUv;
+
+void main (void)
 {
-	vec4 modelViewPosition = modelViewMatrix * vec4(position, 1.0);
-	gl_Position = projectionMatrix * modelViewPosition;
+	vUv = uv;
+	// TODO: this crack is wrong and hacky -- save me chris!
+	gl_Position = projectionMatrix * modelViewMatrix * vec4( position.x, position.y + 20.0, position.z, 1.0 );
 }
