@@ -53,7 +53,7 @@ zero.core.Body = CT.Class({
 	init: function(opts) {
 		this.opts = opts = CT.merge(this.opts, opts, {
 			joints: [],
-			shader: false,//true,
+			shader: true,
 			onassemble: this._assembled
 		});
 	}
