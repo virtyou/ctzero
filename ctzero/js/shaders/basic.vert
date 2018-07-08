@@ -1,8 +1,13 @@
 varying vec2 vUv;
+// MORPH IMPORTS HERE
 
-void main (void)
-{
+void main (void) {
 	vUv = uv;
-	// TODO: this crack is wrong and hacky -- save me chris!
-	gl_Position = projectionMatrix * modelViewMatrix * vec4( position.x, position.y + 20.0, position.z, 1.0 );
+
+	// TODO: this bs is wrong and hacky -- save me chris!
+	vec4 pos = vec4( position.x, position.y + 20.0, position.z, 1.0 );
+
+// MORPH MANIPULATIONS HERE
+
+	gl_Position = projectionMatrix * modelViewMatrix * pos;
 }
