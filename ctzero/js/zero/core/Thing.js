@@ -172,6 +172,14 @@ zero.core.Thing = CT.Class({
 				}
 				map.offset.set.apply(map.offset, oz.offset);
 				meshopts = CT.merge(meshopts, { map: map });
+				if (oz.shader) {
+					meshopts.uniforms = {
+						baseTexture: {
+							type: "t",
+							value: map
+						}
+					};
+				}
 			}
 			if (this.material) {
 				this.material.dispose();
