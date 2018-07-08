@@ -160,10 +160,6 @@ zero.core.Thing = CT.Class({
 			var meshname = (oz.shader ? "Shader"
 				: ("Mesh" + oz.matcat)) + "Material",
 				map, meshopts = oz.material;
-			if (oz.shader) {
-				meshopts.vertexShader = CT.net.get("/js/shaders/basic.vert");
-				meshopts.fragmentShader = CT.net.get("/js/shaders/basic.frag");
-			}
 			if (oz.texture) {
 				map = THREE.ImageUtils.loadTexture(oz.texture);
 				if (oz.repeat) {
@@ -172,14 +168,11 @@ zero.core.Thing = CT.Class({
 				}
 				map.offset.set.apply(map.offset, oz.offset);
 				meshopts = CT.merge(meshopts, { map: map });
-				if (oz.shader) {
-					meshopts.uniforms = {
-						baseTexture: {
-							type: "t",
-							value: map
-						}
-					};
-				}
+			}
+			if (oz.shader) {
+				meshopts.vertexShader = zero.core.shaders.vertex(this);
+				meshopts.fragmentShader = zero.core.shaders.fragment(this);
+				meshopts.uniforms = zero.core.shaders.uniforms(this, map);
 			}
 			if (this.material) {
 				this.material.dispose();
