@@ -5,9 +5,9 @@ void main (void) {
 	vUv = uv;
 
 	// TODO: this bs is wrong and hacky -- save me chris!
-	vec4 pos = vec4( position.x, position.y + 20.0, position.z, 1.0 );
+	vec3 pos = vec3(position.x, position.y + 20.0, position.z);
 
 // MORPH LOGIC HERE
 
-	gl_Position = projectionMatrix * modelViewMatrix * pos;
+	gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
 }
