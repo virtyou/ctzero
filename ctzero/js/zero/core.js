@@ -7,6 +7,7 @@ CT.require("zero.core.camera");
 CT.require("zero.core.click");
 CT.require("zero.core.rec");
 CT.require("zero.core.phonemes");
+CT.require("zero.core.shaders");
 CT.require("zero.core.morphs");
 
 CT.require("zero.core.Thing");
