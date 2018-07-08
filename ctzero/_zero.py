@@ -63,7 +63,7 @@ def response():
         fpjson = "%s.json"%(fpath,)
         if not os.path.exists(fpjson):
             for command in comz[language]:
-                cmd(command%(words, fpath))
+                cmd(command%(words.replace('"', ''), fpath))
         data = read(fpjson)
         robj = {}
         if language == "mandarin":
