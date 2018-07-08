@@ -9,12 +9,13 @@ zero.core.shaders = {
 		}
 		if (thang.morphStack) {
 			for (var m in thang.morphStack) {
-				uz[m] = {
+				uz[m + "Strength"] = {
 					type: 'f',
 					value: 0.0
 				}
 			}
 		}
+		thang.uniforms = uz;
 		return uz;
 	},
 	attributes: function(thang) {
@@ -37,15 +38,19 @@ zero.core.shaders = {
 		if (thang.morphStack) {
 			vert = vert.replace("// MORPH IMPORTS HERE",
 				Object.keys(thang.morphStack).map(function(m) {
-					return "uniform float " + m;
-				}).join(";\n")).replace("// MORPH LOGIC HERE",
+					return "uniform float " + m + "Strength;\nattribute float " + m + ";";
+				}).join("\n")).replace("// MORPH LOGIC HERE",
 				Object.keys(thang.morphStack).map(function(m) {
 					var morph = thang.morphStack[m];
 
 					return ""; // TODO: mod pos!!
 
-				}).join(";\n"));
+				}).join("\n"));
 		}
 		return vert;
+	},
+	tick: function(thang) {
+		for (var m in thang.uniforms)
+			thang.uniforms[m].value = thang.aspects[m].value;
 	}
 };
