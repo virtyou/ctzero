@@ -120,6 +120,7 @@ zero.core.Head = CT.Class({
 		this._.customs.forEach(function(c) { c.tick(skeleton); });
 	},
 	init: function(opts) {
+		this.opts.shader = true;
 		for (var p in phonemes.forms)
 			this.springs[p] = spring.add(phonemes.forms[p], p, this);
 		zero.core.morphs.init(this);
