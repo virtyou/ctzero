@@ -8,7 +8,7 @@ zero.core.shaders = {
 			};
 		}
 		if (thang.morphStack) {
-			for (var m in thang.morphStack) {
+			for (var m in thang.aspects) {
 				uz[m] = {
 					type: 'f',
 					value: 0.0
@@ -21,7 +21,7 @@ zero.core.shaders = {
 	attributes: function(thang) {
 		var az = {};
 		if (thang.morphStack) {
-			for (var m in thang.morphStack) {
+			for (var m in thang.aspects) {
 				var splitz = { x: [], y: [], z: [] },
 					morphs = thang.morphStack[m];
 				for (var i = 2; i < morphs.length; i += 3) {
@@ -46,7 +46,7 @@ zero.core.shaders = {
 		var vert = CT.net.get("/js/shaders/basic.vert");
 		if (thang.morphStack) {
 			vert = vert.replace("// MORPH IMPORTS HERE",
-				Object.keys(thang.morphStack).map(function(m) {
+				Object.keys(thang.aspects).map(function(m) {
 					return [
 						"uniform float " + m,
 						"attribute float " + m + "_x",
@@ -56,7 +56,7 @@ zero.core.shaders = {
 				}).join("\n")).replace("// MORPH LOGIC HERE",
 				[
 					"vec3 base = vec3(pos);"
-				].concat(Object.keys(thang.morphStack).map(function(m) {
+				].concat(Object.keys(thang.aspects).map(function(m) {
 					return ["x", "y", "z"].map(function(a) {
 						return "pos." + a + " += ("
 							+ m + "_" + a + " - base." + a
