@@ -16,7 +16,7 @@ zero.core.morphs = {
 	},
 	tick: function(thing) {
 		if (thing.opts.shader)
-			return zero.core.shader.tick(thing);
+			return zero.core.shaders.tick(thing);
 		if (CT.info.iOs)
 			return zero.core.morphs.ios(thing);
 		var geo = thing.body.thring.geometry, modz = {},
