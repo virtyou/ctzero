@@ -2,8 +2,10 @@ var rec = zero.core.rec = {
 	_: {
 		language: "english",
 		record: function(stream) {
+			rec.active = true;
 			var recorder = rec._.recorder = new MediaRecorder(stream);
 			recorder.onstop = function() {
+				rec.active = false;
 				stream.stop();
 			};
 			recorder.ondataavailable = function(data) {
@@ -38,8 +40,10 @@ var rec = zero.core.rec = {
 			rec._.language = lang;
 	},
 	local: function(cb) {
+		rec.active = true;
 		var recognition = new webkitSpeechRecognition();
-		recognition.onresult = function(event) { 
+		recognition.onresult = function(event) {
+			rec.active = false;
 			cb(event.results[0][0].transcript);
 		};
 		recognition.start();
