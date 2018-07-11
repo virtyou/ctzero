@@ -1,4 +1,5 @@
-zero.core.version = "0.1";
+zero.core.version = "0.1.1";
+
 CT.require("zero.lib.three");
 CT.require("zero.lib.Projector");
 CT.require("zero.lib.TrackballControls");
