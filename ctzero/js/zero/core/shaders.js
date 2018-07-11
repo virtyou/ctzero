@@ -68,7 +68,7 @@ zero.core.shaders = {
 		return vert;
 	},
 	tick: function(thang) {
-		for (var m in thang.uniforms)
+		for (var m in thang.aspects)
 			thang.uniforms[m].value = thang.aspects[m].value;
 	}
 };
