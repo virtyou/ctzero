@@ -32,6 +32,9 @@ var camera = zero.core.camera = {
 			return camera._.subject;
 		camera._.subject = thing;
 	},
+	unfollow: function() {
+		camera._.subject = null;
+	},
 	perspective: function(person) {
 		camera._.perspective = person;
 		camera.follow(person.body.lookAt);
