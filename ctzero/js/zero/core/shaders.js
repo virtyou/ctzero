@@ -43,9 +43,9 @@ zero.core.shaders = {
 			vert = vert.replace("// MORPH IMPORTS HERE",
 				Object.keys(thang.aspects).map(function(m) {
 					return [
-						"uniform float " + m,
+						"uniform float " + m + ";",
 						"attribute vec3 " + m + "Pos;"
-					].join(";\n");
+					].join("\n");
 				}).join("\n")).replace("// MORPH LOGIC HERE",
 				[
 					"vec3 base = vec3(pos);"
