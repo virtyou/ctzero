@@ -33,11 +33,11 @@ zero.core.Head = CT.Class({
 			cubeR.look(cpos);
 
 			if (gL.rotation.x > -0.2)
-				this.springs.lids.target += gL.rotation.x;
+				this.body.springs.lids.target += gL.rotation.x;
 			else
-				this.springs.lids.target = -0.2;
+				this.body.springs.lids.target = -0.2;
 
-			var smeye = this.aspects.smile_eye;
+			var smeye = this.body.aspects.smile_eye;
 			if (gR.rotation.x > -0.3 && gR.rotation.x < 0.3)
 				smeye.value -= 4 * gR.rotation.x;
 			else if (gR.rotation.x <= -0.3)
@@ -71,15 +71,15 @@ zero.core.Head = CT.Class({
 				if (morphs) {
 					for (var m in morphs) {
 						var morph = morphs[m];
-						this[m].morph(morph.influence, morph.factor * this.springs[shape].value, true, true);
+						this[m].morph(morph.influence, morph.factor * this.body.springs[shape].value, true, true);
 					}
 				}
 			}
 		},
 		spontanimation: function() { // TODO: use Tickers or something for this (and top vars)!
-			var shake = this.springs.shake,
-			    nod = this.springs.nod,
-			    lids = this.springs.lids,
+			var shake = this.body.springs.shake,
+			    nod = this.body.springs.nod,
+			    lids = this.body.springs.lids,
 			    eyeRot = this.eyeGroupL.rotation();
 			lids.target = 0; // ????
 			shake.target += 0.01 * eyeRot.y;
@@ -87,7 +87,7 @@ zero.core.Head = CT.Class({
 			if (eyeRot.x > 0)
 				lids.target += eyeRot.x;
 			else if (eyeRot.x < 0)
-				this.springs.smileEyes.target -= 5 * eyeRot.x;
+				this.body.springs.smileEyes.target -= 5 * eyeRot.x;
 			else
 				lids.target = -0.2;
 			this.blinkTicker += 0.01;
@@ -105,7 +105,7 @@ zero.core.Head = CT.Class({
 	},
 	_viseme: function(vdata, vtype) {
 		for (var k in vdata[vtype] || {})
-			this.springs[k][vtype] = vdata[vtype][k];
+			this.body.springs[k][vtype] = vdata[vtype][k];
 	},
 	energy: function() {
 		return this.person && this.person.energy;
@@ -115,14 +115,7 @@ zero.core.Head = CT.Class({
 		this.updaters.eyes();
 		this.updaters.mouth();
 		this.updaters.spontanimation();
-		zero.core.morphs.tick(this);
 		var skeleton = this.body.thring.skeleton;
 		this._.customs.forEach(function(c) { c.tick(skeleton); });
-	},
-	init: function(opts) {
-		this.opts.shader = true;
-		for (var p in phonemes.forms)
-			this.springs[p] = spring.add(phonemes.forms[p], p, this);
-		zero.core.morphs.init(this);
 	}
 }, zero.core.Thing);

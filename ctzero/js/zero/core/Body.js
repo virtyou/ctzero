@@ -3,7 +3,7 @@ zero.core.Body = CT.Class({
 	_assembled: function() {
 		this.log("built body!");
 		if (this.opts.joints.length) {
-			var dim, name, h = this, head,
+			var dim, name, h = thiz = this,
 				spine = this.spine = [],
 				joints = this.joints = {};
 			this.opts.joints.forEach(function(part, i) {
@@ -11,12 +11,12 @@ zero.core.Body = CT.Class({
 					h = h[part.name];
 				spine.push(part.name);
 			});
-			head = this.head = h.head;
+			this.head = h.head;
 			this.head.body = this;
 			this.opts.joints.forEach(function(part, i) {
 				for (dim in part.rotation) {
 					name = part.name + "_" + dim;
-					joints[name] = aspect.add(part.rotation[dim], name, head);
+					joints[name] = aspect.add(part.rotation[dim], name, thiz);
 					joints[name].part = spine[i];
 				}
 			});
@@ -47,13 +47,18 @@ zero.core.Body = CT.Class({
 			this.bone.position.x = this.springs.weave.value;
 		if (this.springs.slide)
 			this.bone.position.z = this.springs.slide.value;
+		zero.core.morphs.tick(this);
 		var skeleton = this.thring.skeleton;
 		this._.customs.forEach(function(c) { c.tick(skeleton); });
 	},
 	init: function(opts) {
 		this.opts = opts = CT.merge(this.opts, opts, {
 			joints: [],
+//			shader: true,
 			onassemble: this._assembled
 		});
+		for (var p in phonemes.forms)
+			this.springs[p] = spring.add(phonemes.forms[p], p, this);
+		zero.core.morphs.init(this);
 	}
 }, zero.core.Thing);

@@ -1,6 +1,6 @@
 zero.core.morphs = {
 	ios: function(thing) {
-		var geo = thing.body.thring.geometry, a, i, val, dim,
+		var geo = thing.thring.geometry, a, i, val, dim,
 			vert = geo.vertices[0], dims = ["x", "y", "z"],
 			morphStack = thing.morphStack, base = thing.base;
 		for (i = 0; i < geo.vertices.length * 3; i++) {
@@ -19,7 +19,7 @@ zero.core.morphs = {
 			return zero.core.shaders.tick(thing);
 		if (CT.info.iOs)
 			return zero.core.morphs.ios(thing);
-		var geo = thing.body.thring.geometry, modz = {},
+		var geo = thing.thring.geometry, modz = {},
 			dimz = ["x", "y", "z"], a, i, val, stack, base = thing.base;
 		for (a in thing.morphs) {
 			val = thing.aspects[a].value;
