@@ -1,5 +1,5 @@
 zero.core.morphs = {
-	deprecated: function(thing) { // don't use -- current tick() faster, even on ios
+	deprecated: function(thing) { // basic example -- current tick() faster, even on ios
 		var geo = thing.thring.geometry, a, i, val, dim,
 			vert = geo.vertices[0], dims = ["x", "y", "z"],
 			morphStack = thing.morphStack, base = thing.base;
