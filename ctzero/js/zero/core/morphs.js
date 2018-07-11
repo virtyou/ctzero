@@ -37,7 +37,7 @@ zero.core.morphs = {
 		var m = thing.morphStack[a],
 			morphz = thing.morphs[a] = {};
 		thing.base.forEach(function(b, i) {
-			if (Math.abs(b - m[i]) > 0.2)
+			if (Math.abs(b - m[i]) > 0.07)
 				morphz[i] = m[i];
 		});
 	},
