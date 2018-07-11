@@ -6,7 +6,8 @@ zero.core.click = {
         zero.core.click._ready = true;
         var mouse = {}, projector = new THREE.Projector(),
             cam = zero.core.camera.get(), vector, ray, intersects, i;
-        document.getElementsByTagName("canvas")[0].parentNode.addEventListener('mousedown', function(e) {
+        document.getElementsByTagName("canvas")[0].parentNode.addEventListener(CT.info.mobile
+            ? 'touchstart' : 'mousedown', function(e) {
             mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
             mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
 
