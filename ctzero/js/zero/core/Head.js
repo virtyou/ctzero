@@ -15,8 +15,10 @@ zero.core.Head = CT.Class({
 			eyeR.morph(1, eyeMorph);
 
 			//moves rotation center to correct place on parent --- every time, really? <---- !!!!
-			gR.position([3, 6, 7.22]);
-			gL.position([-3, 6, 7.22]);
+//			gR.position([3, 6, 7.22]);
+//			gL.position([-3, 6, 7.22]);
+			gR.position([3, 6.3, 7.22]);
+			gL.position([-3, 6.3, 7.22]);
 
 			var thiz = this, bonez = this.body.thring.skeleton.bones;
 			["y", "x"].forEach(function(dimension) {
@@ -36,6 +38,8 @@ zero.core.Head = CT.Class({
 				this.body.springs.lids.target += gL.rotation.x;
 			else
 				this.body.springs.lids.target = -0.2;
+
+			return;
 
 			var smeye = this.body.aspects.smile_eye;
 			if (gR.rotation.x > -0.3 && gR.rotation.x < 0.3)
