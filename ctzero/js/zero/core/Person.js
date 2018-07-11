@@ -45,9 +45,9 @@ zero.core.Person = CT.Class({
 			smiler.target = 0;
 		}, 5000);
 	},
-	say: function(data, cb) {
+	say: function(data, cb, watch) {
 		zero.core.rec.cancel();
-		this.watch();
+		watch && this.watch();
 		if (data.audio)
 			this._.playClip(this.brain.say_data(data, cb));
 		else
