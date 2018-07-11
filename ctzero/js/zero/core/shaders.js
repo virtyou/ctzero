@@ -44,9 +44,9 @@ zero.core.shaders = {
 	},
 	vertex: function(thang) {
 		var vert = CT.net.get("/js/shaders/basic.vert");
-		if (thang.morphStack) {
+		if (thang.morphStack) { // ugh only 4? probs use BufferGeometry attributes.....
 			vert = vert.replace("// MORPH IMPORTS HERE",
-				Object.keys(thang.aspects).map(function(m) {
+				Object.keys(thang.aspects).slice(0, 4).map(function(m) {
 					return [
 						"uniform float " + m,
 						"attribute float " + m + "_x",
@@ -56,7 +56,7 @@ zero.core.shaders = {
 				}).join("\n")).replace("// MORPH LOGIC HERE",
 				[
 					"vec3 base = vec3(pos);"
-				].concat(Object.keys(thang.aspects).map(function(m) {
+				].concat(Object.keys(thang.aspects).slice(0, 4).map(function(m) {
 					return ["x", "y", "z"].map(function(a) {
 						return "pos." + a + " += ("
 							+ m + "_" + a + " - base." + a
@@ -64,6 +64,7 @@ zero.core.shaders = {
 					}).join("\n");
 				})).join("\n"));
 		}
+//		console.log(vert);
 		return vert;
 	},
 	tick: function(thang) {

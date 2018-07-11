@@ -3,7 +3,9 @@ varying vec2 vUv;
 
 void main (void) {
 	vUv = uv;
-	vec3 pos = vec3(position.x, position.y, position.z);
+
+	// TODO: this bs is wrong and hacky -- save me chris!
+	vec3 pos = vec3(position.x, position.y + 20.0, position.z);
 
 // MORPH LOGIC HERE
 
