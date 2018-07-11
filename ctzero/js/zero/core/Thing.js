@@ -173,7 +173,7 @@ zero.core.Thing = CT.Class({
 				meshopts.vertexShader = zero.core.shaders.vertex(this);
 				meshopts.fragmentShader = zero.core.shaders.fragment(this);
 				meshopts.uniforms = zero.core.shaders.uniforms(this, map);
-				meshopts.attributes = zero.core.shaders.uniforms(this);
+				meshopts.attributes = zero.core.shaders.attributes(this);
 			}
 			if (this.material) {
 				this.material.dispose();
