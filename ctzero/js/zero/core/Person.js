@@ -6,13 +6,12 @@ zero.core.Person = CT.Class({
 			audio.play().then(cb)["catch"](function(error) {
 				if (error.code == 20)
 					return; // skip it!
-				var mp = document.getElementById("mobilePlay");
-				mp.style.display = "block";
-				mp.onclick = function() {
-					mp.style.display = "none";
+				var mp = CT.dom.button("CLICK TO CHAT", function() {
+					CT.dom.remove(mp);
 					audio.play();
 					cb && cb();
-				};
+				}, "fixed all20p gigantic translucent roundest");
+				document.body.appendChild(mp);
 			});
 		},
 		playClip: function(d) {
