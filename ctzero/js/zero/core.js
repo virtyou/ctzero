@@ -1,4 +1,5 @@
-zero.core.version = "0.1";
+zero.core.version = "0.1.1";
+
 CT.require("zero.lib.three");
 CT.require("zero.lib.Projector");
 CT.require("zero.lib.TrackballControls");
@@ -8,6 +9,7 @@ CT.require("zero.core.camera");
 CT.require("zero.core.click");
 CT.require("zero.core.rec");
 CT.require("zero.core.phonemes");
+CT.require("zero.core.shaders");
 CT.require("zero.core.morphs");
 
 CT.require("zero.core.Thing");

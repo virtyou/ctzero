@@ -157,7 +157,8 @@ zero.core.Thing = CT.Class({
 	build: function() {
 		var oz = this.opts;
 		if (oz.geometry || oz.stripset) {
-			var meshname = "Mesh" + oz.matcat + "Material",
+			var meshname = (oz.shader ? "Shader"
+				: ("Mesh" + oz.matcat)) + "Material",
 				map, meshopts = oz.material;
 			if (oz.texture) {
 				map = THREE.ImageUtils.loadTexture(oz.texture);
@@ -167,6 +168,12 @@ zero.core.Thing = CT.Class({
 				}
 				map.offset.set.apply(map.offset, oz.offset);
 				meshopts = CT.merge(meshopts, { map: map });
+			}
+			if (oz.shader) {
+				meshopts.vertexShader = zero.core.shaders.vertex(this);
+				meshopts.fragmentShader = zero.core.shaders.fragment(this);
+				meshopts.uniforms = zero.core.shaders.uniforms(this, map);
+				meshopts.attributes = zero.core.shaders.attributes(this);
 			}
 			if (this.material) {
 				this.material.dispose();
