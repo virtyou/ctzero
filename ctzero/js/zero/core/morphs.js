@@ -1,5 +1,5 @@
 zero.core.morphs = {
-	ios: function(thing) {
+	deprecated: function(thing) { // don't use -- current tick() faster, even on ios
 		var geo = thing.thring.geometry, a, i, val, dim,
 			vert = geo.vertices[0], dims = ["x", "y", "z"],
 			morphStack = thing.morphStack, base = thing.base;
@@ -17,8 +17,6 @@ zero.core.morphs = {
 	tick: function(thing) {
 		if (thing.opts.shader)
 			return zero.core.shaders.tick(thing);
-		if (CT.info.iOs)
-			return zero.core.morphs.ios(thing);
 		var geo = thing.thring.geometry, modz = {},
 			dimz = ["x", "y", "z"], a, i, val, stack, base = thing.base;
 		for (a in thing.morphs) {
@@ -39,12 +37,12 @@ zero.core.morphs = {
 		var m = thing.morphStack[a],
 			morphz = thing.morphs[a] = {};
 		thing.base.forEach(function(b, i) {
-			if (b != m[i])
+			if (Math.abs(b - m[i]) > 0.2)
 				morphz[i] = m[i];
 		});
 	},
 	init: function(thing) {
-		if (!thing.opts.shader && !CT.info.iOs) {
+		if (!thing.opts.shader) {
 			thing.morphs = {};
 			for (var a in thing.aspects)
 				zero.core.morphs.delta(thing, a);
