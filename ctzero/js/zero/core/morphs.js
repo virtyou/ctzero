@@ -35,9 +35,10 @@ zero.core.morphs = {
 	},
 	delta: function(thing, a) {
 		var m = thing.morphStack[a],
-			morphz = thing.morphs[a] = {};
+			morphz = thing.morphs[a] = {},
+			cutoff = core.config.ctzero.morphs.delta_cutoff;
 		thing.base.forEach(function(b, i) {
-			if (Math.abs(b - m[i]) > 0.07)
+			if (Math.abs(b - m[i]) > cutoff)
 				morphz[i] = m[i];
 		});
 	},

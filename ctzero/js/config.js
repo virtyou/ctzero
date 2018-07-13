@@ -49,5 +49,8 @@
 		"objects": []
 	},
 	"people": [],
-	"script": []
+	"script": [],
+	"morphs": {
+		"delta_cutoff": 0.1
+	}
 }
