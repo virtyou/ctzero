@@ -59,9 +59,9 @@ zero.core.Person = CT.Class({
 	watch: function(nofollow, noroom) {
 		var cube = this.body.looker;
 		if (nofollow)
-			camera.look(cube.position());
+			zero.core.camera.look(cube.position());
 		else
-			camera.follow(cube);
+			zero.core.camera.follow(cube);
 		if (!noroom) {
 			var pz = zero.core.util.people;
 			for (var p in pz)
@@ -92,6 +92,6 @@ zero.core.Person = CT.Class({
 			damp: 1
 		});
 		this._.initSpeech();
-		camera.register(this.name, this.watch);
+		zero.core.camera.register(this.name, this.watch);
 	}
 });

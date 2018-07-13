@@ -30,7 +30,7 @@ zero.core.Head = CT.Class({
 				});
 			});
 
-			var cpos = (this.person.subject || camera).position(null, true);
+			var cpos = (this.person.subject || zero.core.camera).position(null, true);
 			cubeL.look(cpos);
 			cubeR.look(cpos);
 
@@ -77,6 +77,7 @@ zero.core.Head = CT.Class({
 		},
 		mouth: function() {
 			var cur = this.currentPhoneme, vis = this._viseme,
+				phonemes = zero.core.phonemes,
 				t, talking = cur != "pau" && cur !== "sil", changed;
 			if (talking != this.talking) {
 				changed = true;

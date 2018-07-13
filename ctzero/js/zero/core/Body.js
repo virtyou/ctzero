@@ -4,6 +4,7 @@ zero.core.Body = CT.Class({
 		this.log("built body!");
 		if (this.opts.joints.length) {
 			var dim, name, h = thiz = this,
+				ac = zero.core.aspectController,
 				spine = this.spine = [],
 				joints = this.joints = {};
 			this.opts.joints.forEach(function(part, i) {
@@ -16,7 +17,7 @@ zero.core.Body = CT.Class({
 			this.opts.joints.forEach(function(part, i) {
 				for (dim in part.rotation) {
 					name = part.name + "_" + dim;
-					joints[name] = aspect.add(part.rotation[dim], name, thiz);
+					joints[name] = ac.add(part.rotation[dim], name, thiz);
 					joints[name].part = spine[i];
 				}
 			});
@@ -57,8 +58,9 @@ zero.core.Body = CT.Class({
 //			shader: true,
 			onassemble: this._assembled
 		});
-		for (var p in phonemes.forms)
-			this.springs[p] = spring.add(phonemes.forms[p], p, this);
+		var p, zc = zero.core;
+		for (p in zc.phonemes.forms)
+			this.springs[p] = zc.springController.add(zc.phonemes.forms[p], p, this);
 		zero.core.morphs.init(this);
 	}
 }, zero.core.Thing);
