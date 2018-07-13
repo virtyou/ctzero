@@ -11,7 +11,7 @@ zero.core.Head = CT.Class({
 				gR = this.eyeGroupR, eyeR = gR.eyeR, cubeR = gR.cubeReyeDummy,
 				eyeMorph = 0.05 * Math.sin(zero.core.util.ticker / 20);
 
-			eyeL.morph(1, eyeMorph);
+			eyeL.morph(1, eyeMorph); // what is this morph???
 			eyeR.morph(1, eyeMorph);
 
 			//moves rotation center to correct place on parent --- every time, really? <---- !!!!
@@ -34,12 +34,38 @@ zero.core.Head = CT.Class({
 			cubeL.look(cpos);
 			cubeR.look(cpos);
 
-			if (gL.rotation.x > -0.2)
-				this.body.springs.lids.target += gL.rotation.x;
-			else
-				this.body.springs.lids.target = -0.2;
+	    	var lids = this.body.springs.lids;
+			if (this.blinking) {
+				lids.target = 1;
+				lids.k = 2000;
+				return;
+			}
 
-			return;
+			var shake = this.body.springs.shake,
+			    nod = this.body.springs.nod,
+			    eyeRot = this.eyeGroupL.rotation();
+			lids.target = 0; // ????
+			shake.target += 0.01 * eyeRot.y;
+			nod.target += 0.01 * eyeRot.x;
+			if (eyeRot.x > 0)
+				lids.target += eyeRot.x;
+			else
+				this.body.springs.smileEyes.target -= 5 * eyeRot.x;
+
+			this.blinkTicker += 0.01;
+			if (this.blinkTicker > 0.04)
+				lids.k = 220;
+			if (this.blinkTicker > this.blinkWait && this.blinkTicker < (this.blinkWait + this.blinkDuration)) {
+				lids.target = 1; // blink
+				lids.k = 2000;
+			} else {
+				this.blinkWait = 3 * Math.random();
+				this.blinkDuration = 0.1 * Math.random();
+				this.blinkTicker = 0;
+			}
+
+
+			return; // lines below make eyes huge....
 
 			var smeye = this.body.aspects.smile_eye;
 			if (gR.rotation.x > -0.3 && gR.rotation.x < 0.3)
@@ -79,37 +105,18 @@ zero.core.Head = CT.Class({
 					}
 				}
 			}
-		},
-		spontanimation: function() { // TODO: use Tickers or something for this (and top vars)!
-			var shake = this.body.springs.shake,
-			    nod = this.body.springs.nod,
-			    lids = this.body.springs.lids,
-			    eyeRot = this.eyeGroupL.rotation();
-			lids.target = 0; // ????
-			shake.target += 0.01 * eyeRot.y;
-			nod.target += 0.01 * eyeRot.x;
-			if (eyeRot.x > 0)
-				lids.target += eyeRot.x;
-			else if (eyeRot.x < 0)
-				this.body.springs.smileEyes.target -= 5 * eyeRot.x;
-			else
-				lids.target = -0.2;
-			this.blinkTicker += 0.01;
-			if (this.blinkTicker > 0.04)
-				lids.k = 220;
-			if (this.blinkTicker > this.blinkWait && this.blinkTicker < (this.blinkWait + this.blinkDuration)) {
-				lids.target = 1; // blink
-				lids.k = 2000;
-			} else {
-				this.blinkWait = 3 * Math.random();
-				this.blinkDuration = 0.1 * Math.random();
-				this.blinkTicker = 0;
-			}
 		}
 	},
 	_viseme: function(vdata, vtype) {
 		for (var k in vdata[vtype] || {})
 			this.body.springs[k][vtype] = vdata[vtype][k];
+	},
+	blink: function() {
+		var thiz = this;
+		this.blinking = true;
+		setTimeout(function() {
+			thiz.blinking = false;
+		}, CT.data.random(500) + 500);
 	},
 	energy: function() {
 		return this.person && this.person.energy;
@@ -118,7 +125,6 @@ zero.core.Head = CT.Class({
 		if (!this.isReady()) return;
 		this.updaters.eyes();
 		this.updaters.mouth();
-		this.updaters.spontanimation();
 		var skeleton = this.body.thring.skeleton;
 		this._.customs.forEach(function(c) { c.tick(skeleton); });
 	}
