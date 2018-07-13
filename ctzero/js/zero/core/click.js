@@ -16,7 +16,7 @@ zero.core.click = {
             ray = new THREE.Raycaster(cam.position, vector.sub(cam.position).normalize());
             intersects = ray.intersectObjects(zero.core.click.targets, true);
 
-            for (i = 0; i < intersects.length; i++) {
+            for (i = intersects.length - 1; i > -1; i--) {
                 var obj = intersects[i].object;
                 while (obj) {
                     if (obj.__click)
