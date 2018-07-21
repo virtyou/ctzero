@@ -52,7 +52,9 @@ def response():
     if action == "chat":
         from pb_py import main as PB
         cfg = config.ctzero.chat
-        succeed(PB.talk(cfg.userkey, cfg.appid, cfg.host, cfg.botname, cgi_get("question"))["response"])
+        resp = PB.talk(cfg.userkey, cfg.appid, cfg.host, cfg.botname, cgi_get("question"))["response"]
+        resp = resp.split("[URL]")[0]
+        succeed(resp)
     language = cgi_get("language")
     comz = CMDS[action]
     if action == "say":
@@ -62,8 +64,17 @@ def response():
         fpath = "sound/" + fname
         fpjson = "%s.json"%(fpath,)
         if not os.path.exists(fpjson):
+            fullwords = words.replace('"', '')
+            fullfpath = fpath
+            prosity = cgi_get("prosody", required=False)
+            if prosity:
+                start = "<speak><prosody"
+                for key, val in prosity.items():
+                    start += " %s='%s'"%(key, val)
+                fullwords = "%s>%s</prosody></speak>"%(start, fullwords)
+                fullfpath = "--text-type ssml %s"%(fpath,)
             for command in comz[language]:
-                cmd(command%(words.replace('"', ''), fpath))
+                cmd(command%(fullwords, fullfpath))
         data = read(fpjson)
         robj = {}
         if language == "mandarin":
