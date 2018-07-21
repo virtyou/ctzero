@@ -61,6 +61,7 @@ zero.core.Person = CT.Class({
 		});
 	},
 	tick: function() {
+		this.mood.tick();
 		this.body.tick();
 	},
 	watch: function(nofollow, noroom) {
@@ -97,6 +98,13 @@ zero.core.Person = CT.Class({
 		this.energy = new zero.core.Energy({
 			k: 1,
 			damp: 1
+		});
+		this.mood = new zero.core.Mood(CT.merge(opts.mood, {
+			person: this
+		}));
+		this.prosody = CT.merge(opts.prosody, {
+			rate: "medium",
+			pitch: "medium"
 		});
 		this._.initSpeech();
 		zero.core.camera.register(this.name, this.watch);
