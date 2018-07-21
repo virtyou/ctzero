@@ -12,7 +12,9 @@ zero.core.Mood = CT.Class({
 			energy = this.person.energy,
 			springs = this.person.body.springs,
 			tickers = this.person.body.tickers;
-		springs.browAsym.target = mad;
+		springs.brow.target = mad;
+		springs.browAsym.target = antsy;
+		springs.sad_brow.target = sad;
 		springs.smile.target = springs.smileEyes.target = happy;
 		springs.nod.target = -0.1 * (sad - mad - antsy - (happy / 2));
 		tickers.asym.conditions.talking.no.reschedule = 3 - antsy;
