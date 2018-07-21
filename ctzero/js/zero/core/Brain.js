@@ -44,6 +44,16 @@ zero.core.Brain = CT.Class({
 		};
 		recognizer.start();
 	},
+	respond: function(phrase, cb) {
+		CT.net.post({
+			path: "/_zero",
+			params: {
+				action: "chat",
+				question: phrase
+			},
+			cb: cb
+		});
+	},
 	compare: function(target, next, onwrong) {
 		target = target.text || target;
 		document.getElementById(onwrong ? "iSaid" : "sayThis").innerHTML = target;
