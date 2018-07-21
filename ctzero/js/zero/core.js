@@ -21,6 +21,7 @@ CT.require("zero.core.Body");
 
 CT.require("zero.core.Brain");
 CT.require("zero.core.Energy");
+CT.require("zero.core.Mood");
 CT.require("zero.core.Person");
 
 CT.require("zero.core.Controller");
