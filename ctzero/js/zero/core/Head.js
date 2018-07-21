@@ -45,8 +45,8 @@ zero.core.Head = CT.Class({
 			    nod = this.body.springs.nod,
 			    eyeRot = this.eyeGroupL.rotation();
 			lids.target = 0; // ????
-			shake.target += 0.01 * eyeRot.y;
-			nod.target += 0.01 * eyeRot.x;
+			shake.boost = 0.01 * eyeRot.y;
+			nod.boost = 0.01 * eyeRot.x;
 			if (eyeRot.x > 0)
 				lids.target += eyeRot.x;
 			else
@@ -82,8 +82,8 @@ zero.core.Head = CT.Class({
 			if (talking != this.talking) {
 				changed = true;
 				this.talking = talking;
-				for (t in this.tickers)
-					this.tickers[t].tick();
+				for (t in this.body.tickers)
+					this.body.tickers[t].tick();
 			} else
 				this.talking = talking;
 			(talking || changed) && phonemes.forEach(function(pdata) {
