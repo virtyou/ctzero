@@ -14,7 +14,7 @@ This package contains the core zero libraries.
     
     syms = {
     	".": ["_zero.py"],
-    	"js": ["zero"]
+    	"js": ["zero", "shaders"]
     }
     model = {
     	"ctzero.model": ["*"]
@@ -30,6 +30,12 @@ This package contains the core zero libraries.
     		"mode": "gcloud", # or "baidu" -- default "gcloud" mode requires gcloud to be installed and configured
     		"id": None,       # baidu only
     		"secret": None    # baidu only
+    	},
+    	"chat": {             # currently supports pandorabots mode
+    		"host": "aiaas.pandorabots.com",
+    		"appid": None,
+    		"userkey": None,
+    		"botname": None
     	}
     }
 
@@ -39,6 +45,9 @@ This package contains the core zero libraries.
 ### Import line: 'CT.require("core.config");'
     {
     	"camera": {
+    		"opts": {
+    			"antialias": true
+    		},
     		"controls": {
     			"rotateSpeed": 1.0,
     			"zoomSpeed": 1.2,
@@ -88,5 +97,8 @@ This package contains the core zero libraries.
     		"objects": []
     	},
     	"people": [],
-    	"script": []
+    	"script": [],
+    	"morphs": {
+    		"delta_cutoff": 0.1
+    	}
     }
