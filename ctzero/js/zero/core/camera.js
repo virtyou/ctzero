@@ -170,7 +170,7 @@ var camera = zero.core.camera = {
 		if (config.camera.background)
 			camera.scene.background = THREE.ImageUtils.loadTexture(config.camera.background);
 		_.camera = new THREE.PerspectiveCamera(25, WIDTH / HEIGHT, 0.2, 10000000);
-		_.renderer = new THREE.WebGLRenderer({ antialias: true });
+		_.renderer = new THREE.WebGLRenderer(core.config.ctzero.camera.opts);
 		_.renderer.setSize(WIDTH, HEIGHT);
 		_.container = CT.dom.div(null, "abs all0");
 		CT.dom.addContent(document.body, _.container);

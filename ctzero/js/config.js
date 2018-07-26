@@ -1,5 +1,8 @@
 {
 	"camera": {
+		"opts": {
+			"antialias": true
+		},
 		"controls": {
 			"rotateSpeed": 1.0,
 			"zoomSpeed": 1.2,
