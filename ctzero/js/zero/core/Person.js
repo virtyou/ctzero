@@ -51,7 +51,7 @@ zero.core.Person = CT.Class({
 		if (data.audio)
 			this._.playClip(this.brain.say_data(data, cb));
 		else
-			this.brain.say(data, cb, this._.playClip, this.prosody);
+			this.brain.say(data, cb, this._.playClip, this.prosody, this.voice);
 	},
 	respond: function(phrase, cb) {
 		var thaz = this;
@@ -84,6 +84,7 @@ zero.core.Person = CT.Class({
 		this.log("init", opts.name);
 		var thiz = this;
 		this.opts = opts;
+		this.voice = opts.voice || "Joanna";
 		this.name = opts.name;
 		this.body = new zero.core.Body(CT.merge(opts.body, {
 			onbuild: function() {
