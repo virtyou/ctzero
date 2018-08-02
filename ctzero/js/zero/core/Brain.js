@@ -13,7 +13,7 @@ zero.core.Brain = CT.Class({
 		this.person.afterSpeech(cb);
 		return this.data2clip(data);
 	},
-	say: function(utterances, cb, playClip, prosody) {
+	say: function(utterances, cb, playClip, prosody, voice) {
 		if (!Array.isArray(utterances)) {
 			if (!cb && !playClip && window.speechSynthesis)
 				return speechSynthesis.speak(new SpeechSynthesisUtterance(utterances));
@@ -29,6 +29,7 @@ zero.core.Brain = CT.Class({
 				params: {
 					action: "say",
 					words: words,
+					voice: voice,
 					prosody: prosody,
 					language: /[A-Za-z0-9/$]/.test(words) && "english" || "mandarin"
 				}
