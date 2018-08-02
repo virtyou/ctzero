@@ -10,12 +10,10 @@ LANG = {
 }
 CMDS = {
     "say": {
-        "mandarin": [
-            "wget \"http://tts.mobvoi.com/api/synthesis?nettype=wifi×tamp=1484898152748&language=unknown&audio_type=mp3&product=bd_yunnan&detail_output=true&text='%s'\" -O %s.json"
-        ],
+        "mandarin": "wget \"http://tts.mobvoi.com/api/synthesis?nettype=wifi×tamp=1484898152748&language=unknown&audio_type=mp3&product=bd_yunnan&detail_output=true&text='%s'\" -O %s.json",
         "english": [
-            'aws polly synthesize-speech --output-format mp3 --voice-id Joanna --text "%s" %s.mp3',
-            'aws polly synthesize-speech --output-format json --voice-id Joanna --text "%s" --speech-mark-types=\'["viseme"]\' %s.json'
+            'aws polly synthesize-speech --output-format mp3 --voice-id %s --text "%s" %s.mp3',
+            'aws polly synthesize-speech --output-format json --voice-id %s --text "%s" --speech-mark-types=\'["viseme"]\' %s.json'
         ]
     },
     "rec": {
@@ -56,11 +54,12 @@ def response():
         resp = resp.split("[URL]")[0]
         succeed(resp)
     language = cgi_get("language")
+    voice = cgi_get("voice", default="Joanna")
     comz = CMDS[action]
     if action == "say":
         words = cgi_get("words")
-        log("say -> %s :: %s"%(language, words))
-        fname = "".join([c for c in words if c in string.letters]) or hash(words)
+        log("say -> %s [%s] :: %s"%(language, voice, words))
+        fname = "%s%s"%(voice, "".join([c for c in words if c in string.letters]) or hash(words))
         fpath = "sound/" + fname
         fpjson = "%s.json"%(fpath,)
         if not os.path.exists(fpjson):
@@ -73,8 +72,11 @@ def response():
                     start += " %s='%s'"%(key, val)
                 fullwords = "%s>%s</prosody></speak>"%(start, fullwords)
                 fullfpath = "--text-type ssml %s"%(fpath,)
-            for command in comz[language]:
-                cmd(command%(fullwords, fullfpath))
+            if language == "english":
+                for command in comz["english"]:
+                    cmd(command%(voice, fullwords, fullfpath))
+            else: # mandarin -- figure out voice and remerge w/ english version
+                cmd(comz["mandarin"]%(fullwords, fullfpath))
         data = read(fpjson)
         robj = {}
         if language == "mandarin":
