@@ -61,7 +61,7 @@ zero.core.Person = CT.Class({
 		});
 	},
 	tick: function() {
-		this.mood.tick();
+		this.opts.moody && this.mood.tick();
 		this.body.tick();
 	},
 	watch: function(nofollow, noroom) {
@@ -83,8 +83,11 @@ zero.core.Person = CT.Class({
 	init: function(opts) {
 		this.log("init", opts.name);
 		var thiz = this;
-		this.opts = opts;
-		this.voice = opts.voice || "Joanna";
+		this.opts = CT.merge(opts, {
+			moody: false,
+			voice: "Joanna"
+		});
+		this.voice = opts.voice;
 		this.name = opts.name;
 		this.body = new zero.core.Body(CT.merge(opts.body, {
 			onbuild: function() {
