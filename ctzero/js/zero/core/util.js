@@ -87,14 +87,14 @@ zero.core.util = {
 			}
 		}));
 	},
-	person: function(body_generator, name, pos) {
+	person: function(body_generator, name, pos, opts) {
 		var body = body_generator();
 		if (pos)
 			body.position = pos;
-		return {
+		return CT.merge({
 			name: name,
 			body: body
-		};
+		}, opts);
 	},
 	script: function(script) {
 		var step = script.shift();
