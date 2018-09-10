@@ -5,11 +5,13 @@ zero.core.click = {
         if (zero.core.click._ready) return;
         zero.core.click._ready = true;
         var mouse = {}, projector = new THREE.Projector(),
-            cam = zero.core.camera.get(), vector, ray, intersects, i;
-        document.getElementsByTagName("canvas")[0].parentNode.addEventListener(CT.info.mobile
+            cam = zero.core.camera.get(), vector, ray, intersects, i,
+            can = document.getElementsByTagName("canvas")[0],
+            offset = CT.align.offset(can);
+        can.parentNode.addEventListener(CT.info.mobile
             ? 'touchstart' : 'mousedown', function(e) {
-            mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
-            mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
+            mouse.x = ((e.clientX - offset.left) / can.clientWidth) * 2 - 1;
+            mouse.y = -((e.clientY - offset.top) / can.clientHeight) * 2 + 1;
 
             vector = new THREE.Vector3(mouse.x, mouse.y, 0.5);
             projector.unprojectVector(vector, cam);
