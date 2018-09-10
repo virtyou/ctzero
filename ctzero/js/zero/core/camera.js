@@ -173,7 +173,7 @@ var camera = zero.core.camera = {
 		_.renderer = new THREE.WebGLRenderer(core.config.ctzero.camera.opts);
 		_.renderer.setSize(WIDTH, HEIGHT);
 		_.container = CT.dom.div(null, "abs all0");
-		CT.dom.addContent(document.body, _.container);
+		CT.dom.addContent(CT.dom.id(config.container) || document.body, _.container);
 		_.container.appendChild(_.renderer.domElement);
 		_.controls = new THREE.TrackballControls(_.camera);
 		_.looker = new zero.core.Thing({
