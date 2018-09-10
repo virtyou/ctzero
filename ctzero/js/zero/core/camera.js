@@ -164,18 +164,19 @@ var camera = zero.core.camera = {
 		});
 	},
 	init: function() {
-		var _ = camera._, config = core.config.ctzero,
+		var _ = camera._, config = core.config.ctzero, controls = !config.camera.noControls,
 			WIDTH = window.innerWidth, HEIGHT = window.innerHeight;
 		camera.scene = new THREE.Scene();
 		if (config.camera.background)
 			camera.scene.background = THREE.ImageUtils.loadTexture(config.camera.background);
 		_.camera = new THREE.PerspectiveCamera(25, WIDTH / HEIGHT, 0.2, 10000000);
-		_.renderer = new THREE.WebGLRenderer(core.config.ctzero.camera.opts);
+		_.renderer = new THREE.WebGLRenderer(config.camera.opts);
 		_.renderer.setSize(WIDTH, HEIGHT);
 		_.container = CT.dom.div(null, "abs all0");
 		CT.dom.addContent(CT.dom.id(config.container) || document.body, _.container);
 		_.container.appendChild(_.renderer.domElement);
-		_.controls = new THREE.TrackballControls(_.camera);
+		if (controls)
+			_.controls = new THREE.TrackballControls(_.camera);
 		_.looker = new zero.core.Thing({
 			name: "looker",
 			geometry: new THREE.CubeGeometry(1, 1, 15),
@@ -185,8 +186,9 @@ var camera = zero.core.camera = {
 			}
 		});
 
-		for (var k in config.camera.controls)
-			_.controls[k] = config.camera.controls[k];
+		if (controls)
+			for (var k in config.camera.controls)
+				_.controls[k] = config.camera.controls[k];
 		for (var a in config.camera.springs) {
 			for (var s in config.camera.springs[a])
 				camera.springs[a][s] = zero.core.springController.add(config.camera.springs[a][s], "camera" + a + s);
