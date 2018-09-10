@@ -48,6 +48,7 @@ This package contains the core zero libraries.
     		"opts": {
     			"antialias": true
     		},
+    		"noControls": false,
     		"controls": {
     			"rotateSpeed": 1.0,
     			"zoomSpeed": 1.2,
