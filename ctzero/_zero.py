@@ -58,20 +58,25 @@ def response():
     comz = CMDS[action]
     if action == "say":
         words = cgi_get("words")
-        log("say -> %s [%s] :: %s"%(language, voice, words))
-        fname = "%s%s"%(voice, "".join([c for c in words if c in string.letters]) or hash(words))
+        prosody = cgi_get("prosody", default={
+            "rate": "medium",
+            "pitch": "medium"
+        })
+        rate = prosody["rate"]
+        pitch = prosody["pitch"]
+        log("say -> %s [%s @ %s, %s] :: %s"%(language, voice, rate, pitch, words))
+        fname = "%s%s%s%s"%(voice, rate, pitch,
+            "".join([c for c in words if c in string.letters]) or hash(words))
         fpath = "sound/" + fname
         fpjson = "%s.json"%(fpath,)
         if not os.path.exists(fpjson):
             fullwords = words.replace('"', '')
             fullfpath = fpath
-            prosity = cgi_get("prosody", required=False)
-            if prosity:
-                start = "<speak><prosody"
-                for key, val in prosity.items():
-                    start += " %s='%s'"%(key, val)
-                fullwords = "%s>%s</prosody></speak>"%(start, fullwords)
-                fullfpath = "--text-type ssml %s"%(fpath,)
+            start = "<speak><prosody"
+            for key, val in prosody.items():
+                start += " %s='%s'"%(key, val)
+            fullwords = "%s>%s</prosody></speak>"%(start, fullwords)
+            fullfpath = "--text-type ssml %s"%(fpath,)
             if language == "english":
                 for command in comz["english"]:
                     cmd(command%(voice, fullwords, fullfpath))
