@@ -138,6 +138,7 @@ zero.core.Thing = CT.Class({
 			this.parts = this.opts.parts.map(function(child) {
 				childopts = CT.merge(child, {
 					scene: group,
+					path: thiz.path,
 					iterator: iterator,
 					bones: thiz.bones || []
 				});
@@ -191,6 +192,7 @@ zero.core.Thing = CT.Class({
 	},
 	init: function(opts) {
 		this.opts = opts = CT.merge(opts, {
+			path: null,
 			name: "Thing" + Math.floor(Math.random() * 1000),
 			scene: zero.core.camera.scene,
 			parts: [],
@@ -216,6 +218,7 @@ zero.core.Thing = CT.Class({
 			onbuild: null // also supports: "onassemble"
 		});
 		this.name = opts.name;
+		this.path = opts.path ? (opts.path + "." + opts.name) : opts.name;
 		var thiz = this, iz, name;
 		["spring", "aspect", "ticker"].forEach(function(influence) {
 			iz = influence + "s", influences = thiz[iz] = {};
