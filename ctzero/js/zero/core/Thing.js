@@ -124,34 +124,40 @@ zero.core.Thing = CT.Class({
 		if (mti)
 			mti[influence] = mti[influence] ? 0 : 1;
 	},
+	attach: function(child, iterator) {
+		var thing, childopts = CT.merge(child, {
+			scene: this.group,
+			path: this.path,
+			iterator: iterator,
+			bones: this.bones || []
+		});
+		if (child.custom) {
+			 // custom() must:
+			 // - call iterator() post-init
+			 // - return object w/ name and tick()
+			thing = child.custom(childopts);
+			this._.customs.push(thing);
+		} else
+			thing = new zero.core[child.thing || "Thing"](childopts);
+		this[thing.name] = thing;
+		if (!iterator) // one-off
+			this.parts.push(thing);
+		return thing;
+	},
 	assemble: function() {
 		if (this.opts.parts.length && !this.parts) {
-			var group, childopts, thing, thiz = this, i = 0, iterator = function() {
-				i += 1;
-				if (i >= thiz.opts.parts.length) {
-					if (!thiz.bone && i == thiz.opts.parts.length)
-						thiz.opts.scene.add(group);
-					thiz._.built();
-				}
-			};
-			group = this.group = this.bone || new THREE.Object3D();
-			this.parts = this.opts.parts.map(function(child) {
-				childopts = CT.merge(child, {
-					scene: group,
-					path: thiz.path,
-					iterator: iterator,
-					bones: thiz.bones || []
-				});
-				if (child.custom) {
-					 // custom() must:
-					 // - call iterator() post-init
-					 // - return object w/ name and tick()
-					thing = child.custom(childopts);
-					thiz._.customs.push(thing);
-				} else
-					thing = new zero.core[child.thing || "Thing"](childopts);
-				thiz[thing.name] = thing;
-				return thing;
+			var thiz = this, i = 0,
+				group = this.group = this.bone || new THREE.Object3D(),
+				iterator = function() {
+					i += 1;
+					if (i >= thiz.opts.parts.length) {
+						if (!thiz.bone && i == thiz.opts.parts.length)
+							thiz.opts.scene.add(group);
+						thiz._.built();
+					}
+				};
+			this.parts = this.opts.parts.map(function(p) {
+				return thiz.attach(p, iterator);
 			});
 		}
 	},
