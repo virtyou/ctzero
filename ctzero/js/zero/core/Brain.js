@@ -46,7 +46,25 @@ zero.core.Brain = CT.Class({
 		};
 		recognizer.start();
 	},
+	get_response: function(res) {
+		if (typeof res == "string")
+			return res;
+		else if (Array.isArray(res))
+			return this.get_response(CT.data.choice(res));
+		else if (typeof res == "object") {
+			// also support res.gesture{}, etc
+			res.mood && this.person.mood.update(res.mood);
+			return this.get_response(res.phrase);
+		}
+	},
 	respond: function(phrase, cb) {
+		var respz = this.person.opts.responses, i, word,
+			words = phrase.toLowerCase().split(" ");
+		for (i = 0; i < words.length; i++) {
+			word = words[i];
+			if (word in respz)
+				return cb(this.get_response(respz[word]));
+		}
 		CT.net.post({
 			path: "/_zero",
 			params: {

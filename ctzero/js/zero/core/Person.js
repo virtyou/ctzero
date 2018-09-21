@@ -85,6 +85,7 @@ zero.core.Person = CT.Class({
 		var thiz = this;
 		this.opts = CT.merge(opts, {
 			moody: false,
+			responses: {},
 			voice: "Joanna"
 		});
 		this.voice = opts.voice;
