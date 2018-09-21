@@ -49,6 +49,8 @@ zero.core.Brain = CT.Class({
 	get_response: function(res) {
 		if (typeof res == "string")
 			return res;
+		if (typeof res == "function")
+			return res(this.person);
 		else if (Array.isArray(res))
 			return this.get_response(CT.data.choice(res));
 		else if (typeof res == "object") {
