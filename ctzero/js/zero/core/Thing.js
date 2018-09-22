@@ -124,6 +124,9 @@ zero.core.Thing = CT.Class({
 		if (mti)
 			mti[influence] = mti[influence] ? 0 : 1;
 	},
+	remove: function(cname) {
+		this.group.remove(this[cname].thring);
+	},
 	attach: function(child, iterator) {
 		var thing, childopts = CT.merge(child, {
 			scene: this.group,
