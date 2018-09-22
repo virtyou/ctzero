@@ -125,14 +125,21 @@ zero.core.Thing = CT.Class({
 			mti[influence] = mti[influence] ? 0 : 1;
 	},
 	remove: function(cname, fromScene) {
-		(fromScene ? camera.scene : this.group).remove(this[cname].thring);
+		var thing = this[cname],
+			isCustom = !!thing.thrings,
+			thrings = thing.thrings || [thing.thring], // supports custom objects
+			parent = fromScene ? camera.scene : this.group;
+		thrings.forEach(function(thring) {
+			parent.remove(thring);
+		});
+		isCustom && CT.data.remove(this._.customs, thing);
 		delete this[cname];
 	},
 	attach: function(child, iterator) {
 		var thing, childopts = CT.merge(child, {
 			scene: this.group,
 			path: this.path,
-			iterator: iterator,
+			iterator: iterator || function() {},
 			bones: this.bones || []
 		});
 		if (child.custom) {
