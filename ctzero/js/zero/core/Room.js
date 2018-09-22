@@ -16,7 +16,11 @@ zero.core.Room = CT.Class({
 	},
 	removeObject: function(obj) {
 		this.log("removing object");
-		CT.data.remove(this.objects, obj);
+		var thing;
+		for (var i = 0; i < this.objects.length; i++)
+			if (this.objects[i].name == obj.name)
+				thing = this.objects[i];
+		CT.data.remove(this.objects, thing);
 		this.remove(obj.name, true);
 	},
 	addCamera: function(cam) {
