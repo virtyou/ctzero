@@ -1,6 +1,7 @@
 zero.core.Pool = CT.Class({
 	CLASSNAME: "zero.core.Pool",
 	tick: function(dts) {
+		if (!this.thring) return; // for dynamic attachment
 		this.age += dts;
 		var timeP = this.age * this.opts.factor,
 			amp = this.opts.amplitude, i,
