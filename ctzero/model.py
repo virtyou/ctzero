@@ -3,11 +3,21 @@ from ctuser.model import CTUser
 
 class Thing(db.TimeStampedBase):
 	owner = db.ForeignKey(kind=CTUser)
-	opts = db.JSON()
+	opts = db.JSON() # base opts
 	custom = db.Text()
 	texture = db.Binary()
 	stripset = db.Binary()
 	morphStack = db.Binary()
+
+class Part(Thing):
+	parent = db.ForeignKey(kind="Part")
+	base = db.ForeignKey(kind=Thing)
+	opts = db.JSON() # merged into Thing.opts{}
+
+class Person(Thing):
+	body = db.ForeignKey(kind=Part)
+	voice = db.String()
+	mood = db.JSON() # {mad,happy,sad,antsy}
 
 class Room(Thing):
 	pass
