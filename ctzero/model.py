@@ -3,7 +3,8 @@ from ctuser.model import CTUser
 
 class Thing(db.TimeStampedBase):
 	owner = db.ForeignKey(kind=CTUser)
-	opts = db.Text()
+	opts = db.JSON()
+	custom = db.Text()
 	texture = db.Binary()
 	stripset = db.Binary()
 	morphStack = db.Binary()
