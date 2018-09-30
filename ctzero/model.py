@@ -1,14 +1,20 @@
 from cantools import db
 from ctuser.model import CTUser
 
+class Asset(db.TimeStampedBase):
+	owner = db.ForeignKey(kind=CTUser)
+	variety = db.String(choices=["texture", "stripset", "morphStack"])
+	name = db.String()
+	item = db.Binary()
+
 class Thing(db.TimeStampedBase):
 	owner = db.ForeignKey(kind=CTUser)
+	texture = db.ForeignKey(kind=Asset)
+	stripset = db.ForeignKey(kind=Asset)
+	morphStack = db.ForeignKey(kind=Asset)
 	opts = db.JSON() # base opts
 	name = db.String()
 	custom = db.Text()
-	texture = db.Binary()
-	stripset = db.Binary()
-	morphStack = db.Binary()
 
 class Part(db.TimeStampedBase):
 	parent = db.ForeignKey(kind="Part")
