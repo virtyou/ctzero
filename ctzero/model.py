@@ -4,6 +4,7 @@ from ctuser.model import CTUser
 class Thing(db.TimeStampedBase):
 	owner = db.ForeignKey(kind=CTUser)
 	opts = db.JSON() # base opts
+	name = db.String()
 	custom = db.Text()
 	texture = db.Binary()
 	stripset = db.Binary()
@@ -16,7 +17,6 @@ class Part(Thing):
 
 class Person(Thing):
 	body = db.ForeignKey(kind=Part)
-	name = db.String()
 	voice = db.String()
 	mood = db.JSON() # {mad,happy,sad,antsy}
 
