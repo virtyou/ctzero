@@ -148,7 +148,9 @@ zero.core.Thing = CT.Class({
 			 // - return object w/ name, tick(), thrings[]
 			thing = child.custom(childopts);
 			thing.snapshot = function() {
-				return child;
+				return CT.merge({
+					name: thing.name
+				}, child);
 			};
 			this._.customs.push(thing);
 		} else
