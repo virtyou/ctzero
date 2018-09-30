@@ -145,8 +145,11 @@ zero.core.Thing = CT.Class({
 		if (child.custom) {
 			 // custom() must:
 			 // - call iterator() post-init
-			 // - return object w/ name and tick()
+			 // - return object w/ name, tick(), thrings[]
 			thing = child.custom(childopts);
+			thing.snapshot = function() {
+				return child;
+			};
 			this._.customs.push(thing);
 		} else
 			thing = new zero.core[child.thing || "Thing"](childopts);
@@ -207,7 +210,15 @@ zero.core.Thing = CT.Class({
 			this.assemble();
 		}
 	},
+	snapshot: function() {
+		return CT.merge({
+			parts: this.parts && this.parts.map(function(p) {
+				return p.snapshot();
+			})
+		}, this.min_opts);
+	},
 	init: function(opts) {
+		this.min_opts = opts;
 		this.opts = opts = CT.merge(opts, {
 			path: null,
 			name: "Thing" + Math.floor(Math.random() * 1000),

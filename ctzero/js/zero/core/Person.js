@@ -80,6 +80,13 @@ zero.core.Person = CT.Class({
 	look: function(subject) {
 		this.subject = subject;
 	},
+	snapshot: function() {
+		return {
+			voice: this.voice,
+			mood: this.mood.snapshot(),
+			body: this.body.snapshot()
+		}
+	},
 	init: function(opts) {
 		this.log("init", opts.name);
 		var thiz = this;

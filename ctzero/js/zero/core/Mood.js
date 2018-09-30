@@ -30,6 +30,14 @@ zero.core.Mood = CT.Class({
 	update: function(opts) {
 		this.opts = CT.merge(opts, this.opts);
 	},
+	snapshot: function() {
+		return {
+			mad: this.opts.mad,
+			happy: this.opts.happy,
+			sad: this.opts.sad,
+			antsy: this.opts.antsy
+		};
+	},
 	init: function(opts) {
 		this.opts = opts = CT.merge(opts, {
 			mad: 0,
