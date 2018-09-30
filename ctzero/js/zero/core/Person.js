@@ -82,6 +82,7 @@ zero.core.Person = CT.Class({
 	},
 	snapshot: function() {
 		return {
+			name: this.name,
 			voice: this.voice,
 			mood: this.mood.snapshot(),
 			body: this.body.snapshot()
