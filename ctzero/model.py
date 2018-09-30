@@ -2,7 +2,9 @@ from cantools import db
 
 class Thing(db.TimeStampedBase):
 	opts = db.Text()
-	assets = db.Binary(repeated=True)
+	texture = db.Binary()
+	stripset = db.Binary()
+	morphStack = db.Binary()
 
 class Room(Thing):
 	pass
