@@ -32,3 +32,4 @@ cfg = {
 		"botname": None
 	}
 }
+requires = ["ctuser"]
