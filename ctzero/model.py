@@ -16,6 +16,7 @@ class Part(Thing):
 
 class Person(Thing):
 	body = db.ForeignKey(kind=Part)
+	name = db.String()
 	voice = db.String()
 	mood = db.JSON() # {mad,happy,sad,antsy}
 
