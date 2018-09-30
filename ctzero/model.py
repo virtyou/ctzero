@@ -16,6 +16,7 @@ class Part(db.TimeStampedBase):
 	opts = db.JSON() # merged into Thing.opts{}
 
 class Person(db.TimeStampedBase):
+	owner = db.ForeignKey(kind=CTUser)
 	body = db.ForeignKey(kind=Part)
 	name = db.String()
 	voice = db.String()
