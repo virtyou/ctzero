@@ -10,13 +10,14 @@ class Thing(db.TimeStampedBase):
 	stripset = db.Binary()
 	morphStack = db.Binary()
 
-class Part(Thing):
+class Part(db.TimeStampedBase):
 	parent = db.ForeignKey(kind="Part")
 	base = db.ForeignKey(kind=Thing)
 	opts = db.JSON() # merged into Thing.opts{}
 
-class Person(Thing):
+class Person(db.TimeStampedBase):
 	body = db.ForeignKey(kind=Part)
+	name = db.String()
 	voice = db.String()
 	mood = db.JSON() # {mad,happy,sad,antsy}
 
