@@ -4,6 +4,11 @@ CT.require("zero.lib.three");
 CT.require("zero.lib.Projector");
 CT.require("zero.lib.TrackballControls");
 
+CT.require("zero.base.joints");
+CT.require("zero.base.springs");
+CT.require("zero.base.aspects");
+CT.require("zero.base.tickers");
+
 CT.require("zero.core.util");
 CT.require("zero.core.camera");
 CT.require("zero.core.click");
