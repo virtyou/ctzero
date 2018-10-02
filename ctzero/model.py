@@ -12,6 +12,7 @@ class Thing(db.TimeStampedBase):
 	texture = db.ForeignKey(kind=Asset)
 	stripset = db.ForeignKey(kind=Asset)
 	morphStack = db.ForeignKey(kind=Asset)
+	kind = db.String() # furnishing, headgear, head, eye, arm, leg, etc
 	opts = db.JSON() # base opts
 	name = db.String()
 	custom = db.Text()
@@ -28,13 +29,18 @@ class Person(db.TimeStampedBase):
 	voice = db.String()
 	mood = db.JSON() # {mad,happy,sad,antsy}
 
-class Room(Thing):
-	pass
+class Room(db.TimeStampedBase):
+	owner = db.ForeignKey(kind=CTUser)
+	base = db.ForeignKey(kind=Thing)
+	opts = db.JSON() # merged into Thing.opts{}
 
-class Door(Thing):
-	room = db.ForeignKey(kind=Room)
-	position = db.Integer(repeated=True) # x, y, z
-	rotation = db.Integer(repeated=True) # x, y, z
+class Furnishing(db.TimeStampedBase):
+	parent = db.ForeignKey(kinds=["Room", "Furnishing"])
+	base = db.ForeignKey(kind=Thing)
+	opts = db.JSON() # merged into Thing.opts{} - includes pos, rot, etc
+
+class Door(Furnishing):
+	pass
 
 # should each room have a default incoming portal?
 class Portal(db.TimeStampedBase): # asymmetrical (one per direction)
