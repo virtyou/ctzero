@@ -12,13 +12,14 @@ var camera = zero.core.camera = {
 		_.renderer.render(camera.scene, _.camera);
 	},
 	update: function() {
-		var cam = camera._.camera;
-		cam.aspect = window.innerWidth / window.innerHeight;
+		var cam = camera._.camera, cont = camera._.outerContainer;
+		cam.aspect = cont.clientWidth / cont.clientHeight;
 		cam.updateProjectionMatrix();
 		camera.resize();
 	},
 	resize: function(w, h) {
-		camera._.renderer.setSize(w || window.innerWidth, h || window.innerHeight);
+		var cont = camera._.outerContainer;
+		camera._.renderer.setSize(w || cont.clientWidth, h || cont.clientHeight);
 		if (camera._.useControls)
 			camera._.controls.handleResize();
 	},
@@ -164,16 +165,17 @@ var camera = zero.core.camera = {
 		});
 	},
 	init: function() {
-		var _ = camera._, config = core.config.ctzero, controls = !config.camera.noControls,
-			WIDTH = window.innerWidth, HEIGHT = window.innerHeight;
+		var _ = camera._, config = core.config.ctzero, controls = !config.camera.noControls;
 		camera.scene = new THREE.Scene();
 		if (config.camera.background)
 			camera.scene.background = THREE.ImageUtils.loadTexture(config.camera.background);
+		_.container = CT.dom.div(null, "abs all0");
+		var c = _.outerContainer = CT.dom.id(config.container) || document.body,
+			WIDTH = c.clientWidth, HEIGHT = c.clientHeight;
 		_.camera = new THREE.PerspectiveCamera(25, WIDTH / HEIGHT, 0.2, 10000000);
 		_.renderer = new THREE.WebGLRenderer(config.camera.opts);
 		_.renderer.setSize(WIDTH, HEIGHT);
-		_.container = CT.dom.div(null, "abs all0");
-		CT.dom.addContent(CT.dom.id(config.container) || document.body, _.container);
+		CT.dom.addContent(_.outerContainer, _.container);
 		_.container.appendChild(_.renderer.domElement);
 		if (controls)
 			_.controls = new THREE.TrackballControls(_.camera);
