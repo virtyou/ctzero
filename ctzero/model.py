@@ -13,9 +13,9 @@ class Thing(db.TimeStampedBase):
 	stripset = db.ForeignKey(kind=Asset)
 	morphStack = db.ForeignKey(kind=Asset)
 	kind = db.String() # furnishing, headgear, head, eye, arm, leg, etc
-	opts = db.JSON() # base opts
 	name = db.String()
 	custom = db.Text()
+	opts = db.JSON() # base opts
 
 class Part(db.TimeStampedBase):
 	parent = db.ForeignKey(kind="Part")
