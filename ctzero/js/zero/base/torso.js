@@ -64,7 +64,7 @@ zero.base.torso = function(opts, fat_headed) {
                         stripset: opts.teeth_stripset,
                         position: [0, -9.2, 2.5],
                         material: {
-                            color: 0xcccccc,
+                            color: opts.teeth_color,
                             morphTargets: true
                         },
                         morphs: {
@@ -76,7 +76,7 @@ zero.base.torso = function(opts, fat_headed) {
                         stripset: opts.teeth_top_stripset,
                         position: [0, -9.2, 2.5],
                         material: {
-                            color: 0xcccccc,
+                            color: opts.teeth_top_color,
                             morphTargets: true
                         },
                         morphs: {
@@ -88,7 +88,7 @@ zero.base.torso = function(opts, fat_headed) {
                         stripset: opts.tongue_stripset,
                         position: [0, -9.2, 2.5],
                         material: {
-                            color: 0xcccccc,
+                            color: opts.tongue_color,
                             morphTargets: true
                         },
                         morphs: {
@@ -121,7 +121,7 @@ zero.base.torso = function(opts, fat_headed) {
                             //matcat: "Phong",
                             scale: [0.9, 0.9, 0.9],
                             material: {
-                                color: 0xffffff,
+                                color: opts.eyeL_color,
                                 specular: 0xaaaaff,
                                 morphTargets: true,
                                 emissive: 0,
@@ -147,7 +147,7 @@ zero.base.torso = function(opts, fat_headed) {
                             //matcat: "Phong",
                             scale: [0.9, 0.9, 0.9],
                             material: {
-                                color: 0xffffff,
+                                color: opts.eyeR_color,
                                 specular: 0xaaaaff,
                                 morphTargets: true,
                                 emissive: 0,
