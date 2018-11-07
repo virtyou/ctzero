@@ -19,7 +19,7 @@ zero.base.torso = function(opts, fat_headed) {
         parts: [{
             name: "looker",
             position: [0, 35, 25],
-            geometry: new THREE.CubeGeometry(1, 1, 5),
+            cubeGeometry: [1, 1, 5],
             material: {
                 color: 0x00ff00,
                 visible: false
@@ -27,7 +27,7 @@ zero.base.torso = function(opts, fat_headed) {
         }, {
             name: "lookAt",
             position: [0, 35, 55],
-            geometry: new THREE.CubeGeometry(1, 1, 5),
+            cubeGeometry: [1, 1, 5],
             material: {
                 color: 0x00ff00,
                 visible: false
@@ -132,7 +132,7 @@ zero.base.torso = function(opts, fat_headed) {
                             }
                         }, {
                             name: "cubeLeyeDummy",
-                            geometry: new THREE.CubeGeometry(1, 1, 10),
+                            cubeGeometry: [1, 1, 10],
                             material: {
                                 color: 0x00ff00,
                                 visible: false
@@ -158,7 +158,7 @@ zero.base.torso = function(opts, fat_headed) {
                             }
                         }, {
                             name: "cubeReyeDummy",
-                            geometry: new THREE.CubeGeometry(1, 1, 10),
+                            cubeGeometry: [1, 1, 10],
                             material: {
                                 color: 0x00ff00,
                                 visible: false
