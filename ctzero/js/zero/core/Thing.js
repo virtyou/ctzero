@@ -249,6 +249,10 @@ zero.core.Thing = CT.Class({
 		});
 		this.name = opts.name;
 		this.path = opts.path ? (opts.path + "." + opts.name) : opts.name;
+		if (opts.cubeGeometry) {
+			var g = opts.cubeGeometry;
+			opts.geometry = new THREE.CubeGeometry(g[0], g[1], g[2]); // better way?
+		}
 		var thiz = this, iz, name;
 		["spring", "aspect", "ticker"].forEach(function(influence) {
 			iz = influence + "s", influences = thiz[iz] = {};
