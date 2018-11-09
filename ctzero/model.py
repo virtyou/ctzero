@@ -67,8 +67,8 @@ class Room(db.TimeStampedBase):
 	opts = db.JSON() # merged into Thing.opts{}
 
 	def json(self):
-		d = self.base and self.base.get().json() or { "opts": {} }
-		d["opts"].update(self.opts)
+		d = self.base and self.base.get().json() or {}
+		self.opts and d.update(self.opts)
 		d["objects"] = [f.json() for f in Furnishing.query(Furnishing.parent == self.key).fetch()]
 		return d
 
@@ -78,8 +78,8 @@ class Furnishing(db.TimeStampedBase):
 	opts = db.JSON() # merged into Thing.opts{} - includes pos, rot, etc
 
 	def json(self):
-		d = self.base and self.base.get().json() or { "opts": {} }
-		d["opts"].update(self.opts)
+		d = self.base and self.base.get().json() or {}
+		self.opts and d.update(self.opts)
 		d["parts"] = [f.json() for f in Furnishing.query(Furnishing.parent == self.key).fetch()]
 		return d
 
