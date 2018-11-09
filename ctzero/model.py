@@ -18,14 +18,15 @@ class Thing(db.TimeStampedBase):
 	opts = db.JSON() # base opts
 
 	def json(self):
-		return {
+		d = {
 			"name": self.name,
-			"opts": self.opts,
 			"custom": self.custom,
 			"texture": self.texture and self.texture.get().item.urlsafe(),
 			"stripset": self.stripset and self.stripset.get().item.urlsafe(),
 			"morphStack": self.morphStack and self.morphStack.get().item.urlsafe()
 		}
+		self.opts and d.update(self.opts)
+		return d
 
 class Part(db.TimeStampedBase):
 	parent = db.ForeignKey(kind="Part")
@@ -35,12 +36,14 @@ class Part(db.TimeStampedBase):
 	assets = db.ForeignKey(kind=Asset, repeated=True) # merged into opts
 
 	def json(self):
-		d = self.base and self.base.get().json() or { "opts": {} }
+		d = self.base and self.base.get().json() or {}
 		d["template"] = self.template
-		d["opts"].update(self.opts)
+		self.opts and d.update(self.opts)
 		for asset in db.get_multi(self.assets):
-			d["opts"][asset.name] = asset.item.urlsafe()
+			d[asset.name] = asset.item.urlsafe()
 		d["parts"] = [p.json() for p in Part.query(Part.parent == self.key).fetch()]
+		if not self.parent and "name" not in d:
+			d["name"] = "body"
 		return d
 
 class Person(db.TimeStampedBase):
