@@ -4,7 +4,9 @@ from model import db
 
 def response():
     action = cgi_get("action", choices=["say", "rec", "chat", "json"])
-    if action == "chat":
+    if action == "json": # better name?
+        succeed(db.get(cgi_get("key")).json())
+    elif action == "chat":
         succeed(chat(cgi_get("question")))
     language = cgi_get("language")
     voice = cgi_get("voice", default="Joanna")
@@ -17,7 +19,5 @@ def response():
         succeed(say(language, voice, words, prosody))
     elif action == "rec":
         succeed(rec(language, cgi_get("data")))
-    elif action == "json": # better name?
-        succeed(db.get(cgi_get("key")).json())
 
 respond(response, threaded=True)
