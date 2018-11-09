@@ -63,10 +63,22 @@ class Room(db.TimeStampedBase):
 	base = db.ForeignKey(kind=Thing)
 	opts = db.JSON() # merged into Thing.opts{}
 
+	def json(self):
+		d = self.base and self.base.get().json() or { "opts": {} }
+		d["opts"].update(self.opts)
+		d["objects"] = [f.json() for f in Furnishing.query(Furnishing.parent == self.key).fetch()]
+		return d
+
 class Furnishing(db.TimeStampedBase):
 	parent = db.ForeignKey(kinds=["Room", "Furnishing"])
 	base = db.ForeignKey(kind=Thing)
 	opts = db.JSON() # merged into Thing.opts{} - includes pos, rot, etc
+
+	def json(self):
+		d = self.base and self.base.get().json() or { "opts": {} }
+		d["opts"].update(self.opts)
+		d["parts"] = [f.json() for f in Furnishing.query(Furnishing.parent == self.key).fetch()]
+		return d
 
 class Door(Furnishing):
 	pass
