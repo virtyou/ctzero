@@ -21,9 +21,9 @@ class Thing(db.TimeStampedBase):
 		d = {
 			"name": self.name,
 			"custom": self.custom,
-			"texture": self.texture and self.texture.get().item.urlsafe(),
-			"stripset": self.stripset and self.stripset.get().item.urlsafe(),
-			"morphStack": self.morphStack and self.morphStack.get().item.urlsafe()
+			"texture": self.texture and self.texture.get().item.urlsafe() or None,
+			"stripset": self.stripset and self.stripset.get().item.urlsafe() or None,
+			"morphStack": self.morphStack and self.morphStack.get().item.urlsafe() or None
 		}
 		self.opts and d.update(self.opts)
 		return d
