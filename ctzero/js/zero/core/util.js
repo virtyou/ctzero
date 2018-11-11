@@ -87,8 +87,8 @@ zero.core.util = {
 			}
 		}));
 	},
-	person: function(body_generator, name, pos, opts) {
-		var body = body_generator();
+	person: function(body_generator, name, pos, opts, bopts) {
+		var body = body_generator(bopts);
 		if (pos)
 			body.position = pos;
 		return CT.merge({
