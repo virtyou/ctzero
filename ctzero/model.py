@@ -3,7 +3,7 @@ from ctuser.model import CTUser
 
 class Asset(db.TimeStampedBase):
 	owner = db.ForeignKey(kind=CTUser)
-	variety = db.String(choices=["texture", "stripset", "morphStack"])
+	variety = db.String(choices=["texture", "stripset"])
 	name = db.String()
 	item = db.Binary(unique=True)
 
@@ -11,7 +11,7 @@ class Thing(db.TimeStampedBase):
 	owner = db.ForeignKey(kind=CTUser)
 	texture = db.ForeignKey(kind=Asset)
 	stripset = db.ForeignKey(kind=Asset)
-	morphStack = db.ForeignKey(kind=Asset)
+	morphStack = db.String() # should be Asset, but Thing.js gets complicated...
 	kind = db.String() # furnishing, headgear, head, eye, arm, leg, etc
 	name = db.String()
 	custom = db.Text()
@@ -21,9 +21,9 @@ class Thing(db.TimeStampedBase):
 		d = {
 			"name": self.name,
 			"custom": self.custom,
+			"morphStack": self.morphStack,
 			"texture": self.texture and self.texture.get().item.urlsafe() or None,
-			"stripset": self.stripset and self.stripset.get().item.urlsafe() or None,
-			"morphStack": self.morphStack and self.morphStack.get().item.urlsafe() or None
+			"stripset": self.stripset and self.stripset.get().item.urlsafe() or None
 		}
 		self.opts and d.update(self.opts)
 		return d
