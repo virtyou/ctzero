@@ -143,6 +143,8 @@ zero.core.Thing = CT.Class({
 			bones: this.bones || []
 		});
 		if (child.custom) {
+			if (typeof child.custom == "string") // from server
+				child.custom = eval(child.custom);
 			 // custom() must:
 			 // - call iterator() post-init
 			 // - return object w/ name, tick(), thrings[]
