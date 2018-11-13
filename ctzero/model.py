@@ -19,6 +19,7 @@ class Thing(db.TimeStampedBase):
 
 	def json(self):
 		d = {
+			"key": self.key.urlsafe(),
 			"name": self.name,
 			"custom": self.custom,
 			"morphStack": self.morphStack,
@@ -37,6 +38,7 @@ class Part(db.TimeStampedBase):
 
 	def json(self):
 		d = self.base and self.base.get().json() or {}
+		d["key"] = self.key.urlsafe()
 		d["template"] = self.template
 		self.opts and d.update(self.opts)
 		for asset in db.get_multi(self.assets):
@@ -55,6 +57,7 @@ class Person(db.TimeStampedBase):
 
 	def json(self):
 		return {
+			"key": self.key.urlsafe(),
 			"name": self.name,
 			"voice": self.voice,
 			"mood": self.mood,
@@ -69,6 +72,7 @@ class Room(db.TimeStampedBase):
 	def json(self):
 		d = self.base and self.base.get().json() or {}
 		self.opts and d.update(self.opts)
+		d["key"] = self.key.urlsafe()
 		d["objects"] = [f.json() for f in Furnishing.query(Furnishing.parent == self.key).fetch()]
 		return d
 
@@ -80,6 +84,7 @@ class Furnishing(db.TimeStampedBase):
 	def json(self):
 		d = self.base and self.base.get().json() or {}
 		self.opts and d.update(self.opts)
+		d["key"] = self.key.urlsafe()
 		d["parts"] = [f.json() for f in Furnishing.query(Furnishing.parent == self.key).fetch()]
 		return d
 
