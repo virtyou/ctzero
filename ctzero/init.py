@@ -7,7 +7,7 @@ copies = {
 }
 
 syms = {
-	".": ["_zero.py"],
+	".": ["_zero.py", "_speech.py"],
 	"js": ["zero", "shaders"]
 }
 model = {
@@ -15,6 +15,7 @@ model = {
 }
 routes = {
 	"/_zero": "_zero.py",
+	"/_speech": "_speech.py",
 	"/sound": "sound",
 	"/maps": "maps",
 	"/models": "models"
