@@ -24,7 +24,7 @@ zero.core.Brain = CT.Class({
 			if (!words)
 				return cb && cb();
 			CT.net.post({
-				path: "/_zero",
+				path: "/_speech",
 				cb: playClip,
 				params: {
 					action: "say",
@@ -68,7 +68,7 @@ zero.core.Brain = CT.Class({
 				return cb(this.get_response(respz[word]));
 		}
 		CT.net.post({
-			path: "/_zero",
+			path: "/_speech",
 			params: {
 				action: "chat",
 				question: phrase

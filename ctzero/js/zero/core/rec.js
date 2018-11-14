@@ -10,7 +10,7 @@ var rec = zero.core.rec = {
 			};
 			recorder.ondataavailable = function(data) {
 				CT.net.formUp(data.data, {
-					path: "/_zero",
+					path: "/_speech",
 					params: {
 						action: "rec",
 						language: rec._.language
