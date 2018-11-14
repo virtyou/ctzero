@@ -1,9 +1,8 @@
-from cantools.web import log, respond, succeed, cgi_get, read_file
-from ctzero.speech import chat, say, rec
+from cantools.web import respond, succeed, cgi_get
 from model import db, Thing, Person, Room
 
 def response():
-    action = cgi_get("action", choices=["say", "rec", "chat", "json", "opts", "extras"])
+    action = cgi_get("action", choices=["json", "opts", "extras"])
     if action == "json": # better name?
         ent = db.get(cgi_get("key"))
         if ent.polytype == "ctuser":
@@ -26,19 +25,5 @@ def response():
         obj.update(opts)
         setattr(ent, prop, obj)
         ent.put()
-        succeed()
-    elif action == "chat":
-        succeed(chat(cgi_get("question")))
-    language = cgi_get("language")
-    voice = cgi_get("voice", default="Joanna")
-    if action == "say":
-        words = cgi_get("words")
-        prosody = cgi_get("prosody", default={
-            "rate": "medium",
-            "pitch": "medium"
-        })
-        succeed(say(language, voice, words, prosody))
-    elif action == "rec":
-        succeed(rec(language, cgi_get("data")))
 
-respond(response, threaded=True)
+respond(response)
