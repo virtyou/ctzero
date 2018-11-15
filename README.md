@@ -13,7 +13,7 @@ This package contains the core zero libraries.
     }
     
     syms = {
-    	".": ["_zero.py"],
+    	".": ["_zero.py", "_speech.py"],
     	"js": ["zero", "shaders"]
     }
     model = {
@@ -21,6 +21,7 @@ This package contains the core zero libraries.
     }
     routes = {
     	"/_zero": "_zero.py",
+    	"/_speech": "_speech.py",
     	"/sound": "sound",
     	"/maps": "maps",
     	"/models": "models"
@@ -38,6 +39,7 @@ This package contains the core zero libraries.
     		"botname": None
     	}
     }
+    requires = ["ctuser"]
 
 # Front (JS Config)
 
