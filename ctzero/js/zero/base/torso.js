@@ -2,6 +2,7 @@ zero.base.torso = function(opts, fat_headed) {
     opts = CT.merge(opts, zero.base.torso.defaults); // must set defaults!
     var bod = {
         name: "body",
+        key: opts.key,
         texture: opts.texture,
         stripset: opts.stripset,
         matcat: "Phong",
