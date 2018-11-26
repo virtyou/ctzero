@@ -38,7 +38,7 @@ zero.core.Person = CT.Class({
 	},
 	setSmile: function(degree, unsmile) {
 		degree = degree || 0;
-		var smiler = this.body.head.springs.bigSmile;
+		var smiler = this.body.springs.bigSmile;
 		this.log("setSmile", degree, unsmile);
 		smiler.target = degree;
 		unsmile && setTimeout(function() {
