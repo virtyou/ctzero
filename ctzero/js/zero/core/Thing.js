@@ -134,6 +134,8 @@ zero.core.Thing = CT.Class({
 		});
 		isCustom && CT.data.remove(this._.customs, thing);
 		delete this[cname];
+		if (thing.opts.kind && this[thing.opts.kind])
+			delete this[thing.opts.kind]; // what about multiple children w/ same kind?
 	},
 	attach: function(child, iterator) {
 		var thing, childopts = CT.merge(child, {
@@ -154,10 +156,13 @@ zero.core.Thing = CT.Class({
 					name: thing.name
 				}, child);
 			};
+			thing.opts = childopts;
 			this._.customs.push(thing);
 		} else
 			thing = new zero.core[child.thing || "Thing"](childopts);
 		this[thing.name] = thing;
+		if (child.kind)
+			this[child.kind] = thing;
 		if (!iterator) // one-off
 			this.parts.push(thing);
 		return thing;
