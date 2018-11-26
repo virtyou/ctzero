@@ -2,7 +2,7 @@ from cantools.web import respond, succeed, cgi_get
 from model import db, Thing, Person, Room
 
 def response():
-    action = cgi_get("action", choices=["json", "opts", "extras"])
+    action = cgi_get("action", choices=["json", "opts", "things"])
     if action == "json": # better name?
         ent = db.get(cgi_get("key"))
         if ent.polytype == "ctuser":
@@ -11,12 +11,13 @@ def response():
                 "rooms": [r.json() for r in Room.query(Room.owner == ent.key).fetch()]
             })
         succeed(ent.json())
-    elif action == "extras":
-        data = { "furnishing": {}, "headgear": {} }
-        for kind in data:
-            for item in Thing.query(Thing.kind == kind).fetch():
-                data[kind][item.name] = item.json()
-        succeed(data)
+    elif action == "things":
+        thingz = {}
+        for item in Thing.query().fetch():
+            if item.kind not in thingz:
+                thingz[item.kind] = {}
+            thingz[item.kind][item.name] = item.json()
+        succeed(thingz)
     elif action == "opts":
         ent = db.get(cgi_get("key"))
         prop = cgi_get("prop", default="opts")
