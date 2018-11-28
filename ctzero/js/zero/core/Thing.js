@@ -271,6 +271,8 @@ zero.core.Thing = CT.Class({
 			this.morphStack = ms.stack; 
 			this.base = ms.base;
 		}
-		setTimeout(this.build); // next post-init tick
+		setTimeout(function() {
+			thiz.opts.deferBuild || thiz.build();
+		}); // next post-init tick
 	}
 });
