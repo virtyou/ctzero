@@ -142,7 +142,7 @@ zero.core.Thing = CT.Class({
 		if (thing.opts.kind && this[thing.opts.kind])
 			delete this[thing.opts.kind]; // what about multiple children w/ same kind?
 	},
-	attach: function(child, iterator) {
+	attach: function(child, iterator, oneOff) {
 		var thing, childopts = CT.merge(child, {
 			scene: this.group,
 			path: this.path,
@@ -168,7 +168,7 @@ zero.core.Thing = CT.Class({
 		this[thing.name] = thing;
 		if (child.kind)
 			this[child.kind] = thing;
-		if (!iterator) // one-off
+		if (oneOff || !iterator) // one-off
 			this.parts.push(thing);
 		return thing;
 	},
