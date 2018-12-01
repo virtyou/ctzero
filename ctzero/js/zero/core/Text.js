@@ -3,7 +3,7 @@ zero.core.Text = CT.Class({
 	init: function(opts) {
 		var noPos = !("position" in opts),
 			build = this.build;
-		var opts = this.opts = CT.merge(opts, {
+		opts = this.opts = CT.merge(opts, {
 			size: 4,
 			height: 4,
 			deferBuild: true,
