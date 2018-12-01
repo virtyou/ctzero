@@ -19,17 +19,21 @@ zero.core.Menu = CT.Class({
 		var offset = opts.width * opts.items.length / 2,
 			y = -opts.height / 2;
 		opts.parts = opts.items.map(function(part, i) {
-			var x = i * opts.width - offset;
+			var x = i * opts.width - offset, sel = function() {
+				opts.onselect(part);
+			};
 			return {
 				parts: [
 					CT.merge({
 						position: [x, 10 + y, 0],
-						scale: [0.5, 0.5, 0.5]
+						scale: [0.5, 0.5, 0.5],
+						onclick: sel
 					}, part),
 					{
 						thing: "Text",
 						text: part.name,
-						position: [x, y, 0]
+						position: [x, y, 0],
+						onclick: sel
 					}
 				]
 			};
