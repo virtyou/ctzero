@@ -4,10 +4,14 @@ zero.core.Thing = CT.Class({
 		customs: [], // stored here, only tick()ed in Thing subclasses that implement tick()
 		ready: false,
 		built: function() {
+			var thiz = this;
 			this.opts.onassemble && this.opts.onassemble();
 			this.opts.onbuild && this.opts.onbuild(this);
 			this.opts.iterator && this.opts.iterator();
 			this._.ready = true;
+			this.opts.onclick && zero.core.click.register(this, function() {
+				thiz.opts.onclick(thiz);
+			});
 		}
 	},
 	isReady: function() {
