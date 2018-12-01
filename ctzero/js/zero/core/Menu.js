@@ -41,10 +41,5 @@ zero.core.Menu = CT.Class({
 //			part.position = [i * 10, 0, 0];
 //			return part;
 		});
-		opts.onbuild = function() {
-			// TODO
-			// - set callbacks w/ opts.cb
-			// - look at camera
-		};
 	}
 }, zero.core.Thing);
