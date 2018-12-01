@@ -15,7 +15,7 @@ zero.core.Text = CT.Class({
 				height: opts.height,
 				font: font
 			});
-			if (noPos) {
+			if (noPos) { // TODO: improve!
 				geo.computeBoundingBox();
 				opts.position = [
 					-0.5 * (geo.boundingBox.max.x - geo.boundingBox.min.x),
