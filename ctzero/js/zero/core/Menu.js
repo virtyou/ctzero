@@ -1,5 +1,9 @@
 zero.core.Menu = CT.Class({
 	CLASSNAME: "zero.core.Menu",
+	close: function() {
+		this.opts.scene.remove(this.thring);
+		this.opts.scene.remove(this.group);
+	},
 	init: function(opts) {
 		opts = this.opts = CT.merge(opts, this.opts, {
 			depth: 6,
@@ -9,7 +13,6 @@ zero.core.Menu = CT.Class({
 			resize: 0.25,
 			color: 0x00ff00
 		});
-
 		var bs = opts.backset * 2 / 3,
 			width = camera.width(bs),
 			height = camera.height(bs),
