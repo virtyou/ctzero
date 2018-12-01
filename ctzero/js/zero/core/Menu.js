@@ -2,44 +2,49 @@ zero.core.Menu = CT.Class({
 	CLASSNAME: "zero.core.Menu",
 	init: function(opts) {
 		opts = this.opts = CT.merge(opts, this.opts, {
-			width: 15,
-			depth: 20,
-			height: 20,
+			depth: 6,
+			width: 3,
+			height: 3,
+			backset: 50,
+			resize: 0.25,
 			color: 0x00ff00
 		});
-		if (!(opts.cubeGeometry || opts.geometry)) {
-			opts.cubeGeometry = [opts.width * opts.items.length, opts.height, opts.depth];
-			opts.material = CT.merge(opts.material, {
-				transparent: true,
-				color: opts.color,
-				opacity: 0.2
-			});
-		}
-		// TODO: figure out dimensions, position, orientation based on camera
-		var offset = opts.width * opts.items.length / 2,
-			y = -opts.height / 2;
+
+		var bs = opts.backset * 2 / 3,
+			width = camera.width(bs),
+			height = camera.height(bs),
+			w = width / opts.width,
+			h = height / opts.height,
+			cpos = camera.position(),
+			depth = cpos.z - opts.backset,
+			offsetX = width / 2;
+		opts.cubeGeometry = [width, height, opts.depth];
+		opts.material = CT.merge(opts.material, {
+			transparent: true,
+			color: opts.color,
+			opacity: 0.2
+		});
+		opts.position = [cpos.x, cpos.y, depth];
 		opts.parts = opts.items.map(function(part, i) {
-			var x = i * opts.width - offset, sel = function() {
+			var sel = function() {
 				opts.onselect(part);
-			};
+			},  x = cpos.x + (i % opts.width) * w - offsetX,
+				y = cpos.y + Math.floor(i / opts.height) * h;
 			return {
 				parts: [
 					CT.merge({
-						position: [x, 10 + y, 0],
-						scale: [0.5, 0.5, 0.5],
+						position: [x, y, depth],
+						scale: [opts.resize, opts.resize, opts.resize],
 						onclick: sel
 					}, part),
 					{
 						thing: "Text",
 						text: part.name,
-						position: [x, y, 0],
+						position: [x, y, depth],
 						onclick: sel
 					}
 				]
 			};
-//			part.scale = [0.5, 0.5, 0.5];
-//			part.position = [i * 10, 0, 0];
-//			return part;
 		});
 	}
 }, zero.core.Thing);
