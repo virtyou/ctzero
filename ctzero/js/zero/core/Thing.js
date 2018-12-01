@@ -186,6 +186,10 @@ zero.core.Thing = CT.Class({
 	},
 	build: function() {
 		var oz = this.opts;
+		if (oz.cubeGeometry) {
+			var g = oz.cubeGeometry;
+			oz.geometry = new THREE.CubeGeometry(g[0], g[1], g[2]); // better way?
+		}
 		if (oz.geometry || oz.stripset) {
 			var meshname = (oz.shader ? "Shader"
 				: ("Mesh" + oz.matcat)) + "Material",
@@ -256,10 +260,6 @@ zero.core.Thing = CT.Class({
 		});
 		this.name = opts.name;
 		this.path = opts.path ? (opts.path + "." + opts.name) : opts.name;
-		if (opts.cubeGeometry) {
-			var g = opts.cubeGeometry;
-			opts.geometry = new THREE.CubeGeometry(g[0], g[1], g[2]); // better way?
-		}
 		var thiz = this, iz, name;
 		["spring", "aspect", "ticker"].forEach(function(influence) {
 			iz = influence + "s", influences = thiz[iz] = {};
