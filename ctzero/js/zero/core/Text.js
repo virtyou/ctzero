@@ -4,8 +4,8 @@ zero.core.Text = CT.Class({
 		var noPos = !("position" in opts),
 			build = this.build;
 		opts = this.opts = CT.merge(opts, {
-			size: 4,
-			height: 4,
+			size: 1,
+			height: 1,
 			deferBuild: true,
 			font: "https://threejs.org/examples/fonts/helvetiker_bold.typeface.json"
 		}, this.opts);
