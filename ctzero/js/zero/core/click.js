@@ -21,8 +21,8 @@ zero.core.click = {
             for (i = intersects.length - 1; i > -1; i--) {
                 var obj = intersects[i].object;
                 while (obj) {
-                    if (obj.__click)
-                        return obj.__click();
+                    if (obj.__click && !obj.__click())
+                        return;
                     obj = obj.parent;
                 }
             }
