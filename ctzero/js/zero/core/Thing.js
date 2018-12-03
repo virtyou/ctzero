@@ -134,13 +134,12 @@ zero.core.Thing = CT.Class({
 	},
 	remove: function(cname, fromScene) {
 		var thing = this[cname],
-			isCustom = !!thing.thrings,
-			thrings = thing.thrings || [thing.thring, thing.group], // supports custom objects
+			thrings = [thing.thring, thing.group],
 			parent = fromScene ? camera.scene : this.group;
 		thrings.forEach(function(thring) {
 			thring && parent.remove(thring);
 		});
-		isCustom && CT.data.remove(this._.customs, thing);
+		thing.isCustom && CT.data.remove(this._.customs, thing);
 		CT.data.remove(this.parts, thing);
 		delete this[cname];
 		if (thing.opts.kind && this[thing.opts.kind])
