@@ -7,7 +7,7 @@ zero.core.Thing = CT.Class({
 			var thiz = this;
 			this.opts.onassemble && this.opts.onassemble();
 			this.opts.onbuild && this.opts.onbuild(this);
-			this.opts.iterator && this.opts.iterator();
+			this.opts.iterator && this.opts.iterator(this);
 			this._.ready = true;
 			this.opts.onclick && zero.core.click.register(this, function() {
 				thiz.opts.onclick(thiz);
@@ -65,6 +65,13 @@ zero.core.Thing = CT.Class({
 				oz.scene.add(this.bone);
 		}
 	},
+	place: function() {
+		var oz = this.opts, thring = this.thring || this.group;
+		["position", "rotation", "scale"].forEach(function(prop) {
+			var setter = thring[prop];
+			setter.set.apply(setter, oz[prop]);
+		});
+	},
 	setGeometry: function(geometry) {
 		var oz = this.opts, thiz = this;
 		if (this.thring) {
@@ -73,10 +80,7 @@ zero.core.Thing = CT.Class({
 			delete this.thring;
 		}
 		this.thring = new THREE[oz.meshcat](geometry, this.material);
-		["position", "rotation", "scale"].forEach(function(prop) {
-			var setter = thiz.thring[prop];
-			setter.set.apply(setter, oz[prop]);
-		});
+		this.place();
 		this.setBone();
 		(this.bone || oz.scene).add(this.thring);
 		for (var m in this.opts.morphs)
@@ -143,16 +147,18 @@ zero.core.Thing = CT.Class({
 			delete this[thing.opts.kind]; // what about multiple children w/ same kind?
 	},
 	attach: function(child, iterator, oneOff) {
-		var thing, childopts = CT.merge(child, {
+		var thing, customs = this._.customs, childopts = CT.merge(child, {
 			scene: this.group,
 			path: this.path,
-			iterator: iterator || function() {},
+			iterator: function(tng) {
+				child.custom && customs.push(tng); // for tick()ing
+				iterator && iterator();
+			},
 			bones: this.bones || []
 		});
-		if (child.custom) {
+		if (child.custom)
 			thing = new zero.core.Custom(childopts);
-			this._.customs.push(thing); // for tick()ing
-		} else
+		else
 			thing = new zero.core[child.thing || "Thing"](childopts);
 		this[thing.name] = thing;
 		if (child.kind)
