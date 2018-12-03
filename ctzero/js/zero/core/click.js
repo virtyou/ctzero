@@ -30,13 +30,8 @@ zero.core.click = {
     },
     register: function(thing, cb) {
         zero.core.click.init();
-        var thrings = thing.thrings || [thing.bone || thing.thring || thing.group],
-            i, thring;
-        for (i = 0; i < thrings.length; i++) {
-            thring = thrings[i];
-            thring.__click = cb;
-            thring.__name = thing.name;
-            zero.core.click.targets.push(thring);
-        }
+        var thring = thing.bone || thing.thring || thing.group;
+        thring.__click = cb;
+        zero.core.click.targets.push(thring);
     }
 };
