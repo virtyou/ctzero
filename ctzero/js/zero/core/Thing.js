@@ -150,24 +150,13 @@ zero.core.Thing = CT.Class({
 			bones: this.bones || []
 		});
 		if (child.custom) {
-			if (typeof child.custom == "string") // from server
-				child.custom = eval(child.custom);
-			 // custom() must:
-			 // - call iterator() post-init
-			 // - return object w/ name, tick(), thrings[]
-			thing = child.custom(childopts);
-			thing.snapshot = function() {
-				return CT.merge({
-					name: thing.name
-				}, child);
-			};
-			thing.opts = childopts;
-			this._.customs.push(thing);
+			thing = new zero.core.Custom(childopts);
+			this._.customs.push(thing); // for tick()ing
 		} else
 			thing = new zero.core[child.thing || "Thing"](childopts);
 		this[thing.name] = thing;
 		if (child.kind)
-			this[child.kind] = thing;
+			this[child.kind] = thing; // what about multiple children w/ same kind?
 		if (oneOff || !iterator) // one-off
 			this.parts.push(thing);
 		return thing;
