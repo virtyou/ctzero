@@ -5,6 +5,7 @@ zero.core.Custom = CT.Class({
 		if (typeof this.opts.custom == "string") // from server
 			this.opts.custom = eval(this.opts.custom);
 		this.group = new THREE.Object3D();
+		this.place();
 		// custom() must:
 		// - call iterator() post-init
 		// - return object with tick() (bonus points: name, thrings[])
