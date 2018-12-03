@@ -27,7 +27,7 @@ zero.core.Menu = CT.Class({
 			color: opts.color,
 			opacity: 0.2
 		});
-		opts.position = [cpos.x, cpos.y, depth];
+		opts.position = [cpos.x, cpos.y, depth - opts.depth];
 		opts.parts = opts.items.map(function(part, i) {
 			var sel = function() {
 				opts.onselect(part);
