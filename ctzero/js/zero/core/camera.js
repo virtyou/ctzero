@@ -164,6 +164,14 @@ var camera = zero.core.camera = {
 			camera.springs[which][dim][prop] = val;
 		});
 	},
+	width: function(dist) {
+		return camera.height(dist) * camera._.camera.aspect;
+	},
+	height: function(dist) {
+		var w = (CT.dom.id(core.config.ctzero.container) || document.body).clientHeight,
+			fov = THREE.Math.degToRad(camera._.camera.fov);
+		return 2 * Math.tan(fov / 2) * dist;
+	},
 	init: function() {
 		var _ = camera._, config = core.config.ctzero, controls = !config.camera.noControls;
 		camera.scene = new THREE.Scene();

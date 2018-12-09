@@ -22,6 +22,7 @@ class Thing(db.TimeStampedBase):
 		d = {
 			"key": self.key.urlsafe(),
 			"name": self.name,
+			"kind": self.kind,
 			"custom": self.custom,
 			"material": self.material,
 			"morphStack": self.morphStack,
@@ -41,6 +42,8 @@ class Part(db.TimeStampedBase):
 
 	def json(self):
 		d = self.base and self.base.get().json() or {}
+		if "key" in d: # thing key
+			d["thing_key"] = d["key"]
 		d["key"] = self.key.urlsafe()
 		d["template"] = self.template
 		self.material and d["material"].update(self.material)

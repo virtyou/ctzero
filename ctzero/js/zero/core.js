@@ -24,6 +24,7 @@ CT.require("zero.core.Pool");
 CT.require("zero.core.Room");
 CT.require("zero.core.Head");
 CT.require("zero.core.Body");
+CT.require("zero.core.Custom");
 
 CT.require("zero.core.Brain");
 CT.require("zero.core.Energy");
@@ -34,3 +35,6 @@ CT.require("zero.core.Controller");
 CT.require("zero.core.Spring");
 CT.require("zero.core.Aspect");
 CT.require("zero.core.Ticker");
+
+CT.require("zero.core.Text");
+CT.require("zero.core.Menu");

@@ -1,6 +1,6 @@
 zero.base.joints = function() {
     return [{
-        name: "body",
+        name: "torso",
         rotation: {
             x: {
                 max: 0.5,
@@ -27,7 +27,7 @@ zero.base.joints = function() {
             }
         }
     }, {
-        name: "rib",
+        name: "chest",
         rotation: {
             x: {
                 max: 0.5,

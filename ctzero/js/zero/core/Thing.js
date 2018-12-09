@@ -4,10 +4,14 @@ zero.core.Thing = CT.Class({
 		customs: [], // stored here, only tick()ed in Thing subclasses that implement tick()
 		ready: false,
 		built: function() {
+			var thiz = this;
 			this.opts.onassemble && this.opts.onassemble();
 			this.opts.onbuild && this.opts.onbuild(this);
-			this.opts.iterator && this.opts.iterator();
+			this.opts.iterator && this.opts.iterator(this);
 			this._.ready = true;
+			this.opts.onclick && zero.core.click.register(this, function() {
+				thiz.opts.onclick(thiz);
+			});
 		}
 	},
 	isReady: function() {
@@ -61,6 +65,13 @@ zero.core.Thing = CT.Class({
 				oz.scene.add(this.bone);
 		}
 	},
+	place: function() {
+		var oz = this.opts, thring = this.thring || this.group;
+		["position", "rotation", "scale"].forEach(function(prop) {
+			var setter = thring[prop];
+			setter.set.apply(setter, oz[prop]);
+		});
+	},
 	setGeometry: function(geometry) {
 		var oz = this.opts, thiz = this;
 		if (this.thring) {
@@ -69,10 +80,7 @@ zero.core.Thing = CT.Class({
 			delete this.thring;
 		}
 		this.thring = new THREE[oz.meshcat](geometry, this.material);
-		["position", "rotation", "scale"].forEach(function(prop) {
-			var setter = thiz.thring[prop];
-			setter.set.apply(setter, oz[prop]);
-		});
+		this.place();
 		this.setBone();
 		(this.bone || oz.scene).add(this.thring);
 		for (var m in this.opts.morphs)
@@ -126,39 +134,35 @@ zero.core.Thing = CT.Class({
 	},
 	remove: function(cname, fromScene) {
 		var thing = this[cname],
-			isCustom = !!thing.thrings,
-			thrings = thing.thrings || [thing.thring], // supports custom objects
+			thrings = [thing.thring, thing.group],
 			parent = fromScene ? camera.scene : this.group;
 		thrings.forEach(function(thring) {
-			parent.remove(thring);
+			thring && parent.remove(thring);
 		});
-		isCustom && CT.data.remove(this._.customs, thing);
+		thing.isCustom && CT.data.remove(this._.customs, thing);
+		CT.data.remove(this.parts, thing);
 		delete this[cname];
+		if (thing.opts.kind && this[thing.opts.kind])
+			delete this[thing.opts.kind]; // what about multiple children w/ same kind?
 	},
-	attach: function(child, iterator) {
-		var thing, childopts = CT.merge(child, {
+	attach: function(child, iterator, oneOff) {
+		var thing, customs = this._.customs, childopts = CT.merge(child, {
 			scene: this.group,
 			path: this.path,
-			iterator: iterator || function() {},
+			iterator: function(tng) {
+				child.custom && customs.push(tng); // for tick()ing
+				iterator && iterator();
+			},
 			bones: this.bones || []
 		});
-		if (child.custom) {
-			if (typeof child.custom == "string") // from server
-				child.custom = eval(child.custom);
-			 // custom() must:
-			 // - call iterator() post-init
-			 // - return object w/ name, tick(), thrings[]
-			thing = child.custom(childopts);
-			thing.snapshot = function() {
-				return CT.merge({
-					name: thing.name
-				}, child);
-			};
-			this._.customs.push(thing);
-		} else
+		if (child.custom)
+			thing = new zero.core.Custom(childopts);
+		else
 			thing = new zero.core[child.thing || "Thing"](childopts);
 		this[thing.name] = thing;
-		if (!iterator) // one-off
+		if (child.kind)
+			this[child.kind] = thing; // what about multiple children w/ same kind?
+		if (oneOff || !iterator) // one-off
 			this.parts.push(thing);
 		return thing;
 	},
@@ -181,6 +185,10 @@ zero.core.Thing = CT.Class({
 	},
 	build: function() {
 		var oz = this.opts;
+		if (oz.cubeGeometry) {
+			var g = oz.cubeGeometry;
+			oz.geometry = new THREE.CubeGeometry(g[0], g[1], g[2]); // better way?
+		}
 		if (oz.geometry || oz.stripset) {
 			var meshname = (oz.shader ? "Shader"
 				: ("Mesh" + oz.matcat)) + "Material",
@@ -251,10 +259,6 @@ zero.core.Thing = CT.Class({
 		});
 		this.name = opts.name;
 		this.path = opts.path ? (opts.path + "." + opts.name) : opts.name;
-		if (opts.cubeGeometry) {
-			var g = opts.cubeGeometry;
-			opts.geometry = new THREE.CubeGeometry(g[0], g[1], g[2]); // better way?
-		}
 		var thiz = this, iz, name;
 		["spring", "aspect", "ticker"].forEach(function(influence) {
 			iz = influence + "s", influences = thiz[iz] = {};
@@ -266,6 +270,8 @@ zero.core.Thing = CT.Class({
 			this.morphStack = ms.stack; 
 			this.base = ms.base;
 		}
-		setTimeout(this.build); // next post-init tick
+		setTimeout(function() {
+			thiz.opts.deferBuild || thiz.build();
+		}); // next post-init tick
 	}
 });
