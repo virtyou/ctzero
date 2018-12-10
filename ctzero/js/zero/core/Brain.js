@@ -67,6 +67,8 @@ zero.core.Brain = CT.Class({
 			if (word in respz)
 				return cb(this.get_response(respz[word]));
 		}
+		if (respz["*"]) // default response object
+			return cb(this.get_response(respz["*"]));
 		CT.net.post({
 			path: "/_speech",
 			params: {
