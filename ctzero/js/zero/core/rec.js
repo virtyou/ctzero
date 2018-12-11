@@ -52,6 +52,6 @@ var rec = zero.core.rec = {
 		if (window.webkitSpeechRecognition)
 			return rec.local(cb);
 		rec._.cb = cb;
-		navigator.getUserMedia({ audio: true }, rec._.record, rec._.oops);
+		navigator.mediaDevices.getUserMedia({ audio: true }).then(rec._.record).catch(rec._.oops);
 	}
 };
