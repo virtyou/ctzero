@@ -17,7 +17,7 @@ CMDS = {
         ]
     },
     "rec": {
-        "transcode": "avconv -i %s.webm %s.wav", # stampath, stampath
+        "transcode": "avconv -i %s.webm -ac 1 %s.wav", # stampath, stampath
         "interpret": {
             "gcloud": "gcloud ml speech recognize %s.wav --language-code=%s", # stampath, lang
             "baidu": 'wget --header="Content-Type: audio/wav;rate=16000" --post-file=%s.wav "http://vop.baidu.com/server_api?lan=%s&cuid=10569015&token=%s" -O %s.json' # stampath, lang, token, stampath
