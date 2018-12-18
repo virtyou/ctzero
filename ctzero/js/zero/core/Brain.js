@@ -56,6 +56,7 @@ zero.core.Brain = CT.Class({
 		else if (typeof res == "object") {
 			// also support res.gesture{}, etc
 			res.mood && this.person.mood.update(res.mood);
+			res.triggers && this.triggers.update(res.triggers);
 			return this.get_response(res.phrase);
 		}
 	},
@@ -64,6 +65,8 @@ zero.core.Brain = CT.Class({
 			words = phrase.toLowerCase().split(" ");
 		for (i = 0; i < words.length; i++) {
 			word = words[i];
+			if (word in this.triggers)
+				return cb(this.get_response(this.triggers[word]));
 			if (word in respz)
 				return cb(this.get_response(respz[word]));
 		}
@@ -110,8 +113,10 @@ zero.core.Brain = CT.Class({
 	},
 	init: function(opts) {
 		this.opts = opts = CT.merge(opts, {
-			person: window
+			person: window,
+			triggers: {}
 		});
 		this.person = opts.person;
+		this.triggers = opts.triggers;
 	}
 });
