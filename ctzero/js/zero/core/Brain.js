@@ -55,8 +55,12 @@ zero.core.Brain = CT.Class({
 			return this.get_response(CT.data.choice(res));
 		else if (typeof res == "object") {
 			// also support res.gesture{}, etc
+			var trigz = this.triggers;
 			res.mood && this.person.mood.update(res.mood);
-			res.branches && Object.assign(this.triggers, res.branches);
+			res.disable && res.disable.forEach(function(key) {
+				delete trigz[key];
+			});
+			res.branches && Object.assign(trigz, res.branches);
 			return this.get_response(res.phrase);
 		}
 	},
