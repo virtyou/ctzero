@@ -135,12 +135,12 @@ zero.core.Thing = CT.Class({
 	remove: function(cname, fromScene) {
 		var thing = this[cname],
 			thrings = [thing.thring, thing.group],
-			parent = fromScene ? camera.scene : this.group;
+			parent = fromScene ? zero.core.camera.scene : this.group;
 		thrings.forEach(function(thring) {
 			thring && parent.remove(thring);
 		});
 		thing.isCustom && CT.data.remove(this._.customs, thing);
-		CT.data.remove(this.parts, thing);
+		this.parts && CT.data.remove(this.parts, thing); // parts check for Room-like attachments... probs revise
 		delete this[cname];
 		if (thing.opts.kind && this[thing.opts.kind])
 			delete this[thing.opts.kind]; // what about multiple children w/ same kind?
