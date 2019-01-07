@@ -6,8 +6,10 @@ This package contains the core zero libraries.
 
     import os
     mdir = os.path.join("js", "morphs")
+    cdir = os.path.join("js", "custom")
+    tdir = os.path.join("js", "templates")
     edir = os.path.join("js", "environments")
-    dirs = ["sound", "sound_in", "maps", "models", mdir]
+    dirs = ["sound", "sound_in", "maps", "models", mdir, cdir, tdir, edir]
     copies = {
     	mdir: ["head1.js"]
     }
