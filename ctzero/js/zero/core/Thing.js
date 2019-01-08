@@ -229,6 +229,10 @@ zero.core.Thing = CT.Class({
 			})
 		}, this.min_opts);
 	},
+	setName: function(opts) {
+		this.name = opts.name;
+		this.path = opts.path ? (opts.path + "." + opts.name) : opts.name;
+	},
 	init: function(opts) {
 		this.min_opts = opts;
 		this.opts = opts = CT.merge(opts, {
@@ -257,8 +261,7 @@ zero.core.Thing = CT.Class({
 			iterator: null,
 			onbuild: null // also supports: "onassemble"
 		});
-		this.name = opts.name;
-		this.path = opts.path ? (opts.path + "." + opts.name) : opts.name;
+		this.setName(opts);
 		var thiz = this, iz, name;
 		["spring", "aspect", "ticker"].forEach(function(influence) {
 			iz = influence + "s", influences = thiz[iz] = {};
