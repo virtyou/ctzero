@@ -20,6 +20,7 @@ zero.core.Head = CT.Class({
 			gR.position([3, 6.3, 7.22]);
 			gL.position([-3, 6.3, 7.22]);
 
+			// rotates eyes based on bones -- configurize?
 			var thiz = this, bonez = this.body.thring.skeleton.bones;
 			["y", "x"].forEach(function(dimension) {
 				["L", "R"].forEach(function(side) {
@@ -30,10 +31,12 @@ zero.core.Head = CT.Class({
 				});
 			});
 
+			// look at subject or camera
 			var cpos = (this.person.subject || zero.core.camera).position(null, true);
 			cubeL.look(cpos);
 			cubeR.look(cpos);
 
+			// blinking...
 	    	var lids = this.body.springs.lids;
 			if (this.blinking) {
 				lids.target = 1;
@@ -41,6 +44,7 @@ zero.core.Head = CT.Class({
 				return;
 			}
 
+			// adjust shake, nod, lids, smileEyes based on eye rotation
 			var shake = this.body.springs.shake,
 			    nod = this.body.springs.nod,
 			    eyeRot = this.eyeGroupL.rotation();
@@ -52,6 +56,7 @@ zero.core.Head = CT.Class({
 			else
 				this.body.springs.smileEyes.target -= 5 * eyeRot.x;
 
+			// blink -- tickerize!?!
 			this.blinkTicker += 0.01;
 			if (this.blinkTicker > 0.04)
 				lids.k = 220;
