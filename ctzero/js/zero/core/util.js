@@ -2,6 +2,7 @@ var lastTime, dmax = dts = 0.032;//0.016;
 
 zero.core.util = {
 	ticker: 0,
+	_tickers: [],
 	coords: function(xyz, cb) {
 	    ["x", "y", "z"].forEach(function(dim, i) {
 	        var val = xyz[dim] != undefined ? xyz[dim] : xyz[i];
@@ -74,9 +75,14 @@ zero.core.util = {
 	    for (var p in zero.core.util.people)
 	    	zero.core.util.people[p].tick();
 
+	    zero.core.util._tickers.forEach(function(t) { t(dts); });
+
 	    zero.core.camera.tick();
 	    zero.core.camera.render(); 
 	    requestAnimationFrame(zero.core.util.animate);
+	},
+	ontick: function(cb) {
+		zero.core.util._tickers.push(cb);
 	},
 	join: function(person, onready) {
 		var fullp = new zero.core.Person(CT.merge(person, {
