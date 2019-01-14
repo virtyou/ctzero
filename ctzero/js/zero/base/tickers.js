@@ -137,13 +137,15 @@ zero.base.tickers = function() {
             talking: {
                 once: true,
                 yes: {
-                    reschedule: 2,
                     target: {
-                        base: 30,
-                        coefficient: -60
+                        base: 0.4,
+                        coefficient: -0.8
                     },
                     k: {
-                        base: 60
+                        base: 40
+                    },
+                    damp: {
+                        base: 20
                     }
                 },
                 no: {
@@ -151,6 +153,12 @@ zero.base.tickers = function() {
                     target: {
                         base: 0.2,
                         coefficient: -0.4
+                    },
+                    k: {
+                        base: 20
+                    },
+                    damp: {
+                        base: 10
                     }
                 }
             }
@@ -161,8 +169,8 @@ zero.base.tickers = function() {
                 yes: {
                     reschedule: 6,
                     target: {
-                        base: -6,
-                        coefficient: 12
+                        base: 0.4,
+                        coefficient: -0.8
                     }
                 },
                 no: {
