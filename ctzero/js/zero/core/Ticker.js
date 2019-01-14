@@ -19,7 +19,7 @@ zero.core.Ticker = CT.Class({
 			direction = this.parent[condition] ? "yes" : "no";
 			opts = this.conditions[condition][direction];
 			clearTimeout(this._timeout);
-			this._timeout = setTimeout(this.tick, (opts.reschedule || 1) * 1000);
+			this._timeout = setTimeout(this.tick, Math.random() * (opts.reschedule || 1) * 1000);
 			if (opts.once) {
 				if (this.oncers[direction])
 					continue;
@@ -28,7 +28,7 @@ zero.core.Ticker = CT.Class({
 				this.oncers[direction] = true;
 			}
 			s = this.parent.springs[this.name];
-			["target", "k"].forEach(function(property) {
+			["target", "k", "damp"].forEach(function(property) {
 				up(s, opts, property);
 			});
 			if (opts.boost) {
