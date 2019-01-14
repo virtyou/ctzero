@@ -83,14 +83,14 @@ zero.core.Head = CT.Class({
 		mouth: function() {
 			var cur = this.currentPhoneme, vis = this._viseme,
 				phonemes = zero.core.phonemes,
-				t, talking = cur != "pau" && cur !== "sil", changed;
+				t, talking = cur && cur != "pau" && cur !== "sil", changed;
 			if (talking != this.talking) {
 				changed = true;
-				this.talking = talking;
+				this.talking = this.body.talking = talking;
 				for (t in this.body.tickers)
 					this.body.tickers[t].tick();
 			} else
-				this.talking = talking;
+				this.talking = this.body.talking = talking;
 			(talking || changed) && phonemes.forEach(function(pdata) {
 				if (pdata.phones.indexOf(cur) != -1) {
 					vis(pdata, "target");
