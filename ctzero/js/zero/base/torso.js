@@ -37,6 +37,7 @@ zero.base.torso = function(opts, fat_headed) {
             name: "chest",
             texture: opts.dress_texture,
             stripset: opts.dress_stripset,
+            matcat: opts.dress_matcat,
             //matcat: "Phong",
             repeat: opts.dress_repeat,
 //            position: [0, 18.3, 0],
