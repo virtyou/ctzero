@@ -63,13 +63,13 @@ zero.base.springs = function() {
 
         shake: {
             k: 20,
-            damp: 10,
-            breaks: true
+            damp: 10
+//            breaks: true
         },
         nod: {
-            k: 20,
-            damp: 10,
-            breaks: true
+            k: 4,
+            damp: 2
+//            breaks: true
         },
         tilt: {
             k: 50,
