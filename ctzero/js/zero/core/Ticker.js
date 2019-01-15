@@ -13,13 +13,20 @@ zero.core.Ticker = CT.Class({
 		clearTimeout(this._timeout);
 		delete this._timeout;
 	},
+	reschedule: function(opts) {
+		var reschedule = opts.reschedule || {},
+			base = reschedule.base || 1,
+			coefficient = reschedule.coefficient || 0;
+		this.stop();
+		this._timeout = setTimeout(this.tick,
+			(base + coefficient * Math.random()) * 1000);
+	},
 	tick: function() {
 		var condition, direction, opts, s, up = this._up;
 		for (condition in this.conditions) {
 			direction = this.parent[condition] ? "yes" : "no";
 			opts = this.conditions[condition][direction];
-			clearTimeout(this._timeout);
-			this._timeout = setTimeout(this.tick, Math.random() * (opts.reschedule || 1) * 1000);
+			this.reschedule(opts);
 			if (opts.once) {
 				if (this.oncers[direction])
 					continue;
