@@ -254,8 +254,8 @@ zero.base.tickers = function() {
                         base: 10
                     },
                     target: {
-                        base: -0.1,
-                        coefficient: 0.2
+                        base: -0.2,
+                        coefficient: 0.4
                     }
                 }
             }
