@@ -18,11 +18,11 @@ zero.core.Mood = CT.Class({
 		springs.smile.target = springs.smileEyes.target =
 			springs.bigSmile.target = happy;
 		springs.nod.target = -0.1 * (sad - mad - antsy - (happy / 2));
-		tickers.asym.conditions.talking.no.reschedule = 3 - antsy;
-		tickers.lids.conditions.talking.no.reschedule = 5 - antsy * 2;
-		tickers.tilt.conditions.talking.no.reschedule = 7 - antsy * 2;
-		tickers.shake.conditions.talking.no.reschedule = 8 - antsy * 2;
-		tickers.twist.conditions.talking.no.reschedule = 10 - antsy * 4;
+		tickers.asym.conditions.talking.no.reschedule.base = 3 - antsy;
+		tickers.lids.conditions.talking.no.reschedule.base = 5 - antsy * 2;
+		tickers.tilt.conditions.talking.no.reschedule.base = 7 - antsy * 2;
+		tickers.shake.conditions.talking.no.reschedule.base = 8 - antsy * 2;
+		tickers.twist.conditions.talking.no.reschedule.base = 10 - antsy * 4;
 		energy.k = 1 + happy + (2 * mad) - sad + antsy;
 		prosody.rate = _.rates[Math.floor(2 - sad + antsy) % 5];
 		prosody.pitch = _.pitches[Math.floor(energy.k) % 5];
