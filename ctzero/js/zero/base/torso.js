@@ -1,7 +1,11 @@
-zero.base.torso = function(opts, fat_headed) {
+zero.base.torso = function(opts) {
     opts = CT.merge(opts, zero.base.torso.defaults); // must set defaults!
-    var bod = {
+    return {
         name: "torso",
+        morphStack: opts.morphStack,
+        springs: zero.base.springs(),
+        aspects: zero.base.aspects(),
+        tickers: zero.base.tickers(),
         key: opts.key,
         texture: opts.texture,
         stripset: opts.stripset,
@@ -171,11 +175,4 @@ zero.base.torso = function(opts, fat_headed) {
             }]
         }]
     };
-    var v = zero.core.version,
-        livePart = (!v || v == "0.1") ? bod.parts[2].parts[0].parts[0] : bod;
-    livePart.morphStack = opts.morphStack;
-    livePart.springs = zero.base.springs();
-    livePart.aspects = zero.base.aspects(fat_headed);
-    livePart.tickers = zero.base.tickers();
-    return bod;
 };
