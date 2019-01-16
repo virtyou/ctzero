@@ -1,11 +1,10 @@
-zero.base.aspects = function(fat_headed) {
-    var asps = {
+zero.base.aspects = function() {
+    return {
         china: {
             springs: {
                 china: 1
             }
         },
-
         ah: {
             springs: {
                 ah: 1.3
@@ -52,6 +51,11 @@ zero.base.aspects = function(fat_headed) {
                 sad_brow: 1
             }
         },
+        frown: {
+            springs: {
+                frown: 1
+            }
+        },
         asym: {
             springs: {
                 asym: 1
@@ -92,12 +96,4 @@ zero.base.aspects = function(fat_headed) {
             }
         }
     };
-    if (fat_headed) {
-        asps.fat_head = {
-            base: 1,
-            min: 0,
-            springs: {}
-        }
-    }
-    return asps;
 };
