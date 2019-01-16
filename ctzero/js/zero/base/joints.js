@@ -14,7 +14,7 @@ zero.base.joints = function() {
                 unbounded: true,
                 springs: {
                     twist: 1,
-                    shake: 0.4
+                    shake: 0.3
                 }
             },
             z: {
