@@ -22,7 +22,7 @@ zero.base.joints = function() {
                 min: -0.5,
                 springs: {
                     lean: 1,
-                    tilt: -0.5
+                    tilt: -0.2
                 }
             }
         }
