@@ -32,6 +32,10 @@ zero.base.springs = function() {
             k: 120,
             damp: 40
         },
+        frown: {
+            k: 120,
+            damp: 40
+        },
 
         bob: {
             k: 10,
