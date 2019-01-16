@@ -14,7 +14,7 @@ zero.core.Mood = CT.Class({
 			tickers = this.person.body.tickers;
 		springs.brow.target = mad;
 		springs.browAsym.target = antsy;
-		springs.sad_brow.target = sad;
+		springs.sad_brow.target = springs.frown.target = sad;
 		springs.smile.target = springs.smileEyes.target =
 			springs.bigSmile.target = happy;
 		springs.nod.target = -0.1 * (sad - mad - antsy - (happy / 2));
