@@ -1,10 +1,5 @@
 zero.base.aspects = function() {
     return {
-        china: {
-            springs: {
-                china: 1
-            }
-        },
         ah: {
             springs: {
                 ah: 1.3
@@ -79,10 +74,6 @@ zero.base.aspects = function() {
             aspects: {
                 big_smile: -1
             }
-        },
-        norm_eye_fix: {
-            base: 1,
-            springs: {}
         },
         big_smile: {
             min: 0,

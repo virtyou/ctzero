@@ -78,13 +78,6 @@ zero.base.springs = function() {
         tilt: {
             k: 50,
             damp: 5
-        },
-
-        china: {
-            k: 20,
-            damp: 20,
-            target: 1,
-            value: 1
         }
     };
 };
