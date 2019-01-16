@@ -23,7 +23,7 @@ zero.core.Mood = CT.Class({
 		tickers.tilt.conditions.talking.no.reschedule.base = 7 - antsy * 2;
 		tickers.shake.conditions.talking.no.reschedule.base = 8 - antsy * 2;
 		tickers.twist.conditions.talking.no.reschedule.base = 10 - antsy * 4;
-		energy.k = 1 + happy + (2 * mad) - sad + antsy;
+		energy.k = Math.max(0.1, 1 + happy + (2 * mad) - sad + antsy);
 		prosody.rate = _.rates[Math.floor(2 - sad + antsy) % 5];
 		prosody.pitch = _.pitches[Math.floor(energy.k) % 5];
 	},
