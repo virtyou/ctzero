@@ -172,12 +172,12 @@ zero.base.tickers = function() {
                 once: true,
                 yes: {
                     reschedule: {
-                        base: 0.2,
-                        coefficient: 0.6
+                        base: 0,
+                        coefficient: 0.4
                     },
                     target: {
-                        base: 0.3,
-                        coefficient: -0.6
+                        base: 0.2,
+                        coefficient: -0.4
                     },
                     k: {
                         base: 36
@@ -319,11 +319,11 @@ zero.base.tickers = function() {
                         coefficient: 3.5
                     },
                     k: {
-                        base: 20
+                        base: 10
                     },
                     target: {
-                        base: -0.1,
-                        coefficient: 0.2
+                        base: -0.05,
+                        coefficient: 0.1
                     }
                 },
                 no: {
