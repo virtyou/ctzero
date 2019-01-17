@@ -6,6 +6,7 @@ zero.base.torso = function(opts) {
         springs: zero.base.springs(),
         aspects: zero.base.aspects(),
         tickers: zero.base.tickers(),
+        joints: zero.base.joints(),
         key: opts.key,
         texture: opts.texture,
         stripset: opts.stripset,
@@ -20,7 +21,6 @@ zero.base.torso = function(opts) {
             reflectivity: 10,
             shininess: 2
         },
-        joints: zero.base.joints(),
         parts: [{
             name: "looker",
             position: [0, 35, 25],
