@@ -7,6 +7,11 @@ zero.core.Ticker = CT.Class({
 			s[property] = propts.base || 0;
 			if (propts.coefficient)
 				s[property] += propts.coefficient * Math.random(); 
+			if ((property == "target") && !this.opts.noTargetMult) {
+				var energy = this.parent.energy();
+				if (energy)
+					s[property] *= energy.targetMult;
+			}
 		}
 	},
 	stop: function() {
@@ -16,10 +21,15 @@ zero.core.Ticker = CT.Class({
 	reschedule: function(opts) {
 		var reschedule = opts.reschedule || {},
 			base = reschedule.base || 1,
-			coefficient = reschedule.coefficient || 0;
+			coefficient = reschedule.coefficient || 0,
+			dur = (base + coefficient * Math.random()) * 1000;
+		if (!this.opts.noReschedMult) {
+			var energy = this.parent.energy();
+			if (energy)
+				dur *= energy.reschedMult;
+		}
 		this.stop();
-		this._timeout = setTimeout(this.tick,
-			(base + coefficient * Math.random()) * 1000);
+		this._timeout = setTimeout(this.tick, dur);
 	},
 	tick: function() {
 		var condition, direction, opts, s, up = this._up;
