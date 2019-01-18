@@ -108,10 +108,7 @@ zero.core.Person = CT.Class({
 		this.brain = new zero.core.Brain({
 			person: this
 		});
-		this.energy = new zero.core.Energy({
-			k: 1,
-			damp: 1
-		});
+		this.energy = new zero.core.Energy(opts.energy);
 		this.mood = new zero.core.Mood(CT.merge(opts.mood, {
 			person: this
 		}));
