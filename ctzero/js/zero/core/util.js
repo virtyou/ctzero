@@ -2,6 +2,7 @@ var lastTime, dmax = dts = 0.032;//0.016;
 
 zero.core.util = {
 	ticker: 0,
+	elapsed: 0,
 	_tickers: [],
 	coords: function(xyz, cb) {
 	    ["x", "y", "z"].forEach(function(dim, i) {
@@ -38,6 +39,11 @@ zero.core.util = {
 		var blob = new Blob(byteArrays, {type: contentType});
 		return blob;
 	},
+	audio: function(src) {
+		var a = new Audio(src);
+		document.body.appendChild(a);
+		a.play();
+	},
 	init: function(onbuild) {
 		zero.core.camera.init();
 		var cfg = core.config.ctzero, people = zero.core.util.people = {},
@@ -67,6 +73,7 @@ zero.core.util = {
 	        dts = Math.min(dmax, (now - lastTime) / 1000);
 	    lastTime = now;
 	    zero.core.util.ticker += 1;
+	    zero.core.util.elapsed += dts;
 
 	    zero.core.springController.tick(dts);
 	    zero.core.aspectController.tick();
