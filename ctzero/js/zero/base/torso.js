@@ -80,7 +80,7 @@ zero.base.torso = function(opts) {
                         name: "teeth_top",
                         texture: opts.teeth_top_texture,
                         stripset: opts.teeth_top_stripset,
-                        position: [0, -9.2, 2.5],
+                        position: [0, -9.2, 2.2],
                         material: {
                             color: opts.teeth_top_color,
                             morphTargets: true
