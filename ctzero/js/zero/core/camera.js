@@ -172,11 +172,14 @@ var camera = zero.core.camera = {
 			fov = THREE.Math.degToRad(camera._.camera.fov);
 		return 2 * Math.tan(fov / 2) * dist;
 	},
+	background: function(bg) {
+		zero.core.camera.scene.background = THREE.ImageUtils.loadTexture(bg);
+	},
 	init: function() {
 		var _ = camera._, config = core.config.ctzero, controls = !config.camera.noControls;
 		camera.scene = new THREE.Scene();
 		if (config.camera.background)
-			camera.scene.background = THREE.ImageUtils.loadTexture(config.camera.background);
+			camera.background(config.camera.background);
 		_.container = CT.dom.div(null, "abs all0");
 		var c = _.outerContainer = CT.dom.id(config.container) || document.body,
 			WIDTH = c.clientWidth, HEIGHT = c.clientHeight;
