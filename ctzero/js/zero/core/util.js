@@ -39,6 +39,11 @@ zero.core.util = {
 		var blob = new Blob(byteArrays, {type: contentType});
 		return blob;
 	},
+	audio: function(src) {
+		var a = new Audio(src);
+		document.body.appendChild(a);
+		a.play();
+	},
 	init: function(onbuild) {
 		zero.core.camera.init();
 		var cfg = core.config.ctzero, people = zero.core.util.people = {},
