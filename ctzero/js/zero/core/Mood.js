@@ -39,12 +39,15 @@ zero.core.Mood = CT.Class({
 		};
 	},
 	init: function(opts) {
-		this.opts = opts = CT.merge(opts, {
-			mad: 0,
-			happy: 0,
-			sad: 0,
-			antsy: 0
-		});
+		this.opts = opts = CT.merge(opts, zero.core.Mood.defaults);
 		this.person = opts.person;
 	}
 });
+
+zero.core.Mood.defaults = {
+	mad: 0,
+	happy: 0,
+	sad: 0,
+	antsy: 0
+};
+zero.core.Mood.vectors = Object.keys(zero.core.Mood.defaults);
