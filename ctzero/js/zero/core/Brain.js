@@ -54,6 +54,25 @@ zero.core.Brain = CT.Class({
 		else if (Array.isArray(res))
 			return this.get_response(CT.data.choice(res));
 		else if (typeof res == "object") {
+			// these (audio, background, image) look like {key,name,item} - item is path
+			res.audio && zero.core.util.audio(res.audio.item);
+			res.background && zero.core.camera.background(res.background.item);
+			if (res.image) {
+				var m = new CT.modal.Modal({
+					noClose: true,
+					className: "basicpopup noframe",
+					content: CT.dom.img(res.image.item),
+					transition: "slide",
+					slide: {
+						origin: "right"
+					},
+					onclick: function() {
+						m.hide()
+					}
+				});
+				m.show();
+			}
+
 			// also support res.gesture{}, etc
 			var trigz = this.triggers;
 			res.mood && this.person.mood.update(res.mood);
