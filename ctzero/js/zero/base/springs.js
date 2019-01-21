@@ -1,40 +1,40 @@
 zero.base.springs = function() {
     return {
         asym: {
-            k: 80,
-            damp: 40
+            k: 20,
+            damp: 10
         },
         smileEyes: {
-            k: 80,
-            damp: 40
+            k: 20,
+            damp: 10
         },
         lids: {
             k: 220,
             damp: 40
         },
         smile: {
-            k: 220,
-            damp: 40
+            k: 20,
+            damp: 10
         },
         bigSmile: {
-            k: 70,
-            damp: 40
+            k: 20,
+            damp: 10
         },
         brow: {
-            k: 70,
-            damp: 40
+            k: 20,
+            damp: 10
         },
         browAsym: {
-            k: 120,
-            damp: 40
+            k: 20,
+            damp: 10
         },
         sad_brow: {
-            k: 120,
-            damp: 40
+            k: 20,
+            damp: 10
         },
         frown: {
-            k: 120,
-            damp: 40
+            k: 20,
+            damp: 10
         },
 
         bob: {

@@ -37,11 +37,12 @@ zero.base.tickers = function() {
                 },
                 no: {
                     reschedule: {
+                        base: 0,
                         coefficient: 1
                     },
                     target: {
-                        base: 0.3,
-                        coefficient: -0.6
+                        base: -0.5,
+                        coefficient: 1
                     }
                 }
             }
@@ -64,14 +65,14 @@ zero.base.tickers = function() {
                 },
                 no: {
                     reschedule: {
-                        base: 2.5,
+                        base: 0,
                         coefficient: 2.5
                     },
-                    boost: {
-                        smileEyes: {
-                            coefficient: 0.2
-                        }
-                    }
+               //     boost: {
+                //        smileEyes: {
+                //            coefficient: -0.2
+                //        }
+                 //   }
                 }
             }
         },
@@ -88,8 +89,27 @@ zero.base.tickers = function() {
                         coefficient: 1.5
                     },
                     target: {
-                        base: -0.6,
-                        coefficient: 1.6
+                        base: 0,
+                        coefficient: 1
+                    }
+                }
+            }
+        },
+        bigSmile: {
+            talking: {
+                yes: {
+                    target: {
+                        coefficient: 0.7
+                    }
+                },
+                no: {
+                    reschedule: {
+                        base: 0,
+                        coefficient: 1
+                    },
+                    target: {
+                        base: 0,
+                        coefficient: 0
                     }
                 }
             }
@@ -102,7 +122,7 @@ zero.base.tickers = function() {
                         coefficient: 0.7
                     },
                     k: {
-                        base: 200
+                        base: 10
                     }
                 },
                 no: {
@@ -111,10 +131,11 @@ zero.base.tickers = function() {
                         coefficient: 2
                     },
                     target: {
+                        base: 0,
                         coefficient: 1
                     },
                     k: {
-                        base: 70
+                        base: 20
                     }
                 }
             }
@@ -157,8 +178,8 @@ zero.base.tickers = function() {
                 },
                 no: {
                     reschedule: {
-                        base: 3.5,
-                        coefficient: 3.5
+                        base: 0,
+                        coefficient: 3
                     },
                     target: {
                         base: 0,
@@ -167,6 +188,32 @@ zero.base.tickers = function() {
                 }
             }
         },
+
+
+        frown: {
+            talking: {
+                yes: {
+                    reschedule: {
+                        base: 0.5,
+                        coefficient: 0.5
+                    },
+                    target: {
+                        coefficient: 2.4
+                    }
+                },
+                no: {
+                    reschedule: {
+                        base: 0,
+                        coefficient: 1
+                    },
+                    target: {
+                        base: -0.1,
+                        coefficient: 0.2
+                    }
+                }
+            }
+        },
+
         nod: {
             talking: {
                 once: true,
@@ -192,8 +239,8 @@ zero.base.tickers = function() {
                         coefficient: 2
                     },
                     target: {
-                        base: 0.2,
-                        coefficient: -0.4
+                        base: -0.2,
+                        coefficient: 0.4
                     },
                     k: {
                         base: 10
@@ -215,6 +262,12 @@ zero.base.tickers = function() {
                     target: {
                         base: 0.4,
                         coefficient: -0.8
+                    },
+                    k: {
+                        base: 10
+                    },
+                    damp: {
+                        base: 5
                     }
                 },
                 no: {
@@ -225,6 +278,12 @@ zero.base.tickers = function() {
                     target: {
                         base: -0.2,
                         coefficient: 0.4
+                    },
+                    k: {
+                        base: 10
+                    },
+                    damp: {
+                        base: 5
                     }
                 }
             }
@@ -247,8 +306,8 @@ zero.base.tickers = function() {
                 },
                 no: {
                     reschedule: {
-                        base: 3.5,
-                        coefficient: 3.5
+                        base: 0,
+                        coefficient: 6
                     },
                     k: {
                         base: 10
