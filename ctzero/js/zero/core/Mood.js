@@ -10,7 +10,8 @@ zero.core.Mood = CT.Class({
 			mad = opts.mad,  // frown, snarl, brow, prosody
 			sad = opts.sad,  // frown, sad brow
 			ego = opts.ego,  // nod tick base
-			voiceMaster = opts.voiceMaster,  // looker
+			rate = opts.rate,
+			pitch = opts.pitch,
 			energy = opts.energy, // antsiness, moodmaster_k, prosody_speed
 			suspicion = opts.suspicion,   //   blink ticker base, smile eye ticker base
 			curiosity = opts.curiosity,   //   tilt ticker_coeff
@@ -42,8 +43,8 @@ zero.core.Mood = CT.Class({
 		//tickers.nod.conditions.talking.no.k.base = 2 + 20*energy;
 		//tickers.shake.conditions.talking.no.k.base = 2 + 20*energy,
 		energyMaster.k = 0.1 + 2*energy;
-		prosody.rate = _.rates[Math.floor(4*voiceMaster) % 5];
-		prosody.pitch = _.pitches[Math.floor(4*voiceMaster) % 5];
+		prosody.rate = _.rates[Math.floor(4*rate) % 5];
+		prosody.pitch = _.pitches[Math.floor(4*pitch) % 5];
 
 		
 		/*
@@ -94,7 +95,8 @@ zero.core.Mood.defaults = {
 	happy: 0,
 	sad: 0,
 	ego: 0.5,
-	voiceMaster: 0.5,
+	pitch: 0.5,
+	rate: 0.5,
 	energy: 0.5,
 	suspicion: 0.5,
 	curiosity: 0.5
