@@ -112,20 +112,17 @@ zero.core.Head = CT.Class({
 				}
 			}
 
-
-/// DARKEN TEETH WHEN MOUTH SHUT
-//////////////////////////////////////
-var asps = this.body.aspects;
-var teeth_show_ness = (0.8*asps.ah.value + 0.4*asps.w.value + 0.4*asps.ff.value + 0.5*asps.ee.value + 0.9*asps.big_smile.value);
-
-this.teeth_top.material.color.r = this.teeth.material.color.r = 0.6 + teeth_show_ness;
-this.teeth_top.material.color.g = this.teeth.material.color.g = 0.5 + teeth_show_ness;
-this.teeth_top.material.color.b = this.teeth.material.color.b = 0.5 + teeth_show_ness;
-if(this.teeth.material.color.r>0.9){this.teeth_top.material.color.r = this.teeth.material.color.r = 0.9}
-if(this.teeth.material.color.g>0.85){this.teeth.material.color.g = this.teeth.material.color.b = this.teeth_top.material.color.g = this.teeth_top.material.color.b = 0.85};
-
-
-
+			/// DARKEN TEETH WHEN MOUTH SHUT
+			var asps = this.body.aspects, teeth_show_ness = 0.8 * asps.ah.value + 0.4 * asps.w.value
+				+ 0.4 * asps.ff.value + 0.5 * asps.ee.value + 0.9 * asps.big_smile.value;
+			this.teeth_top.material.color.r = this.teeth.material.color.r = 0.6 + teeth_show_ness;
+			this.teeth_top.material.color.g = this.teeth.material.color.g = 0.5 + teeth_show_ness;
+			this.teeth_top.material.color.b = this.teeth.material.color.b = 0.5 + teeth_show_ness;
+			if (this.teeth.material.color.r > 0.9)
+				this.teeth_top.material.color.r = this.teeth.material.color.r = 0.9;
+			if (this.teeth.material.color.g > 0.85)
+				this.teeth.material.color.g = this.teeth.material.color.b
+					= this.teeth_top.material.color.g = this.teeth_top.material.color.b = 0.85;
 		}
 	},
 	_viseme: function(vdata, vtype) {
