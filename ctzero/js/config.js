@@ -58,6 +58,9 @@
 		"delta_cutoff": 0.1
 	},
 	"brain": {
+		"chain": {
+			"delay": 500
+		},
 		"modal": {
 			"noClose": true,
 			"className": "basicpopup noframe",

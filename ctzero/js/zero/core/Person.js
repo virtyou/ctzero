@@ -60,7 +60,9 @@ zero.core.Person = CT.Class({
 				var chain = thaz.brain.chain;
 				if (chain) {
 					delete thaz.brain.chain;
-					thaz.respond(chain, cb);
+					setTimeout(thaz.respond,
+						core.config.ctzero.brain.chain.delay,
+						chain, cb);
 				} else
 					cb && cb();
 			});
