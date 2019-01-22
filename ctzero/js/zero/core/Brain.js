@@ -58,18 +58,12 @@ zero.core.Brain = CT.Class({
 			res.audio && zero.core.util.audio(res.audio.item);
 			res.background && zero.core.camera.background(res.background.item);
 			if (res.image) {
-				var m = new CT.modal.Modal({
-					noClose: true,
-					className: "basicpopup noframe",
+				var m = new CT.modal.Modal(CT.merge({
 					content: CT.dom.img(res.image.item),
-					transition: "slide",
-					slide: {
-						origin: "right"
-					},
 					onclick: function() {
 						m.hide()
 					}
-				});
+				}, core.config.ctzero.brain.modal));
 				m.show();
 			}
 

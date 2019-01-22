@@ -56,5 +56,15 @@
 	"script": [],
 	"morphs": {
 		"delta_cutoff": 0.1
+	},
+	"brain": {
+		"modal": {
+			"noClose": true,
+			"className": "basicpopup noframe",
+			"transition": "slide",
+			"slide": {
+				"origin": "right"
+			}
+		}
 	}
 }
