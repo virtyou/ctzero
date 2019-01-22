@@ -56,8 +56,14 @@ zero.core.Person = CT.Class({
 	respond: function(phrase, cb) {
 		var thaz = this;
 		this.brain.respond(phrase, function(words) {
-			thaz.say(words);
-			cb && cb();
+			thaz.say(words, function() {
+				var chain = thaz.brain.chain;
+				if (chain) {
+					delete thaz.brain.chain;
+					thaz.respond(chain, cb);
+				} else
+					cb && cb();
+			});
 		});
 	},
 	tick: function() {

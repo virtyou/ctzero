@@ -74,6 +74,8 @@ zero.core.Brain = CT.Class({
 				delete trigz[key];
 			});
 			res.branches && Object.assign(trigz, res.branches);
+			if (res.chain)
+				this.chain = res.chain;
 			return this.get_response(res.phrase);
 		}
 	},
