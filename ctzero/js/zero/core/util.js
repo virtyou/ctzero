@@ -44,6 +44,12 @@ zero.core.util = {
 		document.body.appendChild(a);
 		a.play();
 	},
+	video: function(src) {
+		var v = CT.dom.video(src, "full");
+		zero.core.camera.container().appendChild(v);
+		zero.core.camera.background();
+		v.play();
+	},
 	init: function(onbuild) {
 		zero.core.camera.init();
 		var cfg = core.config.ctzero, people = zero.core.util.people = {},
