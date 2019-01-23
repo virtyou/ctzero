@@ -12,10 +12,28 @@ zero.core.Thing = CT.Class({
 			this.opts.onclick && zero.core.click.register(this, function() {
 				thiz.opts.onclick(thiz);
 			});
+			this.opts.scroll && this.scroll();
 		}
 	},
 	isReady: function() {
 		return this._.ready;
+	},
+	scroll: function(_opts) {
+		var opts = this.opts.scroll = CT.merge(_opts, this.opts.scroll, {
+			axis: "y",
+			speed: 0.05
+		}), map = this.material.map;
+		if (this._.scroller)
+			zero.core.util.untick(this._.scroller);
+		this._.scroller = function(dts) {
+			var t = zero.core.util.elapsed;
+			map.offset[opts.axis] = opts.speed * t;
+			if (opts.repeat) {
+				var r = opts.repeat;
+				map.repeat[r.axis || "y"] = (r.degree || 4) * (1 + Math.sin((r.speed || opts.speed) * t));
+			}
+		};
+		zero.core.util.ontick(this._.scroller);
 	},
 	look: function(pos) {
 		var myPos = this.position(null, true);
@@ -259,7 +277,8 @@ zero.core.Thing = CT.Class({
 			tickers: {},
 			morphStack: null,
 			iterator: null,
-			onbuild: null // also supports: "onassemble"
+			onbuild: null, // also supports: "onassemble"
+			scroll: null
 		});
 		this.setName(opts);
 		var thiz = this, iz, name;
