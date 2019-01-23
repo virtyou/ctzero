@@ -97,6 +97,9 @@ zero.core.util = {
 	ontick: function(cb) {
 		zero.core.util._tickers.push(cb);
 	},
+	untick: function(cb) {
+		CT.data.remove(zero.core.util._tickers, cb);
+	},
 	join: function(person, onready) {
 		var fullp = new zero.core.Person(CT.merge(person, {
 			onbuild: function() {
