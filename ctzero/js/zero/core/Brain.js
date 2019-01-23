@@ -54,8 +54,9 @@ zero.core.Brain = CT.Class({
 		else if (Array.isArray(res))
 			return this.get_response(CT.data.choice(res));
 		else if (typeof res == "object") {
-			// these (audio, background, image) look like {key,name,item} - item is path
+			// these (audio, background, image) look like {key,name,variety,item} - item is path
 			res.audio && zero.core.util.audio(res.audio.item);
+			res.video && zero.core.util.video(res.video.item);
 			res.background && zero.core.camera.background(res.background.item);
 			if (res.image) {
 				var m = new CT.modal.Modal(CT.merge({
