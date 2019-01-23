@@ -173,7 +173,13 @@ var camera = zero.core.camera = {
 		return 2 * Math.tan(fov / 2) * dist;
 	},
 	background: function(bg) {
-		zero.core.camera.scene.background = THREE.ImageUtils.loadTexture(bg);
+		if (bg)
+			zero.core.camera.scene.background = THREE.ImageUtils.loadTexture(bg);
+		else
+			delete zero.core.camera.scene.background;
+	},
+	container: function() {
+		return zero.core.camera._.outerContainer;
 	},
 	init: function() {
 		var _ = camera._, config = core.config.ctzero, controls = !config.camera.noControls;
