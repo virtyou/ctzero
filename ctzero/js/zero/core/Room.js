@@ -42,11 +42,12 @@ zero.core.Room = CT.Class({
 		zero.core.camera.move(this.cameras[this._cam]);
 	},
 	init: function(opts) {
-		this.opts = opts = CT.merge(this.opts, opts, {
+		var eopts = opts.environment && CT.require("environments." + opts.environment, true);
+		this.opts = opts = CT.merge(eopts, this.opts, {
 			lights: [],  // Lights
 			objects: [], // regular Things
 			cameras: []
-		}, opts.environment && CT.require("environments." + opts.environment, true));
+		});
 		if (opts.floor)
 			this.floor = new zero.core.Thing(opts.floor);
 		if (opts.wall) {
