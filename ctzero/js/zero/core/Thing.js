@@ -30,7 +30,7 @@ zero.core.Thing = CT.Class({
 			map.offset[opts.axis] = opts.speed * t;
 			if (opts.repeat) {
 				var r = opts.repeat;
-				map.repeat[r.axis || "y"] = (r.degree || 4) * (1 + Math.sin((r.speed || opts.speed) * t));
+				map.repeat[r.axis || "y"] = (r.degree || 2) * (1 + Math.sin((r.speed || opts.speed) * t));
 			}
 		};
 		zero.core.util.ontick(this._.scroller);
