@@ -124,7 +124,7 @@ zero.core.Person = CT.Class({
 		this.vibe = new zero.core.Vibe({
 			person: this,
 			vibes: CT.merge(opts.vibe, {
-				default: this.mood.snapshot()
+				"default": this.mood.snapshot()
 			})
 		});
 		this.prosody = CT.merge(opts.prosody, {
