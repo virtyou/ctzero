@@ -60,7 +60,8 @@ class Person(db.TimeStampedBase):
 	body = db.ForeignKey(kind=Part)
 	name = db.String()
 	voice = db.String()
-	mood = db.JSON() # {mad,happy,sad,antsy}
+	mood = db.JSON()
+	vibe = db.JSON()
 	responses = db.JSON()
 
 	def json(self):
@@ -69,6 +70,7 @@ class Person(db.TimeStampedBase):
 			"name": self.name,
 			"voice": self.voice,
 			"mood": self.mood or {},
+			"vibe": self.vibe or {},
 			"responses": self.responses or {},
 			"body": self.body.get().json()
 		}

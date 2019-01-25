@@ -99,9 +99,10 @@ zero.core.Person = CT.Class({
 	init: function(opts) {
 		this.log("init", opts.name);
 		var thiz = this;
-		this.opts = CT.merge(opts, {
-			moody: false,
+		this.opts = opts = CT.merge(opts, {
+			moody: true,
 			responses: {},
+			vibe: {},
 			voice: "Joanna"
 		});
 		this.voice = opts.voice;
@@ -120,6 +121,12 @@ zero.core.Person = CT.Class({
 		this.mood = new zero.core.Mood(CT.merge(opts.mood, {
 			person: this
 		}));
+		this.vibe = new zero.core.Vibe({
+			person: this,
+			vibes: CT.merge(opts.vibe, {
+				default: this.mood.snapshot()
+			})
+		});
 		this.prosody = CT.merge(opts.prosody, {
 			rate: "medium",
 			pitch: "medium"
