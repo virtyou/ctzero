@@ -70,6 +70,7 @@ zero.core.Brain = CT.Class({
 
 			// also support res.gesture{}, etc
 			var trigz = this.triggers;
+			res.vibe && this.person.vibe.update(res.vibe);
 			res.mood && this.person.mood.update(res.mood);
 			res.disable && res.disable.forEach(function(key) {
 				delete trigz[key];
