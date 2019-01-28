@@ -55,6 +55,7 @@ zero.core.Brain = CT.Class({
 			return this.get_response(CT.data.choice(res));
 		else if (typeof res == "object") {
 			// these (audio, background, image) look like {key,name,variety,item} - item is path
+			res.iframe && zero.core.util.iframe(res.iframe.item);
 			res.audio && zero.core.util.audio(res.audio.item);
 			res.video && zero.core.util.video(res.video.item);
 			res.background && zero.core.camera.background(res.background.item);
