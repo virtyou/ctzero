@@ -46,13 +46,20 @@ zero.core.util = {
 	},
 	video: function(src) {
 		var v = CT.dom.video(src, "full");
-		zero.core.camera.container().appendChild(v);
+		zero.core.util.back(v);
 		zero.core.camera.background();
 		v.play();
 	},
 	iframe: function(src) {
-		zero.core.camera.container().appendChild(CT.dom.iframe(src, "full"));
+		zero.core.util.back(CT.dom.iframe(src, "full"));
 		zero.core.camera.background();
+	},
+	back: function(node) {
+		if (!zero.core.util._back) {
+			zero.core.util._back = CT.dom.div(null, "full");
+			zero.core.camera.container().appendChild(zero.core.util._back);
+		}
+		CT.dom.setContent(zero.core.util._back, node);
 	},
 	init: function(onbuild) {
 		zero.core.camera.init();
