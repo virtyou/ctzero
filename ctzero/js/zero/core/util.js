@@ -50,6 +50,10 @@ zero.core.util = {
 		zero.core.camera.background();
 		v.play();
 	},
+	iframe: function(src) {
+		zero.core.camera.container().appendChild(CT.dom.iframe(src, "full"));
+		zero.core.camera.background();
+	},
 	init: function(onbuild) {
 		zero.core.camera.init();
 		var cfg = core.config.ctzero, people = zero.core.util.people = {},
