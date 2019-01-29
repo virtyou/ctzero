@@ -39,11 +39,7 @@ zero.core.util = {
 		var blob = new Blob(byteArrays, {type: contentType});
 		return blob;
 	},
-	_map: function(pos, variety) {
-		if (!CT.map) {
-			CT.setVal("mapkey", CT.data.choice(core.config.geo.keys));
-			CT.require("CT.map", true);
-		}
+	_map: function(pos, variety, pnode) {
 		var node = CT.dom.div(null, "full");
 		new CT.map[variety || "Map"]({
 			node: node,
@@ -51,13 +47,16 @@ zero.core.util = {
 			position: pos,
 			disableDefaultUI: true
 		});
-		zero.core.util.back(node);
+		if (pnode)
+			CT.dom.setContent(pnode, node);
+		else
+			zero.core.util.back(node);
 	},
-	map: function(pos) {
-		zero.core.util._map(pos);
+	map: function(pos, node) {
+		zero.core.util._map(pos, "Map", node);
 	},
-	pano: function(pos) {
-		zero.core.util._map(pos, "Panorama");
+	pano: function(pos, node) {
+		zero.core.util._map(pos, "Panorama", node);
 	},
 	audio: function(src) {
 		var a = new Audio(src);
