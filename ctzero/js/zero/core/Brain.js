@@ -54,11 +54,17 @@ zero.core.Brain = CT.Class({
 		else if (Array.isArray(res))
 			return this.get_response(CT.data.choice(res));
 		else if (typeof res == "object") {
-			// these (audio, background, image) look like {key,name,variety,item} - item is path
-			res.iframe && zero.core.util.iframe(res.iframe.item);
-			res.audio && zero.core.util.audio(res.audio.item);
+			// these (audio, background, image, etc) look like {key,name,variety,item}
+
+			// background changers
+			res.map && zero.core.util.map(res.map.item);
+			res.pano && zero.core.util.pano(res.pano.item);
 			res.video && zero.core.util.video(res.video.item);
+			res.iframe && zero.core.util.iframe(res.iframe.item);
 			res.background && zero.core.camera.background(res.background.item);
+
+			// misc
+			res.audio && zero.core.util.audio(res.audio.item);
 			if (res.image) {
 				var m = new CT.modal.Modal(CT.merge({
 					content: CT.dom.img(res.image.item),
@@ -69,7 +75,7 @@ zero.core.Brain = CT.Class({
 				m.show();
 			}
 
-			// also support res.gesture{}, etc
+			// character -- also support res.gesture{}, etc
 			var trigz = this.triggers;
 			res.vibe && this.person.vibe.update(res.vibe);
 			res.mood && this.person.mood.update(res.mood);
