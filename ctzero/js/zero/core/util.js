@@ -55,7 +55,7 @@ zero.core.util = {
 	map: function(pos, node) {
 		zero.core.util._map(pos, "Map", node);
 	},
-	pano: function(pos, node) {
+	panorama: function(pos, node) {
 		zero.core.util._map(pos, "Panorama", node);
 	},
 	audio: function(src) {
@@ -73,7 +73,7 @@ zero.core.util = {
 	},
 	back: function(node) {
 		if (!zero.core.util._back) {
-			zero.core.util._back = CT.dom.div(null, "full");
+			zero.core.util._back = CT.dom.div(null, "full low abs");
 			zero.core.camera.container().appendChild(zero.core.util._back);
 		}
 		CT.dom.setContent(zero.core.util._back, node);
