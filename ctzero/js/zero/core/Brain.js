@@ -58,9 +58,9 @@ zero.core.Brain = CT.Class({
 
 			// background changers
 			res.map && zero.core.util.map(res.map.item);
-			res.pano && zero.core.util.pano(res.pano.item);
 			res.video && zero.core.util.video(res.video.item);
 			res.iframe && zero.core.util.iframe(res.iframe.item);
+			res.panorama && zero.core.util.panorama(res.panorama.item);
 			res.background && zero.core.camera.background(res.background.item);
 
 			// misc
