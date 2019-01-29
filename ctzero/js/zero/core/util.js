@@ -39,6 +39,26 @@ zero.core.util = {
 		var blob = new Blob(byteArrays, {type: contentType});
 		return blob;
 	},
+	_map: function(pos, variety) {
+		if (!CT.map) {
+			CT.setVal("mapkey", CT.data.choice(core.config.geo.keys));
+			CT.require("CT.map", true);
+		}
+		var node = CT.dom.div(null, "full");
+		new CT.map[variety || "Map"]({
+			node: node,
+			center: pos,
+			position: pos,
+			disableDefaultUI: true
+		});
+		zero.core.util.back(node);
+	},
+	map: function(pos) {
+		zero.core.util._map(pos);
+	},
+	pano: function(pos) {
+		zero.core.util._map(pos, "Panorama");
+	},
 	audio: function(src) {
 		var a = new Audio(src);
 		document.body.appendChild(a);
@@ -47,12 +67,10 @@ zero.core.util = {
 	video: function(src) {
 		var v = CT.dom.video(src, "full");
 		zero.core.util.back(v);
-		zero.core.camera.background();
 		v.play();
 	},
 	iframe: function(src) {
 		zero.core.util.back(CT.dom.iframe(src, "full"));
-		zero.core.camera.background();
 	},
 	back: function(node) {
 		if (!zero.core.util._back) {
@@ -60,6 +78,7 @@ zero.core.util = {
 			zero.core.camera.container().appendChild(zero.core.util._back);
 		}
 		CT.dom.setContent(zero.core.util._back, node);
+		zero.core.camera.background();
 	},
 	init: function(onbuild) {
 		zero.core.camera.init();
