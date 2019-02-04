@@ -18,8 +18,8 @@ zero.core.Mood = CT.Class({
 			prosody = this.person.prosody,
 			energyMaster = this.person.energy,
 			tickers = this.person.body.tickers;
-		tickers.sad_brow.conditions.talking.no.target.coefficient = 2*sad - mad;
-		tickers.sad_brow.conditions.talking.no.target.base = 0.5*(sad - 0.5*mad);
+		tickers.browSad.conditions.talking.no.target.coefficient = 2*sad - mad;
+		tickers.browSad.conditions.talking.no.target.base = 0.5*(sad - 0.5*mad);
 		tickers.browAsym.conditions.talking.no.target.coefficient = 1-sad;
 		tickers.browAsym.conditions.talking.no.target.base = 0;
 		tickers.asym.conditions.talking.no.target.coefficient = 1-sad;
@@ -48,7 +48,7 @@ zero.core.Mood = CT.Class({
 
 		
 		/*
-			tickers.sad_brow.conditions.talking.no.target.coefficient = 0.3(1+sad);
+			tickers.browSad.conditions.talking.no.target.coefficient = 0.3(1+sad);
 
 		*/
 
@@ -63,7 +63,7 @@ zero.core.Mood = CT.Class({
 			tickers = this.person.body.tickers;
 		springs.brow.target = mad;
 		springs.browAsym.target = antsy;
-		springs.sad_brow.target = springs.frown.target = sad;
+		springs.browSad.target = springs.frown.target = sad;
 		springs.smile.target = springs.smileEyes.target =
 			springs.bigSmile.target = happy;
 		springs.nod.target = -0.1 * (sad - mad - antsy - (happy / 2));

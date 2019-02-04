@@ -72,7 +72,7 @@ zero.core.Head = CT.Class({
 
 			return; // lines below make eyes huge....
 
-			var smeye = this.body.aspects.smile_eye;
+			var smeye = this.body.aspects.smileEyes;
 			if (gR.rotation.x > -0.3 && gR.rotation.x < 0.3)
 				smeye.value -= 4 * gR.rotation.x;
 			else if (gR.rotation.x <= -0.3)
@@ -114,7 +114,7 @@ zero.core.Head = CT.Class({
 
 			/// DARKEN TEETH WHEN MOUTH SHUT
 			var asps = this.body.aspects, teeth_show_ness = 0.8 * asps.ah.value + 0.4 * asps.w.value
-				+ 0.4 * asps.ff.value + 0.5 * asps.ee.value + 0.9 * asps.big_smile.value;
+				+ 0.4 * asps.ff.value + 0.5 * asps.ee.value + 0.9 * asps.bigSmile.value;
 			this.teeth_top.material.color.r = this.teeth.material.color.r = 0.6 + teeth_show_ness;
 			this.teeth_top.material.color.g = this.teeth.material.color.g = 0.5 + teeth_show_ness;
 			this.teeth_top.material.color.b = this.teeth.material.color.b = 0.5 + teeth_show_ness;

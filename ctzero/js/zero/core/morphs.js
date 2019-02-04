@@ -37,6 +37,7 @@ zero.core.morphs = {
 		var m = thing.morphStack[a],
 			morphz = thing.morphs[a] = {},
 			cutoff = core.config.ctzero.morphs.delta_cutoff;
+		CT.log("delta: " + a);
 		thing.base.forEach(function(b, i) {
 			if (Math.abs(b - m[i]) > cutoff)
 				morphz[i] = m[i];
