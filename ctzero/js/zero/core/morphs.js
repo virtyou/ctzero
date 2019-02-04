@@ -19,6 +19,13 @@ zero.core.morphs = {
 			return zero.core.shaders.tick(thing);
 		var geo = thing.thring.geometry, modz = {},
 			dimz = ["x", "y", "z"], a, i, val, stack, base = thing.base;
+		if (thing._upped) {
+			for (a = 0; a < thing._upped.length; a++) {
+				i = thing._upped[a];
+				geo.vertices[Math.floor(i / 3)][dimz[i % 3]] = base[i];
+			}
+			delete thing._upped;
+		}
 		for (a in thing.morphs) {
 			val = thing.aspects[a].value;
 			if (val) { // should be safe...
@@ -65,6 +72,7 @@ zero.core.morphs = {
 		}
 		for (i in diffz)
 			base[i] += diffz[i];
+		thing._upped = Object.keys(diffz);
 	},
 	init: function(thing) {
 		if (!thing.opts.shader) {
