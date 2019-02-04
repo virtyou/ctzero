@@ -62,6 +62,7 @@ class Person(db.TimeStampedBase):
 	voice = db.String()
 	mood = db.JSON()
 	vibe = db.JSON()
+	morphs = db.JSON()
 	responses = db.JSON()
 
 	def json(self):
@@ -71,6 +72,7 @@ class Person(db.TimeStampedBase):
 			"voice": self.voice,
 			"mood": self.mood or {},
 			"vibe": self.vibe or {},
+			"morphs": self.morphs or {},
 			"responses": self.responses or {},
 			"body": self.body.get().json()
 		}
