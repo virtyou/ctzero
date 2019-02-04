@@ -164,7 +164,7 @@ zero.base.tickers = function() {
                 }
             }
         },
-        sad_brow: {
+        browSad: {
             talking: {
                 yes: {
                     reschedule: {
