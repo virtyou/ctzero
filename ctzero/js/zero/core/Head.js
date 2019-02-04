@@ -11,8 +11,8 @@ zero.core.Head = CT.Class({
 				gR = this.eyeGroupR, eyeR = gR.eyeR, cubeR = gR.cubeReyeDummy,
 				eyeMorph = 0.05 * Math.sin(zero.core.util.ticker / 20);
 
-			eyeL.morph(1, eyeMorph); // what is this morph???
-			eyeR.morph(1, eyeMorph);
+			eyeL.morphTargetInfluences(1, eyeMorph); // what is this morph???
+			eyeR.morphTargetInfluences(1, eyeMorph);
 
 			//moves rotation center to correct place on parent --- every time, really? <---- !!!!
 //			gR.position([3, 6, 7.22]);
@@ -100,14 +100,14 @@ zero.core.Head = CT.Class({
 					vis(pdata.otherwise, "k");
 				}
 			});
-			this.teeth.morph(1, 0);
-			this.tongue.morph(1, 0);
+			this.teeth.morphTargetInfluences(1, 0);
+			this.tongue.morphTargetInfluences(1, 0);
 			for (var shape in phonemes.forms) {
 				var morphs = phonemes.forms[shape].morphs;
 				if (morphs) {
 					for (var m in morphs) {
 						var morph = morphs[m];
-						this[m].morph(morph.influence, morph.factor * this.body.springs[shape].value, true, true);
+						this[m].morphTargetInfluences(morph.influence, morph.factor * this.body.springs[shape].value, true, true);
 					}
 				}
 			}

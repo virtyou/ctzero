@@ -101,8 +101,8 @@ zero.core.Thing = CT.Class({
 		this.place();
 		this.setBone();
 		(this.bone || oz.scene).add(this.thring);
-		for (var m in this.opts.morphs)
-			this.morph(m, this.opts.morphs[m]);
+		for (var m in this.opts.mti)
+			this.morphTargetInfluences(m, this.opts.mti[m]);
 		if (this.opts.parts.length)
 			this.assemble();
 		else
@@ -137,7 +137,7 @@ zero.core.Thing = CT.Class({
 	vary: function(variant) {
 		this.update(this.opts.variants[variant]);
 	},
-	morph: function(influence, target, additive, positive) {
+	morphTargetInfluences: function(influence, target, additive, positive) {
 		var mti = this.thring && this.thring.morphTargetInfluences;
 		if (mti) {
 			mti[influence] = additive ? mti[influence] + target : target;
@@ -271,7 +271,7 @@ zero.core.Thing = CT.Class({
 			rotation: [0, 0, 0],
 			scale: [1, 1, 1],
 			variants: {},
-			morphs: {},
+			mti: {},
 			springs: {},
 			aspects: {},
 			tickers: {},
