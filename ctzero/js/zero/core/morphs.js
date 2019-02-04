@@ -45,22 +45,30 @@ zero.core.morphs = {
 		});
 	},
 	apply: function(thing, m) {
-		var degree = thing.opts.morphs[m],
-			stack = thing.morphStack[m],
-			base = thing.base, i;
-		// TODO: revise -- this probs won't work w/ multiple morphs (all should diff from orig base)
-		for (i = 0; i < thing.base.length; i++)
-			base[i] += (stack[i] - base[i]) * degree;
+		var i, m, diffz = {}, base = thing.base,
+			cutoff = core.config.ctzero.morphs.delta_cutoff;
+		for (m in thing.morphStack) {
+			if (thing.opts.morphs[m] && !thing.morphs[m]) {
+				var degree = thing.opts.morphs[m],
+					stack = thing.morphStack[m];
+				base.forEach(function(b, i) {
+					var diff = stack[i] - b;
+					if (Math.abs(diff) > cutoff) {
+						diffz[i] = diffz[i] || 0;
+						diffz[i] += diff * degree;
+					}
+				});
+			}
+		}
+		for (i in diffz)
+			base[i] += diffz[i];
 	},
 	init: function(thing) {
 		if (!thing.opts.shader) {
 			thing.morphs = {};
 			for (var a in thing.aspects)
 				zero.core.morphs.delta(thing, a);
-			for (var m in thing.morphStack) {
-				if (thing.opts.morphs[m] && !thing.morphs[m]) // static
-					zero.core.morphs.apply(thing, m);
-			}
+			zero.core.morphs.apply(thing);
 		}
 	}
 };
