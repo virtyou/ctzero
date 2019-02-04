@@ -44,11 +44,15 @@ zero.core.morphs = {
 				morphz[i] = diff;
 		});
 	},
-	apply: function(thing, m) {
+	apply: function(thing) {
 		var i, m, diffz = {}, base = thing.base,
 			cutoff = core.config.ctzero.morphs.delta_cutoff;
+		thing.staticMorphs = [];
 		for (m in thing.morphStack) {
-			if (thing.opts.morphs[m] && !thing.morphs[m]) {
+			if (!thing.morphs[m]) {
+				thing.staticMorphs.push(m);
+				if (thing.opts.skipPrecompile || !thing.opts.morphs[m])
+					continue;
 				var degree = thing.opts.morphs[m],
 					stack = thing.morphStack[m];
 				base.forEach(function(b, i) {
