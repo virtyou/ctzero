@@ -2,7 +2,6 @@ zero.base.torso = function(opts) {
     opts = CT.merge(opts, zero.base.torso.defaults); // must set defaults!
     return {
         name: "torso",
-        morphs: {},
         morphStack: opts.morphStack,
         springs: zero.base.springs(),
         aspects: zero.base.aspects(),

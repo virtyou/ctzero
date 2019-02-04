@@ -272,7 +272,6 @@ zero.core.Thing = CT.Class({
 			scale: [1, 1, 1],
 			variants: {},
 			mti: {},
-			morphs: {},
 			springs: {},
 			aspects: {},
 			tickers: {},

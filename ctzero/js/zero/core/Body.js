@@ -53,8 +53,9 @@ zero.core.Body = CT.Class({
 		this._.customs.forEach(function(c) { c.tick(skeleton); });
 	},
 	init: function(opts) {
-		this.opts = opts = CT.merge(this.opts, opts, {
+		this.opts = opts = CT.merge(this.opts, {
 			joints: [],
+			morphs: {},
 //			shader: true,
 			onassemble: this._assembled
 		});
