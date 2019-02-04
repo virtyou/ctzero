@@ -55,7 +55,7 @@
 	"people": [],
 	"script": [],
 	"morphs": {
-		"delta_cutoff": 0.01
+		"delta_cutoff": 0.1
 	},
 	"brain": {
 		"chain": {
