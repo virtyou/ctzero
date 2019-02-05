@@ -155,7 +155,13 @@ zero.core.Thing = CT.Class({
 		if (mti)
 			mti[influence] = mti[influence] ? 0 : 1;
 	},
-	remove: function(cname, fromScene) {
+	remove: function() {
+		if (this.thring)
+			this.opts.scene.remove(this.thring);
+		if (this.group)
+			this.opts.scene.remove(this.group);
+	},
+	detach: function(cname, fromScene) {
 		var thing = this[cname],
 			thrings = [thing.thring, thing.group],
 			parent = fromScene ? zero.core.camera.scene : this.group;

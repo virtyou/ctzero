@@ -36,7 +36,7 @@ zero.core.Room = CT.Class({
 			if (this.objects[i].name == obj.name)
 				thing = this.objects[i];
 		CT.data.remove(this.objects, thing);
-		this.remove(obj.name);
+		this.detach(obj.name);
 	},
 	postassemble: function() {
 		var opts = this.opts;
