@@ -212,6 +212,7 @@ zero.core.Thing = CT.Class({
 				return thiz.attach(p, iterator);
 			});
 		}
+		this.postassemble && this.postassemble();
 	},
 	build: function() {
 		var oz = this.opts;
