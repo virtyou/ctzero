@@ -71,6 +71,12 @@ zero.core.util = {
 	iframe: function(src) {
 		zero.core.util.back(CT.dom.iframe(src, "full"));
 	},
+	room: function(robj) {
+		if (zero.core.util.room)
+			zero.core.util.room.remove();
+		if (robj)
+			zero.core.util.room = new zero.core.Room(robj);
+	},
 	back: function(node) {
 		if (!zero.core.util._back) {
 			zero.core.util._back = CT.dom.div(null, "full low abs");
@@ -78,6 +84,7 @@ zero.core.util = {
 		}
 		CT.dom.setContent(zero.core.util._back, node);
 		zero.core.camera.background();
+		zero.core.util.room();
 	},
 	init: function(onbuild) {
 		zero.core.camera.init();
