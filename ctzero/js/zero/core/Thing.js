@@ -18,13 +18,18 @@ zero.core.Thing = CT.Class({
 	isReady: function() {
 		return this._.ready;
 	},
+	unscroll: function() {
+		if (this._.scroller) {
+			zero.core.util.untick(this._.scroller);
+			delete this._.scroller;
+		}
+	},
 	scroll: function(_opts) {
 		var opts = this.opts.scroll = CT.merge(_opts, this.opts.scroll, {
 			axis: "y",
 			speed: 0.05
 		}), map = this.material.map;
-		if (this._.scroller)
-			zero.core.util.untick(this._.scroller);
+		this.unscroll();
 		this._.scroller = function(dts) {
 			var t = zero.core.util.elapsed;
 			map.offset[opts.axis] = opts.speed * t;
@@ -158,7 +163,8 @@ zero.core.Thing = CT.Class({
 			thring && parent.remove(thring);
 		});
 		thing.isCustom && CT.data.remove(this._.customs, thing);
-		this.parts && CT.data.remove(this.parts, thing); // parts check for Room-like attachments... probs revise
+		CT.data.remove(this.parts, thing);
+		this.unscroll();
 		delete this[cname];
 		if (thing.opts.kind && this[thing.opts.kind]) {
 			delete this[thing.opts.kind][thing.opts.name];
