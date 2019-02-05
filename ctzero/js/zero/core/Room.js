@@ -41,6 +41,21 @@ zero.core.Room = CT.Class({
 		this._cam = index;
 		zero.core.camera.move(this.cameras[this._cam]);
 	},
+	preassemble: function() {
+		var opts = this.opts;
+		if (opts.floor)
+			opts.parts.push(CT.merge({ name: "floor" }, opts.floor));
+		if (opts.wall) {
+			var wall = opts.wall, dz = wall.dimensions;
+			wall.sides.forEach(function(side) {
+				opts.parts.push(CT.merge(side, {
+					texture: wall.texture,
+					material: wall.material,
+					geometry: new THREE.CubeGeometry(dz[0], dz[1], dz[2], dz[3], dz[4]) // ugh
+				}));
+			});
+		}
+	},
 	init: function(opts) {
 		var eopts = opts.environment && CT.require("environments." + opts.environment, true);
 		this.opts = opts = CT.merge(eopts, this.opts, {
@@ -48,18 +63,6 @@ zero.core.Room = CT.Class({
 			objects: [], // regular Things
 			cameras: []
 		});
-		if (opts.floor)
-			this.floor = new zero.core.Thing(opts.floor);
-		if (opts.wall) {
-			var wall = opts.wall, dz = wall.dimensions;
-			this.walls = wall.sides.map(function(side) {
-				return new zero.core.Thing(CT.merge(side, {
-					texture: wall.texture,
-					material: wall.material,
-					geometry: new THREE.CubeGeometry(dz[0], dz[1], dz[2], dz[3], dz[4]) // ugh
-				}));
-			});
-		}
 		this.lights = [];
 		this.objects = [];
 		this.cameras = [];

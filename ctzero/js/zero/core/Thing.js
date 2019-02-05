@@ -185,6 +185,7 @@ zero.core.Thing = CT.Class({
 		return thing;
 	},
 	assemble: function() {
+		this.preassemble && this.preassemble();
 		if (this.opts.parts.length && !this.parts) {
 			var thiz = this, i = 0,
 				group = this.group = this.bone || new THREE.Object3D(),
