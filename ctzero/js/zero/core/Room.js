@@ -20,10 +20,10 @@ zero.core.Room = CT.Class({
 	},
 	addLight: function(light) {
 		this.log("adding light");
-		this.lights.push(this.attach(light, {
+		this.lights.push(this.attach(CT.merge(light, {
 			kind: "light",
 			thing: "Light"
-		}));
+		})));
 	},
 	addObject: function(obj) {
 		this.log("adding object");

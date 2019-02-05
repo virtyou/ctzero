@@ -10,7 +10,7 @@ zero.core.Light = CT.Class({
 		this.thring = new THREE[constructor](oz.color, oz.intensity);
 		if (oz.variety != "ambient")
 			this.thring.position.set.apply(this.thring.position, oz.position);
-		zero.core.camera.scene.add(this.thring);
+		oz.scene.add(this.thring);
 	},
 	init: function(opts) {
 		this.opts = opts = CT.merge(this.opts, opts, {
