@@ -160,8 +160,11 @@ zero.core.Thing = CT.Class({
 		thing.isCustom && CT.data.remove(this._.customs, thing);
 		this.parts && CT.data.remove(this.parts, thing); // parts check for Room-like attachments... probs revise
 		delete this[cname];
-		if (thing.opts.kind && this[thing.opts.kind])
-			delete this[thing.opts.kind]; // what about multiple children w/ same kind?
+		if (thing.opts.kind && this[thing.opts.kind]) {
+			delete this[thing.opts.kind][thing.opts.name];
+			if (!Object.keys(this[thing.opts.kind]))
+				delete this[thing.opts.kind];
+		}
 	},
 	attach: function(child, iterator, oneOff) {
 		var thing, customs = this._.customs, childopts = CT.merge(child, {
@@ -178,8 +181,10 @@ zero.core.Thing = CT.Class({
 		else
 			thing = new zero.core[child.thing || "Thing"](childopts);
 		this[thing.name] = thing;
-		if (child.kind)
-			this[child.kind] = thing; // what about multiple children w/ same kind?
+		if (child.kind) {
+			this[child.kind] = this[child.kind] || {};
+			this[child.kind][child.name] = thing;
+		}
 		if (oneOff || !iterator) // one-off
 			this.parts.push(thing);
 		return thing;
