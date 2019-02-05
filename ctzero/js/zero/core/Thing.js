@@ -202,8 +202,8 @@ zero.core.Thing = CT.Class({
 		return thing;
 	},
 	assemble: function() {
-		this.preassemble && this.preassemble();
-		if (this.opts.parts.length && !this.parts) {
+		if (!this.parts) {
+			this.preassemble && this.preassemble();
 			var thiz = this, i = 0,
 				group = this.group = this.bone || new THREE.Object3D(),
 				iterator = function() {
@@ -217,8 +217,8 @@ zero.core.Thing = CT.Class({
 			this.parts = this.opts.parts.map(function(p) {
 				return thiz.attach(p, iterator);
 			});
+			this.postassemble && this.postassemble();
 		}
-		this.postassemble && this.postassemble();
 	},
 	build: function() {
 		var oz = this.opts;
