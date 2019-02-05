@@ -79,7 +79,7 @@ zero.core.Person = CT.Class({
 		else
 			zero.core.camera.follow(cube);
 		if (!noroom) {
-			var pz = zero.core.util.people;
+			var pz = zero.core.current.people;
 			for (var p in pz)
 				if (p != this.name)
 					 pz[p].look(cube);
