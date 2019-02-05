@@ -1,5 +1,6 @@
 var lastTime, dmax = dts = 0.032;//0.016;
 
+zero.core.current = {};
 zero.core.util = {
 	ticker: 0,
 	elapsed: 0,
@@ -72,10 +73,11 @@ zero.core.util = {
 		zero.core.util.back(CT.dom.iframe(src, "full"));
 	},
 	room: function(robj) {
-		if (zero.core.util.room)
-			zero.core.util.room.remove();
+		if (zero.core.current.room)
+			zero.core.current.room.remove();
 		if (robj)
-			zero.core.util.room = new zero.core.Room(robj);
+			zero.core.current.room = new zero.core.Room(robj);
+		return zero.core.current.room;
 	},
 	back: function(node) {
 		if (!zero.core.util._back) {
@@ -88,8 +90,8 @@ zero.core.util = {
 	},
 	init: function(onbuild) {
 		zero.core.camera.init();
-		var cfg = core.config.ctzero, people = zero.core.util.people = {},
-			room = zero.core.util.room = new zero.core.Room(cfg.room), isLast;
+		var cfg = core.config.ctzero, people = zero.core.current.people = {},
+			room = zero.core.util.room(cfg.room), isLast;
 		if (cfg.people.length) {
 			cfg.people.forEach(function(pobj, i) {
 				people[pobj.name] = new zero.core.Person(CT.merge(pobj, {
@@ -119,10 +121,10 @@ zero.core.util = {
 
 	    zero.core.springController.tick(dts);
 	    zero.core.aspectController.tick();
-	    if (zero.core.util.room)
-	    	zero.core.util.room.tick(dts);
-	    for (var p in zero.core.util.people)
-	    	zero.core.util.people[p].tick();
+	    if (zero.core.current.room)
+	    	zero.core.current.room.tick(dts);
+	    for (var p in zero.core.current.people)
+	    	zero.core.current.people[p].tick();
 
 	    zero.core.util._tickers.forEach(function(t) { t(dts); });
 
@@ -139,7 +141,7 @@ zero.core.util = {
 	join: function(person, onready) {
 		var fullp = new zero.core.Person(CT.merge(person, {
 			onbuild: function() {
-				zero.core.util.people[person.name] = fullp;
+				zero.core.current.people[person.name] = fullp;
 				fullp.watch();
 				onready && onready(fullp);
 			}
@@ -156,7 +158,7 @@ zero.core.util = {
 	},
 	script: function(script) {
 		var step = script.shift();
-		if (step) zero.core.util.people[step.person].say(step.line, function() {
+		if (step) zero.core.current.people[step.person].say(step.line, function() {
 			setTimeout(zero.core.util.script, step.pause || 0, script);
 		});
 	},
