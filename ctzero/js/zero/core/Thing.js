@@ -108,10 +108,7 @@ zero.core.Thing = CT.Class({
 		(this.bone || oz.scene).add(this.thring);
 		for (var m in this.opts.mti)
 			this.morphTargetInfluences(m, this.opts.mti[m]);
-		if (this.opts.parts.length)
-			this.assemble();
-		else
-			this._.built();
+		this.assemble();
 	},
 	adjust: function(property, dimension, value) {
 		if (this.thring)
@@ -218,6 +215,10 @@ zero.core.Thing = CT.Class({
 				return thiz.attach(p, iterator);
 			});
 			this.postassemble && this.postassemble();
+			if (!this.opts.parts.length) {
+				i -= 1;
+				iterator();
+			}
 		}
 	},
 	build: function() {
