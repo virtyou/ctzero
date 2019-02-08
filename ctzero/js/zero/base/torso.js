@@ -73,7 +73,7 @@ zero.base.torso = function(opts) {
                             color: opts.teeth_color,
                             morphTargets: true
                         },
-                        morphs: {
+                        mti: {
                             3: 1
                         }
                     }, {
@@ -85,7 +85,7 @@ zero.base.torso = function(opts) {
                             color: opts.teeth_top_color,
                             morphTargets: true
                         },
-                        morphs: {
+                        mti: {
                             1: 1
                         }
                     }, {
@@ -97,7 +97,7 @@ zero.base.torso = function(opts) {
                             color: opts.tongue_color,
                             morphTargets: true
                         },
-                        morphs: {
+                        mti: {
                             2: 1
                         }
                     }, {

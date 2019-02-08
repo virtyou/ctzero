@@ -28,7 +28,7 @@ zero.base.springs = function() {
             k: 20,
             damp: 10
         },
-        sad_brow: {
+        browSad: {
             k: 20,
             damp: 10
         },

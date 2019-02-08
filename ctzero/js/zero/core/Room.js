@@ -1,35 +1,5 @@
 zero.core.Room = CT.Class({
 	CLASSNAME: "zero.core.Room",
-	addLight: function(light) {
-		this.log("adding light");
-		if (this.opts.lights.indexOf(light) == -1)
-			this.opts.lights.push(light);
-		this.lights.push(new zero.core.Light(light));
-	},
-	addObject: function(obj) {
-		this.log("adding object");
-		if (this.opts.objects.indexOf(obj) == -1)
-			this.opts.objects.push(obj);
-		var thing = new zero.core[obj.thing || "Thing"](obj);
-		this.objects.push(thing);
-		this[thing.name] = thing;
-	},
-	removeObject: function(obj) {
-		this.log("removing object");
-		var thing;
-		for (var i = 0; i < this.objects.length; i++)
-			if (this.objects[i].name == obj.name)
-				thing = this.objects[i];
-		CT.data.remove(this.objects, thing);
-		this.remove(obj.name, true);
-	},
-	addCamera: function(cam) {
-		this.log("adding camera");
-		if (this.opts.cameras.indexOf(cam) == -1)
-			this.opts.cameras.push(cam);
-		this.cameras.push(cam);
-		this._cam = -1;
-	},
 	tick: function(dts) {
 		this.objects.forEach(function(obj) {
 			obj.tick && obj.tick(dts);
@@ -41,6 +11,56 @@ zero.core.Room = CT.Class({
 		this._cam = index;
 		zero.core.camera.move(this.cameras[this._cam]);
 	},
+	addCamera: function(cam) {
+		this.log("adding camera");
+		if (this.opts.cameras.indexOf(cam) == -1)
+			this.opts.cameras.push(cam);
+		this.cameras.push(cam);
+		this._cam = -1;
+	},
+	addLight: function(light) {
+		this.log("adding light");
+		this.lights.push(this.attach(CT.merge(light, {
+			kind: "light",
+			thing: "Light"
+		})));
+	},
+	addObject: function(obj) {
+		this.log("adding object");
+		this.objects.push(this.attach(obj));
+	},
+	removeObject: function(obj) {
+		this.log("removing object");
+		var thing;
+		for (var i = 0; i < this.objects.length; i++)
+			if (this.objects[i].name == obj.name)
+				thing = this.objects[i];
+		CT.data.remove(this.objects, thing);
+		this.detach(obj.name);
+	},
+	postassemble: function() {
+		var opts = this.opts;
+		opts.lights.forEach(this.addLight);
+		opts.objects.forEach(this.addObject);
+		opts.cameras.forEach(this.addCamera);
+	},
+	preassemble: function() {
+		var opts = this.opts;
+		if (opts.floor)
+			opts.parts.push(CT.merge({ name: "floor" }, opts.floor));
+		if (opts.wall) {
+			var wall = opts.wall, dz = wall.dimensions;
+			wall.sides.forEach(function(side, i) {
+				opts.parts.push(CT.merge(side, {
+					name: "wall" + i,
+					kind: "wall",
+					texture: wall.texture,
+					material: wall.material,
+					geometry: new THREE.CubeGeometry(dz[0], dz[1], dz[2], dz[3], dz[4]) // ugh
+				}));
+			});
+		}
+	},
 	init: function(opts) {
 		var eopts = opts.environment && CT.require("environments." + opts.environment, true);
 		this.opts = opts = CT.merge(eopts, this.opts, {
@@ -48,23 +68,8 @@ zero.core.Room = CT.Class({
 			objects: [], // regular Things
 			cameras: []
 		});
-		if (opts.floor)
-			this.floor = new zero.core.Thing(opts.floor);
-		if (opts.wall) {
-			var wall = opts.wall, dz = wall.dimensions;
-			this.walls = wall.sides.map(function(side) {
-				return new zero.core.Thing(CT.merge(side, {
-					texture: wall.texture,
-					material: wall.material,
-					geometry: new THREE.CubeGeometry(dz[0], dz[1], dz[2], dz[3], dz[4]) // ugh
-				}));
-			});
-		}
 		this.lights = [];
 		this.objects = [];
 		this.cameras = [];
-		opts.lights.forEach(this.addLight);
-		opts.objects.forEach(this.addObject);
-		opts.cameras.forEach(this.addCamera);
 	}
 }, zero.core.Thing);

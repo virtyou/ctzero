@@ -18,13 +18,18 @@ zero.core.Thing = CT.Class({
 	isReady: function() {
 		return this._.ready;
 	},
+	unscroll: function() {
+		if (this._.scroller) {
+			zero.core.util.untick(this._.scroller);
+			delete this._.scroller;
+		}
+	},
 	scroll: function(_opts) {
 		var opts = this.opts.scroll = CT.merge(_opts, this.opts.scroll, {
 			axis: "y",
 			speed: 0.05
 		}), map = this.material.map;
-		if (this._.scroller)
-			zero.core.util.untick(this._.scroller);
+		this.unscroll();
 		this._.scroller = function(dts) {
 			var t = zero.core.util.elapsed;
 			map.offset[opts.axis] = opts.speed * t;
@@ -101,12 +106,9 @@ zero.core.Thing = CT.Class({
 		this.place();
 		this.setBone();
 		(this.bone || oz.scene).add(this.thring);
-		for (var m in this.opts.morphs)
-			this.morph(m, this.opts.morphs[m]);
-		if (this.opts.parts.length)
-			this.assemble();
-		else
-			this._.built();
+		for (var m in this.opts.mti)
+			this.morphTargetInfluences(m, this.opts.mti[m]);
+		this.assemble();
 	},
 	adjust: function(property, dimension, value) {
 		if (this.thring)
@@ -137,7 +139,7 @@ zero.core.Thing = CT.Class({
 	vary: function(variant) {
 		this.update(this.opts.variants[variant]);
 	},
-	morph: function(influence, target, additive, positive) {
+	morphTargetInfluences: function(influence, target, additive, positive) {
 		var mti = this.thring && this.thring.morphTargetInfluences;
 		if (mti) {
 			mti[influence] = additive ? mti[influence] + target : target;
@@ -150,7 +152,13 @@ zero.core.Thing = CT.Class({
 		if (mti)
 			mti[influence] = mti[influence] ? 0 : 1;
 	},
-	remove: function(cname, fromScene) {
+	remove: function() {
+		if (this.thring)
+			this.opts.scene.remove(this.thring);
+		if (this.group)
+			this.opts.scene.remove(this.group);
+	},
+	detach: function(cname, fromScene) {
 		var thing = this[cname],
 			thrings = [thing.thring, thing.group],
 			parent = fromScene ? zero.core.camera.scene : this.group;
@@ -158,10 +166,14 @@ zero.core.Thing = CT.Class({
 			thring && parent.remove(thring);
 		});
 		thing.isCustom && CT.data.remove(this._.customs, thing);
-		this.parts && CT.data.remove(this.parts, thing); // parts check for Room-like attachments... probs revise
+		CT.data.remove(this.parts, thing);
+		this.unscroll();
 		delete this[cname];
-		if (thing.opts.kind && this[thing.opts.kind])
-			delete this[thing.opts.kind]; // what about multiple children w/ same kind?
+		if (thing.opts.kind && this[thing.opts.kind]) {
+			delete this[thing.opts.kind][thing.opts.name];
+			if (!Object.keys(this[thing.opts.kind]))
+				delete this[thing.opts.kind];
+		}
 	},
 	attach: function(child, iterator, oneOff) {
 		var thing, customs = this._.customs, childopts = CT.merge(child, {
@@ -178,14 +190,17 @@ zero.core.Thing = CT.Class({
 		else
 			thing = new zero.core[child.thing || "Thing"](childopts);
 		this[thing.name] = thing;
-		if (child.kind)
-			this[child.kind] = thing; // what about multiple children w/ same kind?
+		if (child.kind) {
+			this[child.kind] = this[child.kind] || {};
+			this[child.kind][child.name] = thing;
+		}
 		if (oneOff || !iterator) // one-off
 			this.parts.push(thing);
 		return thing;
 	},
 	assemble: function() {
-		if (this.opts.parts.length && !this.parts) {
+		if (!this.parts) {
+			this.preassemble && this.preassemble();
 			var thiz = this, i = 0,
 				group = this.group = this.bone || new THREE.Object3D(),
 				iterator = function() {
@@ -199,6 +214,11 @@ zero.core.Thing = CT.Class({
 			this.parts = this.opts.parts.map(function(p) {
 				return thiz.attach(p, iterator);
 			});
+			this.postassemble && this.postassemble();
+			if (!this.opts.parts.length) {
+				i -= 1;
+				iterator();
+			}
 		}
 	},
 	build: function() {
@@ -271,7 +291,7 @@ zero.core.Thing = CT.Class({
 			rotation: [0, 0, 0],
 			scale: [1, 1, 1],
 			variants: {},
-			morphs: {},
+			mti: {},
 			springs: {},
 			aspects: {},
 			tickers: {},

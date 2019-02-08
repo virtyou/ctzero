@@ -37,14 +37,14 @@ zero.base.aspects = function() {
                 brow: 1
             }
         },
-        brow_asym: {
+        browAsym: {
             springs: {
                 browAsym: 1
             }
         },
-        sad_brow: {
+        browSad: {
             springs: {
-                sad_brow: 1
+                browSad: 1
             }
         },
         frown: {
@@ -57,17 +57,17 @@ zero.base.aspects = function() {
                 asym: 1
             }
         },
-        smile_eye: {
+        smileEyes: {
             min: 0,
             max: 1,
             springs: {
                 smileEyes: 1, // multiplier
             },
             aspects: {
-                big_smile: -1
+                bigSmile: -1
             }
         },
-        big_smile: {
+        bigSmile: {
             min: 0,
             springs: {
                 bigSmile: 0.8
@@ -86,7 +86,7 @@ zero.base.aspects = function() {
                 smile: 1
             },
             aspects: {
-                big_smile: -1
+                bigSmile: -1
             }
         }
     };

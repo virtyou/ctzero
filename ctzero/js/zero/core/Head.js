@@ -11,8 +11,8 @@ zero.core.Head = CT.Class({
 				gR = this.eyeGroupR, eyeR = gR.eyeR, cubeR = gR.cubeReyeDummy,
 				eyeMorph = 0.05 * Math.sin(zero.core.util.ticker / 20);
 
-			eyeL.morph(1, eyeMorph); // what is this morph???
-			eyeR.morph(1, eyeMorph);
+			eyeL.morphTargetInfluences(1, eyeMorph); // what is this morph???
+			eyeR.morphTargetInfluences(1, eyeMorph);
 
 			//moves rotation center to correct place on parent --- every time, really? <---- !!!!
 //			gR.position([3, 6, 7.22]);
@@ -72,7 +72,7 @@ zero.core.Head = CT.Class({
 
 			return; // lines below make eyes huge....
 
-			var smeye = this.body.aspects.smile_eye;
+			var smeye = this.body.aspects.smileEyes;
 			if (gR.rotation.x > -0.3 && gR.rotation.x < 0.3)
 				smeye.value -= 4 * gR.rotation.x;
 			else if (gR.rotation.x <= -0.3)
@@ -100,21 +100,21 @@ zero.core.Head = CT.Class({
 					vis(pdata.otherwise, "k");
 				}
 			});
-			this.teeth.morph(1, 0);
-			this.tongue.morph(1, 0);
+			this.teeth.morphTargetInfluences(1, 0);
+			this.tongue.morphTargetInfluences(1, 0);
 			for (var shape in phonemes.forms) {
 				var morphs = phonemes.forms[shape].morphs;
 				if (morphs) {
 					for (var m in morphs) {
 						var morph = morphs[m];
-						this[m].morph(morph.influence, morph.factor * this.body.springs[shape].value, true, true);
+						this[m].morphTargetInfluences(morph.influence, morph.factor * this.body.springs[shape].value, true, true);
 					}
 				}
 			}
 
 			/// DARKEN TEETH WHEN MOUTH SHUT
 			var asps = this.body.aspects, teeth_show_ness = 0.8 * asps.ah.value + 0.4 * asps.w.value
-				+ 0.4 * asps.ff.value + 0.5 * asps.ee.value + 0.9 * asps.big_smile.value;
+				+ 0.4 * asps.ff.value + 0.5 * asps.ee.value + 0.9 * asps.bigSmile.value;
 			this.teeth_top.material.color.r = this.teeth.material.color.r = 0.6 + teeth_show_ness;
 			this.teeth_top.material.color.g = this.teeth.material.color.g = 0.5 + teeth_show_ness;
 			this.teeth_top.material.color.b = this.teeth.material.color.b = 0.5 + teeth_show_ness;
