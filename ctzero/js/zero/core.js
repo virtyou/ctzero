@@ -22,8 +22,10 @@ CT.require("zero.core.Thing");
 CT.require("zero.core.Light");
 CT.require("zero.core.Pool");
 CT.require("zero.core.Room");
+
 CT.require("zero.core.Head");
 CT.require("zero.core.Chest");
+CT.require("zero.core.Arm");
 CT.require("zero.core.Body");
 CT.require("zero.core.Custom");
 
