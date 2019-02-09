@@ -54,6 +54,7 @@ zero.base.torso = function(opts) {
                 color: opts.dress_color,
                 specular: 0xff3333,
                 morphTargets: false,
+                skinning: true,
                 emissive: 0,
                 transparency: true,
                 alphaTest: 0.3,
