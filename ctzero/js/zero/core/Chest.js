@@ -14,15 +14,18 @@ zero.core.Chest = CT.Class({
 		this.bones = this.opts.bones.slice();
 		this.bone = this.bones.shift();
 
-		var side, part, b, bones = this.thring.skeleton.bones;
+		var side, bones = this.thring.skeleton.bones;
 		this.opts.scene.add(bones[0]);
 
 		bones[0].position.y = 0; // HACK! fix this...
 
+		this.arms = {};
 		for (side in this._bmap) {
-			this[side] = {};
-			for (part in this._bmap[side])
-				this[side][part] = bones[this._bmap[side][part]];
+			this.arms[side] = new zero.core.Arm({
+				parent: this,
+				bones: bones,
+				bonemap: this._bmap[side]
+			});
 		}
 	}
 }, zero.core.Thing);
