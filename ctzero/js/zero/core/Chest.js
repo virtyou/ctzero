@@ -1,6 +1,6 @@
 zero.core.Chest = CT.Class({
 	CLASSNAME: "zero.core.Chest",
-	_roots: [3, 25],
+	_roots: [0],//[3, 25],
 	_bmap: {
 		left: {
 			shoulder: 4,
