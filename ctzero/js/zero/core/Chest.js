@@ -2,12 +2,30 @@ zero.core.Chest = CT.Class({
 	CLASSNAME: "zero.core.Chest",
 	_bmap: {
 		left: {
-			shoulder: 4,
-			elbo: 5
+			arm: {
+				shoulder: 4,
+				elbo: 5
+			},
+			hand: {
+				thumb: [18, 19, 20],
+				pointer: [14, 15, 16, 17],
+				middle: [10, 11, 12, 13],
+				ring: [21, 22, 23, 24],
+				pinky: [6, 7, 8, 9]
+			}
 		},
 		right: {
-			shoulder: 26,
-			elbo: 27
+			arm: {
+				shoulder: 26,
+				elbo: 27
+			},
+			hand: {
+				thumb: [40, 41, 42],
+				pointer: [36, 37, 38, 39],
+				middle: [32, 33, 34, 35],
+				ring: [43, 44, 45, 46],
+				pinky: [28, 29, 30, 31]
+			}
 		}
 	},
 	setBone: function() {
@@ -22,7 +40,6 @@ zero.core.Chest = CT.Class({
 		this.arms = {};
 		for (side in this._bmap) {
 			this.arms[side] = new zero.core.Arm({
-				parent: this,
 				bones: bones,
 				bonemap: this._bmap[side]
 			});
