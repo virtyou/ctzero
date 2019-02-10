@@ -28,21 +28,36 @@ zero.core.Chest = CT.Class({
 			}
 		}
 	},
-	setBone: function() {
-		this.bones = this.opts.bones.slice();
-		this.bone = this.bones.shift();
-
+	tick: function() {
+		this.arms.left.tick();
+		this.arms.right.tick();
+	},
+	move: function(opts) {
+		for (var side in opts)
+			this.arms[side].move(opts[side]);
+	},
+	energy: function() {
+		return this.body && this.body.energy();
+	},
+	setArms: function() {
 		var side, bones = this.thring.skeleton.bones;
-		this.opts.scene.add(bones[0]);
-
-		bones[0].position.y = 0; // HACK! fix this...
-
 		this.arms = {};
 		for (side in this._bmap) {
 			this.arms[side] = new zero.core.Arm({
+				parent: this,
 				bones: bones,
 				bonemap: this._bmap[side]
 			});
 		}
+	},
+	setBone: function() {
+		this.bones = this.opts.bones.slice();
+		this.bone = this.bones.shift();
+
+		var bones = this.thring.skeleton.bones;
+		this.opts.scene.add(bones[0]);
+		bones[0].position.y = 0; // HACK! fix this...
+
+		this.setArms();
 	}
 }, zero.core.Thing);
