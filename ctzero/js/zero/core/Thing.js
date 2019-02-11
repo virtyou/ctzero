@@ -80,12 +80,11 @@ zero.core.Thing = CT.Class({
 			if (this.thring && this.thring.skeleton) {
 				this.bones = this.thring.skeleton.bones.slice(0, oz.joints.length);
 				this.bone = this.bones[0];
+				oz.scene.add(this.bone);
 			} else {
 				this.bones = oz.bones.slice();
 				this.bone = this.bones.shift();
 			}
-			if (this.thring && this.thring.skeleton) // 1st bone
-				oz.scene.add(this.bone);
 		}
 	},
 	place: function() {

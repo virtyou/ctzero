@@ -46,16 +46,14 @@ var camera = zero.core.camera = {
 				function(dim, val) { camera.springs.position[dim].target = val; });
 	},
 	_tickSubject: function() {
-		if (camera._.subject) {
-			var looker = camera.springs.looker;
-			camera.look(camera._.subject.position(null, true));
-			camera.looker({
-				x: looker.x.value,
-				y: looker.y.value,
-				z: looker.z.value
-			});
-			camera._.camera.lookAt(camera._.looker.position());
-		}
+		var looker = camera.springs.looker;
+		camera.look(camera._.subject.position(null, true));
+		camera.looker({
+			x: looker.x.value,
+			y: looker.y.value,
+			z: looker.z.value
+		});
+		camera._.camera.lookAt(camera._.looker.position());
 	},
 	tick: function() {
 		if (camera._.useControls)
@@ -68,7 +66,15 @@ var camera = zero.core.camera = {
 				y: s.position.y.value,
 				z: s.position.z.value
 			});
-			camera._tickSubject();
+			if (camera._.subject)
+				camera._tickSubject();
+			else {
+				camera.rotation({
+					x: s.rotation.x.value,
+					y: s.rotation.y.value,
+					z: s.rotation.z.value
+				});
+			}
 		}
 	},
 	random: function(dimension, target, factor, aspect) {
