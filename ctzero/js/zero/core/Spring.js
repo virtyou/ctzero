@@ -10,6 +10,12 @@ zero.core.Spring = CT.Class({
 				moodMaster_k = 1;
 		}
 		this.target += this.boost;
+		if (this.bounds) {
+			if (this.bounds.max)
+				this.target = Math.min(this.target, this.bounds.max);
+			if (this.bounds.min)
+				this.target = Math.max(this.target, this.bounds.min);
+		}
 		this.value += this.velocity * dts;
 		this.velocity += (this.k * moodMaster_k * (this.target - this.value)
 			- this.damp * moodMaster_damp * this.velocity) * dts;
@@ -39,6 +45,7 @@ zero.core.Spring = CT.Class({
 		this.breaks = opts.breaks;
 		this.target =  opts.target;
 		this.velocity = opts.velocity;
+		this.bounds = opts.bounds;
 	}
 });
 
