@@ -3,14 +3,21 @@ zero.core.Arm = CT.Class({
 	setJoints: function() {
 		var part, oz = this.opts, thiz = this,
 			bones = oz.bones, bmap = oz.bonemap,
-			springs = this.springs = {};
+			sname, aspringz,
+			springs = this.springs = {},
+			aspects = this.aspects = {};
 		for (part in bmap.arm) {
 			this[part] = bones[bmap.arm[part]];
 			["x", "y", "z"].forEach(function(dim) {
-				var sname = part + "_" + dim;
+				sname = part + "_" + dim;
 				springs[sname] = zero.core.springController.add({
 					k: 20,
 					damp: 10
+				}, sname, thiz);
+				aspringz = {};
+				aspringz[sname] = 1;
+				aspects[sname] = zero.core.aspectController.add({
+					springs: aspringz
 				}, sname, thiz);
 			});
 		}
@@ -22,9 +29,9 @@ zero.core.Arm = CT.Class({
 	},
 	rotation: function(part) {
 		return {
-			x: this.springs[part + "_x"].value,
-			y: this.springs[part + "_y"].value,
-			z: this.springs[part + "_z"].value
+			x: this.aspects[part + "_x"].value,
+			y: this.aspects[part + "_y"].value,
+			z: this.aspects[part + "_z"].value
 		}
 	},
 	tick: function() {
