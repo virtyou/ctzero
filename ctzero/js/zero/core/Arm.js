@@ -29,7 +29,7 @@ zero.core.Arm = CT.Class({
 	},
 	tick: function() {
 		var thiz = this;
-		["shoulder", "elbo"].forEach(function(part) {
+		["shoulder", "elbow", "wrist"].forEach(function(part) {
 			zero.core.util.update(thiz.rotation(part), thiz[part].rotation);
 		});
 		this.hand.tick();
