@@ -43,13 +43,17 @@ zero.core.Arm = CT.Class({
 		}
 		this.hand.move(opts.hand);
 	},
+	gesture: function(gname) {
+		this.move(this.opts.gestures[gname]);
+	},
 	energy: function() {
 		return this.parent.energy();
 	},
 	init: function(opts) {
 		this.opts = CT.merge(opts, {
 			bones: [],
-			bonemap: {}
+			bonemap: {},
+			gestures: {}
 		});
 		this.parent = opts.parent;
 		this.setJoints();

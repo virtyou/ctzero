@@ -26,6 +26,9 @@ zero.core.Chest = CT.Class({
 			});
 		});
 	},
+	gesture: function(gname) {
+		this.move(this.opts.gestures[gname]);
+	},
 	setBone: function() {
 		this.bones = this.opts.bones.slice();
 		this.bone = this.bones.shift();
