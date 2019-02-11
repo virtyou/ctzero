@@ -26,7 +26,7 @@ zero.core.Hand = CT.Class({
 	},
 	tick: function() {
 		var knuckle, thiz = this;
-		["thumb", "pointer", "middle", "ring", "pinky"].forEach(function(digit) {
+		["thumb", "pointer", "middle", "ring", "pinkie"].forEach(function(digit) {
 			for (knuckle = 0; knuckle < thiz[digit].length; knuckle++)
 				zero.core.util.update(thiz.rotation(digit, knuckle), thiz[digit][knuckle].rotation);
 		});
