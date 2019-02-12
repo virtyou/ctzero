@@ -97,6 +97,7 @@ zero.core.Person = CT.Class({
 		}
 	},
 	gesture: function(gname) {
+		this.activeGesture = gname;
 		this.body.chest.move(this.opts.gestures[gname]);
 	},
 	init: function(opts) {
