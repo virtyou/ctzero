@@ -41,17 +41,13 @@ zero.core.Hand = CT.Class({
 			});
 		}
 	},
-	gesture: function(gname) {
-		this.move(this.opts.gestures[gname]);
-	},
 	energy: function() {
 		return this.parent.energy();
 	},
 	init: function(opts) {
 		this.opts = CT.merge(opts, {
 			bones: [],
-			bonemap: {},
-			gestures: {}
+			bonemap: {}
 		});
 		this.parent = opts.parent;
 		this.setJoints();

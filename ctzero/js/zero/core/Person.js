@@ -96,6 +96,9 @@ zero.core.Person = CT.Class({
 			body: this.body.snapshot()
 		}
 	},
+	gesture: function(gname) {
+		this.body.chest.move(this.opts.gestures[gname]);
+	},
 	init: function(opts) {
 		this.log("init", opts.name);
 		var thiz = this;
@@ -103,6 +106,7 @@ zero.core.Person = CT.Class({
 			moody: true,
 			mood: {},
 			vibe: {},
+			gestures: {},
 			responses: {},
 			voice: "Joanna"
 		});
