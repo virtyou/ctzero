@@ -1,7 +1,7 @@
 zero.core.Hand = CT.Class({
 	CLASSNAME: "zero.core.Hand",
-	setJoint: function(digit, knuckle, dim) {
-		var aspringz, sname = digit + "_" + (dim || knuckle); // ie _2 or _x
+	setJoint: function(digit, dim) {
+		var aspringz, sname = digit + "_" + dim;
 		this.springs[sname] = zero.core.springController.add({
 			k: 20,
 			damp: 10
@@ -18,30 +18,27 @@ zero.core.Hand = CT.Class({
 		this.springs = {};
 		this.aspects = {};
 		for (digit in bmap) {
-			setJoint(digit, null, "x");
+			setJoint(digit, "x");
+			setJoint(digit, "z");
 			this[digit] = bmap[digit].map(function(knuckle, i) {
-				setJoint(digit, i);
 				return bones[knuckle];
 			});
 		}
 	},
 	tick: function() {
-		var knuckle, thiz = this;
+		var knuckle, thiz = this, zval;
 		zero.core.Hand.parts.forEach(function(digit) {
 			thiz[digit][0].rotation.x = thiz.aspects[digit + "_x"].value;
+			zval = thiz.aspects[digit + "_z"].value;
 			for (knuckle = 0; knuckle < thiz[digit].length; knuckle++)
-				thiz[digit][knuckle].rotation.z = thiz.aspects[digit + "_" + knuckle].value;
+				thiz[digit][knuckle].rotation.z = zval;
 		});
 	},
 	move: function(opts) {
 		var part, val, springs = this.springs;
 		for (part in opts) {
-			if (!Array.isArray(opts[part])) {
-				val = opts[part];
-				opts[part] = this[part].map(function() { return val; });
-			}
-			opts[part].forEach(function(xyz, knuckle) {
-				springs[part + "_" + knuckle].target = val;
+			["x", "z"].forEach(function(dim) {
+				springs[part + "_" + dim].target = opts[part][dim];
 			});
 		}
 	},
