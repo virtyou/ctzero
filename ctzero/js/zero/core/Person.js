@@ -100,12 +100,8 @@ zero.core.Person = CT.Class({
 		this.activeGesture = gname;
 		this.body.chest.move(this.opts.gestures[gname]);
 	},
-	ungesture: function(resetz) {
-		if (!resetz) {
-			resetz = this.opts.gestures[this.activeGesture];
-			delete this.activeGesture;
-		}
-		var k, gest = {}, mergeBit = function(obj1, obj2) {
+	ungesture: function(resetz, side, sub) {
+		var k, part, axis, gest = {}, mergeBit = function(obj1, obj2) {
 			for (k in obj1) {
 				if (typeof obj1[k] == "number")
 					obj2[k] = 0;
@@ -114,7 +110,26 @@ zero.core.Person = CT.Class({
 					mergeBit(obj1[k], obj2[k]);
 				}
 			}
-		};
+		}, aspz = zero.base.aspects;
+		if (!resetz) {
+			if (this.activeGesture) {
+				resetz = this.opts.gestures[this.activeGesture];
+				delete this.activeGesture;
+			} else {
+				resetz = {};
+				(side ? [side] : ["left", "right"]).forEach(function(side) {
+					resetz[side] = {};
+					(sub ? [sub] : ["arm", "hand"]).forEach(function(sub) {
+						resetz[side][sub] = {};
+						for (part in aspz[sub]) {
+							resetz[side][sub][part] = {};
+							for (axis in aspz[sub][part])
+								resetz[side][sub][part][axis] = 0;
+						}
+					});
+				});
+			}
+		}
 		mergeBit(resetz, gest);
 		this.body.chest.move(gest);
 	},
