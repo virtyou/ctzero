@@ -24,7 +24,7 @@ zero.core.Hand = CT.Class({
 	},
 	tick: function() {
 		var knuckle, thiz = this;
-		["thumb", "pointer", "middle", "ring", "pinkie"].forEach(function(digit) {
+		zero.core.Hand.parts.forEach(function(digit) {
 			for (knuckle = 0; knuckle < thiz[digit].length; knuckle++)
 				thiz[digit][knuckle].rotation.z = thiz.aspects[digit + "_" + knuckle].value;
 		});
@@ -53,3 +53,5 @@ zero.core.Hand = CT.Class({
 		this.setJoints();
 	}
 });
+
+zero.core.Hand.parts = ["thumb", "pointer", "middle", "ring", "pinkie"];
