@@ -1,21 +1,22 @@
 zero.core.Hand = CT.Class({
 	CLASSNAME: "zero.core.Hand",
 	setJoint: function(digit, knuckle, dim) {
-		var aspringz, sname = digit + "_" + (dim || knuckle), // ie _2 or _x
-			springs = this.springs = {}, aspects = this.aspects = {};
-		springs[sname] = zero.core.springController.add({
+		var aspringz, sname = digit + "_" + (dim || knuckle); // ie _2 or _x
+		this.springs[sname] = zero.core.springController.add({
 			k: 20,
 			damp: 10
 		}, sname, this);
 		aspringz = {};
 		aspringz[sname] = 1;
-		aspects[sname] = zero.core.aspectController.add(CT.merge({
+		this.aspects[sname] = zero.core.aspectController.add(CT.merge({
 			springs: aspringz
 		}, zero.base.aspects.hand[digit][dim]), sname, this);
 	},
 	setJoints: function() {
 		var digit, oz = this.opts, setJoint = this.setJoint,
 			bones = oz.bones, bmap = oz.bonemap;
+		this.springs = {};
+		this.aspects = {};
 		for (digit in bmap) {
 			setJoint(digit, null, "x");
 			this[digit] = bmap[digit].map(function(knuckle, i) {
