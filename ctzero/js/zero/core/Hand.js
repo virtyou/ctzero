@@ -1,23 +1,25 @@
 zero.core.Hand = CT.Class({
 	CLASSNAME: "zero.core.Hand",
+	setJoint: function(digit, knuckle, dim) {
+		var aspringz, sname = digit + "_" + (dim || knuckle), // ie _2 or _x
+			springs = this.springs = {}, aspects = this.aspects = {};
+		springs[sname] = zero.core.springController.add({
+			k: 20,
+			damp: 10
+		}, sname, this);
+		aspringz = {};
+		aspringz[sname] = 1;
+		aspects[sname] = zero.core.aspectController.add(CT.merge({
+			springs: aspringz
+		}, zero.base.aspects.hand[digit][dim]), sname, this);
+	},
 	setJoints: function() {
-		var digit, oz = this.opts, thiz = this,
-			bones = oz.bones, bmap = oz.bonemap,
-			sname, aspringz,
-			springs = this.springs = {},
-			aspects = this.aspects = {};
+		var digit, oz = this.opts, setJoint = this.setJoint,
+			bones = oz.bones, bmap = oz.bonemap;
 		for (digit in bmap) {
+			setJoint(digit, null, "x");
 			this[digit] = bmap[digit].map(function(knuckle, i) {
-				sname = digit + "_" + i;
-				springs[sname] = zero.core.springController.add({
-					k: 20,
-					damp: 10
-				}, sname, thiz);
-				aspringz = {};
-				aspringz[sname] = 1;
-				aspects[sname] = zero.core.aspectController.add({
-					springs: aspringz
-				}, sname, thiz);
+				setJoint(digit, i);
 				return bones[knuckle];
 			});
 		}
@@ -25,6 +27,7 @@ zero.core.Hand = CT.Class({
 	tick: function() {
 		var knuckle, thiz = this;
 		zero.core.Hand.parts.forEach(function(digit) {
+			thiz[digit][0].rotation.x = thiz.aspects[digit + "_x"].value;
 			for (knuckle = 0; knuckle < thiz[digit].length; knuckle++)
 				thiz[digit][knuckle].rotation.z = thiz.aspects[digit + "_" + knuckle].value;
 		});
@@ -55,3 +58,15 @@ zero.core.Hand = CT.Class({
 });
 
 zero.core.Hand.parts = ["thumb", "pointer", "middle", "ring", "pinkie"];
+zero.core.Hand.parts.forEach(function(digit) {
+    zero.base.aspects.hand[digit] = {
+        z: {
+            max: 0,
+            min: -1.5
+        },
+        x: {
+            max: 0.2,
+            min: -0.2
+        }
+    };
+});
