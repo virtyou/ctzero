@@ -63,8 +63,8 @@ zero.core.Hand.parts.forEach(function(digit) {
             min: -1.5
         },
         x: {
-            max: 0.2,
-            min: -0.2
+            max: 0.1,
+            min: -0.1
         }
     };
 });
