@@ -100,6 +100,24 @@ zero.core.Person = CT.Class({
 		this.activeGesture = gname;
 		this.body.chest.move(this.opts.gestures[gname]);
 	},
+	ungesture: function(resetz) {
+		if (!resetz) {
+			resetz = this.opts.gestures[this.activeGesture];
+			delete this.activeGesture;
+		}
+		var k, gest = {}, mergeBit = function(obj1, obj2) {
+			for (k in obj1) {
+				if (typeof obj1[k] == "number")
+					obj2[k] = 0;
+				else {
+					obj2[k] = {};
+					mergeBit(obj1[k], obj2[k]);
+				}
+			}
+		};
+		mergeBit(resetz, gest);
+		this.body.chest.move(gest);
+	},
 	init: function(opts) {
 		this.log("init", opts.name);
 		var thiz = this;
