@@ -95,6 +95,7 @@ zero.base.aspects = function() {
 zero.base.aspects.arm = {
     shoulder: {
         x: {
+            max: 1,
             min: -3
         },
         y: {
