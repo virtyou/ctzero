@@ -96,6 +96,24 @@ zero.core.Person = CT.Class({
 			body: this.body.snapshot()
 		}
 	},
+	_dance: function() {
+		if (!this.activeDance)
+			return;
+		var dance = this.opts.dances[this.activeDance];
+		dance.step = (dance.step + 1) % dance.steps.length;
+		this.ungesture();
+		this.gesture(dance.steps[dance.step]);
+		setTimeout(this._dance, dance.interval || 1000);
+	},
+	dance: function(dname) {
+		this.activeDance = dname;
+		this.opts.dances[dname].step = -1;
+		this._dance();
+	},
+	undance: function() {
+		delete this.activeDance;
+		this.ungesture();
+	},
 	gesture: function(gname) {
 		this.activeGesture = gname;
 		this.body.chest.move(this.opts.gestures[gname]);
@@ -143,6 +161,7 @@ zero.core.Person = CT.Class({
 			moody: true,
 			mood: {},
 			vibe: {},
+			dances: {},
 			gestures: {},
 			responses: {},
 			voice: "Joanna"
