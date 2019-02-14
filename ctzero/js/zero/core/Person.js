@@ -96,6 +96,46 @@ zero.core.Person = CT.Class({
 			body: this.body.snapshot()
 		}
 	},
+	gesture: function(gname) {
+		this.activeGesture = gname;
+		this.body.chest.move(this.opts.gestures[gname]);
+	},
+	ungesture: function(resetz, side, sub) {
+		var k, part, axis, gest = {}, mergeBit = function(obj1, obj2) {
+			for (k in obj1) {
+				if (typeof obj1[k] == "number")
+					obj2[k] = 0;
+				else {
+					obj2[k] = {};
+					mergeBit(obj1[k], obj2[k]);
+				}
+			}
+		}, aspz = zero.base.aspects, genopts = function() {
+			resetz = {};
+			(side ? [side] : ["left", "right"]).forEach(function(side) {
+				resetz[side] = {};
+				(sub ? [sub] : ["arm", "hand"]).forEach(function(sub) {
+					resetz[side][sub] = {};
+					for (part in aspz[sub]) {
+						resetz[side][sub][part] = {};
+						for (axis in aspz[sub][part])
+							resetz[side][sub][part][axis] = 0;
+					}
+				});
+			});
+		};
+		if (!resetz) {
+			if (side || sub)
+				genopts();
+			else if (this.activeGesture) {
+				resetz = this.opts.gestures[this.activeGesture];
+				delete this.activeGesture;
+			} else
+				genopts();
+		}
+		mergeBit(resetz, gest);
+		this.body.chest.move(gest);
+	},
 	init: function(opts) {
 		this.log("init", opts.name);
 		var thiz = this;
@@ -103,6 +143,7 @@ zero.core.Person = CT.Class({
 			moody: true,
 			mood: {},
 			vibe: {},
+			gestures: {},
 			responses: {},
 			voice: "Joanna"
 		});

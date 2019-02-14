@@ -91,3 +91,41 @@ zero.base.aspects = function() {
         }
     };
 };
+
+zero.base.aspects.arm = {
+    shoulder: {
+        x: {
+            max: 1,
+            min: -3
+        },
+        y: {
+            max: 0.5,
+            min: -0.5
+        },
+        z: {
+            max: 0,
+            min: -2
+        }
+    },
+    elbow: {
+        x: {
+            max: 0,
+            min: -2
+        },
+        y: {
+            max: 1,
+            min: -1
+        }
+    },
+    wrist: {
+        x: {
+            max: 0.5,
+            min: -0.5
+        },
+        z: {
+            max: 1,
+            min: -1
+        }
+    }
+};
+zero.base.aspects.hand = {}; // filled out in core.Hand

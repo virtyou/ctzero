@@ -48,7 +48,7 @@ zero.base.torso = function(opts) {
             repeat: opts.dress_repeat,
 //            position: [0, 18.3, 0],
 //            position: [0, 19.2, 0],
-            position: [0, 20.25, 0],
+//            position: [0, 20.25, 0],
 //            scale: [1, 0.8, 1],
             material: {
                 color: opts.dress_color,

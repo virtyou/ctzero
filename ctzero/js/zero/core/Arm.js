@@ -3,12 +3,13 @@ zero.core.Arm = CT.Class({
 	setJoints: function() {
 		var part, oz = this.opts, thiz = this,
 			bones = oz.bones, bmap = oz.bonemap,
-			sname, aspringz,
+			sname, aspringz, dimz, drule,
 			springs = this.springs = {},
 			aspects = this.aspects = {};
 		for (part in bmap.arm) {
 			this[part] = bones[bmap.arm[part]];
-			["x", "y", "z"].forEach(function(dim) {
+			dimz = zero.base.aspects.arm[part];
+			Object.keys(dimz).forEach(function(dim) {
 				sname = part + "_" + dim;
 				springs[sname] = zero.core.springController.add({
 					k: 20,
@@ -16,9 +17,16 @@ zero.core.Arm = CT.Class({
 				}, sname, thiz);
 				aspringz = {};
 				aspringz[sname] = 1;
-				aspects[sname] = zero.core.aspectController.add({
+				if (oz.side == "left" && sname == "shoulder_z") {
+					drule = {
+						max: -dimz[dim].min,
+						min: -dimz[dim].max
+					};
+				} else
+					drule = dimz[dim];
+				aspects[sname] = zero.core.aspectController.add(CT.merge({
 					springs: aspringz
-				}, sname, thiz);
+				}, drule), sname, thiz);
 			});
 		}
 		this.hand = new zero.core.Hand({
@@ -28,15 +36,17 @@ zero.core.Arm = CT.Class({
 		});
 	},
 	rotation: function(part) {
-		return {
-			x: this.aspects[part + "_x"].value,
-			y: this.aspects[part + "_y"].value,
-			z: this.aspects[part + "_z"].value
-		}
+		var r = {}, asp, asps = this.aspects;
+		["x", "y", "z"].forEach(function(dim) {
+			asp = asps[part + "_" + dim];
+			if (asp)
+				r[dim] = asp.value;
+		});
+		return r;
 	},
 	tick: function() {
 		var thiz = this;
-		["shoulder", "elbow", "wrist"].forEach(function(part) {
+		zero.core.Arm.parts.forEach(function(part) {
 			zero.core.util.update(thiz.rotation(part), thiz[part].rotation);
 		});
 		this.hand.tick();
@@ -50,19 +60,16 @@ zero.core.Arm = CT.Class({
 		}
 		this.hand.move(opts.hand);
 	},
-	gesture: function(gname) {
-		this.move(this.opts.gestures[gname]);
-	},
 	energy: function() {
 		return this.parent.energy();
 	},
 	init: function(opts) {
 		this.opts = CT.merge(opts, {
 			bones: [],
-			bonemap: {},
-			gestures: {}
+			bonemap: {}
 		});
 		this.parent = opts.parent;
 		this.setJoints();
 	}
 });
+zero.core.Arm.parts = ["shoulder", "elbow", "wrist"];
