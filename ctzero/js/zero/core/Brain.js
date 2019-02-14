@@ -80,8 +80,12 @@ zero.core.Brain = CT.Class({
 			var trigz = this.triggers;
 			res.vibe && this.person.vibe.update(res.vibe);
 			res.mood && this.person.mood.update(res.mood);
-			res.dance && this.person.dance(res.dance);
-			res.undance && this.person.undance();
+			if (res.dance) {
+				if (res.dance == "undance") // hacky...
+					this.person.undance();
+				else
+					this.person.dance(res.dance);
+			}
 			res.gesture && this.person.gesture(res.gesture);
 			res.disable && res.disable.forEach(function(key) {
 				delete trigz[key];
