@@ -110,25 +110,28 @@ zero.core.Person = CT.Class({
 					mergeBit(obj1[k], obj2[k]);
 				}
 			}
-		}, aspz = zero.base.aspects;
+		}, aspz = zero.base.aspects, genopts = function() {
+			resetz = {};
+			(side ? [side] : ["left", "right"]).forEach(function(side) {
+				resetz[side] = {};
+				(sub ? [sub] : ["arm", "hand"]).forEach(function(sub) {
+					resetz[side][sub] = {};
+					for (part in aspz[sub]) {
+						resetz[side][sub][part] = {};
+						for (axis in aspz[sub][part])
+							resetz[side][sub][part][axis] = 0;
+					}
+				});
+			});
+		};
 		if (!resetz) {
-			if (this.activeGesture) {
+			if (side || sub)
+				genopts();
+			else if (this.activeGesture) {
 				resetz = this.opts.gestures[this.activeGesture];
 				delete this.activeGesture;
-			} else {
-				resetz = {};
-				(side ? [side] : ["left", "right"]).forEach(function(side) {
-					resetz[side] = {};
-					(sub ? [sub] : ["arm", "hand"]).forEach(function(sub) {
-						resetz[side][sub] = {};
-						for (part in aspz[sub]) {
-							resetz[side][sub][part] = {};
-							for (axis in aspz[sub][part])
-								resetz[side][sub][part][axis] = 0;
-						}
-					});
-				});
-			}
+			} else
+				genopts();
 		}
 		mergeBit(resetz, gest);
 		this.body.chest.move(gest);
