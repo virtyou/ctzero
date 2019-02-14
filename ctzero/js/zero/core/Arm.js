@@ -3,7 +3,7 @@ zero.core.Arm = CT.Class({
 	setJoints: function() {
 		var part, oz = this.opts, thiz = this,
 			bones = oz.bones, bmap = oz.bonemap,
-			sname, aspringz, dimz,
+			sname, aspringz, dimz, drule,
 			springs = this.springs = {},
 			aspects = this.aspects = {};
 		for (part in bmap.arm) {
@@ -17,9 +17,16 @@ zero.core.Arm = CT.Class({
 				}, sname, thiz);
 				aspringz = {};
 				aspringz[sname] = 1;
+				if (oz.side == "left" && sname == "shoulder_z") {
+					drule = {
+						max: -dimz[dim].min,
+						min: -dimz[dim].max
+					};
+				} else
+					drule = dimz[dim];
 				aspects[sname] = zero.core.aspectController.add(CT.merge({
 					springs: aspringz
-				}, dimz[dim]), sname, thiz);
+				}, drule), sname, thiz);
 			});
 		}
 		this.hand = new zero.core.Hand({
