@@ -81,6 +81,7 @@ zero.core.Brain = CT.Class({
 			res.vibe && this.person.vibe.update(res.vibe);
 			res.mood && this.person.mood.update(res.mood);
 			res.dance && this.person.dance(res.dance);
+			res.undance && this.person.undance();
 			res.gesture && this.person.gesture(res.gesture);
 			res.disable && res.disable.forEach(function(key) {
 				delete trigz[key];
