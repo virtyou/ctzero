@@ -11,15 +11,22 @@ zero.core.Chest = CT.Class({
 	energy: function() {
 		return this.body && this.body.energy();
 	},
-	setArms: function() {
+	setLimbs: function() {
 		var thiz = this, bones = this.thring.skeleton.bones;
+		this.legs = {};
 		this.arms = {};
 		this.hands = {};
 
-		// faster way to get bmap, such as from three somehow?
-		this._bmap = CT.net.get(this.opts.stripset, null, true).bonemap;
-
 		["left", "right"].forEach(function(side) {
+			if (thiz._bmap[side].leg) {
+				thiz.legs[side] = new zero.core.Leg({
+					side: side,
+					parent: thiz,
+					bones: bones,
+					bonemap: thiz._bmap[side].leg
+				});
+				delete thiz._bmap[side].leg;
+			}
 			thiz.arms[side] = new zero.core.Arm({
 				side: side,
 				parent: thiz,
@@ -37,6 +44,8 @@ zero.core.Chest = CT.Class({
 		this.opts.scene.add(bones[0]);
 		bones[0].position.y = -3.7; // HACK! fix this...
 
-		this.setArms();
+		// faster way to get bmap, such as from three somehow?
+		this._bmap = CT.net.get(this.opts.stripset, null, true).bonemap;
+		this.setLimbs();
 	}
 }, zero.core.Thing);
