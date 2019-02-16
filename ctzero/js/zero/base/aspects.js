@@ -99,8 +99,8 @@ zero.base.aspects.leg = {
             min: -2
         },
         y: {
-            max: 0.5,
-            min: -0.5
+            max: 1,
+            min: -1
         },
         z: {
             max: 0,
