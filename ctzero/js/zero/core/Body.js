@@ -14,7 +14,8 @@ zero.core.Body = CT.Class({
 			});
 			this.head = h.head;
 			this.head.body = this;
-			this.chest.body = this;
+			this.torso = this.chest; // better way?
+			this.torso.body = this;
 			this.opts.joints.forEach(function(part, i) {
 				for (dim in part.rotation) {
 					name = part.name + "_" + dim;
@@ -43,7 +44,7 @@ zero.core.Body = CT.Class({
 	tick: function() {
 		this._setRotation();
 		this.head.tick();
-		this.chest.tick();
+		this.torso.tick();
 		if (this.springs.bob)
 			this.bone.position.y = this.springs.bob.value;
 		if (this.springs.weave)

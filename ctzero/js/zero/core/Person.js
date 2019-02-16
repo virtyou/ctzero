@@ -116,7 +116,7 @@ zero.core.Person = CT.Class({
 	},
 	gesture: function(gname) {
 		this.activeGesture = gname;
-		this.body.chest.move(this.opts.gestures[gname]);
+		this.body.torso.move(this.opts.gestures[gname]);
 	},
 	ungesture: function(resetz, side, sub) {
 		var k, part, axis, gest = {}, mergeBit = function(obj1, obj2) {
@@ -152,7 +152,7 @@ zero.core.Person = CT.Class({
 				genopts();
 		}
 		mergeBit(resetz, gest);
-		this.body.chest.move(gest);
+		this.body.torso.move(gest);
 	},
 	init: function(opts) {
 		this.log("init", opts.name);

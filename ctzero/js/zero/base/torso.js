@@ -39,7 +39,7 @@ zero.base.torso = function(opts) {
             }
         }, {
             name: "chest",
-            thing: "Chest",
+            thing: "Torso",
             meshcat: "SkinnedMesh",
             texture: opts.dress_texture,
             stripset: opts.dress_stripset,
