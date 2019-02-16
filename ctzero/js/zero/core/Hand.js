@@ -35,12 +35,12 @@ zero.core.Hand.parts.forEach(function(digit) {
         },
         y: {
             max: 0.2,
-            min: -0.6
+            min: -2
         }
     } : {
         z: {
-            max: 0,
-            min: -1.5
+            max: 1.5,
+            min: 0
         },
         x: {
             max: 0.1,
