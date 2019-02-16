@@ -92,6 +92,44 @@ zero.base.aspects = function() {
     };
 };
 
+zero.base.aspects.leg = {
+    hip: {
+        x: {
+            max: 0,
+            min: -2
+        },
+        y: {
+            max: 0.5,
+            min: -0.5
+        },
+        z: {
+            max: 0,
+            min: -2
+        }
+    },
+    knee: {
+        x: {
+            max: 2,
+            min: 0
+        }
+    },
+    ankle: {
+        x: {
+            max: 0.5,
+            min: -0.5
+        },
+        y: {
+            max: 0.5,
+            min: -0.5
+        }
+    },
+    toe: {
+        x: {
+            max: 0.5,
+            min: -0.5
+        }
+    }
+};
 zero.base.aspects.arm = {
     shoulder: {
         x: {
