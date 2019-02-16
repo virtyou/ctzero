@@ -1,7 +1,7 @@
-zero.base.torso = function(opts) {
-    opts = CT.merge(opts, zero.base.torso.defaults); // must set defaults!
+zero.base.body = function(opts) {
+    opts = CT.merge(opts, zero.base.body.defaults); // must set defaults!
     return {
-        name: "torso",
+        name: "body",
         morphStack: opts.morphStack,
         springs: zero.base.springs(),
         aspects: zero.base.aspects(),
@@ -38,7 +38,7 @@ zero.base.torso = function(opts) {
                 visible: false
             }
         }, {
-            name: "chest",
+            name: "torso",
             thing: "Torso",
             meshcat: "SkinnedMesh",
             texture: opts.dress_texture,
