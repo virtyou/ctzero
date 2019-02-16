@@ -1,12 +1,16 @@
 zero.core.Chest = CT.Class({
 	CLASSNAME: "zero.core.Chest",
 	tick: function() {
-		for (var arm in this.arms)
-			this.arms[arm].tick();
+		for (var side in this.arms) {
+			this.arms[side].tick();
+			this.legs[side].tick();
+		}
 	},
 	move: function(opts) {
-		for (var side in opts)
+		for (var side in opts) {
 			this.arms[side].move(opts[side]);
+			this.legs[side].move(opts[side].leg);
+		}
 	},
 	energy: function() {
 		return this.body && this.body.energy();
