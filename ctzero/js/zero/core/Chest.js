@@ -35,7 +35,7 @@ zero.core.Chest = CT.Class({
 
 		var bones = this.thring.skeleton.bones;
 		this.opts.scene.add(bones[0]);
-		bones[0].position.y = -14.3; // HACK! fix this...
+		bones[0].position.y = -3.7; // HACK! fix this...
 
 		this.setArms();
 	}
