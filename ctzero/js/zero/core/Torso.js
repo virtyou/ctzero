@@ -1,5 +1,5 @@
-zero.core.Chest = CT.Class({
-	CLASSNAME: "zero.core.Chest",
+zero.core.Torso = CT.Class({
+	CLASSNAME: "zero.core.Torso",
 	tick: function() {
 		for (var side in this.arms) {
 			this.arms[side].tick();
