@@ -2,31 +2,28 @@ zero.core.Body = CT.Class({
 	CLASSNAME: "zero.core.Body",
 	_assembled: function() {
 		this.log("built body!");
-		if (this.opts.joints.length) {
-			var dim, name, h = thiz = this,
-				ac = zero.core.aspectController,
-				spine = this.spine = [],
-				joints = this.joints = {};
-			this.opts.joints.forEach(function(part, i) {
-				if (i) // hack
-					h = h[part.name];
-				spine.push(part.name);
-			});
-			this.head = h.head;
-			this.head.body = this;
-			this.torso = this.chest; // better way?
-			this.torso.body = this;
-			this.opts.joints.forEach(function(part, i) {
-				for (dim in part.rotation) {
-					name = part.name + "_" + dim;
-					joints[name] = ac.add(part.rotation[dim], name, thiz);
-					joints[name].part = spine[i];
-				}
-			});
-			var pos = this.position();
-			this.bone.position.set(pos.x, pos.y, pos.z);
-			this.allbones = this.thring.skeleton.bones;
-		}
+		var dim, name, h = thiz = this,
+			ac = zero.core.aspectController,
+			spine = this.spine = [],
+			joints = this.joints = {};
+		this.opts.joints.forEach(function(part, i) {
+			if (i) // hack
+				h = h[part.name];
+			spine.push(part.name);
+		});
+		this.head = h.head;
+		this.head.body = this;
+		this.torso.body = this;
+		this.opts.joints.forEach(function(part, i) {
+			for (dim in part.rotation) {
+				name = part.name + "_" + dim;
+				joints[name] = ac.add(part.rotation[dim], name, thiz);
+				joints[name].part = spine[i];
+			}
+		});
+//		var pos = this.position();  // <- unnecessary, right?
+//		this.bone.position.set(pos.x, pos.y, pos.z);
+		this.allbones = this.thring.skeleton.bones;
 		this.thring.frustumCulled = false; // TODO: figure out real problem and fix!!!
 	},
 	_setRotation: function() {
