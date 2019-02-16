@@ -22,15 +22,12 @@ zero.core.Torso = CT.Class({
 		this.hands = {};
 
 		["left", "right"].forEach(function(side) {
-			if (thiz._bmap[side].leg) {
-				thiz.legs[side] = new zero.core.Leg({
-					side: side,
-					parent: thiz,
-					bones: bones,
-					bonemap: thiz._bmap[side].leg
-				});
-				delete thiz._bmap[side].leg;
-			}
+			thiz.legs[side] = new zero.core.Leg({
+				side: side,
+				parent: thiz,
+				bones: bones,
+				bonemap: thiz._bmap[side].leg
+			});
 			thiz.arms[side] = new zero.core.Arm({
 				side: side,
 				parent: thiz,
