@@ -21,8 +21,6 @@ zero.core.Body = CT.Class({
 				joints[name].part = spine[i];
 			}
 		});
-//		var pos = this.position();  // <- unnecessary, right?
-//		this.bone.position.set(pos.x, pos.y, pos.z);
 		this.allbones = this.thring.skeleton.bones;
 		this.thring.frustumCulled = false; // TODO: figure out real problem and fix!!!
 	},
