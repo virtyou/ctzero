@@ -8,7 +8,7 @@ CT.require("zero.base.joints");
 CT.require("zero.base.springs");
 CT.require("zero.base.aspects");
 CT.require("zero.base.tickers");
-CT.require("zero.base.torso");
+CT.require("zero.base.body");
 
 CT.require("zero.core.util");
 CT.require("zero.core.camera");
