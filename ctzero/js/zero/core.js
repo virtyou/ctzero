@@ -26,6 +26,7 @@ CT.require("zero.core.Room");
 CT.require("zero.core.Skeleton");
 CT.require("zero.core.Hand");
 CT.require("zero.core.Arm");
+CT.require("zero.core.Leg");
 
 CT.require("zero.core.Chest");
 CT.require("zero.core.Head");
