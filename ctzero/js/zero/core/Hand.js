@@ -2,7 +2,7 @@ zero.core.Hand = CT.Class({
 	CLASSNAME: "zero.core.Hand",
 	majMin: function(digit) {
 		if (digit == "thumb")
-			return ["x", "y"];
+			return ["x", "z"];
 		else
 			return ["z", "x"];
 	},
@@ -33,9 +33,9 @@ zero.core.Hand.parts.forEach(function(digit) {
             max: 0.3,
             min: -0.2
         },
-        y: {
+        z: {
             max: 0.2,
-            min: -2
+            min: -0.4
         }
     } : {
         z: {
