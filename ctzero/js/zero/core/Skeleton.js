@@ -1,5 +1,6 @@
 zero.core.Skeleton = CT.Class({
 	CLASSNAME: "zero.core.Skeleton",
+	dims: ["x", "y", "z"],
 	bmap: function() {
 		return this.opts.bonemap;
 	},
@@ -21,7 +22,7 @@ zero.core.Skeleton = CT.Class({
 	},
 	rotation: function(part) {
 		var r = {}, asp, asps = this.aspects;
-		["x", "y", "z"].forEach(function(dim) {
+		this.dims.forEach(function(dim) {
 			asp = asps[part + "_" + dim];
 			if (asp)
 				r[dim] = asp.value;
