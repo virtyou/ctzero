@@ -1,5 +1,6 @@
 zero.core.Hand = CT.Class({
 	CLASSNAME: "zero.core.Hand",
+	dims: ["x", "y", "z", "curl"],
 	majMin: function(digit) {
 		if (digit == "thumb")
 			return ["x", "z"];
@@ -12,17 +13,25 @@ zero.core.Hand = CT.Class({
 		this.majMin(digit).forEach(function(dim) {
 			setJoint(digit, dim);
 		});
+		setJoint(digit, "curl");
 		this[digit] = bmap[digit].map(function(knuckle, i) {
 			return bones[knuckle];
 		});
 	},
+	move: function(opts) {
+		var digit;
+		this.setSprings(opts);
+		for (digit in opts) {
+			if ("curl" in opts[digit])
+				this.springs[digit + "_curl"].target = opts[digit].curl;
+		}
+	},
 	tickPart: function(digit) {
-		var major, minor, knuckle, zval;
+		var major, minor, knuckle, cval = this.aspects[digit + "_curl"].value;
 		[major, minor] = this.majMin(digit);
-		this[digit][0].rotation.x = this.aspects[digit + "_" + minor].value;
-		zval = this.aspects[digit + "_" + major].value;
-		for (knuckle = 0; knuckle < this[digit].length; knuckle++)
-			this[digit][knuckle].rotation.z = zval;
+		zero.core.util.update(this.rotation(digit), this[digit][0].rotation);
+		for (knuckle = 1; knuckle < this[digit].length; knuckle++)
+			this[digit][knuckle].rotation[major] = cval;
 	}
 }, zero.core.Skeleton);
 
@@ -36,6 +45,10 @@ zero.core.Hand.parts.forEach(function(digit) {
         z: {
             max: 0.2,
             min: -0.4
+        },
+        curl: {
+            max: 1.5,
+            min: -0.2
         }
     } : {
         z: {
@@ -45,6 +58,10 @@ zero.core.Hand.parts.forEach(function(digit) {
         x: {
             max: 0.1,
             min: -0.1
+        },
+        curl: {
+            max: 1.5,
+            min: -0.2
         }
     };
 });
