@@ -9,13 +9,10 @@ LANG = {
     "mandarin": "zh-guoyu"
 }
 CMDS = {
-    "say": {
-        "mandarin": "wget \"http://tts.mobvoi.com/api/synthesis?nettype=wifi×tamp=1484898152748&language=unknown&audio_type=mp3&product=bd_yunnan&detail_output=true&text='%s'\" -O %s.json",
-        "english": [
-            'aws polly synthesize-speech --output-format mp3 --voice-id %s --text "%s" %s.mp3',
-            'aws polly synthesize-speech --output-format json --voice-id %s --text "%s" --speech-mark-types=\'["viseme"]\' %s.json'
-        ]
-    },
+    "say": [
+        'aws polly synthesize-speech --output-format mp3 --voice-id %s --text "%s" %s.mp3',
+        'aws polly synthesize-speech --output-format json --voice-id %s --text "%s" --speech-mark-types=\'["viseme"]\' %s.json'
+    ],
     "rec": {
         "transcode": "avconv -i %s.webm -ac 1 %s.wav", # stampath, stampath
         "interpret": {
@@ -55,6 +52,8 @@ def say(language, voice, words, prosody):
     comz = CMDS["say"]
     rate = prosody["rate"]
     pitch = prosody["pitch"]
+    if language == "mandarin":
+        voice = "Zhiyu"
     log("say -> %s [%s @ %s, %s] :: %s"%(language, voice, rate, pitch, words))
     fname = "%s%s%s%s"%(voice, rate, pitch,
         "".join([c for c in words if c in string.letters]) or hash(words))
@@ -68,18 +67,12 @@ def say(language, voice, words, prosody):
             start += " %s='%s'"%(key, val)
         fullwords = "%s>%s</prosody></speak>"%(start, fullwords)
         fullfpath = "--text-type ssml %s"%(fpath,)
-        if language == "english":
-            for command in comz["english"]:
-                cmd(command%(voice, fullwords, fullfpath))
-        else: # mandarin -- figure out voice and remerge w/ english version
-            cmd(comz["mandarin"]%(fullwords, fullfpath))
+        for command in comz:
+            cmd(command%(voice, fullwords, fullfpath))
     data = read(fpjson)
     robj = {}
-    if language == "mandarin":
-        robj["data"] = json.loads(data)
-    else:
-        robj["url"] = "/%s.mp3"%(fpath,)
-        robj["visemes"] = json.loads("[%s]"%(",".join(data[:-1].split("\n"))));
+    robj["url"] = "/%s.mp3"%(fpath,)
+    robj["visemes"] = json.loads("[%s]"%(",".join(data[:-1].split("\n"))));
     return robj
 
 def rec(language, data):
