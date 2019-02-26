@@ -156,17 +156,17 @@ zero.core.Thing = CT.Class({
 			this.opts.scene.remove(this.thring);
 		if (this.group)
 			this.opts.scene.remove(this.group);
+		this.unscroll();
 	},
-	detach: function(cname, fromScene) {
-		var thing = this[cname],
-			thrings = [thing.thring, thing.group],
-			parent = fromScene ? zero.core.camera.scene : this.group;
-		thrings.forEach(function(thring) {
-			thring && parent.remove(thring);
-		});
+	detach: function(cname) {
+		var thing = this[cname];
+		if (!(thing.thring || thing.group)) { // kind map!
+			thing = Object.values(thing)[0];
+			cname = thing.name;
+		}
+		thing.remove();
 		thing.isCustom && CT.data.remove(this._.customs, thing);
 		CT.data.remove(this.parts, thing);
-		this.unscroll();
 		delete this[cname];
 		if (thing.opts.kind && this[thing.opts.kind]) {
 			delete this[thing.opts.kind][thing.opts.name];
