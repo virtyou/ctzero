@@ -16,6 +16,7 @@ class Thing(db.TimeStampedBase):
 	name = db.String()
 	custom = db.Text()
 	material = db.JSON()
+	morphs = db.JSON()
 	opts = db.JSON() # base opts
 
 	def json(self):
@@ -25,6 +26,7 @@ class Thing(db.TimeStampedBase):
 			"kind": self.kind,
 			"custom": self.custom,
 			"material": self.material,
+			"morphs": self.morphs or {},
 			"morphStack": self.morphStack,
 			"texture": self.texture and self.texture.get().item.urlsafe() or None,
 			"stripset": self.stripset and self.stripset.get().item.urlsafe() or None
@@ -37,6 +39,7 @@ class Part(db.TimeStampedBase):
 	base = db.ForeignKey(kind=Thing) # base Thing OR template
 	template = db.String() # zero.base.torso / templates.whatever / etc
 	material = db.JSON()
+	morphs = db.JSON() # merged into Things.morphs{}
 	opts = db.JSON() # passed to template or merged into Thing.opts{}
 	assets = db.ForeignKey(kind=Asset, repeated=True) # merged into opts
 
@@ -47,6 +50,7 @@ class Part(db.TimeStampedBase):
 		d["key"] = self.key.urlsafe()
 		d["template"] = self.template
 		self.material and d["material"].update(self.material)
+		self.morphs and d["morphs"].update(self.morphs)
 		self.opts and d.update(self.opts)
 		for asset in db.get_multi(self.assets):
 			d[asset.name] = asset.item.urlsafe()
@@ -62,6 +66,8 @@ class Person(db.TimeStampedBase):
 	voice = db.String()
 	mood = db.JSON()
 	vibe = db.JSON()
+	dances = db.JSON()
+	gestures = db.JSON()
 	responses = db.JSON()
 
 	def json(self):
@@ -71,6 +77,8 @@ class Person(db.TimeStampedBase):
 			"voice": self.voice,
 			"mood": self.mood or {},
 			"vibe": self.vibe or {},
+			"dances": self.dances or {},
+			"gestures": self.gestures or {},
 			"responses": self.responses or {},
 			"body": self.body.get().json()
 		}
