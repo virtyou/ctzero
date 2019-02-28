@@ -32290,7 +32290,7 @@
 				}
 
 				var object = scope.parse( json, texturePath );
-				onLoad( object.geometry, object.materials );
+				onLoad( object.geometry, object.materials, json );
 
 			}, onProgress, onError );
 
