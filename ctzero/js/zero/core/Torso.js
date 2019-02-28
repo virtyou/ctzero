@@ -45,8 +45,7 @@ zero.core.Torso = CT.Class({
 		this.opts.scene.add(bones[0]);
 		bones[0].position.y = -3.7; // HACK! fix this...
 
-		// faster way to get bmap, such as from three somehow?
-		this._bmap = CT.net.get(this.opts.stripset, null, true).bonemap;
+		this._bmap = this.geojson.bonemap;
 		this.setLimbs();
 	}
 }, zero.core.Thing);
