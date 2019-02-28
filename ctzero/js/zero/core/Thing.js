@@ -94,8 +94,9 @@ zero.core.Thing = CT.Class({
 			setter.set.apply(setter, oz[prop]);
 		});
 	},
-	setGeometry: function(geometry) {
+	setGeometry: function(geometry, materials, json) {
 		var oz = this.opts, thiz = this;
+		this.geojson = json;
 		if (this.thring) {
 			this.thring.geometry.dispose();
 			oz.scene.remove(this.thring);
