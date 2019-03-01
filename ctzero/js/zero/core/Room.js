@@ -38,6 +38,31 @@ zero.core.Room = CT.Class({
 		CT.data.remove(this.objects, thing);
 		this.detach(obj.name);
 	},
+	clear: function(retain_lights) {
+		if (retain_lights) {
+			if (this.thring) {
+				this.opts.scene.remove(this.thring);
+				delete this.thring;
+			}
+			var group = this.group;
+			group && group.children.forEach(function(child) {
+				if (!child.type.endsWith("Light"))
+					group.remove(child);
+			});
+		} else
+			this.remove();
+	},
+	clearBox: function() {
+		var opts = this.opts, detach = this.detach;
+		if (opts.floor)
+			detach("floor");
+		opts.wall && opts.wall.sides.forEach(function(side, i) {
+			detach("wall" + i);
+		});
+	},
+	clearObjects: function() {
+		this.opts.objects.forEach(this.removeObject);
+	},
 	postassemble: function() {
 		var opts = this.opts;
 		opts.lights.forEach(this.addLight);
