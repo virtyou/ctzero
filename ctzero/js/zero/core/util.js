@@ -72,21 +72,24 @@ zero.core.util = {
 	iframe: function(src) {
 		zero.core.util.back(CT.dom.iframe(src, "full"));
 	},
+	background: function(src) {
+		zero.core.util.back(null, src);
+	},
 	room: function(robj) {
 		if (zero.core.current.room)
-			zero.core.current.room.remove();
+			zero.core.current.room.clear(!robj);
 		if (robj)
 			zero.core.current.room = new zero.core.Room(robj);
 		return zero.core.current.room;
 	},
-	back: function(node) {
+	back: function(node, bgsrc, robj) {
 		if (!zero.core.util._back) {
 			zero.core.util._back = CT.dom.div(null, "full low abs");
 			zero.core.camera.container().appendChild(zero.core.util._back);
 		}
 		CT.dom.setContent(zero.core.util._back, node);
-		zero.core.camera.background();
-		zero.core.util.room();
+		zero.core.camera.background(bgsrc);
+		zero.core.util.room(robj);
 	},
 	init: function(onbuild) {
 		zero.core.camera.init();
