@@ -61,7 +61,7 @@ zero.core.Brain = CT.Class({
 			res.video && zero.core.util.video(res.video.item);
 			res.iframe && zero.core.util.iframe(res.iframe.item);
 			res.panorama && zero.core.util.panorama(res.panorama.item);
-			res.background && zero.core.camera.background(res.background.item);
+			res.background && zero.core.util.background(res.background.item);
 			res.environment && zero.core.util.room(res.environment.item);
 
 			// misc
