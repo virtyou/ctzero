@@ -5,6 +5,7 @@ class Asset(db.TimeStampedBase):
 	owner = db.ForeignKey(kind=CTUser)
 	variety = db.String(choices=["texture", "stripset"])
 	name = db.String()
+	identifier = db.String()
 	item = db.Binary(unique=True)
 
 class Thing(db.TimeStampedBase):
