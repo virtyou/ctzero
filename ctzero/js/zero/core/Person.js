@@ -31,6 +31,16 @@ zero.core.Person = CT.Class({
 		initSpeech: function() {
 			this._.audio = document.createElement("audio");
 			document.body.appendChild(this._.audio);
+		},
+		chain: function(cb) {
+			var chain = this.brain.chain;
+			if (chain) {
+				delete this.brain.chain;
+				setTimeout(this.respond,
+					core.config.ctzero.brain.chain.delay,
+					chain, cb);
+			} else
+				cb && cb();
 		}
 	},
 	afterSpeech: function(cb) {
@@ -56,16 +66,9 @@ zero.core.Person = CT.Class({
 	respond: function(phrase, cb) {
 		var thaz = this;
 		this.brain.respond(phrase, function(words) {
-			thaz.say(words, function() {
-				var chain = thaz.brain.chain;
-				if (chain) {
-					delete thaz.brain.chain;
-					setTimeout(thaz.respond,
-						core.config.ctzero.brain.chain.delay,
-						chain, cb);
-				} else
-					cb && cb();
-			});
+			words ? thaz.say(words, function() {
+				thaz._.chain(cb);
+			}) : thaz._.chain(cb);
 		});
 	},
 	tick: function() {
