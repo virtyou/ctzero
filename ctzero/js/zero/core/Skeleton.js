@@ -50,7 +50,7 @@ zero.core.Skeleton = CT.Class({
 		}, sname, this);
 		aspringz = {};
 		aspringz[sname] = 1;
-		if (this.opts.side == "left" && dim == "z") {
+		if (this.opts.side == "left" && this.shouldReverse(part, dim)) {
 			jrules = {
 				max: -jrules.min,
 				min: -jrules.max
@@ -59,6 +59,9 @@ zero.core.Skeleton = CT.Class({
 		this.aspects[sname] = zero.core.aspectController.add(CT.merge({
 			springs: aspringz
 		}, jrules), sname, this);
+	},
+	shouldReverse: function(part, dim) {
+		return dim == "z";
 	},
 	setSprings: function(opts) {
 		var part, springs = this.springs;

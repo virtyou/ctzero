@@ -18,6 +18,9 @@ zero.core.Hand = CT.Class({
 			return bones[knuckle];
 		});
 	},
+	shouldReverse: function(part, dim) {
+		return part != "thumb" && (dim == "z" || dim == "curl");
+	},
 	move: function(opts) {
 		var digit;
 		this.setSprings(opts);
