@@ -43,7 +43,7 @@ zero.core.Hand.parts.forEach(function(digit) {
     zero.base.aspects.hand[digit] = (digit == "thumb") ? {
         x: {
             max: 0.3,
-            min: -0.2
+            min: -0.6
         },
         z: {
             max: 0.2,
