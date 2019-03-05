@@ -87,9 +87,15 @@ zero.core.Brain = CT.Class({
 					this.person.dance(res.dance);
 			}
 			res.gesture && this.person.gesture(res.gesture);
-			res.disable && res.disable.forEach(function(key) {
-				delete trigz[key];
-			});
+			if (res.disable) {
+				if (res.disable[0] == "untrigger") // hacky!!!
+					trigz = this.triggers = {};
+				else {
+					res.disable.forEach(function(key) {
+						delete trigz[key];
+					});
+				}
+			}
 			res.branches && Object.assign(trigz, res.branches);
 			if (res.chain)
 				this.chain = res.chain;
