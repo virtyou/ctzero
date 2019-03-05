@@ -22,7 +22,6 @@ zero.core.Body = CT.Class({
 			}
 		});
 		this.allbones = this.thring.skeleton.bones;
-		this.thring.frustumCulled = false; // TODO: figure out real problem and fix!!!
 	},
 	_setRotation: function() {
 		var bonez = this.thring.skeleton.bones,
@@ -57,6 +56,7 @@ zero.core.Body = CT.Class({
 //			shader: true,
 			onassemble: this._assembled
 		});
+		opts.frustumCulled = false; // TODO: figure out real problem and fix!!!
 		var p, zc = zero.core;
 		for (p in zc.phonemes.forms)
 			this.springs[p] = zc.springController.add(zc.phonemes.forms[p], p, this);
