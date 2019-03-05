@@ -21,8 +21,16 @@ var rec = zero.core.rec = {
 			recorder.start();
 			recorder.timeout = setTimeout(function() { recorder.stop(); }, 3000);
 		},
-		oops: function(err) {
-			CT.log("oh no it didn't work!", err);
+		oops: function(cb) {
+			return function(err) {
+				rec.active = false;
+				if (rec._.oops_cb)
+					rec._.oops_cb(cb);
+				else {
+					CT.log("oh no it didn't work!");
+					CT.log(err);
+				}
+			};
 		}
 	},
 	cancel: function() {
@@ -46,12 +54,16 @@ var rec = zero.core.rec = {
 			rec.active = false;
 			cb(event.results[0][0].transcript);
 		};
+		recognition.onerror = rec._.oops(cb);
 		recognition.start();
+	},
+	onfail: function(cb) {
+		rec._.oops_cb = cb;
 	},
 	listen: function(cb) {
 		if (window.webkitSpeechRecognition)
 			return rec.local(cb);
 		rec._.cb = cb;
-		navigator.mediaDevices.getUserMedia({ audio: true }).then(rec._.record)["catch"](rec._.oops);
+		navigator.mediaDevices.getUserMedia({ audio: true }).then(rec._.record)["catch"](rec._.oops(cb));
 	}
 };
