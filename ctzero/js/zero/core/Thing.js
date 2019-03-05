@@ -103,6 +103,7 @@ zero.core.Thing = CT.Class({
 			delete this.thring;
 		}
 		this.thring = new THREE[oz.meshcat](geometry, this.material);
+		this.thring.frustumCulled = oz.frustumCulled; // should probs usually be default (true)
 		this.place();
 		this.setBone();
 		(this.bone || oz.scene).add(this.thring);
@@ -252,7 +253,7 @@ zero.core.Thing = CT.Class({
 			}
 			this.material = new THREE[meshname](meshopts);
 			if (oz.stripset)
-				(new THREE.JSONLoader(true)).load(oz.stripset, this.setGeometry);
+				(new THREE[oz.loader]()).load(oz.stripset, this.setGeometry);
 			else
 				this.setGeometry(oz.geometry);
 		} else {
@@ -281,6 +282,7 @@ zero.core.Thing = CT.Class({
 			bones: [],
 			texture: "",
 			stripset: "",
+			loader: "JSONLoader",
 			geometry: null, // or a THREE.CubeGeometry or something
 			matcat: "Basic", // or "Phong"
 			meshcat: "Mesh", // or "SkinnedMesh" etc
@@ -298,7 +300,8 @@ zero.core.Thing = CT.Class({
 			morphStack: null,
 			iterator: null,
 			onbuild: null, // also supports: "onassemble"
-			scroll: null
+			scroll: null,
+			frustumCulled: true
 		});
 		this.setName(opts);
 		var thiz = this, iz, name;
