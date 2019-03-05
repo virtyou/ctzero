@@ -72,6 +72,7 @@
 		"delta_cutoff": 0.1
 	},
 	"brain": {
+		"noChat": false,
 		"chain": {
 			"delay": 500
 		},

@@ -114,7 +114,7 @@ zero.core.Brain = CT.Class({
 		}
 		if (respz["*"]) // default response object
 			return cb(this.get_response(respz["*"]));
-		CT.net.post({
+		core.config.ctzero.brain.noChat || CT.net.post({
 			path: "/_speech",
 			params: {
 				action: "chat",
