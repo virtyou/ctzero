@@ -112,8 +112,9 @@ zero.core.Brain = CT.Class({
 			if (word in respz)
 				return cb(this.get_response(respz[word]));
 		}
-		if (respz["*"]) // default response object
-			return cb(this.get_response(respz["*"]));
+		var defresp = this.triggers["*"] || respz["*"];
+		if (defresp) // default response object
+			return cb(this.get_response(defresp));
 		core.config.ctzero.brain.noChat || CT.net.post({
 			path: "/_speech",
 			params: {
