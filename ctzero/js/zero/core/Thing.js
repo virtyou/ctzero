@@ -225,8 +225,13 @@ zero.core.Thing = CT.Class({
 	build: function() {
 		var oz = this.opts;
 		if (oz.cubeGeometry) {
-			var g = oz.cubeGeometry;
-			oz.geometry = new THREE.CubeGeometry(g[0], g[1], g[2]); // better way?
+			oz.boxGeometry = oz.cubeGeometry;
+			this.log("DEPRECATED: cubeGeometry - use boxGeometry!");
+		}
+		if (oz.boxGeometry) {
+			var g = oz.boxGeometry; // better way?
+			oz.geometry = new THREE.BoxGeometry(g[0],
+				g[1], g[2], g[3], g[4]);
 		}
 		if (oz.geometry || oz.stripset) {
 			var meshname = (oz.shader ? "Shader"
