@@ -1,12 +1,14 @@
 var rec = zero.core.rec = {
 	_: {
 		language: "english",
+		indicator: null,
 		record: function(stream) {
 			rec.active = true;
 			var recorder = rec._.recorder = new MediaRecorder(stream);
 			recorder.onstop = function() {
 				rec.active = false;
 				stream.stop();
+				rec.toggleIndicator();
 			};
 			recorder.ondataavailable = function(data) {
 				CT.net.formUp(data.data, {
@@ -41,6 +43,12 @@ var rec = zero.core.rec = {
 			delete rec._.recorder;
 		}
 	},
+	toggleIndicator: function() {
+		rec._.indicator && CT.dom.showHideT(rec._.indicator);
+	},
+	setIndicator: function(node) {
+		rec._.indicator = node;
+	},
 	setLanguage: function(lang) {
 		if (!lang)
 			rec._.norec = true;
@@ -52,6 +60,7 @@ var rec = zero.core.rec = {
 		var recognition = new webkitSpeechRecognition();
 		recognition.onresult = function(event) {
 			rec.active = false;
+			rec.toggleIndicator();
 			cb(event.results[0][0].transcript);
 		};
 		recognition.onerror = rec._.oops(cb);
@@ -61,6 +70,7 @@ var rec = zero.core.rec = {
 		rec._.oops_cb = cb;
 	},
 	listen: function(cb) {
+		rec.toggleIndicator();
 		if (window.webkitSpeechRecognition)
 			return rec.local(cb);
 		rec._.cb = cb;
