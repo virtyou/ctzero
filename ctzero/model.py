@@ -88,13 +88,19 @@ class Room(db.TimeStampedBase):
 	owner = db.ForeignKey(kind=CTUser)
 	base = db.ForeignKey(kind=Thing)
 	name = db.String()
+	environment = db.String()
+	lights = db.JSON()
+	cameras = db.JSON()
 	opts = db.JSON() # merged into Thing.opts{}
 
 	def json(self):
 		d = self.base and self.base.get().json() or {}
 		self.opts and d.update(self.opts)
 		d["key"] = self.key.urlsafe()
-		d["name"] = self.name
+		for iname in ["name", "environment", "lights", "cameras"]:
+			item = getattr(self, iname)
+			if item:
+				d[iname] = item
 		d["objects"] = [f.json() for f in Furnishing.query(Furnishing.parent == self.key).fetch()]
 		return d
 
