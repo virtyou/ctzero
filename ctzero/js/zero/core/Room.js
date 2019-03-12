@@ -25,6 +25,12 @@ zero.core.Room = CT.Class({
 			thing: "Light"
 		})));
 	},
+	removeLight: function(light) {
+		var index = this.lights.indexOf(light);
+		this.lights.splice(index, 1);
+		this.opts.lights.splice(index, 1);
+		this.detach(light.name);
+	},
 	addObject: function(obj) {
 		this.log("adding object");
 		this.objects.push(this.attach(obj));
