@@ -4,6 +4,11 @@ zero.core.Light = CT.Class({
 		this.log("setting intensity to", intensity);
 		this.opts.intensity = this.thring.intensity = intensity;
 	},
+	setColor: function(color) {
+		var c = this.thring.color;
+		this.opts.color = color;
+		c.setRGB.apply(c, color);
+	},
 	build: function() {
 		var oz = this.opts, v = oz.variety,
 			constructor = v.charAt(0).toUpperCase() + v.slice(1) + "Light";
