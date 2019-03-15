@@ -199,6 +199,9 @@ zero.core.Thing = CT.Class({
 			this.parts.push(thing);
 		return thing;
 	},
+	assembled: function() {
+		this._.built();
+	},
 	assemble: function() {
 		if (!this.parts) {
 			this.preassemble && this.preassemble();
@@ -209,7 +212,8 @@ zero.core.Thing = CT.Class({
 					if (i >= thiz.opts.parts.length) {
 						if (!thiz.bone && i == thiz.opts.parts.length)
 							thiz.opts.scene.add(group);
-						thiz._.built();
+						thiz._.assembled = true;
+						thiz.assembled();
 					}
 				};
 			this.parts = this.opts.parts.map(function(p) {
