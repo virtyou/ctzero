@@ -96,6 +96,8 @@ class Room(db.TimeStampedBase):
 	def json(self):
 		d = self.base and self.base.get().json() or {}
 		self.opts and d.update(self.opts)
+		if "key" in d: # thing key
+			d["thing_key"] = d["key"]
 		d["key"] = self.key.urlsafe()
 		for iname in ["name", "environment", "lights", "cameras"]:
 			item = getattr(self, iname)
@@ -112,6 +114,8 @@ class Furnishing(db.TimeStampedBase):
 	def json(self):
 		d = self.base and self.base.get().json() or {}
 		self.opts and d.update(self.opts)
+		if "key" in d: # thing key
+			d["thing_key"] = d["key"]
 		d["key"] = self.key.urlsafe()
 		d["parts"] = [f.json() for f in Furnishing.query(Furnishing.parent == self.key).fetch()]
 		return d
