@@ -19,6 +19,7 @@ zero.core.Light = CT.Class({
 		if (oz.variety != "ambient")
 			this.thring.position.set.apply(this.thring.position, oz.position);
 		oz.scene.add(this.thring);
+		this._.built();
 	},
 	init: function(opts) {
 		this.opts = opts = CT.merge(this.opts, opts, {
