@@ -6,8 +6,11 @@ zero.core.Light = CT.Class({
 	},
 	setColor: function(color) {
 		var c = this.thring.color;
-		this.opts.color = color;
-		c.setRGB.apply(c, color);
+		this.opts.color = color; // revise...
+		if (Array.isArray(color))
+			c.setRGB.apply(c, color);
+		else
+			c.setRGB(color.r, color.g, color.b);
 	},
 	build: function() {
 		var oz = this.opts, v = oz.variety,
