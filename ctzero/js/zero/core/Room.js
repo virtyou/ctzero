@@ -1,9 +1,27 @@
 zero.core.Room = CT.Class({
 	CLASSNAME: "zero.core.Room",
+	_assembled: {
+		lights: 0,
+		objects: 0
+	},
 	tick: function(dts) {
 		this.objects.forEach(function(obj) {
 			obj.tick && obj.tick(dts);
 		});
+	},
+	assembled: function() {
+		var az = this._assembled;
+		if (az.lights == this.lights.length &&
+			az.objects == this.objects.length &&
+			this._.assembled)
+			this._.built();
+	},
+	it: function(kind) {
+		var thaz = this;
+		return function() {
+			thaz._assembled[kind] += 1;
+			thaz.assembled();
+		};
 	},
 	cut: function(index) {
 		if (typeof index != "number")
@@ -23,7 +41,7 @@ zero.core.Room = CT.Class({
 		this.lights.push(this.attach(CT.merge(light, {
 			kind: "light",
 			thing: "Light"
-		})));
+		}), this.it("lights")));
 	},
 	removeLight: function(light) {
 		var index = this.lights.indexOf(light);
@@ -33,7 +51,7 @@ zero.core.Room = CT.Class({
 	},
 	addObject: function(obj) {
 		this.log("adding object");
-		this.objects.push(this.attach(obj));
+		this.objects.push(this.attach(obj, this.it("objects")));
 	},
 	removeObject: function(obj) {
 		this.log("removing object");
