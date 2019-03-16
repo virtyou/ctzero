@@ -55,16 +55,19 @@ zero.core.Body = CT.Class({
 	},
 	setBounds: function() {
 		var bz = zero.core.current.room.bounds,
-			pz = this.positioners, rz = this.radii;
-		pz.bob.max = bz.max.y - rz.y;
-		pz.bob.min = bz.min.y + rz.y;
-		pz.weave.max = bz.max.x - rz.x;
-		pz.weave.min = bz.min.x + rz.x;
-		pz.slide.max = bz.max.z - rz.z;
-		pz.slide.min = bz.min.z + rz.z;
-		pz.bob.unbounded = false;
-		pz.weave.unbounded = false;
-		pz.slide.unbounded = false;
+			pz = this.positioners, rz = this.radii,
+			sz = this.springs, bounder = function(pname, dim) {
+				pz[pname].max = bz.max[dim] - rz[dim];
+				pz[pname].min = bz.min[dim] + rz[dim];
+				pz[pname].unbounded = false;
+				sz[pname].bounds = {
+					min: pz[pname].min,
+					max: pz[pname].max
+				};
+			};
+		bounder("bob", "y");
+		bounder("weave", "x");
+		bounder("slide", "z");
 	},
 	tick: function() {
 		this._setRotation();
