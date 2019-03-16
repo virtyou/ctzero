@@ -31,8 +31,15 @@ zero.core.Body = CT.Class({
 			}, dim, thiz);
 		});
 		this.allbones = this.thring.skeleton.bones;
-		this.bounds = new THREE.Box3();
-		this.bounds.setFromObject(this.bone);
+		this._setBounds();
+	},
+	_setBounds: function() {
+		var radii = this.radii = {},
+			bounds = this.bounds = new THREE.Box3();
+		bounds.setFromObject(this.bone);
+		["x", "y", "z"].forEach(function(dim) {
+			radii[dim] = (bounds.max[dim] - bounds.min[dim]) / 2;
+		});
 	},
 	_setRotation: function() {
 		var bonez = this.thring.skeleton.bones,
@@ -48,13 +55,13 @@ zero.core.Body = CT.Class({
 	},
 	setBounds: function() {
 		var bz = zero.core.current.room.bounds,
-			pz = this.positioners;
-		pz.bob.max = bz.max.y;
-		pz.bob.min = bz.min.y;
-		pz.weave.max = bz.max.x;
-		pz.weave.min = bz.min.x;
-		pz.slide.max = bz.max.y;
-		pz.slide.min = bz.min.y;
+			pz = this.positioners, rz = this.radii;
+		pz.bob.max = bz.max.y - rz.y;
+		pz.bob.min = bz.min.y + rz.y;
+		pz.weave.max = bz.max.x - rz.x;
+		pz.weave.min = bz.min.x + rz.x;
+		pz.slide.max = bz.max.z - rz.z;
+		pz.slide.min = bz.min.z + rz.z;
 		pz.bob.unbounded = false;
 		pz.weave.unbounded = false;
 		pz.slide.unbounded = false;
