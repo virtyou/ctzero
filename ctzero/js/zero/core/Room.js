@@ -13,8 +13,11 @@ zero.core.Room = CT.Class({
 		var az = this._assembled;
 		if (az.lights == this.lights.length &&
 			az.objects == this.objects.length &&
-			this._.assembled)
-			this._.built();
+			this._.assembled) {
+				this.bounds = new THREE.Box3();
+				this.bounds.setFromObject(this.thring);
+				this._.built();
+			}
 	},
 	it: function(kind) {
 		var thaz = this;
@@ -24,10 +27,26 @@ zero.core.Room = CT.Class({
 		};
 	},
 	cut: function(index) {
+		if (this.updateCams) // set from application, on scale for instance
+			this.updateCameras();
 		if (typeof index != "number")
 			index = (this._cam + 1) % this.cameras.length;
 		this._cam = index;
 		zero.core.camera.move(this.cameras[this._cam]);
+	},
+	updateCameras: function() {
+		this.bounds.setFromObject(this.thring);
+		var min = this.bounds.min, max = this.bounds.max;
+		this.cameras = this.opts.cameras = this.cameras.slice(0, 1).concat([
+			[ min.x, min.y, min.z],
+			[ max.x, min.y, min.z],
+			[ min.x, max.y, min.z],
+			[ min.x, min.y, max.z],
+			[ max.x, max.y, min.z],
+			[ max.x, min.y, max.z],
+			[ min.x, max.y, max.z],
+			[ max.x, max.y, max.z]
+		]);
 	},
 	addCamera: function(cam) {
 		this.log("adding camera");
