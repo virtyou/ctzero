@@ -168,12 +168,9 @@ zero.core.Person = CT.Class({
 						thaz.gesture("jump");
 					else
 						thaz.dance("walk");
-				} else {
+				} else
 					thaz.undance();
-					if (dir == "bob")
-						amount = -speed;
-				}
-				springz[dir].boost = amount;
+				springz[dir].boost = amount || ((dir == "bob") ? -speed : 0);
 			};
 		};
 		CT.key.on("UP", mover("slide", 0), mover("slide", -speed));
