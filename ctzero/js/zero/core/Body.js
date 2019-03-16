@@ -21,7 +21,18 @@ zero.core.Body = CT.Class({
 				joints[name].part = spine[i];
 			}
 		});
+		var spropts, poz = this.positioners = {};
+		["bob", "weave", "slide"].forEach(function(dim) {
+			spropts = {};
+			spropts[dim] = 1;
+			poz[dim] = ac.add({
+				unbounded: true,
+				springs: spropts
+			}, dim, thiz);
+		});
 		this.allbones = this.thring.skeleton.bones;
+		this.bounds = new THREE.Box3();
+		this.bounds.setFromObject(this.bone);
 	},
 	_setRotation: function() {
 		var bonez = this.thring.skeleton.bones,
@@ -35,16 +46,26 @@ zero.core.Body = CT.Class({
 	energy: function() {
 		return this.person && this.person.energy;
 	},
+	setBounds: function() {
+		var bz = zero.core.current.room.bounds,
+			pz = this.positioners;
+		pz.bob.max = bz.max.y;
+		pz.bob.min = bz.min.y;
+		pz.weave.max = bz.max.x;
+		pz.weave.min = bz.min.x;
+		pz.slide.max = bz.max.y;
+		pz.slide.min = bz.min.y;
+		pz.bob.unbounded = false;
+		pz.weave.unbounded = false;
+		pz.slide.unbounded = false;
+	},
 	tick: function() {
 		this._setRotation();
 		this.head.tick();
 		this.torso.tick();
-		if (this.springs.bob)
-			this.bone.position.y = this.springs.bob.value;
-		if (this.springs.weave)
-			this.bone.position.x = this.springs.weave.value;
-		if (this.springs.slide)
-			this.bone.position.z = this.springs.slide.value;
+		this.bone.position.y = this.positioners.bob.value;
+		this.bone.position.x = this.positioners.weave.value;
+		this.bone.position.z = this.positioners.slide.value;
 		zero.core.morphs.tick(this);
 		var skeleton = this.thring.skeleton;
 		this._.customs.forEach(function(c) { c.tick(skeleton); });
