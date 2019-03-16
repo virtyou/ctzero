@@ -168,16 +168,19 @@ zero.core.Person = CT.Class({
 						thaz.gesture("jump");
 					else
 						thaz.dance("walk");
-				} else
+				} else {
 					thaz.undance();
+					if (dir == "bob")
+						amount = -speed;
+				}
 				springz[dir].boost = amount;
 			};
 		};
-		CT.key.on("UP", mover("slide", 0), mover("slide", speed));
-		CT.key.on("DOWN", mover("slide", 0), mover("slide", -speed));
-		CT.key.on("LEFT", mover("weave", 0), mover("weave", speed));
-		CT.key.on("RIGHT", mover("weave", 0), mover("weave", -speed));
-		CT.key.on("SPACE", mover("bob", 0), mover("bob", speed));
+		CT.key.on("UP", mover("slide", 0), mover("slide", -speed));
+		CT.key.on("DOWN", mover("slide", 0), mover("slide", speed));
+		CT.key.on("LEFT", mover("weave", 0), mover("weave", -speed));
+		CT.key.on("RIGHT", mover("weave", 0), mover("weave", speed));
+		CT.key.on("CTRL", mover("bob", 0), mover("bob", speed));
 	},
 	init: function(opts) {
 		this.log("init", opts.name);
