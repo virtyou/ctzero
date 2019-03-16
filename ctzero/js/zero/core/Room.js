@@ -36,8 +36,13 @@ zero.core.Room = CT.Class({
 	},
 	updateCameras: function() {
 		this.bounds.setFromObject(this.thring);
-		var min = this.bounds.min, max = this.bounds.max;
-		this.cameras = this.opts.cameras = this.cameras.slice(0, 1).concat([
+		var min = this.bounds.min, max = this.bounds.max,
+			dpos = this.cameras[0], cpos;
+		if (!dpos) {
+			cpos = zero.core.camera.position();
+			dpos = [cpos.x, cpos.y, cpos.z];
+		}
+		this.cameras = this.opts.cameras = [dpos].concat([
 			[ min.x, min.y, min.z],
 			[ max.x, min.y, min.z],
 			[ min.x, max.y, min.z],
