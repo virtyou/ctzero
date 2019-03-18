@@ -2,8 +2,11 @@ CT.require("CT.key", true); // rm this import post-testing (should be in app loa
 
 zero.core.Controls = CT.Class({
 	CLASSNAME: "zero.core.Controls",
+	_: { // configurize
+		speed: 2
+	},
 	mover: function(dir, amount) {
-		var springz = this.springs, target = this.target;
+		var springz = this.springs, target = this.target, speed = this._.speed;
 		return function() {
 			if (target.gesture) { // person
 				if (amount) {
@@ -18,7 +21,7 @@ zero.core.Controls = CT.Class({
 		};
 	},
 	setKeys: function() {
-		var mover = this.mover, speed = 2;
+		var mover = this.mover, speed = this._.speed;
 		CT.key.on("UP", mover("z", 0), mover("z", -speed));
 		CT.key.on("DOWN", mover("z", 0), mover("z", speed));
 		CT.key.on("LEFT", mover("x", 0), mover("x", -speed));
