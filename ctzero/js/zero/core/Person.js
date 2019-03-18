@@ -158,27 +158,6 @@ zero.core.Person = CT.Class({
 		mergeBit(resetz, gest);
 		this.body.torso.move(gest);
 	},
-	setControls: function() {
-		var springz = this.body.springs, thaz = this, speed = 2;
-		CT.require("CT.key", true);
-		var mover = function(dir, amount) {
-			return function() {
-				if (amount) {
-					if (dir == "bob")
-						thaz.gesture("jump");
-					else
-						thaz.dance("walk");
-				} else
-					thaz.undance();
-				springz[dir].boost = amount || ((dir == "bob") ? -speed : 0);
-			};
-		};
-		CT.key.on("UP", mover("slide", 0), mover("slide", -speed));
-		CT.key.on("DOWN", mover("slide", 0), mover("slide", speed));
-		CT.key.on("LEFT", mover("weave", 0), mover("weave", -speed));
-		CT.key.on("RIGHT", mover("weave", 0), mover("weave", speed));
-		CT.key.on("CTRL", mover("bob", 0), mover("bob", speed));
-	},
 	init: function(opts) {
 		this.log("init", opts.name);
 		var thiz = this;
