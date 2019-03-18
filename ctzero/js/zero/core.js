@@ -46,3 +46,4 @@ CT.require("zero.core.Ticker");
 
 CT.require("zero.core.Text");
 CT.require("zero.core.Menu");
+CT.require("zero.core.Controls");
