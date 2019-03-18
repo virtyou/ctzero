@@ -41,7 +41,7 @@ zero.core.Controls = CT.Class({
 				t.springs[dim] = zero.core.springController.add({
 					value: val,
 					target: val
-				});
+				}, dim, t);
 			});
 			this.springs = t.springs;
 		}
