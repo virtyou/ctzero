@@ -1,7 +1,7 @@
 zero.core.Spring = CT.Class({
 	CLASSNAME: "zero.core.Spring",
 	tick: function(dts) {
-		var mood = this.parent && this.parent.energy();
+		var mood = this.parent && this.parent.energy && this.parent.energy();
 		if (mood) {
 			var moodMaster_damp = mood.damp,
 				moodMaster_k = mood.k;
