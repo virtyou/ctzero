@@ -13,10 +13,58 @@ zero.core.Thing = CT.Class({
 				thiz.opts.onclick(thiz);
 			});
 			this.opts.scroll && this.scroll();
+		},
+		setPositioners: function() {
+			var spropts, poz = this.positioners = {}, thaz = this,
+				sz = this.springs, pos = this.position();
+			this._xyz.forEach(function(dim) {
+				if (!sz[dim]) {
+					sz[dim] = zero.core.springController.add({
+						value: pos[dim],
+						target: pos[dim]
+					}, dim, thaz);
+				}
+				spropts = {};
+				spropts[dim] = 1;
+				poz[dim] = zero.core.aspectController.add({
+					unbounded: true,
+					springs: spropts
+				}, dim, thaz);
+			});
+		},
+		setBounds: function() {
+			var radii = this.radii = {},
+				bounds = this.bounds = new THREE.Box3();
+			bounds.setFromObject(this.bone || this.thring);
+			["x", "y", "z"].forEach(function(dim) {
+				radii[dim] = (bounds.max[dim] - bounds.min[dim]) / 2;
+			});
+		},
+		bounder: function(dim, i) {
+			var bz = zero.core.current.room.bounds,
+				pz = this.positioners, rz = this.radii,
+				sz = this.springs, pname = this._xyz[i];
+			pz[pname].max = bz.max[dim] - rz[dim];
+			pz[pname].min = bz.min[dim] + rz[dim];
+			pz[pname].unbounded = false;
+			sz[pname].bounds = {
+				min: pz[pname].min,
+				max: pz[pname].max
+			};
+			if (dim == "y")
+				sz[pname].target = pz[pname].min;
 		}
 	},
+	_xyz: ["x", "y", "z"],
 	isReady: function() {
 		return this._.ready;
+	},
+	setBounds: function() {
+		if (!this.radii)
+			this._.setBounds();
+		if (!this.positioners)
+			this._.setPositioners();
+		["x", "y", "z"].forEach(this._.bounder);
 	},
 	unscroll: function() {
 		if (this._.scroller) {
