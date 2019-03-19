@@ -1,5 +1,6 @@
 zero.core.Body = CT.Class({
 	CLASSNAME: "zero.core.Body",
+	_xyz: ["weave", "bob", "slide"],
 	_assembled: function() {
 		this.log("built body!");
 		var dim, name, h = thiz = this,
@@ -21,25 +22,9 @@ zero.core.Body = CT.Class({
 				joints[name].part = spine[i];
 			}
 		});
-		var spropts, poz = this.positioners = {};
-		["bob", "weave", "slide"].forEach(function(dim) {
-			spropts = {};
-			spropts[dim] = 1;
-			poz[dim] = ac.add({
-				unbounded: true,
-				springs: spropts
-			}, dim, thiz);
-		});
 		this.allbones = this.thring.skeleton.bones;
-		this._setBounds();
-	},
-	_setBounds: function() {
-		var radii = this.radii = {},
-			bounds = this.bounds = new THREE.Box3();
-		bounds.setFromObject(this.bone);
-		["x", "y", "z"].forEach(function(dim) {
-			radii[dim] = (bounds.max[dim] - bounds.min[dim]) / 2;
-		});
+		this._.setPositioners();
+		this._.setBounds();
 	},
 	_setRotation: function() {
 		var bonez = this.thring.skeleton.bones,
@@ -52,22 +37,6 @@ zero.core.Body = CT.Class({
 	},
 	energy: function() {
 		return this.person && this.person.energy;
-	},
-	setBounds: function() {
-		var bz = zero.core.current.room.bounds,
-			pz = this.positioners, rz = this.radii,
-			sz = this.springs, bounder = function(pname, dim) {
-				pz[pname].max = bz.max[dim] - rz[dim];
-				pz[pname].min = bz.min[dim] + rz[dim];
-				pz[pname].unbounded = false;
-				sz[pname].bounds = {
-					min: pz[pname].min,
-					max: pz[pname].max
-				};
-			};
-		bounder("bob", "y");
-		bounder("weave", "x");
-		bounder("slide", "z");
 	},
 	tick: function() {
 		this._setRotation();
