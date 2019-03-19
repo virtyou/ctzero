@@ -15,6 +15,9 @@ zero.core.Room = CT.Class({
 		(Object.values(zero.core.current.people)).forEach(function(person) {
 			person.body.setBounds();
 		});
+		this.objects.forEach(function(furn) {
+			furn.setBounds();
+		});
 	},
 	assembled: function() {
 		var az = this._assembled;
