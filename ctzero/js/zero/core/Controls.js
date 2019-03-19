@@ -43,15 +43,8 @@ zero.core.Controls = CT.Class({
 				y: t.body.springs.bob,
 				z: t.body.springs.slide
 			};
-		} else { // object
-			t.springs.x || zero.core.util.coords(t.position(), function(dim, val) {
-				t.springs[dim] = zero.core.springController.add({
-					value: val,
-					target: val
-				}, dim, t);
-			});
+		} else // object
 			this.springs = t.springs;
-		}
 	},
 	setTarget: function(target) {
 		this.target = target;
