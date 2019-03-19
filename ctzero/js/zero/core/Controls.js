@@ -20,13 +20,20 @@ zero.core.Controls = CT.Class({
 			springz[dir].boost = amount || ((dir == "y") ? -speed : 0);
 		};
 	},
+	clear: function() {
+		CT.key.clear(); // also clear CT.gesture when that's added...
+	},
 	setKeys: function() {
+		this.clear();
 		var mover = this.mover, speed = this._.speed;
 		CT.key.on("UP", mover("z", 0), mover("z", -speed));
 		CT.key.on("DOWN", mover("z", 0), mover("z", speed));
 		CT.key.on("LEFT", mover("x", 0), mover("x", -speed));
 		CT.key.on("RIGHT", mover("x", 0), mover("x", speed));
-		CT.key.on("CTRL", mover("y", 0), mover("y", speed));
+		if (this.target.gesture) // person
+			CT.key.on("CTRL", mover("y", 0), mover("y", speed));
+		else
+			CT.key.on("ENTER", this.cb);
 	},
 	setSprings: function() {
 		var t = this.target;
@@ -51,11 +58,15 @@ zero.core.Controls = CT.Class({
 		this.setSprings();
 		this.setKeys();
 	},
+	setCb: function(cb) {
+		this.cb = cb;
+	},
 	init: function(opts) {
 		this.opts = opts = CT.merge(opts, {
 			target: null,
 			mode: "placement" // or pilot
 		});
+		opts.cb && this.setCb(opts.cb);
 		opts.target && this.setTarget(opts.target);
 	}
 });
