@@ -20,6 +20,8 @@ zero.core.Thing = CT.Class({
 			this._xyz.forEach(function(dim) {
 				if (!sz[dim]) {
 					sz[dim] = zero.core.springController.add({
+						k: 10,
+						damp: 5,
 						value: pos[dim],
 						target: pos[dim]
 					}, dim, thaz);
@@ -60,11 +62,20 @@ zero.core.Thing = CT.Class({
 		return this._.ready;
 	},
 	setBounds: function() {
+		var xyz = ["x", "y", "z"], thaz = this;
 		if (!this.radii)
 			this._.setBounds();
 		if (!this.positioners)
 			this._.setPositioners();
-		["x", "y", "z"].forEach(this._.bounder);
+		xyz.forEach(this._.bounder);
+		if (!this.tick) {
+			this.tick = function() {
+				var pos = thaz.position();
+				xyz.forEach(function(dim) {
+					pos[dim] = thaz.positioners[dim].value;
+				});
+			};
+		}
 	},
 	unscroll: function() {
 		if (this._.scroller) {
