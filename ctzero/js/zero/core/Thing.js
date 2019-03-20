@@ -70,6 +70,12 @@ zero.core.Thing = CT.Class({
 		if (!this.positioners)
 			this._.setPositioners();
 		xyz.forEach(this._.bounder);
+
+		if (this.opts.kind == "poster") { // make this work on any wall!
+			this.springs.z.bounds.min += 1;
+			this.springs.z.bounds.max = this.springs.z.bounds.min;
+		}
+
 		if (!this.tick) {
 			this.tick = function() {
 				var pos = thaz.position();
