@@ -33,7 +33,7 @@ zero.core.Controls = CT.Class({
 		if (this.target.gesture) // person
 			CT.key.on("CTRL", mover("y", 0), mover("y", speed));
 		else
-			CT.key.on("ENTER", this.cb);
+			CT.key.on("ENTER", this._.cb);
 	},
 	setSprings: function() {
 		var t = this.target;
@@ -52,7 +52,7 @@ zero.core.Controls = CT.Class({
 		this.setKeys();
 	},
 	setCb: function(cb) {
-		this.cb = cb;
+		this._.cb = cb;
 	},
 	init: function(opts) {
 		this.opts = opts = CT.merge(opts, {
