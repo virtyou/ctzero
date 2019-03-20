@@ -10,7 +10,7 @@ zero.core.Room = CT.Class({
 		});
 	},
 	setBounds: function() {
-		this.bounds = new THREE.Box3();
+		this.bounds = this.bounds || new THREE.Box3();
 		this.bounds.setFromObject(this.thring);
 		(Object.values(zero.core.current.people)).forEach(function(person) {
 			person.body.setBounds();
