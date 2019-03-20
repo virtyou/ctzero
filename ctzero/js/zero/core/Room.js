@@ -28,11 +28,11 @@ zero.core.Room = CT.Class({
 				this._.built();
 			}
 	},
-	it: function(kind) {
+	it: function(kind, cb) {
 		var thaz = this;
 		return function() {
 			thaz._assembled[kind] += 1;
-			thaz.assembled();
+			(typeof cb == "function") ? cb() : thaz.assembled();
 		};
 	},
 	cut: function(index) {
@@ -69,12 +69,14 @@ zero.core.Room = CT.Class({
 		this.cameras.push(cam);
 		this._cam = -1;
 	},
-	addLight: function(light) {
+	addLight: function(light, cb) {
 		this.log("adding light");
-		this.lights.push(this.attach(CT.merge(light, {
+		var part = this.attach(CT.merge(light, {
 			kind: "light",
 			thing: "Light"
-		}), this.it("lights")));
+		}), this.it("lights", cb));
+		this.lights.push(part);
+		return part;
 	},
 	removeLight: function(light) {
 		var index = this.lights.indexOf(light);
@@ -82,9 +84,11 @@ zero.core.Room = CT.Class({
 		this.opts.lights.splice(index, 1);
 		this.detach(light.name);
 	},
-	addObject: function(obj) {
+	addObject: function(obj, cb) {
 		this.log("adding object");
-		this.objects.push(this.attach(obj, this.it("objects")));
+		var part = this.attach(obj, this.it("objects", cb));
+		this.objects.push(part);
+		return part;
 	},
 	removeObject: function(obj) {
 		this.log("removing object");
