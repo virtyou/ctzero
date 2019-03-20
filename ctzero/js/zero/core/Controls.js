@@ -24,10 +24,17 @@ zero.core.Controls = CT.Class({
 	setKeys: function() {
 		this.clear();
 		var mover = this.mover, speed = this._.speed;
-		CT.key.on("UP", mover("z", 0), mover("z", -speed));
-		CT.key.on("DOWN", mover("z", 0), mover("z", speed));
-		CT.key.on("LEFT", mover("x", 0), mover("x", -speed));
-		CT.key.on("RIGHT", mover("x", 0), mover("x", speed));
+		if (this.target.opts.kind == "poster") {
+			CT.key.on("UP", mover("y", 0), mover("y", speed));
+			CT.key.on("DOWN", mover("y", 0), mover("y", -speed));
+			CT.key.on("LEFT", mover("x", 0), mover("x", -speed));
+			CT.key.on("RIGHT", mover("x", 0), mover("x", speed));
+		} else {
+			CT.key.on("UP", mover("z", 0), mover("z", -speed));
+			CT.key.on("DOWN", mover("z", 0), mover("z", speed));
+			CT.key.on("LEFT", mover("x", 0), mover("x", -speed));
+			CT.key.on("RIGHT", mover("x", 0), mover("x", speed));
+		}
 		if (this.target.gesture) // person
 			CT.key.on("CTRL", mover("y", 0), mover("y", speed));
 		else
@@ -41,7 +48,7 @@ zero.core.Controls = CT.Class({
 				y: t.body.springs.bob,
 				z: t.body.springs.slide
 			};
-		} else // object
+		} else // object (furnishing/poster/portal)
 			this.springs = t.springs;
 	},
 	setTarget: function(target) {
