@@ -1,5 +1,3 @@
-CT.require("CT.key", true); // rm this import post-testing (should be in app loader)
-
 zero.core.Controls = CT.Class({
 	CLASSNAME: "zero.core.Controls",
 	_: { // configurize
