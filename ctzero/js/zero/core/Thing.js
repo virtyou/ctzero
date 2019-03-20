@@ -61,8 +61,10 @@ zero.core.Thing = CT.Class({
 	isReady: function() {
 		return this._.ready;
 	},
-	setBounds: function() {
+	setBounds: function(rebound) {
 		var xyz = ["x", "y", "z"], thaz = this;
+		if (rebound)
+			delete this.radii;
 		if (!this.radii)
 			this._.setBounds();
 		if (!this.positioners)
