@@ -61,8 +61,13 @@ zero.core.Thing = CT.Class({
 	isReady: function() {
 		return this._.ready;
 	},
+	autoRot: function() {
+		if (this.opts.kind == "poster" && "wall" in this.opts)
+			this.adjust("rotation", "y", -this.opts.wall * Math.PI / 2);
+	},
 	setBounds: function(rebound) {
 		var xyz = ["x", "y", "z"], thaz = this;
+		this.autoRot();
 		if (rebound)
 			delete this.radii;
 		if (!this.radii)
@@ -71,9 +76,22 @@ zero.core.Thing = CT.Class({
 			this._.setPositioners();
 		xyz.forEach(this._.bounder);
 
-		if (this.opts.kind == "poster") { // make this work on any wall!
-			this.springs.z.bounds.min += 1;
-			this.springs.z.bounds.max = this.springs.z.bounds.min;
+		if (this.opts.kind == "poster" && "wall" in this.opts) {
+			// TODO: improve...
+			var w = this.opts.wall, sz = this.springs;
+			if (w == 0) {
+				sz.z.bounds.min += 1;
+				sz.z.bounds.max = sz.z.bounds.min;
+			} else if (w == 1) {
+				sz.x.bounds.max -= 1;
+				sz.x.bounds.min = sz.x.bounds.max;
+			} else if (w == 2) {
+				sz.z.bounds.max -= 1;
+				sz.z.bounds.min = sz.z.bounds.max;
+			} else if (w == 3) {
+				sz.x.bounds.min += 1;
+				sz.x.bounds.max = sz.x.bounds.min;
+			}
 		}
 
 		if (!this.tick) {
