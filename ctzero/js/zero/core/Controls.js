@@ -53,9 +53,11 @@ zero.core.Controls = CT.Class({
 	setKeys: function() {
 		this.clear();
 		var mover = this.mover, speed = this._.speed, wall;
-		if (this.target.opts.kind == "poster") {
-			CT.key.on("UP", mover("y", 0), mover("y", speed));
-			CT.key.on("DOWN", mover("y", 0), mover("y", -speed));
+		if (["poster", "portal"].indexOf(this.target.opts.kind) != -1) {
+			if (this.target.opts.kind == "poster") {
+				CT.key.on("UP", mover("y", 0), mover("y", speed));
+				CT.key.on("DOWN", mover("y", 0), mover("y", -speed));
+			}
 			wall = this.target.opts.wall;
 			if (wall == 0) {
 				CT.key.on("LEFT", mover("x", 0), mover("x", -speed, -1));
