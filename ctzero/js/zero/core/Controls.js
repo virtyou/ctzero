@@ -6,7 +6,7 @@ zero.core.Controls = CT.Class({
 	wallshift: function(shift, prev_spring) {
 		var target = this.target;
 		prev_spring.boost = 0;
-		target.opts.wall = (target.opts.wall + shift) % 4;
+		target.opts.wall = (4 + (target.opts.wall + shift)) % 4;
 		target.setBounds(true);
 		this.setKeys();
 	},
