@@ -53,7 +53,7 @@ zero.core.Thing = CT.Class({
 				min: pz[pname].min,
 				max: pz[pname].max
 			};
-			if (dim == "y")
+			if (dim == "y" && this.opts.kind != "poster")
 				sz[pname].target = pz[pname].min;
 		}
 	},
@@ -62,22 +62,11 @@ zero.core.Thing = CT.Class({
 		return this._.ready;
 	},
 	autoRot: function() {
-		if (this.opts.kind == "poster" && "wall" in this.opts)
+		if (["poster", "portal"].indexOf(this.opts.kind) != -1 && "wall" in this.opts)
 			this.adjust("rotation", "y", -this.opts.wall * Math.PI / 2);
 	},
-	setBounds: function(rebound) {
-		var xyz = ["x", "y", "z"], thaz = this;
-		this.autoRot();
-		if (rebound)
-			delete this.radii;
-		if (!this.radii)
-			this._.setBounds();
-		if (!this.positioners)
-			this._.setPositioners();
-		xyz.forEach(this._.bounder);
-
-		if (this.opts.kind == "poster" && "wall" in this.opts) {
-			// TODO: improve...
+	wallStick: function() {
+		if (["poster", "portal"].indexOf(this.opts.kind) != -1 && "wall" in this.opts) {
 			var w = this.opts.wall, sz = this.springs;
 			if (w == 0) {
 				sz.z.bounds.min += 1;
@@ -92,8 +81,21 @@ zero.core.Thing = CT.Class({
 				sz.x.bounds.min += 1;
 				sz.x.bounds.max = sz.x.bounds.min;
 			}
+			if (this.opts.kind == "portal")
+				sz.y.bounds.max = sz.y.bounds.min;
 		}
-
+	},
+	setBounds: function(rebound) {
+		var xyz = ["x", "y", "z"], thaz = this;
+		this.autoRot();
+		if (rebound)
+			delete this.radii;
+		if (!this.radii)
+			this._.setBounds();
+		if (!this.positioners)
+			this._.setPositioners();
+		xyz.forEach(this._.bounder);
+		this.wallStick();
 		if (!this.tick) {
 			this.tick = function() {
 				var pos = thaz.position();
