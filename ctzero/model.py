@@ -124,10 +124,7 @@ class Furnishing(db.TimeStampedBase):
 		d["parts"] = [f.json() for f in Furnishing.query(Furnishing.parent == self.key).fetch()]
 		return d
 
-class Door(Furnishing):
-	pass
-
 # should each room have a default incoming portal?
 class Portal(db.TimeStampedBase): # asymmetrical (one per direction)
-	source = db.ForeignKey(kind=Door)
-	target = db.ForeignKey(kind=Door)
+	source = db.ForeignKey(kind=Furnishing) # base.kind == "door"
+	target = db.ForeignKey(kinds=[Furnishing, Room]) # Room -> pending
