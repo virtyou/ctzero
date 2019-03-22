@@ -77,6 +77,20 @@ This package contains the core zero libraries.
     					"damp": 40
     				}
     			},
+    			"rotation": {
+    				"x": {
+    					"k": 20,
+    					"damp": 40
+    				},
+    				"y": {
+    					"k": 20,
+    					"damp": 40
+    				},
+    				"z": {
+    					"k": 20,
+    					"damp": 40
+    				}
+    			},
     			"looker": {
     				"x": {
     					"k": 20,
@@ -105,5 +119,19 @@ This package contains the core zero libraries.
     	"script": [],
     	"morphs": {
     		"delta_cutoff": 0.1
+    	},
+    	"brain": {
+    		"noChat": false,
+    		"chain": {
+    			"delay": 500
+    		},
+    		"modal": {
+    			"noClose": true,
+    			"className": "basicpopup noframe",
+    			"transition": "slide",
+    			"slide": {
+    				"origin": "right"
+    			}
+    		}
     	}
     }
