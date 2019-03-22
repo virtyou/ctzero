@@ -10,11 +10,10 @@ zero.core.Controls = CT.Class({
 		target.setBounds(true);
 		this.setKeys();
 	},
-	mover: function(dir, amount, wallshift) {
-		var springz = this.springs, target = this.target,
-			speed = this._.speed, wall = target.opts.wall,
-			forward = wallshift == 1, s = springz[dir],
-			shifter = this.wallshift, nxtval;
+	placer: function(dir, amount, wallshift) {
+		var s = this.springs[dir], target = this.target,
+			wall = target.opts.wall, shifter = this.wallshift,
+			forward = wallshift == 1, nxtval;
 		return function() {
 			if (wallshift) { // poster only
 				nxtval = s.value + amount;
@@ -32,19 +31,27 @@ zero.core.Controls = CT.Class({
 						return shifter(wallshift, s);
 				}
 			}
-			else if (target.gesture) { // person
-				if (amount) {
-					if (dir == "y")
-						target.gesture("jump");
-					else
-						target.dance("walk");
-				} else
-					target.undance();
+			s.boost = amount;
+		};
+	},
+	mover: function(amount, dir) {
+		var springz = this.springs, target = this.target, vec;
+		return function() {
+			if (amount) {
+				if (dir == "y")
+					target.gesture("jump");
+				else
+					target.dance("walk");
+			} else
+				target.undance();
+			if (dir == "y")
+				springz[dir].boost = amount;
+			else {
+				vec = target.body.bone.getWorldDirection();
+				["x", "z"].forEach(function(dim) {
+					springz[dim].boost = amount * vec[dim];
+				});
 			}
-			if (target.gesture && !amount && (dir == "y"))
-				s.boost = -speed;
-			else
-				s.boost = amount;
 		};
 	},
 	clear: function() {
@@ -61,14 +68,15 @@ zero.core.Controls = CT.Class({
 	},
 	setKeys: function() {
 		this.clear();
-		var mover = this.mover, speed = this._.speed, ospeed = speed / 10,
+		var placer = this.placer, mover = this.mover,
+			speed = this._.speed, ospeed = speed / 10,
 			wall, gestures, dances, num = 0;
 		if (this.target.gesture) { // person
-			CT.key.on("UP", mover("z", 0), mover("z", -speed));
-			CT.key.on("DOWN", mover("z", 0), mover("z", speed));
-			CT.key.on("LEFT", mover("orientation", 0), mover("orientation", ospeed));
-			CT.key.on("RIGHT", mover("orientation", 0), mover("orientation", -ospeed));
-			CT.key.on("CTRL", mover("y", 0), mover("y", speed));
+			CT.key.on("UP", mover(0), mover(speed));
+			CT.key.on("DOWN", mover(0), mover(-speed));
+			CT.key.on("LEFT", placer("orientation", 0), placer("orientation", ospeed));
+			CT.key.on("RIGHT", placer("orientation", 0), placer("orientation", -ospeed));
+			CT.key.on("CTRL", mover(-speed, "y"), mover(speed, "y"));
 			gestures = Object.keys(this.target.opts.gestures);
 			dances = Object.keys(this.target.opts.dances);
 			this.setNum(0, null, null, true);
@@ -79,28 +87,28 @@ zero.core.Controls = CT.Class({
 		} else {
 			if (["poster", "portal"].indexOf(this.target.opts.kind) != -1) {
 				if (this.target.opts.kind == "poster") {
-					CT.key.on("UP", mover("y", 0), mover("y", speed));
-					CT.key.on("DOWN", mover("y", 0), mover("y", -speed));
+					CT.key.on("UP", placer("y", 0), placer("y", speed));
+					CT.key.on("DOWN", placer("y", 0), placer("y", -speed));
 				}
 				wall = this.target.opts.wall;
 				if (wall == 0) {
-					CT.key.on("LEFT", mover("x", 0), mover("x", -speed, -1));
-					CT.key.on("RIGHT", mover("x", 0), mover("x", speed, 1));
+					CT.key.on("LEFT", placer("x", 0), placer("x", -speed, -1));
+					CT.key.on("RIGHT", placer("x", 0), placer("x", speed, 1));
 				} else if (wall == 1) {
-					CT.key.on("LEFT", mover("z", 0), mover("z", -speed, -1));
-					CT.key.on("RIGHT", mover("z", 0), mover("z", speed, 1));
+					CT.key.on("LEFT", placer("z", 0), placer("z", -speed, -1));
+					CT.key.on("RIGHT", placer("z", 0), placer("z", speed, 1));
 				} else if (wall == 2) {
-					CT.key.on("LEFT", mover("x", 0), mover("x", speed, -1));
-					CT.key.on("RIGHT", mover("x", 0), mover("x", -speed, 1));
+					CT.key.on("LEFT", placer("x", 0), placer("x", speed, -1));
+					CT.key.on("RIGHT", placer("x", 0), placer("x", -speed, 1));
 				} else if (wall == 3) {
-					CT.key.on("LEFT", mover("z", 0), mover("z", speed, -1));
-					CT.key.on("RIGHT", mover("z", 0), mover("z", -speed, 1));
+					CT.key.on("LEFT", placer("z", 0), placer("z", speed, -1));
+					CT.key.on("RIGHT", placer("z", 0), placer("z", -speed, 1));
 				}
 			} else {
-				CT.key.on("UP", mover("z", 0), mover("z", -speed));
-				CT.key.on("DOWN", mover("z", 0), mover("z", speed));
-				CT.key.on("LEFT", mover("x", 0), mover("x", -speed));
-				CT.key.on("RIGHT", mover("x", 0), mover("x", speed));
+				CT.key.on("UP", placer("z", 0), placer("z", -speed));
+				CT.key.on("DOWN", placer("z", 0), placer("z", speed));
+				CT.key.on("LEFT", placer("x", 0), placer("x", -speed));
+				CT.key.on("RIGHT", placer("x", 0), placer("x", speed));
 			}
 			CT.key.on("ENTER", this._.cb);
 		}
