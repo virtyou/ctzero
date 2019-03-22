@@ -15,7 +15,7 @@ zero.core.Controls = CT.Class({
 			wall = target.opts.wall, shifter = this.wallshift,
 			forward = wallshift == 1, nxtval;
 		return function() {
-			if (wallshift) { // poster only
+			if (wallshift) { // poster/portal
 				nxtval = s.value + amount;
 				if (forward) {
 					if (wall < 2) {
