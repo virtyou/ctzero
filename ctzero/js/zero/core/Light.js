@@ -4,6 +4,14 @@ zero.core.Light = CT.Class({
 		this.log("setting intensity to", intensity);
 		this.opts.intensity = this.thring.intensity = intensity;
 	},
+	setColor: function(color) {
+		var c = this.thring.color;
+		this.opts.color = color; // revise...
+		if (Array.isArray(color))
+			c.setRGB.apply(c, color);
+		else
+			c.setRGB(color.r, color.g, color.b);
+	},
 	build: function() {
 		var oz = this.opts, v = oz.variety,
 			constructor = v.charAt(0).toUpperCase() + v.slice(1) + "Light";
@@ -11,6 +19,7 @@ zero.core.Light = CT.Class({
 		if (oz.variety != "ambient")
 			this.thring.position.set.apply(this.thring.position, oz.position);
 		oz.scene.add(this.thring);
+		this._.built();
 	},
 	init: function(opts) {
 		this.opts = opts = CT.merge(this.opts, opts, {

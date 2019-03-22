@@ -47,5 +47,8 @@ zero.core.Torso = CT.Class({
 
 		this._bmap = this.geojson.bonemap;
 		this.setLimbs();
+	},
+	init: function() {
+		this.opts.frustumCulled = false; // TODO: fix!
 	}
 }, zero.core.Thing);

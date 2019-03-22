@@ -13,10 +13,97 @@ zero.core.Thing = CT.Class({
 				thiz.opts.onclick(thiz);
 			});
 			this.opts.scroll && this.scroll();
+		},
+		setPositioners: function() {
+			var spropts, poz = this.positioners = {}, thaz = this,
+				sz = this.springs, pos = this.position();
+			this._xyz.forEach(function(dim) {
+				if (!sz[dim]) {
+					sz[dim] = zero.core.springController.add({
+						k: 10,
+						damp: 5,
+						value: pos[dim],
+						target: pos[dim]
+					}, dim, thaz);
+				}
+				spropts = {};
+				spropts[dim] = 1;
+				poz[dim] = zero.core.aspectController.add({
+					unbounded: true,
+					springs: spropts
+				}, dim, thaz);
+			});
+		},
+		setBounds: function() {
+			var radii = this.radii = {},
+				bounds = this.bounds = new THREE.Box3();
+			bounds.setFromObject(this.bone || this.thring);
+			["x", "y", "z"].forEach(function(dim) {
+				radii[dim] = (bounds.max[dim] - bounds.min[dim]) / 2;
+			});
+		},
+		bounder: function(dim, i) {
+			var bz = zero.core.current.room.bounds,
+				pz = this.positioners, rz = this.radii,
+				sz = this.springs, pname = this._xyz[i];
+			pz[pname].max = bz.max[dim] - rz[dim];
+			pz[pname].min = bz.min[dim] + rz[dim];
+			pz[pname].unbounded = false;
+			sz[pname].bounds = {
+				min: pz[pname].min,
+				max: pz[pname].max
+			};
+			if (dim == "y" && this.opts.kind != "poster")
+				sz[pname].target = pz[pname].min;
 		}
 	},
+	_xyz: ["x", "y", "z"],
 	isReady: function() {
 		return this._.ready;
+	},
+	autoRot: function() {
+		if (["poster", "portal"].indexOf(this.opts.kind) != -1 && "wall" in this.opts)
+			this.adjust("rotation", "y", -this.opts.wall * Math.PI / 2);
+	},
+	wallStick: function() {
+		if (["poster", "portal"].indexOf(this.opts.kind) != -1 && "wall" in this.opts) {
+			var w = this.opts.wall, sz = this.springs;
+			if (w == 0) {
+				sz.z.bounds.min += 1;
+				sz.z.bounds.max = sz.z.bounds.min;
+			} else if (w == 1) {
+				sz.x.bounds.max -= 1;
+				sz.x.bounds.min = sz.x.bounds.max;
+			} else if (w == 2) {
+				sz.z.bounds.max -= 1;
+				sz.z.bounds.min = sz.z.bounds.max;
+			} else if (w == 3) {
+				sz.x.bounds.min += 1;
+				sz.x.bounds.max = sz.x.bounds.min;
+			}
+			if (this.opts.kind == "portal")
+				sz.y.bounds.max = sz.y.bounds.min;
+		}
+	},
+	setBounds: function(rebound) {
+		var xyz = ["x", "y", "z"], thaz = this;
+		this.autoRot();
+		if (rebound)
+			delete this.radii;
+		if (!this.radii)
+			this._.setBounds();
+		if (!this.positioners)
+			this._.setPositioners();
+		xyz.forEach(this._.bounder);
+		this.wallStick();
+		if (!this.tick) {
+			this.tick = function() {
+				var pos = thaz.position();
+				xyz.forEach(function(dim) {
+					pos[dim] = thaz.positioners[dim].value;
+				});
+			};
+		}
 	},
 	unscroll: function() {
 		if (this._.scroller) {
@@ -199,6 +286,9 @@ zero.core.Thing = CT.Class({
 			this.parts.push(thing);
 		return thing;
 	},
+	assembled: function() {
+		this._.built();
+	},
 	assemble: function() {
 		if (!this.parts) {
 			this.preassemble && this.preassemble();
@@ -209,7 +299,8 @@ zero.core.Thing = CT.Class({
 					if (i >= thiz.opts.parts.length) {
 						if (!thiz.bone && i == thiz.opts.parts.length)
 							thiz.opts.scene.add(group);
-						thiz._.built();
+						thiz._.assembled = true;
+						thiz.assembled();
 					}
 				};
 			this.parts = this.opts.parts.map(function(p) {
@@ -232,6 +323,10 @@ zero.core.Thing = CT.Class({
 			var g = oz.boxGeometry; // better way?
 			oz.geometry = new THREE.BoxGeometry(g[0],
 				g[1], g[2], g[3], g[4]);
+		}
+		if (oz.planeGeometry) {
+			var g = oz.planeGeometry; // better way?
+			oz.geometry = new THREE.PlaneGeometry(g[0], g[1]);
 		}
 		if (oz.geometry || oz.stripset) {
 			var meshname = (oz.shader ? "Shader"

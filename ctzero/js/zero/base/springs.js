@@ -50,6 +50,11 @@ zero.base.springs = function() {
             damp: 5
         },
 
+        orientation: {
+            k: 20,
+            damp: 20
+        },
+
         twist: {
             k: 20,
             damp: 20,

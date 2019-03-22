@@ -1,15 +1,66 @@
 zero.core.Room = CT.Class({
 	CLASSNAME: "zero.core.Room",
+	_assembled: {
+		lights: 0,
+		objects: 0
+	},
 	tick: function(dts) {
 		this.objects.forEach(function(obj) {
 			obj.tick && obj.tick(dts);
 		});
 	},
+	setBounds: function() {
+		this.bounds = this.bounds || new THREE.Box3();
+		this.bounds.setFromObject(this.thring);
+		(Object.values(zero.core.current.people)).forEach(function(person) {
+			person.body.setBounds();
+		});
+		this.objects.forEach(function(furn) {
+			furn.setBounds();
+		});
+	},
+	assembled: function() {
+		var az = this._assembled;
+		if (az.lights == this.lights.length &&
+			az.objects == this.objects.length &&
+			this._.assembled) {
+				this.setBounds();
+				this._.built();
+			}
+	},
+	it: function(kind, cb) {
+		var thaz = this;
+		return function() {
+			thaz._assembled[kind] += 1;
+			(typeof cb == "function") ? cb() : thaz.assembled();
+		};
+	},
 	cut: function(index) {
+		if (this.updateCams) // set from application, on scale for instance
+			this.updateCameras();
 		if (typeof index != "number")
 			index = (this._cam + 1) % this.cameras.length;
 		this._cam = index;
 		zero.core.camera.move(this.cameras[this._cam]);
+	},
+	updateCameras: function() {
+		this.bounds.setFromObject(this.thring);
+		var min = this.bounds.min, max = this.bounds.max,
+			dpos = this.cameras[0], cpos;
+		if (!dpos) {
+			cpos = zero.core.camera.position();
+			dpos = [cpos.x, cpos.y, cpos.z];
+		}
+		this.cameras = this.opts.cameras = [dpos].concat([
+			[ min.x, min.y, min.z],
+			[ max.x, min.y, min.z],
+			[ min.x, max.y, min.z],
+			[ min.x, min.y, max.z],
+			[ max.x, max.y, min.z],
+			[ max.x, min.y, max.z],
+			[ min.x, max.y, max.z],
+			[ max.x, max.y, max.z]
+		]);
 	},
 	addCamera: function(cam) {
 		this.log("adding camera");
@@ -18,16 +69,26 @@ zero.core.Room = CT.Class({
 		this.cameras.push(cam);
 		this._cam = -1;
 	},
-	addLight: function(light) {
+	addLight: function(light, cb) {
 		this.log("adding light");
-		this.lights.push(this.attach(CT.merge(light, {
+		var part = this.attach(CT.merge(light, {
 			kind: "light",
 			thing: "Light"
-		})));
+		}), this.it("lights", cb));
+		this.lights.push(part);
+		return part;
 	},
-	addObject: function(obj) {
+	removeLight: function(light) {
+		var index = this.lights.indexOf(light);
+		this.lights.splice(index, 1);
+		this.opts.lights.splice(index, 1);
+		this.detach(light.name);
+	},
+	addObject: function(obj, cb) {
 		this.log("adding object");
-		this.objects.push(this.attach(obj));
+		var part = this.attach(obj, this.it("objects", cb));
+		this.objects.push(part);
+		return part;
 	},
 	removeObject: function(obj) {
 		this.log("removing object");
@@ -66,8 +127,8 @@ zero.core.Room = CT.Class({
 	postassemble: function() {
 		var opts = this.opts;
 		opts.lights.forEach(this.addLight);
-		opts.objects.forEach(this.addObject);
 		opts.cameras.forEach(this.addCamera);
+		opts.objects.forEach(this.addObject);
 	},
 	preassemble: function() {
 		var opts = this.opts;

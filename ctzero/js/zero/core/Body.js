@@ -1,5 +1,6 @@
 zero.core.Body = CT.Class({
 	CLASSNAME: "zero.core.Body",
+	_xyz: ["weave", "bob", "slide"],
 	_assembled: function() {
 		this.log("built body!");
 		var dim, name, h = thiz = this,
@@ -22,6 +23,8 @@ zero.core.Body = CT.Class({
 			}
 		});
 		this.allbones = this.thring.skeleton.bones;
+		this._.setPositioners();
+		this._.setBounds();
 	},
 	_setRotation: function() {
 		var bonez = this.thring.skeleton.bones,
@@ -39,12 +42,9 @@ zero.core.Body = CT.Class({
 		this._setRotation();
 		this.head.tick();
 		this.torso.tick();
-		if (this.springs.bob)
-			this.bone.position.y = this.springs.bob.value;
-		if (this.springs.weave)
-			this.bone.position.x = this.springs.weave.value;
-		if (this.springs.slide)
-			this.bone.position.z = this.springs.slide.value;
+		this.bone.position.y = this.positioners.bob.value;
+		this.bone.position.x = this.positioners.weave.value;
+		this.bone.position.z = this.positioners.slide.value;
 		zero.core.morphs.tick(this);
 		var skeleton = this.thring.skeleton;
 		this._.customs.forEach(function(c) { c.tick(skeleton); });

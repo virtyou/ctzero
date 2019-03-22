@@ -88,32 +88,43 @@ class Room(db.TimeStampedBase):
 	owner = db.ForeignKey(kind=CTUser)
 	base = db.ForeignKey(kind=Thing)
 	name = db.String()
+	environment = db.String()
+	material = db.JSON()
+	lights = db.JSON()
+	cameras = db.JSON()
 	opts = db.JSON() # merged into Thing.opts{}
 
 	def json(self):
 		d = self.base and self.base.get().json() or {}
 		self.opts and d.update(self.opts)
+		if "key" in d: # thing key
+			d["thing_key"] = d["key"]
 		d["key"] = self.key.urlsafe()
-		d["name"] = self.name
+		for iname in ["name", "environment", "lights", "cameras"]:
+			item = getattr(self, iname)
+			if item:
+				d[iname] = item
+		self.material and d["material"].update(self.material)
 		d["objects"] = [f.json() for f in Furnishing.query(Furnishing.parent == self.key).fetch()]
 		return d
 
 class Furnishing(db.TimeStampedBase):
 	parent = db.ForeignKey(kinds=["Room", "Furnishing"])
 	base = db.ForeignKey(kind=Thing)
+	material = db.JSON()
 	opts = db.JSON() # merged into Thing.opts{} - includes pos, rot, etc
 
 	def json(self):
 		d = self.base and self.base.get().json() or {}
 		self.opts and d.update(self.opts)
+		if "key" in d: # thing key
+			d["thing_key"] = d["key"]
 		d["key"] = self.key.urlsafe()
+		self.material and d["material"].update(self.material)
 		d["parts"] = [f.json() for f in Furnishing.query(Furnishing.parent == self.key).fetch()]
 		return d
 
-class Door(Furnishing):
-	pass
-
 # should each room have a default incoming portal?
 class Portal(db.TimeStampedBase): # asymmetrical (one per direction)
-	source = db.ForeignKey(kind=Door)
-	target = db.ForeignKey(kind=Door)
+	source = db.ForeignKey(kind=Furnishing) # base.kind == "door"
+	target = db.ForeignKey(kinds=[Furnishing, Room]) # Room -> pending
