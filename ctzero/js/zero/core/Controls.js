@@ -35,7 +35,8 @@ zero.core.Controls = CT.Class({
 		};
 	},
 	mover: function(amount, dir) {
-		var springz = this.springs, target = this.target, vec;
+		var springz = this.springs, target = this.target,
+			speed = this._.speed, vec;
 		return function() {
 			if (amount) {
 				if (dir == "y")
@@ -45,7 +46,7 @@ zero.core.Controls = CT.Class({
 			} else
 				target.undance();
 			if (dir == "y")
-				springz[dir].boost = amount;
+				springz[dir].boost = amount || -speed;
 			else {
 				vec = target.body.bone.getWorldDirection();
 				["x", "z"].forEach(function(dim) {
@@ -76,7 +77,7 @@ zero.core.Controls = CT.Class({
 			CT.key.on("DOWN", mover(0), mover(-speed));
 			CT.key.on("LEFT", placer("orientation", 0), placer("orientation", ospeed));
 			CT.key.on("RIGHT", placer("orientation", 0), placer("orientation", -ospeed));
-			CT.key.on("CTRL", mover(-speed, "y"), mover(speed, "y"));
+			CT.key.on("CTRL", mover(0, "y"), mover(speed, "y"));
 			gestures = Object.keys(this.target.opts.gestures);
 			dances = Object.keys(this.target.opts.dances);
 			this.setNum(0, null, null, true);
