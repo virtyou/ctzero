@@ -52,36 +52,41 @@ zero.core.Controls = CT.Class({
 	},
 	setKeys: function() {
 		this.clear();
-		var mover = this.mover, speed = this._.speed, wall;
-		if (["poster", "portal"].indexOf(this.target.opts.kind) != -1) {
-			if (this.target.opts.kind == "poster") {
-				CT.key.on("UP", mover("y", 0), mover("y", speed));
-				CT.key.on("DOWN", mover("y", 0), mover("y", -speed));
-			}
-			wall = this.target.opts.wall;
-			if (wall == 0) {
-				CT.key.on("LEFT", mover("x", 0), mover("x", -speed, -1));
-				CT.key.on("RIGHT", mover("x", 0), mover("x", speed, 1));
-			} else if (wall == 1) {
-				CT.key.on("LEFT", mover("z", 0), mover("z", -speed, -1));
-				CT.key.on("RIGHT", mover("z", 0), mover("z", speed, 1));
-			} else if (wall == 2) {
-				CT.key.on("LEFT", mover("x", 0), mover("x", speed, -1));
-				CT.key.on("RIGHT", mover("x", 0), mover("x", -speed, 1));
-			} else if (wall == 3) {
-				CT.key.on("LEFT", mover("z", 0), mover("z", speed, -1));
-				CT.key.on("RIGHT", mover("z", 0), mover("z", -speed, 1));
-			}
-		} else {
+		var mover = this.mover, speed = this._.speed, ospeed = speed / 10, wall;
+		if (this.target.gesture) { // person
 			CT.key.on("UP", mover("z", 0), mover("z", -speed));
 			CT.key.on("DOWN", mover("z", 0), mover("z", speed));
-			CT.key.on("LEFT", mover("x", 0), mover("x", -speed));
-			CT.key.on("RIGHT", mover("x", 0), mover("x", speed));
-		}
-		if (this.target.gesture) // person
+			CT.key.on("LEFT", mover("orientation", 0), mover("orientation", ospeed));
+			CT.key.on("RIGHT", mover("orientation", 0), mover("orientation", -ospeed));
 			CT.key.on("CTRL", mover("y", 0), mover("y", speed));
-		else
+		} else {
+			if (["poster", "portal"].indexOf(this.target.opts.kind) != -1) {
+				if (this.target.opts.kind == "poster") {
+					CT.key.on("UP", mover("y", 0), mover("y", speed));
+					CT.key.on("DOWN", mover("y", 0), mover("y", -speed));
+				}
+				wall = this.target.opts.wall;
+				if (wall == 0) {
+					CT.key.on("LEFT", mover("x", 0), mover("x", -speed, -1));
+					CT.key.on("RIGHT", mover("x", 0), mover("x", speed, 1));
+				} else if (wall == 1) {
+					CT.key.on("LEFT", mover("z", 0), mover("z", -speed, -1));
+					CT.key.on("RIGHT", mover("z", 0), mover("z", speed, 1));
+				} else if (wall == 2) {
+					CT.key.on("LEFT", mover("x", 0), mover("x", speed, -1));
+					CT.key.on("RIGHT", mover("x", 0), mover("x", -speed, 1));
+				} else if (wall == 3) {
+					CT.key.on("LEFT", mover("z", 0), mover("z", speed, -1));
+					CT.key.on("RIGHT", mover("z", 0), mover("z", -speed, 1));
+				}
+			} else {
+				CT.key.on("UP", mover("z", 0), mover("z", -speed));
+				CT.key.on("DOWN", mover("z", 0), mover("z", speed));
+				CT.key.on("LEFT", mover("x", 0), mover("x", -speed));
+				CT.key.on("RIGHT", mover("x", 0), mover("x", speed));
+			}
 			CT.key.on("ENTER", this._.cb);
+		}
 	},
 	setSprings: function() {
 		var t = this.target;
@@ -89,7 +94,8 @@ zero.core.Controls = CT.Class({
 			this.springs = {
 				x: t.body.springs.weave,
 				y: t.body.springs.bob,
-				z: t.body.springs.slide
+				z: t.body.springs.slide,
+				orientation: t.body.springs.orientation
 			};
 		} else // object (furnishing/poster/portal)
 			this.springs = t.springs;
