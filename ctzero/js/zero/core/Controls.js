@@ -50,15 +50,32 @@ zero.core.Controls = CT.Class({
 	clear: function() {
 		CT.key.clear(); // also clear CT.gesture when that's added...
 	},
+	setNum: function(num, gesture, dance, stop) {
+		var target = this.target;
+		CT.key.on(num.toString(), function() {
+			if (CT.key.down("SHIFT"))
+				stop ? target.undance() : (dance && target.dance(dance));
+			else
+				stop ? target.ungesture() : (gesture && target.gesture(gesture));
+		});
+	},
 	setKeys: function() {
 		this.clear();
-		var mover = this.mover, speed = this._.speed, ospeed = speed / 10, wall;
+		var mover = this.mover, speed = this._.speed, ospeed = speed / 10,
+			wall, gestures, dances, num = 0;
 		if (this.target.gesture) { // person
 			CT.key.on("UP", mover("z", 0), mover("z", -speed));
 			CT.key.on("DOWN", mover("z", 0), mover("z", speed));
 			CT.key.on("LEFT", mover("orientation", 0), mover("orientation", ospeed));
 			CT.key.on("RIGHT", mover("orientation", 0), mover("orientation", -ospeed));
 			CT.key.on("CTRL", mover("y", 0), mover("y", speed));
+			gestures = Object.keys(this.target.opts.gestures);
+			dances = Object.keys(this.target.opts.dances);
+			this.setNum(0, null, null, true);
+			while (num < gestures.length || num < dances.length) {
+				this.setNum(num + 1, gestures[num], dances[num]);
+				num += 1;
+			}
 		} else {
 			if (["poster", "portal"].indexOf(this.target.opts.kind) != -1) {
 				if (this.target.opts.kind == "poster") {
