@@ -198,10 +198,10 @@ zero.core.Thing = CT.Class({
 			this.morphTargetInfluences(m, this.opts.mti[m]);
 		this.assemble();
 	},
-	adjust: function(property, dimension, value) {
-		if (this.thring)
+	adjust: function(property, dimension, value, thringonly, grouponly) {
+		if (this.thring && !grouponly)
 			this.thring[property][dimension] = value;
-		if (this.group)
+		if (this.group && !thringonly)
 			this.group[property][dimension] = value;
 	},
 	update: function(opts) {
