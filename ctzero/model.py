@@ -119,15 +119,13 @@ class Furnishing(db.TimeStampedBase):
     material = db.JSON()
     opts = db.JSON() # merged into Thing.opts{} - includes pos, rot, etc
 
-    def rm(self, commit=True, session=session):
+    def rm(self, *args, **kwargs):
         portals = self.portals(False)
         if portals["outgoing"]:
             portals["outgoing"].rm()
         for port in portals["incoming"]:
             port.rm()
-        session.delete(self)
-        if commit:
-            session.commit()
+        super(Furnishing, self).rm(*args, **kwargs)
 
     def portals(self, data=True): # portal only
         portals = { "incoming": Portal.query(Portal.target == self.key).fetch() }
