@@ -246,6 +246,8 @@ zero.core.Thing = CT.Class({
 		if (this.group)
 			this.opts.scene.remove(this.group);
 		this.unscroll();
+		if (this.opts.key)
+			delete zero.core.Thing._things[this.opts.key];
 	},
 	detach: function(cname) {
 		var thing = this[cname];
@@ -418,5 +420,11 @@ zero.core.Thing = CT.Class({
 		setTimeout(function() {
 			thiz.opts.deferBuild || thiz.build();
 		}); // next post-init tick
+		if (opts.key)
+			zero.core.Thing._things[opts.key] = this;
 	}
 });
+zero.core.Thing._things = {};
+zero.core.Thing.get = function(key) {
+	return zero.core.Thing._things[key];
+};
