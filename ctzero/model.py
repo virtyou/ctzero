@@ -119,6 +119,24 @@ class Furnishing(db.TimeStampedBase):
 	material = db.JSON()
 	opts = db.JSON() # merged into Thing.opts{} - includes pos, rot, etc
 
+    def rm(self, commit=True, session=session):
+    	portals = self.portals(False)
+    	if portals["outgoing"]:
+    		portals["outgoing"].rm()
+    	for port in portals["incoming"]:
+    		port.rm()
+        session.delete(self)
+        if commit:
+            session.commit()
+
+    def portals(self, data=True): # portal only
+		portals = { "incoming": Portal.query(Portal.target == self.key).fetch() }
+		if data:
+			portals["incoming"] = [p.data() for p in portals["incoming"]]
+		out = Portal.query(Portal.source == self.key).get()
+		portals["outgoing"] = data and out.data() or out
+		return portals
+
 	def json(self):
 		d = self.base and self.base.get().json() or {}
 		self.opts and d.update(self.opts)
@@ -129,12 +147,7 @@ class Furnishing(db.TimeStampedBase):
 		self.material and d["material"].update(self.material)
 		d["parts"] = [f.json() for f in Furnishing.query(Furnishing.parent == self.key).fetch()]
 		if d["kind"] == "portal":
-			d["portals"] = {
-				"incoming": [p.data() for p in Portal.query(Portal.target == self.key).fetch()]
-			}
-			out = Portal.query(Portal.source == self.key).get()
-			if out:
-				d["portals"]["outgoing"] = out.data()
+			d["portals"] = self.portals()
 		return d
 
 # should each room have a default incoming portal?
