@@ -104,6 +104,7 @@ class Room(db.TimeStampedBase):
 			item = getattr(self, iname)
 			if item:
 				d[iname] = item
+		d["owner"] = self.owner.urlsafe()
 		self.material and d["material"].update(self.material)
 		d["objects"] = [f.json() for f in Furnishing.query(Furnishing.parent == self.key).fetch()]
 		d["portals"] = [p.data() for p in Portal.query(Portal.target == self.key).fetch()] # incoming
@@ -121,6 +122,7 @@ class Furnishing(db.TimeStampedBase):
 		if "key" in d: # thing key
 			d["thing_key"] = d["key"]
 		d["key"] = self.key.urlsafe()
+		d["parent"] = self.parent.urlsafe()
 		self.material and d["material"].update(self.material)
 		d["parts"] = [f.json() for f in Furnishing.query(Furnishing.parent == self.key).fetch()]
 		if d["kind"] == "portal":
