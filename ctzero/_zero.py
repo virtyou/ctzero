@@ -6,9 +6,12 @@ def response():
     if action == "json": # better name?
         ent = db.get(cgi_get("key"))
         if ent.polytype == "ctuser":
+            rq = Room.query()
+            if not cgi_get("allrooms", required=False):
+                rq.filter(Room.owner == ent.key)
             succeed({
                 "people": [p.json() for p in Person.query(Person.owner == ent.key).fetch()],
-                "rooms": [r.json() for r in Room.query(Room.owner == ent.key).fetch()]
+                "rooms": [r.json() for r in rq.fetch()]
             })
         succeed(ent.json())
     elif action == "things":
