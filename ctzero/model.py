@@ -8,6 +8,9 @@ class Asset(db.TimeStampedBase):
 	identifier = db.String()
 	item = db.Binary(unique=True)
 
+	def json(self):
+		return self.data()
+
 class Thing(db.TimeStampedBase):
 	owner = db.ForeignKey(kind=CTUser)
 	texture = db.ForeignKey(kind=Asset)
@@ -138,3 +141,6 @@ class Furnishing(db.TimeStampedBase):
 class Portal(db.TimeStampedBase): # asymmetrical (one per direction)
 	source = db.ForeignKey(kind=Furnishing) # base.kind == "portal"
 	target = db.ForeignKey(kinds=[Furnishing, Room]) # Room -> pending
+
+	def json(self):
+		return self.data()
