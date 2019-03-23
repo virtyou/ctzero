@@ -106,6 +106,7 @@ class Room(db.TimeStampedBase):
 				d[iname] = item
 		self.material and d["material"].update(self.material)
 		d["objects"] = [f.json() for f in Furnishing.query(Furnishing.parent == self.key).fetch()]
+		d["portals"] = [p.data() for p in Portal.query(Portal.target == self.key).fetch()] # incoming
 		return d
 
 class Furnishing(db.TimeStampedBase):
@@ -122,9 +123,16 @@ class Furnishing(db.TimeStampedBase):
 		d["key"] = self.key.urlsafe()
 		self.material and d["material"].update(self.material)
 		d["parts"] = [f.json() for f in Furnishing.query(Furnishing.parent == self.key).fetch()]
+		if d["kind"] == "portal":
+			d["portals"] = {
+				"incoming": [p.data() for p in Portal.query(Portal.target == self.key).fetch()]
+			}
+			out = Portal.query(Portal.source == self.key).get()
+			if out:
+				d["portals"]["outgoing"] = out.data()
 		return d
 
 # should each room have a default incoming portal?
 class Portal(db.TimeStampedBase): # asymmetrical (one per direction)
-	source = db.ForeignKey(kind=Furnishing) # base.kind == "door"
+	source = db.ForeignKey(kind=Furnishing) # base.kind == "portal"
 	target = db.ForeignKey(kinds=[Furnishing, Room]) # Room -> pending
