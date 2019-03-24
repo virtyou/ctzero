@@ -36,8 +36,6 @@ zero.core.Room = CT.Class({
 		};
 	},
 	cut: function(index) {
-		if (this.updateCams) // set from application, on scale for instance
-			this.updateCameras();
 		if (typeof index != "number")
 			index = (this._cam + 1) % this.cameras.length;
 		this._cam = index;
