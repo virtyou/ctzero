@@ -141,11 +141,11 @@ zero.core.util = {
 	untick: function(cb) {
 		CT.data.remove(zero.core.util._tickers, cb);
 	},
-	join: function(person, onready) {
+	join: function(person, onready, nowatch) {
 		var fullp = new zero.core.Person(CT.merge(person, {
 			onbuild: function() {
 				zero.core.current.people[person.name] = fullp;
-				fullp.watch();
+				nowatch || fullp.watch();
 				onready && onready(fullp);
 			}
 		}));
