@@ -158,6 +158,14 @@ zero.core.Person = CT.Class({
 		mergeBit(resetz, gest);
 		this.body.torso.move(gest);
 	},
+	remove: function() {
+		var thaz = this;
+		this.body.remove();
+		["body", "brain", "energy", "vibe"].forEach(function(prop) {
+			delete thaz[prop];
+		});
+		delete zero.core.current.people[this.name];
+	},
 	init: function(opts) {
 		this.log("init", opts.name);
 		var thiz = this;
