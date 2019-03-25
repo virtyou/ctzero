@@ -121,7 +121,7 @@ class Furnishing(db.TimeStampedBase):
 
     def rm(self, *args, **kwargs):
         portals = self.portals(False)
-        if portals["outgoing"]:
+        if "outgoing" in portals:
             portals["outgoing"].rm()
         for port in portals["incoming"]:
             port.rm()
@@ -132,7 +132,8 @@ class Furnishing(db.TimeStampedBase):
         if data:
             portals["incoming"] = [p.data() for p in portals["incoming"]]
         out = Portal.query(Portal.source == self.key).get()
-        portals["outgoing"] = data and out.data() or out
+        if out:
+            portals["outgoing"] = data and out.data() or out
         return portals
 
     def json(self):
