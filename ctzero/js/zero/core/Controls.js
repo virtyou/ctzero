@@ -111,8 +111,8 @@ zero.core.Controls = CT.Class({
 				CT.key.on("LEFT", placer("x", 0), placer("x", -speed));
 				CT.key.on("RIGHT", placer("x", 0), placer("x", speed));
 			}
-			CT.key.on("ENTER", this._.cb);
 		}
+		CT.key.on("ENTER", this._.cb);
 	},
 	setSprings: function() {
 		var t = this.target;
