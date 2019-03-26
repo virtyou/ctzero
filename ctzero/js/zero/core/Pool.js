@@ -16,6 +16,9 @@ zero.core.Pool = CT.Class({
 		this.cam.position.z = campos.z;//+22;
 		this.cam.position.x = campos.x;
 	},
+	getTop: function() {
+		return this.bounds.min.y;
+	},
 	init: function(opts) {
 		this.opts = opts = CT.merge(this.opts, opts, {
 			factor: 75,

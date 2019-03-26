@@ -36,7 +36,7 @@ zero.core.Thing = CT.Class({
 		},
 		setBounds: function() {
 			var radii = this.radii = {},
-				bounds = this.bounds = new THREE.Box3();
+				bounds = this.bounds = this.bounds || new THREE.Box3();
 			bounds.setFromObject(this.bone || this.thring);
 			["x", "y", "z"].forEach(function(dim) {
 				radii[dim] = (bounds.max[dim] - bounds.min[dim]) / 2;
@@ -84,6 +84,9 @@ zero.core.Thing = CT.Class({
 			if (this.opts.kind == "portal")
 				sz.y.bounds.max = sz.y.bounds.min;
 		}
+	},
+	getTop: function() {
+		return this.bounds.max.y;
 	},
 	setBounds: function(rebound) {
 		var xyz = ["x", "y", "z"], thaz = this;
