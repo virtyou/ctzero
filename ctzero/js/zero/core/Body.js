@@ -36,7 +36,7 @@ zero.core.Body = CT.Class({
 		}
 	},
 	setBob: function() {
-		var obj = zero.core.current.room.getObject(this.position());
+		var obj = zero.core.current.room.getObject(this.bone.position);
 		this._.bounder("y", 1, obj && obj.getTop());
 	},
 	energy: function() {
