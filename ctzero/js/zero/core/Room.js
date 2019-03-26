@@ -9,6 +9,14 @@ zero.core.Room = CT.Class({
 			obj.tick && obj.tick(dts);
 		});
 	},
+	getObject: function(pos) {
+		var i, obj;
+		for (i = 0; i < this.objects.length; i++) {
+			obj = this.objects[i];
+			if (obj.opts.kind == "furnishing" && obj.overlaps(pos))
+				return obj;
+		}
+	},
 	setBounds: function() {
 		this.bounds = this.bounds || new THREE.Box3();
 		this.bounds.setFromObject(this.thring);
