@@ -43,6 +43,9 @@ zero.core.Person = CT.Class({
 				cb && cb();
 		}
 	},
+	setVolume: function(v) {
+		this._.audio.volume = v;
+	},
 	afterSpeech: function(cb) {
 		this._.audio.onended = cb;
 	},
