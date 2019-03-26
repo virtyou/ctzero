@@ -141,12 +141,13 @@ zero.core.util = {
 	untick: function(cb) {
 		CT.data.remove(zero.core.util._tickers, cb);
 	},
-	join: function(person, onready, nowatch) {
-		var fullp = new zero.core.Person(CT.merge(person, {
+	join: function(pobj, onready, nowatch) {
+		var person = new zero.core.Person(CT.merge(pobj, {
 			onbuild: function() {
-				zero.core.current.people[person.name] = fullp;
-				nowatch || fullp.watch();
-				onready && onready(fullp);
+				zero.core.current.people[pobj.name] = person;
+				nowatch || person.watch();
+				onready && onready(person);
+				core.config.ctzero.room.gravity && person.body.setBounds();
 			}
 		}));
 	},
