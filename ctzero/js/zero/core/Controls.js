@@ -36,7 +36,7 @@ zero.core.Controls = CT.Class({
 	},
 	mover: function(amount, dir) {
 		var springz = this.springs, target = this.target,
-			speed = this._.speed, vec;
+			speed = this._.speed, vec, moveCb = this._.moveCb;
 		return function() {
 			if (amount) {
 				if (dir == "y")
@@ -53,6 +53,7 @@ zero.core.Controls = CT.Class({
 					springz[dim].boost = amount * vec[dim];
 				});
 			}
+			moveCb && moveCb();
 		};
 	},
 	clear: function() {
@@ -134,12 +135,16 @@ zero.core.Controls = CT.Class({
 	setCb: function(cb) {
 		this._.cb = cb;
 	},
+	setMoveCb: function(cb) {
+		this._.moveCb = cb;
+	},
 	init: function(opts) {
 		this.opts = opts = CT.merge(opts, {
 			target: null,
 			mode: "placement" // or pilot
 		});
 		opts.cb && this.setCb(opts.cb);
+		opts.moveCb && this.setMoveCb(opts.moveCb);
 		opts.target && this.setTarget(opts.target);
 	}
 });
