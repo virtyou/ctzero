@@ -60,6 +60,7 @@
 		"patterns": {}
 	},
 	"room": {
+		"gravity": true,
 		"name": "vroom",
 		"lights": [{
 			"variety": "ambient"
