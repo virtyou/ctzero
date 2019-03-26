@@ -42,12 +42,12 @@ zero.core.Thing = CT.Class({
 				radii[dim] = (bounds.max[dim] - bounds.min[dim]) / 2;
 			});
 		},
-		bounder: function(dim, i) {
+		bounder: function(dim, i, min) {
 			var bz = zero.core.current.room.bounds,
 				pz = this.positioners, rz = this.radii,
 				sz = this.springs, pname = this._xyz[i];
 			pz[pname].max = bz.max[dim] - rz[dim];
-			pz[pname].min = bz.min[dim] + rz[dim];
+			pz[pname].min = (typeof min == "number" ? min : bz.min[dim]) + rz[dim];
 			pz[pname].unbounded = false;
 			sz[pname].bounds = {
 				min: pz[pname].min,
@@ -84,6 +84,11 @@ zero.core.Thing = CT.Class({
 			if (this.opts.kind == "portal")
 				sz.y.bounds.max = sz.y.bounds.min;
 		}
+	},
+	overlaps: function(pos) {
+		var bz = this.bounds;
+		return pos.x > bz.min.x && pos.x < bz.max.x
+			&& pos.z > bz.min.z && pos.z < bz.max.z;
 	},
 	getTop: function() {
 		return this.bounds.max.y;
