@@ -35,6 +35,10 @@ zero.core.Body = CT.Class({
 			bonez[this.spine.indexOf(name)].rotation[axis] = joint.value;
 		}
 	},
+	setBob: function() {
+		var obj = zero.core.current.room.getObject(this.position());
+		this._.bounder("bob", 1, obj && obj.getTop());
+	},
 	energy: function() {
 		return this.person && this.person.energy;
 	},
