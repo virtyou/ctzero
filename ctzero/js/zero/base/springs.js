@@ -39,7 +39,7 @@ zero.base.springs = function() {
 
         bob: {
             k: 10,
-            damp: 1
+            damp: 5
         },
         weave: {
             k: 10,
