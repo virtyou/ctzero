@@ -45,9 +45,12 @@ zero.core.Controls = CT.Class({
 					target.dance("walk");
 			} else
 				target.undance();
-			if (dir == "y")
-				springz[dir].boost = amount || -speed;
-			else {
+			if (dir == "y") {
+				if (amount)
+					springz[dir].velocity = 500;
+				else
+					springz[dir].boost = -speed;
+			} else {
 				vec = target.body.bone.getWorldDirection();
 				["x", "z"].forEach(function(dim) {
 					springz[dim].boost = amount * vec[dim];
