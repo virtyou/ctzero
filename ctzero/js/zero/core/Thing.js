@@ -61,6 +61,12 @@ zero.core.Thing = CT.Class({
 	isReady: function() {
 		return this._.ready;
 	},
+	show: function() {
+		this.group.visible = true;
+	},
+	hide: function() {
+		this.group.visible = false;
+	},
 	setPositioners: function(xyz, unbound, snap) {
 		var _xyz = this._xyz, sz = this.springs, s;
 		["x", "y", "z"].forEach(function(dim, i) {
@@ -324,6 +330,8 @@ zero.core.Thing = CT.Class({
 						thiz.assembled();
 					}
 				};
+			if (this.opts.invisible)
+				this.hide();
 			this.parts = this.opts.parts.map(function(p) {
 				return thiz.attach(p, iterator);
 			});
