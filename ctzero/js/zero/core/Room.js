@@ -11,32 +11,31 @@ zero.core.Room = CT.Class({
 	},
 	eject: function(person, port) {
 		var bod = person.body, wall = port && port.opts.wall,
-			sz = bod.springs, pz = bod.positioners;
+			sz = bod.springs, pz = bod.positioners, dist = 500; // revise
 		if (wall == 0) {
 			delete sz.slide.bounds;
-			sz.slide.target -= 200;
-			pz.slide.min -= 200;
+			sz.slide.target -= dist;
+			pz.slide.min -= dist;
 		} else if (wall == 1) {
 			delete sz.weave.bounds;
-			sz.weave.target += 200;
-			pz.weave.max += 200;
+			sz.weave.target += dist;
+			pz.weave.max += dist;
 		} else if (wall == 2) {
 			delete sz.slide.bounds;
-			sz.slide.target += 200;
-			pz.slide.max += 200;
+			sz.slide.target += dist;
+			pz.slide.max += dist;
 		} else if (wall == 3) {
 			delete sz.weave.bounds;
-			sz.weave.target -= 200;
-			pz.weave.min -= 200;
+			sz.weave.target -= dist;
+			pz.weave.min -= dist;
 		} else {
 			delete sz.bob.bounds;
-			sz.bob.target -= 200;
-			pz.bob.min -= 200;
+			sz.bob.target -= dist;
+			pz.bob.min -= dist;
 		}
 	},
 	inject: function(person, port) {
-		port && person.body.setPositioners(port.position(),
-			true, true);
+		port && person.body.setPositioners(port.position(), false, true);
 	},
 	getObject: function(pos) {
 		var i, obj;
