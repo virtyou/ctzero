@@ -61,6 +61,17 @@ zero.core.Thing = CT.Class({
 	isReady: function() {
 		return this._.ready;
 	},
+	setPositioners: function(xyz, unbound, snap) {
+		var _xyz = this._xyz, sz = this.springs, s;
+		["x", "y", "z"].forEach(function(dim, i) {
+			s = sz[_xyz[i]];
+			s.target = xyz[dim];
+			if (unbound)
+				delete s.bounds;
+			if (snap)
+				s.value = s.target;
+		});
+	},
 	autoRot: function() {
 		if (["poster", "portal"].indexOf(this.opts.kind) != -1 && "wall" in this.opts)
 			this.adjust("rotation", "y", -this.opts.wall * Math.PI / 2);
