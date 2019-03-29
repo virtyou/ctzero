@@ -109,6 +109,7 @@ This package contains the core zero libraries.
     		"patterns": {}
     	},
     	"room": {
+    		"gravity": true,
     		"name": "vroom",
     		"lights": [{
     			"variety": "ambient"
