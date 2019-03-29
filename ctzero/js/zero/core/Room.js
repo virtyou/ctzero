@@ -183,7 +183,9 @@ zero.core.Room = CT.Class({
 	},
 	init: function(opts) {
 		var eopts = opts.environment && CT.require("environments." + opts.environment, true);
-		this.opts = opts = CT.merge(eopts, this.opts, {
+		this.opts = opts = CT.merge({
+			material: CT.merge(opts.material, eopts && eopts.material)
+		}, eopts, this.opts, {
 			lights: [],  // Lights
 			objects: [], // regular Things
 			cameras: []
