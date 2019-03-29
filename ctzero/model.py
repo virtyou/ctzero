@@ -53,8 +53,12 @@ class Part(db.TimeStampedBase):
             d["thing_key"] = d["key"]
         d["key"] = self.key.urlsafe()
         d["template"] = self.template
-        self.material and d["material"].update(self.material)
-        self.morphs and d["morphs"].update(self.morphs)
+        for key in ["material", "morphs"]:
+            val = getattr(self, key)
+            if val:
+                if key not in d:
+                    d[key] = {}
+                d[key].update(val)
         self.opts and d.update(self.opts)
         for asset in db.get_multi(self.assets):
             d[asset.name] = asset.item.urlsafe()
@@ -108,7 +112,10 @@ class Room(db.TimeStampedBase):
             if item:
                 d[iname] = item
         d["owner"] = self.owner.urlsafe()
-        self.material and d["material"].update(self.material)
+        if self.material:
+            if "material" not in d:
+                d["material"] = {}
+            d["material"].update(self.material)
         d["objects"] = [f.json() for f in Furnishing.query(Furnishing.parent == self.key).fetch()]
         d["portals"] = [p.data() for p in Portal.query(Portal.target == self.key).fetch()] # incoming
         return d
@@ -143,7 +150,10 @@ class Furnishing(db.TimeStampedBase):
             d["thing_key"] = d["key"]
         d["key"] = self.key.urlsafe()
         d["parent"] = self.parent.urlsafe()
-        self.material and d["material"].update(self.material)
+        if self.material:
+            if "material" not in d:
+                d["material"] = {}
+            d["material"].update(self.material)
         d["parts"] = [f.json() for f in Furnishing.query(Furnishing.parent == self.key).fetch()]
         if d["kind"] == "portal":
             d["portals"] = self.portals()
