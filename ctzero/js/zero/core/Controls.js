@@ -81,7 +81,7 @@ zero.core.Controls = CT.Class({
 			CT.key.on("DOWN", mover(0), mover(-speed));
 			CT.key.on("LEFT", placer("orientation", 0), placer("orientation", ospeed));
 			CT.key.on("RIGHT", placer("orientation", 0), placer("orientation", -ospeed));
-			CT.key.on("CTRL", mover(0, "y"), mover(speed, "y"));
+			CT.key.on("TAB", mover(0, "y"), mover(speed, "y"));
 			gestures = Object.keys(this.target.opts.gestures);
 			dances = Object.keys(this.target.opts.dances);
 			this.setNum(0, null, null, true);
