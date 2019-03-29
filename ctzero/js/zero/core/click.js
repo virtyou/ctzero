@@ -28,6 +28,9 @@ zero.core.click = {
             }
         });
     },
+    trigger: function(thing) {
+        (thing.bone || thing.thring || thing.group).__click();
+    },
     register: function(thing, cb) {
         zero.core.click.init();
         var thring = thing.bone || thing.thring || thing.group;
