@@ -13,6 +13,7 @@ zero.core.Controls = CT.Class({
 	placer: function(dir, amount, wallshift) {
 		var s = this.springs[dir], target = this.target,
 			wall = target.opts.wall, shifter = this.wallshift,
+			speed = this._.speed, direct = this.direct,
 			forward = wallshift == 1, nxtval;
 		return function() {
 			if (wallshift) { // poster/portal
@@ -32,11 +33,24 @@ zero.core.Controls = CT.Class({
 				}
 			}
 			s.boost = amount;
+			if (dir == "orientation") {
+				if (CT.key.down("UP"))
+					direct(speed);
+				else if (CT.key.down("DOWN"))
+					direct(-speed);
+			}
 		};
+	},
+	direct: function(speed) {
+		var springz = this.springs,
+			vec = this.target.body.bone.getWorldDirection();
+		["x", "z"].forEach(function(dim) {
+			springz[dim].boost = speed * vec[dim];
+		});
 	},
 	mover: function(amount, dir) {
 		var springz = this.springs, target = this.target,
-			speed = this._.speed, vec, moveCb = this._.moveCb;
+			speed = this._.speed, direct = this.direct, moveCb = this._.moveCb;
 		return function() {
 			if (amount) {
 				if (dir == "y")
@@ -50,12 +64,8 @@ zero.core.Controls = CT.Class({
 					springz[dir].velocity = 500;
 				else
 					springz[dir].boost = -speed;
-			} else {
-				vec = target.body.bone.getWorldDirection();
-				["x", "z"].forEach(function(dim) {
-					springz[dim].boost = amount * vec[dim];
-				});
-			}
+			} else
+				direct(amount);
 			moveCb && moveCb();
 		};
 	},
