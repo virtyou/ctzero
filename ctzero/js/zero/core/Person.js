@@ -91,8 +91,23 @@ zero.core.Person = CT.Class({
 					 pz[p].look(cube);
 		}
 	},
-	look: function(subject) {
+	look: function(subject, orient) {
 		this.subject = subject;
+		if (orient) {
+			var pos = this.body.bone.position,
+				spos = subject.position();
+			this.body.springs.orientation.target = Math.atan2(
+				spos.x - pos.x, spos.z - pos.z);
+		}
+	},
+	approach: function(subject) {
+		var vec, bod = this.body;
+		this.look(subject, true);
+		setTimeout(function() { // adapted from Controls.mover()... revise?
+			vec = bod.bone.getWorldDirection();
+			bod.springs.weave.boost = 2 * vec.x;
+			bod.springs.slide.boost = 2 * vec.z;
+		}, 2000); // time for orientation...
 	},
 	snapshot: function() {
 		return {
