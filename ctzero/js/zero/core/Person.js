@@ -102,12 +102,14 @@ zero.core.Person = CT.Class({
 	},
 	approach: function(subject) {
 		var vec, bod = this.body;
+		bod.springs.orientation.k = 200;
 		this.look(subject, true);
 		setTimeout(function() { // adapted from Controls.mover()... revise?
+			bod.springs.orientation.k = 20;
 			vec = bod.bone.getWorldDirection();
 			bod.springs.weave.boost = 2 * vec.x;
 			bod.springs.slide.boost = 2 * vec.z;
-		}, 2000); // time for orientation...
+		}, 500); // time for orientation...
 	},
 	snapshot: function() {
 		return {
