@@ -146,8 +146,8 @@ zero.core.util = {
 			onbuild: function() {
 				zero.core.current.people[pobj.name] = person;
 				nowatch || person.watch();
-				onready && onready(person);
 				core.config.ctzero.room.gravity && person.body.setBounds();
+				onready && onready(person);
 			}
 		}));
 	},
