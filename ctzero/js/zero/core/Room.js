@@ -35,7 +35,19 @@ zero.core.Room = CT.Class({
 		}
 	},
 	inject: function(person, port) {
-		port && person.body.setPositioners(port.position(), false, true);
+		var bod = person.body, wall, prop = "bob",
+			sz = bod.springs, amount = -500; // revise -> should be axis diameter
+		if (port) {
+			wall = port.opts.wall;
+			prop = ["slide", "weave"][wall % 2];
+			if (wall == 1 || wall == 2)
+				amount *= -1;
+			person.body.setPositioners(port.position(), false, true);
+		}
+		sz[prop].value += amount;
+		delete sz[prop].bounds;
+		bod.positioners[prop].unbounded = true;
+		setTimeout(bod.bindAxis, 2000, prop);
 	},
 	getObject: function(pos) {
 		var i, obj;
