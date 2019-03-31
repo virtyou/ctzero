@@ -43,16 +43,12 @@ zero.core.Thing = CT.Class({
 			});
 		},
 		bounder: function(dim, i, min) {
-			var bz = zero.core.current.room.bounds,
+			var bz = zero.core.current.room.bounds, bax = this.bindAxis,
 				pz = this.positioners, rz = this.radii,
 				sz = this.springs, pname = this._xyz[i];
 			pz[pname].max = bz.max[dim] - rz[dim];
 			pz[pname].min = (typeof min == "number" ? min : bz.min[dim]) + rz[dim];
-			pz[pname].unbounded = false;
-			sz[pname].bounds = {
-				min: pz[pname].min,
-				max: pz[pname].max
-			};
+			this._.nosnap ? setTimeout(bax, 2000, pname) : bax(pname);
 			if (dim == "y" && this.opts.kind != "poster")
 				sz[pname].target = pz[pname].min;
 		}
@@ -66,6 +62,14 @@ zero.core.Thing = CT.Class({
 	},
 	hide: function() {
 		this.group.visible = false;
+	},
+	bindAxis: function(pname) {
+		var pz = this.positioners;
+		this.springs[pname].bounds = {
+			min: pz[pname].min,
+			max: pz[pname].max
+		};
+		pz[pname].unbounded = false;
 	},
 	setPositioners: function(xyz, unbound, snap) {
 		var _xyz = this._xyz, sz = this.springs, s;
@@ -110,8 +114,9 @@ zero.core.Thing = CT.Class({
 	getTop: function() {
 		return this.bounds.max.y;
 	},
-	setBounds: function(rebound) {
+	setBounds: function(rebound, nosnap) {
 		var xyz = ["x", "y", "z"], thaz = this;
+		this._.nosnap = nosnap;
 		this.autoRot();
 		if (rebound)
 			delete this.radii;
