@@ -101,10 +101,11 @@ zero.core.Person = CT.Class({
 		}
 	},
 	approach: function(subject) {
-		var vec, bod = this.body;
+		var vec, bod = this.body, dance = this.dance;
 		bod.springs.orientation.k = 200;
 		this.look(subject, true);
 		setTimeout(function() { // adapted from Controls.mover()... revise?
+			dance("walk");
 			bod.springs.orientation.k = 20;
 			vec = bod.bone.getWorldDirection();
 			bod.springs.weave.boost = 2 * vec.x;
