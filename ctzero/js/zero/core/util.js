@@ -74,7 +74,6 @@ zero.core.util = {
 			vt = new THREE.VideoTexture(v);
 		document.body.appendChild(v);
 		v.loop = true;
-		v.play();
 		vt.vnode = v;
 		return vt;
 	},
