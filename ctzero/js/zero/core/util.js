@@ -70,7 +70,7 @@ zero.core.util = {
 		v.play();
 	},
 	videoTexture: function(src) {
-		var v = CT.dom.video(src, "full transparent below"),
+		var v = CT.dom.video(src, "full transparent notouch below"),
 			vt = new THREE.VideoTexture(v);
 		document.body.appendChild(v);
 		v.loop = true;
