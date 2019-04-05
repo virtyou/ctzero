@@ -49,8 +49,11 @@ zero.core.Thing = CT.Class({
 			pz[pname].max = bz.max[dim] - rz[dim];
 			pz[pname].min = (typeof min == "number" ? min : bz.min[dim]) + rz[dim];
 			this._.nosnap ? setTimeout(bax, 2000, pname) : bax(pname);
-			if (dim == "y" && this.opts.kind != "poster")
+			if (this._.shouldMin(pname, dim))
 				sz[pname].target = pz[pname].min;
+		},
+		shouldMin: function(pname, dim) {
+			return dim == "y" && ["poster", "screen"].indexOf(this.opts.kind) != -1;
 		}
 	},
 	_xyz: ["x", "y", "z"],
@@ -83,11 +86,11 @@ zero.core.Thing = CT.Class({
 		});
 	},
 	autoRot: function() {
-		if (["poster", "portal"].indexOf(this.opts.kind) != -1 && "wall" in this.opts)
+		if (["poster", "screen", "portal"].indexOf(this.opts.kind) != -1 && "wall" in this.opts)
 			this.adjust("rotation", "y", -this.opts.wall * Math.PI / 2);
 	},
 	wallStick: function() {
-		if (["poster", "portal"].indexOf(this.opts.kind) != -1 && "wall" in this.opts) {
+		if (["poster", "screen", "portal"].indexOf(this.opts.kind) != -1 && "wall" in this.opts) {
 			var w = this.opts.wall, sz = this.springs;
 			if (w == 0) {
 				sz.z.bounds.min += 1;
