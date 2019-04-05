@@ -53,7 +53,7 @@ zero.core.Thing = CT.Class({
 				sz[pname].target = pz[pname].min;
 		},
 		shouldMin: function(pname, dim) {
-			return dim == "y" && ["poster", "screen"].indexOf(this.opts.kind) != -1;
+			return dim == "y" && ["poster", "screen"].indexOf(this.opts.kind) == -1;
 		}
 	},
 	_xyz: ["x", "y", "z"],
