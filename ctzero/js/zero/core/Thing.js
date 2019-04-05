@@ -279,6 +279,8 @@ zero.core.Thing = CT.Class({
 		if (this.group)
 			this.opts.scene.remove(this.group);
 		this.unscroll();
+		if (this.opts.video)
+			this.material.map.vnode.remove();
 		if (this.opts.key)
 			delete zero.core.Thing._things[this.opts.key];
 	},
