@@ -138,6 +138,10 @@ zero.core.Thing = CT.Class({
 			};
 		}
 	},
+	unvideo: function() {
+		if (this.opts.video)
+			this.material.map.vnode.remove();
+	},
 	unscroll: function() {
 		if (this._.scroller) {
 			zero.core.util.untick(this._.scroller);
@@ -240,7 +244,7 @@ zero.core.Thing = CT.Class({
 	update: function(opts) {
 		var o, setter, full, adjust = this.adjust;
 		["texture", "stripset", "geometry", "matcat", "meshcat",
-			"material", "repeat", "offset"].forEach(function(item) {
+			"material", "repeat", "offset", "video"].forEach(function(item) {
 				full = full || (item in opts);
 			});
 		this.opts = CT.merge(opts, this.opts);
@@ -279,8 +283,7 @@ zero.core.Thing = CT.Class({
 		if (this.group)
 			this.opts.scene.remove(this.group);
 		this.unscroll();
-		if (this.opts.video)
-			this.material.map.vnode.remove();
+		this.unvideo();
 		if (this.opts.key)
 			delete zero.core.Thing._things[this.opts.key];
 	},
