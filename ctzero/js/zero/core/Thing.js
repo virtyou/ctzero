@@ -138,8 +138,17 @@ zero.core.Thing = CT.Class({
 			};
 		}
 	},
+	playPause: function() {
+		if (this.opts.video && this.material.map) {
+			var vnode = this.material.map.vnode;
+			if (vnode.paused)
+				vnode.play();
+			else
+				vnode.pause();
+		}
+	},
 	unvideo: function() {
-		if (this.opts.video)
+		if (this.opts.video && this.material.map)
 			this.material.map.vnode.remove();
 	},
 	unscroll: function() {
