@@ -70,10 +70,13 @@ zero.core.util = {
 		v.play();
 	},
 	videoTexture: function(src) {
-		var v = CT.dom.video(src, "full transparent");
+		var v = CT.dom.video(src, "full transparent below"),
+			vt = new THREE.VideoTexture(v);
 		document.body.appendChild(v);
+		v.loop = true;
 		v.play();
-		return new THREE.VideoTexture(v);
+		vt.vnode = v;
+		return vt;
 	},
 	iframe: function(src) {
 		zero.core.util.back(CT.dom.iframe(src, "full"));
