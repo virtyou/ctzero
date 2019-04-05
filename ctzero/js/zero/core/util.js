@@ -69,6 +69,12 @@ zero.core.util = {
 		zero.core.util.back(v);
 		v.play();
 	},
+	videoTexture: function(src) {
+		var v = CT.dom.video(src, "full transparent");
+		document.body.appendChild(v);
+		v.play();
+		return new THREE.VideoTexture(v);
+	},
 	iframe: function(src) {
 		zero.core.util.back(CT.dom.iframe(src, "full"));
 	},
