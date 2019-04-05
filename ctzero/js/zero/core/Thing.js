@@ -366,8 +366,9 @@ zero.core.Thing = CT.Class({
 			var meshname = (oz.shader ? "Shader"
 				: ("Mesh" + oz.matcat)) + "Material",
 				map, meshopts = oz.material;
-			if (oz.texture) {
-				map = THREE.ImageUtils.loadTexture(oz.texture);
+			if (oz.texture || oz.video) {
+				map = oz.texture ? THREE.ImageUtils.loadTexture(oz.texture)
+					: zero.core.util.videoTexture(oz.video);
 				if (oz.repeat) {
 					map.wrapS = map.wrapT = THREE.RepeatWrapping;
 					map.repeat.set.apply(map.repeat, oz.repeat);
