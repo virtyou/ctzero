@@ -100,8 +100,8 @@ zero.core.Controls = CT.Class({
 				num += 1;
 			}
 		} else {
-			if (["poster", "portal"].indexOf(this.target.opts.kind) != -1) {
-				if (this.target.opts.kind == "poster") {
+			if (["poster", "portal", "screen"].indexOf(this.target.opts.kind) != -1) {
+				if (["poster", "screen"].indexOf(this.target.opts.kind) != -1) {
 					CT.key.on("UP", placer("y", 0), placer("y", speed));
 					CT.key.on("DOWN", placer("y", 0), placer("y", -speed));
 				}
