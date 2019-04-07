@@ -77,6 +77,15 @@
 		"chain": {
 			"delay": 500
 		},
+		"responses": {
+			"unintelligible": [
+				"what was that?",
+				"i didn't quite catch what you said",
+				"could you please repeat that?",
+				"i'm sorry, i missed that",
+				"come again?"
+			]
+		},
 		"modal": {
 			"noClose": true,
 			"className": "basicpopup noframe",

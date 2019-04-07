@@ -189,7 +189,7 @@ zero.core.Person = CT.Class({
 	},
 	init: function(opts) {
 		this.log("init", opts.name);
-		var thiz = this;
+		var thiz = this, cfg = core.config.ctzero;
 		this.opts = opts = CT.merge(opts, {
 			moody: true,
 			mood: {},
@@ -199,6 +199,14 @@ zero.core.Person = CT.Class({
 			responses: {},
 			voice: "Joanna"
 		});
+		if (cfg.brain.responses.unintelligible && !("unintelligible" in opts.responses)) {
+			opts.responses.unintelligible = cfg.brain.responses.unintelligible;
+			zero.core.rec.onfail(function(cb) {
+				thiz.respond("unintelligible", function() {
+					zero.core.rec.listen(cb);
+				});
+			});
+		}
 		this.voice = opts.voice;
 		this.name = opts.name;
 		this.body = new zero.core.Body(CT.merge(opts.body, {
