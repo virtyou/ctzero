@@ -149,11 +149,14 @@ zero.core.util = {
 	untick: function(cb) {
 		CT.data.remove(zero.core.util._tickers, cb);
 	},
-	join: function(pobj, onready, nowatch) {
+	join: function(pobj, onready, nowatch, lookcam, current) {
 		var person = new zero.core.Person(CT.merge(pobj, {
 			onbuild: function() {
 				zero.core.current.people[pobj.name] = person;
 				nowatch || person.watch();
+				lookcam && person.look(zero.core.camera);
+				if (current)
+					zero.core.current.person = person;
 				core.config.ctzero.room.gravity && person.body.setBounds();
 				onready && onready(person);
 			}
