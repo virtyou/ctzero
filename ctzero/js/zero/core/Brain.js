@@ -103,15 +103,14 @@ zero.core.Brain = CT.Class({
 		}
 	},
 	respond: function(phrase, cb) {
-		var respz = this.person.opts.responses, i, word,
-			words = phrase.toLowerCase().split(" ");
-		for (i = 0; i < words.length; i++) {
-			word = words[i];
-			if (word in this.triggers)
-				return cb(this.get_response(this.triggers[word]));
-			if (word in respz)
-				return cb(this.get_response(respz[word]));
-		}
+		var respz = this.person.opts.responses,
+			lphrase = phrase.toLowerCase(), trig;
+		for (trig in this.triggers)
+			if (lphrase.indexOf(trig) != -1)
+				return cb(this.get_response(this.triggers[trig]));
+		for (trig in respz)
+			if (lphrase.indexOf(trig) != -1)
+				return cb(this.get_response(respz[trig]));
 		var defresp = this.triggers["*"] || respz["*"];
 		if (defresp) // default response object
 			return cb(this.get_response(defresp));
