@@ -111,6 +111,8 @@ zero.core.Brain = CT.Class({
 		for (trig in respz)
 			if (lphrase.indexOf(trig) != -1)
 				return cb(this.get_response(respz[trig]));
+		if (phrase == "resolve" && this.person.onresolved)
+			return cb(this.person.onresolved());
 		var defresp = this.triggers["*"] || respz["*"];
 		if (defresp) // default response object
 			return cb(this.get_response(defresp));
