@@ -199,6 +199,7 @@ zero.core.Person = CT.Class({
 			responses: {},
 			voice: "Joanna"
 		});
+		this.onresolved = opts.onresolved;
 		if (cfg.brain.responses.unintelligible && !("unintelligible" in opts.responses)) {
 			opts.responses.unintelligible = cfg.brain.responses.unintelligible;
 			zero.core.rec.onfail(function(cb) {
