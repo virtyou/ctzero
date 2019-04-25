@@ -63,8 +63,10 @@ zero.core.Person = CT.Class({
 		watch && this.watch();
 		if (data.audio)
 			this._.playClip(this.brain.say_data(data, cb));
-		else
+		else {
+			this.mood.tick();
 			this.brain.say(data, cb, this._.playClip, this.prosody, this.voice);
+		}
 	},
 	respond: function(phrase, cb) {
 		var thaz = this;
