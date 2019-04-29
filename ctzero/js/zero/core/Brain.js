@@ -87,7 +87,7 @@ zero.core.Brain = CT.Class({
 				var item = res.button.item, b = CT.dom.button(res.button.name, function() {
 					person.respond(item.trigger);
 				}, item.className), key, val;
-				item.css.split("\n").forEach(function(rule) {
+				item.css.replace(/;/g, "").split("\n").forEach(function(rule) {
 					[key, val] = rule.split(": ");
 					b.style[key] = val;
 				});
