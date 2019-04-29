@@ -47,6 +47,7 @@ zero.core.Brain = CT.Class({
 		recognizer.start();
 	},
 	get_response: function(res) {
+		var trigz = this.triggers, person = this.person;
 		if (typeof res == "string")
 			return res;
 		if (typeof res == "function")
@@ -75,18 +76,27 @@ zero.core.Brain = CT.Class({
 				}, core.config.ctzero.brain.modal));
 				m.show();
 			}
+			if (res.button) {
+				var item = res.button.item, b = CT.dom.button(res.button.name, function() {
+					person.respond(item.trigger);
+				}, item.className), key, val;
+				item.css.split("\n").forEach(function(rule) {
+					[key, val] = rule.split(": ");
+					b.style[key] = val;
+				});
+				CT.dom.addContent("ctmain", b);
+			}
 
 			// character -- also support res.gesture{}, etc
-			var trigz = this.triggers;
-			res.vibe && this.person.vibe.update(res.vibe);
-			res.mood && this.person.mood.update(res.mood);
+			res.vibe && person.vibe.update(res.vibe);
+			res.mood && person.mood.update(res.mood);
 			if (res.dance) {
 				if (res.dance == "undance") // hacky...
-					this.person.undance();
+					person.undance();
 				else
-					this.person.dance(res.dance);
+					person.dance(res.dance);
 			}
-			res.gesture && this.person.gesture(res.gesture);
+			res.gesture && person.gesture(res.gesture);
 			if (res.disable) {
 				if (res.disable[0] == "untrigger") // hacky!!!
 					trigz = this.triggers = {};
