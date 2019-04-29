@@ -1,5 +1,12 @@
 zero.core.Brain = CT.Class({
 	CLASSNAME: "zero.core.Brain",
+	_: {
+		tsort: function(which) {
+			var tz = Object.keys(which);
+			tz.sort(function(a, b) { return b.length - a.length; });
+			return tz;
+		}
+	},
 	data2clip: function(data) {
 		var opts = {
 			url: URL.createObjectURL(zero.core.util.b64toBlob(data.audio, "audio/wav"))
@@ -114,13 +121,18 @@ zero.core.Brain = CT.Class({
 	},
 	respond: function(phrase, cb) {
 		var respz = this.person.opts.responses,
-			lphrase = phrase.toLowerCase(), trig;
-		for (trig in this.triggers)
-			if (lphrase.indexOf(trig) != -1)
-				return cb(this.get_response(this.triggers[trig]));
-		for (trig in respz)
-			if (lphrase.indexOf(trig) != -1)
-				return cb(this.get_response(respz[trig]));
+			lphrase = phrase.toLowerCase(),
+			sets = [this.triggers, respz],
+			s, i, set, trig, tsorted;
+		for (s = 0; s < sets.length; s++) {
+			set = sets[s];
+			tsorted = this._.tsort(set);
+			for (i = 0; i < tsorted.length; i++) {
+				trig = tsorted[i];
+				if (lphrase.indexOf(trig) != -1)
+					return cb(this.get_response(set[trig]));
+			}
+		}
 		if (phrase == "resolve" && this.person.onresolved)
 			return cb(this.person.onresolved());
 		var defresp = this.triggers["*"] || respz["*"];
