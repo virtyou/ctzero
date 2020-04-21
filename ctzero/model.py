@@ -74,6 +74,7 @@ class Person(db.TimeStampedBase):
     voice = db.String()
     mood = db.JSON()
     vibe = db.JSON()
+    mods = db.JSON()
     dances = db.JSON()
     gestures = db.JSON()
     responses = db.JSON()
@@ -85,6 +86,7 @@ class Person(db.TimeStampedBase):
             "voice": self.voice,
             "mood": self.mood or {},
             "vibe": self.vibe or {},
+            "mods": self.mods or {},
             "dances": self.dances or {},
             "gestures": self.gestures or {},
             "responses": self.responses or {},
