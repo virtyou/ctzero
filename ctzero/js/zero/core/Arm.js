@@ -11,6 +11,10 @@ zero.core.Arm = CT.Class({
 		zero.core[this.variety].parts.forEach(this.tickPart);
 		this.hand.tick();
 	},
+	setBody: function(bod) {
+		this.body = bod;
+		this.hand.setBody(bod);
+	},
 	build: function() {
 		var oz = this.opts, bones = oz.bones, bmap = oz.bonemap;
 		this.setJoints();
