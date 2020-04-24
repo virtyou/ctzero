@@ -6,6 +6,13 @@ zero.core.Aspect = CT.Class({
 			this.value += this.parent.springs[s].value * this.springs[s];
 		for (var a in this.aspects)
 			this.value += this.parent.aspects[a].value * this.aspects[a];
+		if (Object.keys(this.bsprings).length) {
+			var bod = this.parent.parent.body;
+			if (bod) {
+				for (var s in this.bsprings)
+					this.value += bod.springs[s].value * this.bsprings[s];
+			}
+		}
 		if (!this.unbounded)
 			this.value = Math.max(Math.min(this.value, this.max), this.min);
 	},
@@ -14,16 +21,18 @@ zero.core.Aspect = CT.Class({
 			max: 1,
 			min: -1,
 			base: 0,
+			aspects: {},
 			springs: {},
-			aspects: {}
+			bsprings: {},
 		});
 		this.max = opts.max;
 		this.min = opts.min;
 		this.name = opts.name;
 		this.value = this.base = opts.base;
 		this.parent = opts.parent;
-		this.springs = opts.springs;
 		this.aspects = opts.aspects;
+		this.springs = opts.springs;
+		this.bsprings = opts.bsprings;
 		this.unbounded = opts.unbounded;
 	}
 });
