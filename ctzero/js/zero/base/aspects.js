@@ -92,6 +92,18 @@ zero.base.aspects = function() {
     };
 };
 
+zero.base.aspects.spine = {
+    neck: {
+        x: {
+            min: -1,
+            max: 1
+        },
+        y: {
+            min: -1,
+            max: 1
+        }
+    }
+};
 zero.base.aspects.leg = {
     hip: {
         x: {
