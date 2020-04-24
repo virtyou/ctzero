@@ -59,7 +59,7 @@ zero.core.Skeleton = CT.Class({
 		aspringz[sname] = 1;
 		bspringz[rs] = 1 - Math.random() * 2;
 		bspringz[ps] = 0.1 - Math.random() * 0.2;
-		bspringz[fs] = 0.1 - Math.random() * 0.2;
+		bspringz[fs] = 0.05 - Math.random() * 0.1;
 		if (this.opts.side == "left" && this.shouldReverse(part, dim)) {
 			jrules = {
 				max: -jrules.min,
