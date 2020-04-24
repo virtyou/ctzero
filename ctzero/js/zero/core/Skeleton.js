@@ -89,8 +89,19 @@ zero.core.Skeleton = CT.Class({
 			});
 		}
 	},
+	setScales: function(opts) {
+		var part, thaz = this;
+		for (part in opts) {
+			zero.core.util.coords(opts[part], function(dim, val) {
+				thaz[part].scale[dim] = val;
+			});
+		}
+	},
 	move: function(opts) {
 		this.setSprings(opts);
+	},
+	resize: function(opts) {
+		this.setScales(opts);
 	},
 	energy: function() {
 		return this.parent.energy();
