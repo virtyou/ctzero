@@ -13,6 +13,15 @@ zero.core.Torso = CT.Class({
 			thaz.legs[side].move(opts[side].leg);
 		});		
 	},
+	resize: function(opts) {
+		var thaz = this;
+		["left", "right"].forEach(function(side) {
+			if (opts[side]) {
+				thaz.arms[side].resize(opts[side]);
+				thaz.legs[side].resize(opts[side].leg);
+			}
+		});
+	},
 	energy: function() {
 		return this.body && this.body.energy();
 	},
