@@ -71,6 +71,9 @@ zero.core.Skeleton = CT.Class({
 			bsprings: bspringz
 		}, jrules), sname, this);
 	},
+	setBody: function(bod) {
+		this.body = bod;
+	},
 	shouldReverse: function(part, dim) {
 		return dim == "z";
 	},
@@ -98,7 +101,8 @@ zero.core.Skeleton = CT.Class({
 		});
 		this.variety = this.CLASSNAME.split(".")[2];
 		this.vlower = this.variety.toLowerCase(); // should these be automated by CT.Class?
-		this.parent = opts.parent;
+		this.parent = opts.parent || opts.body;
+		opts.body && this.setBody(opts.body);
 		this.build();
 	}
 });
