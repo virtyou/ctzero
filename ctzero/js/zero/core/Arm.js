@@ -7,6 +7,10 @@ zero.core.Arm = CT.Class({
 		this.setSprings(opts.arm);
 		this.hand.move(opts.hand);
 	},
+	resize: function(opts) {
+		this.setScales(opts.arm);
+		this.hand.resize(opts.hand);
+	},
 	tick: function() {
 		zero.core[this.variety].parts.forEach(this.tickPart);
 		this.hand.tick();
