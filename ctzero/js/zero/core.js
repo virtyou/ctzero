@@ -1,4 +1,4 @@
-zero.core.version = "0.1.1";
+zero.core.version = "0.1.2";
 
 CT.require("zero.lib.three");
 CT.require("zero.lib.Projector");
@@ -24,6 +24,7 @@ CT.require("zero.core.Pool");
 CT.require("zero.core.Room");
 
 CT.require("zero.core.Skeleton");
+CT.require("zero.core.Spine");
 CT.require("zero.core.Hand");
 CT.require("zero.core.Arm");
 CT.require("zero.core.Leg");
