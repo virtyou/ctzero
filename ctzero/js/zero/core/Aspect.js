@@ -7,7 +7,7 @@ zero.core.Aspect = CT.Class({
 		for (var a in this.aspects)
 			this.value += this.parent.aspects[a].value * this.aspects[a];
 		if (Object.keys(this.bsprings).length) {
-			var bod = this.parent.parent.body;
+			var bod = this.parent.body;
 			if (bod) {
 				for (var s in this.bsprings)
 					this.value += bod.springs[s].value * this.bsprings[s];
