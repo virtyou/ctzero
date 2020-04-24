@@ -16,6 +16,12 @@ zero.core.Aspect = CT.Class({
 		if (!this.unbounded)
 			this.value = Math.max(Math.min(this.value, this.max), this.min);
 	},
+	shift: function(newbase) {
+		var d = newbase - this.base;
+		this.min += d;
+		this.max += d;
+		this.base = newbase;
+	},
 	init: function(opts) {
 		this.opts = opts = CT.merge(opts, {
 			max: 1,
