@@ -45,7 +45,12 @@ zero.core.Skeleton = CT.Class({
 		var aspringz = {}, bspringz = {},
 			sname = part + "_" + dim,
 			rs = CT.data.choice(["twist", "bow",
-				"lean", "shake", "nod", "tilt"]);
+				"lean", "shake", "nod", "tilt"]),
+			ps = CT.data.choice(["ah", "ee", "ow",
+				"ff", "m", "n", "th"]),
+			fs = CT.data.choice(["asym", "smileEyes",
+				"lids", "smile", "bigSmile", "brow",
+				"browAsym", "browSad", "frown"]);
 		jrules = jrules || this.jointRules(part, dim);
 		this.springs[sname] = zero.core.springController.add({
 			k: 20,
@@ -53,6 +58,8 @@ zero.core.Skeleton = CT.Class({
 		}, sname, this);
 		aspringz[sname] = 1;
 		bspringz[rs] = 1 - Math.random() * 2;
+		bspringz[ps] = 0.1 - Math.random() * 0.2;
+		bspringz[fs] = 0.1 - Math.random() * 0.2;
 		if (this.opts.side == "left" && this.shouldReverse(part, dim)) {
 			jrules = {
 				max: -jrules.min,
