@@ -7,10 +7,11 @@ zero.core.Torso = CT.Class({
 		}
 	},
 	move: function(opts) {
-		for (var side in opts) {
-			this.arms[side].move(opts[side]);
-			this.legs[side].move(opts[side].leg);
-		}
+		var thaz = this;
+		["left", "right"].forEach(function(side) {
+			thaz.arms[side].move(opts[side]);
+			thaz.legs[side].move(opts[side].leg);
+		});		
 	},
 	energy: function() {
 		return this.body && this.body.energy();
@@ -47,6 +48,13 @@ zero.core.Torso = CT.Class({
 
 		this._bmap = this.geojson.bonemap;
 		this.setLimbs();
+	},
+	setBody: function(bod) {
+		this.body = bod;
+		for (var side in this.arms) {
+			this.arms[side].setBody(bod);
+			this.legs[side].setBody(bod);
+		}
 	},
 	init: function() {
 		this.opts.frustumCulled = false; // TODO: fix!
