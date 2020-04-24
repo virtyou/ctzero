@@ -14,21 +14,12 @@ zero.core.Spine = CT.Class({
 			return pdata[dim];
 		return pdata;
 	},
-	setJoint: function(part, dim, jrules) {
-		var sname = part + "_" + dim;
-		this.aspects[sname] = zero.core.aspectController.add(jrules
-			|| this.jointRules(part, dim), sname, this);
-	},
-	setSprings: function(opts) {
-		var part, asps = this.aspects;
-		for (part in opts) {
-			zero.core.util.coords(opts[part], function(dim, val) {
-				asps[part + "_" + dim].shift(val);
-			});
-		}
+	aspRules: function(sname) {
+		var aspringz = {};
+		aspringz[sname] = 1;
+		return {
+			springs: aspringz
+		};
 	}
 }, zero.core.Skeleton);
-//zero.core.Spine.parts = ["pelvis", "lumbar", "ribs", "neck", "head"];
 zero.core.Spine.parts = ["pelvis", "torso", "neck"];
-//zero.core.Spine.parts = ["pelvis", "ribs", "neck"];
-//zero.core.Spine.parts = ["lumbar", "ribs", "neck"];
