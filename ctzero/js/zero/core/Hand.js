@@ -29,6 +29,14 @@ zero.core.Hand = CT.Class({
 				this.springs[digit + "_curl"].target = opts[digit].curl;
 		}
 	},
+	resize: function(opts) {
+		var part, thaz = this;
+		for (part in opts) {
+			zero.core.util.coords(opts[part], function(dim, val) {
+				thaz[part][0].scale[dim] = val;
+			});
+		}
+	},
 	tickPart: function(digit) {
 		var major, minor, knuckle, cval = this.aspects[digit + "_curl"].value;
 		[major, minor] = this.majMin(digit);
