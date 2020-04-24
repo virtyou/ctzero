@@ -42,14 +42,17 @@ zero.core.Skeleton = CT.Class({
 		return pdata;
 	},
 	setJoint: function(part, dim, jrules) {
-		var aspringz, sname = part + "_" + dim;
+		var aspringz = {}, bspringz = {},
+			sname = part + "_" + dim,
+			rs = CT.data.choice(["twist", "bow",
+				"lean", "shake", "nod", "tilt"]);
 		jrules = jrules || this.jointRules(part, dim);
 		this.springs[sname] = zero.core.springController.add({
 			k: 20,
 			damp: 10
 		}, sname, this);
-		aspringz = {};
 		aspringz[sname] = 1;
+		bspringz[rs] = 1 - Math.random() * 2;
 		if (this.opts.side == "left" && this.shouldReverse(part, dim)) {
 			jrules = {
 				max: -jrules.min,
@@ -57,7 +60,8 @@ zero.core.Skeleton = CT.Class({
 			};
 		}
 		this.aspects[sname] = zero.core.aspectController.add(CT.merge({
-			springs: aspringz
+			springs: aspringz,
+			bsprings: bspringz
 		}, jrules), sname, this);
 	},
 	shouldReverse: function(part, dim) {
