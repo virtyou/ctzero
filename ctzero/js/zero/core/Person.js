@@ -161,11 +161,21 @@ zero.core.Person = CT.Class({
 	},
 	mod: function(mname) {
 		this.activeMod = mname;
-		// ...
+		this.body.resize(this.opts.mods[mname]);
 	},
-	unmod: function() {
-		delete this.activeMod;
-		// ....
+	unmod: function(resetz, side, sub) {
+		var gest = {}, zcu = zero.core.util;
+		if (!resetz) {
+			if (side || sub)
+				resetz = zcu.neutral(side, sub);
+			else if (this.activeMod) {
+				resetz = this.opts.mods[this.activeMod];
+				delete this.activeMod;
+			} else
+				resetz = zcu.neutral(side, sub);
+		}
+		zcu.mergeBit(resetz, gest);
+		this.body.resize(gest);
 	},
 	remove: function() {
 		var thaz = this;
