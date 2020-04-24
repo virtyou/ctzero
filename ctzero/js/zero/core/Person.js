@@ -143,7 +143,7 @@ zero.core.Person = CT.Class({
 	},
 	gesture: function(gname) {
 		this.activeGesture = gname;
-		this.body.torso.move(this.opts.gestures[gname]);
+		this.body.move(this.opts.gestures[gname]);
 	},
 	ungesture: function(resetz, side, sub) {
 		var gest = {}, zcu = zero.core.util;
@@ -157,7 +157,7 @@ zero.core.Person = CT.Class({
 				resetz = zcu.neutral(side, sub);
 		}
 		zcu.mergeBit(resetz, gest);
-		this.body.torso.move(gest);
+		this.body.move(gest);
 	},
 	mod: function(mname) {
 		this.activeMod = mname;
