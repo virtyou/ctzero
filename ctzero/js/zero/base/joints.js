@@ -5,14 +5,14 @@ zero.base.joints = function() {
             x: {
                 max: 0.5,
                 min: -0.5,
-                springs: {
+                bsprings: {
                     bow: 1,
                     nod: 0.2
                 }
             },
             y: {
                 unbounded: true,
-                springs: {
+                bsprings: {
                     orientation: 1,
                     twist: 0.5,
                     shake: 0.3
@@ -21,7 +21,7 @@ zero.base.joints = function() {
             z: {
                 max: 0.5,
                 min: -0.5,
-                springs: {
+                bsprings: {
                     lean: 1,
                     tilt: -0.2
                 }
@@ -33,7 +33,7 @@ zero.base.joints = function() {
             x: {
                 max: 0.5,
                 min: -0.5,
-                springs: {
+                bsprings: {
                     nod: 0.5,
                     ah: -0.004,
                     ee: 0.004
@@ -42,7 +42,7 @@ zero.base.joints = function() {
             y: {
                 max: 0.5,
                 min: -0.5,
-                springs: {
+                bsprings: {
                     shake: 0.5,
                     ow: -0.004,
                     n: -0.004
@@ -51,7 +51,7 @@ zero.base.joints = function() {
             z: {
                 max: 0.5,
                 min: -0.5,
-                springs: {
+                bsprings: {
                     tilt: 0.5,
                     ow: -0.004,
                     n: -0.004
@@ -64,7 +64,7 @@ zero.base.joints = function() {
             x: {
                 max: 0.5,
                 min: -0.5,
-                springs: {
+                bsprings: {
                     nod: 0.5,
                     ah: -0.004,
                     ee: 0.004
@@ -73,7 +73,7 @@ zero.base.joints = function() {
             y: {
                 max: 0.5,
                 min: -0.5,
-                springs: {
+                bsprings: {
                     shake: 0.5,
                     ow: -0.004,
                     n: 0.004
@@ -82,7 +82,7 @@ zero.base.joints = function() {
             z: {
                 max: 0.5,
                 min: -0.5,
-                springs: {
+                bsprings: {
                     tilt: 0.5,
                     ow: -0.004,
                     n: 0.004

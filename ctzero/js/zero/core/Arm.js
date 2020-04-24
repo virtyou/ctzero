@@ -7,9 +7,17 @@ zero.core.Arm = CT.Class({
 		this.setSprings(opts.arm);
 		this.hand.move(opts.hand);
 	},
+	resize: function(opts) {
+		this.setScales(opts.arm);
+		this.hand.resize(opts.hand);
+	},
 	tick: function() {
 		zero.core[this.variety].parts.forEach(this.tickPart);
 		this.hand.tick();
+	},
+	setBody: function(bod) {
+		this.body = bod;
+		this.hand.setBody(bod);
 	},
 	build: function() {
 		var oz = this.opts, bones = oz.bones, bmap = oz.bonemap;

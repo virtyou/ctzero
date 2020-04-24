@@ -41,24 +41,42 @@ zero.core.Skeleton = CT.Class({
 			return pdata[dim];
 		return pdata;
 	},
+	aspRules: function(sname) {
+		var aspringz = {}, bspringz = {},
+			rs = CT.data.choice(["twist", "bow",
+				"lean", "shake", "nod", "tilt"]),
+			ps = CT.data.choice(["ah", "ee", "ow",
+				"ff", "m", "n", "th"]),
+			fs = CT.data.choice(["asym", "smileEyes",
+				"lids", "smile", "bigSmile", "brow",
+				"browAsym", "browSad", "frown"]);
+		aspringz[sname] = 1;
+		bspringz[rs] = 1 - Math.random() * 2;
+		bspringz[ps] = 0.025 - Math.random() * 0.05;
+		bspringz[fs] = 0.025 - Math.random() * 0.05;
+		return {
+			springs: aspringz,
+			bsprings: bspringz
+		};
+	},
 	setJoint: function(part, dim, jrules) {
-		var aspringz, sname = part + "_" + dim;
+		var sname = part + "_" + dim, rz;
 		jrules = jrules || this.jointRules(part, dim);
 		this.springs[sname] = zero.core.springController.add({
 			k: 20,
 			damp: 10
 		}, sname, this);
-		aspringz = {};
-		aspringz[sname] = 1;
 		if (this.opts.side == "left" && this.shouldReverse(part, dim)) {
 			jrules = {
 				max: -jrules.min,
 				min: -jrules.max
 			};
 		}
-		this.aspects[sname] = zero.core.aspectController.add(CT.merge({
-			springs: aspringz
-		}, jrules), sname, this);
+		rz = CT.merge(this.aspRules(sname), jrules);
+		this.aspects[sname] = zero.core.aspectController.add(rz, sname, this);
+	},
+	setBody: function(bod) {
+		this.body = bod;
 	},
 	shouldReverse: function(part, dim) {
 		return dim == "z";
@@ -71,8 +89,19 @@ zero.core.Skeleton = CT.Class({
 			});
 		}
 	},
+	setScales: function(opts) {
+		var part, thaz = this;
+		for (part in opts) {
+			zero.core.util.coords(opts[part], function(dim, val) {
+				thaz[part].scale[dim] = val;
+			});
+		}
+	},
 	move: function(opts) {
 		this.setSprings(opts);
+	},
+	resize: function(opts) {
+		this.setScales(opts);
 	},
 	energy: function() {
 		return this.parent.energy();
@@ -87,7 +116,8 @@ zero.core.Skeleton = CT.Class({
 		});
 		this.variety = this.CLASSNAME.split(".")[2];
 		this.vlower = this.variety.toLowerCase(); // should these be automated by CT.Class?
-		this.parent = opts.parent;
+		this.parent = opts.parent || opts.body;
+		opts.body && this.setBody(opts.body);
 		this.build();
 	}
 });
