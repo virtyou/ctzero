@@ -3,41 +3,20 @@ zero.core.Body = CT.Class({
 	_xyz: ["weave", "bob", "slide"],
 	_assembled: function() {
 		this.log("built body!");
-		var dim, name, h = thiz = this,
-			ac = zero.core.aspectController,
-			spine = this.spine = [],
-			joints = this.joints = {};
-		this.opts.joints.forEach(function(part, i) {
-			if (i) // hack
-				h = h[part.name];
-			spine.push(part.name);
-		});
-		this.head = h.head;
+		this.head = this.torso.neck.head;
 		this.head.body = this;
-		this.torso.body = this;
-		this.opts.joints.forEach(function(part, i) {
-			for (dim in part.rotation) {
-				name = part.name + "_" + dim;
-				joints[name] = ac.add(part.rotation[dim], name, thiz);
-				joints[name].part = spine[i];
-			}
-		});
+		this.torso.setBody(this);
 		this.allbones = this.thring.skeleton.bones;
+		this.spine = new zero.core.Spine({
+			body: this,
+			bones: this.allbones
+		});
 		this._.setPositioners();
 		this._.setBounds();
 	},
-	_setRotation: function() {
-		var bonez = this.thring.skeleton.bones,
-			j, joint, name, axis;
-		for (j in this.joints) {
-			joint = this.joints[j];
-			[name, axis] = j.split("_");
-			bonez[this.spine.indexOf(name)].rotation[axis] = joint.value;
-		}
-	},
 	move: function(ropts) {
 		this.torso.move(ropts);
-//		this.spine.move(ropts.spine);
+		this.spine.move(ropts.spine);
 	},
 	setBob: function() {
 		var obj = zero.core.current.room.getObject(this.bone.position);
@@ -47,9 +26,9 @@ zero.core.Body = CT.Class({
 		return this.person && this.person.energy;
 	},
 	tick: function() {
-		this._setRotation();
 		this.head.tick();
 		this.torso.tick();
+		this.spine.tick();
 		this.bone.position.y = this.positioners.bob.value;
 		this.bone.position.x = this.positioners.weave.value;
 		this.bone.position.z = this.positioners.slide.value;
