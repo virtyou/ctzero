@@ -167,14 +167,14 @@ zero.core.Person = CT.Class({
 		var gest = {}, zcu = zero.core.util;
 		if (!resetz) {
 			if (side || sub)
-				resetz = zcu.neutral(side, sub);
+				resetz = zcu.neutral(side, sub, 1);
 			else if (this.activeMod) {
 				resetz = this.opts.mods[this.activeMod];
 				delete this.activeMod;
 			} else
-				resetz = zcu.neutral(side, sub);
+				resetz = zcu.neutral(side, sub, 1);
 		}
-		zcu.mergeBit(resetz, gest);
+		zcu.mergeBit(resetz, gest, 1);
 		this.body.resize(gest);
 	},
 	remove: function() {
