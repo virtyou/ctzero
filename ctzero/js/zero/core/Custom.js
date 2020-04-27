@@ -15,7 +15,7 @@ zero.core.Custom = CT.Class({
 		this.custom_rep = this.opts.custom({
 			scene: this.group,
 			iterator: function() {
-				thiz.opts.scene.add(thiz.group);
+				(thiz.opts.anchor || thiz.opts.scene).add(thiz.group);
 				thiz._.built();
 			}
 		}); // thrings[]?
