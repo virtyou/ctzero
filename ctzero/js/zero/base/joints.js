@@ -34,7 +34,9 @@ zero.base.joints = function() {
                 max: 0.5,
                 min: -0.5,
                 bsprings: {
-                    nod: 0.5,
+                    nod: 0.5
+                },
+                hsprings: {
                     ah: -0.004,
                     ee: 0.004
                 }
@@ -43,7 +45,9 @@ zero.base.joints = function() {
                 max: 0.5,
                 min: -0.5,
                 bsprings: {
-                    shake: 0.5,
+                    shake: 0.5
+                },
+                hsprings: {
                     ow: -0.004,
                     n: -0.004
                 }
@@ -52,7 +56,9 @@ zero.base.joints = function() {
                 max: 0.5,
                 min: -0.5,
                 bsprings: {
-                    tilt: 0.5,
+                    tilt: 0.5
+                },
+                hsprings: {
                     ow: -0.004,
                     n: -0.004
                 }
@@ -65,7 +71,9 @@ zero.base.joints = function() {
                 max: 0.5,
                 min: -0.5,
                 bsprings: {
-                    nod: 0.5,
+                    nod: 0.5
+                },
+                hsprings: {
                     ah: -0.004,
                     ee: 0.004
                 }
@@ -74,7 +82,9 @@ zero.base.joints = function() {
                 max: 0.5,
                 min: -0.5,
                 bsprings: {
-                    shake: 0.5,
+                    shake: 0.5
+                },
+                hsprings: {
                     ow: -0.004,
                     n: -0.004
                 }
@@ -83,7 +93,9 @@ zero.base.joints = function() {
                 max: 0.5,
                 min: -0.5,
                 bsprings: {
-                    tilt: 0.5,
+                    tilt: 0.5
+                },
+                hsprings: {
                     ow: -0.004,
                     n: -0.004
                 }
@@ -96,7 +108,9 @@ zero.base.joints = function() {
                 max: 0.5,
                 min: -0.5,
                 bsprings: {
-                    nod: 0.5,
+                    nod: 0.5
+                },
+                hsprings: {
                     ah: -0.004,
                     ee: 0.004
                 }
@@ -105,7 +119,9 @@ zero.base.joints = function() {
                 max: 0.5,
                 min: -0.5,
                 bsprings: {
-                    shake: 0.5,
+                    shake: 0.5
+                },
+                hsprings: {
                     ow: -0.004,
                     n: 0.004
                 }
@@ -114,7 +130,9 @@ zero.base.joints = function() {
                 max: 0.5,
                 min: -0.5,
                 bsprings: {
-                    tilt: 0.5,
+                    tilt: 0.5
+                },
+                hsprings: {
                     ow: -0.004,
                     n: 0.004
                 }
@@ -127,7 +145,9 @@ zero.base.joints = function() {
                 max: 0.5,
                 min: -0.5,
                 bsprings: {
-                    nod: 0.5,
+                    nod: 0.5
+                },
+                hsprings: {
                     ah: -0.004,
                     ee: 0.004
                 }
@@ -136,7 +156,9 @@ zero.base.joints = function() {
                 max: 0.5,
                 min: -0.5,
                 bsprings: {
-                    shake: 0.5,
+                    shake: 0.5
+                },
+                hsprings: {
                     ow: -0.004,
                     n: 0.004
                 }
@@ -145,7 +167,9 @@ zero.base.joints = function() {
                 max: 0.5,
                 min: -0.5,
                 bsprings: {
-                    tilt: 0.5,
+                    tilt: 0.5
+                },
+                hsprings: {
                     ow: -0.004,
                     n: 0.004
                 }
