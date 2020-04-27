@@ -26,7 +26,7 @@ zero.core.Person = CT.Class({
 			});
 		},
 		setPho: function(pho) {
-		    this.body.head.currentPhoneme = pho;
+		    this.head.currentPhoneme = pho;
 		},
 		initSpeech: function() {
 			this._.audio = document.createElement("audio");
