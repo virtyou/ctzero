@@ -163,5 +163,10 @@ zero.core.Head = CT.Class({
 //		this.updaters.mouth();
 		var skeleton = this.thring.skeleton;
 		this._.customs.forEach(function(c) { c.tick(skeleton); });
+	},
+	init: function() {
+		var p, zc = zero.core;
+		for (p in zc.phonemes.forms)
+			this.springs[p] = zc.springController.add(zc.phonemes.forms[p], p, this);
 	}
 }, zero.core.Thing);

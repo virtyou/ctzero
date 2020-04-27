@@ -90,9 +90,5 @@ zero.core.Body = CT.Class({
 
 
 		opts.frustumCulled = false; // TODO: figure out real problem and fix!!!
-		var p, zc = zero.core;
-		for (p in zc.phonemes.forms)
-			this.springs[p] = zc.springController.add(zc.phonemes.forms[p], p, this);
-		zero.core.morphs.init(this);
 	}
 }, zero.core.Thing);
