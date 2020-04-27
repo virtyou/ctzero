@@ -139,11 +139,29 @@ zero.core.Head = CT.Class({
 	energy: function() {
 		return this.person && this.person.energy;
 	},
+	preassemble: function() {
+		// TEMPORARY PREASSAMBLE HACK!!!
+		this.opts.parts = [];
+		this.opts.parts.push({
+			name: "eyeL",
+			kind: "eye",
+			texture: "/blob/5",
+			stripset: "/blob/11",
+			anchor: this.bones[5]
+		});
+		this.opts.parts.push({
+			name: "eyeR",
+			kind: "eye",
+			texture: "/blob/5",
+			stripset: "/blob/11",
+			anchor: this.bones[6]
+		});
+	},
 	tick: function() {
 		if (!this.isReady()) return;
-		this.updaters.eyes();
-		this.updaters.mouth();
-		var skeleton = this.body.thring.skeleton;
+//		this.updaters.eyes();
+//		this.updaters.mouth();
+		var skeleton = this.thring.skeleton;
 		this._.customs.forEach(function(c) { c.tick(skeleton); });
 	}
 }, zero.core.Thing);
