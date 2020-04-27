@@ -161,6 +161,7 @@ zero.core.Head = CT.Class({
 		if (!this.isReady()) return;
 //		this.updaters.eyes();
 //		this.updaters.mouth();
+		zero.core.morphs.tick(this);
 		var skeleton = this.thring.skeleton;
 		this._.customs.forEach(function(c) { c.tick(skeleton); });
 	},

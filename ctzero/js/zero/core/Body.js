@@ -71,7 +71,7 @@ zero.core.Body = CT.Class({
 		this.group.position.y = this.positioners.bob.value;
 		this.group.position.x = this.positioners.weave.value;
 		this.group.position.z = this.positioners.slide.value;
-//		zero.core.morphs.tick(this);
+		zero.core.morphs.tick(this);
 		var skeleton = this.thring.skeleton;
 		this._.customs.forEach(function(c) { c.tick(skeleton); });
 	},
