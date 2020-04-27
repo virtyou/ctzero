@@ -37,7 +37,7 @@ zero.core.Thing = CT.Class({
 		setBounds: function() {
 			var radii = this.radii = {},
 				bounds = this.bounds = this.bounds || new THREE.Box3();
-			bounds.setFromObject(this.bone || this.thring);
+			bounds.setFromObject(this.group);
 			["x", "y", "z"].forEach(function(dim) {
 				radii[dim] = (bounds.max[dim] - bounds.min[dim]) / 2;
 			});
@@ -186,17 +186,16 @@ zero.core.Thing = CT.Class({
 		if (position)
 			this.update({ position: position });
 		else {
-			var thring = (this.thring || this.group);
 			if (world)
-				return thring.getWorldPosition();
-			return thring.position;
+				return this.group.getWorldPosition();
+			return this.group.position;
 		}
 	},
 	rotation: function(rotation) {
 		if (rotation)
 			this.update({ rotation: rotation });
 		else
-			return (this.thring || this.group).rotation;
+			return this.group.rotation;
 	},
 	scale: function(scale) {
 		if (scale) {
@@ -205,23 +204,18 @@ zero.core.Thing = CT.Class({
 			this.update({ scale: scale });
 		}
 		else
-			return (this.thring || this.group).scale;
+			return this.group.scale;
 	},
 	setBone: function() {
-		var oz  = this.opts;
-		if (oz.bones.length || this.thring && this.thring.skeleton) {
-			if (this.thring && this.thring.skeleton) {
-				this.bones = this.thring.skeleton.bones.slice(0, oz.joints.length);
-				this.bone = this.bones[0];
-				oz.scene.add(this.bone);
-			} else {
-				this.bones = oz.bones.slice();
-				this.bone = this.bones.shift();
-			}
-		}
+		var ts = this.thring && this.thring.skeleton;
+		if (ts) {
+			this.bones = ts.bones;
+			this.bmap = this.geojson.bonemap;
+		} else
+			this.bones = this.opts.bones;
 	},
 	place: function() {
-		var oz = this.opts, thring = this.thring || this.group;
+		var oz = this.opts, thring = this.group;
 		["position", "rotation", "scale"].forEach(function(prop) {
 			var setter = thring[prop];
 			setter.set.apply(setter, oz[prop]);
@@ -237,18 +231,14 @@ zero.core.Thing = CT.Class({
 		}
 		this.thring = new THREE[oz.meshcat](geometry, this.material);
 		this.thring.frustumCulled = oz.frustumCulled; // should probs usually be default (true)
-		this.place();
 		this.setBone();
-		(this.bone || oz.scene).add(this.thring);
 		for (var m in this.opts.mti)
 			this.morphTargetInfluences(m, this.opts.mti[m]);
 		this.assemble();
+		this.place();
 	},
-	adjust: function(property, dimension, value, thringonly, grouponly) {
-		if (this.thring && !grouponly)
-			this.thring[property][dimension] = value;
-		if (this.group && !thringonly)
-			this.group[property][dimension] = value;
+	adjust: function(property, dimension, value) {
+		this.group[property][dimension] = value;
 	},
 	update: function(opts) {
 		var o, setter, full, adjust = this.adjust;
@@ -257,18 +247,16 @@ zero.core.Thing = CT.Class({
 				full = full || (item in opts);
 			});
 		this.opts = CT.merge(opts, this.opts);
-		if (!(this.thring || this.group)) return; // hasn't built yet, just wait
+		if (!this.group) return; // hasn't built yet, just wait
 		if (full)
 			return this.build();
-		for (o in opts) {
-			["position", "rotation", "scale"].forEach(function(prop) {
-				if (o == prop) {
-					zero.core.util.coords(opts[prop], function(dim, val) {
-						adjust(o, dim, val);
-					});
-				}
-			});
-		}
+		["position", "rotation", "scale"].forEach(function(prop) {
+			if (prop in opts) {
+				zero.core.util.coords(opts[prop], function(dim, val) {
+					adjust(prop, dim, val);
+				});
+			}
+		});
 	},
 	vary: function(variant) {
 		this.update(this.opts.variants[variant]);
@@ -320,7 +308,8 @@ zero.core.Thing = CT.Class({
 				child.custom && customs.push(tng); // for tick()ing
 				iterator && iterator();
 			},
-			bones: this.bones || []
+			bones: this.bones || [],
+			bmap: this.bmap || {}
 		});
 		if (child.custom)
 			thing = new zero.core.Custom(childopts);
@@ -339,29 +328,29 @@ zero.core.Thing = CT.Class({
 		this._.built();
 	},
 	assemble: function() {
-		if (!this.parts) {
-			this.preassemble && this.preassemble();
-			var thiz = this, i = 0,
-				group = this.group = this.bone || new THREE.Object3D(),
-				iterator = function() {
-					i += 1;
-					if (i >= thiz.opts.parts.length) {
-						if (!thiz.bone && i == thiz.opts.parts.length)
-							thiz.opts.scene.add(group);
-						thiz._.assembled = true;
-						thiz.assembled();
-					}
-				};
-			if (this.opts.invisible)
-				this.hide();
-			this.parts = this.opts.parts.map(function(p) {
-				return thiz.attach(p, iterator);
-			});
-			this.postassemble && this.postassemble();
-			if (!this.opts.parts.length) {
-				i -= 1;
-				iterator();
-			}
+		if (this.parts) return; // for rebuild update()....
+		this.preassemble && this.preassemble();
+		var thiz = this, oz = this.opts, i = 0,
+			group = this.group = new THREE.Object3D(),
+			iterator = function() {
+				i += 1;
+				if (i >= oz.parts.length) {
+					if (i == oz.parts.length)
+						oz.scene.add(group);
+					thiz._.assembled = true;
+					thiz.assembled();
+				}
+			};
+		if (oz.invisible)
+			this.hide();
+		this.thring && group.add(this.thring);
+		this.parts = oz.parts.map(function(p) {
+			return thiz.attach(p, iterator);
+		});
+		this.postassemble && this.postassemble();
+		if (!oz.parts.length) {
+			i -= 1;
+			iterator();
 		}
 	},
 	build: function() {
