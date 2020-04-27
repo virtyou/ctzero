@@ -1,42 +1,5 @@
 zero.base.springs = function() {
     return {
-        asym: {
-            k: 20,
-            damp: 10
-        },
-        smileEyes: {
-            k: 20,
-            damp: 10
-        },
-        lids: {
-            k: 220,
-            damp: 40
-        },
-        smile: {
-            k: 20,
-            damp: 10
-        },
-        bigSmile: {
-            k: 20,
-            damp: 10
-        },
-        brow: {
-            k: 20,
-            damp: 10
-        },
-        browAsym: {
-            k: 20,
-            damp: 10
-        },
-        browSad: {
-            k: 20,
-            damp: 10
-        },
-        frown: {
-            k: 20,
-            damp: 10
-        },
-
         bob: {
             k: 10,
             damp: 5
@@ -83,6 +46,47 @@ zero.base.springs = function() {
         tilt: {
             k: 50,
             damp: 5
+        }
+    };
+};
+
+zero.base.springs.head = function() {
+    return {
+        asym: {
+            k: 20,
+            damp: 10
+        },
+        smileEyes: {
+            k: 20,
+            damp: 10
+        },
+        blink: {
+            k: 220,
+            damp: 40
+        },
+        smile: {
+            k: 20,
+            damp: 10
+        },
+        bigSmile: {
+            k: 20,
+            damp: 10
+        },
+        brow: {
+            k: 20,
+            damp: 10
+        },
+        browAsym: {
+            k: 20,
+            damp: 10
+        },
+        browSad: {
+            k: 20,
+            damp: 10
+        },
+        frown: {
+            k: 20,
+            damp: 10
         }
     };
 };
