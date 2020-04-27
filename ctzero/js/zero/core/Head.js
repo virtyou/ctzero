@@ -156,6 +156,12 @@ zero.core.Head = CT.Class({
 			stripset: "/blob/11",
 			anchor: this.bones[6]
 		});
+		this.opts.parts.push({
+			name: "pony",
+			kind: "hair",
+			anchor: this.bones[4],
+			custom: "custom.one.pony"
+		});
 	},
 	tick: function() {
 		if (!this.isReady()) return;
