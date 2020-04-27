@@ -8,16 +8,15 @@ zero.core.Spine = CT.Class({
 		return bz;
 	},
 	tickPart: function(part) {
-		var zcst = zero.core.Spine.trunc,
+		var zcsp = zero.core.Spine.parts,
 			rz = this.rotation(part);
 		zero.core.util.update(rz, this[part].rotation);
-		if (part != "ribs" && zcst.includes(part))
-			zero.core.util.update(rz,
-				this.opts.hbones[zcst.indexOf(part)].rotation);
+		zero.core.util.update(rz,
+			this.opts.hbones[zcsp.indexOf(part)].rotation);
 	},
 	jointRules: function(part, dim) {
 		var pi = zero.core.Spine.parts.indexOf(part),
-			pdata = this.parent.opts.joints[pi].rotation;
+			pdata = this.body.opts.joints[pi].rotation;
 		if (dim)
 			return pdata[dim];
 		return pdata;
@@ -30,5 +29,4 @@ zero.core.Spine = CT.Class({
 		};
 	}
 }, zero.core.Skeleton);
-zero.core.Spine.trunc = ["ribs", "neck", "head"];
 zero.core.Spine.parts = ["pelvis", "lumbar", "ribs", "neck", "head"]
