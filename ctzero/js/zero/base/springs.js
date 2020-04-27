@@ -1,4 +1,5 @@
-zero.base.springs = function() {
+zero.base.springs = {};
+zero.base.springs.body = function() {
     return {
         bob: {
             k: 10,
