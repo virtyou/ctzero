@@ -29,7 +29,7 @@ zero.base.aspects = function() {
             min: 0,
             max: 0.8,
             springs: {
-                lids: 1
+                blink: 1
             }
         },
         brow: {
