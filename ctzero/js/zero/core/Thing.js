@@ -336,7 +336,7 @@ zero.core.Thing = CT.Class({
 				i += 1;
 				if (i >= oz.parts.length) {
 					if (i == oz.parts.length)
-						oz.scene.add(group);
+						(oz.anchor || oz.scene).add(group);
 					thiz._.assembled = true;
 					thiz.assembled();
 				}
