@@ -444,10 +444,14 @@ zero.core.Thing = CT.Class({
 			scroll: null,
 			frustumCulled: true
 		});
+		this.variety = this.CLASSNAME.split(".")[2];
+		var vl = this.vlower = this.variety.toLowerCase(); // should these be automated by CT.Class?
 		this.setName(opts);
 		var thiz = this, iz, name;
 		["spring", "aspect", "ticker"].forEach(function(influence) {
 			iz = influence + "s", influences = thiz[iz] = {};
+			if (vl in zero.base[iz])
+				opts[iz] = zero.base[iz][vl]();
 			for (name in opts[iz])
 				thiz[iz][name] = zero.core[influence + "Controller"].add(opts[iz][name], name, thiz);
 		});
