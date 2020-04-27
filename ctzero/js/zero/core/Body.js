@@ -3,16 +3,51 @@ zero.core.Body = CT.Class({
 	_xyz: ["weave", "bob", "slide"],
 	_assembled: function() {
 		this.log("built body!");
-		this.head = this.torso.neck.head;
 		this.head.body = this;
-		this.torso.setBody(this);
-		this.allbones = this.thring.skeleton.bones;
+		this.torso = new zero.core.Torso({
+			body: this,
+			bmap: this.bmap,
+			bones: this.bones
+		});
 		this.spine = new zero.core.Spine({
 			body: this,
-			bones: this.allbones
+			bones: this.bones,
+			hbones: this.head.bones
 		});
 		this._.setPositioners();
 		this._.setBounds();
+	},
+	preassemble: function() {
+		// TEMPORARY MID-REFACTOR PREASSAMBLE HACK!!!
+		this.opts.parts = [];
+		this.opts.parts.push({
+			name: "looker",
+			position: [0, 35, 25],
+			cubeGeometry: [1, 1, 5],
+			material: {
+			    color: 0x00ff00,
+			    visible: false
+			}
+		});
+		this.opts.parts.push({
+			name: "lookAt",
+			position: [0, 35, 55],
+			cubeGeometry: [1, 1, 5],
+			material: {
+			    color: 0x00ff00,
+			    visible: false
+			}
+		});
+		this.opts.parts.push(CT.merge(this.opts.head, {
+			// TODO: parts!
+			//morphStack: "one.head",
+			name: "head",
+			thing: "Head",
+			texture: "/blob/6",
+			stripset: "/models/head.js",
+			meshcat: "SkinnedMesh",
+			material: { skinning: true }
+		}));
 	},
 	move: function(ropts) {
 		this.torso.move(ropts);
@@ -33,10 +68,10 @@ zero.core.Body = CT.Class({
 		this.head.tick();
 		this.torso.tick();
 		this.spine.tick();
-		this.bone.position.y = this.positioners.bob.value;
-		this.bone.position.x = this.positioners.weave.value;
-		this.bone.position.z = this.positioners.slide.value;
-		zero.core.morphs.tick(this);
+		this.group.position.y = this.positioners.bob.value;
+		this.group.position.x = this.positioners.weave.value;
+		this.group.position.z = this.positioners.slide.value;
+//		zero.core.morphs.tick(this);
 		var skeleton = this.thring.skeleton;
 		this._.customs.forEach(function(c) { c.tick(skeleton); });
 	},
@@ -47,6 +82,13 @@ zero.core.Body = CT.Class({
 //			shader: true,
 			onassemble: this._assembled
 		});
+
+
+		// TEMPORARY MID-REFACTOR HACK!!!
+		opts.stripset = "/models/bod.js";
+		opts.texture = "/maps/shirt.jpg";
+
+
 		opts.frustumCulled = false; // TODO: figure out real problem and fix!!!
 		var p, zc = zero.core;
 		for (p in zc.phonemes.forms)
