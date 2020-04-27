@@ -1,4 +1,5 @@
-zero.base.tickers = function() {
+zero.base.tickers = {};
+zero.base.tickers.body = function() {
     return {
         nod: {
             talking: {
