@@ -145,16 +145,16 @@ zero.core.Head = CT.Class({
 		this.opts.parts.push({
 			name: "eyeL",
 			kind: "eye",
-			texture: "/blob/5",
-			stripset: "/blob/11",
-			anchor: this.bones[5]
+			anchor: this.bones[5],
+			texture: "/maps/one/eye_brown_basic.jpg",
+			stripset: "/models/one/eyeCminusHole3.js"
 		});
 		this.opts.parts.push({
 			name: "eyeR",
 			kind: "eye",
-			texture: "/blob/5",
-			stripset: "/blob/11",
-			anchor: this.bones[6]
+			anchor: this.bones[6],
+			texture: "/maps/one/eye_brown_basic.jpg",
+			stripset: "/models/one/eyeCminusHole3.js"
 		});
 		this.opts.parts.push({
 			name: "pony",

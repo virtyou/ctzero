@@ -43,7 +43,7 @@ zero.core.Body = CT.Class({
 			//morphStack: "one.head",
 			name: "head",
 			thing: "Head",
-			texture: "/blob/6",
+			texture: "/maps/one/head.jpg",
 			stripset: "/models/head.js",
 			meshcat: "SkinnedMesh",
 			material: { skinning: true }
