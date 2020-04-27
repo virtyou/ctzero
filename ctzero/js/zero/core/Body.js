@@ -58,7 +58,7 @@ zero.core.Body = CT.Class({
 		this.spine.resize(ropts.spine);
 	},
 	setBob: function() {
-		var obj = zero.core.current.room.getObject(this.bone.position);
+		var obj = zero.core.current.room.getObject(this.group.position);
 		this._.bounder("y", 1, obj && obj.getTop());
 	},
 	energy: function() {
@@ -77,7 +77,7 @@ zero.core.Body = CT.Class({
 	},
 	init: function(opts) {
 		this.opts = opts = CT.merge(this.opts, {
-			joints: [],
+			joints: zero.base.joints(),
 			morphs: {},
 //			shader: true,
 			onassemble: this._assembled
