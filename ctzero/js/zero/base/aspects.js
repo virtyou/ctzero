@@ -1,4 +1,5 @@
-zero.base.aspects = function() {
+zero.base.aspects = {};
+zero.base.aspects.head = function() {
     return {
         ah: {
             springs: {
