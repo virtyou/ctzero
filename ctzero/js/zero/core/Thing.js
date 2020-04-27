@@ -207,10 +207,17 @@ zero.core.Thing = CT.Class({
 			return this.group.scale;
 	},
 	setBone: function() {
-		var ts = this.thring && this.thring.skeleton;
+		var ts = this.thring && this.thring.skeleton, gjs, ms;
 		if (ts) {
+			gjs = this.geojson;
 			this.bones = ts.bones;
-			this.bmap = this.geojson.bonemap;
+			this.bmap = gjs.bonemap;
+			this.base = gjs.vertices;
+			this.morphStack = ms = {};
+			gjs.morphTargets.forEach(function(mt) {
+				ms[mt.name] = mt;
+			});
+			zero.core.morphs.init(this);
 		} else
 			this.bones = this.opts.bones;
 	},
@@ -438,7 +445,7 @@ zero.core.Thing = CT.Class({
 			springs: {},
 			aspects: {},
 			tickers: {},
-			morphStack: null,
+			morphs: {},
 			iterator: null,
 			onbuild: null, // also supports: "onassemble"
 			scroll: null,
@@ -455,11 +462,6 @@ zero.core.Thing = CT.Class({
 			for (name in opts[iz])
 				thiz[iz][name] = zero.core[influence + "Controller"].add(opts[iz][name], name, thiz);
 		});
-		if (opts.morphStack) { // required for Body (for instance)
-			var ms = CT.require("morphs." + opts.morphStack, true);
-			this.morphStack = ms.stack; 
-			this.base = ms.base;
-		}
 		setTimeout(function() {
 			thiz.opts.deferBuild || thiz.build();
 		}); // next post-init tick
