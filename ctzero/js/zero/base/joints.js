@@ -28,7 +28,38 @@ zero.base.joints = function() {
             }
         }
     }, {
-        name: "torso",
+        name: "lumbar",
+        rotation: {
+            x: {
+                max: 0.5,
+                min: -0.5,
+                bsprings: {
+                    nod: 0.5,
+                    ah: -0.004,
+                    ee: 0.004
+                }
+            },
+            y: {
+                max: 0.5,
+                min: -0.5,
+                bsprings: {
+                    shake: 0.5,
+                    ow: -0.004,
+                    n: -0.004
+                }
+            },
+            z: {
+                max: 0.5,
+                min: -0.5,
+                bsprings: {
+                    tilt: 0.5,
+                    ow: -0.004,
+                    n: -0.004
+                }
+            }
+        }
+    }, {
+        name: "ribs",
         rotation: {
             x: {
                 max: 0.5,
@@ -60,6 +91,37 @@ zero.base.joints = function() {
         }
     }, {
         name: "neck",
+        rotation: {
+            x: {
+                max: 0.5,
+                min: -0.5,
+                bsprings: {
+                    nod: 0.5,
+                    ah: -0.004,
+                    ee: 0.004
+                }
+            },
+            y: {
+                max: 0.5,
+                min: -0.5,
+                bsprings: {
+                    shake: 0.5,
+                    ow: -0.004,
+                    n: 0.004
+                }
+            },
+            z: {
+                max: 0.5,
+                min: -0.5,
+                bsprings: {
+                    tilt: 0.5,
+                    ow: -0.004,
+                    n: 0.004
+                }
+            }
+        }
+    }, {
+        name: "head",
         rotation: {
             x: {
                 max: 0.5,
