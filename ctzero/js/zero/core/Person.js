@@ -103,13 +103,14 @@ zero.core.Person = CT.Class({
 		}
 	},
 	approach: function(subject) {
-		var vec, bod = this.body, dance = this.dance;
+		var bod = this.body, dance = this.dance,
+			vec, geto = this.getOrientation;
 		bod.springs.orientation.k = 200;
 		this.look(subject, true);
 		setTimeout(function() { // adapted from Controls.mover()... revise?
 			dance("walk");
+			vec = geto();
 			bod.springs.orientation.k = 20;
-			vec = bod.bone.getWorldDirection();
 			bod.springs.weave.boost = 2 * vec.x;
 			bod.springs.slide.boost = 2 * vec.z;
 		}, 500); // time for orientation...
@@ -121,6 +122,9 @@ zero.core.Person = CT.Class({
 			mood: this.mood.snapshot(),
 			body: this.body.snapshot()
 		}
+	},
+	getOrientation: function() {
+		return this.body.bones[0].getWorldDirection();
 	},
 	_dance: function() {
 		if (!this.activeDance)
