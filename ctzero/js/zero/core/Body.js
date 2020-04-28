@@ -39,8 +39,6 @@ zero.core.Body = CT.Class({
 			}
 		});
 		this.opts.parts.push(CT.merge(this.opts.head, {
-			// TODO: parts!
-			//morphStack: "one.head",
 			name: "head",
 			thing: "Head",
 			texture: "/maps/one/head.jpg",
@@ -78,7 +76,6 @@ zero.core.Body = CT.Class({
 	init: function(opts) {
 		this.opts = opts = CT.merge(this.opts, {
 			joints: zero.base.joints(),
-			morphs: {},
 //			shader: true,
 			onassemble: this._assembled
 		});
