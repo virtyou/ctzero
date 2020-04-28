@@ -96,20 +96,20 @@ zero.core.Person = CT.Class({
 	look: function(subject, orient) {
 		this.subject = subject;
 		if (orient) {
-			var pos = this.body.bone.position,
+			var pos = this.body.group.position,
 				spos = subject.position();
-			this.body.springs.orientation.target = Math.atan2(
-				spos.x - pos.x, spos.z - pos.z);
+			this.orientation(Math.atan2(spos.x
+				- pos.x, spos.z - pos.z));
 		}
 	},
 	approach: function(subject) {
 		var bod = this.body, dance = this.dance,
-			vec, geto = this.getOrientation;
+			vec, getd = this.direction;
 		bod.springs.orientation.k = 200;
 		this.look(subject, true);
 		setTimeout(function() { // adapted from Controls.mover()... revise?
 			dance("walk");
-			vec = geto();
+			vec = getd();
 			bod.springs.orientation.k = 20;
 			bod.springs.weave.boost = 2 * vec.x;
 			bod.springs.slide.boost = 2 * vec.z;
@@ -123,7 +123,13 @@ zero.core.Person = CT.Class({
 			body: this.body.snapshot()
 		}
 	},
-	getOrientation: function() {
+	orientation: function(o) {
+		if (o)
+			this.body.springs.orientation.target = o;
+		else
+			return this.body.springs.orientation.target;
+	},
+	direction: function() {
 		return this.body.bones[0].getWorldDirection();
 	},
 	_dance: function() {
