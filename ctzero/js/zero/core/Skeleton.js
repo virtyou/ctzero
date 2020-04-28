@@ -48,7 +48,7 @@ zero.core.Skeleton = CT.Class({
 			ps = CT.data.choice(["ah", "ee", "ow",
 				"ff", "m", "n", "th"]),
 			fs = CT.data.choice(["asym", "smileEyes",
-				"blink", "smile", "bigSmile", "brow",
+				"smile", "bigSmile", "brow",
 				"browAsym", "browSad", "frown"]);
 		aspringz[sname] = 1;
 		bspringz[rs] = 1 - Math.random() * 2;
