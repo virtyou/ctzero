@@ -43,7 +43,7 @@ zero.core.Controls = CT.Class({
 	},
 	direct: function(speed) {
 		var springz = this.springs,
-			vec = this.target.getOrientation();
+			vec = this.target.direction();
 		["x", "z"].forEach(function(dim) {
 			springz[dim].boost = speed * vec[dim];
 		});
