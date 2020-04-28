@@ -174,12 +174,8 @@ zero.core.Thing = CT.Class({
 		zero.core.util.ontick(this._.scroller);
 	},
 	look: function(pos) {
-		var myPos = this.position(null, true);
-		this.thring.lookAt({
-			x: pos.x - myPos.x,
-			y: pos.y - myPos.y,
-			z: pos.z - myPos.z
-		});
+		this.group.lookAt(zero.core.util.vector(this.position(null,
+			true), pos));
 	},
 	// position(), rotation(), scale(): getters _and_ setters
 	position: function(position, world) {
@@ -215,7 +211,7 @@ zero.core.Thing = CT.Class({
 			this.base = gjs.vertices;
 			this.morphStack = ms = {};
 			gjs.morphTargets.forEach(function(mt) {
-				ms[mt.name] = mt;
+				ms[mt.name] = mt.vertices;
 			});
 			zero.core.morphs.init(this);
 		} else
