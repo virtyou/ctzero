@@ -278,14 +278,12 @@ zero.core.Thing = CT.Class({
 			mti[influence] = mti[influence] ? 0 : 1;
 	},
 	remove: function() {
-		if (this.thring)
-			this.opts.scene.remove(this.thring);
-		if (this.group)
-			this.opts.scene.remove(this.group);
+		var oz = this.opts;
+		(oz.anchor || oz.scene).remove(this.group);
 		this.unscroll();
 		this.unvideo();
-		if (this.opts.key)
-			delete zero.core.Thing._things[this.opts.key];
+		if (oz.key)
+			delete zero.core.Thing._things[oz.key];
 	},
 	detach: function(cname) {
 		var thing = this[cname];
