@@ -6,7 +6,7 @@ zero.core.Custom = CT.Class({
 	},
 	setName: function(opts) {
 		var thiz = this;
-		this.group = new THREE.Object3D();
+		this.group = this.placer = new THREE.Object3D();
 		// custom() must:
 		// - call iterator() post-init
 		// - return object with tick() (bonus points: name, thrings[])

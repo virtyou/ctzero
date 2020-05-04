@@ -15,7 +15,7 @@ zero.core.Light = CT.Class({
 	build: function() {
 		var oz = this.opts, v = oz.variety,
 			constructor = v.charAt(0).toUpperCase() + v.slice(1) + "Light";
-		this.thring = this.group = new THREE[constructor](oz.color, oz.intensity);
+		this.thring = this.placer = new THREE[constructor](oz.color, oz.intensity);
 		if (oz.variety != "ambient")
 			this.thring.position.set.apply(this.thring.position, oz.position);
 		(oz.scene || oz.anchor).add(this.thring);

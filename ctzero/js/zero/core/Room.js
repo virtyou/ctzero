@@ -175,6 +175,7 @@ zero.core.Room = CT.Class({
 		opts.lights.forEach(this.addLight);
 		opts.cameras.forEach(this.addCamera);
 		opts.objects.forEach(this.addObject);
+		this.placer = this.thring;
 	},
 	preassemble: function() {
 		var opts = this.opts;

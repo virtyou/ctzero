@@ -183,15 +183,15 @@ zero.core.Thing = CT.Class({
 			this.update({ position: position });
 		else {
 			if (world)
-				return this.group.getWorldPosition();
-			return this.group.position;
+				return this.placer.getWorldPosition();
+			return this.placer.position;
 		}
 	},
 	rotation: function(rotation) {
 		if (rotation)
 			this.update({ rotation: rotation });
 		else
-			return this.group.rotation;
+			return this.placer.rotation;
 	},
 	scale: function(scale) {
 		if (scale) {
@@ -200,7 +200,7 @@ zero.core.Thing = CT.Class({
 			this.update({ scale: scale });
 		}
 		else
-			return this.group.scale;
+			return this.placer.scale;
 	},
 	setBone: function() {
 		var ts = this.thring && this.thring.skeleton, gjs, ms;
@@ -218,7 +218,7 @@ zero.core.Thing = CT.Class({
 			this.bones = this.opts.bones;
 	},
 	place: function() {
-		var oz = this.opts, thring = this.group;
+		var oz = this.opts, thring = this.placer;
 		["position", "rotation", "scale"].forEach(function(prop) {
 			var setter = thring[prop];
 			setter.set.apply(setter, oz[prop]);
@@ -241,7 +241,7 @@ zero.core.Thing = CT.Class({
 		this.place();
 	},
 	adjust: function(property, dimension, value) {
-		this.group[property][dimension] = value;
+		this.placer[property][dimension] = value;
 	},
 	update: function(opts) {
 		var o, setter, full, adjust = this.adjust;
@@ -332,7 +332,7 @@ zero.core.Thing = CT.Class({
 		if (this.parts) return; // for rebuild update()....
 		this.preassemble && this.preassemble();
 		var thiz = this, oz = this.opts, i = 0,
-			group = this.group = new THREE.Object3D(),
+			group = this.group = this.placer = new THREE.Object3D(),
 			iterator = function() {
 				i += 1;
 				if (i >= oz.parts.length) {
