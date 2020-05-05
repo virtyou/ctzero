@@ -27,6 +27,7 @@ zero.core.Body = CT.Class({
 		this.opts.parts = [];
 		this.opts.parts.push({
 			name: "looker",
+			anchor: this.bones[0],
 			position: [0, 35, 25],
 			cubeGeometry: [1, 1, 5],
 			material: {
@@ -36,6 +37,7 @@ zero.core.Body = CT.Class({
 		});
 		this.opts.parts.push({
 			name: "lookAt",
+			anchor: this.bones[0],
 			position: [0, 35, 55],
 			cubeGeometry: [1, 1, 5],
 			material: {
