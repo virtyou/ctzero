@@ -66,21 +66,24 @@ zero.core.Head = CT.Class({
 			name: "teeth",
 			kind: "facial",
 			anchor: this.bones[4],
-			texture: "/maps/one/white.jpg",
+			position: [0, -10, 2],
+			texture: "/maps/one/teeth256s.jpg",
 			stripset: "/models/one/teeth_yan.js"
 		});
 		this.opts.parts.push({
 			name: "teeth_top",
 			kind: "facial",
 			anchor: this.bones[4],
-			texture: "/maps/one/white.jpg",
+			position: [0, -10, 2],
+			texture: "/maps/one/teeth256s.jpg",
 			stripset: "/models/one/teeth_top_yan.js"
 		});
 		this.opts.parts.push({
 			name: "tongue",
 			kind: "facial",
 			anchor: this.bones[4],
-			texture: "/maps/one/white.jpg",
+			position: [0, -10, 2],
+			texture: "/maps/one/teeth256s.jpg",
 			stripset: "/models/one/tongue_yan.js"
 		});
 		this.opts.parts.push({
