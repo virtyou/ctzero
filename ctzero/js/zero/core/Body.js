@@ -23,8 +23,6 @@ zero.core.Body = CT.Class({
 		this._.setBounds();
 	},
 	preassemble: function() {
-		// TEMPORARY MID-REFACTOR PREASSAMBLE HACK!!!
-		this.opts.parts = [];
 		this.opts.parts.push({
 			name: "looker",
 			bone: 0,
@@ -45,14 +43,6 @@ zero.core.Body = CT.Class({
 			    visible: false
 			}
 		});
-		this.opts.parts.push(CT.merge(this.opts.head, {
-			name: "head",
-			thing: "Head",
-			texture: "/maps/one/head.jpg",
-			stripset: "/models/head.js",
-			meshcat: "SkinnedMesh",
-			material: { skinning: true }
-		}));
 	},
 	move: function(ropts) {
 		this.torso.move(ropts);
@@ -83,16 +73,8 @@ zero.core.Body = CT.Class({
 	init: function(opts) {
 		this.opts = opts = CT.merge(this.opts, {
 			joints: zero.base.joints(),
-//			shader: true,
 			onassemble: this._assembled
 		});
-
-
-		// TEMPORARY MID-REFACTOR HACK!!!
-		opts.stripset = "/models/bod.js";
-		opts.texture = "/maps/shirt.jpg";
-
-
 		opts.frustumCulled = false; // TODO: figure out real problem and fix!!!
 	}
 }, zero.core.Thing);
