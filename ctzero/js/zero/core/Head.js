@@ -45,60 +45,6 @@ zero.core.Head = CT.Class({
 	energy: function() {
 		return this.person && this.person.energy;
 	},
-	preassemble: function() {
-		// TEMPORARY PREASSAMBLE HACK!!!
-		this.opts.parts = [];
-		this.opts.parts.push({
-			name: "eyeL",
-			kind: "eye",
-			bone: 5,
-			texture: "/maps/one/eye_brown_basic.jpg",
-			stripset: "/models/one/eyeCminusHole3.js"
-		});
-		this.opts.parts.push({
-			name: "eyeR",
-			kind: "eye",
-			bone: 6,
-			texture: "/maps/one/eye_brown_basic.jpg",
-			stripset: "/models/one/eyeCminusHole3.js"
-		});
-		this.opts.parts.push({
-			name: "teeth",
-			kind: "facial",
-			bone: 4,
-			position: [0, -10, 2],
-			texture: "/maps/one/teeth256s.jpg",
-			stripset: "/models/one/teeth_yan.js"
-		});
-		this.opts.parts.push({
-			name: "teeth_top",
-			kind: "facial",
-			bone: 4,
-			position: [0, -10, 2],
-			texture: "/maps/one/teeth256s.jpg",
-			stripset: "/models/one/teeth_top_yan.js"
-		});
-		this.opts.parts.push({
-			name: "tongue",
-			kind: "facial",
-			bone: 4,
-			position: [0, -10, 2],
-			texture: "/maps/one/teeth256s.jpg",
-			stripset: "/models/one/tongue_yan.js"
-		});
-		this.opts.parts.push({
-			name: "pony",
-			kind: "hair",
-			bone: 4,
-			custom: "custom.one.pony"
-		});
-		this.opts.parts.push({
-			name: "earring",
-			kind: "headgear",
-			bone: 4,
-			custom: "custom.one.earring"
-		});
-	},
 	tick: function() {
 		if (!this.isReady()) return;
 		this.updaters.eyes();
