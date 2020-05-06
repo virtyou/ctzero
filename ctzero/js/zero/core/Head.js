@@ -51,21 +51,21 @@ zero.core.Head = CT.Class({
 		this.opts.parts.push({
 			name: "eyeL",
 			kind: "eye",
-			anchor: this.bones[5],
+			bone: 5,
 			texture: "/maps/one/eye_brown_basic.jpg",
 			stripset: "/models/one/eyeCminusHole3.js"
 		});
 		this.opts.parts.push({
 			name: "eyeR",
 			kind: "eye",
-			anchor: this.bones[6],
+			bone: 6,
 			texture: "/maps/one/eye_brown_basic.jpg",
 			stripset: "/models/one/eyeCminusHole3.js"
 		});
 		this.opts.parts.push({
 			name: "teeth",
 			kind: "facial",
-			anchor: this.bones[4],
+			bone: 4,
 			position: [0, -10, 2],
 			texture: "/maps/one/teeth256s.jpg",
 			stripset: "/models/one/teeth_yan.js"
@@ -73,7 +73,7 @@ zero.core.Head = CT.Class({
 		this.opts.parts.push({
 			name: "teeth_top",
 			kind: "facial",
-			anchor: this.bones[4],
+			bone: 4,
 			position: [0, -10, 2],
 			texture: "/maps/one/teeth256s.jpg",
 			stripset: "/models/one/teeth_top_yan.js"
@@ -81,7 +81,7 @@ zero.core.Head = CT.Class({
 		this.opts.parts.push({
 			name: "tongue",
 			kind: "facial",
-			anchor: this.bones[4],
+			bone: 4,
 			position: [0, -10, 2],
 			texture: "/maps/one/teeth256s.jpg",
 			stripset: "/models/one/tongue_yan.js"
@@ -89,13 +89,13 @@ zero.core.Head = CT.Class({
 		this.opts.parts.push({
 			name: "pony",
 			kind: "hair",
-			anchor: this.bones[4],
+			bone: 4,
 			custom: "custom.one.pony"
 		});
 		this.opts.parts.push({
 			name: "earring",
 			kind: "headgear",
-			anchor: this.bones[4],
+			bone: 4,
 			custom: "custom.one.earring"
 		});
 	},
