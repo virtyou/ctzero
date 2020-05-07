@@ -15,9 +15,8 @@ zero.core.Body = CT.Class({
 			hbones: this.head.bones
 		});
 
-		// is this right???
-		this.bones[0].position.y = 0;
-			this.head.bones[0].position.y = 0;
+		// .... seems wrong
+		this.bones[0].position.y = this.head.bones[0].position.y = -8;
 
 		this._.setPositioners();
 		this._.setBounds();
