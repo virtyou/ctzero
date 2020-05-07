@@ -245,7 +245,7 @@ zero.core.Thing = CT.Class({
 	},
 	update: function(opts) {
 		var o, setter, full, adjust = this.adjust;
-		["texture", "stripset", "geometry", "matcat", "meshcat",
+		["stripset", "geometry", "matcat", "meshcat",
 			"material", "repeat", "offset", "video"].forEach(function(item) {
 				full = full || (item in opts);
 			});
@@ -253,6 +253,10 @@ zero.core.Thing = CT.Class({
 		if (!this.group) return; // hasn't built yet, just wait
 		if (full)
 			return this.build();
+		if (opts.texture) {
+			this.material.map = THREE.ImageUtils.loadTexture(opts.texture);
+			this.material.needsUpdate = true;
+		}
 		["position", "rotation", "scale"].forEach(function(prop) {
 			if (prop in opts) {
 				zero.core.util.coords(opts[prop], function(dim, val) {
