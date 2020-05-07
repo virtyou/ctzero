@@ -452,7 +452,7 @@ zero.core.Thing = CT.Class({
 		this.variety = this.CLASSNAME.split(".")[2];
 		var vl = this.vlower = this.variety.toLowerCase(); // should these be automated by CT.Class?
 		this.setName(opts);
-		if (opts.bone)
+		if ("bone" in opts)
 			opts.anchor = opts.bones[opts.bone];
 		var thiz = this, iz, name;
 		["spring", "aspect", "ticker"].forEach(function(influence) {
