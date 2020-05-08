@@ -1,6 +1,11 @@
 zero.core.Spring = CT.Class({
 	CLASSNAME: "zero.core.Spring",
 	tick: function(dts) {
+		if (this.hard) {
+			this.value += this.boost;
+			this.target = this.value; // for target trackers (including multi stuff)
+			return;
+		}
 		var mood = this.parent && this.parent.energy && this.parent.energy();
 		if (mood) {
 			var moodMaster_damp = mood.damp,
@@ -34,9 +39,11 @@ zero.core.Spring = CT.Class({
 			value: 0,
 			target: 0,
 			velocity: 0,
+			hard: false,
 			breaks: false
 		});
 		this.k = opts.k;
+		this.hard = opts.hard;
 		this.name = opts.name;
 		this.damp = opts.damp;
 		this.boost = opts.boost;
