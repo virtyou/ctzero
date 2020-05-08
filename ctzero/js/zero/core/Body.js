@@ -20,7 +20,9 @@ zero.core.Body = CT.Class({
 
 		this._.setPositioners();
 		this._.setBounds();
-		this.springs.slide.hard = this.springs.weave.hard = true;
+	},
+	setFriction: function(grippy) {
+		this.springs.slide.hard = this.springs.weave.hard = grippy;
 	},
 	preassemble: function() {
 		this.opts.parts.push({
