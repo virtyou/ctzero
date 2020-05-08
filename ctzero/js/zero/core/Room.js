@@ -201,10 +201,12 @@ zero.core.Room = CT.Class({
 		}, eopts, this.opts, {
 			lights: [],  // Lights
 			objects: [], // regular Things
-			cameras: []
+			cameras: [],
+			grippy: true
 		});
 		this.lights = [];
 		this.objects = [];
 		this.cameras = [];
+		this.grippy = opts.grippy;
 	}
 }, zero.core.Thing);
