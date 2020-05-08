@@ -33,12 +33,6 @@ zero.core.Controls = CT.Class({
 				}
 			}
 			s.boost = amount;
-			if (dir == "orientation") {
-				if (CT.key.down("UP"))
-					direct(speed);
-				else if (CT.key.down("DOWN"))
-					direct(-speed);
-			}
 		};
 	},
 	direct: function(speed) {
@@ -49,7 +43,7 @@ zero.core.Controls = CT.Class({
 		});
 	},
 	mover: function(amount, dir) {
-		var springz = this.springs, target = this.target,
+		var target = this.target, spr = this.springs[dir],
 			speed = this._.speed, direct = this.direct, moveCb = this._.moveCb;
 		return function() {
 			if (amount) {
@@ -57,13 +51,19 @@ zero.core.Controls = CT.Class({
 					target.gesture("jump");
 				else
 					target.dance("walk");
-			} else
+			} else if (!CT.key.downs(["UP", "DOWN", "LEFT", "RIGHT"]).length)
 				target.undance();
 			if (dir == "y") {
 				if (amount)
-					springz[dir].velocity = 500;
+					spr.velocity = 500;
 				else
-					springz[dir].boost = -speed;
+					spr.boost = -speed;
+			} else if (dir == "orientation") {
+				spr.boost = amount;
+				if (CT.key.down("UP"))
+					direct(speed);
+				else if (CT.key.down("DOWN"))
+					direct(-speed);
 			} else
 				direct(amount);
 			moveCb && moveCb();
@@ -89,8 +89,8 @@ zero.core.Controls = CT.Class({
 		if (this.target.gesture) { // person
 			CT.key.on("UP", mover(0), mover(speed));
 			CT.key.on("DOWN", mover(0), mover(-speed));
-			CT.key.on("LEFT", placer("orientation", 0), placer("orientation", ospeed));
-			CT.key.on("RIGHT", placer("orientation", 0), placer("orientation", -ospeed));
+			CT.key.on("LEFT", mover(0, "orientation"), mover(ospeed, "orientation"));
+			CT.key.on("RIGHT", mover(0, "orientation"), mover(-ospeed, "orientation"));
 			CT.key.on("ALT", mover(0, "y"), mover(speed, "y"));
 			gestures = Object.keys(this.target.opts.gestures);
 			dances = Object.keys(this.target.opts.dances);
