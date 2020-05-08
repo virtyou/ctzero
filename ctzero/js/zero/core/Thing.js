@@ -218,9 +218,10 @@ zero.core.Thing = CT.Class({
 			this.bones = this.opts.bones;
 	},
 	place: function() {
-		var oz = this.opts, thring = this.placer;
+		var oz = this.opts,
+			p = this.placer = this.placer || new THREE.Object3D();
 		["position", "rotation", "scale"].forEach(function(prop) {
-			var setter = thring[prop];
+			var setter = p[prop];
 			setter.set.apply(setter, oz[prop]);
 		});
 	},
@@ -237,8 +238,8 @@ zero.core.Thing = CT.Class({
 		this.setBone();
 		for (var m in this.opts.mti)
 			this.morphTargetInfluences(m, this.opts.mti[m]);
-		this.assemble();
 		this.place();
+		this.assemble();
 	},
 	adjust: function(property, dimension, value) {
 		this.placer[property][dimension] = value;
@@ -336,7 +337,7 @@ zero.core.Thing = CT.Class({
 		if (this.parts) return; // for rebuild update()....
 		this.preassemble && this.preassemble();
 		var thiz = this, oz = this.opts, i = 0,
-			group = this.group = this.placer = new THREE.Object3D(),
+			group = this.group = this.placer,
 			iterator = function() {
 				i += 1;
 				if (i >= oz.parts.length) {
@@ -404,6 +405,7 @@ zero.core.Thing = CT.Class({
 				this.setGeometry(oz.geometry);
 		} else {
 			this.setBone();
+			this.place();
 			this.assemble();
 		}
 	},
