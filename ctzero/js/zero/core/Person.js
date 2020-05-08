@@ -58,6 +58,9 @@ zero.core.Person = CT.Class({
 			smiler.target = 0;
 		}, 5000);
 	},
+	setFriction: function() { // roller skates, ice, etc
+		this.body.setFriction(this.grippy && zero.core.current.room.grippy);
+	},
 	say: function(data, cb, watch) {
 		zero.core.rec.cancel();
 		watch && this.watch();
@@ -204,6 +207,7 @@ zero.core.Person = CT.Class({
 			vibe: {},
 			mods: {},
 			dances: {},
+			grippy: true,
 			gestures: {},
 			responses: {},
 			voice: "Joanna"
@@ -217,12 +221,15 @@ zero.core.Person = CT.Class({
 				});
 			});
 		}
+		this.grippy = opts.grippy;
 		this.voice = opts.voice;
 		this.name = opts.name;
 		this.body = new zero.core.Body(CT.merge(opts.body, {
 			onbuild: function() {
 				thiz.head = thiz.body.head;
 				thiz.body.person = thiz.head.person = thiz;
+				if (zero.core.current.room)
+					thiz.setFriction();
 				opts.onbuild && opts.onbuild(thiz);
 			}
 		}));
