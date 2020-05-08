@@ -53,7 +53,7 @@ var camera = zero.core.camera = {
 			y: looker.y.value,
 			z: looker.z.value
 		});
-		camera._.camera.lookAt(camera._.looker.position());
+		camera._.camera.lookAt(camera._.looker.position(null, true));
 	},
 	tick: function() {
 		if (camera._.useControls)

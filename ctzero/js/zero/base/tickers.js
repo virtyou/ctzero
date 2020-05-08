@@ -1,219 +1,6 @@
-zero.base.tickers = function() {
+zero.base.tickers = {};
+zero.base.tickers.body = function() {
     return {
-        asym: {
-            talking: { // condition -- should only be one
-                yes: {
-                    reschedule: {
-                        base: 0.5,
-                        coefficient: 0.5
-                    },
-                    target: {
-                        base: -0.6,
-                        coefficient: 1.2
-                    }
-                },
-                no: {
-                    reschedule: {
-                        base: 1.5,
-                        coefficient: 1.5
-                    },
-                    target: {
-                        base: -0.5,
-                        coefficient: 1
-                    }
-                }
-            }
-        },
-        smileEyes: {
-            talking: {
-                yes: {
-                    reschedule: {
-                        base: 0.5,
-                        coefficient: 0.5
-                    },
-                    target: {
-                        coefficient: 2.4
-                    }
-                },
-                no: {
-                    reschedule: {
-                        base: 0,
-                        coefficient: 1
-                    },
-                    target: {
-                        base: -0.5,
-                        coefficient: 1
-                    }
-                }
-            }
-        },
-        lids: {
-            talking: {
-                yes: {
-                    reschedule: {
-                        coefficient: 1
-                    },
-                    boost: {
-                        smileEyes: {
-                            base: -0.1,
-                            coefficient: 0.4
-                        }
-                    },
-                    k: {
-                        base: 220
-                    }
-                },
-                no: {
-                    reschedule: {
-                        base: 0,
-                        coefficient: 2.5
-                    },
-               //     boost: {
-                //        smileEyes: {
-                //            coefficient: -0.2
-                //        }
-                 //   }
-                }
-            }
-        },
-        smile: {
-            talking: {
-                yes: {
-                    target: {
-                        coefficient: 0.7
-                    }
-                },
-                no: {
-                    reschedule: {
-                        base: 1.5,
-                        coefficient: 1.5
-                    },
-                    target: {
-                        base: 0,
-                        coefficient: 1
-                    }
-                }
-            }
-        },
-        bigSmile: {
-            talking: {
-                yes: {
-                    target: {
-                        coefficient: 0.7
-                    }
-                },
-                no: {
-                    reschedule: {
-                        base: 0,
-                        coefficient: 1
-                    },
-                    target: {
-                        base: 0,
-                        coefficient: 0
-                    }
-                }
-            }
-        },
-        brow: {
-            talking: {
-                yes: {
-                    target: {
-                        base: -0.3,
-                        coefficient: 0.7
-                    },
-                    k: {
-                        base: 10
-                    }
-                },
-                no: {
-                    reschedule: {
-                        base: 2,
-                        coefficient: 2
-                    },
-                    target: {
-                        base: 0,
-                        coefficient: 1
-                    },
-                    k: {
-                        base: 20
-                    }
-                }
-            }
-        },
-        browAsym: {
-            talking: {
-                yes: {
-                    reschedule: {
-                        base: 2,
-                        coefficient: 2
-                    },
-                    target: {
-                        base: -1,
-                        coefficient: 2
-                    }
-                },
-                no: {
-                    reschedule: {
-                        base: 3.5,
-                        coefficient: 3.5
-                    },
-                    target: {
-                        base: -0.8,
-                        coefficient: 1.6
-                    }
-                }
-            }
-        },
-        browSad: {
-            talking: {
-                yes: {
-                    reschedule: {
-                        base: 2,
-                        coefficient: 2
-                    },
-                    target: {
-                        base: 0,
-                        coefficient: 0.1
-                    }
-                },
-                no: {
-                    reschedule: {
-                        base: 0,
-                        coefficient: 3
-                    },
-                    target: {
-                        base: 0,
-                        coefficient: 0.2
-                    }
-                }
-            }
-        },
-
-
-        frown: {
-            talking: {
-                yes: {
-                    reschedule: {
-                        base: 0.5,
-                        coefficient: 0.5
-                    },
-                    target: {
-                        coefficient: 2.4
-                    }
-                },
-                no: {
-                    reschedule: {
-                        base: 0,
-                        coefficient: 1
-                    },
-                    target: {
-                        base: -0.1,
-                        coefficient: 0.2
-                    }
-                }
-            }
-        },
-
         nod: {
             talking: {
                 once: true,
@@ -396,6 +183,222 @@ zero.base.tickers = function() {
                     target: {
                         base: -0.05,
                         coefficient: 0.1
+                    }
+                }
+            }
+        }
+    };
+};
+
+zero.base.tickers.head = function() {
+    return {
+        asym: {
+            talking: { // condition -- should only be one
+                yes: {
+                    reschedule: {
+                        base: 0.5,
+                        coefficient: 0.5
+                    },
+                    target: {
+                        base: -0.6,
+                        coefficient: 1.2
+                    }
+                },
+                no: {
+                    reschedule: {
+                        base: 1.5,
+                        coefficient: 1.5
+                    },
+                    target: {
+                        base: -0.5,
+                        coefficient: 1
+                    }
+                }
+            }
+        },
+        smileEyes: {
+            talking: {
+                yes: {
+                    reschedule: {
+                        base: 0.5,
+                        coefficient: 0.5
+                    },
+                    target: {
+                        coefficient: 2.4
+                    }
+                },
+                no: {
+                    reschedule: {
+                        base: 0,
+                        coefficient: 1
+                    },
+                    target: {
+                        base: -0.5,
+                        coefficient: 1
+                    }
+                }
+            }
+        },
+        blink: {
+            talking: {
+                yes: {
+                    reschedule: {
+                        coefficient: 1
+                    },
+                    boost: {
+                        smileEyes: {
+                            base: -0.1,
+                            coefficient: 0.4
+                        }
+                    },
+                    k: {
+                        base: 220
+                    }
+                },
+                no: {
+                    reschedule: {
+                        base: 0,
+                        coefficient: 2.5
+                    },
+               //     boost: {
+                //        smileEyes: {
+                //            coefficient: -0.2
+                //        }
+                 //   }
+                }
+            }
+        },
+        smile: {
+            talking: {
+                yes: {
+                    target: {
+                        coefficient: 0.7
+                    }
+                },
+                no: {
+                    reschedule: {
+                        base: 1.5,
+                        coefficient: 1.5
+                    },
+                    target: {
+                        base: 0,
+                        coefficient: 1
+                    }
+                }
+            }
+        },
+        bigSmile: {
+            talking: {
+                yes: {
+                    target: {
+                        coefficient: 0.7
+                    }
+                },
+                no: {
+                    reschedule: {
+                        base: 0,
+                        coefficient: 1
+                    },
+                    target: {
+                        base: 0,
+                        coefficient: 0
+                    }
+                }
+            }
+        },
+        brow: {
+            talking: {
+                yes: {
+                    target: {
+                        base: -0.3,
+                        coefficient: 0.7
+                    },
+                    k: {
+                        base: 10
+                    }
+                },
+                no: {
+                    reschedule: {
+                        base: 2,
+                        coefficient: 2
+                    },
+                    target: {
+                        base: 0,
+                        coefficient: 1
+                    },
+                    k: {
+                        base: 20
+                    }
+                }
+            }
+        },
+        browAsym: {
+            talking: {
+                yes: {
+                    reschedule: {
+                        base: 2,
+                        coefficient: 2
+                    },
+                    target: {
+                        base: -1,
+                        coefficient: 2
+                    }
+                },
+                no: {
+                    reschedule: {
+                        base: 3.5,
+                        coefficient: 3.5
+                    },
+                    target: {
+                        base: -0.8,
+                        coefficient: 1.6
+                    }
+                }
+            }
+        },
+        browSad: {
+            talking: {
+                yes: {
+                    reschedule: {
+                        base: 2,
+                        coefficient: 2
+                    },
+                    target: {
+                        base: 0,
+                        coefficient: 0.1
+                    }
+                },
+                no: {
+                    reschedule: {
+                        base: 0,
+                        coefficient: 3
+                    },
+                    target: {
+                        base: 0,
+                        coefficient: 0.2
+                    }
+                }
+            }
+        },
+        frown: {
+            talking: {
+                yes: {
+                    reschedule: {
+                        base: 0.5,
+                        coefficient: 0.5
+                    },
+                    target: {
+                        coefficient: 2.4
+                    }
+                },
+                no: {
+                    reschedule: {
+                        base: 0,
+                        coefficient: 1
+                    },
+                    target: {
+                        base: -0.1,
+                        coefficient: 0.2
                     }
                 }
             }

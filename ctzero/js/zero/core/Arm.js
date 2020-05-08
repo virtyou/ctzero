@@ -17,7 +17,7 @@ zero.core.Arm = CT.Class({
 	},
 	setBody: function(bod) {
 		this.body = bod;
-		this.hand.setBody(bod);
+		this.hand && this.hand.setBody(bod);
 	},
 	build: function() {
 		var oz = this.opts, bones = oz.bones, bmap = oz.bonemap;
@@ -25,6 +25,7 @@ zero.core.Arm = CT.Class({
 		this.hand = new zero.core.Hand({
 			parent: this,
 			bones: bones,
+			body: this.body,
 			bonemap: bmap.hand,
 			side: this.opts.side
 		});

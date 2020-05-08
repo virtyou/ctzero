@@ -26,7 +26,7 @@ zero.core.Person = CT.Class({
 			});
 		},
 		setPho: function(pho) {
-		    this.body.head.currentPhoneme = pho;
+		    this.head.currentPhoneme = pho;
 		},
 		initSpeech: function() {
 			this._.audio = document.createElement("audio");
@@ -51,7 +51,7 @@ zero.core.Person = CT.Class({
 	},
 	setSmile: function(degree, unsmile) {
 		degree = degree || 0;
-		var smiler = this.body.springs.bigSmile;
+		var smiler = this.head.springs.bigSmile;
 		this.log("setSmile", degree, unsmile);
 		smiler.target = degree;
 		unsmile && setTimeout(function() {
@@ -96,20 +96,21 @@ zero.core.Person = CT.Class({
 	look: function(subject, orient) {
 		this.subject = subject;
 		if (orient) {
-			var pos = this.body.bone.position,
+			var pos = this.body.group.position,
 				spos = subject.position();
-			this.body.springs.orientation.target = Math.atan2(
-				spos.x - pos.x, spos.z - pos.z);
+			this.orientation(Math.atan2(spos.x
+				- pos.x, spos.z - pos.z));
 		}
 	},
 	approach: function(subject) {
-		var vec, bod = this.body, dance = this.dance;
+		var bod = this.body, dance = this.dance,
+			vec, getd = this.direction;
 		bod.springs.orientation.k = 200;
 		this.look(subject, true);
 		setTimeout(function() { // adapted from Controls.mover()... revise?
 			dance("walk");
+			vec = getd();
 			bod.springs.orientation.k = 20;
-			vec = bod.bone.getWorldDirection();
 			bod.springs.weave.boost = 2 * vec.x;
 			bod.springs.slide.boost = 2 * vec.z;
 		}, 500); // time for orientation...
@@ -121,6 +122,15 @@ zero.core.Person = CT.Class({
 			mood: this.mood.snapshot(),
 			body: this.body.snapshot()
 		}
+	},
+	orientation: function(o) {
+		if (o)
+			this.body.springs.orientation.target = o;
+		else
+			return this.body.springs.orientation.target;
+	},
+	direction: function() {
+		return this.body.bones[0].getWorldDirection();
 	},
 	_dance: function() {
 		if (!this.activeDance)

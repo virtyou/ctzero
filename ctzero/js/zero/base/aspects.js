@@ -1,4 +1,5 @@
-zero.base.aspects = function() {
+zero.base.aspects = {};
+zero.base.aspects.head = function() {
     return {
         ah: {
             springs: {
@@ -29,7 +30,7 @@ zero.base.aspects = function() {
             min: 0,
             max: 0.8,
             springs: {
-                lids: 1
+                blink: 1
             }
         },
         brow: {

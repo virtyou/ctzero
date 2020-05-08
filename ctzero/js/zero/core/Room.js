@@ -148,11 +148,11 @@ zero.core.Room = CT.Class({
 	clear: function(retain_lights) {
 		if (retain_lights) {
 			if (this.thring) {
-				this.opts.scene.remove(this.thring);
+				this.group.remove(this.thring);
 				delete this.thring;
 			}
 			var group = this.group;
-			group && group.children.forEach(function(child) {
+			group.children.forEach(function(child) {
 				if (!child.type.endsWith("Light"))
 					group.remove(child);
 			});
@@ -175,6 +175,7 @@ zero.core.Room = CT.Class({
 		opts.lights.forEach(this.addLight);
 		opts.cameras.forEach(this.addCamera);
 		opts.objects.forEach(this.addObject);
+		this.placer = this.thring;
 	},
 	preassemble: function() {
 		var opts = this.opts;

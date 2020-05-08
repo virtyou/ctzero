@@ -7,9 +7,25 @@ zero.core.Spine = CT.Class({
 		});
 		return bz;
 	},
+	tickPart: function(part) {
+		var zcsp = zero.core.Spine.parts,
+			rz = this.rotation(part);
+		zero.core.util.update(rz, this[part].rotation);
+		zero.core.util.update(rz,
+			this.opts.hbones[zcsp.indexOf(part)].rotation);
+	},
+	setScales: function(opts) {
+		var part, thaz = this, zcsp = zero.core.Spine.parts;
+		for (part in opts) {
+			zero.core.util.coords(opts[part], function(dim, val) {
+				thaz[part].scale[dim] = val;
+				thaz.opts.hbones[zcsp.indexOf(part)].scale[dim] = val;
+			});
+		}
+	},
 	jointRules: function(part, dim) {
 		var pi = zero.core.Spine.parts.indexOf(part),
-			pdata = this.parent.opts.joints[pi].rotation;
+			pdata = this.body.opts.joints[pi].rotation;
 		if (dim)
 			return pdata[dim];
 		return pdata;
@@ -22,4 +38,4 @@ zero.core.Spine = CT.Class({
 		};
 	}
 }, zero.core.Skeleton);
-zero.core.Spine.parts = ["pelvis", "torso", "neck"];
+zero.core.Spine.parts = ["pelvis", "lumbar", "ribs", "neck", "head"]

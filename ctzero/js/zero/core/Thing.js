@@ -37,7 +37,7 @@ zero.core.Thing = CT.Class({
 		setBounds: function() {
 			var radii = this.radii = {},
 				bounds = this.bounds = this.bounds || new THREE.Box3();
-			bounds.setFromObject(this.bone || this.thring);
+			bounds.setFromObject(this.group);
 			["x", "y", "z"].forEach(function(dim) {
 				radii[dim] = (bounds.max[dim] - bounds.min[dim]) / 2;
 			});
@@ -174,29 +174,24 @@ zero.core.Thing = CT.Class({
 		zero.core.util.ontick(this._.scroller);
 	},
 	look: function(pos) {
-		var myPos = this.position(null, true);
-		this.thring.lookAt({
-			x: pos.x - myPos.x,
-			y: pos.y - myPos.y,
-			z: pos.z - myPos.z
-		});
+		this.group.lookAt(zero.core.util.vector(this.position(null,
+			true), pos));
 	},
 	// position(), rotation(), scale(): getters _and_ setters
 	position: function(position, world) {
 		if (position)
 			this.update({ position: position });
 		else {
-			var thring = (this.thring || this.group);
 			if (world)
-				return thring.getWorldPosition();
-			return thring.position;
+				return this.placer.getWorldPosition();
+			return this.placer.position;
 		}
 	},
 	rotation: function(rotation) {
 		if (rotation)
 			this.update({ rotation: rotation });
 		else
-			return (this.thring || this.group).rotation;
+			return this.placer.rotation;
 	},
 	scale: function(scale) {
 		if (scale) {
@@ -205,23 +200,25 @@ zero.core.Thing = CT.Class({
 			this.update({ scale: scale });
 		}
 		else
-			return (this.thring || this.group).scale;
+			return this.placer.scale;
 	},
 	setBone: function() {
-		var oz  = this.opts;
-		if (oz.bones.length || this.thring && this.thring.skeleton) {
-			if (this.thring && this.thring.skeleton) {
-				this.bones = this.thring.skeleton.bones.slice(0, oz.joints.length);
-				this.bone = this.bones[0];
-				oz.scene.add(this.bone);
-			} else {
-				this.bones = oz.bones.slice();
-				this.bone = this.bones.shift();
-			}
-		}
+		var ts = this.thring && this.thring.skeleton, gjs, ms;
+		if (ts) {
+			gjs = this.geojson;
+			this.bones = ts.bones;
+			this.bmap = gjs.bonemap;
+			this.base = gjs.vertices;
+			this.morphStack = ms = {};
+			gjs.morphTargets.forEach(function(mt) {
+				ms[mt.name] = mt.vertices;
+			});
+			zero.core.morphs.init(this);
+		} else
+			this.bones = this.opts.bones;
 	},
 	place: function() {
-		var oz = this.opts, thring = this.thring || this.group;
+		var oz = this.opts, thring = this.placer;
 		["position", "rotation", "scale"].forEach(function(prop) {
 			var setter = thring[prop];
 			setter.set.apply(setter, oz[prop]);
@@ -237,38 +234,36 @@ zero.core.Thing = CT.Class({
 		}
 		this.thring = new THREE[oz.meshcat](geometry, this.material);
 		this.thring.frustumCulled = oz.frustumCulled; // should probs usually be default (true)
-		this.place();
 		this.setBone();
-		(this.bone || oz.scene).add(this.thring);
 		for (var m in this.opts.mti)
 			this.morphTargetInfluences(m, this.opts.mti[m]);
 		this.assemble();
+		this.place();
 	},
-	adjust: function(property, dimension, value, thringonly, grouponly) {
-		if (this.thring && !grouponly)
-			this.thring[property][dimension] = value;
-		if (this.group && !thringonly)
-			this.group[property][dimension] = value;
+	adjust: function(property, dimension, value) {
+		this.placer[property][dimension] = value;
 	},
 	update: function(opts) {
 		var o, setter, full, adjust = this.adjust;
-		["texture", "stripset", "geometry", "matcat", "meshcat",
+		["stripset", "geometry", "matcat", "meshcat",
 			"material", "repeat", "offset", "video"].forEach(function(item) {
 				full = full || (item in opts);
 			});
 		this.opts = CT.merge(opts, this.opts);
-		if (!(this.thring || this.group)) return; // hasn't built yet, just wait
+		if (!this.group) return; // hasn't built yet, just wait
 		if (full)
 			return this.build();
-		for (o in opts) {
-			["position", "rotation", "scale"].forEach(function(prop) {
-				if (o == prop) {
-					zero.core.util.coords(opts[prop], function(dim, val) {
-						adjust(o, dim, val);
-					});
-				}
-			});
+		if ("texture" in opts) {
+			this.material.map = opts.texture && THREE.ImageUtils.loadTexture(opts.texture);
+			this.material.needsUpdate = true;
 		}
+		["position", "rotation", "scale"].forEach(function(prop) {
+			if (prop in opts) {
+				zero.core.util.coords(opts[prop], function(dim, val) {
+					adjust(prop, dim, val);
+				});
+			}
+		});
 	},
 	vary: function(variant) {
 		this.update(this.opts.variants[variant]);
@@ -287,14 +282,12 @@ zero.core.Thing = CT.Class({
 			mti[influence] = mti[influence] ? 0 : 1;
 	},
 	remove: function() {
-		if (this.thring)
-			this.opts.scene.remove(this.thring);
-		if (this.group)
-			this.opts.scene.remove(this.group);
+		var oz = this.opts;
+		(oz.anchor || oz.scene).remove(this.group);
 		this.unscroll();
 		this.unvideo();
-		if (this.opts.key)
-			delete zero.core.Thing._things[this.opts.key];
+		if (oz.key)
+			delete zero.core.Thing._things[oz.key];
 	},
 	detach: function(cname) {
 		var thing = this[cname];
@@ -320,7 +313,8 @@ zero.core.Thing = CT.Class({
 				child.custom && customs.push(tng); // for tick()ing
 				iterator && iterator();
 			},
-			bones: this.bones || []
+			bones: this.bones || [],
+			bmap: this.bmap || {}
 		});
 		if (child.custom)
 			thing = new zero.core.Custom(childopts);
@@ -339,29 +333,29 @@ zero.core.Thing = CT.Class({
 		this._.built();
 	},
 	assemble: function() {
-		if (!this.parts) {
-			this.preassemble && this.preassemble();
-			var thiz = this, i = 0,
-				group = this.group = this.bone || new THREE.Object3D(),
-				iterator = function() {
-					i += 1;
-					if (i >= thiz.opts.parts.length) {
-						if (!thiz.bone && i == thiz.opts.parts.length)
-							thiz.opts.scene.add(group);
-						thiz._.assembled = true;
-						thiz.assembled();
-					}
-				};
-			if (this.opts.invisible)
-				this.hide();
-			this.parts = this.opts.parts.map(function(p) {
-				return thiz.attach(p, iterator);
-			});
-			this.postassemble && this.postassemble();
-			if (!this.opts.parts.length) {
-				i -= 1;
-				iterator();
-			}
+		if (this.parts) return; // for rebuild update()....
+		this.preassemble && this.preassemble();
+		var thiz = this, oz = this.opts, i = 0,
+			group = this.group = this.placer = new THREE.Object3D(),
+			iterator = function() {
+				i += 1;
+				if (i >= oz.parts.length) {
+					if (i == oz.parts.length)
+						(oz.anchor || oz.scene).add(group);
+					thiz._.assembled = true;
+					thiz.assembled();
+				}
+			};
+		if (oz.invisible)
+			this.hide();
+		this.thring && group.add(this.thring);
+		this.parts = oz.parts.map(function(p) {
+			return thiz.attach(p, iterator);
+		});
+		this.postassemble && this.postassemble();
+		if (!oz.parts.length) {
+			i -= 1;
+			iterator();
 		}
 	},
 	build: function() {
@@ -449,24 +443,25 @@ zero.core.Thing = CT.Class({
 			springs: {},
 			aspects: {},
 			tickers: {},
-			morphStack: null,
+			morphs: {},
 			iterator: null,
 			onbuild: null, // also supports: "onassemble"
 			scroll: null,
 			frustumCulled: true
 		});
+		this.variety = this.CLASSNAME.split(".")[2];
+		var vl = this.vlower = this.variety.toLowerCase(); // should these be automated by CT.Class?
 		this.setName(opts);
+		if ("bone" in opts)
+			opts.anchor = opts.bones[opts.bone];
 		var thiz = this, iz, name;
 		["spring", "aspect", "ticker"].forEach(function(influence) {
 			iz = influence + "s", influences = thiz[iz] = {};
+			if (vl in zero.base[iz])
+				opts[iz] = zero.base[iz][vl]();
 			for (name in opts[iz])
 				thiz[iz][name] = zero.core[influence + "Controller"].add(opts[iz][name], name, thiz);
 		});
-		if (opts.morphStack) { // required for Body (for instance)
-			var ms = CT.require("morphs." + opts.morphStack, true);
-			this.morphStack = ms.stack; 
-			this.base = ms.base;
-		}
 		setTimeout(function() {
 			thiz.opts.deferBuild || thiz.build();
 		}); // next post-init tick

@@ -42,21 +42,22 @@ zero.core.Skeleton = CT.Class({
 		return pdata;
 	},
 	aspRules: function(sname) {
-		var aspringz = {}, bspringz = {},
+		var aspringz = {}, bspringz = {}, hspringz = {},
 			rs = CT.data.choice(["twist", "bow",
 				"lean", "shake", "nod", "tilt"]),
 			ps = CT.data.choice(["ah", "ee", "ow",
 				"ff", "m", "n", "th"]),
 			fs = CT.data.choice(["asym", "smileEyes",
-				"lids", "smile", "bigSmile", "brow",
+				"smile", "bigSmile", "brow",
 				"browAsym", "browSad", "frown"]);
 		aspringz[sname] = 1;
 		bspringz[rs] = 1 - Math.random() * 2;
-		bspringz[ps] = 0.025 - Math.random() * 0.05;
-		bspringz[fs] = 0.025 - Math.random() * 0.05;
+		hspringz[ps] = 0.025 - Math.random() * 0.05;
+		hspringz[fs] = 0.025 - Math.random() * 0.05;
 		return {
 			springs: aspringz,
-			bsprings: bspringz
+			bsprings: bspringz,
+			hsprings: hspringz
 		};
 	},
 	setJoint: function(part, dim, jrules) {

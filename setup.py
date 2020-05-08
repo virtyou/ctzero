@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='ctzero',
-    version="0.1",
+    version="0.1.1",
     author='Mario Balibrera',
     author_email='mario.balibrera@gmail.com',
     license='MIT License',
@@ -13,7 +13,6 @@ setup(
     ],
     zip_safe = False,
     install_requires = [
-#        "ct >= 0.10.2.4"
     ],
     entry_points = '''''',
     classifiers = [

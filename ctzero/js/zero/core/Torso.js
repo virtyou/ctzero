@@ -26,7 +26,7 @@ zero.core.Torso = CT.Class({
 		return this.body && this.body.energy();
 	},
 	setLimbs: function() {
-		var thiz = this, bones = this.thring.skeleton.bones;
+		var thiz = this, bones = this.bones;
 		this.legs = {};
 		this.arms = {};
 		this.hands = {};
@@ -36,36 +36,23 @@ zero.core.Torso = CT.Class({
 				side: side,
 				parent: thiz,
 				bones: bones,
-				bonemap: thiz._bmap[side].leg
+				body: thiz.body,
+				bonemap: thiz.bmap[side].leg
 			});
 			thiz.arms[side] = new zero.core.Arm({
 				side: side,
 				parent: thiz,
 				bones: bones,
-				bonemap: thiz._bmap[side]
+				body: thiz.body,
+				bonemap: thiz.bmap[side]
 			});
 			thiz.hands[side] = thiz.arms[side].hand;
 		});
 	},
 	setBone: function() {
-		this.bones = this.opts.bones.slice();
-		this.bone = this.bones.shift();
-
-		var bones = this.thring.skeleton.bones;
-		this.opts.scene.add(bones[0]);
-		bones[0].position.y = -3.7; // HACK! fix this...
-
-		this._bmap = this.geojson.bonemap;
+		this.bones = this.opts.bones;
+		this.bmap = this.opts.bmap;
+		this.body = this.opts.body;
 		this.setLimbs();
-	},
-	setBody: function(bod) {
-		this.body = bod;
-		for (var side in this.arms) {
-			this.arms[side].setBody(bod);
-			this.legs[side].setBody(bod);
-		}
-	},
-	init: function() {
-		this.opts.frustumCulled = false; // TODO: fix!
 	}
 }, zero.core.Thing);
