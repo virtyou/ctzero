@@ -197,10 +197,26 @@ zero.core.util = {
 		}, opts);
 	},
 	script: function(script) {
-		var step = script.shift();
-		if (step) zero.core.current.people[step.person].say(step.line, function() {
-			setTimeout(zero.core.util.script, step.pause || 0, script);
-		});
+		var step = script.shift(), nextStep,
+			zcc = zero.core.current, r = zcc.room;
+		if (step) {
+			nextStep = function() {
+				setTimeout(zero.core.util.script, step.pause || 0, script);
+			};
+			if (step.lights) {
+				step.lights.forEach(function(val, i) {
+					r.lights[i][step.directive || "setIntensity"](val);
+				});
+			}
+			if (step.camera)
+				zero.core.camera[step.camera](step.camopts);
+			if (step.prop)
+				r[step.prop][step.directive](step.direction);
+			if (step.actor)
+				zcc.people[step.actor][step.action || "say"](step.line, nextStep);
+			else
+				nextStep();
+		}
 	},
 	frameCount: function(className) {
 		var zcu = zero.core.util;
