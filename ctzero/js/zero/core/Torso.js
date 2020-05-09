@@ -6,21 +6,20 @@ zero.core.Torso = CT.Class({
 			this.legs[side].tick();
 		}
 	},
-	move: function(opts) {
-		var thaz = this;
-		["left", "right"].forEach(function(side) {
-			thaz.arms[side].move(opts[side]);
-			thaz.legs[side].move(opts[side].leg);
-		});		
-	},
-	resize: function(opts) {
+	_pass: function(opts, action) {
 		var thaz = this;
 		["left", "right"].forEach(function(side) {
 			if (opts[side]) {
-				thaz.arms[side].resize(opts[side]);
-				thaz.legs[side].resize(opts[side].leg);
+				thaz.arms[side][action](opts[side]);
+				thaz.legs[side][action](opts[side].leg);
 			}
 		});
+	},
+	move: function(opts) {
+		this._pass(opts, "move");
+	},
+	resize: function(opts) {
+		this._pass(opts, "resize");
 	},
 	energy: function() {
 		return this.body && this.body.energy();
