@@ -60,11 +60,17 @@ zero.core.Room = CT.Class({
 	setBounds: function() {
 		this.bounds = this.bounds || new THREE.Box3();
 		this.bounds.setFromObject(this.thring);
-		(Object.values(zero.core.current.people)).forEach(function(person) {
+		Object.values(zero.core.current.people).forEach(function(person) {
 			person.body.setBounds();
 		});
 		this.objects.forEach(function(furn) {
 			furn.setBounds();
+		});
+	},
+	setFriction: function(grippy) {
+		this.grippy = this.opts.grippy = grippy;
+		Object.values(zero.core.current.people).forEach(function(person) {
+			person.setFriction();
 		});
 	},
 	assembled: function() {
@@ -207,6 +213,6 @@ zero.core.Room = CT.Class({
 		this.lights = [];
 		this.objects = [];
 		this.cameras = [];
-		this.grippy = opts.grippy;
+		this.setFriction(opts.grippy);
 	}
 }, zero.core.Thing);
