@@ -98,6 +98,7 @@ class Room(db.TimeStampedBase):
     base = db.ForeignKey(kind=Thing)
     name = db.String()
     environment = db.String()
+    grippy = db.Boolean(default=True)
     material = db.JSON()
     lights = db.JSON()
     cameras = db.JSON()
@@ -114,6 +115,7 @@ class Room(db.TimeStampedBase):
             if item:
                 d[iname] = item
         d["owner"] = self.owner.urlsafe()
+        d["grippy"] = self.grippy
         if self.material:
             if "material" not in d:
                 d["material"] = {}
