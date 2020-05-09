@@ -38,4 +38,4 @@ zero.core.Spine = CT.Class({
 		};
 	}
 }, zero.core.Skeleton);
-zero.core.Spine.parts = ["pelvis", "lumbar", "ribs", "neck", "head"]
+zero.core.Spine.parts = ["pelvis", "lumbar", "ribs", "neck", "head"];
