@@ -94,7 +94,47 @@ zero.base.aspects.head = function() {
 };
 
 zero.base.aspects.spine = {
+    pelvis: {
+        x: {
+            min: -1,
+            max: 1
+        },
+        y: {
+            min: -1,
+            max: 1
+        }
+    },
+    lumbar: {
+        x: {
+            min: -1,
+            max: 1
+        },
+        y: {
+            min: -1,
+            max: 1
+        }
+    },
+    ribs: {
+        x: {
+            min: -1,
+            max: 1
+        },
+        y: {
+            min: -1,
+            max: 1
+        }
+    },
     neck: {
+        x: {
+            min: -1,
+            max: 1
+        },
+        y: {
+            min: -1,
+            max: 1
+        }
+    },
+    head: {
         x: {
             min: -1,
             max: 1
