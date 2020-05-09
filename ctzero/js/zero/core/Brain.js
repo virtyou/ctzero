@@ -94,7 +94,7 @@ zero.core.Brain = CT.Class({
 				CT.dom.addContent("ctmain", b);
 			}
 
-			// character -- also support res.gesture{}, etc
+			// character
 			res.vibe && person.vibe.update(res.vibe);
 			res.mood && person.mood.update(res.mood);
 			if (res.dance) {
@@ -104,6 +104,12 @@ zero.core.Brain = CT.Class({
 					person.dance(res.dance);
 			}
 			res.gesture && person.gesture(res.gesture);
+			if (res.mod) {
+				if (res.mod == "unmod") // hacky...
+					person.unmod();
+				else
+					person.mod(res.mod);
+			}
 			if (res.disable) {
 				if (res.disable[0] == "untrigger") // hacky!!!
 					trigz = this.triggers = {};
