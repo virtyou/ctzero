@@ -1,8 +1,11 @@
 from cantools import db
 from ctuser.model import CTUser
 
+class Member(CTUser):
+    cc = db.JSON() # carecoin {person,membership}
+
 class Asset(db.TimeStampedBase):
-    owner = db.ForeignKey(kind=CTUser)
+    owner = db.ForeignKey(kind=Member)
     variety = db.String(choices=["texture", "stripset"])
     name = db.String()
     identifier = db.String()
@@ -12,7 +15,7 @@ class Asset(db.TimeStampedBase):
         return self.data()
 
 class Thing(db.TimeStampedBase):
-    owner = db.ForeignKey(kind=CTUser)
+    owner = db.ForeignKey(kind=Member)
     texture = db.ForeignKey(kind=Asset)
     stripset = db.ForeignKey(kind=Asset)
     morphStack = db.String() # should be Asset, but Thing.js gets complicated...
@@ -68,7 +71,7 @@ class Part(db.TimeStampedBase):
         return d
 
 class Person(db.TimeStampedBase):
-    owner = db.ForeignKey(kind=CTUser)
+    owner = db.ForeignKey(kind=Member)
     body = db.ForeignKey(kind=Part)
     name = db.String()
     voice = db.String()
@@ -94,7 +97,7 @@ class Person(db.TimeStampedBase):
         }
 
 class Room(db.TimeStampedBase):
-    owner = db.ForeignKey(kind=CTUser)
+    owner = db.ForeignKey(kind=Member)
     base = db.ForeignKey(kind=Thing)
     name = db.String()
     environment = db.String()
