@@ -124,7 +124,7 @@ zero.core.util = {
 		zero.core.camera.background(bgsrc);
 		zero.core.util.room(robj);
 	},
-	init: function(onbuild) {
+	init: function(onperson, onbuild) {
 		zero.core.camera.init();
 		var cfg = core.config.ctzero, people = zero.core.current.people = {},
 			room = zero.core.util.room(cfg.room), isLast;
@@ -133,11 +133,12 @@ zero.core.util = {
 				people[pobj.name] = new zero.core.Person(CT.merge(pobj, {
 					onbuild: function(person) {
 						isLast = i == cfg.people.length - 1;
+						onperson && onperson(person, room, i, isLast);
 						if (isLast) {
 							person.watch();
 							setTimeout(requestAnimationFrame, 0, zero.core.util.animate);
+							onbuild && onbuild(person, room, i);
 						}
-						onbuild && onbuild(person, room, i, isLast);
 					}
 				}));
 			});
@@ -195,28 +196,6 @@ zero.core.util = {
 			name: name,
 			body: body
 		}, opts);
-	},
-	script: function(script) {
-		var step = script.shift(), nextStep,
-			zcc = zero.core.current, r = zcc.room;
-		if (step) {
-			nextStep = function() {
-				setTimeout(zero.core.util.script, step.pause || 0, script);
-			};
-			if (step.lights) {
-				step.lights.forEach(function(val, i) {
-					r.lights[i][step.directive || "setIntensity"](val);
-				});
-			}
-			if (step.camera)
-				zero.core.camera[step.camera](step.camopts);
-			if (step.prop)
-				r[step.prop][step.directive](step.direction);
-			if (step.actor)
-				zcc.people[step.actor][step.action || "say"](step.line, nextStep);
-			else
-				nextStep();
-		}
 	},
 	frameCount: function(className) {
 		var zcu = zero.core.util;
