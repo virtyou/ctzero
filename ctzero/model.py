@@ -42,7 +42,7 @@ class Thing(db.TimeStampedBase):
         return d
 
 class Part(db.TimeStampedBase):
-    parent = db.ForeignKey(kind="Part")
+    parent = db.ForeignKey(kind="part")
     base = db.ForeignKey(kind=Thing) # base Thing OR template
     template = db.String() # zero.base.torso / templates.whatever / etc
     material = db.JSON()
