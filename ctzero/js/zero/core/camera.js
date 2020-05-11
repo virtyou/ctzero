@@ -55,7 +55,7 @@ var camera = zero.core.camera = {
 			for (dim in per)
 				bl.adjust("position", dim, per[dim]);
 		} else
-			zcc.room.cut(perspective);
+			zcc.room.cut(parseInt(perspective));
 	},
 	look: function(pos) {
 		zero.core.util.coords(pos, function(dim, val) {
