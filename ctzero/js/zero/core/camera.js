@@ -1,6 +1,16 @@
 var camera = zero.core.camera = {
 	_: {
-		profiles: {}
+		profiles: {},
+		lookers: {
+			pov: {
+				y: 35,
+				z: 25
+			},
+			behind: {
+				y: 85,
+				z: -155
+			}
+		}
 	},
 	springs: {
 		position: {},
@@ -22,6 +32,30 @@ var camera = zero.core.camera = {
 		camera._.renderer.setSize(w || cont.clientWidth, h || cont.clientHeight);
 		if (camera._.useControls)
 			camera._.controls.handleResize();
+	},
+	cycle: function() {
+		if (camera._.cycler) {
+			clearInterval(camera._.cycler);
+			delete camera._.cycler;
+		} else {
+			camera._.cycler = setInterval(zero.core.current.room.cut, 3000);
+			return true;
+		}
+	},
+	angle: function(perspective) {
+		var zcc = zero.core.current;
+		if (perspective == "cycle")
+			camera.cycle();
+		else if (["pov", "behind"].includes(perspective)) {
+			var person = zcc.person,
+				per = camera._.lookers[perspective],
+				bl = person.body.looker, dim;
+			camera.setSprings(200);
+			camera.perspective(person);
+			for (dim in per)
+				bl.adjust("position", dim, per[dim]);
+		} else
+			zcc.room.cut(perspective);
 	},
 	look: function(pos) {
 		zero.core.util.coords(pos, function(dim, val) {
