@@ -105,9 +105,9 @@ zero.core.Person = CT.Class({
 				- pos.x, spos.z - pos.z));
 		}
 	},
-	approach: function(subject) {
-		var bod = this.body, dance = this.dance,
-			vec, getd = this.direction;
+	approach: function(subject, cb) {
+		var bod = this.body, vec, getd = this.direction,
+			dance = this.dance, undance = this.undance;
 		bod.springs.orientation.k = 200;
 		this.look(subject, true);
 		setTimeout(function() { // adapted from Controls.mover()... revise?
@@ -116,6 +116,15 @@ zero.core.Person = CT.Class({
 			bod.springs.orientation.k = 20;
 			bod.springs.weave.boost = 2 * vec.x;
 			bod.springs.slide.boost = 2 * vec.z;
+			var chkr = setInterval(function() {
+				if (zero.core.util.touching(bod, subject)) {
+					bod.springs.weave.boost = 0;
+					bod.springs.slide.boost = 0;
+					clearInterval(chkr);
+					undance();
+					cb && cb();
+				}
+			}, 500);
 		}, 500); // time for orientation...
 	},
 	move: function(opts, cb) {
