@@ -118,6 +118,13 @@ zero.core.Person = CT.Class({
 			bod.springs.slide.boost = 2 * vec.z;
 		}, 500); // time for orientation...
 	},
+	move: function(opts, cb) {
+		var k, dur = 1000; // TODO: ACTUALLY CALC DUR!!!!
+		for (var k in opts)
+			this.body.springs[k].target = opts[k];
+		this.dance("walk", dur);
+		cb && setTimeout(cb, dur);
+	},
 	snapshot: function() {
 		return {
 			name: this.name,
@@ -144,11 +151,12 @@ zero.core.Person = CT.Class({
 		this.gesture(dance.steps[dance.step]);
 		setTimeout(this._dance, dance.interval || 1000);
 	},
-	dance: function(dname) {
+	dance: function(dname, duration) {
 		if (this.activeDance == dname) return;
 		this.activeDance = dname;
 		this.opts.dances[dname].step = -1;
 		this._dance();
+		duration && setTimeout(this.undance, duration);
 	},
 	undance: function() {
 		delete this.activeDance;
