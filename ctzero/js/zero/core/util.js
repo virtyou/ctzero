@@ -16,11 +16,12 @@ zero.core.util = {
 			xyzb[dim] = val;
 		});
 	},
-	touching: function(t1, t2) {
+	touching: function(t1, t2, extra) {
 		var dist = zero.core.util.distance(t1.position(), t2.position()),
-			r1 = Math.max.apply(null, Object.values(t1.radii)), // (improve)
-			r2 = Math.max.apply(null, Object.values(t2.radii)),
+			r1 = (t1.radii.x + t1.radii.y + t1.radii.z) / 3,
+			r2 = (t2.radii.x + t2.radii.y + t2.radii.z) / 3,
 			buff = r1 + r2;
+		if (extra) buff += extra;
 		return dist < buff;
 	},
 	distance: function(p1, p2) { // only checking x/z!!!! (probs revisit)
