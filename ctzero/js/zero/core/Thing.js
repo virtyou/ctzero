@@ -30,16 +30,26 @@ zero.core.Thing = CT.Class({
 				springs: spropts
 			}, dim, this);
 		},
+		setGrowers: function() {
+			var sca = this.scale(), pos = {
+				width: sca.x,
+				height: sca.y,
+				depth: sca.z
+			}, dim;
+			this.growers = {};
+			for (dim of ["width", "height", "depth"])
+				this._.setd(dim, this.springs, this.growers, pos);
+		},
 		setFlippers: function() {
-			var pos = this.rotation();
+			var pos = this.rotation(), dim;
 			this.flippers = {};
 			for (dim of ["x", "y", "z"])
 				this._.setd(dim, this.springs, this.flippers, pos);
 		},
 		setPositioners: function() {
-			var pos = this.position();
+			var pos = this.position(), dim;
 			this.positioners = {};
-			for (var dim of this._xyz)
+			for (dim of this._xyz)
 				this._.setd(dim, this.springs, this.positioners, pos);
 		},
 		setBounds: function() {
