@@ -20,6 +20,7 @@ zero.core.Body = CT.Class({
 
 		this._.setPositioners();
 		this._.setFlippers();
+		this._.setGrowers();
 		this._.setBounds();
 	},
 	setFriction: function(grippy) {
@@ -73,6 +74,9 @@ zero.core.Body = CT.Class({
 	_tickGroup: function() {
 		for (var f in this.flippers)
 			this.group.rotation[f] = this.flippers[f].value;
+		this.group.scale.x = this.growers.width.value;
+		this.group.scale.y = this.growers.height.value;
+		this.group.scale.z = this.growers.depth.value;
 		this.group.position.y = this.positioners.bob.value;
 		this.group.position.x = this.positioners.weave.value;
 		this.group.position.z = this.positioners.slide.value;
