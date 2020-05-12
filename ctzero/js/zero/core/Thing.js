@@ -14,25 +14,43 @@ zero.core.Thing = CT.Class({
 			});
 			this.opts.scroll && this.scroll();
 		},
+		setd: function(dim, springs, positioners, pos) {
+			var spropts = {};
+			if (!springs[dim]) {
+				springs[dim] = zero.core.springController.add({
+					k: 10,
+					damp: 5,
+					value: pos[dim],
+					target: pos[dim]
+				}, dim, this);
+			}
+			spropts[dim] = 1;
+			positioners[dim] = zero.core.aspectController.add({
+				unbounded: true,
+				springs: spropts
+			}, dim, this);
+		},
+		setGrowers: function() {
+			var sca = this.scale(), pos = {
+				width: sca.x,
+				height: sca.y,
+				depth: sca.z
+			}, dim;
+			this.growers = {};
+			for (dim of ["width", "height", "depth"])
+				this._.setd(dim, this.springs, this.growers, pos);
+		},
+		setFlippers: function() {
+			var pos = this.rotation(), dim;
+			this.flippers = {};
+			for (dim of ["x", "y", "z"])
+				this._.setd(dim, this.springs, this.flippers, pos);
+		},
 		setPositioners: function() {
-			var spropts, poz = this.positioners = {}, thaz = this,
-				sz = this.springs, pos = this.position();
-			this._xyz.forEach(function(dim) {
-				if (!sz[dim]) {
-					sz[dim] = zero.core.springController.add({
-						k: 10,
-						damp: 5,
-						value: pos[dim],
-						target: pos[dim]
-					}, dim, thaz);
-				}
-				spropts = {};
-				spropts[dim] = 1;
-				poz[dim] = zero.core.aspectController.add({
-					unbounded: true,
-					springs: spropts
-				}, dim, thaz);
-			});
+			var pos = this.position(), dim;
+			this.positioners = {};
+			for (dim of this._xyz)
+				this._.setd(dim, this.springs, this.positioners, pos);
 		},
 		setBounds: function() {
 			var radii = this.radii = {},
