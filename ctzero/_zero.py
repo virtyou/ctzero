@@ -5,7 +5,7 @@ def response():
     action = cgi_get("action", choices=["json", "opts", "things"])
     if action == "json": # better name?
         ent = db.get(cgi_get("key"))
-        if ent.polytype == "ctuser":
+        if ent.polytype == "member":
             rq = Room.query()
             if not cgi_get("allrooms", required=False):
                 rq.filter(Room.owner == ent.key)

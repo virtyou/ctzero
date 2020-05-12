@@ -105,9 +105,16 @@ zero.core.Person = CT.Class({
 				- pos.x, spos.z - pos.z));
 		}
 	},
-	approach: function(subject) {
-		var bod = this.body, dance = this.dance,
-			vec, getd = this.direction;
+	approach: function(subject, cb) {
+		var bod = this.body, vec, getd = this.direction,
+			dance = this.dance, undance = this.undance,
+			zcc = zero.core.current, ppl = zcc.people;
+		if (typeof subject == "string") {
+			if (ppl[subject])
+				subject = ppl[subject].body;
+			else
+				subject = zcc.room[subject];
+		}
 		bod.springs.orientation.k = 200;
 		this.look(subject, true);
 		setTimeout(function() { // adapted from Controls.mover()... revise?
@@ -116,7 +123,23 @@ zero.core.Person = CT.Class({
 			bod.springs.orientation.k = 20;
 			bod.springs.weave.boost = 2 * vec.x;
 			bod.springs.slide.boost = 2 * vec.z;
+			var chkr = setInterval(function() {
+				if (zero.core.util.touching(bod, subject, 20)) {
+					bod.springs.weave.boost = 0;
+					bod.springs.slide.boost = 0;
+					clearInterval(chkr);
+					undance();
+					cb && cb();
+				}
+			}, 200);
 		}, 500); // time for orientation...
+	},
+	move: function(opts, cb) {
+		var k, dur = 1000; // TODO: ACTUALLY CALC DUR!!!!
+		for (var k in opts)
+			this.body.springs[k].target = opts[k];
+		this.dance("walk", dur);
+		cb && setTimeout(cb, dur);
 	},
 	snapshot: function() {
 		return {
@@ -144,11 +167,12 @@ zero.core.Person = CT.Class({
 		this.gesture(dance.steps[dance.step]);
 		setTimeout(this._dance, dance.interval || 1000);
 	},
-	dance: function(dname) {
+	dance: function(dname, duration) {
 		if (this.activeDance == dname) return;
 		this.activeDance = dname;
 		this.opts.dances[dname].step = -1;
 		this._dance();
+		duration && setTimeout(this.undance, duration);
 	},
 	undance: function() {
 		delete this.activeDance;
