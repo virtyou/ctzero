@@ -16,6 +16,18 @@ zero.core.util = {
 			xyzb[dim] = val;
 		});
 	},
+	touching: function(t1, t2) {
+		var dist = zero.core.util.distance(t1.position(), t2.position()),
+			r1 = Math.max.apply(null, Object.values(t1.radii)), // (improve)
+			r2 = Math.max.apply(null, Object.values(t2.radii)),
+			buff = r1 + r2;
+		return dist < buff;
+	},
+	distance: function(p1, p2) { // only checking x/z!!!! (probs revisit)
+		var vec = zero.core.util.vector(p1, p2),
+			xzt = (vec.x * vec.x) + (vec.y * vec.y);
+		return Math.sqrt(xzt);
+	},
 	vector: function(p1, p2) { // p2 - p1
 		return {
 			x: p2.x - p1.x,
