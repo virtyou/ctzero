@@ -5,7 +5,7 @@ class Member(CTUser):
     cc = db.JSON() # carecoin {person,membership}
 
 class Asset(db.TimeStampedBase):
-    owner = db.ForeignKey(kind=Member)
+    owners = db.ForeignKey(kind=Member, repeated=True)
     variety = db.String(choices=["texture", "stripset"])
     kind = db.String() # furnishing, headgear, hair, head, eye, etc
     name = db.String()
@@ -16,7 +16,7 @@ class Asset(db.TimeStampedBase):
         return self.data()
 
 class Thing(db.TimeStampedBase):
-    owner = db.ForeignKey(kind=Member)
+    owners = db.ForeignKey(kind=Member, repeated=True)
     texture = db.ForeignKey(kind=Asset)
     stripset = db.ForeignKey(kind=Asset)
     morphStack = db.String() # should be Asset, but Thing.js gets complicated...
@@ -72,7 +72,7 @@ class Part(db.TimeStampedBase):
         return d
 
 class Person(db.TimeStampedBase):
-    owner = db.ForeignKey(kind=Member)
+    owners = db.ForeignKey(kind=Member, repeated=True)
     body = db.ForeignKey(kind=Part)
     name = db.String()
     voice = db.String()
@@ -98,7 +98,7 @@ class Person(db.TimeStampedBase):
         }
 
 class Room(db.TimeStampedBase):
-    owner = db.ForeignKey(kind=Member)
+    owners = db.ForeignKey(kind=Member, repeated=True)
     base = db.ForeignKey(kind=Thing)
     name = db.String()
     environment = db.String()
@@ -118,7 +118,7 @@ class Room(db.TimeStampedBase):
             item = getattr(self, iname)
             if item:
                 d[iname] = item
-        d["owner"] = self.owner.urlsafe()
+        d["owners"] = [o.urlsafe() for o in self.owners]
         d["grippy"] = self.grippy
         if self.material:
             if "material" not in d:
