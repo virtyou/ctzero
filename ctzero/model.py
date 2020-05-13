@@ -94,7 +94,8 @@ class Person(db.TimeStampedBase):
             "dances": self.dances or {},
             "gestures": self.gestures or {},
             "responses": self.responses or {},
-            "body": self.body.get().json()
+            "body": self.body.get().json(),
+            "owners": [o.urlsafe() for o in self.owners]
         }
 
 class Room(db.TimeStampedBase):
