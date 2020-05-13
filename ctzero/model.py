@@ -7,6 +7,7 @@ class Member(CTUser):
 class Asset(db.TimeStampedBase):
     owner = db.ForeignKey(kind=Member)
     variety = db.String(choices=["texture", "stripset"])
+    kind = db.String() # furnishing, headgear, hair, head, eye, etc
     name = db.String()
     identifier = db.String()
     item = db.Binary(unique=True)
