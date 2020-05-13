@@ -230,6 +230,7 @@ var camera = zero.core.camera = {
 		var c = _.outerContainer = CT.dom.id(config.container) || document.body,
 			WIDTH = c.clientWidth, HEIGHT = c.clientHeight;
 		_.camera = new THREE.PerspectiveCamera(25, WIDTH / HEIGHT, 0.2, 10000000);
+		camera.scene.add(_.camera);
 		_.renderer = new THREE.WebGLRenderer(config.camera.opts);
 		_.renderer.setSize(WIDTH, HEIGHT);
 		CT.dom.addContent(_.outerContainer, _.container);
