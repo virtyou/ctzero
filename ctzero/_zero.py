@@ -8,9 +8,9 @@ def response():
         if ent.polytype == "member":
             rq = Room.query()
             if not cgi_get("allrooms", required=False):
-                rq.filter(Room.owner == ent.key)
+                rq.filter(Room.owners.contains(ent.key.urlsafe()))
             succeed({
-                "people": [p.json() for p in Person.query(Person.owner == ent.key).fetch()],
+                "people": [p.json() for p in Person.query(Person.owners.contains(ent.key.urlsafe())).fetch()],
                 "rooms": [r.json() for r in rq.fetch()]
             })
         succeed(ent.json())
