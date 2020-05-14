@@ -37,7 +37,8 @@ class Thing(db.TimeStampedBase):
             "morphs": self.morphs or {},
             "morphStack": self.morphStack,
             "texture": self.texture and self.texture.get().item.urlsafe() or None,
-            "stripset": self.stripset and self.stripset.get().item.urlsafe() or None
+            "stripset": self.stripset and self.stripset.get().item.urlsafe() or None,
+            "owners": [o.urlsafe() for o in self.owners]
         }
         self.opts and d.update(self.opts)
         return d
