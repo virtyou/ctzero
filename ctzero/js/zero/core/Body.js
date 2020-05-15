@@ -1,13 +1,14 @@
 zero.core.Body = CT.Class({
 	CLASSNAME: "zero.core.Body",
 	_xyz: ["weave", "bob", "slide"],
-	_assembled: function() {
+	assembled: function() {
 		this.log("built body!");
 		this.head.body = this;
 		this.torso = new zero.core.Torso({
 			body: this,
 			bmap: this.bmap,
-			bones: this.bones
+			bones: this.bones,
+			onbuild: this._.built
 		});
 		this.spine = new zero.core.Spine({
 			body: this,
@@ -92,8 +93,7 @@ zero.core.Body = CT.Class({
 	},
 	init: function(opts) {
 		this.opts = opts = CT.merge(this.opts, {
-			joints: zero.base.joints(),
-			onassemble: this._assembled
+			joints: zero.base.joints()
 		});
 		opts.frustumCulled = false; // TODO: figure out real problem and fix!!!
 	}
