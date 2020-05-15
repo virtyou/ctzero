@@ -254,6 +254,8 @@ zero.core.Person = CT.Class({
 				thiz.body.person = thiz.head.person = thiz;
 				if (zero.core.current.room)
 					thiz.setFriction();
+				if (opts.mods.default)
+					thiz.mod("default");
 				opts.onbuild && opts.onbuild(thiz);
 			}
 		}));
