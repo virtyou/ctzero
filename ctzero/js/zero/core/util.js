@@ -150,7 +150,7 @@ zero.core.util = {
 						if (isLast) {
 							person.watch();
 							setTimeout(requestAnimationFrame, 0, zero.core.util.animate);
-							onbuild && setTimeout(onbuild, 50, person, room, i);
+							onbuild && onbuild(person, room, i);
 						}
 					}
 				}));
