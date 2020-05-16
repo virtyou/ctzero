@@ -12,12 +12,15 @@ class Asset(db.TimeStampedBase):
     identifier = db.String()
     item = db.Binary(unique=True)
 
+    def path(self):
+        return self.item.urlsafe()
+
     def json(self):
         return self.data()
 
 class Thing(db.TimeStampedBase):
     owners = db.ForeignKey(kind=Member, repeated=True)
-    texture = db.ForeignKey(kind=Asset)
+    texture = db.ForeignKey() # Asset or similar (requires item Binary column)!!
     stripset = db.ForeignKey(kind=Asset)
     morphStack = db.String() # should be Asset, but Thing.js gets complicated...
     kind = db.String() # furnishing, headgear, head, eye, arm, leg, etc
@@ -36,7 +39,7 @@ class Thing(db.TimeStampedBase):
             "material": self.material,
             "morphs": self.morphs or {},
             "morphStack": self.morphStack,
-            "texture": self.texture and self.texture.get().item.urlsafe() or None,
+            "texture": self.texture and self.texture.get().path() or None,
             "stripset": self.stripset and self.stripset.get().item.urlsafe() or None,
             "owners": [o.urlsafe() for o in self.owners]
         }
