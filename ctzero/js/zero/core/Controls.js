@@ -51,7 +51,7 @@ zero.core.Controls = CT.Class({
 					target.gesture("jump");
 				else
 					target.dance("walk");
-			} else if (!CT.key.downs(["UP", "DOWN", "LEFT", "RIGHT"]).length)
+			} else if (!CT.key.downs(["w", "s", "a", "d"]).length)
 				target.undance();
 			if (dir == "y") {
 				if (amount)
@@ -60,9 +60,9 @@ zero.core.Controls = CT.Class({
 					spr.boost = -speed;
 			} else if (dir == "orientation") {
 				spr.boost = amount;
-				if (CT.key.down("UP"))
+				if (CT.key.down("w"))
 					direct(speed);
-				else if (CT.key.down("DOWN"))
+				else if (CT.key.down("s"))
 					direct(-speed);
 			} else
 				direct(amount);
@@ -87,10 +87,10 @@ zero.core.Controls = CT.Class({
 			speed = this._.speed, ospeed = speed / 10,
 			wall, gestures, dances, num = 0;
 		if (this.target.gesture) { // person
-			CT.key.on("UP", mover(0), mover(speed));
-			CT.key.on("DOWN", mover(0), mover(-speed));
-			CT.key.on("LEFT", mover(0, "orientation"), mover(ospeed, "orientation"));
-			CT.key.on("RIGHT", mover(0, "orientation"), mover(-ospeed, "orientation"));
+			CT.key.on("w", mover(0), mover(speed));
+			CT.key.on("s", mover(0), mover(-speed));
+			CT.key.on("a", mover(0, "orientation"), mover(ospeed, "orientation"));
+			CT.key.on("d", mover(0, "orientation"), mover(-ospeed, "orientation"));
 			CT.key.on("SPACE", mover(0, "y"), mover(speed, "y"));
 			gestures = Object.keys(this.target.opts.gestures);
 			dances = Object.keys(this.target.opts.dances);
