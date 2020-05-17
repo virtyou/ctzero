@@ -157,7 +157,7 @@ zero.core.util = {
 			});
 		} else {
 			setTimeout(requestAnimationFrame, 0, zero.core.util.animate);
-			onbuild && onbuild();
+			room.opts.onbuild = onbuild;
 		}
 		if (cfg.framecount)
 			zero.core.util.frameCount(typeof cfg.framecount == "string" && cfg.framecount);
