@@ -108,19 +108,22 @@ zero.core.Person = CT.Class({
 	approach: function(subject, cb) {
 		var bod = this.body, vec, getd = this.direction,
 			dance = this.dance, undance = this.undance,
-			zcc = zero.core.current, ppl = zcc.people;
+			zcc = zero.core.current, ppl = zcc.people,
+			bso = bod.springs.orientation, bsohard = bso.hard;
 		if (typeof subject == "string") {
 			if (ppl[subject])
 				subject = ppl[subject].body;
 			else
 				subject = zcc.room[subject];
 		}
-		bod.springs.orientation.k = 200;
+		bso.k = 200;
+		bso.hard = false;
 		this.look(subject, true);
 		setTimeout(function() { // adapted from Controls.mover()... revise?
 			dance("walk");
 			vec = getd();
-			bod.springs.orientation.k = 20;
+			bso.k = 20;
+			bso.hard = bsohard;
 			bod.springs.weave.boost = 2 * vec.x;
 			bod.springs.slide.boost = 2 * vec.z;
 			var chkr = setInterval(function() {
