@@ -176,12 +176,19 @@ zero.core.Room = CT.Class({
 	clearObjects: function() {
 		this.opts.objects.forEach(this.removeObject);
 	},
+	getPlacer: function() {
+		this.placer = this.placer || this.thring;
+		return this.placer;
+	},
+	getGroup: function() {
+		this.group = this.group || new THREE.Object3D();
+		return this.group;
+	},
 	postassemble: function() {
 		var opts = this.opts;
 		opts.lights.forEach(this.addLight);
 		opts.cameras.forEach(this.addCamera);
 		opts.objects.forEach(this.addObject);
-		this.placer = this.thring;
 	},
 	preassemble: function() {
 		var opts = this.opts;
