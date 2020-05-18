@@ -57,6 +57,7 @@ zero.core.Head = CT.Class({
 		var p, zc = zero.core;
 		for (p in zc.phonemes.forms)
 			this.springs[p] = zc.springController.add(zc.phonemes.forms[p], p, this);
+		this.opts.frustumCulled = false; // TODO: figure out real problem and fix!!!
 		setTimeout(this.blink, 1000);
 	}
 }, zero.core.Thing);
