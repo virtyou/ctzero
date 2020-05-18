@@ -235,9 +235,12 @@ zero.core.Thing = CT.Class({
 		} else
 			this.bones = this.opts.bones;
 	},
+	getPlacer: function() {
+		this.placer = this.placer || new THREE.Object3D();
+		return this.placer;
+	},
 	place: function() {
-		var oz = this.opts,
-			p = this.placer = this.placer || new THREE.Object3D();
+		var oz = this.opts, p = this.getPlacer();
 		["position", "rotation", "scale"].forEach(function(prop) {
 			var setter = p[prop];
 			setter.set.apply(setter, oz[prop]);
@@ -351,11 +354,15 @@ zero.core.Thing = CT.Class({
 	assembled: function() {
 		this._.built();
 	},
+	getGroup: function() {
+		this.group = this.group || this.placer;
+		return this.group;
+	},
 	assemble: function() {
 		if (this.parts) return; // for rebuild update()....
 		this.preassemble && this.preassemble();
 		var thiz = this, oz = this.opts, i = 0,
-			group = this.group = this.placer,
+			group = this.getGroup(),
 			iterator = function() {
 				i += 1;
 				if (i >= oz.parts.length) {
