@@ -83,6 +83,7 @@ class Person(db.TimeStampedBase):
     mood = db.JSON()
     vibe = db.JSON()
     mods = db.JSON()
+    gear = db.JSON()
     dances = db.JSON()
     gestures = db.JSON()
     responses = db.JSON()
@@ -95,6 +96,7 @@ class Person(db.TimeStampedBase):
             "mood": self.mood or {},
             "vibe": self.vibe or {},
             "mods": self.mods or {},
+            "gear": self.gear or {},
             "dances": self.dances or {},
             "gestures": self.gestures or {},
             "responses": self.responses or {},
@@ -134,7 +136,7 @@ class Room(db.TimeStampedBase):
         return d
 
 class Furnishing(db.TimeStampedBase):
-    parent = db.ForeignKey(kinds=["Room", "Furnishing"])
+    parent = db.ForeignKey(kinds=["room", "furnishing"])
     base = db.ForeignKey(kind=Thing)
     material = db.JSON()
     opts = db.JSON() # merged into Thing.opts{} - includes pos, rot, etc
