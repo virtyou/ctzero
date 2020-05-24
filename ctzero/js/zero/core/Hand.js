@@ -21,6 +21,18 @@ zero.core.Hand = CT.Class({
 	shouldReverse: function(part, dim) {
 		return part != "thumb" && (dim == "z" || dim == "curl");
 	},
+	curl: function(degree) {
+		var digit, opts = {};
+		for (digit of zero.core.Hand.parts)
+			opts[digit] = { curl: degree };
+		this.move(opts);
+	},
+	grasp: function() {
+		this.curl(1.5);
+	},
+	release: function() {
+		this.curl(0);
+	},
 	move: function(opts) {
 		var digit;
 		this.setSprings(opts);
