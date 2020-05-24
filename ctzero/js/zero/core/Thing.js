@@ -310,6 +310,7 @@ zero.core.Thing = CT.Class({
 		this.unvideo();
 		if (oz.key)
 			delete zero.core.Thing._things[oz.key];
+		oz.onremove && oz.onremove();
 	},
 	detach: function(cname) {
 		var thing = this[cname];
@@ -472,7 +473,7 @@ zero.core.Thing = CT.Class({
 			tickers: {},
 			morphs: {},
 			iterator: null,
-			onbuild: null, // also supports: "onassemble"
+			onbuild: null, // also supports: "onassemble", "onremove" ....
 			scroll: null,
 			frustumCulled: true
 		});

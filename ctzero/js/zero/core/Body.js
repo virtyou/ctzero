@@ -65,6 +65,33 @@ zero.core.Body = CT.Class({
 		this.torso.resize(ropts);
 		this.spine.resize(ropts.spine);
 	},
+	gear: function(gear, held) {
+		var g, gval, bz = this.bones, az = this.torso.arms,
+			gmap = this.gearmap = this.gearmap || {};
+		for (g in gear) {
+			gval = gear[g];
+			if (gval) {
+				if (typeof gval == "object")
+					this.gear(gval, g == "held");
+				else {
+					CT.db.one(gval, function(gdata) {
+						gmap[gdata.key] = new zero.core.Thing(CT.merge(gdata, {
+							bones: bz,
+							onremove: held && az[g].hand.release
+						}));
+						held && az[g].hand.grasp();
+					}, "json");
+				}
+			}
+		}
+	},
+	ungear: function(gkey, side, sub) {
+		var k, kz = gkey ? [gkey] : Object.keys(this.gearmap);
+		for (k of kz) {
+			this.gearmap[k].remove();
+			delete this.gearmap[k];
+		}
+	},
 	setBob: function() {
 		var obj = zero.core.current.room.getObject(this.group.position);
 		this._.bounder("y", 1, obj && obj.getTop());
