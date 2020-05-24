@@ -217,6 +217,12 @@ zero.core.Person = CT.Class({
 		zcu.mergeBit(resetz, gest, 1);
 		this.body.resize(gest);
 	},
+	gear: function(gear) {
+		this.body.gear(gear);
+	},
+	ungear: function(gkey, side, sub) {
+		this.body.ungear(gkey);
+	},
 	remove: function() {
 		var thaz = this;
 		this.body.remove();
@@ -259,6 +265,7 @@ zero.core.Person = CT.Class({
 					thiz.setFriction();
 				if (opts.mods.default)
 					thiz.mod("default");
+				opts.gear && thiz.gear(opts.gear);
 				opts.onbuild && opts.onbuild(thiz);
 			}
 		}));
