@@ -65,18 +65,21 @@ zero.core.Body = CT.Class({
 		this.torso.resize(ropts);
 		this.spine.resize(ropts.spine);
 	},
-	gear: function(gear) {
-		var g, gval, bz = this.bones, gmap = this.gearmap = this.gearmap || {};
+	gear: function(gear, held) {
+		var g, gval, bz = this.bones, az = this.torso.arms,
+			gmap = this.gearmap = this.gearmap || {};
 		for (g in gear) {
 			gval = gear[g];
 			if (gval) {
 				if (typeof gval == "object")
-					this.gear(gval);
+					this.gear(gval, g == "held");
 				else {
 					CT.db.one(gval, function(gdata) {
 						gmap[gdata.key] = new zero.core.Thing(CT.merge(gdata, {
-							bones: bz
+							bones: bz,
+							onremove: held && az[g].hand.release
 						}));
+						held && az[g].hand.grasp();
 					}, "json");
 				}
 			}
