@@ -22,6 +22,8 @@ zero.core.Hand = CT.Class({
 		return part != "thumb" && (dim == "z" || dim == "curl");
 	},
 	curl: function(degree) {
+		if (this.opts.side == "left")
+			degree *= -1;
 		var digit, opts = {};
 		for (digit of zero.core.Hand.parts)
 			opts[digit] = { curl: degree };
