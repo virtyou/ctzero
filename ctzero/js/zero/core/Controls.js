@@ -66,6 +66,7 @@ zero.core.Controls = CT.Class({
 					direct(-speed);
 			} else
 				direct(amount);
+			target.body.setBob();
 			moveCb && moveCb();
 		};
 	},
