@@ -44,7 +44,7 @@ zero.core.Person = CT.Class({
 		},
 		neutral: function(side, sub, nval) {
 			var part, axis, resetz = {}, aspz = zero.base.aspects,
-				held = this.opts.gear.held;
+				held = this.opts.gear.held || {};
 			(side ? [side] : ["left", "right"]).forEach(function(side) {
 				resetz[side] = {};
 				(sub ? [sub] : ((held[side] && !nval) ? ["arm"] : ["arm", "hand"])).forEach(function(sub) {
