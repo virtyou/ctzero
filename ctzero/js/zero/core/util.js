@@ -125,12 +125,13 @@ zero.core.util = {
 	init: function(onperson, onbuild) {
 		zero.core.camera.init();
 		var cfg = core.config.ctzero, people = zero.core.current.people = {},
-			room = zero.core.util.room(cfg.room), isLast;
+			room = zero.core.util.room(cfg.room), loadCount = 0, isLast;
 		if (cfg.people.length) {
 			cfg.people.forEach(function(pobj, i) {
 				people[pobj.name] = new zero.core.Person(CT.merge(pobj, {
 					onbuild: function(person) {
-						isLast = i == cfg.people.length - 1;
+						loadCount += 1;
+						isLast = loadCount == cfg.people.length;
 						onperson && onperson(person, room, i, isLast);
 						if (isLast) {
 							person.watch();
