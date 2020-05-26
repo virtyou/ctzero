@@ -41,6 +41,22 @@ zero.core.Person = CT.Class({
 					chain, cb);
 			} else
 				cb && cb();
+		},
+		neutral: function(side, sub, nval) {
+			var part, axis, resetz = {}, aspz = zero.base.aspects,
+				held = this.opts.gear.held;
+			(side ? [side] : ["left", "right"]).forEach(function(side) {
+				resetz[side] = {};
+				(sub ? [sub] : ((held[side] && !nval) ? ["arm"] : ["arm", "hand"])).forEach(function(sub) {
+					resetz[side][sub] = {};
+					for (part in aspz[sub]) {
+						resetz[side][sub][part] = {};
+						for (axis in aspz[sub][part])
+							resetz[side][sub][part][axis] = nval || 0;
+					}
+				});
+			});
+			return resetz;
 		}
 	},
 	setVolume: function(v) {
@@ -186,17 +202,17 @@ zero.core.Person = CT.Class({
 		this.body.move(this.opts.gestures[gname]);
 	},
 	ungesture: function(resetz, side, sub) {
-		var gest = {}, zcu = zero.core.util;
+		var gest = {}, neutral = this._.neutral;
 		if (!resetz) {
 			if (side || sub)
-				resetz = zcu.neutral(side, sub);
+				resetz = neutral(side, sub);
 			else if (this.activeGesture) {
 				resetz = this.opts.gestures[this.activeGesture];
 				delete this.activeGesture;
 			} else
-				resetz = zcu.neutral(side, sub);
+				resetz = neutral(side, sub);
 		}
-		zcu.mergeBit(resetz, gest);
+		zero.core.util.mergeBit(resetz, gest);
 		this.body.move(gest);
 	},
 	mod: function(mname) {
@@ -204,17 +220,17 @@ zero.core.Person = CT.Class({
 		this.body.resize(this.opts.mods[mname]);
 	},
 	unmod: function(resetz, side, sub) {
-		var gest = {}, zcu = zero.core.util;
+		var gest = {}, neutral = this._.neutral;
 		if (!resetz) {
 			if (side || sub)
-				resetz = zcu.neutral(side, sub, 1);
+				resetz = neutral(side, sub, 1);
 			else if (this.activeMod) {
 				resetz = this.opts.mods[this.activeMod];
 				delete this.activeMod;
 			} else
-				resetz = zcu.neutral(side, sub, 1);
+				resetz = neutral(side, sub, 1);
 		}
-		zcu.mergeBit(resetz, gest, 1);
+		zero.core.util.mergeBit(resetz, gest, 1);
 		this.body.resize(gest);
 	},
 	gear: function(gear) {
