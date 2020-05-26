@@ -36,21 +36,6 @@ zero.core.util = {
 			z: p2.z - p1.z
 		};
 	},
-	neutral: function(side, sub, nval) {
-		var part, axis, resetz = {}, aspz = zero.base.aspects;
-		(side ? [side] : ["left", "right"]).forEach(function(side) {
-			resetz[side] = {};
-			(sub ? [sub] : ["arm", "hand"]).forEach(function(sub) {
-				resetz[side][sub] = {};
-				for (part in aspz[sub]) {
-					resetz[side][sub][part] = {};
-					for (axis in aspz[sub][part])
-						resetz[side][sub][part][axis] = nval || 0;
-				}
-			});
-		});
-		return resetz;
-	},
 	mergeBit: function(obj1, obj2, nval) {
 		for (var k in obj1) {
 			if (typeof obj1[k] == "number")
