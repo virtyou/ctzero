@@ -259,6 +259,7 @@ zero.core.Person = CT.Class({
 			grippy: true,
 			gestures: {},
 			responses: {},
+			positioners: {},
 			voice: "Joanna"
 		});
 		this.onresolved = opts.onresolved;
@@ -274,13 +275,15 @@ zero.core.Person = CT.Class({
 		this.voice = opts.voice;
 		this.name = opts.name;
 		this.body = new zero.core.Body(CT.merge(opts.body, {
-			onbuild: function() {
-				thiz.head = thiz.body.head;
-				thiz.body.person = thiz.head.person = thiz;
+			onbuild: function(bod) {
+				thiz.head = bod.head;
+				bod.person = thiz.head.person = thiz;
 				if (zero.core.current.room)
 					thiz.setFriction();
 				if (opts.mods.default)
 					thiz.mod("default");
+				for (var p in opts.positioners)
+					bod.springs[p].target = bod.springs[p].value = opts.positioners[p];
 				opts.gear && thiz.gear(opts.gear);
 				opts.onbuild && opts.onbuild(thiz);
 			}
