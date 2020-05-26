@@ -133,8 +133,9 @@ zero.core.util = {
 						loadCount += 1;
 						isLast = loadCount == cfg.people.length;
 						onperson && onperson(person, room, i, isLast);
-						if (isLast) {
+						if (i == cfg.people.length - 1) // last in line...
 							person.watch();
+						if (isLast) { // last to load...
 							setTimeout(requestAnimationFrame, 0, zero.core.util.animate);
 							onbuild && onbuild(person, room, i);
 						}
