@@ -64,7 +64,7 @@ zero.core.Skeleton = CT.Class({
 		var sname = part + "_" + dim, rz;
 		jrules = jrules || this.jointRules(part, dim);
 		this.springs[sname] = zero.core.springController.add({
-			k: 20,
+			k: 40,
 			damp: 10
 		}, sname, this);
 		if (this.opts.side == "left" && this.shouldReverse(part, dim)) {
