@@ -122,17 +122,20 @@ zero.core.Person = CT.Class({
 				- pos.x, spos.z - pos.z));
 		}
 	},
-	approach: function(subject, cb) {
+	approach: function(subject, cb, watch) {
 		var bod = this.body, vec, getd = this.direction,
 			dance = this.dance, undance = this.undance,
 			zcc = zero.core.current, ppl = zcc.people,
 			bso = bod.springs.orientation, bsohard = bso.hard;
 		if (typeof subject == "string") {
-			if (ppl[subject])
+			if (subject == "player")
+				subject = zcc.person.body;
+			else if (ppl[subject])
 				subject = ppl[subject].body;
 			else
 				subject = zcc.room[subject];
 		}
+		watch && this.watch();
 		bso.k = 200;
 		bso.hard = false;
 		this.look(subject, true);
@@ -154,10 +157,11 @@ zero.core.Person = CT.Class({
 			}, 200);
 		}, 500); // time for orientation...
 	},
-	move: function(opts, cb) {
+	move: function(opts, cb, watch) {
 		var k, dur = 1000; // TODO: ACTUALLY CALC DUR!!!!
 		for (var k in opts)
 			this.body.springs[k].target = opts[k];
+		watch && this.watch();
 		this.dance("walk", dur);
 		cb && setTimeout(cb, dur);
 	},
