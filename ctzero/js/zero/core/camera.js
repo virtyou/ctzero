@@ -46,16 +46,22 @@ var camera = zero.core.camera = {
 		var zcc = zero.core.current;
 		if (perspective == "cycle")
 			camera.cycle();
-		else if (["pov", "behind"].includes(perspective)) {
-			var person = zcc.person,
-				per = camera._.lookers[perspective],
-				bl = person.body.looker, dim;
-			camera.setSprings(200);
-			camera.perspective(person);
-			for (dim in per)
-				bl.adjust("position", dim, per[dim]);
-		} else
-			zcc.room.cut(parseInt(perspective));
+		else {
+			if (camera._.cycler) {
+				clearInterval(camera._.cycler);
+				delete camera._.cycler;
+			}
+			if (["pov", "behind"].includes(perspective)) {
+				var person = zcc.person,
+					per = camera._.lookers[perspective],
+					bl = person.body.looker, dim;
+				camera.setSprings(200);
+				camera.perspective(person);
+				for (dim in per)
+					bl.adjust("position", dim, per[dim]);
+			} else
+				zcc.room.cut(parseInt(perspective));
+		}
 	},
 	look: function(pos) {
 		zero.core.util.coords(pos, function(dim, val) {
