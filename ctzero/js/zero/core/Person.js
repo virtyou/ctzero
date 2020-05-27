@@ -87,8 +87,9 @@ zero.core.Person = CT.Class({
 			this.brain.say(data, cb, this._.playClip, this.prosody, this.voice);
 		}
 	},
-	respond: function(phrase, cb) {
+	respond: function(phrase, cb, watch) {
 		var thaz = this;
+		watch && this.watch();
 		this.brain.respond(phrase, function(words) {
 			words ? thaz.say(words, function() {
 				thaz._.chain(cb);
