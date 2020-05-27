@@ -33,7 +33,8 @@ zero.core.click = {
     },
     register: function(thing, cb) {
         zero.core.click.init();
-        var thring = thing.bone || thing.thring || thing.group;
+        var thring = thing.group || thing.thring || thing.bone;
+//        var thring = thing.bone || thing.thring || thing.group;
         thring.__click = cb;
         zero.core.click.targets.push(thring);
     }
