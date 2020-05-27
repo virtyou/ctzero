@@ -458,7 +458,7 @@ zero.core.Thing = CT.Class({
 			stripset: "",
 			loader: "JSONLoader",
 			geometry: null, // or a THREE.CubeGeometry or something
-			matcat: "Basic", // or "Phong"
+			matcat: "Phong", // or "Basic"
 			meshcat: "Mesh", // or "SkinnedMesh" etc
 			material: {}, // color etc
 			repeat: null, // or [1, 1] (for instance)
