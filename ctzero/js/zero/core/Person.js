@@ -59,6 +59,9 @@ zero.core.Person = CT.Class({
 			return resetz;
 		}
 	},
+	click: function() {
+		this.body.group.__click();
+	},
 	setVolume: function(v) {
 		this._.audio.volume = v;
 	},
