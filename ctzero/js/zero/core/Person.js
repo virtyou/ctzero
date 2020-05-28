@@ -60,7 +60,7 @@ zero.core.Person = CT.Class({
 		}
 	},
 	click: function() {
-		this.body.group.__click();
+		this.body.group.__click && this.body.group.__click();
 	},
 	setVolume: function(v) {
 		this._.audio.volume = v;
@@ -91,8 +91,12 @@ zero.core.Person = CT.Class({
 		}
 	},
 	respond: function(phrase, cb, watch) {
-		var thaz = this;
-		watch && this.watch();
+		var thaz = this, zcc = zero.core.current;
+		if (watch) { // watch both ways....
+			watch && this.watch();
+			if (zcc.person && zcc.person != this)
+				this.look(zcc.person.body, true);
+		}
 		this.brain.respond(phrase, function(words) {
 			words ? thaz.say(words, function() {
 				thaz._.chain(cb);
@@ -113,7 +117,7 @@ zero.core.Person = CT.Class({
 			var pz = zero.core.current.people;
 			for (var p in pz)
 				if (p != this.name)
-					 pz[p].look(cube);
+					 pz[p].look(cube, true);
 		}
 	},
 	look: function(subject, orient) {
