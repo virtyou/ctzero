@@ -28,14 +28,16 @@ zero.core.click = {
             }
         });
     },
+    target: function(thing) {
+        return thing.group || thing.thring || thing.bone;
+    },
     trigger: function(thing) {
-        (thing.bone || thing.thring || thing.group).__click();
+        zero.core.click.target(thing).__click();
     },
     register: function(thing, cb) {
         zero.core.click.init();
-        var thring = thing.group || thing.thring || thing.bone;
-//        var thring = thing.bone || thing.thring || thing.group;
-        thring.__click = cb;
-        zero.core.click.targets.push(thring);
+        var target = zero.core.click.target(thing);
+        target.__click = cb;
+        zero.core.click.targets.push(target);
     }
 };
