@@ -82,7 +82,7 @@ zero.core.Person = CT.Class({
 	},
 	say: function(data, cb, watch) {
 		zero.core.rec.cancel();
-		watch && this.watch();
+		watch && this.watch(false, true);
 		if (data.audio)
 			this._.playClip(this.brain.say_data(data, cb));
 		else {
@@ -93,7 +93,7 @@ zero.core.Person = CT.Class({
 	respond: function(phrase, cb, watch) {
 		var thaz = this, zcc = zero.core.current;
 		if (watch) { // watch both ways....
-			watch && this.watch();
+			watch && this.watch(false, true);
 			if (zcc.person && zcc.person != this)
 				this.look(zcc.person.body, true);
 		}
@@ -135,14 +135,15 @@ zero.core.Person = CT.Class({
 			zcc = zero.core.current, ppl = zcc.people,
 			bso = bod.springs.orientation, bsohard = bso.hard;
 		if (typeof subject == "string") {
-			if (subject == "player")
+			if (subject == "player") {
+				if (!zcc.person) return cb && cb();
 				subject = zcc.person.body;
-			else if (ppl[subject])
+			} else if (ppl[subject])
 				subject = ppl[subject].body;
 			else
 				subject = zcc.room[subject];
 		}
-		watch && this.watch();
+		watch && this.watch(false, true);
 		bso.k = 200;
 		bso.hard = false;
 		this.look(subject, true);
@@ -168,7 +169,7 @@ zero.core.Person = CT.Class({
 		var k, dur = 1000; // TODO: ACTUALLY CALC DUR!!!!
 		for (var k in opts)
 			this.body.springs[k].target = opts[k];
-		watch && this.watch();
+		watch && this.watch(false, true);
 		this.dance("walk", dur);
 		cb && setTimeout(cb, dur);
 	},
