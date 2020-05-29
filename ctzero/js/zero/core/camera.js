@@ -9,6 +9,10 @@ var camera = zero.core.camera = {
 			behind: {
 				y: 85,
 				z: -155
+			},
+			front: {
+				y: 55,
+				z: 115
 			}
 		}
 	},
@@ -42,7 +46,8 @@ var camera = zero.core.camera = {
 			return true;
 		}
 	},
-	angle: function(perspective) {
+	angle: function(perspective, pname, lookPart) {
+		console.log(perspective, pname, lookPart);
 		var zcc = zero.core.current;
 		if (perspective == "cycle")
 			camera.cycle();
@@ -51,13 +56,13 @@ var camera = zero.core.camera = {
 				clearInterval(camera._.cycler);
 				delete camera._.cycler;
 			}
-			if (["pov", "behind"].includes(perspective)) {
-				var person = zcc.person;
+			if (perspective in camera._.lookers) {
+				var person = zcc.people[pname] || zcc.person;
 				if (!person) return;
 				var per = camera._.lookers[perspective],
 					bl = person.body.looker, dim;
 				camera.setSprings(200);
-				camera.perspective(person);
+				camera.perspective(person, lookPart);
 				for (dim in per)
 					bl.adjust("position", dim, per[dim]);
 			} else
@@ -77,9 +82,9 @@ var camera = zero.core.camera = {
 	unfollow: function() {
 		camera._.subject = null;
 	},
-	perspective: function(person) {
+	perspective: function(person, part) {
 		camera._.perspective = person;
-		person && camera.follow(person.body.lookAt);
+		person && camera.follow(person.body[part || "lookAt"]);
 	},
 	_tickPerspective: function() {
 		if (camera._.perspective)
