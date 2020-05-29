@@ -52,8 +52,9 @@ var camera = zero.core.camera = {
 				delete camera._.cycler;
 			}
 			if (["pov", "behind"].includes(perspective)) {
-				var person = zcc.person,
-					per = camera._.lookers[perspective],
+				var person = zcc.person;
+				if (!person) return;
+				var per = camera._.lookers[perspective],
 					bl = person.body.looker, dim;
 				camera.setSprings(200);
 				camera.perspective(person);
