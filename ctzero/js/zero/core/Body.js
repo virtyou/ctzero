@@ -49,6 +49,16 @@ zero.core.Body = CT.Class({
 			    visible: false
 			}
 		});
+		this.opts.parts.push({
+			name: "lookHigh",
+			bone: 0,
+			position: [0, 45, 55],
+			cubeGeometry: [1, 1, 5],
+			material: {
+			    color: 0x00ff00,
+			    visible: false
+			}
+		});
 	},
 	_applyMod: function(gopts) {
 		for (var op in gopts)

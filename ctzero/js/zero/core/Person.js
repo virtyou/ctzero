@@ -80,6 +80,9 @@ zero.core.Person = CT.Class({
 	setFriction: function() { // roller skates, ice, etc
 		this.body.setFriction(this.grippy && zero.core.current.room.grippy);
 	},
+	onsay: function(cb) {
+		this._.onsay = cb;
+	},
 	say: function(data, cb, watch) {
 		zero.core.rec.cancel();
 		watch && this.watch(false, true);
@@ -87,16 +90,17 @@ zero.core.Person = CT.Class({
 			this._.playClip(this.brain.say_data(data, cb));
 		else {
 			this.mood.tick();
+			this._.onsay && this._.onsay(data, this);
 			this.brain.say(data, cb, this._.playClip, this.prosody, this.voice);
 		}
 	},
 	respond: function(phrase, cb, watch) {
 		var thaz = this, zcc = zero.core.current;
-		if (watch) { // watch both ways....
-			watch && this.watch(false, true);
-			if (zcc.person && zcc.person != this)
-				this.look(zcc.person.body, true);
-		}
+//		if (watch) { // watch both ways....
+//			watch && this.watch(false, true);
+//			if (zcc.person && zcc.person != this)
+//				this.look(zcc.person.body, true);
+//		}
 		this.brain.respond(phrase, function(words) {
 			words ? thaz.say(words, function() {
 				thaz._.chain(cb);
@@ -122,12 +126,13 @@ zero.core.Person = CT.Class({
 	},
 	look: function(subject, orient) {
 		this.subject = subject;
-		if (orient) {
-			var pos = this.body.group.position,
-				spos = subject.position();
-			this.orientation(Math.atan2(spos.x
-				- pos.x, spos.z - pos.z));
-		}
+		orient && this.orient();
+	},
+	orient: function(subject) {
+		var pos = this.body.group.position,
+			spos = subject.position();
+		this.orientation(Math.atan2(spos.x
+			- pos.x, spos.z - pos.z));
 	},
 	approach: function(subject, cb, watch) {
 		var bod = this.body, vec, getd = this.direction,
@@ -146,7 +151,8 @@ zero.core.Person = CT.Class({
 		watch && this.watch(false, true);
 		bso.k = 200;
 		bso.hard = false;
-		this.look(subject, true);
+//		this.look(subject, true);
+		this.orient(subject);
 		setTimeout(function() { // adapted from Controls.mover()... revise?
 			dance("walk");
 			vec = getd();
