@@ -92,11 +92,11 @@ zero.core.Person = CT.Class({
 	},
 	respond: function(phrase, cb, watch) {
 		var thaz = this, zcc = zero.core.current;
-		if (watch) { // watch both ways....
-			watch && this.watch(false, true);
-			if (zcc.person && zcc.person != this)
-				this.look(zcc.person.body, true);
-		}
+//		if (watch) { // watch both ways....
+//			watch && this.watch(false, true);
+//			if (zcc.person && zcc.person != this)
+//				this.look(zcc.person.body, true);
+//		}
 		this.brain.respond(phrase, function(words) {
 			words ? thaz.say(words, function() {
 				thaz._.chain(cb);
@@ -122,12 +122,13 @@ zero.core.Person = CT.Class({
 	},
 	look: function(subject, orient) {
 		this.subject = subject;
-		if (orient) {
-			var pos = this.body.group.position,
-				spos = subject.position();
-			this.orientation(Math.atan2(spos.x
-				- pos.x, spos.z - pos.z));
-		}
+		orient && this.orient();
+	},
+	orient: function(subject) {
+		var pos = this.body.group.position,
+			spos = subject.position();
+		this.orientation(Math.atan2(spos.x
+			- pos.x, spos.z - pos.z));
 	},
 	approach: function(subject, cb, watch) {
 		var bod = this.body, vec, getd = this.direction,
@@ -146,7 +147,8 @@ zero.core.Person = CT.Class({
 		watch && this.watch(false, true);
 		bso.k = 200;
 		bso.hard = false;
-		this.look(subject, true);
+//		this.look(subject, true);
+		this.orient(subject);
 		setTimeout(function() { // adapted from Controls.mover()... revise?
 			dance("walk");
 			vec = getd();
