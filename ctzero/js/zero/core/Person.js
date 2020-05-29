@@ -80,6 +80,9 @@ zero.core.Person = CT.Class({
 	setFriction: function() { // roller skates, ice, etc
 		this.body.setFriction(this.grippy && zero.core.current.room.grippy);
 	},
+	onsay: function(cb) {
+		this._.onsay = cb;
+	},
 	say: function(data, cb, watch) {
 		zero.core.rec.cancel();
 		watch && this.watch(false, true);
@@ -87,6 +90,7 @@ zero.core.Person = CT.Class({
 			this._.playClip(this.brain.say_data(data, cb));
 		else {
 			this.mood.tick();
+			this._.onsay && this._.onsay(data, this);
 			this.brain.say(data, cb, this._.playClip, this.prosody, this.voice);
 		}
 	},
