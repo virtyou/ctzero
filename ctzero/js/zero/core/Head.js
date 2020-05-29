@@ -2,7 +2,8 @@ zero.core.Head = CT.Class({
 	CLASSNAME: "zero.core.Head",
 	updaters: {
 		eyes: function() {
-			var cpos = (this.person.subject || zero.core.camera).position(null, true);
+			if (!this.person.subject) return; // disabled auto cam look
+			var cpos = this.person.subject.position(null, true);
 			this.eyeL.look(cpos);
 			this.eyeR.look(cpos);
 		},
