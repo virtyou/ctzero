@@ -54,10 +54,11 @@ zero.core.Controls = CT.Class({
 			} else if (!CT.key.downs(["w", "s", "a", "d"]).length)
 				target.undance();
 			if (dir == "y") {
-				if (amount)
-					spr.velocity = 500;
-				else
-					spr.boost = -speed;
+				if (amount && spr.floored) {
+					spr.hard = true;
+					spr.boost = amount;
+					spr.floored = false;
+				}
 			} else if (dir == "orientation") {
 				spr.boost = amount;
 				if (CT.key.down("w"))
@@ -85,14 +86,14 @@ zero.core.Controls = CT.Class({
 	setKeys: function() {
 		this.clear();
 		var placer = this.placer, mover = this.mover,
-			speed = this._.speed, ospeed = speed / 10,
+			speed = this._.speed, ospeed = speed / 10, jspeed = speed * 5,
 			wall, gestures, dances, num = 0;
 		if (this.target.gesture) { // person
 			CT.key.on("w", mover(0), mover(speed));
 			CT.key.on("s", mover(0), mover(-speed));
 			CT.key.on("a", mover(0, "orientation"), mover(ospeed, "orientation"));
 			CT.key.on("d", mover(0, "orientation"), mover(-ospeed, "orientation"));
-			CT.key.on("SPACE", mover(0, "y"), mover(speed, "y"));
+			CT.key.on("SPACE", mover(0, "y"), mover(jspeed, "y"));
 			gestures = Object.keys(this.target.opts.gestures);
 			dances = Object.keys(this.target.opts.dances);
 			this.setNum(0, null, null, true);
