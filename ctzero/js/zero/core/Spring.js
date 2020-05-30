@@ -1,9 +1,28 @@
 zero.core.Spring = CT.Class({
 	CLASSNAME: "zero.core.Spring",
+	bound: function() {
+		if (this.bounds) {
+			if (this.bounds.max)
+				this.target = Math.min(this.target, this.bounds.max);
+			if (this.bounds.min)
+				this.target = Math.max(this.target, this.bounds.min);
+		}
+	},
 	tick: function(dts) {
 		if (this.hard) {
-			this.value += this.boost;
-			this.target = this.value; // for target trackers (including multi stuff)
+			if (this.floored) return;
+			this.target += this.boost;
+			if (this.acceleration)
+				this.boost += this.acceleration;
+			var ot = this.target;
+			this.bound();
+			if (this.acceleration && this.target != ot) { // floor...
+				this.log("floored");
+				if (this.target == this.bounds.min && this.acceleration < 0 ||
+					this.target == this.bounds.max && this.acceleration > 0)
+					this.floored = true;
+			}
+			this.value = this.target; // for target trackers (including multi stuff)
 			return;
 		}
 		var mood = this.parent && this.parent.energy && this.parent.energy();
@@ -15,12 +34,7 @@ zero.core.Spring = CT.Class({
 				moodMaster_k = 1;
 		}
 		this.target += this.boost;
-		if (this.bounds) {
-			if (this.bounds.max)
-				this.target = Math.min(this.target, this.bounds.max);
-			if (this.bounds.min)
-				this.target = Math.max(this.target, this.bounds.min);
-		}
+		this.bound();
 		this.value += this.velocity * dts;
 		this.velocity += (this.k * moodMaster_k * (this.target - this.value)
 			- this.damp * moodMaster_damp * this.velocity) * dts;
@@ -40,7 +54,9 @@ zero.core.Spring = CT.Class({
 			target: 0,
 			velocity: 0,
 			hard: false,
-			breaks: false
+			breaks: false,
+			floored: false,
+			acceleration: 0
 		});
 		this.k = opts.k;
 		this.hard = opts.hard;
@@ -50,9 +66,11 @@ zero.core.Spring = CT.Class({
 		this.value = opts.value;
 		this.parent = opts.parent;
 		this.breaks = opts.breaks;
-		this.target =  opts.target;
-		this.velocity = opts.velocity;
 		this.bounds = opts.bounds;
+		this.target =  opts.target;
+		this.floored = opts.floored;
+		this.velocity = opts.velocity;
+		this.acceleration = opts.acceleration;
 	}
 });
 
