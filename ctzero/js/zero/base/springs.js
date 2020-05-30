@@ -3,7 +3,9 @@ zero.base.springs.body = function() {
     return {
         bob: {
             k: 10,
-            damp: 5
+            damp: 5,
+            floored: true,
+            acceleration: -0.5
         },
         weave: {
             k: 10,
