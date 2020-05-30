@@ -107,7 +107,10 @@ zero.core.Body = CT.Class({
 	},
 	setBob: function() {
 		var obj = zero.core.current.room.getObject(this.group.position);
-		this._.bounder("y", 1, obj && obj.getTop());
+		if (obj != this._upon) {
+			this._upon = obj;
+			this._.bounder("y", 1, obj && obj.getTop());
+		}
 	},
 	energy: function() {
 		return this.person && this.person.energy;
