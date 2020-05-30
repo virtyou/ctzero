@@ -192,8 +192,8 @@ zero.core.Thing = CT.Class({
 		zero.core.util.ontick(this._.scroller);
 	},
 	look: function(pos) {
-		this.group.lookAt(zero.core.util.vector(this.position(null,
-			true), pos));
+//		this.group.lookAt(this.group.worldToLocal(pos)); // ????
+		this.group.lookAt(zero.core.util.vector(this.position(null, true), pos));
 	},
 	// position(), rotation(), scale(): getters _and_ setters
 	position: function(position, world) {
