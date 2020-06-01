@@ -93,6 +93,7 @@ zero.core.Room = CT.Class({
 		if (typeof index != "number")
 			index = (this._cam + 1) % this.cameras.length;
 		this._cam = index;
+		zero.core.camera.perspective();
 		zero.core.camera.move(this.cameras[this._cam]);
 	},
 	updateCameras: function() {
