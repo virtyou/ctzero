@@ -12,6 +12,7 @@ zero.core.Room = CT.Class({
 	eject: function(person, port) {
 		var bod = person.body, wall = port && port.opts.wall,
 			sz = bod.springs, pz = bod.positioners, dist = 500; // revise
+		person.body.setFriction(false);
 		if (wall == 0) {
 			delete sz.slide.bounds;
 			sz.slide.target -= dist;
@@ -37,6 +38,7 @@ zero.core.Room = CT.Class({
 	inject: function(person, port) {
 		var bod = person.body, wall, prop = "bob",
 			sz = bod.springs, amount = -500; // revise -> should be axis diameter
+		person.body.setFriction(false);
 		if (port) {
 			wall = port.opts.wall;
 			prop = ["slide", "weave"][wall % 2];
@@ -47,7 +49,10 @@ zero.core.Room = CT.Class({
 		sz[prop].value += amount;
 		delete sz[prop].bounds;
 		bod.positioners[prop].unbounded = true;
-		setTimeout(bod.bindAxis, 2000, prop);
+		setTimeout(function() {
+			bod.bindAxis(prop);
+			bod.setFriction(true);
+		}, 2000);
 	},
 	getObject: function(pos) {
 		var i, obj;
