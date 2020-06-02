@@ -34,11 +34,14 @@ zero.core.Room = CT.Class({
 			sz.bob.target -= dist;
 			pz.bob.min -= dist;
 		}
+		setTimeout(function() {
+			bod.group.visible = false;
+		}, 500);
 	},
 	inject: function(person, port) {
 		var bod = person.body, wall, prop = "bob",
 			sz = bod.springs, amount = -500; // revise -> should be axis diameter
-		person.body.setFriction(false, true);
+		bod.setFriction(false, true);
 		if (port) {
 			wall = port.opts.wall;
 			prop = ["slide", "weave"][wall % 2];
@@ -51,6 +54,7 @@ zero.core.Room = CT.Class({
 		bod.positioners[prop].unbounded = true;
 		setTimeout(function() {
 			bod.bindAxis(prop);
+			bod.group.visible = true;
 			bod.setFriction(true, true);
 		}, 2000);
 	},
@@ -64,7 +68,9 @@ zero.core.Room = CT.Class({
 	},
 	setBounds: function() {
 		this.bounds = this.bounds || new THREE.Box3();
-		this.bounds.setFromObject(this.thring);
+		this.bounds.setFromObject(this.getPlacer());
+		if (this.floor)
+			this.bounds.min.y = this.floor.position().y;
 		Object.values(zero.core.current.people).forEach(function(person) {
 			person.body.group && person.body.setBounds();
 		});
@@ -102,7 +108,7 @@ zero.core.Room = CT.Class({
 		zero.core.camera.move(this.cameras[this._cam]);
 	},
 	updateCameras: function() {
-		this.bounds.setFromObject(this.thring);
+		this.bounds.setFromObject(this.getPlacer());
 		var min = this.bounds.min, max = this.bounds.max,
 			dpos = this.cameras[0], cpos;
 		if (!dpos) {
@@ -183,7 +189,7 @@ zero.core.Room = CT.Class({
 		this.opts.objects.forEach(this.removeObject);
 	},
 	getPlacer: function() {
-		this.placer = this.placer || this.thring;
+		this.placer = this.placer || this.thring || this.getGroup();
 		return this.placer;
 	},
 	getGroup: function() {
