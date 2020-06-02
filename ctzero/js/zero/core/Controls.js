@@ -1,7 +1,11 @@
 zero.core.Controls = CT.Class({
 	CLASSNAME: "zero.core.Controls",
 	_: { // configurize
-		speed: 2
+		speed: {
+			base: 4,
+			orientation: 0.2,
+			jump: 10
+		}
 	},
 	wallshift: function(shift, prev_spring) {
 		var target = this.target;
@@ -13,8 +17,7 @@ zero.core.Controls = CT.Class({
 	placer: function(dir, amount, wallshift) {
 		var s = this.springs[dir], target = this.target,
 			wall = target.opts.wall, shifter = this.wallshift,
-			speed = this._.speed, direct = this.direct,
-			forward = wallshift == 1, nxtval;
+			direct = this.direct, forward = wallshift == 1, nxtval;
 		return function() {
 			if (wallshift) { // poster/portal
 				nxtval = s.value + amount;
@@ -43,8 +46,8 @@ zero.core.Controls = CT.Class({
 		});
 	},
 	mover: function(amount, dir) {
-		var target = this.target, spr = this.springs[dir],
-			speed = this._.speed, direct = this.direct, moveCb = this._.moveCb;
+		var target = this.target, spr = this.springs[dir], _ = this._,
+			speed = _.speed.base, direct = this.direct, moveCb = _.moveCb;
 		return function() {
 			if (amount) {
 				if (dir == "y")
@@ -85,8 +88,8 @@ zero.core.Controls = CT.Class({
 	},
 	setKeys: function() {
 		this.clear();
-		var placer = this.placer, mover = this.mover,
-			speed = this._.speed, ospeed = speed / 10, jspeed = speed * 5,
+		var placer = this.placer, mover = this.mover, sz = this._.speed,
+			speed = sz.base, ospeed = sz.orientation, jspeed = sz.jump,
 			wall, gestures, dances, num = 0;
 		if (this.target.gesture) { // person
 			CT.key.on("w", mover(0), mover(speed));
