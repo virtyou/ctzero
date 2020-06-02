@@ -42,6 +42,7 @@ var camera = zero.core.camera = {
 			clearInterval(camera._.cycler);
 			delete camera._.cycler;
 		} else {
+			camera.setSprings(20);
 			camera._.cycler = setInterval(zero.core.current.room.cut, 3000);
 			return true;
 		}
