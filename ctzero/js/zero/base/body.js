@@ -37,7 +37,13 @@ zero.base.body = function(opts) {
                 bone: 4,
                 position: [0, -10, 2],
                 texture: opts.teeth_texture,
-                stripset: opts.teeth_stripset
+                stripset: opts.teeth_stripset,
+                material: {
+                    morphTargets: true
+                },
+                mti: {
+                    1: 1
+                }
             }, {
                 name: "teeth_top",
                 kind: "facial",
@@ -51,7 +57,13 @@ zero.base.body = function(opts) {
                 bone: 4,
                 position: [0, -10, 2],
                 texture: opts.teeth_texture,
-                stripset: opts.teeth_stripset
+                stripset: opts.teeth_stripset,
+                material: {
+                    morphTargets: true
+                },
+                mti: {
+                    2: 1
+                }
             }, CT.merge(opts.hair, {
                 kind: "hair",
                 bone: 4
