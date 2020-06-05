@@ -20,15 +20,29 @@ zero.core.Head = CT.Class({
 					this.body.tickers[t].tick();
 			} else
 				this.talking = this.body.talking = talking;
-			(talking || changed) && phonemes.forEach(function(pdata) {
-				if (pdata.phones.indexOf(cur) != -1) {
-					vis(pdata, "target");
-					vis(pdata, "k");
-				} else if (pdata.otherwise) {
-					vis(pdata.otherwise, "target");
-					vis(pdata.otherwise, "k");
+			if (talking || changed) {
+				phonemes.forEach(function(pdata) {
+					if (pdata.phones.indexOf(cur) != -1) {
+						vis(pdata, "target");
+						vis(pdata, "k");
+					} else if (pdata.otherwise) {
+						vis(pdata.otherwise, "target");
+						vis(pdata.otherwise, "k");
+					}
+				});
+				this.teeth.morphTargetInfluences(1, 0);
+				this.tongue.morphTargetInfluences(1, 0);
+				for (var shape in phonemes.forms) {
+					var morphs = phonemes.forms[shape].morphs;
+					if (morphs) {
+						for (var m in morphs) {
+							var morph = morphs[m];
+							this[m].morphTargetInfluences(morph.influence,
+								morph.factor * this.springs[shape].value, true, true);
+						}
+					}
 				}
-			});
+			}
 		}
 	},
 	_viseme: function(vdata, vtype) {
