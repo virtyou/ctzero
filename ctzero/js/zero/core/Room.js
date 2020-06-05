@@ -53,7 +53,7 @@ zero.core.Room = CT.Class({
 		setTimeout(function() {
 			bod.show();
 			bod.bindAxis(prop);
-			bod.setFriction(true, true);
+			bod.setFriction(person == zero.core.current.person, true);
 		}, 2000);
 	},
 	getObject: function(pos) {
