@@ -34,9 +34,7 @@ zero.core.Room = CT.Class({
 			sz.bob.target -= dist;
 			pz.bob.min -= dist;
 		}
-		setTimeout(function() {
-			bod.group.visible = false;
-		}, 500);
+		setTimeout(bod.hide, 500);
 	},
 	inject: function(person, port) {
 		var bod = person.body, wall, prop = "bob",
@@ -53,8 +51,8 @@ zero.core.Room = CT.Class({
 		delete sz[prop].bounds;
 		bod.positioners[prop].unbounded = true;
 		setTimeout(function() {
+			bod.show();
 			bod.bindAxis(prop);
-			bod.group.visible = true;
 			bod.setFriction(true, true);
 		}, 2000);
 	},
