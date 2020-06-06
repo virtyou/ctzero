@@ -1,6 +1,7 @@
 zero.core.Body = CT.Class({
 	CLASSNAME: "zero.core.Body",
 	_xyz: ["weave", "bob", "slide"],
+	_yoff: true,
 	assembled: function() {
 		this.log("built body!");
 		this.head.body = this;
@@ -15,10 +16,6 @@ zero.core.Body = CT.Class({
 			bones: this.bones,
 			hbones: this.head.bones
 		});
-
-		// .... seems wrong
-		this.bones[0].position.y = this.head.bones[0].position.y = -12;
-
 		this._.setPositioners();
 		this._.setFlippers();
 		this._.setGrowers();
