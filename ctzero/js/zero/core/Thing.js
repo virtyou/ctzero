@@ -66,6 +66,11 @@ zero.core.Thing = CT.Class({
 				sz = this.springs, pname = this._xyz[i];
 			pz[pname].max = bz.max[dim] - rz[dim];
 			pz[pname].min = (typeof min == "number" ? min : bz.min[dim]) + rz[dim];
+			if (this._yoff && dim == "y") {
+				var offer = -this.bones[0].position.y;
+				pz[pname].max += offer;
+				pz[pname].min += offer;
+			}
 			this._.nosnap ? setTimeout(bax, 2000, pname) : bax(pname);
 			if (this._.shouldMin(pname, dim))
 				sz[pname].target = pz[pname].min;
