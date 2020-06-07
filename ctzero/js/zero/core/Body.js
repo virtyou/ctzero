@@ -28,6 +28,16 @@ zero.core.Body = CT.Class({
 	},
 	preassemble: function() {
 		this.opts.parts.push({
+			name: "watcher",
+			bone: 0,
+			position: [0, 35, 25],
+			cubeGeometry: [1, 1, 5],
+			material: {
+			    color: 0x00ff00,
+			    visible: false
+			}
+		});
+		this.opts.parts.push({
 			name: "looker",
 			bone: 0,
 			position: [0, 35, 25],
