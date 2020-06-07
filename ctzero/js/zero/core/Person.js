@@ -108,6 +108,8 @@ zero.core.Person = CT.Class({
 		});
 	},
 	tick: function() {
+		if (!this.head)
+			return this.log("tick() w/o head!");
 		this.opts.moody && this.mood.tick();
 		this.body.tick();
 	},
