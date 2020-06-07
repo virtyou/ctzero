@@ -82,6 +82,7 @@ zero.core.Body = CT.Class({
 		ropts.body && this._applyMod(ropts.body);
 		this.torso.resize(ropts);
 		this.spine.resize(ropts.spine);
+		setTimeout(this.setBounds, 1200, true);
 	},
 	equipper: function(g, held) { // if held, g is side.....
 		var az = this.torso.arms, bz = this.bones,
