@@ -61,7 +61,7 @@ var camera = zero.core.camera = {
 				var person = zcc.people[pname] || zcc.person;
 				if (!person) return;
 				var per = camera._.lookers[perspective],
-					bl = person.body.looker, dim;
+					bl = person.body.watcher, dim;
 				camera.setSprings(200);
 				camera.perspective(person, lookPart);
 				for (dim in per)
@@ -89,7 +89,7 @@ var camera = zero.core.camera = {
 	},
 	_tickPerspective: function() {
 		if (camera._.perspective)
-			zero.core.util.coords(camera._.perspective.body.looker.position(null, true),
+			zero.core.util.coords(camera._.perspective.body.watcher.position(null, true),
 				function(dim, val) { camera.springs.position[dim].target = val; });
 	},
 	_tickSubject: function() {
