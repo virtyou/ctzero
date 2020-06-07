@@ -122,8 +122,7 @@ zero.core.util = {
 		zero.core.camera.background(bgsrc);
 		zero.core.util.room(robj);
 	},
-	init: function(onperson, onbuild) {
-		zero.core.camera.init();
+	refresh: function(onready, onperson) {
 		var cfg = core.config.ctzero, people = zero.core.current.people = {},
 			room = zero.core.util.room(cfg.room), loadCount = 0, isLast;
 		if (cfg.people.length) {
@@ -135,17 +134,21 @@ zero.core.util = {
 						onperson && onperson(person, room, i, isLast);
 						if (i == cfg.people.length - 1) // last in line...
 							person.watch(null, true);
-						if (isLast) { // last to load...
-							setTimeout(requestAnimationFrame, 0, zero.core.util.animate);
-							onbuild && onbuild(person, room, i);
-						}
+						if (isLast) // last to load...
+							onready(person, room, i);
 					}
 				}));
 			});
-		} else {
+		} else
+			room.opts.onbuild = function(room) { onready(null, room); };
+	},
+	init: function(onperson, onbuild) {
+		var cfg = core.config.ctzero;
+		zero.core.camera.init();
+		zero.core.util.refresh(function(person, room, i) {
 			setTimeout(requestAnimationFrame, 0, zero.core.util.animate);
-			room.opts.onbuild = onbuild;
-		}
+			onbuild && onbuild(person, room, i);
+		}, onperson);
 		if (cfg.framecount)
 			zero.core.util.frameCount(typeof cfg.framecount == "string" && cfg.framecount);
 	},
