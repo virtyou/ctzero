@@ -82,13 +82,20 @@ zero.core.Skeleton = CT.Class({
 	shouldReverse: function(part, dim) {
 		return dim == "z";
 	},
+	partUp: function(part, rotation) {
+		var springs = this.springs;
+		zero.core.util.coords(rotation, function(dim, val) {
+			springs[part + "_" + dim].target = val;
+		});
+	},
+	point: function(part, thing) {
+		var p = this[part], v = zero.core.util.vector(p.position,
+			p.worldToLocal(thing.position(null, true)));
+		this.springs[part + "_x"].target = -(Math.atan(v.y / v.z) + Math.PI / 2);
+	},
 	setSprings: function(opts) {
-		var part, springs = this.springs;
-		for (part in opts) {
-			zero.core.util.coords(opts[part], function(dim, val) {
-				springs[part + "_" + dim].target = val;
-			});
-		}
+		for (var part in opts)
+			this.partUp(part, opts[part]);
 	},
 	setScales: function(opts) {
 		var part, thaz = this;
