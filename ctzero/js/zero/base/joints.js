@@ -31,7 +31,7 @@ zero.base.joints = function() {
         name: "lumbar",
         rotation: {
             x: {
-                max: 0.5,
+                max: Math.PI / 2,
                 min: -0.5,
                 bsprings: {
                     bow: 1,
