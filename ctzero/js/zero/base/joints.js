@@ -6,7 +6,7 @@ zero.base.joints = function() {
                 max: 0.5,
                 min: -0.5,
                 bsprings: {
-                    bow: 1,
+//                    bow: 1,
                     nod: -0.2
                 }
             },
@@ -34,6 +34,7 @@ zero.base.joints = function() {
                 max: 0.5,
                 min: -0.5,
                 bsprings: {
+                    bow: 1,
                     nod: -0.5
                 },
                 hsprings: {
