@@ -13,7 +13,7 @@ zero.base.joints = function() {
             y: {
                 unbounded: true,
                 bsprings: {
-                    orientation: 1,
+//                    orientation: 1,
                     twist: 0.5,
                     shake: -0.3
                 }

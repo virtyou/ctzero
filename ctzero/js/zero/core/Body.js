@@ -127,6 +127,7 @@ zero.core.Body = CT.Class({
 	_tickGroup: function() {
 		for (var f in this.flippers)
 			this.group.rotation[f] = this.flippers[f].value;
+		this.group.rotation.y += this.springs.orientation.value;
 		this.group.scale.x = this.growers.width.value;
 		this.group.scale.y = this.growers.height.value;
 		this.group.scale.z = this.growers.depth.value;
