@@ -24,10 +24,10 @@ zero.core.util = {
 		if (extra) buff += extra;
 		return dist < buff;
 	},
-	distance: function(p1, p2) { // only checking x/z!!!! (probs revisit)
+	distance: function(p1, p2) {
 		var vec = zero.core.util.vector(p1, p2),
-			xzt = (vec.x * vec.x) + (vec.y * vec.y);
-		return Math.sqrt(xzt);
+			xyzt = (vec.x * vec.x) + (vec.y * vec.y) + (vec.z * vec.z);
+		return Math.sqrt(xyzt);
 	},
 	vector: function(p1, p2) { // p2 - p1
 		return {
