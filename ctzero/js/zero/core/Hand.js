@@ -26,11 +26,12 @@ zero.core.Hand = CT.Class({
 			degree *= -1;
 		var digit, opts = {};
 		for (digit of zero.core.Hand.parts)
-			opts[digit] = { curl: degree };
+			if (digit != "thumb")
+				opts[digit] = { curl: degree };
 		this.move(opts);
 	},
 	grasp: function() {
-		this.curl(1.5);
+		this.curl(1);
 	},
 	release: function() {
 		this.curl(0);
