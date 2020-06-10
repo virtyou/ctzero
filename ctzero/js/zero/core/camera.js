@@ -102,6 +102,11 @@ var camera = zero.core.camera = {
 		if (!p) return CT.log("camera.zoom(): no perspective!");
 		p.body.watcher.adjust("position", "z", diff, true);
 	},
+	shift: function(diff) { // perspective only!!!
+		var p = camera._.perspective;
+		if (!p) return CT.log("camera.shift(): no perspective!");
+		p.body.watcher.adjust("position", "x", diff, true);
+	},
 	perspective: function(person, part) {
 		camera._.perspective = person;
 		person && camera.follow(person.body[part || "lookAt"]);
