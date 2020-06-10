@@ -99,8 +99,9 @@ zero.core.Room = CT.Class({
 		};
 	},
 	cut: function(index, down) {
+		var cl = this.cameras.length;
 		if (typeof index != "number")
-			index = (this._cam + (down ? -1 : 1)) % this.cameras.length;
+			index = (cl + (this._cam + (down ? -1 : 1))) % cl;
 		this._cam = index;
 		zero.core.camera.perspective();
 		zero.core.camera.setSprings(20);
