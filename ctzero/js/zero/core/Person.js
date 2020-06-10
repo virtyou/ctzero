@@ -149,13 +149,16 @@ zero.core.Person = CT.Class({
 		});
 	},
 	get: function(subject, cb) {
-		var g = this.opts.gear; h = g && g.held, side = "right";
+		var g = this.opts.gear, h = g.held = g.held || {},
+			side = "right", bod = this.body, gobj = {};
 		if (h.left && h.right)
 			return this.say("i don't have any free hands");
 		if (h.right)
 			side = "left";
 		this.touch(subject, function() {
-			// TODO: gear attach > Hand.grasp()
+			gobj[side] = g.held[side] = subject.opts.key;
+			bod.gear(gobj, true);
+			zero.core.current.room.removeObject(subject);
 		}, side);
 	},
 	approach: function(subject, cb, watch) {
