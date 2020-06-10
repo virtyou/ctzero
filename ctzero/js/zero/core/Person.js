@@ -159,6 +159,7 @@ zero.core.Person = CT.Class({
 			gobj[side] = g.held[side] = subject.opts.key;
 			bod.gear(gobj, true);
 			zero.core.current.room.removeObject(subject);
+			cb && cb();
 		}, side);
 	},
 	approach: function(subject, cb, watch) {
