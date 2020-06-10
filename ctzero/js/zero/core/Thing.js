@@ -267,8 +267,11 @@ zero.core.Thing = CT.Class({
 		this.place();
 		this.assemble();
 	},
-	adjust: function(property, dimension, value) {
-		this.placer[property][dimension] = value;
+	adjust: function(property, dimension, value, additive) {
+		if (additive)
+			this.placer[property][dimension] += value;
+		else
+			this.placer[property][dimension] = value;
 	},
 	update: function(opts) {
 		var o, setter, full, adjust = this.adjust;
