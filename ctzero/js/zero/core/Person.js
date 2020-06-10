@@ -149,10 +149,14 @@ zero.core.Person = CT.Class({
 		});
 	},
 	get: function(subject, cb) {
-		// TODO: choose arm based on held status (or say no free hands)
+		var g = this.opts.gear; h = g && g.held, side = "right";
+		if (h.left && h.right)
+			return this.say("i don't have any free hands");
+		if (h.right)
+			side = "left";
 		this.touch(subject, function() {
 			// TODO: gear attach > Hand.grasp()
-		});
+		}, side);
 	},
 	approach: function(subject, cb, watch) {
 		var bod = this.body, vec, getd = this.direction,
