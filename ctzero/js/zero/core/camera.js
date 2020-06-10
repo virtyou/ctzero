@@ -97,15 +97,16 @@ var camera = zero.core.camera = {
 	unfollow: function() {
 		camera._.subject = null;
 	},
-	zoom: function(diff) { // perspective only!!!
+	adjust: function(axis, diff) {
 		var p = camera._.perspective;
-		if (!p) return CT.log("camera.zoom(): no perspective!");
-		p.body.watcher.adjust("position", "z", diff, true);
+		if (!p) return CT.log("camera.adjust(): no perspective!");
+		p.body.watcher.adjust("position", axis, diff, true);
 	},
-	shift: function(diff) { // perspective only!!!
-		var p = camera._.perspective;
-		if (!p) return CT.log("camera.shift(): no perspective!");
-		p.body.watcher.adjust("position", "x", diff, true);
+	zoom: function(diff) {
+		camera.adjust("z", diff);
+	},
+	shift: function(diff) {
+		camera.adjust("x", diff);
 	},
 	perspective: function(person, part) {
 		camera._.perspective = person;
