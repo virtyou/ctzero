@@ -38,29 +38,41 @@ var camera = zero.core.camera = {
 			camera._.controls.handleResize();
 	},
 	cycle: function() {
-		if (camera._.cycler) {
-			clearInterval(camera._.cycler);
-			delete camera._.cycler;
+		var _ = camera._;
+		if (_.cycler) {
+			clearInterval(_.cycler);
+			delete _.cycler;
 		} else {
-			camera.setSprings(20);
-			camera._.cycler = setInterval(zero.core.current.room.cut, 3000);
+			_.cycler = setInterval(function() {
+				camera.current = zero.core.current.room.cut();
+				_.onchange && _.onchange();
+			}, 3000);
 			return true;
 		}
 	},
+	cyclabel: function() {
+		return camera._.cycler ? "stop cycling" : "cycle";
+	},
+	onchange: function(cb) {
+		camera._.onchange = cb;
+	},
 	angle: function(perspective, pname, lookPart) {
 		console.log(perspective, pname, lookPart);
-		var zcc = zero.core.current;
-		if (perspective == "cycle")
+		var zcc = zero.core.current, _ = camera._;
+		camera.current = perspective;
+		if (pname)
+			camera.current += " (" + pname + ")";
+		if (perspective == "cycle" || perspective == "stop cycling")
 			camera.cycle();
 		else {
 			if (camera._.cycler) {
 				clearInterval(camera._.cycler);
 				delete camera._.cycler;
 			}
-			if (perspective in camera._.lookers) {
+			if (perspective in _.lookers) {
 				var person = zcc.people[pname] || zcc.person;
 				if (!person) return;
-				var per = camera._.lookers[perspective],
+				var per = _.lookers[perspective],
 					bl = person.body.watcher, dim;
 				camera.setSprings(200);
 				camera.perspective(person, lookPart);
@@ -69,6 +81,7 @@ var camera = zero.core.camera = {
 			} else
 				zcc.room.cut(parseInt(perspective));
 		}
+		_.onchange && _.onchange();
 	},
 	look: function(pos) {
 		zero.core.util.coords(pos, function(dim, val) {
