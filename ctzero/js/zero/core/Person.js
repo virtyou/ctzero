@@ -136,6 +136,24 @@ zero.core.Person = CT.Class({
 		this.orientation(Math.atan2(spos.x
 			- pos.x, spos.z - pos.z));
 	},
+	touch: function(subject, cb, arm) {
+		var bod = this.body, arms = bod.torso.arms;
+		this.approach(subject, function() {
+			// TODO: calc bow amount
+			if (subject.group.position.y < bod.spine.pelvis.position.y)
+				bod.springs.bow.target = Math.PI / 2;
+			setTimeout(function() {
+				arms[arm || "right"].point("shoulder", subject);
+				cb && setTimeout(cb, 600);
+			}, 600);
+		});
+	},
+	get: function(subject, cb) {
+		// TODO: choose arm based on held status (or say no free hands)
+		this.touch(subject, function() {
+			// TODO: gear attach > Hand.grasp()
+		});
+	},
 	approach: function(subject, cb, watch) {
 		var bod = this.body, vec, getd = this.direction,
 			dance = this.dance, undance = this.undance,
