@@ -5,7 +5,32 @@ zero.core.Controls = CT.Class({
 			base: 2.5,
 			orientation: 0.1,
 			jump: 10
+		},
+		cams: {
+			cut: {
+				UP: ["cut"],
+				DOWN: ["cut", true],
+				RIGHT: ["cut"],
+				LEFT: ["cut", true]
+			},
+			perspective: {
+				UP: ["zoom", -50],
+				DOWN: ["zoom", 50],
+				RIGHT: ["shift", 50],
+				LEFT: ["shift", -50]
+			}
+		},
+		cam: function(dir) {
+			var _ = this._, cz = _.cams, rule;
+			CT.key.on(dir, function() {
+				rule = cz[camera.get("perspective")
+					? "perspective" : "cut"][dir];
+				zero.core.camera[rule[0]](rule[1]);
+			});
 		}
+	},
+	setCams: function() {
+		["UP", "DOWN", "LEFT", "RIGHT"].forEach(this._.cam);
 	},
 	wallshift: function(shift, prev_spring) {
 		var target = this.target;
@@ -145,10 +170,11 @@ zero.core.Controls = CT.Class({
 		} else // object (furnishing/poster/portal)
 			this.springs = t.springs;
 	},
-	setTarget: function(target) {
+	setTarget: function(target, cams) {
 		this.target = target;
 		this.setSprings();
 		this.setKeys();
+		cams && this.setCams();
 	},
 	setCb: function(cb) {
 		this._.cb = cb;
