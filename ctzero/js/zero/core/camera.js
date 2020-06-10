@@ -43,10 +43,7 @@ var camera = zero.core.camera = {
 			clearInterval(_.cycler);
 			delete _.cycler;
 		} else {
-			_.cycler = setInterval(function() {
-				camera.current = zero.core.current.room.cut();
-				_.onchange && _.onchange();
-			}, 3000);
+			_.cycler = setInterval(camera.cut, 3000);
 			return true;
 		}
 	},
@@ -55,6 +52,10 @@ var camera = zero.core.camera = {
 	},
 	onchange: function(cb) {
 		camera._.onchange = cb;
+	},
+	cut: function(down) {
+		camera.current = zero.core.current.room.cut(null, down === true);
+		camera._.onchange && camera._.onchange();
 	},
 	angle: function(perspective, pname, lookPart) {
 		console.log(perspective, pname, lookPart);
