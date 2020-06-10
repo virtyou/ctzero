@@ -98,9 +98,9 @@ zero.core.Room = CT.Class({
 			(typeof cb == "function") ? cb() : thaz.assembled();
 		};
 	},
-	cut: function(index) {
+	cut: function(index, down) {
 		if (typeof index != "number")
-			index = (this._cam + 1) % this.cameras.length;
+			index = (this._cam + (down ? -1 : 1)) % this.cameras.length;
 		this._cam = index;
 		zero.core.camera.perspective();
 		zero.core.camera.setSprings(20);
