@@ -86,8 +86,10 @@ zero.core.Body = CT.Class({
 	},
 	equipper: function(g, held) { // if held, g is side.....
 		var az = this.torso.arms, bz = this.bones,
-			gmap = this.gearmap = this.gearmap || {};
+			bm = this.bmap, gmap = this.gearmap = this.gearmap || {};
 		return function(gdata) {
+			if (!("bone" in gdata)) // ad-hoc held item
+				gdata.bone = bm[g].arm.wrist;
 			gmap[gdata.key] = new zero.core.Thing(CT.merge(gdata, {
 				bones: bz,
 				onbuild: held && az[g].hand.grasp,
