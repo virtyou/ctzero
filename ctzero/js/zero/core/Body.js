@@ -86,7 +86,7 @@ zero.core.Body = CT.Class({
 	},
 	equipper: function(g, held) { // if held, g is side.....
 		var az = this.torso.arms, bz = this.bones,
-			bm = this.bmap, gmap = this.gearmap = this.gearmap || {};
+			bm = this.bmap, gmap = this.gearmap;
 		return function(gdata) {
 			if (!("bone" in gdata)) // ad-hoc held item
 				gdata.bone = bm[g].arm.wrist;
@@ -151,5 +151,6 @@ zero.core.Body = CT.Class({
 			joints: zero.base.joints()
 		});
 		opts.frustumCulled = false; // TODO: figure out real problem and fix!!!
+		this.gearmap = {};
 	}
 }, zero.core.Thing);
