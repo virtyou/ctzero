@@ -19,19 +19,33 @@ zero.core.Controls = CT.Class({
 				LEFT: ["shift", -50],
 				RIGHT: ["shift", 50]
 			},
-			perspective: {
+			behind: {
 				UP: ["zoom", 50],
 				DOWN: ["zoom", -50],
 				LEFT: ["shift", 50],
 				RIGHT: ["shift", -50]
+			},
+			pov: {
+				UP: ["nod", 0.5],
+				DOWN: ["nod", -0.5],
+				LEFT: ["shake", -0.5],
+				RIGHT: ["shake", 0.5]
 			}
 		},
 		cam: function(dir) {
-			var _ = this._, cz = _.cams, mode, rule, per;
+			var _ = this._, cz = _.cams, mode, rule,
+				zcc = zero.core.current, per, bs;
 			CT.key.on(dir, function() {
 				per = camera.get("perspective");
-				if (per == zero.core.current.person)
-					mode = cz.perspective;
+				if (per == zcc.person) {
+					mode = cz[camera.current];
+					if (camera.current == "pov") {
+						rule = mode[dir];
+						bs = zcc.person.body.springs;
+						bs[rule[0]].target += rule[1];
+						return;
+					}
+				}
 				else if (per)
 					mode = cz.interactive;
 				else
