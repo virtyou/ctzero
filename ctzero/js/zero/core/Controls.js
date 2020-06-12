@@ -7,24 +7,36 @@ zero.core.Controls = CT.Class({
 			jump: 10
 		},
 		cams: {
-			cut: {
+			environmental: {
 				UP: ["cut"],
 				DOWN: ["cut", true],
 				RIGHT: ["cut"],
 				LEFT: ["cut", true]
 			},
-			perspective: {
+			interactive: {
 				UP: ["zoom", -50],
 				DOWN: ["zoom", 50],
-				RIGHT: ["shift", 50],
-				LEFT: ["shift", -50]
+				LEFT: ["shift", -50],
+				RIGHT: ["shift", 50]
+			},
+			perspective: {
+				UP: ["zoom", 50],
+				DOWN: ["zoom", -50],
+				LEFT: ["shift", 50],
+				RIGHT: ["shift", -50]
 			}
 		},
 		cam: function(dir) {
-			var _ = this._, cz = _.cams, rule;
+			var _ = this._, cz = _.cams, mode, rule, per;
 			CT.key.on(dir, function() {
-				rule = cz[camera.get("perspective")
-					? "perspective" : "cut"][dir];
+				per = camera.get("perspective");
+				if (per == zero.core.current.person)
+					mode = cz.perspective;
+				else if (per)
+					mode = cz.interactive;
+				else
+					mode = cz.environmental;
+				rule = mode[dir];
 				zero.core.camera[rule[0]](rule[1]);
 			});
 		}
