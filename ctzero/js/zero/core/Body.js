@@ -26,47 +26,26 @@ zero.core.Body = CT.Class({
 		s.slide.hard = s.weave.hard = s.orientation.hard = grippy;
 		if (vertical) s.bob.hard = grippy;
 	},
+	_lookers: {
+		watcher: [0, 5, 15],
+		looker: [0, 5, 15],
+		lookAt: [0, 5, 45],
+		lookHigh: [0, 10, 45]
+	},
+	_looker: function(name) {
+		this.opts.parts.push({
+			name: name,
+			bone: 4,
+			position: this._lookers[name],
+			cubeGeometry: [1, 1, 5],
+			material: {
+			    color: 0x00ff00,
+			    visible: false
+			}
+		});
+	},
 	preassemble: function() {
-		this.opts.parts.push({
-			name: "watcher",
-			bone: 0,
-			position: [0, 35, 25],
-			cubeGeometry: [1, 1, 5],
-			material: {
-			    color: 0x00ff00,
-			    visible: false
-			}
-		});
-		this.opts.parts.push({
-			name: "looker",
-			bone: 0,
-			position: [0, 35, 25],
-			cubeGeometry: [1, 1, 5],
-			material: {
-			    color: 0x00ff00,
-			    visible: false
-			}
-		});
-		this.opts.parts.push({
-			name: "lookAt",
-			bone: 0,
-			position: [0, 35, 55],
-			cubeGeometry: [1, 1, 5],
-			material: {
-			    color: 0x00ff00,
-			    visible: false
-			}
-		});
-		this.opts.parts.push({
-			name: "lookHigh",
-			bone: 0,
-			position: [0, 45, 55],
-			cubeGeometry: [1, 1, 5],
-			material: {
-			    color: 0x00ff00,
-			    visible: false
-			}
-		});
+		Object.keys(this._lookers).forEach(this._looker);
 	},
 	_applyMod: function(gopts) {
 		for (var op in gopts)

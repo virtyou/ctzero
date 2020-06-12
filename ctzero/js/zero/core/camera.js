@@ -3,15 +3,15 @@ var camera = zero.core.camera = {
 		profiles: {},
 		lookers: {
 			pov: {
-				y: 35,
-				z: 25
+				y: 5,
+				z: 15
 			},
 			behind: {
 				y: 85,
 				z: -155
 			},
 			front: {
-				y: 55,
+				y: 25,
 				z: 115
 			}
 		}

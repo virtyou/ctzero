@@ -28,8 +28,8 @@ zero.core.Controls = CT.Class({
 			pov: {
 				UP: ["nod", 0.5],
 				DOWN: ["nod", -0.5],
-				LEFT: ["shake", -0.5],
-				RIGHT: ["shake", 0.5]
+				LEFT: ["shake", 0.5],
+				RIGHT: ["shake", -0.5]
 			}
 		},
 		cam: function(dir) {
@@ -38,13 +38,13 @@ zero.core.Controls = CT.Class({
 			CT.key.on(dir, function() {
 				per = camera.get("perspective");
 				if (per == zcc.person) {
-					mode = cz[camera.current];
-					if (camera.current == "pov") {
+					mode = cz.pov;//[camera.current];
+//					if (camera.current == "pov") {
 						rule = mode[dir];
 						bs = zcc.person.body.springs;
 						bs[rule[0]].target += rule[1];
 						return;
-					}
+//					} disabled behind zoom/shift for now ... better right?
 				}
 				else if (per)
 					mode = cz.interactive;
