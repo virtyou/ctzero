@@ -149,7 +149,10 @@ zero.base.aspects.leg = {
     hip: {
         x: {
             max: 0,
-            min: -2
+            min: -2,
+            bsprings: {
+                bow: -0.5
+            }
         },
         y: {
             max: 1,
@@ -163,13 +166,19 @@ zero.base.aspects.leg = {
     knee: {
         x: {
             max: 2,
-            min: 0
+            min: 0,
+            bsprings: {
+                bow: 0.7
+            }
         }
     },
     ankle: {
         x: {
             max: 0.5,
-            min: -0.5
+            min: -0.5,
+            bsprings: {
+                bow: -0.4
+            }
         },
         y: {
             max: 0.5,
@@ -179,7 +188,10 @@ zero.base.aspects.leg = {
     toe: {
         x: {
             max: 0.5,
-            min: -0.5
+            min: -0.5,
+            bsprings: {
+                bow: -0.4
+            }
         }
     }
 };
