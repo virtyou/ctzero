@@ -54,6 +54,7 @@ class Part(db.TimeStampedBase):
     morphs = db.JSON() # merged into Things.morphs{}
     opts = db.JSON() # passed to template or merged into Thing.opts{}
     assets = db.ForeignKey(kind=Asset, repeated=True) # merged into opts
+    texture = db.ForeignKey() # Asset or Asset-like model
 
     def json(self):
         d = self.base and self.base.get().json() or {}
@@ -70,6 +71,8 @@ class Part(db.TimeStampedBase):
         self.opts and d.update(self.opts)
         for asset in db.get_multi(self.assets):
             d[asset.name] = asset.item.urlsafe()
+        if self.texture:
+            d["texture"] = self.texture.get().path()
         d["parts"] = [p.json() for p in Part.query(Part.parent == self.key).fetch()]
         if not self.parent and "name" not in d:
             d["name"] = "body"
