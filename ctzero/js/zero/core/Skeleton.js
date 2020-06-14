@@ -61,19 +61,21 @@ zero.core.Skeleton = CT.Class({
 		};
 	},
 	setJoint: function(part, dim, jrules) {
-		var sname = part + "_" + dim, rz;
+		var sname = part + "_" + dim, rz, jmax;
 		jrules = jrules || this.jointRules(part, dim);
 		this.springs[sname] = zero.core.springController.add({
 			k: 40,
 			damp: 10
 		}, sname, this);
 		if (this.opts.side == "left" && this.shouldReverse(part, dim)) {
-			jrules = {
-				max: -jrules.min,
-				min: -jrules.max
-			};
+			jmax = jrules.max;
+			jrules.max = -jrules.min;
+			jrules.min = -jmax;
 		}
 		rz = CT.merge(this.aspRules(sname), jrules);
+		["springs", "bsprings", "hsprings"].forEach(function(sz) {
+			rz[sz] = CT.merge(jrules[sz], rz[sz]);
+		});
 		this.aspects[sname] = zero.core.aspectController.add(rz, sname, this);
 	},
 	setBody: function(bod) {
