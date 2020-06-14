@@ -168,7 +168,7 @@ zero.base.aspects.leg = {
             max: 2,
             min: 0,
             bsprings: {
-                bow: 0.7
+                bow: 1
             }
         }
     },
