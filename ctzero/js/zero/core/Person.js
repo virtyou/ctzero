@@ -137,10 +137,12 @@ zero.core.Person = CT.Class({
 			- pos.x, spos.z - pos.z));
 	},
 	touch: function(subject, cb, arm) {
-		var bod = this.body, arms = bod.torso.arms;
+		var bod = this.body, arms = bod.torso.arms, spy;
 		this.approach(subject, function() {
-			// TODO: calc bow amount
-			if (subject.group.position.y < bod.spine.pelvis.position.y)
+			spy = subject.group.getWorldPosition().y;
+			if (spy < bod.torso.legs.right.knee.getWorldPosition().y)
+				bod.springs.bow.target = Math.PI / 4;
+			else if (spy < bod.spine.pelvis.getWorldPosition().y)
 				bod.springs.bow.target = Math.PI / 2;
 			setTimeout(function() {
 				arms[arm || "right"].point("shoulder", subject);
@@ -151,10 +153,11 @@ zero.core.Person = CT.Class({
 	get: function(subject, cb) {
 		var g = this.opts.gear, h = g.held = g.held || {},
 			side = "right", bod = this.body, gobj = {};
-		if (h.left && h.right)
-			return this.say("i don't have any free hands");
-		if (h.right)
+		if (h.right) {
+			if (h.left)
+				return this.say("i don't have any free hands");
 			side = "left";
+		}
 		this.touch(subject, function() {
 			gobj[side] = g.held[side] = subject.opts.key;
 			bod.gear(gobj, true);
