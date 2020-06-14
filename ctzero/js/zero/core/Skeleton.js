@@ -68,9 +68,10 @@ zero.core.Skeleton = CT.Class({
 			damp: 10
 		}, sname, this);
 		if (this.opts.side == "left" && this.shouldReverse(part, dim)) {
-			jmax = jrules.max;
-			jrules.max = -jrules.min;
-			jrules.min = -jmax;
+			jrules = CT.merge({
+				min: -jrules.max,
+				max: -jrules.min
+			}, jrules);
 		}
 		rz = CT.merge(this.aspRules(sname), jrules);
 		["springs", "bsprings", "hsprings"].forEach(function(sz) {
