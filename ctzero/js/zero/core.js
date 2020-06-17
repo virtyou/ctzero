@@ -28,12 +28,13 @@ CT.require("zero.core.Spine");
 CT.require("zero.core.Hand");
 CT.require("zero.core.Arm");
 CT.require("zero.core.Leg");
+CT.require("zero.core.Strand");
+CT.require("zero.core.Hair");
 
 CT.require("zero.core.Torso");
 CT.require("zero.core.Head");
 CT.require("zero.core.Body");
 CT.require("zero.core.Custom");
-CT.require("zero.core.hair");
 
 CT.require("zero.core.Brain");
 CT.require("zero.core.Energy");

@@ -1,5 +1,5 @@
-zero.core.hair.Strand = CT.Class({
-	CLASSNAME: "zero.core.hair.Strand",
+zero.core.Strand = CT.Class({
+	CLASSNAME: "zero.core.Strand",
 	_cols: [0xff0000, 0x00ff00, 0x0000ff],
 	segment: function(index) {
 		var oz = this.opts;

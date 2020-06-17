@@ -1,10 +1,10 @@
-zero.core.hair.Hair = CT.Class({
-	CLASSNAME: "zero.core.hair.Hair",
+zero.core.Hair = CT.Class({
+	CLASSNAME: "zero.core.Hair",
 	preassemble: function() {
 		var i, oz = this.opts, pz = oz.parts;
 		for (i = 0; i < oz.count; i++) {
 			pz.push({
-				thing: "hair.Strand",
+				thing: "Strand",
 				
 			});
 		}
