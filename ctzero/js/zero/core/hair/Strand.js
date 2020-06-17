@@ -27,7 +27,10 @@ zero.core.hair.Strand = CT.Class({
 		this._.built();
 	},
 	tickSegment: function(seg, i) {
-		
+		var pend = this.pends.x[i];
+		pend.boost -= this.vel.x; // TODO: z
+		pend.acceleration = Math.sin(seg.rotation(null, true).x);
+		seg.adjust("rotation", "x", pend.value);
 	},
 	tick: function() {
 		var pos = this.position(null, true);
@@ -37,12 +40,26 @@ zero.core.hair.Strand = CT.Class({
 		}
 		this.pos = pos;
 	},
+	setSprings: function() {
+		var i, oz = this.opts, pz = this.pends = { x: [] };
+		for (i = 0; i < opts.segments; i++) { // TODO: z
+			pz.x.push(zero.core.springController.add({
+				hard: true,
+				bounds: {
+					min: -oz.stiffness,
+					max: oz.stiffness
+				}
+			}, "x" + i, this));
+		}
+	},
 	init: function(opts) {
 		this.opts = opts = CT.merge(this.opts, opts, {
 			length: 5,
 			girth: 1,
-			segments: 3
+			segments: 3,
+			stiffness: 1 // lower is higher
 		});
 		this.segs = [];
+		this.setSprings();
 	}
 }, zero.core.Thing);
