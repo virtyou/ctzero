@@ -14,17 +14,17 @@ zero.core.Hair = CT.Class({
 			});
 		}
 	},
-	tick: function() {
-		for (var i = 0; i < oz.count; i++)
-			this["strand" + i].tick();
+	tick: function(dts) {
+		for (var i = 0; i < this.opts.count; i++)
+			this["strand" + i].tick(dts);
 	},
 	init: function(opts) {
 		this.opts = opts = CT.merge(this.opts, opts, {
 			girth: 1,
 			space: 5,
-			count: 10,
+			count: 5,
 			length: 5,
-			segments: 3,
+			segments: 9,
 			stiffness: 1 // lower is higher
 		});
 		this.hairs = [];
