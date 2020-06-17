@@ -18,11 +18,31 @@ zero.core.hair.Strand = CT.Class({
 			parts = seg.parts = [];
 		}
 	},
+	assembled: function() {
+		var i, part = this;
+		for (i = 0; i < this.opts.segments; i++) {
+			part = part["seg" + i];
+			this.segs.push(part);
+		}
+		this._.built();
+	},
+	tickSegment: function(seg, i) {
+		
+	},
+	tick: function() {
+		var pos = this.position(null, true);
+		if (this.pos) {
+			this.vel = zero.core.util.vector(this.pos, pos);
+			this.segs.forEach(this.tickSegment);
+		}
+		this.pos = pos;
+	},
 	init: function(opts) {
 		this.opts = opts = CT.merge(this.opts, opts, {
 			length: 5,
 			girth: 1,
 			segments: 3
 		});
+		this.segs = [];
 	}
 }, zero.core.Thing);
