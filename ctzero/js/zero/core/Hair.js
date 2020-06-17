@@ -9,7 +9,8 @@ zero.core.Hair = CT.Class({
 				girth: oz.girth,
 				length: oz.length,
 				segments: oz.segments,
-				stiffness: oz.stiffness
+				stiffness: oz.stiffness,
+				position: [oz.space * i, 0, 0]
 			});
 		}
 	},
@@ -20,6 +21,7 @@ zero.core.Hair = CT.Class({
 	init: function(opts) {
 		this.opts = opts = CT.merge(this.opts, opts, {
 			girth: 1,
+			space: 5,
 			count: 10,
 			length: 5,
 			segments: 3,
