@@ -42,7 +42,7 @@ zero.core.hair.Strand = CT.Class({
 	},
 	setSprings: function() {
 		var i, oz = this.opts, pz = this.pends = { x: [] };
-		for (i = 0; i < opts.segments; i++) { // TODO: z
+		for (i = 0; i < oz.segments; i++) { // TODO: z
 			pz.x.push(zero.core.springController.add({
 				hard: true,
 				bounds: {
