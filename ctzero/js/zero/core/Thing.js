@@ -210,11 +210,14 @@ zero.core.Thing = CT.Class({
 			return this.placer.position;
 		}
 	},
-	rotation: function(rotation) {
+	rotation: function(rotation, world) {
 		if (rotation)
 			this.update({ rotation: rotation });
-		else
+		else {
+			if (world)
+				return this.placer.getWorldRotation();
 			return this.placer.rotation;
+		}
 	},
 	scale: function(scale) {
 		if (scale) {
