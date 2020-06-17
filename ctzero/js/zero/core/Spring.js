@@ -16,7 +16,7 @@ zero.core.Spring = CT.Class({
 				this.boost += this.acceleration;
 			var ot = this.target;
 			this.bound();
-			if (this.acceleration && this.target != ot) { // floor...
+			if (this.floory && this.acceleration && this.target != ot) { // floor...
 				this.log("floored");
 				if (this.target == this.bounds.min && this.acceleration < 0 ||
 					this.target == this.bounds.max && this.acceleration > 0)
@@ -55,6 +55,7 @@ zero.core.Spring = CT.Class({
 			velocity: 0,
 			hard: false,
 			breaks: false,
+			floory: false,
 			floored: false,
 			acceleration: 0
 		});
@@ -68,6 +69,7 @@ zero.core.Spring = CT.Class({
 		this.breaks = opts.breaks;
 		this.bounds = opts.bounds;
 		this.target =  opts.target;
+		this.floory = opts.floory;
 		this.floored = opts.floored;
 		this.velocity = opts.velocity;
 		this.acceleration = opts.acceleration;
