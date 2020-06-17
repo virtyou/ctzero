@@ -54,8 +54,8 @@ zero.core.hair.Strand = CT.Class({
 	},
 	init: function(opts) {
 		this.opts = opts = CT.merge(this.opts, opts, {
-			length: 5,
 			girth: 1,
+			length: 5,
 			segments: 3,
 			stiffness: 1 // lower is higher
 		});
