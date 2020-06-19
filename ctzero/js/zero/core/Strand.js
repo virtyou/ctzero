@@ -27,15 +27,13 @@ zero.core.Strand = CT.Class({
 		this._.built();
 	},
 	tickSegment: function(seg, i) {
-		var pendz = this.pends, damp = 200,
+		var pendz = this.pends, damp = 200, vd = 2000,
 			rot = seg.rotation(null, true), pend,
 			dts = this.dts, vel = this.vel;
 		["x", "z"].forEach(function(dim) {
 			pend = pendz[dim][i];
-			pend.boost += vel[dim] / damp;
+			pend.boost += vel[dim] / vd;
 			pend.acceleration = dts * Math.sin(rot.x) / damp;
-	//		pend.boost = this.vel.x;
-	//		pend.target = seg.group.worldToLocal(new THREE.Vector3(Math.PI, 0, 0)).x;
 			seg.adjust("rotation", dim, pend.value);
 		});
 	},
