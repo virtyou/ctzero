@@ -27,37 +27,50 @@ zero.core.Strand = CT.Class({
 		this._.built();
 	},
 	tickSegment: function(seg, i) {
-		var pend = this.pends.x[i];
-		pend.boost -= this.vel.x; // TODO: z
-		pend.acceleration = Math.sin(seg.rotation(null, true).x);
-		seg.adjust("rotation", "x", pend.value);
+		var pendz = this.pends, damp = 200,
+			rot = seg.rotation(null, true), pend,
+			dts = this.dts, vel = this.vel;
+		["x", "z"].forEach(function(dim) {
+			pend = pendz[dim][i];
+			pend.boost += vel[dim] / damp;
+			pend.acceleration = dts * Math.sin(rot.x) / damp;
+	//		pend.boost = this.vel.x;
+	//		pend.target = seg.group.worldToLocal(new THREE.Vector3(Math.PI, 0, 0)).x;
+			seg.adjust("rotation", dim, pend.value);
+		});
 	},
-	tick: function() {
+	tick: function(dts) {
 		var pos = this.position(null, true);
 		if (this.pos) {
+			this.dts = dts;
 			this.vel = zero.core.util.vector(this.pos, pos);
 			this.segs.forEach(this.tickSegment);
 		}
 		this.pos = pos;
 	},
 	setSprings: function() {
-		var i, oz = this.opts, pz = this.pends = { x: [] };
-		for (i = 0; i < oz.segments; i++) { // TODO: z
-			pz.x.push(zero.core.springController.add({
-				hard: true,
-				bounds: {
-					min: -oz.stiffness,
-					max: oz.stiffness
-				}
-			}, "x" + i, this));
-		}
+		var oz = this.opts, pz = this.pends = {
+			x: [], z: []
+		}, thaz = this, i, s;
+		["x", "z"].forEach(function(dim) {
+			for (i = 0; i < oz.segments; i++) {
+				s = oz.stiffness * (oz.segments - i) / oz.segments;
+				pz[dim].push(zero.core.springController.add({
+					hard: true,
+					bounds: {
+						min: -s,
+						max: s
+					}
+				}, dim + i, thaz));
+			}
+		});
 	},
 	init: function(opts) {
 		this.opts = opts = CT.merge(this.opts, opts, {
 			girth: 1,
 			length: 5,
-			segments: 3,
-			stiffness: 1 // lower is higher
+			segments: 9,
+			stiffness: Math.PI / 4 // lower is higher
 		});
 		this.segs = [];
 		this.setSprings();
