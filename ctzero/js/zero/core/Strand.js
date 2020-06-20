@@ -2,10 +2,11 @@ zero.core.Strand = CT.Class({
 	CLASSNAME: "zero.core.Strand",
 	_cols: [0xff0000, 0x00ff00, 0x0000ff],
 	segment: function(index) {
-		var oz = this.opts, len = oz.length - index;
+		var oz = this.opts, len = oz.length,
+			ypos = index ? len : oz.yoff;
 		return {
 			name: "seg" + index,
-			position: [0, len, 0],
+			position: [0, ypos, 0],
 			boxGeometry: [oz.girth, len, oz.girth],
 			material: { color: this._cols[index % 3] }
 		};
@@ -66,9 +67,10 @@ zero.core.Strand = CT.Class({
 	init: function(opts) {
 		this.opts = opts = CT.merge(this.opts, opts, {
 			girth: 0.2,
-			length: 10,
-			segments: 9,
-			stiffness: Math.PI / 4 // lower is higher
+			length: 5,
+			yoff: 12,
+			segments: 3,
+			stiffness: Math.PI / 8 // lower is higher
 		});
 		this.segs = [];
 		this.setSprings();
