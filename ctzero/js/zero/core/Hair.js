@@ -25,7 +25,7 @@ zero.core.Hair = CT.Class({
 	init: function(opts) {
 		this.opts = opts = CT.merge(opts, {
 			// TODO: cut, part (default 0)
-			density: 12,
+			density: 14,
 			range: Math.PI / 2,
 			offx: -Math.PI / 4,
 			offz: 0,

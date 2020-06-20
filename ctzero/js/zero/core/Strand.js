@@ -78,7 +78,7 @@ zero.core.Strand = CT.Class({
 			segments: 3,
 			damp: 200,
 			veldamp: 2000,
-			flex: Math.PI / 4
+			flex: Math.PI / 3
 		});
 		this.segs = [];
 		this.setSprings();
