@@ -5,6 +5,7 @@ zero.core.Strand = CT.Class({
 		var oz = this.opts, len = oz.length,
 			ypos = index ? len : oz.yoff;
 		return {
+			matcat: "Basic",
 			name: "seg" + index,
 			position: [0, ypos, 0],
 			boxGeometry: [oz.girth, len, oz.girth],
