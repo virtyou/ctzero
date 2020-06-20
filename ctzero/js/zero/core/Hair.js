@@ -8,7 +8,7 @@ zero.core.Hair = CT.Class({
 			offx = oz.offx, offz = oz.offz;
 		for (x = -r + offx; x <= r + offx; x += space) {
 			for (z = -r + offz; z <= r + offz; z += space) {
-				pz.push(CT.merge(oz.hair, {
+				pz.push(CT.merge(oz.strand, {
 					thing: "Strand",
 					name: "strand" + i,
 					rotation: [x, 0, z]
@@ -24,6 +24,7 @@ zero.core.Hair = CT.Class({
 	},
 	init: function(opts) {
 		this.opts = opts = CT.merge(opts, {
+			// TODO: cut, part (default 0)
 			density: 12,
 			range: Math.PI / 2,
 			offx: -Math.PI / 4,
