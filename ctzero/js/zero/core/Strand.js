@@ -28,7 +28,8 @@ zero.core.Strand = CT.Class({
 		this._.built();
 	},
 	tickSegment: function(seg, i) {
-		var pendz = this.pends, damp = 200, vd = 2000,
+		var pendz = this.pends, oz = this.opts,
+			damp = oz.damp, vd = oz.veldamp,
 			rot = seg.rotation(null, true), pend,
 			dts = this.dts, vel = this.vel;
 		["x", "z"].forEach(function(dim) {
@@ -70,6 +71,8 @@ zero.core.Strand = CT.Class({
 			length: 5,
 			yoff: 10,
 			segments: 3,
+			damp: 200,
+			veldamp: 2000,
 			stiffness: Math.PI / 4 // lower is higher
 		});
 		this.segs = [];
