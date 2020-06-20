@@ -3,11 +3,12 @@ zero.core.Strand = CT.Class({
 	_cols: [0xff0000, 0x00ff00, 0x0000ff],
 	segment: function(index) {
 		var oz = this.opts, len = oz.length,
-			ypos = index ? len : oz.yoff;
+			ypos = index ? len : oz.yoff, t = oz.taper;
 		return {
 			matcat: "Basic",
 			name: "seg" + index,
 			position: [0, ypos, 0],
+			scale: [t, 1, t],
 			boxGeometry: [oz.girth, len, oz.girth],
 			material: { color: this._cols[index % 3] }
 		};
@@ -52,15 +53,16 @@ zero.core.Strand = CT.Class({
 	setSprings: function() {
 		var oz = this.opts, pz = this.pends = {
 			x: [], z: []
-		}, thaz = this, i, s;
+		}, thaz = this, i, f, k;
 		["x", "z"].forEach(function(dim) {
 			for (i = 0; i < oz.segments; i++) {
-				s = oz.stiffness * (oz.segments - i) / oz.segments;
+				f = oz.flex * (oz.segments - i) / oz.segments;
+				k = oz.kink * Math.random() - oz.kink / 2;
 				pz[dim].push(zero.core.springController.add({
 					hard: true,
 					bounds: {
-						min: -s,
-						max: s
+						min: k - f,
+						max: k + f
 					}
 				}, dim + i, thaz));
 			}
@@ -68,13 +70,15 @@ zero.core.Strand = CT.Class({
 	},
 	init: function(opts) {
 		this.opts = opts = CT.merge(this.opts, opts, {
-			girth: 0.2,
+			kink: 0,
+			taper: 1,
 			length: 5,
+			girth: 0.2,
 			yoff: 10,
 			segments: 3,
 			damp: 200,
 			veldamp: 2000,
-			stiffness: Math.PI / 4 // lower is higher
+			flex: Math.PI / 4
 		});
 		this.segs = [];
 		this.setSprings();
