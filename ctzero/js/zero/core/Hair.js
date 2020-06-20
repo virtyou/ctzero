@@ -30,6 +30,5 @@ zero.core.Hair = CT.Class({
 			offz: 0,
 			position: [0, 6, 0]
 		}, this.opts);
-		this.hairs = [];
 	}
 }, zero.core.Thing);
