@@ -23,12 +23,13 @@ zero.core.Hair = CT.Class({
 			this["strand" + i].tick(dts);
 	},
 	init: function(opts) {
-		this.opts = opts = CT.merge(this.opts, opts, {
+		this.opts = opts = CT.merge(opts, {
 			density: 12,
-			range: Math.PI / 4,
-			offx: -Math.PI / 8,
-			offz: 0
-		});
+			range: Math.PI / 2,
+			offx: -Math.PI / 4,
+			offz: 0,
+			position: [0, 6, 0]
+		}, this.opts);
 		this.hairs = [];
 	}
 }, zero.core.Thing);

@@ -68,9 +68,9 @@ zero.core.Strand = CT.Class({
 		this.opts = opts = CT.merge(this.opts, opts, {
 			girth: 0.2,
 			length: 5,
-			yoff: 12,
+			yoff: 10,
 			segments: 3,
-			stiffness: Math.PI / 8 // lower is higher
+			stiffness: Math.PI / 4 // lower is higher
 		});
 		this.segs = [];
 		this.setSprings();
