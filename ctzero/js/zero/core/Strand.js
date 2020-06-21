@@ -35,8 +35,7 @@ zero.core.Strand = CT.Class({
 			dts = this.dts, vel = this.vel;
 		["x", "z"].forEach(function(dim) {
 			pend = pendz[dim][i];
-			pend.boost += vel[dim] / vd;
-			pend.boost *= oz.drag;
+			pend.boost = (pend.boost + (vel[dim] + vel.y) / vd) * oz.drag;
 			pend.acceleration = dts * Math.sin(rot[dim]) / damp;
 			seg.adjust("rotation", dim, pend.value);
 		});
@@ -78,7 +77,7 @@ zero.core.Strand = CT.Class({
 			segments: 8,
 			drag: 0.7,
 			damp: 1.4,
-			veldamp: 800,
+			veldamp: 3000,
 			color: 0x000000,
 			flex: Math.PI * 2 / 3
 		});
