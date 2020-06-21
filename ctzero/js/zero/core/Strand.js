@@ -73,11 +73,11 @@ zero.core.Strand = CT.Class({
 			taper: 0.7,
 			length: 6,
 			girth: 4,
-			yoff: 10,
+			yoff: 9,
 			segments: 8,
 			drag: 0.7,
 			damp: 1.4,
-			veldamp: 3000,
+			veldamp: 4000,
 			color: 0x000000,
 			flex: Math.PI * 2 / 3
 		});

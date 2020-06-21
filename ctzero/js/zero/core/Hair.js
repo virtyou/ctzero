@@ -28,7 +28,7 @@ zero.core.Hair = CT.Class({
 			range: Math.PI * 2 / 5,
 			offx: -Math.PI / 8,
 			offz: 0,
-			position: [0, 6, 0]
+			position: [0, 7, 4]
 		}, this.opts);
 	}
 }, zero.core.Thing);
