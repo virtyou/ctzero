@@ -1,6 +1,5 @@
 zero.core.Strand = CT.Class({
 	CLASSNAME: "zero.core.Strand",
-	_cols: [0xff0000, 0x00ff00, 0x0000ff],
 	segment: function(index) {
 		var oz = this.opts, len = oz.length,
 			ypos = index ? len : oz.yoff, t = oz.taper;
@@ -10,7 +9,7 @@ zero.core.Strand = CT.Class({
 			position: [0, ypos, 0],
 			scale: [t, 1, t],
 			boxGeometry: [oz.girth, len, oz.girth],
-			material: { color: this._cols[index % 3] }
+			material: { color: oz.color }
 		};
 	},
 	preassemble: function() {
@@ -73,11 +72,12 @@ zero.core.Strand = CT.Class({
 			kink: 0,
 			taper: 1,
 			length: 5,
-			girth: 0.2,
+			girth: 1,
 			yoff: 10,
 			segments: 3,
-			damp: 200,
+			damp: 100,
 			veldamp: 2000,
+			color: 0x000000,
 			flex: Math.PI / 3
 		});
 		this.segs = [];
