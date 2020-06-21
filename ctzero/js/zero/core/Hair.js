@@ -19,8 +19,13 @@ zero.core.Hair = CT.Class({
 		this.count = i;
 	},
 	tick: function(dts) {
-		for (var i = 0; i < this.count; i++)
-			this["strand" + i].tick(dts);
+		var i, vel, pos = this.position(null, true);
+		if (this.pos) {
+			vel = zero.core.util.vector(this.pos, pos);
+			for (i = 0; i < this.count; i++)
+				this["strand" + i].tick(dts, vel);
+		}
+		this.pos = pos;
 	},
 	init: function(opts) {
 		this.opts = opts = CT.merge(opts, {

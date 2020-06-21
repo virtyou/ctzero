@@ -40,14 +40,10 @@ zero.core.Strand = CT.Class({
 			seg.adjust("rotation", dim, pend.value);
 		});
 	},
-	tick: function(dts) {
-		var pos = this.position(null, true);
-		if (this.pos) {
-			this.dts = dts;
-			this.vel = zero.core.util.vector(this.pos, pos);
-			this.segs.forEach(this.tickSegment);
-		}
-		this.pos = pos;
+	tick: function(dts, vel) {
+		this.dts = dts;
+		this.vel = vel;
+		this.segs.forEach(this.tickSegment);
 	},
 	setSprings: function() {
 		var oz = this.opts, pz = this.pends = {
