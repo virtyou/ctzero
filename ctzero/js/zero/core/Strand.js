@@ -36,7 +36,8 @@ zero.core.Strand = CT.Class({
 		["x", "z"].forEach(function(dim) {
 			pend = pendz[dim][i];
 			pend.boost += vel[dim] / vd;
-			pend.acceleration = dts * Math.sin(rot.x) / damp;
+			pend.boost *= oz.drag;
+			pend.acceleration = dts * Math.sin(rot[dim]) / damp;
 			seg.adjust("rotation", dim, pend.value);
 		});
 	},
@@ -55,7 +56,7 @@ zero.core.Strand = CT.Class({
 		}, thaz = this, i, f, k;
 		["x", "z"].forEach(function(dim) {
 			for (i = 0; i < oz.segments; i++) {
-				f = oz.flex * (oz.segments - i) / oz.segments;
+				f = oz.flex;// * (oz.segments - i) / oz.segments;
 				k = oz.kink * Math.random() - oz.kink / 2;
 				pz[dim].push(zero.core.springController.add({
 					hard: true,
@@ -70,15 +71,16 @@ zero.core.Strand = CT.Class({
 	init: function(opts) {
 		this.opts = opts = CT.merge(this.opts, opts, {
 			kink: 0,
-			taper: 1,
-			length: 5,
-			girth: 1,
+			taper: 0.7,
+			length: 6,
+			girth: 4,
 			yoff: 10,
-			segments: 3,
-			damp: 100,
-			veldamp: 2000,
+			segments: 8,
+			drag: 0.7,
+			damp: 1.4,
+			veldamp: 800,
 			color: 0x000000,
-			flex: Math.PI / 3
+			flex: Math.PI * 2 / 3
 		});
 		this.segs = [];
 		this.setSprings();
