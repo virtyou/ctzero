@@ -347,7 +347,7 @@ zero.core.Thing = CT.Class({
 			scene: this.group,
 			path: this.path,
 			iterator: function(tng) {
-				child.custom && customs.push(tng); // for tick()ing
+				tng.isCustom && customs.push(tng); // for tick()ing
 				iterator && iterator();
 			},
 			bones: this.bones || [],
