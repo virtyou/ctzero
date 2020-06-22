@@ -22,8 +22,9 @@ zero.core.Hair = CT.Class({
 		for (var i = 0; i < this.count; i++)
 			this["strand" + i].setColor(col);
 	},
-	tick: function(dts) {
-		var i, vel, pos = this.position(null, true);
+	tick: function() {
+		var i, vel, dts = zero.core.util.dts,
+			pos = this.position(null, true);
 		if (this.pos) {
 			vel = zero.core.util.vector(this.pos, pos);
 			for (i = 0; i < this.count; i++)
@@ -39,5 +40,6 @@ zero.core.Hair = CT.Class({
 			offz: 0,
 			position: [0, 7, 4]
 		}, this.opts);
+		this.isCustom = true; // for tick
 	}
 }, zero.core.Thing);
