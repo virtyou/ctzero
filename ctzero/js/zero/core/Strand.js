@@ -77,7 +77,7 @@ zero.core.Strand = CT.Class({
 			segments: 8,
 			drag: 0.7,
 			damp: 1.4,
-			veldamp: 4000,
+			veldamp: 6000,
 			color: 0x000000,
 			flex: Math.PI * 2 / 3
 		});
