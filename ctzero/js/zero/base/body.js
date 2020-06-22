@@ -71,3 +71,23 @@ zero.base.body = function(opts) {
         }]
     };
 };
+
+zero.base.body.hair = {
+    afro: {
+        flex: Math.PI / 32,
+        taper: 1.4,
+        girth: 4,
+        length: 4,
+        segments: 3
+    },
+    braids: {
+        length: 3,
+        girth: 1.2,
+        segments: 6,
+        kink: Math.PI / 8
+    },
+    eighties: {
+        taper: 0.9,
+        kink: Math.PI / 2
+    }
+};
