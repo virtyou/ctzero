@@ -18,18 +18,21 @@ zero.core.Hair = CT.Class({
 		}
 		this.count = i;
 	},
-	setColor: function(col) {
+	_pass: function(func, a1, a2) {
 		for (var i = 0; i < this.count; i++)
-			this["strand" + i].setColor(col);
+			this["strand" + i][func](a1, a2);
+	},
+	setColor: function(col) {
+		this._pass("setColor", col);
+	},
+	setTexture: function(tx) {
+		this._pass("setTexture", tx);
 	},
 	tick: function() {
-		var i, vel, dts = zero.core.util.dts,
+		var vel, dts = zero.core.util.dts,
 			pos = this.position(null, true);
-		if (this.pos) {
-			vel = zero.core.util.vector(this.pos, pos);
-			for (i = 0; i < this.count; i++)
-				this["strand" + i].tick(dts, vel);
-		}
+		this.pos && this._pass("tick", dts,
+			zero.core.util.vector(this.pos, pos));
 		this.pos = pos;
 	},
 	init: function(opts) {

@@ -49,6 +49,10 @@ zero.core.Strand = CT.Class({
 		for (var seg of this.segs)
 			seg.setColor(col);
 	},
+	setTexture: function(tx) {
+		for (var seg of this.segs)
+			seg.setTexture(tx);
+	},
 	setSprings: function() {
 		var oz = this.opts, pz = this.pends = {
 			x: [], z: []
