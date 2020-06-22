@@ -154,7 +154,7 @@ zero.core.util = {
 	},
 	animate: function(now) {
 	    if (lastTime)
-	        dts = Math.min(dmax, (now - lastTime) / 1000);
+	        dts = zero.core.util.dts = Math.min(dmax, (now - lastTime) / 1000);
 	    lastTime = now;
 	    zero.core.util.ticker += 1;
 	    zero.core.util.elapsed += dts;
