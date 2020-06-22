@@ -76,7 +76,7 @@ zero.base.body.hair = {
     afro: {
         strand: {
             flex: Math.PI / 32,
-            taper: 1.4,
+            taper: [1.4, 1, 1.4],
             girth: 4,
             length: 4,
             segments: 3
@@ -92,8 +92,8 @@ zero.base.body.hair = {
     },
     eighties: {
         strand: {
-            taper: 0.9,
-            kink: Math.PI / 2
+            kink: Math.PI / 2,
+            taper: [0.7, 0.9, 1]
         }
     },
     medusa: {
