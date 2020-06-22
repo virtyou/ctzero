@@ -96,6 +96,12 @@ zero.base.body.hair = {
             taper: [0.7, 0.9, 1]
         }
     },
+    mohawk: {
+        coverage: [1, 0.2],
+        strand: {
+            flex: Math.PI / 32
+        }
+    },
     medusa: {
         density: 4,
         strand: {
