@@ -74,20 +74,40 @@ zero.base.body = function(opts) {
 
 zero.base.body.hair = {
     afro: {
-        flex: Math.PI / 32,
-        taper: 1.4,
-        girth: 4,
-        length: 4,
-        segments: 3
+        strand: {
+            flex: Math.PI / 32,
+            taper: 1.4,
+            girth: 4,
+            length: 4,
+            segments: 3
+        }
     },
     braids: {
-        length: 3,
-        girth: 1.2,
-        segments: 6,
-        kink: Math.PI / 8
+        strand: {
+            length: 3,
+            girth: 1.2,
+            segments: 6,
+            kink: Math.PI / 8
+        }
     },
     eighties: {
-        taper: 0.9,
-        kink: Math.PI / 2
+        strand: {
+            taper: 0.9,
+            kink: Math.PI / 2
+        }
+    },
+    medusa: {
+        density: 4,
+        strand: {
+            kink: Math.PI,
+            girth: 4,
+            length: 8,
+            segments: 10,
+            flex: Math.PI / 16,
+            color: 0x00ff00,
+            drag: 0.9,
+            damp: 1.1,
+            veldamp: 1000
+        }
     }
 };
