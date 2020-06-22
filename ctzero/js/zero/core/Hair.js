@@ -3,11 +3,12 @@ zero.core.Hair = CT.Class({
 	preassemble: function() {
 		var oz = this.opts, r = oz.range,
 			space = r * 2 / oz.density,
-			pz = oz.parts, i = 0,
-			shift = oz.shift, x, z,
+			pz = oz.parts, c = oz.coverage,
+			xr = r * c[0], zr = r * c[1],
+			shift = oz.shift, i = 0, x, z,
 			offx = oz.offx, offz = oz.offz;
-		for (x = -r + offx; x <= r + offx; x += space) {
-			for (z = -r + offz; z <= r + offz; z += space) {
+		for (x = offx - xr; x <= offx + xr; x += space) {
+			for (z = offz - zr; z <= offz + zr; z += space) {
 				pz.push(CT.merge(oz.strand, {
 					thing: "Strand",
 					name: "strand" + i,
@@ -38,6 +39,7 @@ zero.core.Hair = CT.Class({
 	init: function(opts) {
 		this.opts = opts = CT.merge(opts, {
 			density: 7,
+			coverage: [1, 1],
 			range: Math.PI * 2 / 5,
 			offx: -Math.PI / 8,
 			offz: 0,
