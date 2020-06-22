@@ -298,6 +298,9 @@ zero.core.Thing = CT.Class({
 			}
 		});
 	},
+	setColor: function(col) {
+		if (this.material) this.material.color = col;
+	},
 	vary: function(variant) {
 		this.update(this.opts.variants[variant]);
 	},
