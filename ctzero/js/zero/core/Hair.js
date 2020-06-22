@@ -18,6 +18,10 @@ zero.core.Hair = CT.Class({
 		}
 		this.count = i;
 	},
+	setColor: function(col) {
+		for (var i = 0; i < this.count; i++)
+			this["strand" + i].setColor(col);
+	},
 	tick: function(dts) {
 		var i, vel, pos = this.position(null, true);
 		if (this.pos) {

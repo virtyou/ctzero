@@ -45,6 +45,10 @@ zero.core.Strand = CT.Class({
 		this.vel = vel;
 		this.segs.forEach(this.tickSegment);
 	},
+	setColor: function(col) {
+		for (var seg of this.segs)
+			seg.setColor(col);
+	},
 	setSprings: function() {
 		var oz = this.opts, pz = this.pends = {
 			x: [], z: []
