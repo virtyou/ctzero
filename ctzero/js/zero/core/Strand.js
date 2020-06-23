@@ -9,8 +9,8 @@ zero.core.Strand = CT.Class({
 			position: [0, ypos, 0],
 			scale: oz.taper,
 			texture: oz.texture,
-			boxGeometry: [oz.girth, len, oz.girth],
-			material: { color: oz.color }
+			material: oz.material,
+			boxGeometry: [oz.girth, len, oz.girth]
 		};
 	},
 	preassemble: function() {
@@ -82,7 +82,6 @@ zero.core.Strand = CT.Class({
 			drag: 0.7,
 			damp: 1.4,
 			veldamp: 6000,
-			color: 0x000000,
 			flex: Math.PI * 2 / 3,
 			taper: [0.8, 0.8, 0.8]
 		});
