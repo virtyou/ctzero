@@ -1,8 +1,12 @@
 zero.core.Hair = CT.Class({
 	CLASSNAME: "zero.core.Hair",
 	preassemble: function() {
-		var oz = this.opts, r = oz.range,
-			space = r * 2 / oz.density,
+		var oz = this.opts, r = oz.range;
+		if (!oz.density) {
+			this.count = 0;
+			return;
+		}
+		var space = r * 2 / oz.density,
 			pz = oz.parts, c = oz.coverage,
 			xr = r * c[0], zr = r * c[1],
 			shift = oz.shift, i = 0, x, z,
