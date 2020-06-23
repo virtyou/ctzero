@@ -110,7 +110,6 @@ zero.base.body.hair = {
             length: 8,
             segments: 10,
             flex: Math.PI / 16,
-            color: 0x00ff00,
             drag: 0.9,
             damp: 1.1,
             veldamp: 1000
