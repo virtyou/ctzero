@@ -77,7 +77,7 @@ zero.core.Strand = CT.Class({
 			kink: 0,
 			length: 6,
 			girth: 3,
-			yoff: 9,
+			yoff: 6,
 			segments: 8,
 			drag: 0.7,
 			damp: 1.4,
