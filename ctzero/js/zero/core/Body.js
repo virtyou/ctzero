@@ -37,7 +37,7 @@ zero.core.Body = CT.Class({
 			name: name,
 			bone: 4,
 			position: this._lookers[name],
-			cubeGeometry: [1, 1, 5],
+			boxGeometry: [1, 1, 5],
 			material: {
 			    color: 0x00ff00,
 			    visible: false

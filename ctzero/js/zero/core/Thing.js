@@ -210,11 +210,14 @@ zero.core.Thing = CT.Class({
 			return this.placer.position;
 		}
 	},
-	rotation: function(rotation) {
+	rotation: function(rotation, world) {
 		if (rotation)
 			this.update({ rotation: rotation });
-		else
+		else {
+			if (world)
+				return this.placer.getWorldRotation();
 			return this.placer.rotation;
+		}
 	},
 	scale: function(scale) {
 		if (scale) {
@@ -295,6 +298,12 @@ zero.core.Thing = CT.Class({
 			}
 		});
 	},
+	setTexture: function(tx) {
+		this.update({ texture: tx });
+	},
+	setColor: function(col) {
+		if (this.material) this.material.color = col;
+	},
 	vary: function(variant) {
 		this.update(this.opts.variants[variant]);
 	},
@@ -341,7 +350,7 @@ zero.core.Thing = CT.Class({
 			scene: this.group,
 			path: this.path,
 			iterator: function(tng) {
-				child.custom && customs.push(tng); // for tick()ing
+				tng.isCustom && customs.push(tng); // for tick()ing
 				iterator && iterator();
 			},
 			bones: this.bones || [],

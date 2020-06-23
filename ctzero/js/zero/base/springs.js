@@ -4,6 +4,7 @@ zero.base.springs.body = function() {
         bob: {
             k: 10,
             damp: 5,
+            floory: true,
             floored: true,
             acceleration: -0.5
         },

@@ -71,3 +71,48 @@ zero.base.body = function(opts) {
         }]
     };
 };
+
+zero.base.body.hair = {
+    afro: {
+        strand: {
+            flex: Math.PI / 32,
+            taper: [1.4, 1, 1.4],
+            girth: 4,
+            length: 4,
+            segments: 3
+        }
+    },
+    braids: {
+        strand: {
+            length: 3,
+            girth: 1.2,
+            segments: 6,
+            kink: Math.PI / 8
+        }
+    },
+    eighties: {
+        strand: {
+            kink: Math.PI / 2,
+            taper: [0.7, 0.9, 1]
+        }
+    },
+    mohawk: {
+        coverage: [1, 0.2],
+        strand: {
+            flex: Math.PI / 32
+        }
+    },
+    medusa: {
+        density: 4,
+        strand: {
+            kink: Math.PI,
+            girth: 4,
+            length: 8,
+            segments: 10,
+            flex: Math.PI / 16,
+            drag: 0.9,
+            damp: 1.1,
+            veldamp: 1000
+        }
+    }
+};
