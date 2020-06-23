@@ -90,6 +90,15 @@ zero.base.body.hair = {
             kink: Math.PI / 8
         }
     },
+    buzz: {
+        density: 20,
+        strand: {
+            length: 1,
+            girth: 0.1,
+            segments: 1,
+            flex: Math.PI / 32
+        }
+    },
     eighties: {
         strand: {
             kink: Math.PI / 2,
