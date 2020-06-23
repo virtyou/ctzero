@@ -12,7 +12,9 @@ zero.core.Hair = CT.Class({
 				pz.push(CT.merge(oz.strand, {
 					thing: "Strand",
 					name: "strand" + i,
-					rotation: [x, 0, z]
+					rotation: [x, 0, z],
+					texture: oz.texture,
+					material: oz.material
 				}));
 				i += 1;
 			}
