@@ -87,9 +87,9 @@ zero.base.body.hair = {
         strand: {
             girth: 1,
             length: 2,
-            segments: 5,
+            segments: 4,
             flex: Math.PI / 4,
-            taper: [0.8, 1.3, 1.1]
+            taper: [0.8, 1.5, 1.1]
         }
     },
     braids: {
