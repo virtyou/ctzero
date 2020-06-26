@@ -5,8 +5,14 @@ zero.core.Strand = CT.Class({
 			ypos = index ? len : oz.yoff;
 		return {
 			matcat: "Basic",
+			thing: "Pendulum",
 			name: "seg" + index,
 			position: [0, ypos, 0],
+			kink: oz.kink,
+			flex: oz.flex,
+			drag: oz.drag,
+			damp: oz.damp,
+			veldamp: oz.veldamp,
 			scale: oz.taper,
 			texture: oz.texture,
 			material: oz.material,
@@ -29,22 +35,8 @@ zero.core.Strand = CT.Class({
 		}
 		this._.built();
 	},
-	tickSegment: function(seg, i) {
-		var pendz = this.pends, oz = this.opts,
-			damp = oz.damp, vd = oz.veldamp,
-			rot = seg.rotation(null, true), pend,
-			dts = this.dts, vel = this.vel;
-		["x", "z"].forEach(function(dim) {
-			pend = pendz[dim][i];
-			pend.boost = (pend.boost + (vel[dim] + vel.y) / vd) * oz.drag;
-			pend.acceleration = dts * Math.sin(rot[dim]) / damp;
-			seg.adjust("rotation", dim, pend.value);
-		});
-	},
 	tick: function(dts, vel) {
-		this.dts = dts;
-		this.vel = vel;
-		this.segs.forEach(this.tickSegment);
+		this.segs.forEach(seg => seg.tick(dts, vel));
 	},
 	setColor: function(col) {
 		for (var seg of this.segs)
@@ -53,24 +45,6 @@ zero.core.Strand = CT.Class({
 	setTexture: function(tx) {
 		for (var seg of this.segs)
 			seg.setTexture(tx);
-	},
-	setSprings: function() {
-		var oz = this.opts, pz = this.pends = {
-			x: [], z: []
-		}, thaz = this, i, f, k;
-		["x", "z"].forEach(function(dim) {
-			for (i = 0; i < oz.segments; i++) {
-				f = oz.flex;// * (oz.segments - i) / oz.segments;
-				k = oz.kink * Math.random() - oz.kink / 2;
-				pz[dim].push(zero.core.springController.add({
-					hard: true,
-					bounds: {
-						min: k - f,
-						max: k + f
-					}
-				}, dim + i, thaz));
-			}
-		});
 	},
 	init: function(opts) {
 		this.opts = opts = CT.merge(this.opts, opts, {
@@ -86,6 +60,5 @@ zero.core.Strand = CT.Class({
 			taper: [0.8, 0.8, 0.8]
 		});
 		this.segs = [];
-		this.setSprings();
 	}
 }, zero.core.Thing);
