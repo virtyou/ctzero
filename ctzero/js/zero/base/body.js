@@ -83,13 +83,13 @@ zero.base.body.hair = {
         }
     },
     aragorn: {
-        density: 9,
+        density: 8,
         strand: {
-            girth: 1,
+            girth: 2,
             length: 2,
             segments: 4,
             flex: Math.PI / 4,
-            taper: [0.8, 1.5, 1.1]
+            taper: [0.8, 1.5, 1.2]
         }
     },
     braids: {
