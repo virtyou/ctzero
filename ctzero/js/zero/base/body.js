@@ -83,7 +83,7 @@ zero.base.body.hair = {
         }
     },
     aragorn: {
-        density: 10,
+        density: 9,
         strand: {
             girth: 1,
             length: 2,
