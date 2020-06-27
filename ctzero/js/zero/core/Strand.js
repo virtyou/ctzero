@@ -37,8 +37,8 @@ zero.core.Strand = CT.Class({
 		}
 		this._.built();
 	},
-	tick: function(dts, vel) {
-		this.segs.forEach(seg => seg.tick(dts, vel));
+	tick: function(dts) {
+		this.segs.forEach(seg => seg.tick(dts));
 	},
 	setColor: function(col) {
 		for (var seg of this.segs)
