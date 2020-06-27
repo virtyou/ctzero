@@ -4,13 +4,13 @@ zero.core.Pendulum = CT.Class({
 		var pendz = this.pends, oz = this.opts,
 			damp = oz.damp, vd = oz.veldamp,
 			rot = this.rotation(null, true),
-			thaz = this, pend;
-		["x", "z"].forEach(function(dim) {
+			dim, pend;
+		for (dim of ["x", "z"]) {
 			pend = pendz[dim];
 			pend.boost = (pend.boost + (vel[dim] + vel.y) / vd) * oz.drag;
 			pend.acceleration = dts * Math.sin(rot[dim]) / damp;
-			thaz.adjust("rotation", dim, pend.value);
-		});
+			this.adjust("rotation", dim, pend.value);
+		};
 	},
 	setSprings: function() {
 		var oz = this.opts, thaz = this,
