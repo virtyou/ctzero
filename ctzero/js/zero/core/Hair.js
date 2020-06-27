@@ -36,11 +36,7 @@ zero.core.Hair = CT.Class({
 		this._pass("setTexture", tx);
 	},
 	tick: function() {
-		var vel, dts = zero.core.util.dts,
-			pos = this.position(null, true);
-		this.pos && this._pass("tick", dts,
-			zero.core.util.vector(this.pos, pos));
-		this.pos = pos;
+		this._pass("tick", zero.core.util.dts);
 	},
 	init: function(opts) {
 		this.opts = opts = CT.merge(opts, {
