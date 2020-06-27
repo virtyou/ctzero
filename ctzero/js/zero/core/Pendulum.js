@@ -14,17 +14,18 @@ zero.core.Pendulum = CT.Class({
 	},
 	setSprings: function() {
 		var oz = this.opts, thaz = this,
-			pz = this.pends = {}, f, k;
+			pz = this.pends = {}, f, k, s;
 		["x", "z"].forEach(function(dim, i) {
-			f = oz.flex;
-			k = oz.curl[i] + oz.kink * Math.random() - oz.kink / 2;
-			pz[dim] = zero.core.springController.add({
-				hard: true,
-				bounds: {
+			s = { hard: true };
+			if (!oz.unbounded) {
+				f = oz.flex;
+				k = oz.curl[i] + oz.kink * Math.random() - oz.kink / 2;
+				s.bounds = {
 					min: k - f,
 					max: k + f
-				}
-			}, dim, thaz);
+				};
+			}
+			pz[dim] = zero.core.springController.add(s, dim, thaz);
 		});
 	},
 	init: function(opts) {
