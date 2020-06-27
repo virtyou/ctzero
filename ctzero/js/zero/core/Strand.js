@@ -9,6 +9,7 @@ zero.core.Strand = CT.Class({
 			name: "seg" + index,
 			position: [0, ypos, 0],
 			kink: oz.kink,
+			curl: oz.curl,
 			flex: oz.flex,
 			drag: oz.drag,
 			damp: oz.damp,
@@ -49,6 +50,7 @@ zero.core.Strand = CT.Class({
 	init: function(opts) {
 		this.opts = opts = CT.merge(this.opts, opts, {
 			kink: 0,
+			curl: 0,
 			length: 6,
 			girth: 3,
 			yoff: 6,
