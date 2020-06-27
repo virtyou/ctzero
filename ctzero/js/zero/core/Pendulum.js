@@ -15,9 +15,9 @@ zero.core.Pendulum = CT.Class({
 	setSprings: function() {
 		var oz = this.opts, thaz = this,
 			pz = this.pends = {}, f, k;
-		["x", "z"].forEach(function(dim) {
+		["x", "z"].forEach(function(dim, i) {
 			f = oz.flex;
-			k = oz.curl + oz.kink * Math.random() - oz.kink / 2;
+			k = oz.curl[i] + oz.kink * Math.random() - oz.kink / 2;
 			pz[dim] = zero.core.springController.add({
 				hard: true,
 				bounds: {

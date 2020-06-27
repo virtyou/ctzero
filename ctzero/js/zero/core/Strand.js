@@ -50,13 +50,13 @@ zero.core.Strand = CT.Class({
 	init: function(opts) {
 		this.opts = opts = CT.merge(this.opts, opts, {
 			kink: 0,
-			curl: 0,
 			length: 6,
 			girth: 3,
 			yoff: 6,
 			segments: 8,
 			drag: 0.7,
 			damp: 1.4,
+			curl: [0, 0],
 			veldamp: 6000,
 			flex: Math.PI * 2 / 3,
 			taper: [0.8, 0.8, 0.8]
