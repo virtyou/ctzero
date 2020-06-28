@@ -36,6 +36,14 @@ zero.core.util = {
 			z: p2.z - p1.z
 		};
 	},
+	velocity: function(p1, p2, dt) {
+		var vec = zero.core.vector(p1, p2);
+		return {
+			x: vec.x / dt,
+			y: vec.y / dt,
+			z: vec.z / dt
+		};
+	},
 	mergeBit: function(obj1, obj2, nval) {
 		for (var k in obj1) {
 			if (typeof obj1[k] == "number")
