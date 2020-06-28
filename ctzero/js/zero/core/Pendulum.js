@@ -17,15 +17,13 @@ zero.core.Pendulum = CT.Class({
 		_soft: function(dts, vel, acc) {
 			var pendz = this.pends, oz = this.opts,
 				damp = oz.damp, vd = oz.veldamp,
-				rot = this.rotation(null, true), rd, ao, sa,
+				rot = this.rotation(null, true), sa,
 				dim, pend, other = { x: "z", z: "x" };
-	//		for (dim of ["x", "z"]) {
-			for (dim of ["z"]) {
+			for (dim of ["x", "z"]) {
 				pend = pendz[dim];
-				sa = rd = rot[dim];// - oz.srot[dim];
-
-	//			if (dim == "x")
-	//				sa = Math.PI - rd;
+				sa = rot[dim];
+				if (dim == "x")
+					sa -= Math.PI;
 	//			vo = vel[other[dim]];
 	//			ao = acc[other[dim]];
 //				pend.acceleration = -oz.mass * Math.sin(rd);
