@@ -62,7 +62,7 @@ zero.core.Strand = CT.Class({
 			curl: [0, 0],
 			veldamp: 6000,
 			flex: Math.PI * 2 / 3,
-			taper: [0.9, 0.9, 0.9]
+			taper: [0.8, 0.9, 0.8]
 		});
 		this.segs = [];
 	}
