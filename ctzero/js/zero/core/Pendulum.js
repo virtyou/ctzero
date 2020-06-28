@@ -1,13 +1,15 @@
 zero.core.Pendulum = CT.Class({
 	CLASSNAME: "zero.core.Pendulum",
+	dims: ["x", "z"],
+	other: { x: "z", z: "x" },
 	ticks: {
 		hard: function(dts, pos) {
 			var pendz = this.pends, oz = this.opts,
 				vel = this.localize(zero.core.util.vector(this.pos, pos)),
 				damp = oz.damp, vd = oz.veldamp,
 				rot = this.rotation(null, true),
-				dim, pend, other = { x: "z", z: "x" };
-			for (dim of ["x", "z"]) {
+				dim, pend, other = this.other;
+			for (dim of this.dims) {
 				pend = pendz[dim];
 				pend.boost = (pend.boost + (vel[other[dim]] + vel.y) / vd) * oz.drag;
 				pend.acceleration = dts * Math.sin(rot[dim]) / damp;
@@ -18,8 +20,8 @@ zero.core.Pendulum = CT.Class({
 			var pendz = this.pends, oz = this.opts,
 				damp = oz.damp, vd = oz.veldamp,
 				rot = this.rotation(null, true), sa,
-				dim, pend, other = { x: "z", z: "x" };
-			for (dim of ["x", "z"]) {
+				dim, pend;//, other = this.other;
+			for (dim of this.dims) {
 				pend = pendz[dim];
 				sa = rot[dim];
 				if (dim == "x")
@@ -51,7 +53,7 @@ zero.core.Pendulum = CT.Class({
 	setSprings: function() {
 		var oz = this.opts, thaz = this,
 			pz = this.pends = {}, f, k, s;
-		["x", "z"].forEach(function(dim, i) {
+		this.dims.forEach(function(dim, i) {
 			s = { hard: oz.hard };
 			if (s.hard) {
 				f = oz.flex;
