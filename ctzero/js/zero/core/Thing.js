@@ -229,7 +229,7 @@ zero.core.Thing = CT.Class({
 			return this.placer.scale;
 	},
 	localize: function(v) {
-		return this.placer.worldToLocal(new THREE.Vector3(v.x, v.y, v.z));
+		return this.placer.worldToLocal(v.applyMatrix4 ? v : new THREE.Vector3(v.x, v.y, v.z));
 	},
 	setBone: function() {
 		var ts = this.thring && this.thring.skeleton, gjs, ms;

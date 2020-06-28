@@ -39,8 +39,8 @@ zero.core.Spring = CT.Class({
 		this.target += this.boost;
 		this.bound();
 		this.value += this.velocity * dts;
-		this.velocity += (this.k * moodMaster_k * (this.target - this.value)
-			- this.damp * moodMaster_damp * this.velocity) * dts;
+		this.velocity += (this.acceleration || (this.k * moodMaster_k * (this.target
+			- this.value) - this.damp * moodMaster_damp * this.velocity)) * dts;
 		if (this.breaks) {
 			if (this.velocity > 10 || this.velocity < -10)
 				this.damp = 100;
