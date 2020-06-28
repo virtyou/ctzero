@@ -37,7 +37,7 @@ zero.core.util = {
 		};
 	},
 	velocity: function(p1, p2, dt) {
-		var vec = zero.core.vector(p1, p2);
+		var vec = zero.core.util.vector(p1, p2);
 		return {
 			x: vec.x / dt,
 			y: vec.y / dt,
