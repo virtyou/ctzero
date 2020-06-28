@@ -25,11 +25,12 @@ zero.core.Pendulum = CT.Class({
 				if (dim == "x")
 					sa -= Math.PI;
 	//			vo = vel[other[dim]];
-	//			ao = acc[other[dim]];
+//				ao = acc[other[dim]];
 //				pend.acceleration = -oz.mass * Math.sin(rd);
 //				pend.acceleration = -oz.mass * Math.sin(sa)
-//					- 0.02 * ao * Math.cos(rd) - damp * pend.velocity;
+//					+ 0.000002 * ao * Math.cos(sa) - damp * pend.velocity;
 
+				// TODO: fix -- not quite right yet!!
 				pend.acceleration = -oz.mass * Math.sin(sa) - damp * pend.velocity;
 
 				this.adjust("rotation", dim, pend.value);
