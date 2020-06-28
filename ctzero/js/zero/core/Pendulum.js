@@ -21,8 +21,8 @@ zero.core.Pendulum = CT.Class({
 		var oz = this.opts, thaz = this,
 			pz = this.pends = {}, f, k, s;
 		["x", "z"].forEach(function(dim, i) {
-			s = { hard: true };
-			if (!oz.unbounded) {
+			s = { hard: opts.hard };
+			if (s.hard) {
 				f = oz.flex;
 				k = oz.curl[i] + oz.kink * Math.random() - oz.kink / 2;
 				s.bounds = {

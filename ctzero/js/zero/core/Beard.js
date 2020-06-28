@@ -7,7 +7,8 @@ zero.core.Beard = CT.Class({
 			offx: Math.PI * 4 / 5
 		}, this.opts);
 		opts.strand = CT.merge(opts.strand, {
-			yoff: 3
+			yoff: 3,
+			hard: false
 		});
 	}
 }, zero.core.Hair);

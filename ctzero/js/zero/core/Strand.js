@@ -13,11 +13,11 @@ zero.core.Strand = CT.Class({
 			flex: oz.flex,
 			drag: oz.drag,
 			damp: oz.damp,
+			hard: oz.hard,
 			veldamp: oz.veldamp,
 			scale: oz.taper,
 			texture: oz.texture,
 			material: oz.material,
-			unbounded: oz.unbounded,
 			boxGeometry: [oz.girth, len, oz.girth]
 		};
 	},
@@ -57,6 +57,7 @@ zero.core.Strand = CT.Class({
 			segments: 7,
 			drag: 0.7,
 			damp: 1.4,
+			hard: true,
 			curl: [0, 0],
 			veldamp: 6000,
 			flex: Math.PI * 2 / 3,
