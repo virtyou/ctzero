@@ -18,6 +18,7 @@ zero.core.Strand = CT.Class({
 			scale: oz.taper,
 			texture: oz.texture,
 			material: oz.material,
+			mass: oz.segments - index,
 			boxGeometry: [oz.girth, len, oz.girth]
 		};
 	},
