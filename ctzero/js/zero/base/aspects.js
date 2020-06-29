@@ -196,6 +196,16 @@ zero.base.aspects.leg = {
     }
 };
 zero.base.aspects.arm = {
+    clavicle: {
+        y: {
+            max: 0.5,
+            min: -0.5
+        },
+        z: {
+            max: 0.2,
+            min: -0.5
+        }
+    },
     shoulder: {
         x: {
             max: 1,
