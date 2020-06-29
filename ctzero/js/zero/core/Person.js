@@ -248,6 +248,8 @@ zero.core.Person = CT.Class({
 		this.ungesture();
 	},
 	gesture: function(gname) {
+		if (gname == "ungesture")
+			return this.ungesture();
 		this.activeGesture = gname;
 		this.body.move(this.opts.gestures[gname]);
 	},
