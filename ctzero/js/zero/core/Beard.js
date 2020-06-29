@@ -7,7 +7,7 @@ zero.core.Beard = CT.Class({
 			position: [0, 0, 8]
 		}, this.opts);
 		opts.strand = CT.merge(opts.strand, {
-			yoff: 4,
+			yoff: Math.PI,
 			damp: 3,
 			hard: false
 		});
