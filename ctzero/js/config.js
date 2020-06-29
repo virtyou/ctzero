@@ -3,6 +3,7 @@
 		"opts": {
 			"antialias": true
 		},
+		"fov": 25,
 		"noControls": false,
 		"controls": {
 			"rotateSpeed": 1.0,
