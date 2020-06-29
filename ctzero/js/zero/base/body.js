@@ -135,3 +135,21 @@ zero.base.body.hair = {
         }
     }
 };
+
+zero.base.body.beard = {
+    santa: {
+        strand: {
+            taper: [1.1, 0.9, 1.1]
+        }
+    },
+    stubble: {
+        density: 10,
+        strand: {
+            hard: true,
+            length: 1,
+            girth: 0.1,
+            segments: 1,
+            flex: Math.PI / 32
+        }
+    }
+};
