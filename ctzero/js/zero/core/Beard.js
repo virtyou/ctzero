@@ -3,11 +3,11 @@ zero.core.Beard = CT.Class({
 	init: function(opts) {
 		this.opts = opts = CT.merge(opts, {
 			density: 3,
-			position: [0, -5, 8],
-			offx: Math.PI * 4 / 5
+			offx: Math.PI,
+			position: [0, 0, 8]
 		}, this.opts);
 		opts.strand = CT.merge(opts.strand, {
-			yoff: 3,
+			yoff: 4,
 			damp: 3,
 			hard: false
 		});
