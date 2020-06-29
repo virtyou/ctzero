@@ -143,11 +143,11 @@ zero.base.body.beard = {
         }
     },
     stubble: {
-        density: 10,
+        density: 5,
         strand: {
             hard: true,
-            length: 1,
-            girth: 0.1,
+            length: 0.5,
+            girth: 0.05,
             segments: 1,
             flex: Math.PI / 32
         }
