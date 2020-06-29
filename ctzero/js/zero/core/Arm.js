@@ -11,6 +11,22 @@ zero.core.Arm = CT.Class({
 		this.setScales(opts.arm);
 		this.hand.resize(opts.hand);
 	},
+	setScales: function(opts) {
+		var part, thaz = this, bm = this.opts.bonemap.arm;
+		for (part in opts) {
+			zero.core.util.coords(opts[part], function(dim, val) {
+				thaz[part].scale[dim] = val;
+				if (part == "clavicle")
+					thaz.body.head.bones[bm.clavicle].scale[dim] = val;
+			});
+		}
+	},
+	tickPart: function(part) {
+		var rz = this.rotation(part);
+		zero.core.util.update(rz, this[part].rotation);
+		(part == "clavicle") && zero.core.util.update(rz,
+			this.body.head.bones[this.opts.bonemap.arm.clavicle].rotation);
+	},
 	tick: function() {
 		zero.core[this.variety].parts.forEach(this.tickPart);
 		this.hand.tick();
@@ -31,4 +47,4 @@ zero.core.Arm = CT.Class({
 		});
 	}
 }, zero.core.Skeleton);
-zero.core.Arm.parts = ["shoulder", "elbow", "wrist"];
+zero.core.Arm.parts = ["clavicle", "shoulder", "elbow", "wrist"];
