@@ -66,8 +66,8 @@ zero.base.springs.head = function() {
             damp: 10
         },
         blink: {
-            k: 2000,
-            damp: 40
+            k: 40,
+            damp: 5
         },
         smile: {
             k: 20,
