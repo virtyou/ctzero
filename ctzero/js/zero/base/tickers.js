@@ -243,7 +243,7 @@ zero.base.tickers.head = function() {
             talking: {
                 yes: {
                     reschedule: {
-                        coefficient: 1
+                        coefficient: 3
                     },
                     boost: {
                         smileEyes: {
@@ -251,20 +251,23 @@ zero.base.tickers.head = function() {
                             coefficient: 0.4
                         }
                     },
-                    k: {
-                        base: 220
+                    value: {
+                        base: 1
                     }
                 },
                 no: {
                     reschedule: {
-                        base: 0,
-                        coefficient: 2.5
+                        base: 2,
+                        coefficient: 4
                     },
-               //     boost: {
-                //        smileEyes: {
-                //            coefficient: -0.2
-                //        }
-                 //   }
+                    value: {
+                        base: 1
+                    },
+                    boost: {
+                        smileEyes: {
+                            coefficient: -0.2
+                        }
+                    }
                 }
             }
         },
