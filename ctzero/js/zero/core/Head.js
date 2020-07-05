@@ -49,14 +49,6 @@ zero.core.Head = CT.Class({
 		for (var k in vdata[vtype] || {})
 			this.springs[k][vtype] = vdata[vtype][k];
 	},
-	blink: function() {
-		var bs = this.springs.blink, bk = this.blink;
-		bs.target = 1;
-		setTimeout(function() {
-			bs.target = 0;
-			setTimeout(bk, CT.data.random(3000) + 2000);
-		}, CT.data.random(100) + 100);
-	},
 	energy: function() {
 		return this.person && this.person.energy;
 	},
@@ -73,6 +65,5 @@ zero.core.Head = CT.Class({
 		for (p in zc.phonemes.forms)
 			this.springs[p] = zc.springController.add(zc.phonemes.forms[p], p, this);
 		this.opts.frustumCulled = false; // TODO: figure out real problem and fix!!!
-		setTimeout(this.blink, 1000);
 	}
 }, zero.core.Thing);
