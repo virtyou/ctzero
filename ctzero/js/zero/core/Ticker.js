@@ -45,7 +45,7 @@ zero.core.Ticker = CT.Class({
 				this.oncers[direction] = true;
 			}
 			s = this.parent.springs[this.name];
-			["target", "k", "damp"].forEach(function(property) {
+			["target", "k", "damp", "value"].forEach(function(property) {
 				up(s, opts, property);
 			});
 			if (opts.boost) {
