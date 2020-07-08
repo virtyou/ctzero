@@ -31,6 +31,8 @@ class Thing(db.TimeStampedBase):
     opts = db.JSON() # base opts
 
     def json(self):
+        tex = self.texture and self.texture.get()
+        sts = self.stripset and self.stripset.get()
         d = {
             "key": self.key.urlsafe(),
             "name": self.name,
@@ -39,10 +41,14 @@ class Thing(db.TimeStampedBase):
             "material": self.material,
             "morphs": self.morphs or {},
             "morphStack": self.morphStack,
-            "texture": self.texture and self.texture.get().path() or None,
-            "stripset": self.stripset and self.stripset.get().item.urlsafe() or None,
+            "texture": tex and tex.path() or None,
+            "stripset": sts and sts.path() or None,
             "owners": [o.urlsafe() for o in self.owners]
         }
+        if tex:
+            d["texture_owners"] = [o.urlsafe() for o in tex.owners]
+        if sts:
+            d["stripset_owners"] = [o.urlsafe() for o in sts.owners]
         self.opts and d.update(self.opts)
         return d
 
@@ -71,8 +77,10 @@ class Part(db.TimeStampedBase):
         self.opts and d.update(self.opts)
         for asset in db.get_multi(self.assets):
             d[asset.name] = asset.item.urlsafe()
-        if self.texture:
-            d["texture"] = self.texture.get().path()
+        tex = self.texture and self.texture.get()
+        if tex:
+            d["texture"] = tex.path()
+            d["texture_owners"] = [o.urlsafe() for o in tex.owners]
         d["parts"] = [p.json() for p in Part.query(Part.parent == self.key).fetch()]
         if not self.parent and "name" not in d:
             d["name"] = "body"
