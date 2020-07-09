@@ -69,6 +69,23 @@ zero.core.util = {
 		var blob = new Blob(byteArrays, {type: contentType});
 		return blob;
 	},
+	components: function(part) {
+		var pref, ipref, oz, compz = [];
+		for (pref of ["", "texture_", "stripset_"]) {
+			oz = part[pref + "owners"];
+			if (oz && oz.length) {
+				ipref = pref ? ("Asset (" + pref.slice(0, -1) + ")") : "Thing";
+				compz.push({
+					identifier: ipref + ": " + part[pref + "name"],
+					owners: oz
+				});
+			}
+		}
+		part.parts && part.parts.forEach(function(p) {
+			compz = compz.concat(zero.core.util.components(p));
+		});
+		return compz;
+	},
 	_map: function(pos, variety, pnode) {
 		var node = CT.dom.div(null, "full");
 		new CT.map[variety || "Map"]({
