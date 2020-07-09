@@ -224,9 +224,9 @@ zero.core.Room = CT.Class({
 		var o, cz = [{
 			identifier: "Room: " + this.name,
 			owners: this.opts.owners
-		}]
+		}], ppref = this.name + " furnishings";
 		for (o of this.opts.objects)
-			cz = cz.concat(zero.core.util.components(o));
+			cz = cz.concat(zero.core.util.components(o, ppref));
 		return cz;
 	},
 	init: function(opts) {
