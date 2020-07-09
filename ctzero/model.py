@@ -18,6 +18,15 @@ class Asset(db.TimeStampedBase):
     def json(self):
         return self.data()
 
+def assetize(ent, d):
+    for item in ["texture", "stripset"]:
+        a = getattr(ent, item, None)
+        if a:
+            ast = a.get()
+            d[item] = ast.path()
+            d["%s_name"%(item,)] = ast.name
+            d["%s_owners"%(item,)] = [o.urlsafe() for o in ast.owners]
+
 class Thing(db.TimeStampedBase):
     owners = db.ForeignKey(kind=Member, repeated=True)
     texture = db.ForeignKey() # Asset or similar (requires item Binary column)!!
@@ -31,8 +40,6 @@ class Thing(db.TimeStampedBase):
     opts = db.JSON() # base opts
 
     def json(self):
-        tex = self.texture and self.texture.get()
-        sts = self.stripset and self.stripset.get()
         d = {
             "key": self.key.urlsafe(),
             "name": self.name,
@@ -41,14 +48,9 @@ class Thing(db.TimeStampedBase):
             "material": self.material,
             "morphs": self.morphs or {},
             "morphStack": self.morphStack,
-            "texture": tex and tex.path() or None,
-            "stripset": sts and sts.path() or None,
             "owners": [o.urlsafe() for o in self.owners]
         }
-        if tex:
-            d["texture_owners"] = [o.urlsafe() for o in tex.owners]
-        if sts:
-            d["stripset_owners"] = [o.urlsafe() for o in sts.owners]
+        assetize(self, d)
         self.opts and d.update(self.opts)
         return d
 
@@ -77,10 +79,7 @@ class Part(db.TimeStampedBase):
         self.opts and d.update(self.opts)
         for asset in db.get_multi(self.assets):
             d[asset.name] = asset.item.urlsafe()
-        tex = self.texture and self.texture.get()
-        if tex:
-            d["texture"] = tex.path()
-            d["texture_owners"] = [o.urlsafe() for o in tex.owners]
+        assetize(self, d)
         d["parts"] = [p.json() for p in Part.query(Part.parent == self.key).fetch()]
         if not self.parent and "name" not in d:
             d["name"] = "body"
