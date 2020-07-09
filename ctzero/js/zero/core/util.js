@@ -69,12 +69,14 @@ zero.core.util = {
 		var blob = new Blob(byteArrays, {type: contentType});
 		return blob;
 	},
-	components: function(part) {
+	components: function(part, parent) {
 		var pref, ipref, oz, compz = [];
 		for (pref of ["", "texture_", "stripset_"]) {
 			oz = part[pref + "owners"];
 			if (oz && oz.length) {
 				ipref = pref ? ("Asset (" + part.name + " " + pref.slice(0, -1) + ")") : "Thing";
+				if (parent)
+					ipref = parent + ": " + ipref;
 				compz.push({
 					identifier: ipref + ": " + part[pref + "name"],
 					owners: oz
@@ -82,7 +84,7 @@ zero.core.util = {
 			}
 		}
 		part.parts && part.parts.forEach(function(p) {
-			compz = compz.concat(zero.core.util.components(p));
+			compz = compz.concat(zero.core.util.components(p, parent));
 		});
 		return compz;
 	},
