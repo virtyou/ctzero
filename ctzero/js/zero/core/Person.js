@@ -299,6 +299,12 @@ zero.core.Person = CT.Class({
 		});
 		delete zero.core.current.people[this.name];
 	},
+	components: function() {
+		return [{
+			identifier: "Person: " + this.name,
+			owners: this.opts.owners
+		}].concat(zero.core.util.components(this.body.opts, this.name + "'s body"));
+	},
 	init: function(opts) {
 		this.log("init", opts.name);
 		var thiz = this, cfg = core.config.ctzero;

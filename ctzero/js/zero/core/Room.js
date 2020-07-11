@@ -220,6 +220,15 @@ zero.core.Room = CT.Class({
 			});
 		}
 	},
+	components: function() {
+		var o, cz = [{
+			identifier: "Room: " + this.name,
+			owners: this.opts.owners
+		}], ppref = this.name + " furnishings";
+		for (o of this.opts.objects)
+			cz = cz.concat(zero.core.util.components(o, ppref));
+		return cz;
+	},
 	init: function(opts) {
 		var eopts = opts.environment && CT.require("environments." + opts.environment, true);
 		this.opts = opts = CT.merge({
