@@ -29,8 +29,10 @@ zero.core.Pool = CT.Class({
 			cam: [1, 1000000, 512],
 			camPos: {
 //				z: -66
-			}
+			},
+			pull: { bob: 20 }
 		}, this.opts);
+		this.pull = opts.pull;
 		this.grippy = opts.grippy;
 		if (opts.plane && !opts.geometry) {
 			var p = opts.plane;
