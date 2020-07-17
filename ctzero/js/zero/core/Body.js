@@ -100,12 +100,13 @@ zero.core.Body = CT.Class({
 	},
 	setBob: function() {
 		var r = zero.core.current.room,
-			obj = r.getObject(this.group.position, this.radii);
+			obj = r.getSurface(this.group.position, this.radii);
 		if (obj != this.upon) {
-			this.log("upon", obj ? obj.name : "floor");
+			this.log("upon", obj ? obj.name : "bottom");
 			this.upon = obj;
 			this.springs.bob.floored = false;
 			this.setFriction((obj || r).grippy);
+			this.springs.slide.pull = obj && obj.slide;
 			this._.bounder("y", 1, obj && obj.getTop());
 		}
 	},
