@@ -2,6 +2,9 @@ zero.core.Body = CT.Class({
 	CLASSNAME: "zero.core.Body",
 	_xyz: ["weave", "bob", "slide"],
 	_yoff: true,
+	positioner2axis: function(pname) {
+		return ["x", "y", "z"][this._xyz.indexOf(pname)];
+	},
 	assembled: function() {
 		this.log("built body!");
 		this.head.body = this;
