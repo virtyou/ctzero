@@ -181,7 +181,7 @@ zero.core.Thing = CT.Class({
 	setPull: function(pull, axis) {
 		if (this.opts.kind == "floor") { // ... meh
 			var zccp = zero.core.current.people;
-			this.pull = { slide: 0, weave: 0 };
+			this.pull.slide = this.pull.weave = 0;
 			if (axis == "y")
 				this.pull.slide = -pull;
 			else if (axis == "x")
@@ -510,6 +510,7 @@ zero.core.Thing = CT.Class({
 			scale: [1, 1, 1],
 			variants: {},
 			mti: {},
+			pull: {},
 			springs: {},
 			aspects: {},
 			tickers: {},
@@ -522,8 +523,9 @@ zero.core.Thing = CT.Class({
 		});
 		this.variety = this.CLASSNAME.split(".")[2];
 		var vl = this.vlower = this.variety.toLowerCase(); // should these be automated by CT.Class?
-		this.grippy = opts.grippy;
 		this.setName(opts);
+		this.pull = opts.pull;
+		this.grippy = opts.grippy;
 		if ("bone" in opts)
 			opts.anchor = opts.bones[opts.bone];
 		var thiz = this, iz, name;
