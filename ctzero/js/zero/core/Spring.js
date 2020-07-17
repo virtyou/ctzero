@@ -7,6 +7,7 @@ zero.core.Spring = CT.Class({
 			if (this.bounds.min)
 				this.target = Math.max(this.target, this.bounds.min);
 		}
+		this.ebound && zero.core.current.room.ebound(this, this.parent);
 	},
 	tick: function(dts) {
 		if (this.hard) {
@@ -57,6 +58,7 @@ zero.core.Spring = CT.Class({
 			target: 0,
 			velocity: 0,
 			hard: false,
+			ebound: false,
 			breaks: false,
 			floory: false,
 			floored: false,
@@ -69,6 +71,7 @@ zero.core.Spring = CT.Class({
 		this.boost = opts.boost;
 		this.value = opts.value;
 		this.parent = opts.parent;
+		this.ebound = opts.ebound;
 		this.breaks = opts.breaks;
 		this.bounds = opts.bounds;
 		this.target =  opts.target;
