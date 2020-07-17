@@ -178,12 +178,20 @@ zero.core.Thing = CT.Class({
 		if (this.opts.video && this.material.map)
 			this.material.map.vnode.remove();
 	},
+	setSlide: function(slide) {
+		if (this.opts.kind == "floor") { // ... meh
+			var zccp = zero.core.current.people;
+			this.slide = slide;
+			for (var p in zccp)
+				if (zccp[p].body.upon == this)
+					zccp[p].body.springs.slide.pull = slide;
+		}
+	},
 	unscroll: function() {
 		if (this._.scroller) {
 			zero.core.util.untick(this._.scroller);
 			delete this._.scroller;
-			if (this.opts.kind == "floor") // ... meh
-				this.slide = 0;
+			this.setSlide(0);
 		}
 	},
 	scroll: function(_opts) {
@@ -200,8 +208,7 @@ zero.core.Thing = CT.Class({
 				map.repeat[r.axis || "y"] = (r.degree || 2) * (1 + Math.sin((r.speed || opts.speed) * t));
 			}
 		};
-		if (this.opts.kind == "floor") // ... meh
-			this.slide = -opts.speed * 100;
+		this.setSlide(-opts.speed * 100);
 		zero.core.util.ontick(this._.scroller);
 	},
 	look: function(pos) {
