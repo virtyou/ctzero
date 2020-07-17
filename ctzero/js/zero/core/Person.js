@@ -192,7 +192,7 @@ zero.core.Person = CT.Class({
 			bod.springs.weave.boost = 2 * vec.x;
 			bod.springs.slide.boost = 2 * vec.z;
 			var chkr = setInterval(function() {
-				if (zero.core.util.touching(bod, subject, 20)) {
+				if (zero.core.util.touching(bod, subject, 40)) {
 					bod.springs.weave.boost = 0;
 					bod.springs.slide.boost = 0;
 					clearInterval(chkr);
