@@ -99,9 +99,11 @@ zero.core.Body = CT.Class({
 		}
 	},
 	setBob: function() {
-		var obj = zero.core.current.room.getObject(this.group.position);
-		if (obj != this._upon) {
-			this._upon = obj;
+		var obj = zero.core.current.room.getObject(this.group.position, this.radii);
+		if (obj != this.upon) {
+			this.log("upon", obj ? obj.name : "floor");
+			this.upon = obj;
+			this.springs.bob.floored = false;
 			this._.bounder("y", 1, obj && obj.getTop());
 		}
 	},
