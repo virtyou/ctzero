@@ -13,6 +13,8 @@ zero.core.Spring = CT.Class({
 		if (this.hard) {
 			if (this.floored) return;
 			this.target += this.boost;
+			if (this.pull)
+				this.target += this.pull;
 			if (this.acceleration)
 				this.boost += this.acceleration;
 			var ot = this.target;
