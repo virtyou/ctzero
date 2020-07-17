@@ -120,7 +120,7 @@ zero.core.Controls = CT.Class({
 				else if (CT.key.down("s"))
 					direct(-speed);
 			} else
-				direct(amount);
+				direct(amount * target.energy.k);
 			target.body.setBob();
 			moveCb && moveCb();
 		};
@@ -137,17 +137,25 @@ zero.core.Controls = CT.Class({
 				stop ? target.ungesture() : (gesture && target.gesture(gesture));
 		});
 	},
+	runner: function(running) {
+		var m = this.target.mood, o = m.orig_opts.energy || 1,
+			e = running ? 2 * o : o;
+		return function() {
+			m.update({ energy: e });
+		};
+	},
 	setKeys: function() {
 		this.clear();
 		var placer = this.placer, mover = this.mover, sz = this._.speed,
 			speed = sz.base, ospeed = sz.orientation, jspeed = sz.jump,
-			wall, gestures, dances, num = 0;
+			wall, gestures, dances, num = 0, runner = this.runner;
 		if (this.target.gesture) { // person
 			CT.key.on("w", mover(0), mover(speed));
 			CT.key.on("s", mover(0), mover(-speed));
 			CT.key.on("a", mover(0, "orientation"), mover(ospeed, "orientation"));
 			CT.key.on("d", mover(0, "orientation"), mover(-ospeed, "orientation"));
 			CT.key.on("SPACE", mover(0, "y"), mover(jspeed, "y"));
+			CT.key.on("SHIFT", runner(), runner(true));
 			gestures = Object.keys(this.target.opts.gestures);
 			dances = Object.keys(this.target.opts.dances);
 			this.setNum(0, null, null, true);
