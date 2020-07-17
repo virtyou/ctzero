@@ -74,6 +74,7 @@ zero.core.Mood = CT.Class({
 		tickers.shake.conditions.talking.no.reschedule.base = 8 - antsy * 2;
 		tickers.twist.conditions.talking.no.reschedule.base = 10 - antsy * 4;
 		energy.k = Math.max(0.1, 1 + happy + (2 * mad) - sad + antsy);
+		energy.damp = energy.opts.damp / energy.k;
 		prosody.rate = _.rates[Math.floor(2 - sad + antsy) % 5];
 		prosody.pitch = _.pitches[Math.floor(energy.k) % 5];
 	},
@@ -86,6 +87,7 @@ zero.core.Mood = CT.Class({
 		return s;
 	},
 	init: function(opts) {
+		this.orig_opts = opts;
 		this.opts = opts = CT.merge(opts, zero.core.Mood.defaults);
 		this.person = opts.person;
 	}
