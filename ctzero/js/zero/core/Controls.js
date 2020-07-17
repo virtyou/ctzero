@@ -2,7 +2,7 @@ zero.core.Controls = CT.Class({
 	CLASSNAME: "zero.core.Controls",
 	_: { // configurize
 		speed: {
-			base: 2.5,
+			base: 3,
 			orientation: 0.1,
 			jump: 10
 		},
