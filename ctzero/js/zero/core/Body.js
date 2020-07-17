@@ -2,6 +2,9 @@ zero.core.Body = CT.Class({
 	CLASSNAME: "zero.core.Body",
 	_xyz: ["weave", "bob", "slide"],
 	_yoff: true,
+	positioner2axis: function(pname) {
+		return ["x", "y", "z"][this._xyz.indexOf(pname)];
+	},
 	assembled: function() {
 		this.log("built body!");
 		this.head.body = this;
@@ -96,9 +99,15 @@ zero.core.Body = CT.Class({
 		}
 	},
 	setBob: function() {
-		var obj = zero.core.current.room.getObject(this.group.position);
-		if (obj != this._upon) {
-			this._upon = obj;
+		var r = zero.core.current.room,
+			obj = r.getSurface(this.group.position, this.radii);
+		if (obj != this.upon) {
+			this.log("upon", obj ? obj.name : "bottom");
+			this.upon = obj;
+			this.springs.bob.floored = false;
+			this.setFriction((obj || r).grippy);
+			for (var ps of ["weave", "bob", "slide"])
+				this.springs[ps].pull = obj && obj.pull && obj.pull[ps];
 			this._.bounder("y", 1, obj && obj.getTop());
 		}
 	},

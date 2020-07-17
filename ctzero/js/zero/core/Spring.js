@@ -7,15 +7,19 @@ zero.core.Spring = CT.Class({
 			if (this.bounds.min)
 				this.target = Math.max(this.target, this.bounds.min);
 		}
+		var zccr = zero.core.current.room;
+		this.ebound && zccr && zccr.ebound(this, this.parent);
 	},
 	tick: function(dts) {
 		if (this.hard) {
 			if (this.floored) return;
 			this.target += this.boost;
+			if (this.pull)
+				this.target += this.pull;
 			if (this.acceleration)
 				this.boost += this.acceleration;
 			var ot = this.target;
-			this.bound();
+			this.boost && this.bound();
 			if (this.acceleration && this.target != ot) { // floor...
 				if (this.target == this.bounds.min && this.acceleration < 0 ||
 					this.target == this.bounds.max && this.acceleration > 0) {
@@ -57,6 +61,7 @@ zero.core.Spring = CT.Class({
 			target: 0,
 			velocity: 0,
 			hard: false,
+			ebound: false,
 			breaks: false,
 			floory: false,
 			floored: false,
@@ -69,6 +74,7 @@ zero.core.Spring = CT.Class({
 		this.boost = opts.boost;
 		this.value = opts.value;
 		this.parent = opts.parent;
+		this.ebound = opts.ebound;
 		this.breaks = opts.breaks;
 		this.bounds = opts.bounds;
 		this.target =  opts.target;

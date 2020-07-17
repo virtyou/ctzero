@@ -20,7 +20,8 @@ zero.core.Pool = CT.Class({
 		return this.bounds.min.y;
 	},
 	init: function(opts) {
-		this.opts = opts = CT.merge(this.opts, opts, {
+		this.opts = opts = CT.merge(opts, {
+			grippy: false,
 			factor: 75,
 			amplitude: 2,
 			watermat: true,
@@ -28,8 +29,11 @@ zero.core.Pool = CT.Class({
 			cam: [1, 1000000, 512],
 			camPos: {
 //				z: -66
-			}
-		});
+			},
+			pull: { bob: 20 }
+		}, this.opts);
+		this.pull = opts.pull;
+		this.grippy = opts.grippy;
 		if (opts.plane && !opts.geometry) {
 			var p = opts.plane;
 			opts.geometry = new THREE.PlaneGeometry(p[0], p[1], p[2], p[3]);

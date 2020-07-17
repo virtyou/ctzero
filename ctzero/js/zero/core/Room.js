@@ -56,25 +56,52 @@ zero.core.Room = CT.Class({
 			bod.setFriction(person == zero.core.current.person, true);
 		}, 2000);
 	},
-	getObject: function(pos) {
-		var i, obj;
+	getObject: function(pos, radii, checkY) {
+		var i, o, obj, obst;
+		for (o in this.obstacle) {
+			obst = this.obstacle[o];
+			if (obst.overlaps(pos, radii, checkY))
+				return obst;
+		}
 		for (i = 0; i < this.objects.length; i++) {
 			obj = this.objects[i];
-			if (obj.opts.kind == "furnishing" && obj.overlaps(pos))
+			if (obj.opts.kind == "furnishing" && obj.overlaps(pos, radii, checkY))
 				return obj;
 		}
+	},
+	getSurface: function(pos, radii) {
+		var i, flo, obj = this.getObject(pos, radii);
+		if (obj) return obj;
+		if (!this.opts.floor) return;
+		for (i = this.opts.floor.parts.length - 1; i > -1; i--) {
+			flo = this["floor" + i];
+			if (pos.y > flo.bounds.min.y && flo.overlaps(pos, radii))
+				return flo;
+		}
+	},
+	ebound: function(spr, bod) {
+		if (!bod.group) return;
+		var bp = bod.group.position, p = {
+			x: bp.x, y: bp.y, z: bp.z
+		};
+		p[bod.positioner2axis(spr.name)] = spr.target;
+		if (bod.radii && this.getObject(p, bod.radii, true))
+			spr.target = spr.value;
 	},
 	setBounds: function() {
 		this.bounds = this.bounds || new THREE.Box3();
 		this.bounds.setFromObject(this.getPlacer());
-		if (this.floor)
-			this.bounds.min.y = this.floor.position().y;
+//		if (this.floor0)
+//			this.bounds.min.y = this.floor0.position().y;
 		Object.values(zero.core.current.people).forEach(function(person) {
 			person.body.group && person.body.setBounds();
 		});
-		this.objects.forEach(function(furn) {
-			furn.setBounds();
-		});
+		this.objects.forEach(furn => furn.setBounds());
+		for (var kind of ["obstacle", "floor"]) {
+			if (this[kind])
+				for (var item in this[kind])
+					this[kind][item].setBounds();
+		}
 	},
 	setFriction: function(grippy) {
 		this.grippy = this.opts.grippy = grippy;
@@ -180,10 +207,9 @@ zero.core.Room = CT.Class({
 	},
 	clearBox: function() {
 		var opts = this.opts, detach = this.detach;
-		if (opts.floor)
-			detach("floor");
-		opts.wall && opts.wall.sides.forEach(function(side, i) {
-			detach("wall" + i);
+		opts.shell && detach("shell");
+		["obstacle", "floor", "wall"].forEach(function(cat) {
+			opts[cat] && opts[cat].parts.forEach(part => detach(part.name));
 		});
 	},
 	clearObjects: function() {
@@ -204,21 +230,29 @@ zero.core.Room = CT.Class({
 		opts.objects.forEach(this.addObject);
 	},
 	preassemble: function() {
-		var opts = this.opts;
-		if (opts.floor)
-			opts.parts.push(CT.merge({ name: "floor" }, opts.floor));
-		if (opts.wall) {
-			var wall = opts.wall, dz = wall.dimensions;
-			wall.sides.forEach(function(side, i) {
-				opts.parts.push(CT.merge(side, {
-					name: "wall" + i,
-					kind: "wall",
-					texture: wall.texture,
-					material: wall.material,
-					geometry: new THREE.CubeGeometry(dz[0], dz[1], dz[2], dz[3], dz[4]) // ugh
-				}));
-			});
-		}
+		var opts = this.opts, d2g = function(dz) {
+			return new THREE.CubeGeometry(dz[0], dz[1], dz[2], dz[3], dz[4]); // ugh
+		}, os = opts.shell;
+		os && opts.parts.push(CT.merge({
+			name: "shell",
+			kind: "shell",
+			geometry: d2g(os.dimensions)
+		}, os));
+		["obstacle", "floor", "wall"].forEach(function(cat) {
+			var base = opts[cat];
+			if (base && base.parts && base.parts.length) {
+				var dz = base.dimensions;
+				base.parts.forEach(function(side, i) {
+					opts.parts.push(CT.merge(side, {
+						name: cat + i,
+						kind: cat,
+						texture: base.texture,
+						material: base.material,
+						geometry: dz && d2g(dz)
+					}));
+				});
+			}
+		});
 	},
 	components: function() {
 		var o, cz = [{
@@ -236,8 +270,7 @@ zero.core.Room = CT.Class({
 		}, eopts, this.opts, {
 			lights: [],  // Lights
 			objects: [], // regular Things
-			cameras: [],
-			grippy: true
+			cameras: []
 		});
 		this.lights = [];
 		this.objects = [];
