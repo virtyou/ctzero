@@ -7,7 +7,8 @@ zero.core.Spring = CT.Class({
 			if (this.bounds.min)
 				this.target = Math.max(this.target, this.bounds.min);
 		}
-		this.ebound && zero.core.current.room.ebound(this, this.parent);
+		var zccr = zero.core.current.room;
+		this.ebound && zccr && zccr.ebound(this, this.parent);
 	},
 	tick: function(dts) {
 		if (this.hard) {
