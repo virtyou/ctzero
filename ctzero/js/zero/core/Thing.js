@@ -499,10 +499,12 @@ zero.core.Thing = CT.Class({
 			iterator: null,
 			onbuild: null, // also supports: "onassemble", "onremove" ....
 			scroll: null,
+			grippy: true,
 			frustumCulled: true
 		});
 		this.variety = this.CLASSNAME.split(".")[2];
 		var vl = this.vlower = this.variety.toLowerCase(); // should these be automated by CT.Class?
+		this.grippy = opts.grippy;
 		this.setName(opts);
 		if ("bone" in opts)
 			opts.anchor = opts.bones[opts.bone];
