@@ -132,13 +132,14 @@ zero.core.Thing = CT.Class({
 				sz.y.bounds.max = sz.y.bounds.min;
 		}
 	},
-	overlaps: function(pos, checkY) {
+	overlaps: function(pos, radii, checkY) {
 		var bz = this.bounds;
 		if (!bz) return false;
-		var xz = pos.x > bz.min.x && pos.x < bz.max.x
-			&& pos.z > bz.min.z && pos.z < bz.max.z;
-		if (!checkY || !xz) return xz;
-		return pos.y > bz.min.y && pos.y < bz.max.y;
+		var check = function(dim) {
+			return (pos[dim] + radii[dim]) > bz.min[dim]
+				&& (pos[dim] - radii[dim]) < bz.max[dim];
+		};
+		return check("x") && check("z") && (!checkY || check("y"));
 	},
 	getTop: function() {
 		return this.bounds.max.y;
