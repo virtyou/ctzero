@@ -56,13 +56,27 @@ zero.core.Room = CT.Class({
 			bod.setFriction(person == zero.core.current.person, true);
 		}, 2000);
 	},
-	getObject: function(pos) {
-		var i, obj;
+	getObject: function(pos, checkY) {
+		var i, o, obj, obst;
+		for (o in this.obstacle) {
+			obst = this.obstacle[o];
+			if (obst.overlaps(pos, checkY))
+				return obst;
+		}
 		for (i = 0; i < this.objects.length; i++) {
 			obj = this.objects[i];
-			if (obj.opts.kind == "furnishing" && obj.overlaps(pos))
+			if (obj.opts.kind == "furnishing" && obj.overlaps(pos, checkY))
 				return obj;
 		}
+	},
+	ebound: function(spr, bod) {
+		if (!bod.group) return;
+		var bp = bod.group.position, p = {
+			x: bp.x, y: bp.y, z: bp.z
+		};
+		p[bod.positioner2axis(spr.name)] = spr.target;
+		if (this.getObject(p, true))
+			spr.target = spr.value;
 	},
 	setBounds: function() {
 		this.bounds = this.bounds || new THREE.Box3();
@@ -72,9 +86,10 @@ zero.core.Room = CT.Class({
 		Object.values(zero.core.current.people).forEach(function(person) {
 			person.body.group && person.body.setBounds();
 		});
-		this.objects.forEach(function(furn) {
-			furn.setBounds();
-		});
+		this.objects.forEach(furn => furn.setBounds());
+		if (this.obstacle)
+			for (var obst in this.obstacle)
+				this.obstacle[obst].setBounds();
 	},
 	setFriction: function(grippy) {
 		this.grippy = this.opts.grippy = grippy;
