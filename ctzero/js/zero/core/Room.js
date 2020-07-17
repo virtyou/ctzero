@@ -70,11 +70,12 @@ zero.core.Room = CT.Class({
 		}
 	},
 	getSurface: function(pos, radii) {
-		var f, flo, obj = this.getObject(pos, radii);
+		var i, flo, obj = this.getObject(pos, radii);
 		if (obj) return obj;
-		for (f in this.floor) {
-			flo = this.floor[f];
-			if (flo.overlaps(pos, radii))
+		if (!this.opts.floor) return;
+		for (i = this.opts.floor.parts.length - 1; i > -1; i--) {
+			flo = this["floor" + i];
+			if (pos.y > flo.bounds.min.y && flo.overlaps(pos, radii))
 				return flo;
 		}
 	},
@@ -84,14 +85,14 @@ zero.core.Room = CT.Class({
 			x: bp.x, y: bp.y, z: bp.z
 		};
 		p[bod.positioner2axis(spr.name)] = spr.target;
-		if (this.getObject(p, bod.radii, true))
+		if (bod.radii && this.getObject(p, bod.radii, true))
 			spr.target = spr.value;
 	},
 	setBounds: function() {
 		this.bounds = this.bounds || new THREE.Box3();
 		this.bounds.setFromObject(this.getPlacer());
-		if (this.floor0)
-			this.bounds.min.y = this.floor0.position().y;
+//		if (this.floor0)
+//			this.bounds.min.y = this.floor0.position().y;
 		Object.values(zero.core.current.people).forEach(function(person) {
 			person.body.group && person.body.setBounds();
 		});
