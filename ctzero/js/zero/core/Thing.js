@@ -178,20 +178,27 @@ zero.core.Thing = CT.Class({
 		if (this.opts.video && this.material.map)
 			this.material.map.vnode.remove();
 	},
-	setSlide: function(slide) {
+	setPull: function(pull, axis) {
 		if (this.opts.kind == "floor") { // ... meh
 			var zccp = zero.core.current.people;
-			this.slide = slide;
-			for (var p in zccp)
-				if (zccp[p].body.upon == this)
-					zccp[p].body.springs.slide.pull = slide;
+			this.pull = { slide: 0, weave: 0 };
+			if (axis == "y")
+				this.pull.slide = -pull;
+			else if (axis == "x")
+				this.pull.weave = pull;
+			for (var p in zccp) {
+				var b = zccp[p].body;
+				if (b.upon == this)
+					for (var s in this.pull)
+						b.springs[s].pull = this.pull[s];
+			}
 		}
 	},
 	unscroll: function() {
 		if (this._.scroller) {
 			zero.core.util.untick(this._.scroller);
 			delete this._.scroller;
-			this.setSlide(0);
+			this.setPull(0);
 		}
 	},
 	scroll: function(_opts) {
@@ -208,7 +215,7 @@ zero.core.Thing = CT.Class({
 				map.repeat[r.axis || "y"] = (r.degree || 2) * (1 + Math.sin((r.speed || opts.speed) * t));
 			}
 		};
-		this.setSlide(-opts.speed * 100);
+		this.setPull(opts.speed * 100, opts.axis);
 		zero.core.util.ontick(this._.scroller);
 	},
 	look: function(pos) {
