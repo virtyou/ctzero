@@ -11,11 +11,13 @@ zero.base.springs.body = function() {
         },
         weave: {
             k: 10,
-            damp: 5
+            damp: 5,
+            ebound: true
         },
         slide: {
             k: 10,
-            damp: 5
+            damp: 5,
+            ebound: true
         },
 
         orientation: {
