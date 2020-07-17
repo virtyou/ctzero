@@ -106,7 +106,8 @@ zero.core.Body = CT.Class({
 			this.upon = obj;
 			this.springs.bob.floored = false;
 			this.setFriction((obj || r).grippy);
-			this.springs.slide.pull = obj && obj.slide;
+			for (var dps of ["slide", "weave"])
+				this.springs[dps].pull = obj && obj.pull && obj.pull[dps];
 			this._.bounder("y", 1, obj && obj.getTop());
 		}
 	},
