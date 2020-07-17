@@ -44,6 +44,7 @@ zero.core.Mood = CT.Class({
 		//tickers.nod.conditions.talking.no.k.base = 2 + 20*energy;
 		//tickers.shake.conditions.talking.no.k.base = 2 + 20*energy,
 		energyMaster.k = 0.1 + 2*energy;
+		energyMaster.damp = energyMaster.opts.damp / energy;
 		prosody.rate = _.rates[Math.floor(4*rate) % 5];
 		prosody.pitch = _.pitches[Math.floor(4*pitch) % 5];
 
@@ -74,7 +75,6 @@ zero.core.Mood = CT.Class({
 		tickers.shake.conditions.talking.no.reschedule.base = 8 - antsy * 2;
 		tickers.twist.conditions.talking.no.reschedule.base = 10 - antsy * 4;
 		energy.k = Math.max(0.1, 1 + happy + (2 * mad) - sad + antsy);
-		energy.damp = energy.opts.damp / energy.k;
 		prosody.rate = _.rates[Math.floor(2 - sad + antsy) % 5];
 		prosody.pitch = _.pitches[Math.floor(energy.k) % 5];
 	},
