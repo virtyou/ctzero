@@ -4,9 +4,9 @@ zero.base.springs.body = function() {
         bob: {
             k: 10,
             damp: 5,
-            hard: !core.config.ctzero.room.gravity,
+            hard: true,
             floory: true,
-            floored: true,
+            floored: !core.config.ctzero.room.gravity,
             acceleration: -0.5
         },
         weave: {
