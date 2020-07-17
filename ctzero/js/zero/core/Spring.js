@@ -16,7 +16,7 @@ zero.core.Spring = CT.Class({
 			if (this.acceleration)
 				this.boost += this.acceleration;
 			var ot = this.target;
-			this.bound();
+			this.boost && this.bound();
 			if (this.acceleration && this.target != ot) { // floor...
 				if (this.target == this.bounds.min && this.acceleration < 0 ||
 					this.target == this.bounds.max && this.acceleration > 0) {
