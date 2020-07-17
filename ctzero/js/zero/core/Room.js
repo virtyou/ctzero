@@ -56,16 +56,16 @@ zero.core.Room = CT.Class({
 			bod.setFriction(person == zero.core.current.person, true);
 		}, 2000);
 	},
-	getObject: function(pos, checkY) {
+	getObject: function(pos, radii, checkY) {
 		var i, o, obj, obst;
 		for (o in this.obstacle) {
 			obst = this.obstacle[o];
-			if (obst.overlaps(pos, checkY))
+			if (obst.overlaps(pos, radii, checkY))
 				return obst;
 		}
 		for (i = 0; i < this.objects.length; i++) {
 			obj = this.objects[i];
-			if (obj.opts.kind == "furnishing" && obj.overlaps(pos, checkY))
+			if (obj.opts.kind == "furnishing" && obj.overlaps(pos, radii, checkY))
 				return obj;
 		}
 	},
@@ -75,7 +75,7 @@ zero.core.Room = CT.Class({
 			x: bp.x, y: bp.y, z: bp.z
 		};
 		p[bod.positioner2axis(spr.name)] = spr.target;
-		if (this.getObject(p, true))
+		if (this.getObject(p, bod.radii, true))
 			spr.target = spr.value;
 	},
 	setBounds: function() {
