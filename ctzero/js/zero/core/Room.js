@@ -67,8 +67,8 @@ zero.core.Room = CT.Class({
 	setBounds: function() {
 		this.bounds = this.bounds || new THREE.Box3();
 		this.bounds.setFromObject(this.getPlacer());
-		if (this.floor)
-			this.bounds.min.y = this.floor.position().y;
+		if (this.floor0)
+			this.bounds.min.y = this.floor0.position().y;
 		Object.values(zero.core.current.people).forEach(function(person) {
 			person.body.group && person.body.setBounds();
 		});
@@ -180,10 +180,9 @@ zero.core.Room = CT.Class({
 	},
 	clearBox: function() {
 		var opts = this.opts, detach = this.detach;
-		if (opts.floor)
-			detach("floor");
-		opts.wall && opts.wall.sides.forEach(function(side, i) {
-			detach("wall" + i);
+		opts.shell && detach("shell");
+		["obstacle", "floor", "wall"].forEach(function(cat) {
+			opts[cat] && opts[cat].parts.forEach(part => detach(part.name));
 		});
 	},
 	clearObjects: function() {
@@ -204,21 +203,29 @@ zero.core.Room = CT.Class({
 		opts.objects.forEach(this.addObject);
 	},
 	preassemble: function() {
-		var opts = this.opts;
-		if (opts.floor)
-			opts.parts.push(CT.merge({ name: "floor" }, opts.floor));
-		if (opts.wall) {
-			var wall = opts.wall, dz = wall.dimensions;
-			wall.sides.forEach(function(side, i) {
-				opts.parts.push(CT.merge(side, {
-					name: "wall" + i,
-					kind: "wall",
-					texture: wall.texture,
-					material: wall.material,
-					geometry: new THREE.CubeGeometry(dz[0], dz[1], dz[2], dz[3], dz[4]) // ugh
-				}));
-			});
-		}
+		var opts = this.opts, d2g = function(dz) {
+			return new THREE.CubeGeometry(dz[0], dz[1], dz[2], dz[3], dz[4]); // ugh
+		}, os = opts.shell;
+		os && opts.parts.push(CT.merge({
+			name: "shell",
+			kind: "shell",
+			geometry: d2g(os.dimensions)
+		}, os));
+		["obstacle", "floor", "wall"].forEach(function(cat) {
+			var base = opts[cat];
+			if (base && base.parts && base.parts.length) {
+				var dz = base.dimensions;
+				base.parts.forEach(function(side, i) {
+					opts.parts.push(CT.merge(side, {
+						name: cat + i,
+						kind: cat,
+						texture: base.texture,
+						material: base.material,
+						geometry: dz && d2g(dz)
+					}));
+				});
+			}
+		});
 	},
 	components: function() {
 		var o, cz = [{
