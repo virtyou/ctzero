@@ -69,6 +69,15 @@ zero.core.Room = CT.Class({
 				return obj;
 		}
 	},
+	getSurface: function(pos, radii) {
+		var f, flo, obj = this.getObject(pos, radii);
+		if (obj) return obj;
+		for (f in this.floor) {
+			flo = this.floor[f];
+			if (flo.overlaps(pos, radii))
+				return flo;
+		}
+	},
 	ebound: function(spr, bod) {
 		if (!bod.group) return;
 		var bp = bod.group.position, p = {
@@ -87,9 +96,11 @@ zero.core.Room = CT.Class({
 			person.body.group && person.body.setBounds();
 		});
 		this.objects.forEach(furn => furn.setBounds());
-		if (this.obstacle)
-			for (var obst in this.obstacle)
-				this.obstacle[obst].setBounds();
+		for (var kind of ["obstacle", "floor"]) {
+			if (this[kind])
+				for (var item in this[kind])
+					this[kind][item].setBounds();
+		}
 	},
 	setFriction: function(grippy) {
 		this.grippy = this.opts.grippy = grippy;
