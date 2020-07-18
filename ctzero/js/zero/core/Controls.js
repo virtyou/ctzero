@@ -138,10 +138,12 @@ zero.core.Controls = CT.Class({
 		});
 	},
 	runner: function(running) {
-		var m = this.target.mood, o = m.orig_opts.energy || 1,
-			e = running ? 2 * o : o;
+		var t = this.target, m = t.mood, en = t.energy,
+			oe = m.orig_opts.energy || 1, od = en.opts.damp,
+			e = running ? 2 * oe : oe, d = running ? 0.6 * od : od;
 		return function() {
 			m.update({ energy: e });
+			en.damp = d;
 		};
 	},
 	setKeys: function() {
