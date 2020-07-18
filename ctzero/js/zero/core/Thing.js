@@ -302,7 +302,7 @@ zero.core.Thing = CT.Class({
 			this.placer[property][dimension] = value;
 	},
 	update: function(opts) {
-		var o, setter, full, adjust = this.adjust;
+		var o, setter, full, adjust = this.adjust, zcu = zero.core.util;
 		["stripset", "geometry", "matcat", "meshcat",
 			"material", "repeat", "offset", "video"].forEach(function(item) {
 				full = full || (item in opts);
@@ -312,12 +312,12 @@ zero.core.Thing = CT.Class({
 		if (full)
 			return this.build();
 		if ("texture" in opts) {
-			this.material.map = opts.texture && THREE.ImageUtils.loadTexture(opts.texture);
+			this.material.map = opts.texture && zcu.texture(opts.texture);
 			this.material.needsUpdate = true;
 		}
 		["position", "rotation", "scale"].forEach(function(prop) {
 			if (prop in opts) {
-				zero.core.util.coords(opts[prop], function(dim, val) {
+				zcu.coords(opts[prop], function(dim, val) {
 					adjust(prop, dim, val);
 				});
 			}
@@ -428,7 +428,7 @@ zero.core.Thing = CT.Class({
 		}
 	},
 	build: function() {
-		var oz = this.opts;
+		var oz = this.opts, zcu = zero.core.util;
 		if (oz.cubeGeometry) {
 			oz.boxGeometry = oz.cubeGeometry;
 			this.log("DEPRECATED: cubeGeometry - use boxGeometry!");
@@ -447,8 +447,8 @@ zero.core.Thing = CT.Class({
 				: ("Mesh" + oz.matcat)) + "Material",
 				map, meshopts = oz.material;
 			if (oz.texture || oz.video) {
-				map = oz.texture ? THREE.ImageUtils.loadTexture(oz.texture)
-					: zero.core.util.videoTexture(oz.video.item || oz.video);
+				map = oz.texture ? zcu.texture(oz.texture)
+					: zcu.videoTexture(oz.video.item || oz.video);
 				if (oz.repeat) {
 					map.wrapS = map.wrapT = THREE.RepeatWrapping;
 					map.repeat.set.apply(map.repeat, oz.repeat);
