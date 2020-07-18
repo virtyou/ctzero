@@ -69,6 +69,11 @@ zero.core.util = {
 		var blob = new Blob(byteArrays, {type: contentType});
 		return blob;
 	},
+	texture: function(path) {
+		if (core.config.ctzero.media.proxy && path.startsWith("http"))
+			path = "/_memcache?action=prox&url=" + path;
+		return THREE.ImageUtils.loadTexture(path);
+	},
 	components: function(part, parent) {
 		var pref, ipref, oz, compz = [];
 		for (pref of ["", "texture_", "stripset_"]) {
