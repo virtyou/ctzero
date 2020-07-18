@@ -73,6 +73,9 @@
 	"morphs": {
 		"delta_cutoff": 0.1
 	},
+	"media": {
+		"proxy": true
+	},
 	"brain": {
 		"noChat": false,
 		"chain": {
