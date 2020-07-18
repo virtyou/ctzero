@@ -43,8 +43,8 @@ zero.core.Mood = CT.Class({
 		btickers.tilt.conditions.talking.no.k.base = 2 + 20*energy; // 40+50*energy;
 		//tickers.nod.conditions.talking.no.k.base = 2 + 20*energy;
 		//tickers.shake.conditions.talking.no.k.base = 2 + 20*energy,
-		energyMaster.k = 0.1 + 2*energy;
-		energyMaster.damp = energyMaster.opts.damp / energy;
+		energyMaster.k = 0.1 + 2 * energy;
+//		energyMaster.damp = 0.1 + energyMaster.opts.damp / energy;
 		prosody.rate = _.rates[Math.floor(4*rate) % 5];
 		prosody.pitch = _.pitches[Math.floor(4*pitch) % 5];
 
