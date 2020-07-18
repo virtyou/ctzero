@@ -122,7 +122,7 @@ zero.core.Controls = CT.Class({
 			} else
 				direct(amount * target.energy.k);
 			target.body.setBob();
-			moveCb && moveCb();
+			moveCb && moveCb(target.name);
 		};
 	},
 	clear: function() {
