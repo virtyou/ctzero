@@ -99,22 +99,16 @@ zero.core.Body = CT.Class({
 		}
 	},
 	setBob: function() {
-		var r = zero.core.current.room,
-			obj = r.getSurface(this.group.position, this.radii);
+		var r = zero.core.current.room;
+		if (!r.isReady()) return;
+		var obj = r.getSurface(this.group.position, this.radii);
 		if (obj != this.upon) {
 			this.log("upon", obj ? obj.name : "bottom");
 			this.upon = obj;
 			this.springs.bob.floored = false;
 			this.setFriction((obj || r).grippy);
-			var moving;
-			for (var ps of ["weave", "bob", "slide"]) {
-				var pv = obj && obj.pull && obj.pull[ps];
-				this.springs[ps].pull = pv;
-				moving = moving || pv;
-			}
-			clearInterval(this.bobCheck);
-			if (moving)
-				this.bobCheck = setInterval(this.setBob, 1000);
+			for (var ps of ["weave", "bob", "slide"])
+				this.springs[ps].pull = obj && obj.pull && obj.pull[ps];
 			this._.bounder("y", 1, obj && obj.getTop());
 		}
 	},
@@ -128,9 +122,14 @@ zero.core.Body = CT.Class({
 		this.group.scale.x = this.growers.width.value;
 		this.group.scale.y = this.growers.height.value;
 		this.group.scale.z = this.growers.depth.value;
-		this.group.position.y = this.positioners.bob.value;
-		this.group.position.x = this.positioners.weave.value;
-		this.group.position.z = this.positioners.slide.value;
+		var gp = this.group.position, pz = this.positioners;
+		gp.y = pz.bob.value;
+		this.moving = gp.x != pz.weave.value || gp.z != pz.slide.value;
+		if (this.moving) {
+			gp.x = pz.weave.value;
+			gp.z = pz.slide.value;
+			this.setBob();
+		}
 	},
 	tick: function() {
 		this.head.tick();
