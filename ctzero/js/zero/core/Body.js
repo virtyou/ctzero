@@ -100,7 +100,7 @@ zero.core.Body = CT.Class({
 	},
 	setBob: function() {
 		var r = zero.core.current.room;
-		if (!r.isReady()) return;
+		if (!(r && r.isReady())) return;
 		var obj = r.getSurface(this.group.position, this.radii);
 		if (obj != this.upon) {
 			this.log("upon", obj ? obj.name : "bottom");
