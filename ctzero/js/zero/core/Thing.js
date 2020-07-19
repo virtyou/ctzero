@@ -75,8 +75,8 @@ zero.core.Thing = CT.Class({
 			if (this._.shouldMin(pname, dim))
 				sz[pname].target = pz[pname].min;
 		},
-		shouldMin: function(pname, dim) {
-			return dim == "y" && ["poster", "screen"].indexOf(this.opts.kind) == -1;
+		shouldMin: function(pname, dim) { // fix multifloor-zone portals!
+			return dim == "y" && ["poster", "screen", "body"].indexOf(this.opts.kind) == -1;
 		}
 	},
 	_xyz: ["x", "y", "z"],
