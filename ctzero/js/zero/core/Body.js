@@ -106,8 +106,15 @@ zero.core.Body = CT.Class({
 			this.upon = obj;
 			this.springs.bob.floored = false;
 			this.setFriction((obj || r).grippy);
-			for (var ps of ["weave", "bob", "slide"])
-				this.springs[ps].pull = obj && obj.pull && obj.pull[ps];
+			var moving;
+			for (var ps of ["weave", "bob", "slide"]) {
+				var pv = obj && obj.pull && obj.pull[ps];
+				this.springs[ps].pull = pv;
+				moving = moving || pv;
+			}
+			clearInterval(this.bobCheck);
+			if (moving)
+				this.bobCheck = setInterval(this.setBob, 1000);
 			this._.bounder("y", 1, obj && obj.getTop());
 		}
 	},
