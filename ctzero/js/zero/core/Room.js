@@ -241,11 +241,13 @@ zero.core.Room = CT.Class({
 		["obstacle", "floor", "wall"].forEach(function(cat) {
 			var base = opts[cat];
 			if (base && base.parts && base.parts.length) {
-				var dz = base.dimensions;
+				var dz = base.dimensions,
+					thing = cat == "floor" && "Floor" || "Thing";
 				base.parts.forEach(function(side, i) {
 					opts.parts.push(CT.merge(side, {
 						name: cat + i,
 						kind: cat,
+						thing: thing,
 						texture: base.texture,
 						material: base.material,
 						geometry: dz && d2g(dz)
