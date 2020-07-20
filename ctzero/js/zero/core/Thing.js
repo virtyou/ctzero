@@ -15,15 +15,15 @@ zero.core.Thing = CT.Class({
 			this.opts.scroll && this.scroll();
 		},
 		setd: function(dim, springs, positioners, pos) {
-			var spropts = {};
+			var spropts = {}, // body positioner!
+				val = pos[(dim in pos) ? dim : this.positioner2axis(dim)];
 			if (!springs[dim]) {
 				springs[dim] = zero.core.springController.add({
 					k: 10,
-					damp: 5,
-					value: pos[dim],
-					target: pos[dim]
+					damp: 5
 				}, dim, this);
 			}
+			springs[dim].target = springs[dim].value = val;
 			spropts[dim] = 1;
 			positioners[dim] = zero.core.aspectController.add({
 				unbounded: true,
