@@ -200,7 +200,10 @@ zero.core.Thing = CT.Class({
 				map.repeat[r.axis || "y"] = (r.degree || 2) * (1 + Math.sin((r.speed || opts.speed) * t));
 			}
 		};
-		this.setPull(opts.speed * 100, opts.axis);
+		this.setPull(opts.speed * 100, {
+			x: "weave",
+			y: "slide"
+		}[opts.axis]);
 		zero.core.util.ontick(this._.scroller);
 	},
 	look: function(pos) {

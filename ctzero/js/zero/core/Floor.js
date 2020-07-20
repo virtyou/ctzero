@@ -3,10 +3,7 @@ zero.core.Floor = CT.Class({
 	setPull: function(pull, axis) {
 		var zccp = zero.core.current.people;
 		this.pull.slide = this.pull.weave = 0;
-		if (axis == "y")
-			this.pull.slide = -pull;
-		else if (axis == "x")
-			this.pull.weave = pull;
+		this.pull[axis] = (axis == "slide") ? -pull : pull;
 		for (var p in zccp) {
 			var b = zccp[p].body;
 			if (b.upon == this)
