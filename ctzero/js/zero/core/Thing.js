@@ -227,7 +227,7 @@ zero.core.Thing = CT.Class({
 				x: "weave",
 				z: "slide"
 			}[opts.axis]);
-		}, pos, bz;
+		}, pos, bz, p, b, zcc = zero.core.current;
 		this.unshift();
 		this._.shifter = function(dts) {
 //			var t = zero.core.util.elapsed, // TODO: change to zone age!!
@@ -236,8 +236,17 @@ zero.core.Thing = CT.Class({
 			thaz.adjust("position", opts.axis, opts.speed, true);
 			thaz.bounds.min[opts.axis] += opts.speed;
 			thaz.bounds.max[opts.axis] += opts.speed;
+			if (opts.axis == "y") {
+				for (p in zcc.people) {
+					b = zcc.people[p].body;
+					if (b.upon == thaz && b.springs.bob.floored) {
+						b.springs.bob.value += opts.speed;
+						b.springs.bob.target += opts.speed;
+					}
+				}
+			}
 			pos = thaz.placer.position[opts.axis];
-			bz = zero.core.current.room.bounds;
+			bz = zcc.room.bounds;
 			if (pos > bz.max[opts.axis] || pos < bz.min[opts.axis]) {
 				if (opts.mode == "bounce") {
 					opts.speed *= -1;
