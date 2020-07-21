@@ -201,7 +201,10 @@ zero.core.Thing = CT.Class({
 				map.repeat[r.axis || "y"] = (r.degree || 2) * (1 + Math.sin((r.speed || opts.speed) * t));
 			}
 		};
-		this.setPull(opts.speed * 100, {
+		var pull = opts.speed * 100;
+		if (opts.axis == "y")
+			pull *= -1;
+		this.setPull(pull, {
 			x: "weave",
 			y: "slide"
 		}[opts.axis]);
@@ -220,7 +223,7 @@ zero.core.Thing = CT.Class({
 			speed: 5,
 			mode: "bounce" // recycle|bounce
 		}), thaz = this, setp = function() {
-			thaz.setPull(-opts.speed, {
+			thaz.setPull(opts.speed, {
 				x: "weave",
 				z: "slide"
 			}[opts.axis]);
@@ -229,6 +232,7 @@ zero.core.Thing = CT.Class({
 		this._.shifter = function(dts) {
 //			var t = zero.core.util.elapsed, // TODO: change to zone age!!
 //				v = opts.speed * t; // mod!!!
+			if (!thaz.bounds) return;
 			thaz.adjust("position", opts.axis, opts.speed, true);
 			thaz.bounds.min[opts.axis] += opts.speed;
 			thaz.bounds.max[opts.axis] += opts.speed;
