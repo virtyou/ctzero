@@ -13,6 +13,7 @@ zero.core.Thing = CT.Class({
 				thiz.opts.onclick(thiz);
 			});
 			this.opts.scroll && this.scroll();
+			this.opts.shift && this.shift();
 		},
 		setd: function(dim, springs, positioners, pos) {
 			var spropts = {}, // body positioner!
@@ -206,6 +207,47 @@ zero.core.Thing = CT.Class({
 		}[opts.axis]);
 		zero.core.util.ontick(this._.scroller);
 	},
+	unshift: function() {
+		if (this._.shifter) {
+			zero.core.util.untick(this._.shifter);
+			delete this._.shifter;
+			this.setPull(0);
+		}
+	},
+	shift: function(_opts) {
+		var opts = this.opts.shift = CT.merge(_opts, this.opts.shift, {
+			axis: "z",
+			speed: 5,
+			mode: "bounce" // recycle|bounce
+		}), thaz = this, setp = function() {
+			thaz.setPull(-opts.speed, {
+				x: "weave",
+				z: "slide"
+			}[opts.axis]);
+		}, pos, bz;
+		this.unshift();
+		this._.shifter = function(dts) {
+//			var t = zero.core.util.elapsed, // TODO: change to zone age!!
+//				v = opts.speed * t; // mod!!!
+			thaz.adjust("position", opts.axis, opts.speed, true);
+			thaz.bounds.min[opts.axis] += opts.speed;
+			thaz.bounds.max[opts.axis] += opts.speed;
+			pos = thaz.placer.position[opts.axis];
+			bz = zero.core.current.room.bounds;
+			if (pos > bz.max[opts.axis] || pos < bz.min[opts.axis]) {
+				if (opts.mode == "bounce") {
+					opts.speed *= -1;
+					setp();
+				} else { // recycle -- hacky!
+					thaz.placer.position[opts.axis] *= -1;
+					thaz.bounds.min[opts.axis] = -thaz.bounds.max[opts.axis];
+					thaz.bounds.max[opts.axis] = -thaz.bounds.min[opts.axis];
+				}
+			}
+		};
+		setp();
+		zero.core.util.ontick(this._.shifter);
+	},
 	look: function(pos) {
 //		this.group.lookAt(this.group.worldToLocal(pos)); // ????
 		this.group.lookAt(zero.core.util.vector(this.position(null, true), pos));
@@ -337,6 +379,7 @@ zero.core.Thing = CT.Class({
 		var oz = this.opts;
 		(oz.anchor || oz.scene).remove(this.group);
 		this.unscroll();
+		this.unshift();
 		this.unvideo();
 		if (oz.key)
 			delete zero.core.Thing._things[oz.key];
@@ -506,6 +549,7 @@ zero.core.Thing = CT.Class({
 			iterator: null,
 			onbuild: null, // also supports: "onassemble", "onremove" ....
 			scroll: null,
+			shift: null,
 			grippy: true,
 			frustumCulled: true
 		});
