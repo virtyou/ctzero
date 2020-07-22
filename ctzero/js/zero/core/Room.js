@@ -75,7 +75,7 @@ zero.core.Room = CT.Class({
 		if (!this.opts.floor) return;
 		for (i = this.opts.floor.parts.length - 1; i > -1; i--) {
 			flo = this["floor" + i];
-			if (pos.y > flo.bounds.min.y && flo.overlaps(pos, radii))
+			if (pos.y > flo.getTop() && flo.overlaps(pos, radii))
 				return flo;
 		}
 	},
