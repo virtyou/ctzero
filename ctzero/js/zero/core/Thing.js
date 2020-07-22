@@ -254,13 +254,17 @@ zero.core.Thing = CT.Class({
 					thaz.placer.position[opts.axis] *= -1;
 					thaz.bounds.min[opts.axis] = -thaz.bounds.max[opts.axis];
 					thaz.bounds.max[opts.axis] = -thaz.bounds.min[opts.axis];
-					(opts.axis == "y") && setTimeout(function() {
+					if (opts.axis == "y") {
 						for (p in zcc.people) {
 							b = zcc.people[p].body;
-							if (b.upon == thaz && b.springs.bob.floored)
-								b.springs.bob.floored = false;
+							if (b.springs.bob.floored) {
+								if (b.upon == thaz)
+									b.springs.bob.floored = false;
+								else if (thaz.overlaps(b.position(), b.radii))
+									b.setBob();
+							}
 						}
-					}, 100); // tick ....
+					}
 				}
 			}
 		};
