@@ -6,8 +6,8 @@ zero.base.springs.body = function() {
             damp: 5,
             hard: true,
             floory: true,
-            floored: !core.config.ctzero.room.gravity,
-            acceleration: -0.5
+            acceleration: -1000,
+            floored: !core.config.ctzero.room.gravity
         },
         weave: {
             k: 10,
