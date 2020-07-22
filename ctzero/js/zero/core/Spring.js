@@ -13,11 +13,11 @@ zero.core.Spring = CT.Class({
 	tick: function(dts) {
 		if (this.hard) {
 			if (this.floored) return;
-			this.target += this.boost;
+			this.target += this.boost * dts;
 			if (this.pull)
-				this.target += this.pull;
+				this.target += this.pull * dts;
 			if (this.acceleration)
-				this.boost += this.acceleration;
+				this.boost += this.acceleration * dts;
 			var ot = this.target;
 			(this.boost || this.pull) && this.bound();
 			if (this.acceleration && this.target != ot) { // floor...
@@ -39,7 +39,7 @@ zero.core.Spring = CT.Class({
 			var moodMaster_damp = 1,
 				moodMaster_k = 1;
 		}
-		this.target += this.boost;
+		this.target += this.boost * dts;
 		this.bound();
 		this.value += this.velocity * dts;
 		this.velocity += (this.acceleration || (this.k * moodMaster_k * (this.target
