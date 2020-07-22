@@ -61,7 +61,7 @@ zero.core.Thing = CT.Class({
 				radii[dim] = (bounds.max[dim] - bounds.min[dim]) / 2;
 			});
 		},
-		bounder: function(dim, i, min) {
+		bounder: function(dim, i, min, upspring) {
 			var bz = zero.core.current.room.bounds, bax = this.bindAxis,
 				pz = this.positioners, rz = this.radii,
 				sz = this.springs, pname = this._xyz[i];
@@ -73,6 +73,8 @@ zero.core.Thing = CT.Class({
 				pz[pname].min += offer;
 			}
 			this._.nosnap ? setTimeout(bax, 2000, pname) : bax(pname);
+			if (upspring)
+				sz[pname].target = Math.max(sz[pname].target, pz[pname].min);
 			if (this._.shouldMin(pname, dim))
 				sz[pname].target = pz[pname].min;
 		},
@@ -217,6 +219,10 @@ zero.core.Thing = CT.Class({
 			this.setPull(0);
 		}
 	},
+	shifting: function(dim) {
+		var s = this.opts.shift;
+		return s && s.axis == dim;
+	},
 	shift: function(_opts) {
 		var opts = this.opts.shift = CT.merge(_opts, this.opts.shift, {
 			axis: "z",
@@ -225,7 +231,8 @@ zero.core.Thing = CT.Class({
 		}), thaz = this, setp = function() {
 			thaz.setPull(opts.speed, {
 				x: "weave",
-				z: "slide"
+				z: "slide",
+				y: "bob"
 			}[opts.axis]);
 		}, pos, bz, p, b, zcc = zero.core.current;
 		this.unshift();
@@ -236,15 +243,6 @@ zero.core.Thing = CT.Class({
 			thaz.adjust("position", opts.axis, opts.speed, true);
 			thaz.bounds.min[opts.axis] += opts.speed;
 			thaz.bounds.max[opts.axis] += opts.speed;
-			if (opts.axis == "y") {
-				for (p in zcc.people) {
-					b = zcc.people[p].body;
-					if (b.upon == thaz && b.springs.bob.floored) {
-						b.springs.bob.value += opts.speed;
-						b.springs.bob.target += opts.speed;
-					}
-				}
-			}
 			pos = thaz.placer.position[opts.axis];
 			bz = zcc.room.bounds;
 			if (pos > bz.max[opts.axis] || pos < bz.min[opts.axis]) {
@@ -255,6 +253,13 @@ zero.core.Thing = CT.Class({
 					thaz.placer.position[opts.axis] *= -1;
 					thaz.bounds.min[opts.axis] = -thaz.bounds.max[opts.axis];
 					thaz.bounds.max[opts.axis] = -thaz.bounds.min[opts.axis];
+					(opts.axis == "y") && setTimeout(function() {
+						for (p in zcc.people) {
+							b = zcc.people[p].body;
+							if (b.upon == thaz && b.springs.bob.floored)
+								b.springs.bob.floored = false;
+						}
+					}, 100); // tick ....
 				}
 			}
 		};
