@@ -71,7 +71,7 @@ zero.core.Room = CT.Class({
 	},
 	getSurface: function(pos, radii) {
 		var i, flo, obj = this.getObject(pos, radii);
-		if (obj) return obj;
+		if (obj && obj.getTop() < pos.y) return obj;
 		if (!this.opts.floor) return;
 		for (i = this.opts.floor.parts.length - 1; i > -1; i--) {
 			flo = this["floor" + i];
