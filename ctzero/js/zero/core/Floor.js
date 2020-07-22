@@ -12,6 +12,9 @@ zero.core.Floor = CT.Class({
 					b.springs[s].pull = this.pull[s];
 		}
 	},
+	getTop: function() {
+		return this.group.position.y;
+	},
 	init: function(opts) {
 		this.opts = opts = CT.merge(opts, {
 			repeat: [1, 1],
