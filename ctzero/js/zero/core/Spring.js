@@ -25,8 +25,7 @@ zero.core.Spring = CT.Class({
 					this.target == this.bounds.max && this.acceleration > 0) {
 					if (this.floory)
 						this.floored = true;
-					else
-						this.boost = 0;
+					this.boost = 0;
 				}
 			}
 			this.value = this.target; // for target trackers (including multi stuff)
