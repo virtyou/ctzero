@@ -74,7 +74,7 @@ zero.core.Thing = CT.Class({
 			}
 			this._.nosnap ? setTimeout(bax, 2000, pname) : bax(pname);
 			if (upspring)
-				sz[pname].target = Math.max(sz[pname].target, pz[pname].min);
+				sz[pname].target = sz[pname].value = Math.max(sz[pname].target, pz[pname].min);
 			if (this._.shouldMin(pname, dim))
 				sz[pname].target = pz[pname].min;
 		},
@@ -203,7 +203,7 @@ zero.core.Thing = CT.Class({
 				map.repeat[r.axis || "y"] = (r.degree || 2) * (1 + Math.sin((r.speed || opts.speed) * t));
 			}
 		};
-		var pull = opts.speed * 100;
+		var pull = opts.speed * 4500;
 		if (opts.axis == "y")
 			pull *= -1;
 		this.setPull(pull, {
@@ -226,13 +226,13 @@ zero.core.Thing = CT.Class({
 	shift: function(_opts) {
 		var opts = this.opts.shift = CT.merge(_opts, this.opts.shift, {
 			axis: "z",
-			speed: 5,
+			speed: 150,
 			mode: "bounce" // recycle|bounce
 		}), thaz = this, setp = function() {
 			thaz.setPull(opts.speed, {
 				x: "weave",
 				z: "slide",
-				y: "bob"
+//				y: "bob"
 			}[opts.axis]);
 		}, pos, bz, p, b, zcc = zero.core.current;
 		this.unshift();
@@ -240,9 +240,10 @@ zero.core.Thing = CT.Class({
 //			var t = zero.core.util.elapsed, // TODO: change to zone age!!
 //				v = opts.speed * t; // mod!!!
 			if (!thaz.bounds) return;
-			thaz.adjust("position", opts.axis, opts.speed, true);
-			thaz.bounds.min[opts.axis] += opts.speed;
-			thaz.bounds.max[opts.axis] += opts.speed;
+			var s = opts.speed * dts;
+			thaz.adjust("position", opts.axis, s, true);
+			thaz.bounds.min[opts.axis] += s;
+			thaz.bounds.max[opts.axis] += s;
 			pos = thaz.placer.position[opts.axis];
 			bz = zcc.room.bounds;
 			if (pos > bz.max[opts.axis] || pos < bz.min[opts.axis]) {
