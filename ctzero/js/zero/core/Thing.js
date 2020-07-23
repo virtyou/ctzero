@@ -246,6 +246,7 @@ zero.core.Thing = CT.Class({
 			thaz.bounds.max[opts.axis] += s;
 			pos = thaz.placer.position[opts.axis];
 			bz = zcc.room.bounds;
+			if (!bz) return;
 			if (pos > bz.max[opts.axis] || pos < bz.min[opts.axis]) {
 				if (opts.mode == "bounce") {
 					opts.speed *= -1;
