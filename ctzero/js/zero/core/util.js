@@ -1,9 +1,9 @@
-var lastTime, dmax = dts = 0.032;//0.016;
-
 zero.core.current = {};
 zero.core.util = {
 	ticker: 0,
 	elapsed: 0,
+	dts: 0.032,
+	dmax: 0.032,
 	_tickers: [],
 	coords: function(xyz, cb) {
 	    ["x", "y", "z"].forEach(function(dim, i) {
@@ -183,21 +183,20 @@ zero.core.util = {
 			zero.core.util.frameCount(typeof cfg.framecount == "string" && cfg.framecount);
 	},
 	animate: function(now) {
-	    if (lastTime)
-	        dts = zero.core.util.dts = Math.min(dmax, (now - lastTime) / 1000);
-	    lastTime = now;
-	    zero.core.util.ticker += 1;
-	    zero.core.util.elapsed += dts;
-
+	    var zcu = zero.core.util, dts;
+	    if (zcu.now)
+	        zcu.dts = Math.min(zcu.dmax, (now - zcu.now) / 1000);
+	    dts = zcu.dts;
+	    zcu.now = now;
+	    zcu.ticker += 1;
+	    zcu.elapsed += dts;
 	    zero.core.springController.tick(dts);
 	    zero.core.aspectController.tick();
 	    if (zero.core.current.room)
 	    	zero.core.current.room.tick(dts);
 	    for (var p in zero.core.current.people)
 	    	zero.core.current.people[p].tick();
-
-	    zero.core.util._tickers.forEach(function(t) { t(dts); });
-
+	    zcu._tickers.forEach(function(t) { t(dts); });
 	    zero.core.camera.tick();
 	    zero.core.camera.render(); 
 	    requestAnimationFrame(zero.core.util.animate);
