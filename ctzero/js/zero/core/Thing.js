@@ -242,8 +242,10 @@ zero.core.Thing = CT.Class({
 			if (!thaz.bounds) return;
 			var s = opts.speed * dts;
 			thaz.adjust("position", opts.axis, s, true);
-			thaz.bounds.min[opts.axis] += s;
-			thaz.bounds.max[opts.axis] += s;
+			if (opts.axis != "y") { // fix y elevator vert bounds ....
+				thaz.bounds.min[opts.axis] += s;
+				thaz.bounds.max[opts.axis] += s;
+			}
 			pos = thaz.placer.position[opts.axis];
 			bz = zcc.room.bounds;
 			if (!bz) return;
@@ -253,8 +255,6 @@ zero.core.Thing = CT.Class({
 					setp();
 				} else { // recycle -- hacky!
 					thaz.placer.position[opts.axis] *= -1;
-					thaz.bounds.min[opts.axis] = -thaz.bounds.max[opts.axis];
-					thaz.bounds.max[opts.axis] = -thaz.bounds.min[opts.axis];
 					if (opts.axis == "y") {
 						for (p in zcc.people) {
 							b = zcc.people[p].body;
@@ -265,6 +265,9 @@ zero.core.Thing = CT.Class({
 									b.setBob();
 							}
 						}
+					} else { // fix y elevator vert bounds ....
+						thaz.bounds.min[opts.axis] = -thaz.bounds.max[opts.axis];
+						thaz.bounds.max[opts.axis] = -thaz.bounds.min[opts.axis];
 					}
 				}
 			}
