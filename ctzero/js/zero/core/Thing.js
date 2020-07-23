@@ -270,6 +270,13 @@ zero.core.Thing = CT.Class({
 						thaz.bounds.max[opts.axis] = -thaz.bounds.min[opts.axis];
 					}
 				}
+				CT.event.emit("environment", {
+					name: thaz.name,
+					speed: opts.speed,
+					position: thaz.placer.position[opts.axis],
+					min: thaz.bounds.min[opts.axis],
+					max: thaz.bounds.max[opts.axis]
+				});
 			}
 		};
 		setp();
