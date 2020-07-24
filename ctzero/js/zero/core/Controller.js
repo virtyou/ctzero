@@ -3,11 +3,11 @@ zero.core.Controller = CT.Class({
 	_: {
 		collection: {}
 	},
-	tick: function(dts) {
+	tick: function(dts, rdts) {
 		var c = this._.collection;
 		for (var n in c) {
 			for (var i = 0; i < c[n].length; i++)
-				c[n][i].tick(dts);
+				c[n][i].tick(dts, rdts);
 		}
 	},
 	update: function(name, opts, index) {

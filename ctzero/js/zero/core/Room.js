@@ -4,9 +4,9 @@ zero.core.Room = CT.Class({
 		lights: 0,
 		objects: 0
 	},
-	tick: function(dts) {
+	tick: function(dts, rdts) {
 		this.objects.forEach(function(obj) {
-			obj.tick && obj.tick(dts);
+			obj.tick && obj.tick(dts, rdts);
 		});
 	},
 	eject: function(person, port) {
@@ -71,11 +71,11 @@ zero.core.Room = CT.Class({
 	},
 	getSurface: function(pos, radii) {
 		var i, flo, obj = this.getObject(pos, radii);
-		if (obj) return obj;
+		if (obj && obj.getTop() < pos.y) return obj;
 		if (!this.opts.floor) return;
 		for (i = this.opts.floor.parts.length - 1; i > -1; i--) {
 			flo = this["floor" + i];
-			if (pos.y > flo.bounds.min.y && flo.overlaps(pos, radii))
+			if (pos.y > flo.getTop() && flo.overlaps(pos, radii))
 				return flo;
 		}
 	},
@@ -241,11 +241,13 @@ zero.core.Room = CT.Class({
 		["obstacle", "floor", "wall"].forEach(function(cat) {
 			var base = opts[cat];
 			if (base && base.parts && base.parts.length) {
-				var dz = base.dimensions;
+				var dz = base.dimensions,
+					thing = cat == "floor" && "Floor" || "Thing";
 				base.parts.forEach(function(side, i) {
 					opts.parts.push(CT.merge(side, {
 						name: cat + i,
 						kind: cat,
+						thing: thing,
 						texture: base.texture,
 						material: base.material,
 						geometry: dz && d2g(dz)

@@ -10,14 +10,16 @@ zero.core.Spring = CT.Class({
 		var zccr = zero.core.current.room;
 		this.ebound && zccr && zccr.ebound(this, this.parent);
 	},
-	tick: function(dts) {
+	tick: function(dts, rdts) {
+		if (this.rdts)
+			dts = rdts;
 		if (this.hard) {
 			if (this.floored) return;
-			this.target += this.boost;
+			this.target += this.boost * dts;
 			if (this.pull)
-				this.target += this.pull;
+				this.target += this.pull * dts;
 			if (this.acceleration)
-				this.boost += this.acceleration;
+				this.boost += this.acceleration * dts;
 			var ot = this.target;
 			(this.boost || this.pull) && this.bound();
 			if (this.acceleration && this.target != ot) { // floor...
@@ -25,8 +27,7 @@ zero.core.Spring = CT.Class({
 					this.target == this.bounds.max && this.acceleration > 0) {
 					if (this.floory)
 						this.floored = true;
-					else
-						this.boost = 0;
+					this.boost = 0;
 				}
 			}
 			this.value = this.target; // for target trackers (including multi stuff)
@@ -40,7 +41,7 @@ zero.core.Spring = CT.Class({
 			var moodMaster_damp = 1,
 				moodMaster_k = 1;
 		}
-		this.target += this.boost;
+		this.target += this.boost * dts;
 		this.bound();
 		this.value += this.velocity * dts;
 		this.velocity += (this.acceleration || (this.k * moodMaster_k * (this.target
@@ -60,6 +61,7 @@ zero.core.Spring = CT.Class({
 			value: 0,
 			target: 0,
 			velocity: 0,
+			rdts: false,
 			hard: false,
 			ebound: false,
 			breaks: false,
@@ -68,6 +70,7 @@ zero.core.Spring = CT.Class({
 			acceleration: 0
 		});
 		this.k = opts.k;
+		this.rdts = opts.rdts;
 		this.hard = opts.hard;
 		this.name = opts.name;
 		this.damp = opts.damp;

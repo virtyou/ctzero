@@ -110,7 +110,8 @@ zero.core.Body = CT.Class({
 			for (var ps of ["weave", "bob", "slide"])
 				this.springs[ps].pull = obj && obj.pull && obj.pull[ps];
 			this._.bounder("y", 1, obj && obj.getTop());
-		}
+		} else if (obj && obj.shifting("y"))
+			this._.bounder("y", 1, obj.getTop(), true);
 	},
 	energy: function() {
 		return this.person && this.person.energy;
@@ -125,7 +126,7 @@ zero.core.Body = CT.Class({
 		var gp = this.group.position, pz = this.positioners;
 		gp.y = pz.bob.value;
 		this.moving = gp.x != pz.weave.value || gp.z != pz.slide.value;
-		if (this.moving) {
+		if (this.moving || (this.upon && this.upon.shifting("y"))) {
 			gp.x = pz.weave.value;
 			gp.z = pz.slide.value;
 			this.setBob();

@@ -13,6 +13,7 @@ zero.core.Thing = CT.Class({
 				thiz.opts.onclick(thiz);
 			});
 			this.opts.scroll && this.scroll();
+			this.opts.shift && this.shift();
 		},
 		setd: function(dim, springs, positioners, pos) {
 			var spropts = {}, // body positioner!
@@ -60,7 +61,7 @@ zero.core.Thing = CT.Class({
 				radii[dim] = (bounds.max[dim] - bounds.min[dim]) / 2;
 			});
 		},
-		bounder: function(dim, i, min) {
+		bounder: function(dim, i, min, upspring) {
 			var bz = zero.core.current.room.bounds, bax = this.bindAxis,
 				pz = this.positioners, rz = this.radii,
 				sz = this.springs, pname = this._xyz[i];
@@ -72,6 +73,8 @@ zero.core.Thing = CT.Class({
 				pz[pname].min += offer;
 			}
 			this._.nosnap ? setTimeout(bax, 2000, pname) : bax(pname);
+			if (upspring)
+				sz[pname].target = sz[pname].value = Math.max(sz[pname].target, pz[pname].min);
 			if (this._.shouldMin(pname, dim))
 				sz[pname].target = pz[pname].min;
 		},
@@ -178,22 +181,7 @@ zero.core.Thing = CT.Class({
 		if (this.opts.video && this.material.map)
 			this.material.map.vnode.remove();
 	},
-	setPull: function(pull, axis) {
-		if (this.opts.kind == "floor") { // ... meh
-			var zccp = zero.core.current.people;
-			this.pull.slide = this.pull.weave = 0;
-			if (axis == "y")
-				this.pull.slide = -pull;
-			else if (axis == "x")
-				this.pull.weave = pull;
-			for (var p in zccp) {
-				var b = zccp[p].body;
-				if (b.upon == this)
-					for (var s in this.pull)
-						b.springs[s].pull = this.pull[s];
-			}
-		}
-	},
+	setPull: function(pull, axis) {},
 	unscroll: function() {
 		if (this._.scroller) {
 			zero.core.util.untick(this._.scroller);
@@ -205,18 +193,92 @@ zero.core.Thing = CT.Class({
 		var opts = this.opts.scroll = CT.merge(_opts, this.opts.scroll, {
 			axis: "y",
 			speed: 0.05
-		}), map = this.material.map;
+		}), map = this.material.map, multi = core.config.ctzero.multi;
 		this.unscroll();
-		this._.scroller = function(dts) {
-			var t = zero.core.util.elapsed;
+		this._.scroller = function(dts, rdts) {
+			var t = zero.core.util[multi ? "relapsed" : "elapsed"];
 			map.offset[opts.axis] = opts.speed * t;
 			if (opts.repeat) {
 				var r = opts.repeat;
 				map.repeat[r.axis || "y"] = (r.degree || 2) * (1 + Math.sin((r.speed || opts.speed) * t));
 			}
 		};
-		this.setPull(opts.speed * 100, opts.axis);
+		var pull = opts.speed * 4500;
+		if (opts.axis == "y")
+			pull *= -1;
+		this.setPull(pull, {
+			x: "weave",
+			y: "slide"
+		}[opts.axis]);
 		zero.core.util.ontick(this._.scroller);
+	},
+	unshift: function() {
+		if (this._.shifter) {
+			zero.core.util.untick(this._.shifter);
+			delete this._.shifter;
+			this.setPull(0);
+		}
+	},
+	shifting: function(dim) {
+		var s = this.opts.shift;
+		return s && s.axis == dim;
+	},
+	shift: function(_opts) {
+		var opts = this.opts.shift = CT.merge(_opts, this.opts.shift, {
+			axis: "z",
+			speed: 150,
+			mode: "bounce" // recycle|bounce
+		}), thaz = this, setp = function() {
+			thaz.setPull(opts.speed, {
+				x: "weave",
+				z: "slide",
+//				y: "bob"
+			}[opts.axis]);
+		}, pos, bz, p, b, zcc = zero.core.current, multi = core.config.ctzero.multi;
+		this.unshift();
+		this._.shifter = function(dts, rdts) {
+			if (!thaz.bounds) return;
+			var s = opts.speed * (multi ? rdts : dts);
+			thaz.adjust("position", opts.axis, s, true);
+			if (opts.axis != "y") { // fix y elevator vert bounds ....
+				thaz.bounds.min[opts.axis] += s;
+				thaz.bounds.max[opts.axis] += s;
+			}
+			pos = thaz.placer.position[opts.axis];
+			bz = zcc.room.bounds;
+			if (!bz) return;
+			if (pos > bz.max[opts.axis] || pos < bz.min[opts.axis]) {
+				if (opts.mode == "bounce") {
+					opts.speed *= -1;
+					setp();
+				} else { // recycle -- hacky!
+					thaz.placer.position[opts.axis] *= -1;
+					if (opts.axis == "y") {
+						for (p in zcc.people) {
+							b = zcc.people[p].body;
+							if (b.springs.bob.floored) {
+								if (b.upon == thaz)
+									b.springs.bob.floored = false;
+								else if (thaz.overlaps(b.position(), b.radii))
+									b.setBob();
+							}
+						}
+					} else { // fix y elevator vert bounds ....
+						thaz.bounds.min[opts.axis] = -thaz.bounds.max[opts.axis];
+						thaz.bounds.max[opts.axis] = -thaz.bounds.min[opts.axis];
+					}
+				}
+				CT.event.emit("environment", {
+					name: thaz.name,
+					speed: opts.speed,
+					position: thaz.placer.position[opts.axis],
+					min: thaz.bounds.min[opts.axis],
+					max: thaz.bounds.max[opts.axis]
+				});
+			}
+		};
+		setp();
+		zero.core.util.ontick(this._.shifter);
 	},
 	look: function(pos) {
 //		this.group.lookAt(this.group.worldToLocal(pos)); // ????
@@ -349,6 +411,7 @@ zero.core.Thing = CT.Class({
 		var oz = this.opts;
 		(oz.anchor || oz.scene).remove(this.group);
 		this.unscroll();
+		this.unshift();
 		this.unvideo();
 		if (oz.key)
 			delete zero.core.Thing._things[oz.key];
@@ -518,6 +581,7 @@ zero.core.Thing = CT.Class({
 			iterator: null,
 			onbuild: null, // also supports: "onassemble", "onremove" ....
 			scroll: null,
+			shift: null,
 			grippy: true,
 			frustumCulled: true
 		});

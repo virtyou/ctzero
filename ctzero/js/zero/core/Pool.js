@@ -30,7 +30,7 @@ zero.core.Pool = CT.Class({
 			camPos: {
 //				z: -66
 			},
-			pull: { bob: 20 }
+			pull: { bob: 600 }
 		}, this.opts);
 		this.pull = opts.pull;
 		this.grippy = opts.grippy;
