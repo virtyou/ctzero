@@ -189,8 +189,8 @@ zero.core.Person = CT.Class({
 			vec = getd();
 			bso.k = 20;
 			bso.hard = bsohard;
-			bod.springs.weave.boost = 2 * vec.x;
-			bod.springs.slide.boost = 2 * vec.z;
+			bod.springs.weave.boost = 100 * vec.x;
+			bod.springs.slide.boost = 100 * vec.z;
 			var chkr = setInterval(function() {
 				if (zero.core.util.touching(bod, subject, 40)) {
 					bod.springs.weave.boost = 0;
