@@ -4,9 +4,9 @@ zero.core.Room = CT.Class({
 		lights: 0,
 		objects: 0
 	},
-	tick: function(dts) {
+	tick: function(dts, rdts) {
 		this.objects.forEach(function(obj) {
-			obj.tick && obj.tick(dts);
+			obj.tick && obj.tick(dts, rdts);
 		});
 	},
 	eject: function(person, port) {
