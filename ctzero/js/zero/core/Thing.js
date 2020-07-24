@@ -193,10 +193,10 @@ zero.core.Thing = CT.Class({
 		var opts = this.opts.scroll = CT.merge(_opts, this.opts.scroll, {
 			axis: "y",
 			speed: 0.05
-		}), map = this.material.map;
+		}), map = this.material.map, multi = core.config.ctzero.multi;
 		this.unscroll();
-		this._.scroller = function(dts) {
-			var t = zero.core.util.elapsed;
+		this._.scroller = function(dts, rdts) {
+			var t = zero.core.util[multi ? "relapsed" : "elapsed"];
 			map.offset[opts.axis] = opts.speed * t;
 			if (opts.repeat) {
 				var r = opts.repeat;
@@ -234,13 +234,11 @@ zero.core.Thing = CT.Class({
 				z: "slide",
 //				y: "bob"
 			}[opts.axis]);
-		}, pos, bz, p, b, zcc = zero.core.current;
+		}, pos, bz, p, b, zcc = zero.core.current, multi = core.config.ctzero.multi;
 		this.unshift();
-		this._.shifter = function(dts) {
-//			var t = zero.core.util.elapsed, // TODO: change to zone age!!
-//				v = opts.speed * t; // mod!!!
+		this._.shifter = function(dts, rdts) {
 			if (!thaz.bounds) return;
-			var s = opts.speed * dts;
+			var s = opts.speed * (multi ? rdts : dts);
 			thaz.adjust("position", opts.axis, s, true);
 			if (opts.axis != "y") { // fix y elevator vert bounds ....
 				thaz.bounds.min[opts.axis] += s;
