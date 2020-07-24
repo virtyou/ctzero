@@ -1,5 +1,6 @@
 zero.base.springs = {};
 zero.base.springs.body = function() {
+    var cfg = core.config.ctzero;
     return {
         bob: {
             k: 10,
@@ -7,19 +8,19 @@ zero.base.springs.body = function() {
             hard: true,
             floory: true,
             acceleration: -1000,
-            floored: !core.config.ctzero.room.gravity
+            floored: !cfg.room.gravity
         },
         weave: {
             k: 10,
             damp: 5,
-            rdts: true,
-            ebound: true
+            ebound: true,
+            rdts: cfg.multi
         },
         slide: {
             k: 10,
             damp: 5,
-            rdts: true,
-            ebound: true
+            ebound: true,
+            rdts: cfg.multi
         },
 
         orientation: {
