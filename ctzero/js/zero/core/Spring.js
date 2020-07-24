@@ -10,7 +10,9 @@ zero.core.Spring = CT.Class({
 		var zccr = zero.core.current.room;
 		this.ebound && zccr && zccr.ebound(this, this.parent);
 	},
-	tick: function(dts) {
+	tick: function(dts, rdts) {
+		if (this.rdts)
+			dts = rdts;
 		if (this.hard) {
 			if (this.floored) return;
 			this.target += this.boost * dts;
@@ -59,6 +61,7 @@ zero.core.Spring = CT.Class({
 			value: 0,
 			target: 0,
 			velocity: 0,
+			rdts: false,
 			hard: false,
 			ebound: false,
 			breaks: false,
@@ -67,6 +70,7 @@ zero.core.Spring = CT.Class({
 			acceleration: 0
 		});
 		this.k = opts.k;
+		this.rdts = opts.rdts;
 		this.hard = opts.hard;
 		this.name = opts.name;
 		this.damp = opts.damp;
