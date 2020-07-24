@@ -60,6 +60,7 @@
 		},
 		"patterns": {}
 	},
+	"multi": false,
 	"room": {
 		"gravity": true,
 		"name": "vroom",
