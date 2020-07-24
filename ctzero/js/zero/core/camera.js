@@ -118,14 +118,16 @@ var camera = zero.core.camera = {
 				function(dim, val) { camera.springs.position[dim].target = val; });
 	},
 	_tickSubject: function() {
-		var looker = camera.springs.looker;
-		camera.look(camera._.subject.position(null, true));
+		var _ = camera._, looker = camera.springs.looker;
+		if (!_.looker.placer)
+			return CT.log("camera._tickSubject(): aborting - no looker placer");
+		camera.look(_.subject.position(null, true));
 		camera.looker({
 			x: looker.x.value,
 			y: looker.y.value,
 			z: looker.z.value
 		});
-		camera._.camera.lookAt(camera._.looker.position(null, true));
+		_.camera.lookAt(_.looker.position(null, true));
 	},
 	tick: function() {
 		if (camera._.useControls)
