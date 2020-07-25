@@ -73,7 +73,7 @@ zero.core.util = {
 	},
 	texture: function(path) {
 		if (core.config.ctzero.media.proxy && path.startsWith("http"))
-			path = "/_memcache?action=prox&url=" + path;
+			path = "/_memcache?action=prox&p2=true&url=" + path;
 		return THREE.ImageUtils.loadTexture(path);
 	},
 	components: function(part, parent) {
