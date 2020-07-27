@@ -2,12 +2,11 @@ zero.core.Pool = CT.Class({
 	CLASSNAME: "zero.core.Pool",
 	tick: function(dts) {
 		if (!this.thring) return; // for dynamic attachment
-		var timeP = zero.core.util.elapsed * this.opts.factor,
-			amp = this.opts.amplitude, i,
+		var smap = this.smap, t = zero.core.util.ticker, i,
 			geo = this.thring.geometry, vertices = geo.vertices,
 			mainCam = zero.core.camera, campos = mainCam.position();
 		for (i = 0; i < vertices.length; i ++)
-			vertices[i].z = amp * Math.sin(i / 2 + (timeP + i) / 5);
+			vertices[i].z = smap[(t + i) % 60];
 		geo.computeFaceNormals();
 		geo.computeVertexNormals();
 		geo.verticesNeedUpdate = true;
@@ -50,5 +49,6 @@ zero.core.Pool = CT.Class({
 			cubeCam = this.cam = new THREE.CubeCamera(c[0], c[1], c[2]);
 		zero.core.util.update(opts.camPos, cubeCam.position);
 		opts.material.envMap = this.cam.renderTarget;
+		this.smap = zero.core.util.sin.amp(opts.amplitude);
 	}
 }, zero.core.Thing);

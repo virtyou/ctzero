@@ -35,10 +35,11 @@ zero.core.Head = CT.Class({
 				for (var shape in phonemes.forms) {
 					var morphs = phonemes.forms[shape].morphs;
 					if (morphs) {
+						var sval = this.springs[shape].value;
 						for (var m in morphs) {
 							var morph = morphs[m];
 							this[m].morphTargetInfluences(morph.influence,
-								morph.factor * this.springs[shape].value, true, true);
+								morph.factor * sval, true, true);
 						}
 					}
 				}

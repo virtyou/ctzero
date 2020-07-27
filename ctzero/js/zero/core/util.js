@@ -185,7 +185,7 @@ zero.core.util = {
 			zero.core.util.frameCount(typeof cfg.framecount == "string" && cfg.framecount);
 	},
 	animate: function(now) {
-	    var zcu = zero.core.util, dts, rdts;
+	    var zcu = zero.core.util, zcc = zero.core.current, dts, rdts, p, t;
 	    if (zcu.now) {
 	    	zcu.rdts = (now - zcu.now) / 1000;
 	        zcu.dts = Math.min(zcu.dmax, zcu.rdts);
@@ -198,14 +198,15 @@ zero.core.util = {
 	    zcu.relapsed += rdts;
 	    zero.core.springController.tick(dts, rdts);
 	    zero.core.aspectController.tick();
-	    if (zero.core.current.room)
-	    	zero.core.current.room.tick(dts, rdts);
-	    for (var p in zero.core.current.people)
-	    	zero.core.current.people[p].tick();
-	    zcu._tickers.forEach(function(t) { t(dts, rdts); });
+	    if (zcc.room)
+	    	zcc.room.tick(dts, rdts);
+	    for (p in zcc.people)
+	    	zcc.people[p].tick();
+	    for (t of zcu._tickers)
+	    	t(dts, rdts);
 	    zero.core.camera.tick();
 	    zero.core.camera.render(); 
-	    requestAnimationFrame(zero.core.util.animate);
+	    requestAnimationFrame(zcu.animate);
 	},
 	ontick: function(cb) {
 		zero.core.util._tickers.push(cb);
@@ -243,6 +244,26 @@ zero.core.util = {
 		return zcu._counter;
 	}
 };
+
+var zcus = zero.core.util.sin = function(index, amp, talt) { // 60 cached values
+	return zcus.amp(amp)[((index || 0) + (talt || zero.core.util.ticker)) % 60];
+};
+zcus.amp = function(amp) {
+	var zcu = zero.core.util, inc, i;
+	if (!zcus._sin) {
+		inc = Math.PI / 30;
+		zcus._sin = [];
+		for (i = 0; i < 60; i++)
+			zcus._sin.push(Math.sin(inc * i));
+	}
+	if (amp) {
+		if (!zcus._amp[amp])
+			zcus._amp[amp] = zcus._sin.map(v => v * amp);
+		return zcus._amp[amp];
+	}
+	return zcus._sin;
+};
+zcus._amp = {};
 
 zero.core.util.FrameCounter = CT.Class({
 	CLASSNAME: "zero.core.util.FrameCounter",
