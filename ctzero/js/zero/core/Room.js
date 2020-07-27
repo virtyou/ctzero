@@ -5,9 +5,8 @@ zero.core.Room = CT.Class({
 		objects: 0
 	},
 	tick: function(dts, rdts) {
-		this.objects.forEach(function(obj) {
+		for (var obj of this.objects)
 			obj.tick && obj.tick(dts, rdts);
-		});
 	},
 	eject: function(person, port) {
 		var bod = person.body, wall = port && port.opts.wall,
