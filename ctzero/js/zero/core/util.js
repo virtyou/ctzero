@@ -245,26 +245,6 @@ zero.core.util = {
 	}
 };
 
-var zcus = zero.core.util.sin = function(index, amp, talt) { // 60 cached values
-	return zcus.amp(amp)[((index || 0) + (talt || zero.core.util.ticker)) % 60];
-};
-zcus.amp = function(amp) {
-	var zcu = zero.core.util, inc, i;
-	if (!zcus._sin) {
-		inc = Math.PI / 30;
-		zcus._sin = [];
-		for (i = 0; i < 60; i++)
-			zcus._sin.push(Math.sin(inc * i));
-	}
-	if (amp) {
-		if (!zcus._amp[amp])
-			zcus._amp[amp] = zcus._sin.map(v => v * amp);
-		return zcus._amp[amp];
-	}
-	return zcus._sin;
-};
-zcus._amp = {};
-
 zero.core.util.FrameCounter = CT.Class({
 	CLASSNAME: "zero.core.util.FrameCounter",
 	on: function() {
