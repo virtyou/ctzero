@@ -59,7 +59,8 @@ zero.core.Head = CT.Class({
 		this.updaters.mouth();
 		zero.core.morphs.tick(this);
 		var skeleton = this.thring.skeleton;
-		this._.customs.forEach(function(c) { c.tick(skeleton); });
+		for (var c of this._.customs)
+			c.tick(skeleton);
 	},
 	init: function() {
 		var p, zc = zero.core;
