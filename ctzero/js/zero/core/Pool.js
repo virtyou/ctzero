@@ -49,6 +49,6 @@ zero.core.Pool = CT.Class({
 			cubeCam = this.cam = new THREE.CubeCamera(c[0], c[1], c[2]);
 		zero.core.util.update(opts.camPos, cubeCam.position);
 		opts.material.envMap = this.cam.renderTarget;
-		this.smap = zero.core.util.sin.amp(opts.amplitude);
+		this.smap = zero.core.trig.amp(opts.amplitude);
 	}
 }, zero.core.Thing);
