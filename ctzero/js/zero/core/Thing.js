@@ -193,14 +193,15 @@ zero.core.Thing = CT.Class({
 		var opts = this.opts.scroll = CT.merge(_opts, this.opts.scroll, {
 			axis: "y",
 			speed: 0.05
-		}), map = this.material.map, multi = core.config.ctzero.multi;
+		}), map = this.material.map, multi = core.config.ctzero.multi,
+			zsin = zero.core.trig.sin;
 		this.unscroll();
 		this._.scroller = function(dts, rdts) {
 			var t = zero.core.util[multi ? "relapsed" : "elapsed"];
 			map.offset[opts.axis] = opts.speed * t;
 			if (opts.repeat) {
 				var r = opts.repeat;
-				map.repeat[r.axis || "y"] = (r.degree || 2) * (1 + Math.sin((r.speed || opts.speed) * t));
+				map.repeat[r.axis || "y"] = (r.degree || 2) * (1 + zsin((r.speed || opts.speed) * t));
 			}
 		};
 		var pull = opts.speed * 4500;
