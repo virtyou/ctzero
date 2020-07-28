@@ -21,7 +21,7 @@ zero.core.trig = {
 				_.sin[segs].push(Math.sin(inc * i));
 		}
 		if (amp) {
-			if (!_amps[segs])
+			if (!_.amps[segs])
 				_.amps[segs] = {};
 			if (!_.amps[segs][amp])
 				_.amps[segs][amp] = _.sin.map(v => v * amp);
