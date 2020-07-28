@@ -1,8 +1,7 @@
 zero.core.trig = {
 	_: {
 		sin: {},
-		amps: {},
-		ratio: 30 / Math.PI
+		amps: {}
 	},
 	sin: function(angle, amp) { // 628
 		var segs = zero.core.trig.segs(628, amp),

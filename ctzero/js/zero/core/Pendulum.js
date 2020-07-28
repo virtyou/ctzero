@@ -4,17 +4,11 @@ zero.core.Pendulum = CT.Class({
 	other: { x: "z", z: "x" },
 	ticks: {
 		hard: function(dts, pos) {
-			var pendz = this.pends,//, oz = this.opts,
-				//vel = this.localize(zero.core.util.vector(this.pos, pos)),
-				//damp = oz.damp, vd = oz.veldamp,
+			var pendz = this.pends, dim, pend,
 				rot = this.rotation(null, true),
-				zsin = zero.core.trig.sin,
-				dim, pend;//, other = this.other;
+				zsin = zero.core.trig.sin;
 			for (dim of this.dims) {
 				pend = pendz[dim];
-//				pend.boost = (pend.boost + (vel[other[dim]] + vel.y) / vd) * oz.drag;
-
-//				pend.acceleration = dts * Math.sin(rot[dim]) / damp;
 				pend.acceleration = zsin(rot[dim]);
 				this.adjust("rotation", dim, pend.value);
 			};
@@ -24,22 +18,14 @@ zero.core.Pendulum = CT.Class({
 				damp = oz.damp, vd = oz.veldamp,
 				rot = this.rotation(null, true), sa,
 				zsin = zero.core.trig.sin,
-				dim, pend;//, other = this.other;
+				dim, pend;
 			for (dim of this.dims) {
 				pend = pendz[dim];
 				sa = rot[dim];
 				if (dim == "x")
 					sa -= Math.PI;
-	//			vo = vel[other[dim]];
-//				ao = acc[other[dim]];
-//				pend.acceleration = -oz.mass * Math.sin(rd);
-//				pend.acceleration = -oz.mass * Math.sin(sa)
-//					+ 0.000002 * ao * Math.cos(sa) - damp * pend.velocity;
-
 				// TODO: fix -- not quite right yet!!
 				pend.acceleration = -oz.mass * zsin(sa) - damp * pend.velocity;
-//				pend.acceleration = -oz.mass * Math.sin(sa) - damp * pend.velocity;
-
 				this.adjust("rotation", dim, pend.value);
 			};
 		},
