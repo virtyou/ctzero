@@ -20,6 +20,7 @@ zero.core.Pendulum = CT.Class({
 			var pendz = this.pends, oz = this.opts,
 				damp = oz.damp, vd = oz.veldamp,
 				rot = this.rotation(null, true), sa,
+				zsin = zero.core.trig.sin,
 				dim, pend;//, other = this.other;
 			for (dim of this.dims) {
 				pend = pendz[dim];
@@ -33,7 +34,8 @@ zero.core.Pendulum = CT.Class({
 //					+ 0.000002 * ao * Math.cos(sa) - damp * pend.velocity;
 
 				// TODO: fix -- not quite right yet!!
-				pend.acceleration = -oz.mass * Math.sin(sa) - damp * pend.velocity;
+				pend.acceleration = -oz.mass * zsin(sa) - damp * pend.velocity;
+//				pend.acceleration = -oz.mass * Math.sin(sa) - damp * pend.velocity;
 
 				this.adjust("rotation", dim, pend.value);
 			};
