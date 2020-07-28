@@ -4,15 +4,18 @@ zero.core.Pendulum = CT.Class({
 	other: { x: "z", z: "x" },
 	ticks: {
 		hard: function(dts, pos) {
-			var pendz = this.pends, oz = this.opts,
-				vel = this.localize(zero.core.util.vector(this.pos, pos)),
-				damp = oz.damp, vd = oz.veldamp,
+			var pendz = this.pends,//, oz = this.opts,
+				//vel = this.localize(zero.core.util.vector(this.pos, pos)),
+				//damp = oz.damp, vd = oz.veldamp,
 				rot = this.rotation(null, true),
-				dim, pend, other = this.other;
+				zsin = zero.core.trig.sin,
+				dim, pend;//, other = this.other;
 			for (dim of this.dims) {
 				pend = pendz[dim];
-				pend.boost = (pend.boost + (vel[other[dim]] + vel.y) / vd) * oz.drag;
-				pend.acceleration = dts * Math.sin(rot[dim]) / damp;
+//				pend.boost = (pend.boost + (vel[other[dim]] + vel.y) / vd) * oz.drag;
+
+//				pend.acceleration = dts * Math.sin(rot[dim]) / damp;
+				pend.acceleration = zsin(rot[dim]);
 				this.adjust("rotation", dim, pend.value);
 			};
 		},
