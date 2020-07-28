@@ -25,7 +25,7 @@ zero.core.trig = {
 				_.amps[segs] = {};
 			if (!_.amps[segs][amp])
 				_.amps[segs][amp] = _.sin[segs].map(v => v * amp);
-			return _.amps[seg][amp];
+			return _.amps[segs][amp];
 		}
 		return _.sin[segs];
 	}
