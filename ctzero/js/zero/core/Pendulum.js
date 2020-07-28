@@ -17,8 +17,7 @@ zero.core.Pendulum = CT.Class({
 			var pendz = this.pends, oz = this.opts,
 				damp = oz.damp, vd = oz.veldamp,
 				rot = this.rotation(null, true), sa,
-				zsin = zero.core.trig.sin,
-				dim, pend;
+				zsin = zero.core.trig.sin, dim, pend;
 			for (dim of this.dims) {
 				pend = pendz[dim];
 				sa = rot[dim];
