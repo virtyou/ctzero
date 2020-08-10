@@ -153,3 +153,19 @@ zero.base.body.beard = {
         }
     }
 };
+
+zero.base.body.tail = {
+    horse: {
+        strand: {
+            girth: 0.1,
+            taper: [1, 1, 1]
+        }
+    },
+    lizard: {
+        density: 1,
+        strand: {
+            hard: true,
+            girth: 6
+        }
+    }
+};
