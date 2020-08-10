@@ -35,6 +35,7 @@ CT.require("zero.core.Pendulum");
 CT.require("zero.core.Strand");
 CT.require("zero.core.Hair");
 CT.require("zero.core.Beard");
+CT.require("zero.core.Tail");
 
 CT.require("zero.core.Torso");
 CT.require("zero.core.Head");
