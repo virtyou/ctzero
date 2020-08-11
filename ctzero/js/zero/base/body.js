@@ -163,6 +163,7 @@ zero.base.body.tail = {
     },
     lizard: {
         density: 0.1,
+        range: Math.PI / 16,
         strand: {
             girth: 6,
             hard: true,
