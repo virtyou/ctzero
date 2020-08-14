@@ -320,6 +320,8 @@ zero.core.Person = CT.Class({
 			positioners: {},
 			voice: "Joanna"
 		});
+		this.opts.gestures = CT.merge(this.opts.gestures, zero.base.body.gestures);
+		this.opts.dances = CT.merge(this.opts.dances, zero.base.body.dances);
 		this.onresolved = opts.onresolved;
 		if (cfg.brain.responses.unintelligible && !("unintelligible" in opts.responses)) {
 			opts.responses.unintelligible = cfg.brain.responses.unintelligible;
