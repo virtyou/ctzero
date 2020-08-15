@@ -104,15 +104,18 @@ zero.core.Controls = CT.Class({
 				if (dir == "y")
 					target.gesture("jump");
 				else
-					target.dance("walk");
+					target.go();
 			} else if (!CT.key.downs(["w", "s", "a", "d"]).length)
 				target.undance();
 			if (dir == "y") {
-				if (amount && spr.floored) {
-					spr.hard = true;
-					spr.boost = amount;
-					spr.floored = false;
-				}
+				if (amount) {
+					if (spr.floored) {
+						spr.boost = amount;
+						spr.floored = false;
+					} else if (!spr.hard)
+						spr.boost = amount;
+				} else if (!spr.hard)
+					spr.boost = -_.speed.jump;
 			} else if (dir == "orientation") {
 				spr.boost = amount;
 				if (CT.key.down("w"))

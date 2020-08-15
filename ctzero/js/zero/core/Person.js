@@ -167,7 +167,7 @@ zero.core.Person = CT.Class({
 	},
 	approach: function(subject, cb, watch) {
 		var bod = this.body, vec, getd = this.direction,
-			dance = this.dance, undance = this.undance,
+			go = this.go, undance = this.undance,
 			zcc = zero.core.current, ppl = zcc.people,
 			bso = bod.springs.orientation, bsohard = bso.hard;
 		if (typeof subject == "string") {
@@ -185,7 +185,7 @@ zero.core.Person = CT.Class({
 //		this.look(subject, true);
 		this.orient(subject);
 		setTimeout(function() { // adapted from Controls.mover()... revise?
-			dance("walk");
+			go();
 			vec = getd();
 			bso.k = 20;
 			bso.hard = bsohard;
@@ -202,12 +202,16 @@ zero.core.Person = CT.Class({
 			}, 200);
 		}, 500); // time for orientation...
 	},
+	go: function(dur) {
+		this.dance((this.body.upon && this.body.upon.opts.state == "liquid")
+			? "swim" : "walk", dur);
+	},
 	move: function(opts, cb, watch) {
 		var k, dur = 1000; // TODO: ACTUALLY CALC DUR!!!!
 		for (var k in opts)
 			this.body.springs[k].target = opts[k];
 		watch && this.watch(false, true);
-		this.dance("walk", dur);
+		this.go(dur);
 		cb && setTimeout(cb, dur);
 	},
 	snapshot: function() {

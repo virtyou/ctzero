@@ -84,8 +84,11 @@ zero.core.Room = CT.Class({
 			x: bp.x, y: bp.y, z: bp.z
 		};
 		p[bod.positioner2axis(spr.name)] = spr.target;
-		if (bod.radii && this.getObject(p, bod.radii, true))
-			spr.target = spr.value;
+		if (bod.radii) {
+			var obj = this.getObject(p, bod.radii, true);
+			if (obj && obj.opts.state == "solid")
+				spr.target = spr.value;
+		}
 	},
 	setBounds: function() {
 		this.bounds = this.bounds || new THREE.Box3();
