@@ -27,7 +27,10 @@ zero.core.Body = CT.Class({
 	setFriction: function(grippy, vertical) {
 		var s = this.springs;
 		s.slide.hard = s.weave.hard = s.orientation.hard = grippy;
-		if (vertical) s.bob.hard = grippy;
+		if (vertical) {
+			s.bob.hard = grippy;
+			s.bob.acceleration = grippy ? -1000 : 0;
+		}
 	},
 	_lookers: {
 		watcher: [0, 5, 15],
@@ -106,7 +109,8 @@ zero.core.Body = CT.Class({
 			this.log("upon", obj ? obj.name : "bottom");
 			this.upon = obj;
 			this.springs.bob.floored = false;
-			this.setFriction((obj || r).grippy);
+			this.setFriction((obj || r).grippy,
+				!this.springs.bob.hard || (obj && obj.opts.state == "liquid"));
 			for (var ps of ["weave", "bob", "slide"])
 				this.springs[ps].pull = obj && obj.pull && obj.pull[ps];
 			this._.bounder("y", 1, obj && obj.getTop());
