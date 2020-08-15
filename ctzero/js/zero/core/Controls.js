@@ -104,7 +104,7 @@ zero.core.Controls = CT.Class({
 				if (dir == "y")
 					target.gesture("jump");
 				else
-					target.dance("walk");
+					target.go();
 			} else if (!CT.key.downs(["w", "s", "a", "d"]).length)
 				target.undance();
 			if (dir == "y") {
