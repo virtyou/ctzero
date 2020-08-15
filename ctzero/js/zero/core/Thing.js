@@ -579,6 +579,7 @@ zero.core.Thing = CT.Class({
 			aspects: {},
 			tickers: {},
 			morphs: {},
+			state: "solid",
 			iterator: null,
 			onbuild: null, // also supports: "onassemble", "onremove" ....
 			scroll: null,
