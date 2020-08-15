@@ -16,10 +16,12 @@ zero.core.Pool = CT.Class({
 		this.cam.position.x = campos.x;
 	},
 	getTop: function() {
-		return this.bounds.min.y;
+		return zero.core.current.room.bounds.min.y + 1;
+//		return this.bounds.min.y;
 	},
 	init: function(opts) {
 		this.opts = opts = CT.merge(opts, {
+			state: "liquid",
 			grippy: false,
 			factor: 75,
 			amplitude: 2,
