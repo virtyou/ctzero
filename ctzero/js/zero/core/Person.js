@@ -203,8 +203,11 @@ zero.core.Person = CT.Class({
 		}, 500); // time for orientation...
 	},
 	go: function(dur) {
-		this.dance((this.body.upon && this.body.upon.opts.state == "liquid")
-			? "swim" : "walk", dur);
+		var plat = this.body.upon;
+		var dance = "walk";
+		if (plat && plat.opts.state == "liquid")
+			dance = plat.above(this.body.position()) ? "fly" : "swim";
+		this.dance(dance, dur);
 	},
 	move: function(opts, cb, watch) {
 		var k, dur = 1000; // TODO: ACTUALLY CALC DUR!!!!
