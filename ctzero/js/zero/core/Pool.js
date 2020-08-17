@@ -19,6 +19,12 @@ zero.core.Pool = CT.Class({
 		return zero.core.current.room.bounds.min.y + 1;
 //		return this.bounds.min.y;
 	},
+	getSurface: function() {
+		return this.bounds.max.y;
+	},
+	above: function(pos) {
+		return pos.y > this.getSurface();
+	},
 	init: function(opts) {
 		this.opts = opts = CT.merge(opts, {
 			state: "liquid",
