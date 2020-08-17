@@ -4,6 +4,7 @@ zero.core.Controls = CT.Class({
 		speed: {
 			base: 100,
 			jump: 500,
+			descent: -50,
 			orientation: 10
 		},
 		cams: {
@@ -115,7 +116,7 @@ zero.core.Controls = CT.Class({
 					} else if (!spr.hard)
 						spr.boost = amount;
 				} else if (!spr.hard)
-					spr.boost = -_.speed.jump;
+					spr.boost = _.speed.descent;
 			} else if (dir == "orientation") {
 				spr.boost = amount;
 				if (CT.key.down("w"))
