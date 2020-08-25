@@ -310,7 +310,8 @@ zero.core.Person = CT.Class({
 		return [{
 			identifier: "Person: " + this.name,
 			owners: this.opts.owners
-		}].concat(zero.core.util.components(this.body.opts, this.name + "'s body"));
+		}].concat(this.opts.basepacks).concat(zero.core.util.components(this.body.opts,
+			this.name + "'s body"));
 	},
 	init: function(opts) {
 		this.log("init", opts.name);
