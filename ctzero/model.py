@@ -107,7 +107,10 @@ class Person(db.TimeStampedBase):
             "basepack": self.basepack,
             "basepacks": [{
                 "identifier": "%s's basepacks: %s"%(self.name, b.name),
-                "owners": b.owners
+                "key": b.id(),
+                "pack": b.basepack,
+                "label": "%s (by %s)"%(b.name, b.owners[0].get().fullName()),
+                "owners": [o.urlsafe() for o in b.owners]
             } for b in bz]
         }
         for p in pz:
