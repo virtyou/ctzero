@@ -87,6 +87,8 @@ class Part(db.TimeStampedBase):
 
 class Person(db.TimeStampedBase):
     owners = db.ForeignKey(kind=Member, repeated=True)
+    basepacks = db.ForeignKey(kind="person", repeated=True)
+    basepack = db.String(repeated=True)
     body = db.ForeignKey(kind=Part)
     name = db.String()
     voice = db.String()
@@ -98,21 +100,39 @@ class Person(db.TimeStampedBase):
     gestures = db.JSON()
     responses = db.JSON()
 
+    def packed(self):
+        pz = ["mood", "vibe", "mods", "gear", "dances", "gestures", "responses"]
+        bz = db.get_multi(self.basepacks)
+        d = {
+            "basepack": self.basepack,
+            "basepacks": [{
+                "identifier": "%s's basepacks: %s"%(self.name, b.name),
+                "key": b.id(),
+                "pack": b.basepack,
+                "label": "%s (by %s)"%(b.name, b.owners[0].get().fullName()),
+                "owners": [o.urlsafe() for o in b.owners]
+            } for b in bz]
+        }
+        for p in pz:
+            d[p] = {}
+            for b in bz:
+                if p in b.basepack:
+                    for k, v in (getattr(b, p) or {}).items():
+                        d[p][k] = v
+            for k, v in (getattr(self, p) or {}).items():
+                d[p][k] = v
+        return d
+
     def json(self):
-        return {
+        d = {
             "key": self.key.urlsafe(),
             "name": self.name,
             "voice": self.voice,
-            "mood": self.mood or {},
-            "vibe": self.vibe or {},
-            "mods": self.mods or {},
-            "gear": self.gear or {},
-            "dances": self.dances or {},
-            "gestures": self.gestures or {},
-            "responses": self.responses or {},
             "body": self.body.get().json(),
             "owners": [o.urlsafe() for o in self.owners]
         }
+        d.update(self.packed())
+        return d
 
 class Room(db.TimeStampedBase):
     owners = db.ForeignKey(kind=Member, repeated=True)
