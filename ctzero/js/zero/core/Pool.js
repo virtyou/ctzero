@@ -25,12 +25,59 @@ zero.core.Pool = CT.Class({
 	above: function(pos) {
 		return pos.y > this.getSurface();
 	},
+	onbound: function() {
+		var oz = this.opts, s, side, py = this.position().y,
+			rf = this.getTop(), h = py - rf, p = -h / 2;
+		if (oz.sides) {
+			for (s in this.side) {
+				side = this.side[s];
+				side.adjust("scale", "y", h);
+				side.adjust("position", "z", p);
+				side.material.color.r = 0.6; // meh...
+			}
+		}
+	},
+	preassemble: function() {
+		var oz = this.opts, partz = oz.parts,
+			ph = Math.PI / 2, i,
+			xf = oz.plane[0], zf = oz.plane[1],
+			xh = xf / 2, zh = zf / 2, pg = function(x) {
+				return new THREE.PlaneGeometry(x, 1);
+			}, geos = [
+				pg(xf), pg(zf), pg(xf), pg(zf)
+			], pz = [
+				[0, zh, 0],
+				[xh, 0, 0],
+				[0, -zh, 0],
+				[-xh, 0, 0]
+			], rz = [
+				[ph, 0, 0],
+				[ph, ph, 0],
+				[ph, 0, 0],
+				[ph, ph, 0]
+			], matty = CT.merge(oz.material);
+		delete matty.envMap;
+		matty.side = THREE.DoubleSide;
+		if (oz.sides) {
+			for (i = 0; i < 4; i++) {
+				partz.push({
+					name: "side" + i,
+					kind: "side",
+					material: matty,
+					position: pz[i],
+					rotation: rz[i],
+					geometry: geos[i]
+				});
+			}
+		}
+	},
 	init: function(opts) {
 		this.opts = opts = CT.merge(opts, {
 			state: "liquid",
 			grippy: false,
 			factor: 75,
 			amplitude: 2,
+			sides: true,
 			watermat: true,
 			plane: [800, 800, 22, 44],
 			cam: [1, 1000000, 512],

@@ -167,6 +167,7 @@ zero.core.Thing = CT.Class({
 				});
 			};
 		}
+		this.onbound && this.onbound();
 	},
 	playPause: function() {
 		if (this.opts.video && this.material.map) {
