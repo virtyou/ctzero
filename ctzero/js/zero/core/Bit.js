@@ -13,7 +13,8 @@ zero.core.Bit = CT.Class({
 	},
 	init: function(opts) {
 		this.opts = opts = CT.merge(opts, {
-			matcat: "Basic"
+			matcat: "Basic",
+			sphereGeometry: true
 		}, this.opts);
 		var vri, wobz = this.wobblers = {};
 		["x", "y", "z"].forEach(function(d, i) {
