@@ -14,6 +14,7 @@ zero.core.Pool = CT.Class({
 		this.cam.position.y = -campos.y - 80;
 		this.cam.position.z = campos.z;//+22;
 		this.cam.position.x = campos.x;
+		this.bubbles && this.bubbles.tick(dts);
 	},
 	getTop: function() {
 		return zero.core.current.room.bounds.min.y + 1;
@@ -36,6 +37,7 @@ zero.core.Pool = CT.Class({
 				side.material.color.r = 0.6; // meh...
 			}
 		}
+		this.bubbles && this.bubbles.rebound();
 	},
 	preassemble: function() {
 		var oz = this.opts, partz = oz.parts,
@@ -70,6 +72,12 @@ zero.core.Pool = CT.Class({
 				});
 			}
 		}
+		oz.bubbles && partz.push({
+			name: "bubbles",
+			kind: "particles",
+			thing: "Particles",
+			bounder: this
+		});
 	},
 	init: function(opts) {
 		this.opts = opts = CT.merge(opts, {
@@ -78,6 +86,7 @@ zero.core.Pool = CT.Class({
 			factor: 75,
 			amplitude: 2,
 			sides: true,
+			bubbles: true,
 			watermat: true,
 			plane: [800, 800, 22, 44],
 			cam: [1, 1000000, 512],
