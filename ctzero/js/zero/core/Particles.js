@@ -17,8 +17,9 @@ zero.core.Particles = CT.Class({
 		}
 	},
 	preassemble: function() {
-		var i, oz = this.opts, pz = oz.parts;
+		var i, size, oz = this.opts, pz = oz.parts;
 		for (i = 0; i < oz.count; i++) {
+			size = oz.size + oz.sizeVariance * Math.random();
 			pz.push({
 				index: i,
 				thing: "Bit",
@@ -28,7 +29,7 @@ zero.core.Particles = CT.Class({
 				bounder: oz.bounder,
 				velocity: oz.velocity,
 				variance: oz.variance,
-				geometry: new THREE.SphereGeometry(oz.size + oz.sizeVarience * Math.random())
+				scale: [size, size, size]
 			});
 		}
 	},
@@ -36,9 +37,9 @@ zero.core.Particles = CT.Class({
 		this.opts = CT.merge(opts, zero.core.Particles.kinds[opts.kind], {
 			count: 20,
 			size: 0.05,
-			sizeVariance: 0.2,
+			sizeVariance: 0.1,
 			velocity: [0, 0, 0],
-			variance: [5, 5, 5]
+			variance: [1, 1, 1]
 		}, this.opts);
 	}
 }, zero.core.Thing);
@@ -46,6 +47,7 @@ zero.core.Particles = CT.Class({
 zero.core.Particles.kinds = {
 	bubbles: {
 		velocity: [0, 5, 0],
+		variance: [1, 0, 1],
 		pmat: {
 			opacity: 0.25,
 			color: 0x22ccff,
