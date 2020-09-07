@@ -503,6 +503,8 @@ zero.core.Thing = CT.Class({
 			oz.geometry = new THREE.BoxGeometry(g[0],
 				g[1], g[2], g[3], g[4]);
 		}
+		if (oz.sphereGeometry)
+			oz.geometry = new THREE.SphereGeometry();
 		if (oz.planeGeometry) {
 			var g = oz.planeGeometry; // better way?
 			oz.geometry = new THREE.PlaneGeometry(g[0], g[1]);
