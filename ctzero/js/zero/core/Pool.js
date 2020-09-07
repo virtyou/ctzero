@@ -33,6 +33,7 @@ zero.core.Pool = CT.Class({
 				side = this.side[s];
 				side.adjust("scale", "y", h);
 				side.adjust("position", "z", p);
+				side.material.color.r = 0.6; // meh...
 			}
 		}
 	},
