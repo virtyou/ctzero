@@ -5,7 +5,7 @@ zero.core.Bit = CT.Class({
 			vel = oz.velocity, i = oz.index, wobz = this.wobblers,
 			v, t = zero.core.util.ticker, adjust = this.adjust;
 		["x", "y", "z"].forEach(function(d, i) {
-			v = vel[i];
+			v = vel[i] * dts;
 			if (wobz[d])
 				v += wobz[d][(t + i) % 60];
 			v && adjust("position", d, v, true);
@@ -13,7 +13,6 @@ zero.core.Bit = CT.Class({
 	},
 	init: function(opts) {
 		this.opts = opts = CT.merge(opts, {
-			matcat: "Basic",
 			sphereGeometry: true
 		}, this.opts);
 		var vri, wobz = this.wobblers = {};
