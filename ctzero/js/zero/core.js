@@ -24,6 +24,8 @@ CT.require("zero.core.Light");
 CT.require("zero.core.Floor");
 CT.require("zero.core.Pool");
 CT.require("zero.core.Room");
+CT.require("zero.core.Bit");
+CT.require("zero.core.Particles");
 
 CT.require("zero.core.Skeleton");
 CT.require("zero.core.Spine");
