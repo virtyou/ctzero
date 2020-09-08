@@ -8,12 +8,13 @@ zero.core.Particles = CT.Class({
 	rebound: function() {
 		var p, part, oz = this.opts,
 			bz = oz.bounder.bounds, r = Math.random,
-			xl = bz.max.x - bz.min.y, xd = xl * 2,
-			yl = bz.max.y - bz.min.y, yd = yl * 2
-			zl = bz.max.z - bz.min.z, zd = zl * 2;
+			xl = bz.max.x - bz.min.y, xh = xl / 2,
+			yl = bz.max.y - bz.min.y, yh = yl / 2
+			zl = bz.max.z - bz.min.z, zh = zl / 2;
 		for (p in this.particle) {
 			part = this.particle[p];
-			part.position([r() * xd - xl, r() * yd - yl, r() * zd - zl]);
+			part.position([r() * xl - xh, r() * yl - yh, r() * zl - zh]);
+
 		}
 	},
 	preassemble: function() {
@@ -46,7 +47,7 @@ zero.core.Particles = CT.Class({
 
 zero.core.Particles.kinds = {
 	bubbles: {
-		velocity: [0, 5, 0],
+		velocity: [0, 25, 0],
 		variance: [1, 0, 1],
 		pmat: {
 			opacity: 0.6,
