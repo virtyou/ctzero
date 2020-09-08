@@ -201,7 +201,7 @@ zero.core.util = {
 	    if (zcc.room)
 	    	zcc.room.tick(dts, rdts);
 	    for (p in zcc.people)
-	    	zcc.people[p].tick();
+	    	zcc.people[p].tick(dts);
 	    for (t of zcu._tickers)
 	    	t(dts, rdts);
 	    zero.core.camera.tick();
