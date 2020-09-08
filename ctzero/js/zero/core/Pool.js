@@ -29,6 +29,7 @@ zero.core.Pool = CT.Class({
 	onbound: function() {
 		var oz = this.opts, s, side, py = this.position().y,
 			rf = this.getTop(), h = py - rf, p = -h / 2;
+		this.bounds.min.y = this.getTop(); // why doesn't this just happen w/ sides?
 		if (oz.sides) {
 			for (s in this.side) {
 				side = this.side[s];
@@ -37,7 +38,10 @@ zero.core.Pool = CT.Class({
 				side.material.color.r = 0.6; // meh...
 			}
 		}
-		this.bubbles && this.bubbles.rebound();
+		if (this.bubbles) {
+			this.bubbles.adjust("position", "z", p);
+			this.bubbles.rebound();
+		}
 	},
 	preassemble: function() {
 		var oz = this.opts, partz = oz.parts,
@@ -76,7 +80,8 @@ zero.core.Pool = CT.Class({
 			name: "bubbles",
 			kind: "particles",
 			thing: "Particles",
-			bounder: this
+			bounder: this,
+			rotation: [Math.PI / 2, 0, 0]
 		});
 	},
 	init: function(opts) {
