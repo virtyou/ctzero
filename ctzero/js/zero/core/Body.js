@@ -52,6 +52,11 @@ zero.core.Body = CT.Class({
 	},
 	preassemble: function() {
 		Object.keys(this._lookers).forEach(this._looker);
+		this.opts.parts.push({
+			name: "bubbletrail",
+			kind: "particles",
+			thing: "Particles"
+		});
 	},
 	_applyMod: function(gopts) {
 		for (var op in gopts)
@@ -136,7 +141,7 @@ zero.core.Body = CT.Class({
 			this.setBob();
 		}
 	},
-	tick: function() {
+	tick: function(dts) {
 		this.head.tick();
 		this.torso.tick();
 		this.spine.tick();
@@ -144,6 +149,7 @@ zero.core.Body = CT.Class({
 		zero.core.morphs.tick(this);
 		var skeleton = this.thring.skeleton;
 		this._.customs.forEach(function(c) { c.tick(skeleton); });
+		this.bubbletrail.tick(dts);
 	},
 	init: function(opts) {
 		this.opts = opts = CT.merge(this.opts, {
