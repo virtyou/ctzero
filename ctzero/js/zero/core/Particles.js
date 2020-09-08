@@ -2,6 +2,7 @@ zero.core.Particles = CT.Class({
 	CLASSNAME: "zero.core.Particles",
 	tick: function(dts) {
 		var p, oz = this.opts;
+		if (!this.isReady() || !oz.bounder.bounds) return;
 		for (p in this.particle)
 			this.particle[p].tick(dts);
 	},
