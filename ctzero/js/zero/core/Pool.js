@@ -14,6 +14,7 @@ zero.core.Pool = CT.Class({
 		this.cam.position.y = -campos.y - 80;
 		this.cam.position.z = campos.z;//+22;
 		this.cam.position.x = campos.x;
+		this.bubbles && this.bubbles.tick(dts);
 	},
 	getTop: function() {
 		return zero.core.current.room.bounds.min.y + 1;
@@ -28,6 +29,7 @@ zero.core.Pool = CT.Class({
 	onbound: function() {
 		var oz = this.opts, s, side, py = this.position().y,
 			rf = this.getTop(), h = py - rf, p = -h / 2;
+		this.bounds.min.y = this.getTop(); // why doesn't this just happen w/ sides?
 		if (oz.sides) {
 			for (s in this.side) {
 				side = this.side[s];
@@ -35,6 +37,10 @@ zero.core.Pool = CT.Class({
 				side.adjust("position", "z", p);
 				side.material.color.r = 0.6; // meh...
 			}
+		}
+		if (this.bubbles) {
+			this.bubbles.adjust("position", "z", p);
+			this.bubbles.rebound();
 		}
 	},
 	preassemble: function() {
@@ -70,6 +76,13 @@ zero.core.Pool = CT.Class({
 				});
 			}
 		}
+		oz.bubbles && partz.push({
+			name: "bubbles",
+			kind: "particles",
+			thing: "Particles",
+			bounder: this,
+			rotation: [Math.PI / 2, 0, 0]
+		});
 	},
 	init: function(opts) {
 		this.opts = opts = CT.merge(opts, {
@@ -78,6 +91,7 @@ zero.core.Pool = CT.Class({
 			factor: 75,
 			amplitude: 2,
 			sides: true,
+			bubbles: true,
 			watermat: true,
 			plane: [800, 800, 22, 44],
 			cam: [1, 1000000, 512],
