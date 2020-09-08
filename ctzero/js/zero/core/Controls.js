@@ -103,7 +103,7 @@ zero.core.Controls = CT.Class({
 		return function() {
 			if (amount) {
 				if (dir == "y")
-					target.gesture("jump");
+					target.jump();
 				else
 					target.go();
 			} else if (!CT.key.downs(["w", "s", "a", "d"]).length)
