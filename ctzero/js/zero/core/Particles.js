@@ -37,7 +37,7 @@ zero.core.Particles = CT.Class({
 	},
 	init: function(opts) {
 		this.opts = CT.merge(opts, zero.core.Particles.kinds[opts.name], {
-			count: 20,
+			count: 50,
 			size: 0.05,
 			sizeVariance: 0.1,
 			velocity: [0, 0, 0],
