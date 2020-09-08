@@ -31,7 +31,6 @@ zero.core.Particles = CT.Class({
 			activated.setOpacity(1);
 			this.active.push(activated);
 			number -= 1;
-			this.log("active", this.active.length, "pool", this.pool.length);
 		}
 		number && this.log("unable to release", number, "particles");
 	},
