@@ -2,9 +2,37 @@ zero.core.Particles = CT.Class({
 	CLASSNAME: "zero.core.Particles",
 	tick: function(dts) {
 		var p, oz = this.opts;
-		if (!this.isReady() || !oz.bounder.bounds) return;
-		for (p in this.particle)
-			this.particle[p].tick(dts);
+		if (!this.isReady()) return;
+		if (this.active && this.active.length)
+			this.tickActive(dts);
+		else if (oz.bounder && oz.bounder.bounds)
+			for (p in this.particle)
+				this.particle[p].tick(dts);
+	},
+	tickActive: function(dts) {
+		var p, retired, dissolve = this.opts.dissolve;
+		for (p of this.active)
+			if (!dissolve || p.setOpacity(-dts * dissolve, true) > 0)
+				p.tick(dts);
+		while (dissolve && this.active.length && this.active[0].material.opacity < 0) {
+			retired = this.active.shift();
+			retired.position([0, 0, 0]);
+			this.pool.push(retired);
+		}
+	},
+	release: function(number) {
+		var activated;
+		if (!this.active) {
+			this.active = [];
+			this.pool = Object.values(this.particle);
+		}
+		while (number && this.pool.length) {
+			activated = this.pool.shift();
+			activated.setOpacity(1);
+			this.active.push(activated);
+			number -= 1;
+		}
+		number && this.log("unable to release", number, "particles");
 	},
 	rebound: function() {
 		var p, part, oz = this.opts,
@@ -15,7 +43,6 @@ zero.core.Particles = CT.Class({
 		for (p in this.particle) {
 			part = this.particle[p];
 			part.position([r() * xl - xh, r() * yl - yh, r() * zl - zh]);
-
 		}
 	},
 	preassemble: function() {
@@ -52,6 +79,18 @@ zero.core.Particles.kinds = {
 		variance: [1, 0, 1],
 		pmat: {
 			opacity: 0.6,
+			shininess: 150,
+			color: 0x22ccff,
+			transparent: true
+		}
+	},
+	bubbletrail: {
+		count: 30,
+		velocity: [0, -400, 0],
+		variance: [25, 25, 25],
+		dissolve: 0.25,
+		pmat: {
+			opacity: 0,
 			shininess: 150,
 			color: 0x22ccff,
 			transparent: true

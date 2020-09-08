@@ -390,6 +390,15 @@ zero.core.Thing = CT.Class({
 	setTexture: function(tx) {
 		this.update({ texture: tx });
 	},
+	setOpacity: function(op, additive) {
+		var mat = this.material;
+		if (!mat) return;
+		if (additive)
+			mat.opacity += op;
+		else
+			mat.opacity = op;
+		return mat.opacity;
+	},
 	setColor: function(col) {
 		if (this.material) this.material.color = col;
 	},

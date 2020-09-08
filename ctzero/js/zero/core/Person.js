@@ -107,11 +107,11 @@ zero.core.Person = CT.Class({
 			}) : thaz._.chain(cb);
 		});
 	},
-	tick: function() {
+	tick: function(dts) {
 		if (!this.head)
 			return this.log("tick() w/o head!");
 		this.opts.moody && this.mood.tick();
-		this.body.tick();
+		this.body.tick(dts);
 	},
 	watch: function(nofollow, noroom) {
 		var cube = this.body.looker;
@@ -202,11 +202,20 @@ zero.core.Person = CT.Class({
 			}, 200);
 		}, 500); // time for orientation...
 	},
+	jump: function() {
+		this.gesture("jump");
+		this.body.bubbletrail.release(3);
+	},
 	go: function(dur) {
-		var plat = this.body.upon;
-		var dance = "walk";
-		if (plat && plat.opts.state == "liquid")
-			dance = plat.above(this.body.position()) ? "fly" : "swim";
+		var plat = this.body.upon, dance = "walk";
+		if (plat && plat.opts.state == "liquid") {
+			if (plat.above(this.body.position()))
+				dance = "fly";
+			else {
+				dance = "swim";
+				this.body.bubbletrail.release(1);
+			}
+		}
 		this.dance(dance, dur);
 	},
 	move: function(opts, cb, watch) {
