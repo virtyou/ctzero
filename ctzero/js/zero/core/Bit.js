@@ -1,7 +1,7 @@
 zero.core.Bit = CT.Class({
 	CLASSNAME: "zero.core.Bit",
 	tick: function(dts) {
-		var pos, v, h, oz = this.opts, bz = oz.bounder.bounds,
+		var pos, v, h, oz = this.opts, bz = oz.bounder && oz.bounder.bounds,
 			vel = oz.velocity, i = oz.index, wobz = this.wobblers,
 			t = zero.core.util.ticker, adjust = this.adjust;
 		this._xyz.forEach(function(d, i) {
@@ -10,6 +10,7 @@ zero.core.Bit = CT.Class({
 				v += wobz[d][(t + i) % 60];
 			v && adjust("position", d, v, true);
 		});
+		if (!bz) return;
 		pos = this.position();
 		this._xyz.forEach(function(d, i) {
 			if (!vel[i]) return;
