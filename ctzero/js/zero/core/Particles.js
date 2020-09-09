@@ -21,7 +21,7 @@ zero.core.Particles = CT.Class({
 		}
 	},
 	release: function(number) {
-		var activated;
+		var activated, oz = this.opts;
 		if (!this.active) {
 			this.active = [];
 			this.pool = Object.values(this.particle);
@@ -29,6 +29,7 @@ zero.core.Particles = CT.Class({
 		while (number && this.pool.length) {
 			activated = this.pool.shift();
 			activated.setOpacity(1);
+			oz.acceleration && activated.setVelocity();
 			this.active.push(activated);
 			number -= 1;
 		}
@@ -56,9 +57,10 @@ zero.core.Particles = CT.Class({
 				kind: "particle",
 				material: oz.pmat,
 				bounder: oz.bounder,
-				velocity: oz.velocity,
 				variance: oz.variance,
+				velocity: oz.velocity,
 				velVariance: oz.velVariance,
+				acceleration: oz.acceleration,
 				scale: [size, size, size]
 			});
 		}
@@ -106,8 +108,9 @@ zero.core.Particles.kinds = {
 	sparks: {
 		count: 20,
 		size: 0.01,
-		sizeVariance: 0.05,
-		velocity: [0, 16, 0],
+		sizeVariance: 0.04,
+		velocity: [0, 24, 0],
+		acceleration: [0, -24, 0],
 		velVariance: [40, 0, 40],
 		variance: [0, 0, 0],
 		dissolve: 0.25,
