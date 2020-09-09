@@ -58,18 +58,25 @@ zero.core.Particles = CT.Class({
 				bounder: oz.bounder,
 				velocity: oz.velocity,
 				variance: oz.variance,
+				velVariance: oz.velVariance,
 				scale: [size, size, size]
 			});
 		}
 	},
+	undrip: function() {
+		clearInterval(this.dripper);
+		delete this.dripper;
+	},
 	init: function(opts) {
-		this.opts = CT.merge(opts, zero.core.Particles.kinds[opts.name], {
+		this.opts = opts = CT.merge(opts, zero.core.Particles.kinds[opts.name], {
 			count: 50,
 			size: 0.05,
 			sizeVariance: 0.1,
 			velocity: [0, 0, 0],
 			variance: [1, 1, 1]
 		}, this.opts);
+		if (opts.drip) // TODO: cancel interval at some point?
+			this.dripper = setInterval(this.release, 1000 / (opts.count * opts.dissolve || 1), 1);
 	}
 }, zero.core.Thing);
 
@@ -96,10 +103,37 @@ zero.core.Particles.kinds = {
 			transparent: true
 		}
 	},
-	flames: {
-
+	sparks: {
+		count: 20,
+		size: 0.01,
+		sizeVariance: 0.05,
+		velocity: [0, 16, 0],
+		velVariance: [40, 0, 40],
+		variance: [0, 0, 0],
+		dissolve: 0.25,
+		drip: true,
+		pmat: {
+			opacity: 0,
+			shininess: 150,
+			color: 0xff2222,
+			transparent: true
+		}
 	},
 	smoke: {
+		count: 8,
+		sizeVariance: 0.4,
+		velocity: [0, 8, 0],
+		velVariance: [4, 0, 4],
+		variance: [0, 0, 0],
+		dissolve: 0.1,
+		drip: true,
+		pmat: {
+			opacity: 0,
+			color: 0x888888,
+			transparent: true
+		}
+	},
+	glow: {
 
 	},
 	fog: {
