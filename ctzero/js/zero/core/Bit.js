@@ -2,10 +2,12 @@ zero.core.Bit = CT.Class({
 	CLASSNAME: "zero.core.Bit",
 	tick: function(dts) {
 		var pos, v, h, oz = this.opts, bz = oz.bounder && oz.bounder.bounds,
-			vel = oz.velocity, i = oz.index, wobz = this.wobblers,
-			t = zero.core.util.ticker, adjust = this.adjust;
+			wobz = this.wobblers, vel = this.velocity, acc = oz.acceleration,
+			i = oz.index, t = zero.core.util.ticker, adjust = this.adjust;
 		this._xyz.forEach(function(d, i) {
 			v = vel[i] * dts;
+			if (acc)
+				vel[i] += acc[i] * dts;
 			if (wobz[d])
 				v += wobz[d][(t + i) % 60];
 			v && adjust("position", d, v, true);
@@ -20,6 +22,9 @@ zero.core.Bit = CT.Class({
 			else if (pos[d] > h)
 				pos[d] = -h;
 		});
+	},
+	setVelocity: function() {
+		this.velocity = this.opts.velocity.map(v => v);
 	},
 	init: function(opts) {
 		this.opts = opts = CT.merge(opts, {
@@ -36,5 +41,6 @@ zero.core.Bit = CT.Class({
 				return v + Math.random() * 2 * vv[i] - vv[i];
 			});
 		}
+		this.setVelocity();
 	}
 }, zero.core.Thing);
