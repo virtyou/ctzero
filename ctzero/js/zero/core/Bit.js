@@ -25,11 +25,16 @@ zero.core.Bit = CT.Class({
 		this.opts = opts = CT.merge(opts, {
 			sphereGeometry: true
 		}, this.opts);
-		var vri, wobz = this.wobblers = {};
+		var vri, wobz = this.wobblers = {}, vv = opts.velVariance;
 		this._xyz.forEach(function(d, i) {
 			vri = opts.variance[i];
 			if (vri)
 				wobz[d] = zero.core.trig.segs(60, vri);
 		});
+		if (vv) {
+			opts.velocity = opts.velocity.map(function(v, i) {
+				return v + Math.random() * 2 * vv[i] - vv[i];
+			});
+		}
 	}
 }, zero.core.Thing);
