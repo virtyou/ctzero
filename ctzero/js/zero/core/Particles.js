@@ -98,7 +98,7 @@ zero.core.Particles.kinds = {
 		velocity: [0, -400, 0],
 		velVariance: [25, 25, 25],
 		variance: [1, 1, 1],
-		dissolve: 0.25,
+		dissolve: 0.5,
 		pmat: {
 			opacity: 0,
 			shininess: 150,
