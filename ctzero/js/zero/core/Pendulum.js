@@ -6,10 +6,19 @@ zero.core.Pendulum = CT.Class({
 		hard: function(dts, pos) {
 			var pendz = this.pends, dim, pend,
 				rot = this.rotation(null, true),
-				zsin = zero.core.trig.sin;
+				zsin = zero.core.trig.sin,
+				w = this.wiggler, t, oz = this.opts;
+			if (w)
+				t = (zero.core.util.ticker + this.wigdex) % oz.wiggle;
 			for (dim of this.dims) {
 				pend = pendz[dim];
-				pend.acceleration = zsin(rot[dim]);
+				if (w || !oz.nograv) {
+					pend.acceleration = 0;
+					if (!oz.nograv)
+						pend.acceleration += zsin(rot[dim]);
+					if (w)
+						pend.acceleration += w[t];
+				}
 				this.adjust("rotation", dim, pend.value);
 			};
 		},
@@ -59,5 +68,9 @@ zero.core.Pendulum = CT.Class({
 	init: function(opts) {
 		this._tick = this.ticks[this.opts.hard ? "hard" : "soft"];
 		this.setSprings();
+		if (this.opts.wiggle) {
+			this.wigdex = CT.data.random(this.opts.wiggle);
+			this.wiggler = zero.core.trig.segs(this.opts.wiggle);
+		}
 	}
 }, zero.core.Thing);
