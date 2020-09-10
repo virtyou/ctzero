@@ -75,7 +75,7 @@ zero.core.Particles = CT.Class({
 			size: 0.05,
 			sizeVariance: 0.1,
 			velocity: [0, 0, 0],
-			variance: [1, 1, 1]
+			variance: [0, 0, 0]
 		}, this.opts);
 		if (opts.drip) // TODO: cancel interval at some point?
 			this.dripper = setInterval(this.release, 1000 / (opts.count * opts.dissolve || 1), 1);
@@ -96,7 +96,8 @@ zero.core.Particles.kinds = {
 	bubbletrail: {
 		count: 30,
 		velocity: [0, -400, 0],
-		variance: [25, 25, 25],
+		velVariance: [25, 25, 25],
+		variance: [1, 1, 1],
 		dissolve: 0.25,
 		pmat: {
 			opacity: 0,
@@ -112,7 +113,6 @@ zero.core.Particles.kinds = {
 		velocity: [0, 24, 0],
 		acceleration: [0, -24, 0],
 		velVariance: [40, 0, 40],
-		variance: [0, 0, 0],
 		dissolve: 0.25,
 		drip: true,
 		pmat: {
@@ -127,7 +127,6 @@ zero.core.Particles.kinds = {
 		sizeVariance: 0.4,
 		velocity: [0, 8, 0],
 		velVariance: [4, 0, 4],
-		variance: [0, 0, 0],
 		dissolve: 0.1,
 		drip: true,
 		pmat: {
