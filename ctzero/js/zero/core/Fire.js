@@ -16,7 +16,27 @@ zero.core.Fire = CT.Class({
 	preassemble: function() {
 		var oz = this.opts, variety;
 		oz.flames && oz.parts.push({
-
+			name: "flames",
+			kind: "tentacles",
+			thing: "Hair",
+			density: 4,
+			coverage: [0.5, 0.5],
+			position: [0, 0, 0],
+			strand: {
+				pendmap: "Phong",
+				girth: 6,
+				length: 6,
+				segments: 4,
+				wiggle: 60,
+				nograv: true,
+				flex: Math.PI / 8,
+				taper: [0.6, 0.9, 0.6],
+				material: {
+					opacity: 0.9,
+					color: 0xff0000,
+					transparent: true
+				}
+			}
 		});
 //		for (variety of ["sparks", "smoke", "glow"]) {
 		for (variety of ["sparks", "smoke"]) {
@@ -33,7 +53,7 @@ zero.core.Fire = CT.Class({
 	init: function(opts) {
 		this.opts = opts = CT.merge(opts, {
 			state: "plasma",
-			flames: false,
+			flames: true,
 			sparks: true,
 			smoke: true,
 			glow: true,
