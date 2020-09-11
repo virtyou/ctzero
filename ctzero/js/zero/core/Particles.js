@@ -28,7 +28,7 @@ zero.core.Particles = CT.Class({
 		}
 		while (number && this.pool.length) {
 			activated = this.pool.shift();
-			activated.setOpacity(1);
+			activated.setOpacity(0.9);
 			oz.acceleration && activated.setVelocity();
 			this.active.push(activated);
 			number -= 1;
