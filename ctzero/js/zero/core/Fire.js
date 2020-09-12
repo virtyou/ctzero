@@ -1,8 +1,9 @@
 zero.core.Fire = CT.Class({
 	CLASSNAME: "zero.core.Fire",
 	tick: function(dts) {
-		for (var variety of ["flames", "sparks", "smoke", "glow", "light"])
+		for (var variety of ["flames", "sparks", "smoke", "glow"])
 			this[variety] && this[variety].tick(dts);
+		this.light && this.light.setIntensity(0.5 + this.flicker[zero.core.util.ticker % 60]);
 	},
 	onremove: function() {
 		this.smoke && this.smoke.undrip();
@@ -58,7 +59,11 @@ zero.core.Fire = CT.Class({
 			}
 		});
 		oz.light && oz.parts.push({
-
+			name: "light",
+			thing: "Light",
+			kind: "lighting",
+			variety: "point",
+			color: 0xffaaaa
 		});
 	},
 	init: function(opts) {
@@ -68,7 +73,9 @@ zero.core.Fire = CT.Class({
 			sparks: true,
 			smoke: true,
 			glow: true,
-			light: false
+			light: true
 		}, this.opts);
+		if (opts.light)
+			this.flicker = zero.core.trig.segs(60, 0.05);
 	}
 }, zero.core.Thing);
