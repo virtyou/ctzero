@@ -14,10 +14,6 @@ zero.core.Particles = CT.Class({
 		for (p of this.active)
 			if (!dissolve || p.setOpacity(-dts * dissolve, true) > 0)
 				p.tick(dts);
-			if (oz.grow) {
-				p._size += oz.grow * dts;
-				p.scale(p._size);
-			}
 		while (dissolve && this.active.length && this.active[0].material.opacity < 0) {
 			retired = this.active.shift();
 			retired.position([0, 0, 0]);
@@ -33,7 +29,7 @@ zero.core.Particles = CT.Class({
 		while (number && this.pool.length) {
 			activated = this.pool.shift();
 			activated.setOpacity(0.9);
-			if (oz.grow) {
+			if (oz.grow || oz.pulse) {
 				activated._size = oz.size + oz.sizeVariance * Math.random();
 				activated.scale(activated._size);
 			}
@@ -63,13 +59,16 @@ zero.core.Particles = CT.Class({
 				thing: "Bit",
 				name: "p" + i,
 				kind: "particle",
+				grow: oz.grow,
+				pulse: oz.pulse,
 				material: oz.pmat,
 				bounder: oz.bounder,
 				variance: oz.variance,
 				velocity: oz.velocity,
 				velVariance: oz.velVariance,
 				acceleration: oz.acceleration,
-				scale: [size, size, size]
+				scale: [size, size, size],
+				size: size
 			});
 		}
 	},
