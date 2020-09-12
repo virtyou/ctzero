@@ -21,14 +21,19 @@ zero.core.Particles = CT.Class({
 		}
 	},
 	release: function(number) {
-		var activated;
+		var activated, oz = this.opts;
 		if (!this.active) {
 			this.active = [];
 			this.pool = Object.values(this.particle);
 		}
 		while (number && this.pool.length) {
 			activated = this.pool.shift();
-			activated.setOpacity(1);
+			activated.setOpacity(0.9);
+			if (oz.grow || oz.pulse) {
+				activated._size = oz.size + oz.sizeVariance * Math.random();
+				activated.scale(activated._size);
+			}
+			oz.acceleration && activated.setVelocity();
 			this.active.push(activated);
 			number -= 1;
 		}
@@ -54,58 +59,32 @@ zero.core.Particles = CT.Class({
 				thing: "Bit",
 				name: "p" + i,
 				kind: "particle",
+				grow: oz.grow,
+				pulse: oz.pulse,
 				material: oz.pmat,
 				bounder: oz.bounder,
-				velocity: oz.velocity,
 				variance: oz.variance,
-				scale: [size, size, size]
+				velocity: oz.velocity,
+				velVariance: oz.velVariance,
+				acceleration: oz.acceleration,
+				scale: [size, size, size],
+				size: size
 			});
 		}
 	},
+	undrip: function() {
+		clearInterval(this.dripper);
+		delete this.dripper;
+	},
 	init: function(opts) {
-		this.opts = CT.merge(opts, zero.core.Particles.kinds[opts.name], {
+		this.opts = opts = CT.merge(opts, zero.base.particles[opts.name], {
 			count: 50,
 			size: 0.05,
 			sizeVariance: 0.1,
 			velocity: [0, 0, 0],
-			variance: [1, 1, 1]
+			variance: [0, 0, 0]
 		}, this.opts);
+		if (opts.drip) // TODO: cancel interval at some point?
+			this.dripper = setInterval(this.release, 1000 / (opts.count * opts.dissolve || 1), 1);
 	}
 }, zero.core.Thing);
-
-zero.core.Particles.kinds = {
-	bubbles: {
-		velocity: [0, 25, 0],
-		variance: [1, 0, 1],
-		pmat: {
-			opacity: 0.6,
-			shininess: 150,
-			color: 0x22ccff,
-			transparent: true
-		}
-	},
-	bubbletrail: {
-		count: 30,
-		velocity: [0, -400, 0],
-		variance: [25, 25, 25],
-		dissolve: 0.25,
-		pmat: {
-			opacity: 0,
-			shininess: 150,
-			color: 0x22ccff,
-			transparent: true
-		}
-	},
-	flames: {
-
-	},
-	smoke: {
-
-	},
-	fog: {
-
-	},
-	aura: {
-
-	}
-};

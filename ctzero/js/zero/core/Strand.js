@@ -4,7 +4,7 @@ zero.core.Strand = CT.Class({
 		var oz = this.opts, len = oz.length,
 			ypos = index ? len : oz.yoff;
 		return {
-			matcat: "Basic",
+			matcat: oz.pendmap,
 			thing: "Pendulum",
 			name: "seg" + index,
 			position: [0, ypos, 0],
@@ -14,6 +14,8 @@ zero.core.Strand = CT.Class({
 			drag: oz.drag,
 			damp: oz.damp,
 			hard: oz.hard,
+			wiggle: oz.wiggle,
+			nograv: oz.nograv,
 			veldamp: oz.veldamp,
 			scale: oz.taper,
 			texture: oz.texture,
@@ -62,6 +64,7 @@ zero.core.Strand = CT.Class({
 			hard: true,
 			curl: [0, 0],
 			veldamp: 6000,
+			pendmat: "Basic",
 			flex: Math.PI * 2 / 3,
 			taper: [0.8, 0.9, 0.8]
 		});

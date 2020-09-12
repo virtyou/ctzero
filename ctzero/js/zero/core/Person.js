@@ -203,8 +203,9 @@ zero.core.Person = CT.Class({
 		}, 500); // time for orientation...
 	},
 	jump: function() {
+		var plat = this.body.upon;
 		this.gesture("jump");
-		this.body.bubbletrail.release(3);
+		plat && plat.opts.state == "liquid" && this.body.bubbletrail.release(2);
 	},
 	go: function(dur) {
 		var plat = this.body.upon, dance = "walk";

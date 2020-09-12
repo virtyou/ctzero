@@ -4,9 +4,19 @@ zero.core.Room = CT.Class({
 		lights: 0,
 		objects: 0
 	},
+	_tickers: [],
 	tick: function(dts, rdts) {
-		for (var obj of this.objects)
+		var obj;
+		for (obj of this.objects)
 			obj.tick && obj.tick(dts, rdts);
+		for (obj of this._tickers)
+			obj.tick(dts, rdts);
+	},
+	regTicker: function(ticker) {
+		this._tickers.push(ticker);
+	},
+	unregTicker: function(ticker) {
+		CT.data.remove(this._tickers, ticker);
 	},
 	eject: function(person, port) {
 		var bod = person.body, wall = port && port.opts.wall,
