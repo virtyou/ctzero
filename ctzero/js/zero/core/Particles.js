@@ -10,10 +10,14 @@ zero.core.Particles = CT.Class({
 				this.particle[p].tick(dts);
 	},
 	tickActive: function(dts) {
-		var p, retired, dissolve = this.opts.dissolve;
+		var p, retired, oz = this.opts, dissolve = oz.dissolve;
 		for (p of this.active)
 			if (!dissolve || p.setOpacity(-dts * dissolve, true) > 0)
 				p.tick(dts);
+			if (oz.grow) {
+				p._size += oz.grow * dts;
+				p.scale(p._size);
+			}
 		while (dissolve && this.active.length && this.active[0].material.opacity < 0) {
 			retired = this.active.shift();
 			retired.position([0, 0, 0]);
@@ -29,6 +33,10 @@ zero.core.Particles = CT.Class({
 		while (number && this.pool.length) {
 			activated = this.pool.shift();
 			activated.setOpacity(0.9);
+			if (oz.grow) {
+				activated._size = oz.size + oz.sizeVariance * Math.random();
+				activated.scale(activated._size);
+			}
 			oz.acceleration && activated.setVelocity();
 			this.active.push(activated);
 			number -= 1;
@@ -124,10 +132,11 @@ zero.core.Particles.kinds = {
 	},
 	smoke: {
 		count: 8,
-		sizeVariance: 0.4,
+		sizeVariance: 0.2,
 		velocity: [0, 8, 0],
 		velVariance: [4, 0, 4],
 		dissolve: 0.1,
+		grow: 0.1,
 		drip: true,
 		pmat: {
 			opacity: 0,
