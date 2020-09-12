@@ -38,7 +38,6 @@ zero.core.Fire = CT.Class({
 				}
 			}
 		});
-//		for (variety of ["sparks", "smoke", "glow"]) {
 		for (variety of ["sparks", "smoke"]) {
 			oz[variety] && oz.parts.push({
 				name: variety,
@@ -46,6 +45,18 @@ zero.core.Fire = CT.Class({
 				thing: "Particles"
 			});
 		}
+		oz.glow && oz.parts.push({
+			name: "glow",
+			kind: "pulser",
+			thing: "Bit",
+			pulse: 0.01,
+			material: {
+				opacity: 0.2,
+				color: 0xff0000,
+				transparent: true,
+				side: THREE.BackSide
+			}
+		});
 		oz.light && oz.parts.push({
 
 		});
