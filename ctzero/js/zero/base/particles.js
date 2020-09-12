@@ -39,21 +39,17 @@ zero.base.particles = {
 		}
 	},
 	smoke: {
-		count: 8,
-		sizeVariance: 0.2,
+		count: 4,
 		velocity: [0, 8, 0],
 		velVariance: [4, 0, 4],
 		dissolve: 0.1,
-		grow: 0.1,
+		grow: 0.05,
 		drip: true,
 		pmat: {
 			opacity: 0,
 			color: 0x888888,
 			transparent: true
 		}
-	},
-	glow: {
-
 	},
 	fog: {
 
