@@ -10,7 +10,7 @@ zero.core.Particles = CT.Class({
 				this.particle[p].tick(dts);
 	},
 	tickActive: function(dts) {
-		var p, retired, oz = this.opts, dissolve = oz.dissolve;
+		var p, retired, dissolve = this.opts.dissolve;
 		for (p of this.active)
 			if (!dissolve || p.setOpacity(-dts * dissolve, true) > 0)
 				p.tick(dts);
