@@ -1,7 +1,9 @@
 zero.core.Light = CT.Class({
 	CLASSNAME: "zero.core.Light",
 	setIntensity: function(intensity) {
-		this.opts.intensity = this.thring.intensity = intensity;
+		this.opts.intensity = intensity;
+		if (this.isReady())
+			this.thring.intensity = intensity;
 	},
 	setColor: function(color) {
 		var c = this.thring.color;
