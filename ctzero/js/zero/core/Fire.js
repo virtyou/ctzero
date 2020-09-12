@@ -8,11 +8,11 @@ zero.core.Fire = CT.Class({
 	onremove: function() {
 		this.smoke && this.smoke.undrip();
 		this.sparks && this.sparks.undrip();
-		zero.core.current.room.unregTicker(this);
+		this.opts.regTick && zero.core.current.room.unregTicker(this);
 	},
-	assembled: function() { // TODO: what if fire's parent is room? revisit!!!
+	assembled: function() {
 		this._.built();
-		zero.core.current.room.regTicker(this);
+		this.opts.regTick && zero.core.current.room.regTicker(this);
 	},
 	preassemble: function() {
 		var oz = this.opts, variety;
