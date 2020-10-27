@@ -124,10 +124,25 @@ zero.core.util = {
 		zero.core.util.back(v);
 		v.play();
 	},
-	videoTexture: function(src) {
-		var v = CT.dom.video(src, "full transparent notouch below"),
-			vt = new THREE.VideoTexture(v);
-		document.body.appendChild(v);
+	svids: {},
+	videoTexture: function(src, thing) {
+		var chan, v, vt, svids = zero.core.util.svids;
+			vclass = "full transparent notouch below";
+		if (src.startsWith("fzn:")) {
+			chan = src.slice(4);
+			if (!svids[chan]) {
+				CT.require("CT.stream", true); // just in case
+				svids[chan] = CT.stream.util.fzn.video(chan, vclass, function() {
+					thing.update({ video: src });
+				});
+				document.body.appendChild(svids[chan].node);
+			}
+			v = svids[chan].video;
+		} else {
+			v = CT.dom.video(src, vclass);
+			document.body.appendChild(v);
+		}
+		vt = new THREE.VideoTexture(v);
 		v.loop = true;
 		vt.vnode = v;
 		return vt;
