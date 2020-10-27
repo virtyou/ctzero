@@ -368,15 +368,16 @@ zero.core.Thing = CT.Class({
 	update: function(opts) {
 		var o, setter, full, adjust = this.adjust, zcu = zero.core.util;
 		["stripset", "geometry", "matcat", "meshcat",
-			"material", "repeat", "offset", "video"].forEach(function(item) {
+			"material", "repeat", "offset"].forEach(function(item) {
 				full = full || (item in opts);
 			});
 		this.opts = CT.merge(opts, this.opts);
 		if (!this.group) return; // hasn't built yet, just wait
 		if (full)
 			return this.build();
-		if ("texture" in opts) {
-			this.material.map = opts.texture && zcu.texture(opts.texture);
+		if ("texture" in opts || "video" in opts) {
+			this.material.map = (opts.texture && zcu.texture(opts.texture))
+				|| (opts.video && zcu.videoTexture(opts.video.item || opts.video, this));
 			this.material.needsUpdate = true;
 		}
 		["position", "rotation", "scale"].forEach(function(prop) {
@@ -524,7 +525,7 @@ zero.core.Thing = CT.Class({
 				map, meshopts = oz.material;
 			if (oz.texture || oz.video) {
 				map = oz.texture ? zcu.texture(oz.texture)
-					: zcu.videoTexture(oz.video.item || oz.video);
+					: zcu.videoTexture(oz.video.item || oz.video, this);
 				if (oz.repeat) {
 					map.wrapS = map.wrapT = THREE.RepeatWrapping;
 					map.repeat.set.apply(map.repeat, oz.repeat);
