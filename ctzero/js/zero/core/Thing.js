@@ -375,7 +375,7 @@ zero.core.Thing = CT.Class({
 		if (!this.group) return; // hasn't built yet, just wait
 		if (full)
 			return this.build();
-		if ("texture" in opts || "video" in opts) {
+		if (this.material && ("texture" in opts || "video" in opts)) {
 			this.material.map = (opts.texture && zcu.texture(opts.texture))
 				|| (opts.video && zcu.videoTexture(opts.video.item || opts.video, this));
 			this.material.needsUpdate = true;
