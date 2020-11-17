@@ -170,10 +170,8 @@ zero.core.Controls = CT.Class({
 			}
 		} else {
 			if (["poster", "portal", "screen", "stream"].indexOf(this.target.opts.kind) != -1) {
-				if (["poster", "screen", "stream"].indexOf(this.target.opts.kind) != -1) {
-					CT.key.on("UP", placer("y", 0), placer("y", speed));
-					CT.key.on("DOWN", placer("y", 0), placer("y", -speed));
-				}
+				CT.key.on("UP", placer("y", 0), placer("y", speed));
+				CT.key.on("DOWN", placer("y", 0), placer("y", -speed));
 				wall = this.target.opts.wall;
 				if (wall == 0) {
 					CT.key.on("LEFT", placer("x", 0), placer("x", -speed, -1));

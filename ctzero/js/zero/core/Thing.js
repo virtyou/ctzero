@@ -79,7 +79,7 @@ zero.core.Thing = CT.Class({
 				sz[pname].target = pz[pname].min;
 		},
 		shouldMin: function(pname, dim) { // fix multifloor-zone portals!
-			return dim == "y" && ["poster", "screen", "stream", "body"].indexOf(this.opts.kind) == -1;
+			return dim == "y" && ["poster", "screen", "stream", "portal", "body"].indexOf(this.opts.kind) == -1;
 		}
 	},
 	_xyz: ["x", "y", "z"],
@@ -131,8 +131,8 @@ zero.core.Thing = CT.Class({
 				sz.x.bounds.min += 1;
 				sz.x.bounds.max = sz.x.bounds.min;
 			}
-			if (this.opts.kind == "portal")
-				sz.y.bounds.max = sz.y.bounds.min;
+//			if (this.opts.kind == "portal")
+//				sz.y.bounds.max = sz.y.bounds.min;
 		}
 	},
 	overlaps: function(pos, radii, checkY) {
