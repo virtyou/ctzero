@@ -64,31 +64,31 @@ zero.base.aspects.head = function() {
             springs: {
                 smileEyes: 1, // multiplier
             },
-            aspects: {
-                bigSmile: -1
-            }
+//            aspects: {
+  //              bigSmile: -1
+    //        }
         },
         bigSmile: {
             min: 0,
             springs: {
                 bigSmile: 0.8
             },
-            aspects: {
-                ah: -1,
-                ee: -1,
-                m: -1,
-                frown: -1,
-                smile: -0.4
-            }
+       //     aspects: {
+//                ah: -1,
+  //              ee: -1,
+    //            m: -1,
+      //          frown: -1,
+        //        smile: -0.4
+         //   }
         },
         smile: {
             min: 0,
             springs: {
                 smile: 1
             },
-            aspects: {
-                bigSmile: -1
-            }
+//            aspects: {
+  //              bigSmile: -1
+    //        }
         }
     };
 };
