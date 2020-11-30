@@ -128,7 +128,7 @@ zero.core.Person = CT.Class({
 	},
 	look: function(subject, orient) {
 		this.subject = subject;
-		orient && this.orient();
+		orient && this.orient(subject);
 	},
 	orient: function(subject) {
 		var pos = this.body.group.position,
