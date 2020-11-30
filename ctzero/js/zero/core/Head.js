@@ -10,7 +10,7 @@ zero.core.Head = CT.Class({
 		mouth: function() {
 			var cur = this.currentPhoneme, vis = this._viseme,
 				phonemes = zero.core.phonemes,
-				t, talking = cur && cur != "pau" && cur !== "sil", changed;
+				t, talking = cur && cur != "pau" && cur != "sil", changed;
 			if (talking != this.talking) {
 				changed = true;
 				this.talking = this.body.talking = talking;
