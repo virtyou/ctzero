@@ -52,7 +52,7 @@ zero.core.Skeleton = CT.Class({
 				"browAsym", "browSad", "frown"]);
 		aspringz[sname] = 1;
 		bspringz[rs] = 1 - Math.random() * 2;
-		hspringz[ps] = 0.025 - Math.random() * 0.05;
+//		hspringz[ps] = 0.025 - Math.random() * 0.05;
 		hspringz[fs] = 0.025 - Math.random() * 0.05;
 		return {
 			springs: aspringz,
