@@ -38,8 +38,8 @@ zero.base.joints = function() {
                     nod: -0.5
                 },
                 hsprings: {
-                    ah: -0.004,
-                    ee: 0.004
+                    ah: -0.000000000000004,
+                    ee: 0.000000000000004
                 }
             },
             y: {
@@ -75,8 +75,8 @@ zero.base.joints = function() {
                     nod: 0.5
                 },
                 hsprings: {
-                    ah: -0.004,
-                    ee: 0.004
+                    ah: -0.000000000000004,
+                    ee: 0.000000000000004
                 }
             },
             y: {
@@ -112,8 +112,8 @@ zero.base.joints = function() {
                     nod: 0.5
                 },
                 hsprings: {
-                    ah: -0.004,
-                    ee: 0.004
+                    ah: -0.000000000000004,
+                    ee: 0.000000000000004
                 }
             },
             y: {
@@ -149,8 +149,8 @@ zero.base.joints = function() {
                     nod: 0.5
                 },
                 hsprings: {
-                    ah: -0.004,
-                    ee: 0.004
+                    ah: -0.000000000000004,
+                    ee: 0.000000000000004
                 }
             },
             y: {

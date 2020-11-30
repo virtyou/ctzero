@@ -115,8 +115,8 @@ zero.base.tickers.body = function() {
                         coefficient: 1.5
                     },
                     target: {
-                        base: 0.2,
-                        coefficient: -0.4
+                        base: 0.08,
+                        coefficient: -0.16
                     }
                 },
                 no: {
@@ -125,8 +125,8 @@ zero.base.tickers.body = function() {
                         coefficient: 3
                     },
                     target: {
-                        base: 0.1,
-                        coefficient: -0.2
+                        base: 0.06,
+                        coefficient: -0.12
                     }
                 }
             }
