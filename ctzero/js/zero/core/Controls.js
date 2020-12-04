@@ -87,7 +87,10 @@ zero.core.Controls = CT.Class({
 						return shifter(wallshift, s);
 				}
 			}
-			s.boost = amount;
+			if (target.opts.kind == "floor") // hm...... should fix.
+				target.adjust("position", dir, amount, true);
+			else
+				s.boost = amount;
 		};
 	},
 	direct: function(speed) {
