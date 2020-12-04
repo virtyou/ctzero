@@ -220,6 +220,7 @@ zero.core.Room = CT.Class({
 	clearBox: function() {
 		var opts = this.opts, detach = this.detach;
 		opts.shell && detach("shell");
+		opts.outside && detach("sky");
 		["obstacle", "floor", "wall"].forEach(function(cat) {
 			opts[cat] && opts[cat].parts.forEach(part => detach(part.name));
 		});
@@ -246,21 +247,32 @@ zero.core.Room = CT.Class({
 			return new THREE.CubeGeometry(dz[0], dz[1], dz[2], dz[3], dz[4]); // ugh
 		}, os = opts.shell;
 		os && opts.parts.push(CT.merge({
-			name: "shell",
+			name: "shelly",
 			kind: "shell",
 			geometry: d2g(os.dimensions)
 		}, os));
+		opts.outside && opts.parts.push({
+			name: "sky",
+			kind: "celestial",
+			sphereGeometry: true,
+			texture: opts.outside,
+			scale: [100, 100, 100],
+			material: {
+				side: THREE.BackSide
+			}
+		});
 		["obstacle", "floor", "wall"].forEach(function(cat) {
 			var base = opts[cat];
 			if (base && base.parts && base.parts.length) {
 				var dz = base.dimensions,
+					tx = base.texture || opts.texture;
 					thing = cat == "floor" && "Floor" || "Thing";
 				base.parts.forEach(function(side, i) {
 					opts.parts.push(CT.merge(side, {
 						name: cat + i,
 						kind: cat,
 						thing: thing,
-						texture: base.texture,
+						texture: tx,
 						material: base.material,
 						geometry: dz && d2g(dz)
 					}));
