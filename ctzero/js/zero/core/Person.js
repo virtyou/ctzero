@@ -165,9 +165,12 @@ zero.core.Person = CT.Class({
 			cb && cb();
 		}, side);
 	},
-	approach: function(subject, cb, watch) {
+	chase: function(subject, cb) {
+		this.approach(subject, cb, false, true);
+	},
+	approach: function(subject, cb, watch, chase) {
 		var bod = this.body, vec, getd = this.direction,
-			go = this.go, undance = this.undance,
+			go = this.go, undance = this.undance, orient = this.orient,
 			zcc = zero.core.current, ppl = zcc.people,
 			bso = bod.springs.orientation, bsohard = bso.hard;
 		if (typeof subject == "string") {
@@ -183,14 +186,17 @@ zero.core.Person = CT.Class({
 		bso.k = 200;
 		bso.hard = false;
 //		this.look(subject, true);
-		this.orient(subject);
-		setTimeout(function() { // adapted from Controls.mover()... revise?
-			go();
+		orient(subject);
+		var revec = function() {
 			vec = getd();
-			bso.k = 20;
-			bso.hard = bsohard;
 			bod.springs.weave.boost = 100 * vec.x;
 			bod.springs.slide.boost = 100 * vec.z;
+		};
+		setTimeout(function() { // adapted from Controls.mover()... revise?
+			go();
+			revec();
+			bso.k = 20;
+			bso.hard = bsohard;
 			var chkr = setInterval(function() {
 				if (zero.core.util.touching(bod, subject, 60)) {
 					bod.springs.weave.boost = 0;
@@ -198,6 +204,9 @@ zero.core.Person = CT.Class({
 					clearInterval(chkr);
 					undance();
 					cb && cb();
+				} else if (chase) {
+					orient(subject);
+					revec();
 				}
 			}, 200);
 		}, 500); // time for orientation...
