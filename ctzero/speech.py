@@ -3,6 +3,10 @@ import os, string, json, time
 from cantools.util import read, write, cmd, output
 from cantools.web import log, read_file
 from cantools import config
+try:
+    from string import letters
+except: # py38
+    from string import ascii_letters as letters
 
 LANG = {
     "english": "en-US",
@@ -56,7 +60,7 @@ def say(language, voice, words, prosody):
         voice = "Zhiyu"
     log("say -> %s [%s @ %s, %s] :: %s"%(language, voice, rate, pitch, words))
     fname = "%s%s%s%s"%(voice, rate, pitch,
-        "".join([c for c in words if c in string.letters]) or hash(words))
+        "".join([c for c in words if c in letters]) or hash(words))
     fpath = "sound/" + fname
     fpjson = "%s.json"%(fpath,)
     if not os.path.exists(fpjson):
