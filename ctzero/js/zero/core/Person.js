@@ -221,7 +221,7 @@ zero.core.Person = CT.Class({
 	},
 	leave: function(portal) {
 		var me = this, zccr = zero.core.current.room;
-		this.approach(port, function() {
+		this.approach(portal, function() {
 			zccr.eject(me, zccr[portal]);
 		}, true);
 	},
