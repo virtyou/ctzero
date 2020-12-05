@@ -219,6 +219,12 @@ zero.core.Person = CT.Class({
 		}
 		this.dance(dance, dur);
 	},
+	leave: function(portal) {
+		var me = this, zccr = zero.core.current.room;
+		this.approach(port, function() {
+			zccr.eject(me, zccr[portal]);
+		}, true);
+	},
 	move: function(opts, cb, watch) {
 		var k, dur = 1000; // TODO: ACTUALLY CALC DUR!!!!
 		for (var k in opts)
