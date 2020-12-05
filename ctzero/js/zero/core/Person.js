@@ -219,10 +219,11 @@ zero.core.Person = CT.Class({
 		}
 		this.dance(dance, dur);
 	},
-	leave: function(portal) {
+	leave: function(portal, cb) {
 		var me = this, zccr = zero.core.current.room;
 		this.approach(portal, function() {
 			zccr.eject(me, zccr[portal]);
+			cb && cb();
 		}, true);
 	},
 	move: function(opts, cb, watch) {
