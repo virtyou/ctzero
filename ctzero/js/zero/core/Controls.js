@@ -87,8 +87,8 @@ zero.core.Controls = CT.Class({
 						return shifter(wallshift, s);
 				}
 			}
-			if (target.opts.kind == "floor") // hm...... should fix.
-				target.adjust("position", dir, amount, true);
+			if (["floor", "obstacle", "wall"].includes(target.opts.kind))
+				target.adjust("position", dir, amount, true); // but fix..
 			else
 				s.boost = amount;
 		};
