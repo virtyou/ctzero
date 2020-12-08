@@ -125,8 +125,8 @@ zero.core.Body = CT.Class({
 			isRamp = obj.vlower == "ramp";
 			if (isRamp || obj.shifting("y")) {
 				otop = obj.getTop(pos);
-				if (isRamp && otop < bobber.value)
-					bobber.floored = false;
+				if (isRamp) // eh.......
+					bobber.floored = otop >= bobber.value - 100;
 				this._.bounder("y", 1, otop, true);
 			}
 		}
