@@ -109,18 +109,27 @@ zero.core.Body = CT.Class({
 	setBob: function() {
 		var r = zero.core.current.room;
 		if (!(r && r.isReady())) return;
-		var obj = r.getSurface(this.group.position, this.radii);
+		var pos = this.group.position,
+			isRamp, otop, bobber = this.springs.bob,
+			obj = r.getSurface(pos, this.radii);
 		if (obj != this.upon) {
 			this.log("upon", obj ? obj.name : "bottom");
 			this.upon = obj;
-			this.springs.bob.floored = false;
+			bobber.floored = false;
 			this.setFriction((obj || r).grippy,
-				!this.springs.bob.hard || (obj && obj.opts.state == "liquid"));
+				!bobber.hard || (obj && obj.opts.state == "liquid"));
 			for (var ps of ["weave", "bob", "slide"])
 				this.springs[ps].pull = obj && obj.pull && obj.pull[ps];
-			this._.bounder("y", 1, obj && obj.getTop());
-		} else if (obj && obj.shifting("y"))
-			this._.bounder("y", 1, obj.getTop(), true);
+			this._.bounder("y", 1, obj && obj.getTop(pos));
+		} else if (obj) {
+			isRamp = obj.vlower == "ramp";
+			if (isRamp || obj.shifting("y")) {
+				otop = obj.getTop(pos);
+				if (isRamp && otop < bobber.value)
+					bobber.floored = false;
+				this._.bounder("y", 1, otop, true);
+			}
+		}
 	},
 	energy: function() {
 		return this.person && this.person.energy;

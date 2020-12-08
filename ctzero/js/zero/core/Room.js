@@ -79,14 +79,27 @@ zero.core.Room = CT.Class({
 		}
 	},
 	getSurface: function(pos, radii) {
-		var i, flo, obj = this.getObject(pos, radii);
-		if (obj && obj.getTop() < pos.y) return obj;
-		if (!this.opts.floor) return;
-		for (i = this.opts.floor.parts.length - 1; i > -1; i--) {
-			flo = this["floor" + i];
-			if (pos.y > flo.getTop() && flo.overlaps(pos, radii))
-				return flo;
+		var val, top, winner, test = function(obj) {
+			if (obj) {
+				val = obj.getTop(pos);
+				if (val <= pos.y) {
+					if (!top || val > top) {
+						top = val;
+						winner = obj;
+					}
+				}
+			}
+		}, i, k, flo, oz = this.opts;
+		test(this.getObject(pos, radii));
+		for (k of ["floor", "ramp"]) {
+			if (oz[k]) {
+				for (i = oz[k].parts.length - 1; i > -1; i--) {
+					flo = this[k + i];
+					flo.overlaps(pos, radii) && test(flo);
+				}
+			}
 		}
+		return winner;
 	},
 	ebound: function(spr, bod) {
 		if (!bod.group) return;
@@ -109,7 +122,7 @@ zero.core.Room = CT.Class({
 			person.body.group && person.body.setBounds();
 		});
 		this.objects.forEach(furn => furn.setBounds());
-		for (var kind of ["obstacle", "floor"]) {
+		for (var kind of ["obstacle", "floor", "wall", "ramp"]) {
 			if (this[kind])
 				for (var item in this[kind])
 					this[kind][item].setBounds();
@@ -221,7 +234,7 @@ zero.core.Room = CT.Class({
 		var opts = this.opts, detach = this.detach;
 		opts.shell && detach("shell");
 		opts.outside && detach("sky");
-		["obstacle", "floor", "wall"].forEach(function(cat) {
+		["obstacle", "floor", "wall", "ramp"].forEach(function(cat) {
 			opts[cat] && opts[cat].parts.forEach(part => detach(part.name));
 		});
 	},
@@ -261,12 +274,16 @@ zero.core.Room = CT.Class({
 				side: THREE.BackSide
 			}
 		});
-		["obstacle", "floor", "wall"].forEach(function(cat) {
+		["obstacle", "floor", "wall", "ramp"].forEach(function(cat) {
 			var base = opts[cat];
 			if (base && base.parts && base.parts.length) {
 				var dz = base.dimensions,
 					tx = base.texture || opts.texture;
-					thing = cat == "floor" && "Floor" || "Thing";
+					thing = "Thing";
+				if (cat == "floor")
+					thing = "Floor";
+				else if (cat == "ramp")
+					thing = "Ramp";
 				base.parts.forEach(function(side, i) {
 					opts.parts.push(CT.merge(side, {
 						name: cat + i,
