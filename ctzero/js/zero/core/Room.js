@@ -66,11 +66,13 @@ zero.core.Room = CT.Class({
 		}, 2000);
 	},
 	getObject: function(pos, radii, checkY) {
-		var i, o, obj, obst;
-		for (o in this.obstacle) {
-			obst = this.obstacle[o];
-			if (obst.overlaps(pos, radii, checkY))
-				return obst;
+		var i, k, o, obj, obst;
+		for (k of ["wall", "obstacle"]) {
+			for (o in this[k]) {
+				obst = this[k][o];
+				if (obst.overlaps(pos, radii, checkY))
+					return obst;
+			}
 		}
 		for (i = 0; i < this.objects.length; i++) {
 			obj = this.objects[i];
