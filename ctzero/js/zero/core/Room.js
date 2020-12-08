@@ -5,6 +5,9 @@ zero.core.Room = CT.Class({
 		objects: 0
 	},
 	_tickers: [],
+	_structural: ["obstacle", "floor", "wall", "ramp"],
+	_bumpers: ["wall", "obstacle"],
+	_surfaces: ["floor", "ramp"],
 	tick: function(dts, rdts) {
 		var obj;
 		for (obj of this.objects)
@@ -67,7 +70,7 @@ zero.core.Room = CT.Class({
 	},
 	getObject: function(pos, radii, checkY) {
 		var i, k, o, obj, obst;
-		for (k of ["wall", "obstacle"]) {
+		for (k of this._bumpers) {
 			for (o in this[k]) {
 				obst = this[k][o];
 				if (obst.overlaps(pos, radii, checkY))
@@ -93,7 +96,7 @@ zero.core.Room = CT.Class({
 			}
 		}, i, k, flo, oz = this.opts;
 		test(this.getObject(pos, radii));
-		for (k of ["floor", "ramp"]) {
+		for (k of this._surfaces) {
 			if (oz[k]) {
 				for (i = oz[k].parts.length - 1; i > -1; i--) {
 					flo = this[k + i];
@@ -124,7 +127,7 @@ zero.core.Room = CT.Class({
 			person.body.group && person.body.setBounds();
 		});
 		this.objects.forEach(furn => furn.setBounds());
-		for (var kind of ["obstacle", "floor", "wall", "ramp"]) {
+		for (var kind of this._structural) {
 			if (this[kind])
 				for (var item in this[kind])
 					this[kind][item].setBounds();
@@ -236,7 +239,7 @@ zero.core.Room = CT.Class({
 		var opts = this.opts, detach = this.detach;
 		opts.shell && detach("shell");
 		opts.outside && detach("sky");
-		["obstacle", "floor", "wall", "ramp"].forEach(function(cat) {
+		this._structural.forEach(function(cat) {
 			opts[cat] && opts[cat].parts.forEach(part => detach(part.name));
 		});
 	},
