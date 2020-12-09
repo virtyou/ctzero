@@ -279,7 +279,7 @@ zero.core.Room = CT.Class({
 				side: THREE.BackSide
 			}
 		});
-		["obstacle", "floor", "wall", "ramp"].forEach(function(cat) {
+		this._structural.forEach(function(cat) {
 			var base = opts[cat];
 			if (base && base.parts && base.parts.length) {
 				var dz = base.dimensions,
