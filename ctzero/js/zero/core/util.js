@@ -71,10 +71,14 @@ zero.core.util = {
 		var blob = new Blob(byteArrays, {type: contentType});
 		return blob;
 	},
+	_txz: {},
 	texture: function(path) {
+		var txz = zero.core.util._txz;
 		if (core.config.ctzero.media.proxy && path.startsWith("http"))
 			path = "/_memcache?action=prox&p2=true&url=" + path;
-		return THREE.ImageUtils.loadTexture(path);
+		if (!txz[path])
+			txz[path] = THREE.ImageUtils.loadTexture(path);
+		return txz[path];
 	},
 	components: function(part, parent) {
 		var pref, ipref, oz, compz = [];
