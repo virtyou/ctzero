@@ -37,6 +37,12 @@ var camera = zero.core.camera = {
 		if (camera._.useControls)
 			camera._.controls.handleResize();
 	},
+	upsprings: function(opts) {
+		var o, s, sz = this.springs.position;
+		for (s in sz)
+			for (o in opts)
+				sz[s][o] = opts[o];
+	},
 	cycle: function() {
 		var _ = camera._;
 		if (_.cycler) {
