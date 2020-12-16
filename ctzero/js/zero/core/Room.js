@@ -14,6 +14,9 @@ zero.core.Room = CT.Class({
 			obj.tick && obj.tick(dts, rdts);
 		for (obj of this._tickers)
 			obj.tick(dts, rdts);
+		if (this.particles)
+			for (obj in this.particles)
+				this.particles[obj].tick(dts, rdts);
 	},
 	regTicker: function(ticker) {
 		this._tickers.push(ticker);
@@ -279,6 +282,11 @@ zero.core.Room = CT.Class({
 				side: THREE.BackSide
 			}
 		});
+		opts.fog && opts.parts.push(CT.merge({
+			name: "fog",
+			kind: "particles",
+			thing: "Particles"
+		}, zero.base.particles.fog));
 		this._structural.forEach(function(cat) {
 			var base = opts[cat];
 			if (base && base.parts && base.parts.length) {
