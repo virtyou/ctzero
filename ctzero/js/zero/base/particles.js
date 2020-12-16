@@ -52,7 +52,20 @@ zero.base.particles = {
 		}
 	},
 	fog: {
-
+		count: 8,
+		drip: true,
+		grow: 0.02,
+		dissolve: 0.02,
+		sizeVariance: 0.8,
+		velocity: [0, 0.5, 0],
+		velVariance: [4, 2, 4],
+		scale: [40, 4, 80],
+		pmat: {
+			opacity: 0,
+			color: 0x999999,
+			transparent: true,
+			side: THREE.DoubleSide
+		}
 	},
 	aura: {
 
