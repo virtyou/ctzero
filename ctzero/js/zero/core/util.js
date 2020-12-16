@@ -73,12 +73,14 @@ zero.core.util = {
 	},
 	_txz: {},
 	texture: function(path) {
-		var txz = zero.core.util._txz;
+		var txz = zero.core.util._txz, tx = new THREE.Texture();
 		if (core.config.ctzero.media.proxy && path.startsWith("http"))
 			path = "/_memcache?action=prox&p2=true&url=" + path;
 		if (!txz[path])
-			txz[path] = THREE.ImageUtils.loadTexture(path);
-		return txz[path];
+			txz[path] = CT.dom.img(path);
+		tx.image = txz[path];
+		tx.needsUpdate = true;
+		return tx;
 	},
 	components: function(part, parent) {
 		var pref, ipref, oz, compz = [];
