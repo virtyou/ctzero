@@ -67,6 +67,17 @@ zero.base.particles = {
 			side: THREE.DoubleSide
 		}
 	},
+	rain: {
+		count: 400,
+		size: 0.02,
+		velocity: [0, -800, 0],
+		pmat: {
+			opacity: 0.6,
+			shininess: 150,
+			color: 0x22ccff,
+			transparent: true
+		}
+	},
 	aura: {
 
 	}
