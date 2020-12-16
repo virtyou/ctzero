@@ -135,6 +135,7 @@ zero.core.Room = CT.Class({
 				for (var item in this[kind])
 					this[kind][item].setBounds();
 		}
+		this.rain && this.rain.rebound();
 	},
 	setFriction: function(grippy) {
 		this.grippy = this.opts.grippy = grippy;
@@ -263,6 +264,19 @@ zero.core.Room = CT.Class({
 		opts.cameras.forEach(this.addCamera);
 		opts.objects.forEach(this.addObject);
 	},
+	addEnv: function(ename) {
+		var thaz = this, isRain = ename == "rain", eobj = CT.merge({
+			name: ename,
+			kind: "particles",
+			thing: "Particles"
+		}, zero.base.particles[ename]);
+		if (isRain)
+			eobj.bounder = this;
+		this.attach(eobj);
+		isRain && setTimeout(function() {
+			thaz.rain.rebound();
+		});
+	},
 	preassemble: function() {
 		var opts = this.opts, d2g = function(dz) {
 			return new THREE.CubeGeometry(dz[0], dz[1], dz[2], dz[3], dz[4]); // ugh
@@ -287,6 +301,12 @@ zero.core.Room = CT.Class({
 			kind: "particles",
 			thing: "Particles"
 		}, zero.base.particles.fog));
+		opts.rain && opts.parts.push(CT.merge({
+			name: "rain",
+			kind: "particles",
+			thing: "Particles",
+			bounder: this
+		}, zero.base.particles.rain));
 		this._structural.forEach(function(cat) {
 			var base = opts[cat];
 			if (base && base.parts && base.parts.length) {
