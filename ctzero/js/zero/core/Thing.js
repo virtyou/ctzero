@@ -183,11 +183,13 @@ zero.core.Thing = CT.Class({
 			this.material.map.vnode.remove();
 	},
 	setPull: function(pull, axis) {},
-	unscroll: function() {
+	unscroll: function(clearOpts) {
 		if (this._.scroller) {
 			zero.core.util.untick(this._.scroller);
 			delete this._.scroller;
 			this.setPull(0);
+			if (clearOpts)
+				this.opts.scroll = null;
 		}
 	},
 	scroll: function(_opts) {
@@ -206,7 +208,7 @@ zero.core.Thing = CT.Class({
 			}
 		};
 		var pull = opts.speed * 4500;
-		if (opts.axis == "y")
+		if (opts.axis == "y" || this.opts.planeGeometry)
 			pull *= -1;
 		this.setPull(pull, {
 			x: "weave",
