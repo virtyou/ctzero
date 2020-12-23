@@ -5,7 +5,7 @@ zero.core.Controls = CT.Class({
 			base: 100,
 			jump: 500,
 			descent: -50,
-			orientation: 10
+			orientation: 5
 		},
 		cams: {
 			environmental: {
