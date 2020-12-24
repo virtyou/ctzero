@@ -216,11 +216,13 @@ zero.core.Thing = CT.Class({
 		}[opts.axis]);
 		zero.core.util.ontick(this._.scroller);
 	},
-	unshift: function() {
+	unshift: function(clearOpts) {
 		if (this._.shifter) {
 			zero.core.util.untick(this._.shifter);
 			delete this._.shifter;
 			this.setPull(0);
+			if (clearOpts)
+				this.opts.shift = null;
 		}
 	},
 	shifting: function(dim) {
