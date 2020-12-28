@@ -35,8 +35,8 @@ zero.core.Body = CT.Class({
 	_lookers: {
 		watcher: [0, 5, 15],
 		looker: [0, 5, 15],
-		lookAt: [0, 5, 45],
-		lookHigh: [0, 10, 45]
+		lookAt: [0, 5, 60],
+		lookHigh: [0, 10, 60]
 	},
 	_looker: function(name) {
 		this.opts.parts.push({
