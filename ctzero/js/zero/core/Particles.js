@@ -63,6 +63,7 @@ zero.core.Particles = CT.Class({
 				pulse: oz.pulse,
 				material: oz.pmat,
 				bounder: oz.bounder,
+				stripset: oz.pstrip,
 				variance: oz.variance,
 				velocity: oz.velocity,
 				velVariance: oz.velVariance,
