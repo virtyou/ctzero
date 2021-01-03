@@ -7,6 +7,8 @@ zero.core.util = {
 	rdts: 0.032,
 	dmax: 0.032,
 	_tickers: [],
+	rates: ["x-slow", "slow", "medium", "fast", "x-fast"],
+	pitches: ["x-low", "low", "medium", "high", "x-high"],
 	coords: function(xyz, cb) {
 	    ["x", "y", "z"].forEach(function(dim, i) {
 	        var val = xyz[dim] != undefined ? xyz[dim] : xyz[i];
