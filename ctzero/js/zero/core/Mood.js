@@ -1,11 +1,7 @@
 zero.core.Mood = CT.Class({
 	CLASSNAME: "zero.core.Mood",
-	_: {
-		rates: ["x-slow", "slow", "medium", "fast", "x-fast"],
-		pitches: ["x-low", "low", "medium", "high", "x-high"]
-	},
 	tick: function() {
-		var opts = this.opts, _ = this._,
+		var opts = this.opts, zcu = zero.core.util,
 			happy = opts.happy, // smile, big smile, smile eyes, prosody
 			mad = opts.mad,  // frown, snarl, brow, prosody
 			sad = opts.sad,  // frown, sad brow
@@ -45,8 +41,8 @@ zero.core.Mood = CT.Class({
 		//tickers.shake.conditions.talking.no.k.base = 2 + 20*energy,
 		energyMaster.k = 0.1 + 2 * energy;
 //		energyMaster.damp = 0.1 + energyMaster.opts.damp / energy;
-		prosody.rate = _.rates[Math.floor(4*rate) % 5];
-		prosody.pitch = _.pitches[Math.floor(4*pitch) % 5];
+		prosody.rate = zcu.rates[Math.floor(4*rate) % 5];
+		prosody.pitch = zcu.pitches[Math.floor(4*pitch) % 5];
 
 		
 		/*
@@ -56,7 +52,7 @@ zero.core.Mood = CT.Class({
 
 	},
 	tick_deprecated: function() {
-		var opts = this.opts, _ = this._,
+		var opts = this.opts, zcu = zero.core.util,
 			happy = opts.happy, antsy = opts.antsy,
 			mad = opts.mad, sad = opts.sad,
 			prosody = this.person.prosody,
@@ -75,8 +71,8 @@ zero.core.Mood = CT.Class({
 		tickers.shake.conditions.talking.no.reschedule.base = 8 - antsy * 2;
 		tickers.twist.conditions.talking.no.reschedule.base = 10 - antsy * 4;
 		energy.k = Math.max(0.1, 1 + happy + (2 * mad) - sad + antsy);
-		prosody.rate = _.rates[Math.floor(2 - sad + antsy) % 5];
-		prosody.pitch = _.pitches[Math.floor(energy.k) % 5];
+		prosody.rate = zcu.rates[Math.floor(2 - sad + antsy) % 5];
+		prosody.pitch = zcu.pitches[Math.floor(energy.k) % 5];
 	},
 	update: function(opts) {
 		this.opts = CT.merge(opts, this.opts);
