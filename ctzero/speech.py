@@ -59,8 +59,10 @@ def say(language, voice, words, prosody):
     if language == "mandarin":
         voice = "Zhiyu"
     log("say -> %s [%s @ %s, %s] :: %s"%(language, voice, rate, pitch, words))
-    fname = "%s%s%s%s"%(voice, rate, pitch,
-        "".join([c for c in words if c in letters]) or hash(words))
+    whash = "".join([c for c in words if c in letters])
+    if not whash or len(whash) > 200:
+        whash = hash(words)
+    fname = "%s%s%s%s"%(voice, rate, pitch, whash)
     fpath = "sound/" + fname
     fpjson = "%s.json"%(fpath,)
     if not os.path.exists(fpjson):
