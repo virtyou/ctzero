@@ -153,6 +153,7 @@ zero.core.util = {
 		vt = new THREE.VideoTexture(v);
 		v.loop = true;
 		vt.vnode = v;
+		vt.minFilter = vt.magFilter = THREE.NearestFilter; // for power of 2 warnings
 		return vt;
 	},
 	iframe: function(src) {
