@@ -26,12 +26,9 @@ var rec = zero.core.rec = {
 		oops: function(cb) {
 			return function(err) {
 				rec.active = false;
-				if (rec._.oops_cb)
-					rec._.oops_cb(cb);
-				else {
-					CT.log("oh no it didn't work!");
-					CT.log(err);
-				}
+				CT.log("oh no it didn't work!");
+				CT.log(err);
+				rec._.oops_cb && rec._.oops_cb(cb);
 			};
 		}
 	},
@@ -69,7 +66,9 @@ var rec = zero.core.rec = {
 	onfail: function(cb) {
 		rec._.oops_cb = cb;
 	},
-	listen: function(cb) {
+	listen: function(cb, onfail) {
+		if (onfail)
+			zero.core.rec.onfail(onfail);
 		rec.toggleIndicator();
 		if (window.webkitSpeechRecognition)
 			return rec.local(cb);
