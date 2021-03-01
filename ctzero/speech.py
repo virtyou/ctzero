@@ -18,7 +18,7 @@ CMDS = {
         'aws polly synthesize-speech --output-format json --voice-id %s --text "%s" --speech-mark-types=\'["viseme"]\' %s.json'
     ],
     "rec": {
-        "transcode": "avconv -i %s.webm -ac 1 %s.wav", # stampath, stampath
+        "transcode": config.ctzero.asr.audlib + " -i %s.webm -ac 1 %s.wav", # stampath, stampath
         "interpret": {
             "gcloud": "gcloud ml speech recognize %s.wav --language-code=%s", # stampath, lang
             "baidu": 'wget --header="Content-Type: audio/wav;rate=16000" --post-file=%s.wav "http://vop.baidu.com/server_api?lan=%s&cuid=10569015&token=%s" -O %s.json' # stampath, lang, token, stampath
@@ -86,7 +86,7 @@ def rec(language, data):
     stamp = str(time.time())
     spath = os.path.join("sound_in", stamp)
     log("rec -> %s :: %s"%(language, spath))
-    write(read_file(data), "%s.webm"%(spath,))
+    write(read_file(data), "%s.webm"%(spath,), binary=True)
     cmd(comz["transcode"]%(spath, spath))
     cfg = config.ctzero.asr
     lng = LANG[language]
