@@ -24,6 +24,7 @@ routes = {
 }
 cfg = {
 	"asr": {
+		"audlib": "ffmpeg", # or avconv (certain older distros)
 		"mode": "gcloud", # or "baidu" -- default "gcloud" mode requires gcloud to be installed and configured
 		"id": None,       # baidu only
 		"secret": None    # baidu only
