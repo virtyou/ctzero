@@ -42,6 +42,7 @@ var camera = zero.core.camera = {
 			ratio = ratio / 2;
 			camera.aspect(ratio, _.left.camera);
 			camera.aspect(ratio, _.right.camera);
+			_.camera.aspect = ratio; // for width() etc
 		} else
 			camera.aspect(ratio, _.camera);
 		camera.resize();
@@ -300,12 +301,14 @@ var camera = zero.core.camera = {
 		_.camera.container = _.container;
 		return _.camera;
 	},
-	_stand: function(cam1, cam2) {
+	_stand: function(cam1, cam2, aspect) {
 		var stand = new zero.core.Thing({
 			onbuild: function() {
-				camera._.camera = stand.group;
-				stand.group.add(cam1);
-				stand.group.add(cam2);
+				var c = camera._.camera = stand.group;
+				c.fov = core.config.ctzero.camera.fov; // for height()
+				c.aspect = aspect;
+				c.add(cam1);
+				c.add(cam2);
 				cam1.position.x = -10;
 				cam2.position.x = 10;
 			}
@@ -319,7 +322,7 @@ var camera = zero.core.camera = {
 			WIDTH = WIDTH / 2;
 			c1 = camera._cam(WIDTH, HEIGHT, _.left, "abs ctl");
 			c2 = camera._cam(WIDTH, HEIGHT, _.right, "abs ctr");
-			camera._stand(c1, c2);
+			camera._stand(c1, c2, WIDTH / HEIGHT);
 			CT.dom.addContent(_.outerContainer, c1.container);
 			CT.dom.addContent(_.outerContainer, c2.container);
 		} else {
