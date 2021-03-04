@@ -302,17 +302,14 @@ var camera = zero.core.camera = {
 		return _.camera;
 	},
 	_stand: function(cam1, cam2, aspect) {
-		var stand = new zero.core.Thing({
-			onbuild: function() {
-				var c = camera._.camera = stand.group;
-				c.fov = core.config.ctzero.camera.fov; // for height()
-				c.aspect = aspect;
-				c.add(cam1);
-				c.add(cam2);
-				cam1.position.x = -10;
-				cam2.position.x = 10;
-			}
-		});
+		var stand = camera._.camera = new THREE.Object3D();
+		stand.fov = core.config.ctzero.camera.fov; // for height()
+		stand.aspect = aspect;
+		stand.add(cam1);
+		stand.add(cam2);
+		cam1.position.x = -10;
+		cam2.position.x = 10;
+		return stand;
 	},
 	initCam: function() {
 		var _ = camera._, config = core.config.ctzero,
@@ -322,7 +319,7 @@ var camera = zero.core.camera = {
 			WIDTH = WIDTH / 2;
 			c1 = camera._cam(WIDTH, HEIGHT, _.left, "abs ctl");
 			c2 = camera._cam(WIDTH, HEIGHT, _.right, "abs ctr");
-			camera._stand(c1, c2, WIDTH / HEIGHT);
+			camera.scene.add(camera._stand(c1, c2, WIDTH / HEIGHT));
 			CT.dom.addContent(_.outerContainer, c1.container);
 			CT.dom.addContent(_.outerContainer, c2.container);
 		} else {
