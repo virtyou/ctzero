@@ -317,8 +317,8 @@ var camera = zero.core.camera = {
 			WIDTH = c.clientWidth, HEIGHT = c.clientHeight, c1, c2, cam;
 		if (config.camera.vr) {
 			WIDTH = WIDTH / 2;
-			c1 = camera._cam(WIDTH, HEIGHT, _.left, "abs ctl");
-			c2 = camera._cam(WIDTH, HEIGHT, _.right, "abs ctr");
+			c1 = camera._cam(WIDTH, HEIGHT, _.left, "abs lefthalf");
+			c2 = camera._cam(WIDTH, HEIGHT, _.right, "abs righthalf");
 			camera.scene.add(camera._stand(c1, c2, WIDTH / HEIGHT));
 			CT.dom.addContent(_.outerContainer, c1.container);
 			CT.dom.addContent(_.outerContainer, c2.container);
