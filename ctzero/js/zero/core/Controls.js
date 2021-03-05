@@ -33,31 +33,36 @@ zero.core.Controls = CT.Class({
 				RIGHT: ["shake", -0.5]
 			}
 		},
-		cam: function(dir) {
-			var _ = this._, cz = _.cams, mode, rule,
-				zcc = zero.core.current, per, bs;
-			CT.key.on(dir, function() {
-				per = camera.get("perspective");
-				if (per == zcc.person) {
-					mode = cz.pov;//[camera.current];
+		look: function(dir) {
+			var _ = this._, cz = _.cams, mode,
+				per = camera.get("perspective"),
+				zcc = zero.core.current, rule, bs;
+			if (per == zcc.person) {
+				mode = cz.pov;//[camera.current];
 //					if (camera.current == "pov") {
-						rule = mode[dir];
-						bs = zcc.person.body.springs;
-						bs[rule[0]].target += rule[1];
-						return;
-//					} disabled behind zoom/shift for now ... better right?
-				}
-				else if (per)
-					mode = cz.interactive;
-				else
-					mode = cz.environmental;
 				rule = mode[dir];
-				zero.core.camera[rule[0]](rule[1]);
-			});
+				bs = zcc.person.body.springs;
+				bs[rule[0]].target += rule[1];
+				return;
+//					} disabled behind zoom/shift for now ... better right?
+			} else if (per)
+				mode = cz.interactive;
+			else
+				mode = cz.environmental;
+			rule = mode[dir];
+			zero.core.camera[rule[0]](rule[1]);
+		},
+		cam: function(dir) {
+			CT.key.on(dir, () => this._.look(dir));
+		},
+		xlrometer: function() {
+
 		}
 	},
 	setCams: function() {
-		["UP", "DOWN", "LEFT", "RIGHT"].forEach(this._.cam);
+		var _ = this._;
+		["UP", "DOWN", "LEFT", "RIGHT"].forEach(_.cam);
+		core.config.ctzero.camera.vr && _.xlrometer();
 	},
 	wallshift: function(shift, prev_spring) {
 		var target = this.target;
@@ -227,6 +232,6 @@ zero.core.Controls = CT.Class({
 		});
 		opts.cb && this.setCb(opts.cb);
 		opts.moveCb && this.setMoveCb(opts.moveCb);
-		opts.target && this.setTarget(opts.target);
+		opts.target && this.setTarget(opts.target, opts.cams);
 	}
 });
