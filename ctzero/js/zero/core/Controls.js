@@ -33,6 +33,7 @@ zero.core.Controls = CT.Class({
 				RIGHT: ["shake", -0.5]
 			}
 		},
+		xlrmode: "walk", // walk|look|dance
 		look: function(dir, mult) {
 			var _ = this._, cz = _.cams, mode,
 				per = camera.get("perspective"),
@@ -54,15 +55,25 @@ zero.core.Controls = CT.Class({
 			CT.key.on(dir, () => this._.look(dir));
 		},
 		xlrometer: function() {
-			var _ = this._;
+			var _ = this._, mover = this.mover;
 			if (_.acl) return;
 			_.acl = new Accelerometer();
 			_.acl.addEventListener('reading', function() {
-				_.look("UP", acl.x);
-				_.look("LEFT", acl.y);
+				if (_.xlrmode == "look") {
+					_.look("UP", acl.x);
+					_.look("LEFT", acl.y);
+				} else if (_.xlrmode == "walk") {
+					mover(acl.x);
+					mover(acl.y, "orientation");
+				} else { // dance
+					// TODO! -> flop/flail around!!
+				}
 			});
 			_.acl.start();
 		}
+	},
+	setXLRMode: function(m) {
+		this._.xlrmode = m;
 	},
 	setCams: function() {
 		var _ = this._;
