@@ -1,6 +1,8 @@
 var camera = zero.core.camera = {
 	_: {
 		profiles: {},
+		left: {},
+		right: {},
 		lookers: {
 			pov: {
 				y: 5,
@@ -23,19 +25,40 @@ var camera = zero.core.camera = {
 	},
 	render: function() {
 		var _ = camera._;
-		_.renderer.render(camera.scene, _.camera);
+		if (core.config.ctzero.camera.vr) {
+			_.left.renderer.render(camera.scene, _.left.camera);
+			_.right.renderer.render(camera.scene, _.right.camera);
+		} else
+			_.renderer.render(camera.scene, _.camera);
+	},
+	aspect: function(ratio, cam) {
+		cam.aspect = ratio;
+		cam.updateProjectionMatrix();
 	},
 	update: function() {
-		var cam = camera._.camera, cont = camera._.outerContainer;
-		cam.aspect = cont.clientWidth / cont.clientHeight;
-		cam.updateProjectionMatrix();
+		var _ = camera._, cont = _.outerContainer,
+			ratio = cont.clientWidth / cont.clientHeight;
+		if (core.config.ctzero.camera.vr) {
+			ratio = ratio / 2;
+			camera.aspect(ratio, _.left.camera);
+			camera.aspect(ratio, _.right.camera);
+			_.camera.aspect = ratio; // for width() etc
+		} else
+			camera.aspect(ratio, _.camera);
 		camera.resize();
 	},
 	resize: function(w, h) {
-		var cont = camera._.outerContainer;
-		camera._.renderer.setSize(w || cont.clientWidth, h || cont.clientHeight);
-		if (camera._.useControls)
-			camera._.controls.handleResize();
+		var _ = camera._, cont = _.outerContainer;
+		w = w || cont.clientWidth;
+		h = h || cont.clientHeight;
+		if (core.config.ctzero.camera.vr) {
+			w = w / 2;
+			_.left.renderer.setSize(w, h);
+			_.right.renderer.setSize(w, h);
+		} else
+			_.renderer.setSize(w, h);
+		if (_.useControls)
+			_.controls.handleResize();
 	},
 	upsprings: function(opts) {
 		var o, s, sz = this.springs.position;
@@ -91,8 +114,9 @@ var camera = zero.core.camera = {
 		_.onchange && _.onchange();
 	},
 	look: function(pos) {
+		var prop = (camera.current == "pov") ? "value" : "target";
 		zero.core.util.coords(pos, function(dim, val) {
-			camera.springs.looker[dim].target = val;
+			camera.springs.looker[dim][prop] = val;
 		});
 	},
 	follow: function(thing) {
@@ -119,9 +143,11 @@ var camera = zero.core.camera = {
 		person && camera.follow(person.body[part || "lookAt"]);
 	},
 	_tickPerspective: function() {
-		if (camera._.perspective)
+		if (camera._.perspective) {
+			var prop = (camera.current == "pov") ? "value" : "target";
 			zero.core.util.coords(camera._.perspective.body.watcher.position(null, true),
-				function(dim, val) { camera.springs.position[dim].target = val; });
+				function(dim, val) { camera.springs.position[dim][prop] = val; });
+		}
 	},
 	_tickSubject: function() {
 		var _ = camera._, looker = camera.springs.looker;
@@ -267,20 +293,55 @@ var camera = zero.core.camera = {
 	container: function() {
 		return zero.core.camera._.outerContainer;
 	},
+	_cam: function(w, h, _, cclass) {
+		var camcfg = core.config.ctzero.camera;
+		_ = _ || camera._;
+		_.container = CT.dom.div(null, cclass || "abs all0");
+		_.camera = new THREE.PerspectiveCamera(camcfg.fov, w / h, 0.2, 10000000);
+		_.renderer = new THREE.WebGLRenderer(camcfg.opts);
+		_.renderer.setSize(w, h);
+		_.container.appendChild(_.renderer.domElement);
+		_.camera.container = _.container;
+		return _.camera;
+	},
+	_stand: function(cam1, cam2, aspect) {
+		var stand = camera._.camera = new THREE.Object3D();
+		stand.fov = core.config.ctzero.camera.fov; // for height()
+		stand.aspect = aspect;
+		stand.add(cam1);
+		stand.add(cam2);
+		cam1.position.x = -10;
+		cam2.position.x = 10;
+		var keanu = new THREE.Matrix4();
+		stand.lookAt = function(vec) {
+			keanu.lookAt(stand.position, vec, stand.up);
+			stand.quaternion.setFromRotationMatrix(keanu);
+		};
+		return stand;
+	},
+	initCam: function() {
+		var _ = camera._, config = core.config.ctzero,
+			c = _.outerContainer = CT.dom.id(config.container) || document.body,
+			WIDTH = c.clientWidth, HEIGHT = c.clientHeight, c1, c2, cam;
+		if (config.camera.vr) {
+			WIDTH = WIDTH / 2;
+			c1 = camera._cam(WIDTH, HEIGHT, _.left, "abs lefthalf");
+			c2 = camera._cam(WIDTH, HEIGHT, _.right, "abs righthalf");
+			camera.scene.add(camera._stand(c1, c2, WIDTH / HEIGHT));
+			CT.dom.addContent(_.outerContainer, c1.container);
+			CT.dom.addContent(_.outerContainer, c2.container);
+		} else {
+			cam = camera._cam(WIDTH, HEIGHT);
+			camera.scene.add(cam);
+			CT.dom.addContent(_.outerContainer, cam.container);
+		}
+	},
 	init: function() {
 		var _ = camera._, config = core.config.ctzero, controls = !config.camera.noControls;
 		camera.scene = new THREE.Scene();
+		camera.initCam();
 		if (config.camera.background)
 			camera.background(config.camera.background);
-		_.container = CT.dom.div(null, "abs all0");
-		var c = _.outerContainer = CT.dom.id(config.container) || document.body,
-			WIDTH = c.clientWidth, HEIGHT = c.clientHeight;
-		_.camera = new THREE.PerspectiveCamera(config.camera.fov, WIDTH / HEIGHT, 0.2, 10000000);
-		camera.scene.add(_.camera);
-		_.renderer = new THREE.WebGLRenderer(config.camera.opts);
-		_.renderer.setSize(WIDTH, HEIGHT);
-		CT.dom.addContent(_.outerContainer, _.container);
-		_.container.appendChild(_.renderer.domElement);
 		if (controls)
 			_.controls = new THREE.TrackballControls(_.camera);
 		_.looker = new zero.core.Thing({

@@ -1,5 +1,6 @@
 {
 	"camera": {
+		"vr": false,
 		"opts": {
 			"antialias": true
 		},

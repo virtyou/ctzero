@@ -20,7 +20,7 @@ zero.core.Controls = CT.Class({
 				LEFT: ["shift", -50],
 				RIGHT: ["shift", 50]
 			},
-			behind: {
+			behind: { // currently using pov{} instead...
 				UP: ["zoom", 50],
 				DOWN: ["zoom", -50],
 				LEFT: ["shift", 50],
@@ -33,31 +33,52 @@ zero.core.Controls = CT.Class({
 				RIGHT: ["shake", -0.5]
 			}
 		},
-		cam: function(dir) {
-			var _ = this._, cz = _.cams, mode, rule,
-				zcc = zero.core.current, per, bs;
-			CT.key.on(dir, function() {
-				per = camera.get("perspective");
-				if (per == zcc.person) {
-					mode = cz.pov;//[camera.current];
-//					if (camera.current == "pov") {
-						rule = mode[dir];
-						bs = zcc.person.body.springs;
-						bs[rule[0]].target += rule[1];
-						return;
-//					} disabled behind zoom/shift for now ... better right?
-				}
-				else if (per)
-					mode = cz.interactive;
-				else
-					mode = cz.environmental;
+		xlrmode: "walk", // walk|look|dance
+		look: function(dir, mult) {
+			var _ = this._, cz = _.cams, mode,
+				per = camera.get("perspective"),
+				zcc = zero.core.current, rule, bs;
+			if (per == zcc.person) {
+				mode = cz.pov;//[camera.current];
+//				if (camera.current == "pov") {
+				rule = mode[dir];
+				bs = zcc.person.body.springs;
+				bs[rule[0]].target += rule[1] * (mult || 1);
+//				} disabled behind zoom/shift for now ... better right?
+			} else {
+				mode = per ? cz.interactive : cz.environmental;
 				rule = mode[dir];
 				zero.core.camera[rule[0]](rule[1]);
+			}
+		},
+		cam: function(dir) {
+			CT.key.on(dir, () => this._.look(dir));
+		},
+		xlrometer: function() {
+			var _ = this._, mover = this.mover;
+			if (_.acl) return;
+			_.acl = new Accelerometer();
+			_.acl.addEventListener('reading', function() {
+				if (_.xlrmode == "look") {
+					_.look("UP", acl.x);
+					_.look("LEFT", acl.y);
+				} else if (_.xlrmode == "walk") {
+					mover(acl.x);
+					mover(acl.y, "orientation");
+				} else { // dance
+					// TODO! -> flop/flail around!!
+				}
 			});
+			_.acl.start();
 		}
 	},
+	setXLRMode: function(m) {
+		this._.xlrmode = m;
+	},
 	setCams: function() {
-		["UP", "DOWN", "LEFT", "RIGHT"].forEach(this._.cam);
+		var _ = this._;
+		["UP", "DOWN", "LEFT", "RIGHT"].forEach(_.cam);
+		core.config.ctzero.camera.vr && _.xlrometer();
 	},
 	wallshift: function(shift, prev_spring) {
 		var target = this.target;
@@ -171,30 +192,28 @@ zero.core.Controls = CT.Class({
 				this.setNum(num + 1, gestures[num], dances[num]);
 				num += 1;
 			}
-		} else {
-			if (["poster", "portal", "screen", "stream"].indexOf(this.target.opts.kind) != -1) {
-				CT.key.on("UP", placer("y", 0), placer("y", speed));
-				CT.key.on("DOWN", placer("y", 0), placer("y", -speed));
-				wall = this.target.opts.wall;
-				if (wall == 0) {
-					CT.key.on("LEFT", placer("x", 0), placer("x", -speed, -1));
-					CT.key.on("RIGHT", placer("x", 0), placer("x", speed, 1));
-				} else if (wall == 1) {
-					CT.key.on("LEFT", placer("z", 0), placer("z", -speed, -1));
-					CT.key.on("RIGHT", placer("z", 0), placer("z", speed, 1));
-				} else if (wall == 2) {
-					CT.key.on("LEFT", placer("x", 0), placer("x", speed, -1));
-					CT.key.on("RIGHT", placer("x", 0), placer("x", -speed, 1));
-				} else if (wall == 3) {
-					CT.key.on("LEFT", placer("z", 0), placer("z", speed, -1));
-					CT.key.on("RIGHT", placer("z", 0), placer("z", -speed, 1));
-				}
-			} else {
-				CT.key.on("UP", placer("z", 0), placer("z", -speed));
-				CT.key.on("DOWN", placer("z", 0), placer("z", speed));
-				CT.key.on("LEFT", placer("x", 0), placer("x", -speed));
-				CT.key.on("RIGHT", placer("x", 0), placer("x", speed));
+		} else if (["poster", "portal", "screen", "stream"].indexOf(this.target.opts.kind) != -1) {
+			CT.key.on("UP", placer("y", 0), placer("y", speed));
+			CT.key.on("DOWN", placer("y", 0), placer("y", -speed));
+			wall = this.target.opts.wall;
+			if (wall == 0) {
+				CT.key.on("LEFT", placer("x", 0), placer("x", -speed, -1));
+				CT.key.on("RIGHT", placer("x", 0), placer("x", speed, 1));
+			} else if (wall == 1) {
+				CT.key.on("LEFT", placer("z", 0), placer("z", -speed, -1));
+				CT.key.on("RIGHT", placer("z", 0), placer("z", speed, 1));
+			} else if (wall == 2) {
+				CT.key.on("LEFT", placer("x", 0), placer("x", speed, -1));
+				CT.key.on("RIGHT", placer("x", 0), placer("x", -speed, 1));
+			} else if (wall == 3) {
+				CT.key.on("LEFT", placer("z", 0), placer("z", speed, -1));
+				CT.key.on("RIGHT", placer("z", 0), placer("z", -speed, 1));
 			}
+		} else {
+			CT.key.on("UP", placer("z", 0), placer("z", -speed));
+			CT.key.on("DOWN", placer("z", 0), placer("z", speed));
+			CT.key.on("LEFT", placer("x", 0), placer("x", -speed));
+			CT.key.on("RIGHT", placer("x", 0), placer("x", speed));
 		}
 		CT.key.on("ENTER", this._.cb);
 	},
@@ -229,6 +248,6 @@ zero.core.Controls = CT.Class({
 		});
 		opts.cb && this.setCb(opts.cb);
 		opts.moveCb && this.setMoveCb(opts.moveCb);
-		opts.target && this.setTarget(opts.target);
+		opts.target && this.setTarget(opts.target, opts.cams);
 	}
 });
