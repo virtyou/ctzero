@@ -143,9 +143,11 @@ var camera = zero.core.camera = {
 		person && camera.follow(person.body[part || "lookAt"]);
 	},
 	_tickPerspective: function() {
-		if (camera._.perspective)
+		if (camera._.perspective) {
+			var prop = (camera.current == "pov") ? "value" : "target";
 			zero.core.util.coords(camera._.perspective.body.watcher.position(null, true),
-				function(dim, val) { camera.springs.position[dim].target = val; });
+				function(dim, val) { camera.springs.position[dim][prop] = val; });
+		}
 	},
 	_tickSubject: function() {
 		var _ = camera._, looker = camera.springs.looker;
