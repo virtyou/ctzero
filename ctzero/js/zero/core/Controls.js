@@ -20,7 +20,7 @@ zero.core.Controls = CT.Class({
 				LEFT: ["shift", -50],
 				RIGHT: ["shift", 50]
 			},
-			behind: {
+			behind: { // currently using pov{} instead...
 				UP: ["zoom", 50],
 				DOWN: ["zoom", -50],
 				LEFT: ["shift", 50],
@@ -33,30 +33,35 @@ zero.core.Controls = CT.Class({
 				RIGHT: ["shake", -0.5]
 			}
 		},
-		look: function(dir) {
+		look: function(dir, mult) {
 			var _ = this._, cz = _.cams, mode,
 				per = camera.get("perspective"),
 				zcc = zero.core.current, rule, bs;
 			if (per == zcc.person) {
 				mode = cz.pov;//[camera.current];
-//					if (camera.current == "pov") {
+//				if (camera.current == "pov") {
 				rule = mode[dir];
 				bs = zcc.person.body.springs;
-				bs[rule[0]].target += rule[1];
-				return;
-//					} disabled behind zoom/shift for now ... better right?
-			} else if (per)
-				mode = cz.interactive;
-			else
-				mode = cz.environmental;
-			rule = mode[dir];
-			zero.core.camera[rule[0]](rule[1]);
+				bs[rule[0]].target += rule[1] * (mult || 1);
+//				} disabled behind zoom/shift for now ... better right?
+			} else {
+				mode = per ? cz.interactive : cz.environmental;
+				rule = mode[dir];
+				zero.core.camera[rule[0]](rule[1]);
+			}
 		},
 		cam: function(dir) {
 			CT.key.on(dir, () => this._.look(dir));
 		},
 		xlrometer: function() {
-
+			var _ = this._;
+			if (_.acl) return;
+			_.acl = new Accelerometer();
+			_.acl.addEventListener('reading', function() {
+				_.look("UP", acl.x);
+				_.look("LEFT", acl.y);
+			});
+			_.acl.start();
 		}
 	},
 	setCams: function() {
