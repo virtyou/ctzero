@@ -309,6 +309,11 @@ var camera = zero.core.camera = {
 		stand.add(cam2);
 		cam1.position.x = -10;
 		cam2.position.x = 10;
+		var keanu = new THREE.Matrix4();
+		stand.lookAt = function(vec) {
+			keanu.lookAt(stand.position, vec, stand.up);
+			stand.quaternion.setFromRotationMatrix(keanu);
+		};
 		return stand;
 	},
 	initCam: function() {
