@@ -30,6 +30,7 @@ This package contains the core zero libraries.
     }
     cfg = {
     	"asr": {
+    		"audlib": "ffmpeg", # or avconv (certain older distros)
     		"mode": "gcloud", # or "baidu" -- default "gcloud" mode requires gcloud to be installed and configured
     		"id": None,       # baidu only
     		"secret": None    # baidu only
@@ -49,9 +50,11 @@ This package contains the core zero libraries.
 ### Import line: 'CT.require("core.config");'
     {
     	"camera": {
+    		"vr": false,
     		"opts": {
     			"antialias": true
     		},
+    		"fov": 25,
     		"noControls": false,
     		"controls": {
     			"rotateSpeed": 1.0,
@@ -108,6 +111,7 @@ This package contains the core zero libraries.
     		},
     		"patterns": {}
     	},
+    	"multi": false,
     	"room": {
     		"gravity": true,
     		"name": "vroom",
@@ -121,10 +125,24 @@ This package contains the core zero libraries.
     	"morphs": {
     		"delta_cutoff": 0.1
     	},
+    	"media": {
+    		"proxy": true
+    	},
     	"brain": {
     		"noChat": false,
     		"chain": {
     			"delay": 500
+    		},
+    		"responses": {
+    			"unintelligible": {
+    				"phrase": [
+    					"what was that?",
+    					"i didn't quite catch what you said",
+    					"could you please repeat that?",
+    					"i'm sorry, i missed that",
+    					"come again?"
+    				]
+    			}
     		},
     		"modal": {
     			"noClose": true,
