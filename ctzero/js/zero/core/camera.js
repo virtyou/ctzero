@@ -114,8 +114,9 @@ var camera = zero.core.camera = {
 		_.onchange && _.onchange();
 	},
 	look: function(pos) {
+		var prop = (camera.current == "pov") ? "value" : "target";
 		zero.core.util.coords(pos, function(dim, val) {
-			camera.springs.looker[dim].target = val;
+			camera.springs.looker[dim][prop] = val;
 		});
 	},
 	follow: function(thing) {
