@@ -2,7 +2,7 @@
 	"camera": {
 		"vr": false,
 		"xlro": {
-			"x": 10,
+			"z": 1,
 			"y": 1
 		},
 		"opts": {
