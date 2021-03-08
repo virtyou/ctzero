@@ -60,11 +60,11 @@ zero.core.Controls = CT.Class({
 			_.acl = new Accelerometer();
 			_.acl.addEventListener('reading', function() {
 				if (_.xlrmode == "look") {
-					_.look("UP", acl.x);
-					_.look("LEFT", acl.y);
+					_.look("UP", _.acl.x);
+					_.look("LEFT", _.acl.y);
 				} else if (_.xlrmode == "walk") {
-					mover(acl.x);
-					mover(acl.y, "orientation");
+					mover(_.acl.x);
+					mover(_.acl.y, "orientation");
 				} else { // dance
 					// TODO! -> flop/flail around!!
 				}
