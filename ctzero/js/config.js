@@ -2,8 +2,8 @@
 	"camera": {
 		"vr": false,
 		"xlro": {
-			"x": 100,
-			"y": 30
+			"x": 10,
+			"y": 1
 		},
 		"opts": {
 			"antialias": true
