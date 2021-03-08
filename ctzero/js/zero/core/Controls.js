@@ -63,8 +63,8 @@ zero.core.Controls = CT.Class({
 					_.look("UP", _.acl.x);
 					_.look("LEFT", _.acl.y);
 				} else if (_.xlrmode == "walk") {
-					mover(_.acl.x);
-					mover(_.acl.y, "orientation");
+					mover(_.acl.x * 20);
+					mover(_.acl.y * 10, "orientation");
 				} else { // dance
 					// TODO! -> flop/flail around!!
 				}
