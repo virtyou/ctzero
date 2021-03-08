@@ -55,7 +55,7 @@ zero.core.Controls = CT.Class({
 			CT.key.on(dir, () => this._.look(dir));
 		},
 		xlrometer: function() {
-			var _ = this._, mover = this.mover;
+			var _ = this._, mover = this.mover, acfg = core.config.ctzero.camera.xlro;
 			if (_.acl) return;
 			_.acl = new Accelerometer();
 			_.acl.addEventListener('reading', function() {
@@ -63,8 +63,8 @@ zero.core.Controls = CT.Class({
 					_.look("UP", _.acl.x);
 					_.look("LEFT", _.acl.y);
 				} else if (_.xlrmode == "walk") {
-					mover(_.acl.x * 20);
-					mover(_.acl.y * 10, "orientation");
+					mover(_.acl.x * acfg.x);
+					mover(_.acl.y * acfg.y, "orientation");
 				} else { // dance
 					// TODO! -> flop/flail around!!
 				}
