@@ -604,6 +604,8 @@ zero.core.Thing = CT.Class({
 			grippy: true,
 			frustumCulled: true
 		});
+		if (CT.info.mobile)
+			opts.matcat = "Basic";
 		this.variety = this.CLASSNAME.split(".")[2];
 		var vl = this.vlower = this.variety.toLowerCase(); // should these be automated by CT.Class?
 		this.setName(opts);
