@@ -3,7 +3,7 @@
 		"vr": false,
 		"xlro": {
 			"x": 20,
-			"y": 1
+			"y": -0.5
 		},
 		"opts": {
 			"antialias": true
