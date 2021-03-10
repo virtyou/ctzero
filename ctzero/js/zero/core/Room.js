@@ -20,27 +20,17 @@ zero.core.Room = CT.Class({
 		this.jostle();
 	},
 	jostle: function() {
-		var pz = zero.core.current.people, _fz = {},
-			f, p, pname, moshers, m1, mp, mr, m2;
+		var zcc = zero.core.current, pz = zcc.people,
+			you = zcc.person, b = you.body,
+			pos = b.position(), rz = b.radii, p, pname;
+		if (!(b.upon && b.upon.opts.moshy)) return;
 		for (pname in pz) {
 			p = pz[pname];
-			if (p.body.upon && p.body.upon.opts.moshy) {
-				if (!_fz[p.body.upon.name])
-					_fz[p.body.upon.name] = [];
-				_fz[p.body.upon.name].push(p.body);
-			}
-		}
-		for (f in fz) {
-			moshers = fz[f];
-			while (moshers.length > 1) {
-				m1 = moshers.shift();
-				mp = m1.position();
-				mr = m1.radii;
-				for (m2 of moshers) {
-					if (m2.overlaps(mp, mr, true)) {
-						// swap trajectories?
-					}
-				}
+			if ((pname == you.name) || (p.body.upon != b.upon)) continue;
+			if (p.body.overlaps(pos, rz, true)) {
+
+				// TODO: swap trajectories / sync
+
 			}
 		}
 	},
