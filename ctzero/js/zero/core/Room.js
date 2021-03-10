@@ -17,6 +17,32 @@ zero.core.Room = CT.Class({
 		if (this.particles)
 			for (obj in this.particles)
 				this.particles[obj].tick(dts, rdts);
+		this.jostle();
+	},
+	jostle: function() {
+		var pz = zero.core.current.people, _fz = {},
+			f, p, pname, moshers, m1, mp, mr, m2;
+		for (pname in pz) {
+			p = pz[pname];
+			if (p.body.upon && p.body.upon.opts.moshy) {
+				if (!_fz[p.body.upon.name])
+					_fz[p.body.upon.name] = [];
+				_fz[p.body.upon.name].push(p.body);
+			}
+		}
+		for (f in fz) {
+			moshers = fz[f];
+			while (moshers.length > 1) {
+				m1 = moshers.shift();
+				mp = m1.position();
+				mr = m1.radii;
+				for (m2 of moshers) {
+					if (m2.overlaps(mp, mr, true)) {
+						// swap trajectories?
+					}
+				}
+			}
+		}
 	},
 	regTicker: function(ticker) {
 		this._tickers.push(ticker);
