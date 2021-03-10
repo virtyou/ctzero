@@ -78,7 +78,9 @@ zero.core.Person = CT.Class({
 		}, 5000);
 	},
 	setFriction: function() { // roller skates, ice, etc
-		this.body.setFriction(this.grippy && zero.core.current.room.grippy);
+		this.body.setFriction(this.grippy &&
+			zero.core.current.person == this &&
+			(this.body.upon || zero.core.current.room).grippy);
 	},
 	onsay: function(cb) {
 		this._.onsay = cb;

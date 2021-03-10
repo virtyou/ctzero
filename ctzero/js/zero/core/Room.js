@@ -17,6 +17,28 @@ zero.core.Room = CT.Class({
 		if (this.particles)
 			for (obj in this.particles)
 				this.particles[obj].tick(dts, rdts);
+		this.jostle();
+	},
+	bump: function(b1, b2, moshy) {
+		var axis, s1, s2;
+		for (axis of ["weave", "bob", "slide"]) {
+			s1 = b1.springs[axis].boost;
+			s2 = b2.springs[axis].boost;
+			b1.springs[axis].boost = s2 * moshy;
+			b2.springs[axis].boost = s1 * moshy;
+		}
+	},
+	jostle: function() {
+		var zcc = zero.core.current, pz = zcc.people, you = zcc.person;
+		if (!you) return;
+		var b = you.body, pos = b.position(), rz = b.radii, pname, pbod,
+			moshy = b.upon && b.upon.opts.moshy || this.opts.moshy;
+		if (!moshy) return;
+		for (pname in pz) {
+			pbod = pz[pname].body;
+			if ((pname == you.name) || (pbod.upon != b.upon)) continue;
+			pbod.overlaps(pos, rz, true) && this.bump(b, pbod, moshy);
+		}
 	},
 	regTicker: function(ticker) {
 		this._tickers.push(ticker);
@@ -351,6 +373,6 @@ zero.core.Room = CT.Class({
 		this.lights = [];
 		this.objects = [];
 		this.cameras = [];
-		this.setFriction(opts.grippy);
+		setTimeout(() => this.setFriction(opts.grippy), 1000);
 	}
 }, zero.core.Thing);
