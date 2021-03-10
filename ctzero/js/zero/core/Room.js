@@ -19,23 +19,25 @@ zero.core.Room = CT.Class({
 				this.particles[obj].tick(dts, rdts);
 		this.jostle();
 	},
-	bump: function(b1, b2) {
-		var axis, sb;
-		for (axis in ["weave", "bob", "slide"]) {
-			sb = b1.springs[axis].boost;
-			b1.springs[axis].boost = b2.springs[axis].boost * 2;
-			b2.springs[axis].boost = sb * 2;
+	bump: function(b1, b2, moshy) {
+		var axis, s1, s2;
+		for (axis of ["weave", "bob", "slide"]) {
+			s1 = b1.springs[axis].boost;
+			s2 = b2.springs[axis].boost;
+			b1.springs[axis].boost = s2 * moshy;
+			b2.springs[axis].boost = s1 * moshy;
 		}
 	},
 	jostle: function() {
 		var zcc = zero.core.current, pz = zcc.people, you = zcc.person;
 		if (!you) return;
-		var b = you.body, pos = b.position(), rz = b.radii, pname, pbod;
-		if (!(b.upon && b.upon.opts.moshy)) return;
+		var b = you.body, pos = b.position(), rz = b.radii, pname, pbod,
+			moshy = b.upon && b.upon.opts.moshy || this.opts.moshy;
+		if (!moshy) return;
 		for (pname in pz) {
 			pbod = pz[pname].body;
 			if ((pname == you.name) || (pbod.upon != b.upon)) continue;
-			pbod.overlaps(pos, rz, true) && this.bump(b, pbod);
+			pbod.overlaps(pos, rz, true) && this.bump(b, pbod, moshy);
 		}
 	},
 	regTicker: function(ticker) {
