@@ -189,10 +189,10 @@ zero.core.util = {
 						loadCount += 1;
 						isLast = loadCount == cfg.people.length;
 						onperson && onperson(person, room, i, isLast);
-						if (i == cfg.people.length - 1) // last in line...
+						if (isLast) {
 							person.watch(null, true);
-						if (isLast) // last to load...
 							onready(person, room, i);
+						}
 					}
 				}));
 			});
