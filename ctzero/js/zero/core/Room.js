@@ -19,19 +19,23 @@ zero.core.Room = CT.Class({
 				this.particles[obj].tick(dts, rdts);
 		this.jostle();
 	},
+	bump: function(b1, b2) {
+		var axis, sb;
+		for (axis in ["weave", "bob", "slide"]) {
+			sb = b1.springs[axis].boost;
+			b1.springs[axis].boost = b2.springs[axis].boost * 2;
+			b2.springs[axis].boost = sb * 2;
+		}
+	},
 	jostle: function() {
 		var zcc = zero.core.current, pz = zcc.people,
 			you = zcc.person, b = you.body,
-			pos = b.position(), rz = b.radii, p, pname;
+			pos = b.position(), rz = b.radii, pname, pbod;
 		if (!(b.upon && b.upon.opts.moshy)) return;
 		for (pname in pz) {
-			p = pz[pname];
-			if ((pname == you.name) || (p.body.upon != b.upon)) continue;
-			if (p.body.overlaps(pos, rz, true)) {
-
-				// TODO: swap trajectories / sync
-
-			}
+			pbod = pz[pname].body;
+			if ((pname == you.name) || (pbod.upon != b.upon)) continue;
+			pbod.overlaps(pos, rz, true) && this.bump(b, pbod);
 		}
 	},
 	regTicker: function(ticker) {
