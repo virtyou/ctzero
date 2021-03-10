@@ -371,6 +371,6 @@ zero.core.Room = CT.Class({
 		this.lights = [];
 		this.objects = [];
 		this.cameras = [];
-		this.setFriction(opts.grippy);
+		setTimeout(() => this.setFriction(opts.grippy), 1000);
 	}
 }, zero.core.Thing);
