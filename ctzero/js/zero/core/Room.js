@@ -20,12 +20,15 @@ zero.core.Room = CT.Class({
 		this.jostle();
 	},
 	bump: function(b1, b2, moshy) {
-		var axis, s1, s2;
-		for (axis of ["weave", "bob", "slide"]) {
-			s1 = b1.springs[axis].boost;
-			s2 = b2.springs[axis].boost;
-			b1.springs[axis].boost = s2 * moshy;
-			b2.springs[axis].boost = s1 * moshy;
+		var axis, s1, s2, v1, v2, vd, axes = ["weave", "slide"];
+		for (axis of axes) {
+			s1 = b1.springs[axis];
+			s2 = b2.springs[axis];
+			v1 = s1.velocity;
+			v2 = s2.velocity;
+			vd = v2 - v1;
+			s1.shove = vd * moshy;
+			s2.shove = -vd * moshy;
 		}
 	},
 	jostle: function() {
@@ -37,6 +40,7 @@ zero.core.Room = CT.Class({
 		for (pname in pz) {
 			pbod = pz[pname].body;
 			if ((pname == you.name) || (pbod.upon != b.upon)) continue;
+			pbod.bounds.setFromObject(pbod.group);
 			pbod.overlaps(pos, rz, true) && this.bump(b, pbod, moshy);
 		}
 	},
@@ -370,6 +374,7 @@ zero.core.Room = CT.Class({
 			objects: [], // regular Things
 			cameras: []
 		});
+		if (opts.moshy) opts.grippy = false;
 		this.lights = [];
 		this.objects = [];
 		this.cameras = [];
