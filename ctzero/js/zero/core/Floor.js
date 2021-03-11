@@ -20,5 +20,7 @@ zero.core.Floor = CT.Class({
 			repeat: [1, 1],
 			rotation: [6.28/4, 0, 0]
 		}, this.opts);
+		if (opts.moshy)
+			this.grippy = opts.grippy = false;
 	}
 }, zero.core.Thing);
