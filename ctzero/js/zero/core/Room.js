@@ -24,7 +24,7 @@ zero.core.Room = CT.Class({
 		for (axis of axes) {
 			s1 = b1.springs[axis];
 			s2 = b2.springs[axis];
-			v1 = s1.velocity;
+			v1 = s1.velocity || s1.boost;
 			v2 = s2.velocity;
 			vd = v2 - v1;
 			s1.shove = vd * moshy;
@@ -374,7 +374,6 @@ zero.core.Room = CT.Class({
 			objects: [], // regular Things
 			cameras: []
 		});
-		if (opts.moshy) opts.grippy = false;
 		this.lights = [];
 		this.objects = [];
 		this.cameras = [];
