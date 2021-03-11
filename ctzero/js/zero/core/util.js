@@ -239,14 +239,26 @@ zero.core.util = {
 	untick: function(cb) {
 		CT.data.remove(zero.core.util._tickers, cb);
 	},
+	_cpcbz: [],
+	onCurPer: function(cb) {
+		if (zero.core.current.person)
+			cb();
+		else
+			zero.core.util._cpcbz.push(cb);
+	},
+	setCurPer: function(person) {
+		zero.core.current.person = person;
+		for (var cpcb of zero.core.util._cpcbz)
+			cpcb();
+		zero.core.util._cpcbz.length = 0;
+	},
 	join: function(pobj, onready, nowatch, lookcam, current) {
 		var person = new zero.core.Person(CT.merge(pobj, {
 			onbuild: function() {
 				zero.core.current.people[pobj.name] = person;
 				nowatch || person.watch();
 				lookcam && person.look(zero.core.camera);
-				if (current)
-					zero.core.current.person = person;
+				current && zero.core.util.setCurPer(person);
 				core.config.ctzero.room.gravity && person.body.setBounds();
 				onready && onready(person);
 			}
