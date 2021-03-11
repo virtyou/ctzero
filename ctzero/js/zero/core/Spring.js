@@ -42,6 +42,14 @@ zero.core.Spring = CT.Class({
 				moodMaster_k = 1;
 		}
 		this.target += this.boost * dts;
+		if (this.shove) {
+			var sdts = this.shove * dts;
+			this.target += sdts;
+			this.value += sdts;
+			this.shove /= 2;
+			if (Math.abs(this.shove) < 0.1)
+				this.shove = 0;
+		}
 		var ot = this.target;
 		this.bound();
 		if (this.target != ot)
