@@ -371,10 +371,9 @@ zero.core.Thing = CT.Class({
 	},
 	update: function(opts) {
 		var o, setter, full, adjust = this.adjust, zcu = zero.core.util;
-		["stripset", "geometry", "matcat", "meshcat",
-			"material", "repeat", "offset"].forEach(function(item) {
-				full = full || (item in opts);
-			});
+		["stripset", "geometry", "matcat", "meshcat", "material"].forEach(function(item) {
+			full = full || (item in opts);
+		});
 		this.opts = CT.merge(opts, this.opts);
 		if (!this.group) return; // hasn't built yet, just wait
 		if (full)
@@ -384,6 +383,7 @@ zero.core.Thing = CT.Class({
 				|| (opts.video && zcu.videoTexture(opts.video.item || opts.video, this));
 			this.material.needsUpdate = true;
 		}
+		(opts.repeat || opts.offset) && this.repOff();
 		["position", "rotation", "scale"].forEach(function(prop) {
 			if (prop in opts) {
 				zcu.coords(opts[prop], function(dim, val) {
@@ -506,6 +506,15 @@ zero.core.Thing = CT.Class({
 			iterator();
 		}
 	},
+	repOff: function(map) {
+		var oz = this.opts;
+		map = map || this.material.map;
+		if (oz.repeat) {
+			map.wrapS = map.wrapT = THREE.RepeatWrapping;
+			map.repeat.set.apply(map.repeat, oz.repeat);
+		}
+		map.offset.set.apply(map.offset, oz.offset);
+	},
 	build: function() {
 		var oz = this.opts, zcu = zero.core.util;
 		if (oz.cubeGeometry) {
@@ -530,11 +539,7 @@ zero.core.Thing = CT.Class({
 			if (oz.texture || oz.video) {
 				map = oz.texture ? zcu.texture(oz.texture)
 					: zcu.videoTexture(oz.video.item || oz.video, this);
-				if (oz.repeat) {
-					map.wrapS = map.wrapT = THREE.RepeatWrapping;
-					map.repeat.set.apply(map.repeat, oz.repeat);
-				}
-				map.offset.set.apply(map.offset, oz.offset);
+				this.repOff(map);
 				meshopts = CT.merge(meshopts, { map: map });
 			}
 			if (oz.shader) {
