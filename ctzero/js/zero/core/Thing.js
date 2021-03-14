@@ -371,7 +371,7 @@ zero.core.Thing = CT.Class({
 	},
 	update: function(opts) {
 		var o, setter, full, adjust = this.adjust, zcu = zero.core.util;
-		["stripset", "geometry", "matcat", "meshcat", "material"].forEach(function(item) {
+		["stripset", "geometry", "matcat", "meshcat"].forEach(function(item) {
 			full = full || (item in opts);
 		});
 		this.opts = CT.merge(opts, this.opts);
@@ -384,6 +384,9 @@ zero.core.Thing = CT.Class({
 			this.material.needsUpdate = true;
 		}
 		(opts.repeat || opts.offset) && this.repOff();
+		if (opts.material)
+			for (var p in opts.material)
+				this.material[p] = opts.material[p];
 		["position", "rotation", "scale"].forEach(function(prop) {
 			if (prop in opts) {
 				zcu.coords(opts[prop], function(dim, val) {
