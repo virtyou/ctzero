@@ -430,6 +430,8 @@ zero.core.Thing = CT.Class({
 	},
 	_vstrip: function(vs) {
 		var opts = this.opts;
+		vs.fwidth = vs.fwidth || 128;
+		vs.fheight = vs.fheight || 64;
 		opts.texture = vs.texture;
 		opts.material.transparent = true;
 		opts.repeat = [vs.fwidth / vs.width, vs.fheight / vs.height];
