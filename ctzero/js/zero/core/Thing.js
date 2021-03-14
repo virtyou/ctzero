@@ -14,6 +14,7 @@ zero.core.Thing = CT.Class({
 			});
 			this.opts.scroll && this.scroll();
 			this.opts.shift && this.shift();
+			this.opts.vstrip && this.vsplay();
 		},
 		setd: function(dim, springs, positioners, pos) {
 			var spropts = {}, // body positioner!
@@ -181,6 +182,24 @@ zero.core.Thing = CT.Class({
 	unvideo: function() {
 		if (this.opts.video && this.material.map)
 			this.material.map.vnode.remove();
+	},
+	unvsplay: function(clearOpts) {
+		if (this._.vsplayer) {
+			zero.core.util.untick(this._.vsplayer);
+			delete this._.vsplayer;
+			if (clearOpts)
+				this.opts.vstrip = null;
+		}
+	},
+	vsplay: function() {
+		var zcu = zero.core.util,
+			vs = this.opts.vstrip,
+			mat = this.material;
+		this._.vsplayer = function() {
+			mat.map.offset.x = (zcu.ticker * vs.frame) % vs.width;
+			mat.needsUpdate = true;
+		};
+		zero.core.util.ontick(this._.vsplayer);
 	},
 	setPull: function(pull, axis) {},
 	unscroll: function(clearOpts) {
@@ -378,15 +397,21 @@ zero.core.Thing = CT.Class({
 		if (!this.group) return; // hasn't built yet, just wait
 		if (full)
 			return this.build();
-		if (this.material && ("texture" in opts || "video" in opts)) {
-			this.material.map = (opts.texture && zcu.texture(opts.texture))
-				|| (opts.video && zcu.videoTexture(opts.video.item || opts.video, this));
+		if (opts.vstrip) {
+			this._vstrip(opts.vstrip);
+			opts = this.opts; // for material stuff below
+			this.vsplay();
+		}
+		if (this.material) {
+			if ("texture" in opts || "video" in opts)
+				this.material.map = (opts.texture && zcu.texture(opts.texture))
+					|| (opts.video && zcu.videoTexture(opts.video.item || opts.video, this));
+			(opts.repeat || opts.offset) && this.repOff();
+			if (opts.material)
+				for (var p in opts.material)
+					this.material[p] = opts.material[p];
 			this.material.needsUpdate = true;
 		}
-		(opts.repeat || opts.offset) && this.repOff();
-		if (opts.material)
-			for (var p in opts.material)
-				this.material[p] = opts.material[p];
 		["position", "rotation", "scale"].forEach(function(prop) {
 			if (prop in opts) {
 				zcu.coords(opts[prop], function(dim, val) {
@@ -394,6 +419,12 @@ zero.core.Thing = CT.Class({
 				});
 			}
 		});
+	},
+	_vstrip: function(vs) {
+		var opts = this.opts;
+		opts.texture = vs.texture;
+		opts.material.transparent = true;
+		opts.repeat = [vs.frame / vs.width, 1];
 	},
 	setTexture: function(tx) {
 		this.update({ texture: tx });
@@ -432,6 +463,7 @@ zero.core.Thing = CT.Class({
 		this.unscroll();
 		this.unshift();
 		this.unvideo();
+		this.unvsplay();
 		if (oz.key)
 			delete zero.core.Thing._things[oz.key];
 		oz.onremove && oz.onremove();
@@ -539,6 +571,7 @@ zero.core.Thing = CT.Class({
 			var meshname = (oz.shader ? "Shader"
 				: ("Mesh" + oz.matcat)) + "Material",
 				map, meshopts = oz.material;
+			if (oz.vstrip) this._vstrip(oz.vstrip);
 			if (oz.texture || oz.video) {
 				map = oz.texture ? zcu.texture(oz.texture)
 					: zcu.videoTexture(oz.video.item || oz.video, this);
