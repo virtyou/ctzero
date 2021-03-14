@@ -197,7 +197,6 @@ zero.core.Thing = CT.Class({
 			mat = this.material;
 		this._.vsplayer = function() {
 			mat.map.offset.x = (zcu.ticker * vs.frame) % vs.width;
-			mat.needsUpdate = true;
 		};
 		zero.core.util.ontick(this._.vsplayer);
 	},
