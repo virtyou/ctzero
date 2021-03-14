@@ -195,6 +195,7 @@ zero.core.Thing = CT.Class({
 		var zcu = zero.core.util,
 			vs = this.opts.vstrip,
 			mat = this.material, t, max = 128;
+		this.unvsplay();
 		this._.vsplayer = function() {
 			t = zcu.ticker % vs.frames;
 			mat.map.offset.x = ((t % max) * vs.fwidth) / vs.width;
