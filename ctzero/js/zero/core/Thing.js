@@ -199,7 +199,7 @@ zero.core.Thing = CT.Class({
 		this._.vsplayer = function() {
 			t = zcu.ticker % vs.frames;
 			mat.map.offset.x = ((t % max) * vs.fwidth) / vs.width;
-			mat.map.offset.y = Math.floor(t / max) * vs.fheight / vs.height;
+			mat.map.offset.y = (vs.height - vs.fheight * (1 + Math.floor(t / max))) / vs.height;
 		};
 		zero.core.util.ontick(this._.vsplayer);
 	},
