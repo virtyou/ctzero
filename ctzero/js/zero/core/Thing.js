@@ -429,11 +429,16 @@ zero.core.Thing = CT.Class({
 		});
 	},
 	_vstrip: function(vs) {
-		var opts = this.opts;
+		var opts = this.opts, max = 16384, total;
 		vs.fwidth = vs.fwidth || 128;
 		vs.fheight = vs.fheight || 64;
 		opts.texture = vs.texture;
 		opts.material.transparent = true;
+		if (!vs.width) {
+			total = vs.fwidth * vs.frames;
+			vs.width = Math.min(max, total);
+			vs.height = vs.fheight * Math.ceil(total / vs.width);
+		}
 		opts.repeat = [vs.fwidth / vs.width, vs.fheight / vs.height];
 	},
 	setTexture: function(tx) {
