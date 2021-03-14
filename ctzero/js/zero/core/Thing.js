@@ -196,7 +196,7 @@ zero.core.Thing = CT.Class({
 			vs = this.opts.vstrip,
 			mat = this.material;
 		this._.vsplayer = function() {
-			mat.map.offset.x = (zcu.ticker * vs.frame) % vs.width;
+			mat.map.offset.x = ((zcu.ticker * vs.frame) % vs.width) / vs.width;
 		};
 		zero.core.util.ontick(this._.vsplayer);
 	},
@@ -388,7 +388,7 @@ zero.core.Thing = CT.Class({
 			this.placer[property][dimension] = value;
 	},
 	update: function(opts) {
-		var o, setter, full, adjust = this.adjust, zcu = zero.core.util;
+		var o, setter, full, mat = this.material, adjust = this.adjust, zcu = zero.core.util;
 		["stripset", "geometry", "matcat", "meshcat"].forEach(function(item) {
 			full = full || (item in opts);
 		});
@@ -401,15 +401,21 @@ zero.core.Thing = CT.Class({
 			opts = this.opts; // for material stuff below
 			this.vsplay();
 		}
-		if (this.material) {
+		if (mat) {
 			if ("texture" in opts || "video" in opts)
-				this.material.map = (opts.texture && zcu.texture(opts.texture))
+				mat.map = (opts.texture && zcu.texture(opts.texture))
 					|| (opts.video && zcu.videoTexture(opts.video.item || opts.video, this));
 			(opts.repeat || opts.offset) && this.repOff();
 			if (opts.material)
 				for (var p in opts.material)
-					this.material[p] = opts.material[p];
-			this.material.needsUpdate = true;
+					mat[p] = opts.material[p];
+			if (mat.map.image.complete)
+				mat.needsUpdate = true;
+			else {
+				mat.map.image.onload = function() {
+					mat.needsUpdate = true;
+				};
+			}
 		}
 		["position", "rotation", "scale"].forEach(function(prop) {
 			if (prop in opts) {
