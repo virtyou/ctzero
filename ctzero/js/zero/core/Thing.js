@@ -194,9 +194,11 @@ zero.core.Thing = CT.Class({
 	vsplay: function() {
 		var zcu = zero.core.util,
 			vs = this.opts.vstrip,
-			mat = this.material;
+			mat = this.material, t, max = 128;
 		this._.vsplayer = function() {
-			mat.map.offset.x = ((zcu.ticker * vs.frame) % vs.width) / vs.width;
+			t = zcu.ticker % vs.frames;
+			mat.map.offset.x = ((t % max) * vs.fwidth) / vs.width;
+			mat.map.offset.y = Math.floor(t / max) * vs.fheight / vs.height;
 		};
 		zero.core.util.ontick(this._.vsplayer);
 	},
@@ -429,7 +431,7 @@ zero.core.Thing = CT.Class({
 		var opts = this.opts;
 		opts.texture = vs.texture;
 		opts.material.transparent = true;
-		opts.repeat = [vs.frame / vs.width, 1];
+		opts.repeat = [vs.fwidth / vs.width, vs.fheight / vs.height];
 	},
 	setTexture: function(tx) {
 		this.update({ texture: tx });
