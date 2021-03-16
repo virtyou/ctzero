@@ -591,6 +591,8 @@ zero.core.Thing = CT.Class({
 				map = oz.texture ? zcu.texture(oz.texture)
 					: zcu.videoTexture(oz.video.item || oz.video, this);
 				this.repOff(map);
+				map.minFilter = oz.minfilt;
+				map.magFilter = oz.magfilt;
 				meshopts = CT.merge(meshopts, { map: map });
 			}
 			if (oz.shader) {
@@ -639,6 +641,8 @@ zero.core.Thing = CT.Class({
 			geometry: null, // or a THREE.CubeGeometry or something
 			matcat: "Phong", // or "Basic"
 			meshcat: "Mesh", // or "SkinnedMesh" etc
+			minfilt: "NearestFilter",
+			magfilt: "NearestFilter",
 			material: {}, // color etc
 			repeat: null, // or [1, 1] (for instance)
 			offset: [0, 0],
