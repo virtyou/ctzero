@@ -412,12 +412,14 @@ zero.core.Thing = CT.Class({
 			if (opts.material)
 				for (var p in opts.material)
 					mat[p] = opts.material[p];
-			if (mat.map.image.complete)
-				mat.needsUpdate = true;
-			else {
-				mat.map.image.onload = function() {
+			if (mat.map) {
+				if (mat.map.image.complete)
 					mat.needsUpdate = true;
-				};
+				else {
+					mat.map.image.onload = function() {
+						mat.needsUpdate = true;
+					};
+				}
 			}
 		}
 		["position", "rotation", "scale"].forEach(function(prop) {
