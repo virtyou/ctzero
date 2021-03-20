@@ -97,6 +97,12 @@ zero.core.Room = CT.Class({
 			bod.setFriction(person == zero.core.current.person, true);
 		}, 2000);
 	},
+	dynFloor: function(pos) {
+		var zcu = zero.core.util;
+		zcu.ray.set(pos, zcu.downVec);
+		var isec = zcu.ray.intersectObject(this.thring)[0];
+		return isec && isec.point.y;
+	},
 	getObject: function(pos, radii, checkY) {
 		var i, k, o, obj, obst;
 		for (k of this._bumpers) {
@@ -374,6 +380,10 @@ zero.core.Room = CT.Class({
 			objects: [], // regular Things
 			cameras: []
 		});
+		if (opts.outside && !opts.stripset) {
+			opts.material.transparent = true;
+			opts.material.opacity = opts.material.opacity || 0;
+		}
 		this.lights = [];
 		this.objects = [];
 		this.cameras = [];
