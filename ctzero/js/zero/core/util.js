@@ -202,6 +202,8 @@ zero.core.util = {
 	init: function(onperson, onbuild) {
 		var cfg = core.config.ctzero;
 		zero.core.camera.init();
+		zero.core.util.ray = new THREE.Raycaster();
+		zero.core.util.downVec = new THREE.Vector3(0, -1, 0);
 		zero.core.util.refresh(function(person, room, i) {
 			setTimeout(requestAnimationFrame, 0, zero.core.util.animate);
 			onbuild && onbuild(person, room, i);
