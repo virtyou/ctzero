@@ -391,21 +391,21 @@ zero.core.Thing = CT.Class({
 			this.placer[property][dimension] = value;
 	},
 	update: function(opts) {
-		var o, setter, full, mat = this.material, adjust = this.adjust, zcu = zero.core.util;
-		["stripset", "geometry", "matcat", "meshcat"].forEach(function(item) {
+		var zcu = zero.core.util, mat = this.material, adjust = this.adjust,
+			o, setter, hasT = "texture" in opts || "video" in opts, full = hasT && !mat;
+		full || ["stripset", "geometry", "matcat", "meshcat"].forEach(function(item) {
 			full = full || (item in opts);
 		});
 		this.opts = CT.merge(opts, this.opts);
 		if (!this.group) return; // hasn't built yet, just wait
-		if (full)
-			return this.build();
+		if (full) return this.build();
 		if (opts.vstrip) {
 			this._vstrip(opts.vstrip);
 			opts = this.opts; // for material stuff below
 			this.vsplay();
 		}
 		if (mat) {
-			if ("texture" in opts || "video" in opts)
+			if (hasT)
 				mat.map = (opts.texture && zcu.texture(opts.texture))
 					|| (opts.video && zcu.videoTexture(opts.video.item || opts.video, this));
 			(opts.repeat || opts.offset) && this.repOff();
