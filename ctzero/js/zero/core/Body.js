@@ -121,11 +121,15 @@ zero.core.Body = CT.Class({
 			for (var ps of ["weave", "bob", "slide"])
 				this.springs[ps].pull = obj && obj.pull && obj.pull[ps];
 			this._.bounder("y", 1, obj && obj.getTop(pos));
-		} else if (obj) {
-			isRamp = obj.vlower == "ramp";
-			if (isRamp || obj.shifting("y")) {
-				otop = obj.getTop(pos);
-				if (isRamp) // eh.......
+		} else {
+			if (obj) {
+				isRamp = obj.vlower == "ramp";
+				if (isRamp || obj.shifting("y"))
+					otop = obj.getTop(pos);
+			} else if (r.opts.stripset) // indicates custom surface.......
+				otop = r.dynFloor(pos);
+			if (otop) {
+				if (isRamp || r.opts.stripset) // eh....... why no y shifter?
 					bobber.floored = otop >= bobber.value - 100;
 				this._.bounder("y", 1, otop, true);
 			}
