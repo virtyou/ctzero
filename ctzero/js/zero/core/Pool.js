@@ -66,14 +66,14 @@ zero.core.Pool = CT.Class({
 		matty.side = THREE.DoubleSide;
 		if (oz.sides) {
 			for (i = 0; i < 4; i++) {
-				partz.push({
+				partz.push(CT.merge({
 					name: "side" + i,
 					kind: "side",
 					material: matty,
 					position: pz[i],
 					rotation: rz[i],
 					geometry: geos[i]
-				});
+				}, core.config.ctzero.env.water));
 			}
 		}
 		oz.bubbles && partz.push({
