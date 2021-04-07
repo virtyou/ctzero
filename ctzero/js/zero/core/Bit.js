@@ -34,10 +34,11 @@ zero.core.Bit = CT.Class({
 		this.velocity = this.opts.velocity.map(v => v);
 	},
 	init: function(opts) {
-		this.opts = opts = CT.merge(opts, {
+		this.opts = opts = CT.merge(opts, core.config.ctzero.env[opts.manager + "_bit"], {
 			sphereGeometry: true
 		}, this.opts);
-		var vri, wobz = this.wobblers = {}, vv = opts.velVariance;
+		var vri, wobz = this.wobblers = {},
+			vv = opts.velVariance, pv = opts.posVariance;
 		opts.variance && this._xyz.forEach(function(d, i) {
 			vri = opts.variance[i];
 			if (vri)
@@ -46,6 +47,11 @@ zero.core.Bit = CT.Class({
 		if (vv) {
 			opts.velocity = opts.velocity.map(function(v, i) {
 				return v + Math.random() * 2 * vv[i] - vv[i];
+			});
+		}
+		if (pv) {
+			opts.position = opts.position.map(function(p, i) {
+				return p + Math.random() * 2 * pv[i] - pv[i];
 			});
 		}
 		this._size = opts.size || 1;
