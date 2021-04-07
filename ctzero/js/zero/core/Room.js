@@ -168,6 +168,7 @@ zero.core.Room = CT.Class({
 					this[kind][item].setBounds();
 		}
 		this.rain && this.rain.rebound();
+//		this.fog && this.fog.rebound();
 	},
 	setFriction: function(grippy) {
 		this.grippy = this.opts.grippy = grippy;
@@ -297,16 +298,15 @@ zero.core.Room = CT.Class({
 		opts.objects.forEach(this.addObject);
 	},
 	addEnv: function(ename) {
-		var thaz = this, isRain = ename == "rain", eobj = CT.merge({
+		var thaz = this;
+		this.attach({
 			name: ename,
 			kind: "particles",
-			thing: "Particles"
-		}, zero.base.particles[ename]);
-		if (isRain)
-			eobj.bounder = this;
-		this.attach(eobj);
-		isRain && setTimeout(function() {
-			thaz.rain.rebound();
+			thing: "Particles",
+			bounder: this
+		});
+		if (ename == "rain") setTimeout(function() {
+			thaz[ename].rebound();
 		});
 	},
 	preassemble: function() {
@@ -328,17 +328,18 @@ zero.core.Room = CT.Class({
 				side: THREE.BackSide
 			}
 		});
-		opts.fog && opts.parts.push(CT.merge({
+		opts.fog && opts.parts.push({
 			name: "fog",
 			kind: "particles",
-			thing: "Particles"
-		}, zero.base.particles.fog));
-		opts.rain && opts.parts.push(CT.merge({
+			thing: "Particles",
+			bounder: this
+		});
+		opts.rain && opts.parts.push({
 			name: "rain",
 			kind: "particles",
 			thing: "Particles",
 			bounder: this
-		}, zero.base.particles.rain));
+		});
 		this._structural.forEach(function(cat) {
 			var base = opts[cat];
 			if (base && base.parts && base.parts.length) {
