@@ -82,6 +82,7 @@
 	"media": {
 		"proxy": true
 	},
+	"env": {},
 	"brain": {
 		"noChat": false,
 		"chain": {
