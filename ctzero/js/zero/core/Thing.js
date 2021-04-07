@@ -194,10 +194,11 @@ zero.core.Thing = CT.Class({
 	vsplay: function() {
 		var zcu = zero.core.util,
 			vs = this.opts.vstrip,
+			randoff = CT.data.random(vs.frames),
 			mat = this.material, t, max = 128;
 		this.unvsplay();
 		this._.vsplayer = function() {
-			t = zcu.ticker % vs.frames;
+			t = (zcu.ticker + randoff) % vs.frames;
 			mat.map.offset.x = ((t % max) * vs.fwidth) / vs.width;
 			mat.map.offset.y = (vs.height - vs.fheight * (1 + Math.floor(t / max))) / vs.height;
 		};
@@ -432,6 +433,8 @@ zero.core.Thing = CT.Class({
 	},
 	_vstrip: function(vs) {
 		var opts = this.opts, max = 16384, total;
+		if (typeof vs == "string")
+			vs = opts.vstrip = eval(vs); // better way?
 		vs.fwidth = vs.fwidth || 128;
 		vs.fheight = vs.fheight || 64;
 		opts.texture = vs.texture;
@@ -593,8 +596,8 @@ zero.core.Thing = CT.Class({
 				map = oz.texture ? zcu.texture(oz.texture)
 					: zcu.videoTexture(oz.video.item || oz.video, this);
 				this.repOff(map);
-				map.minFilter = oz.minfilt;
-				map.magFilter = oz.magfilt;
+				map.minFilter = THREE[oz.minfilt];
+				map.magFilter = THREE[oz.magfilt];
 				meshopts = CT.merge(meshopts, { map: map });
 			}
 			if (oz.shader) {
