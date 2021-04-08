@@ -69,7 +69,8 @@ zero.core.Particles = CT.Class({
 				velVariance: oz.velVariance,
 				acceleration: oz.acceleration,
 				scale: [size, size, size],
-				size: size
+				size: size,
+				manager: oz.name
 			});
 		}
 	},
@@ -78,7 +79,7 @@ zero.core.Particles = CT.Class({
 		delete this.dripper;
 	},
 	init: function(opts) {
-		this.opts = opts = CT.merge(opts, zero.base.particles[opts.name], {
+		this.opts = opts = CT.merge(opts, core.config.ctzero.env[opts.name], zero.base.particles[opts.name], {
 			count: 50,
 			size: 0.05,
 			sizeVariance: 0.1,
