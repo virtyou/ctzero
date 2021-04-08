@@ -583,6 +583,14 @@ zero.core.Thing = CT.Class({
 		}
 		if (oz.sphereGeometry)
 			oz.geometry = new THREE.SphereGeometry();
+		if (oz.coneGeometry) {
+			var cgs = (typeof oz.coneGeometry == "number") ? oz.coneGeometry : 20;
+			oz.geometry = new THREE.ConeGeometry(cgs, cgs * 2);
+		}
+		if (oz.cylinderGeometry) {
+			var cgs = (typeof oz.cylinderGeometry == "number") ? oz.cylinderGeometry : 10;
+			oz.geometry = new THREE.CylinderGeometry(cgs, cgs, cgs * 2);
+		}
 		if (oz.planeGeometry) {
 			var g = oz.planeGeometry; // better way?
 			oz.geometry = new THREE.PlaneGeometry(g[0] || 100, g[1] || 100);
