@@ -22,7 +22,7 @@ zero.core.Fire = CT.Class({
 			thing: "Hair",
 			density: 4,
 			coverage: [0.5, 0.5],
-			position: [0, -10, 0],
+			position: [0, 0, 0],
 			strand: {
 				pendmap: "Phong",
 				girth: 6,
@@ -51,7 +51,7 @@ zero.core.Fire = CT.Class({
 			kind: "shiner",
 			thing: "Bit",
 			coneGeometry: true,
-			position: [0, 10, 0],
+			position: [0, 20, 0],
 			material: {
 				opacity: 0.6,
 				color: 0xffff00,
@@ -63,7 +63,7 @@ zero.core.Fire = CT.Class({
 			name: "heart",
 			kind: "shiner",
 			thing: "Bit",
-			position: [0, 10, 0],
+			position: [0, 20, 0],
 			scale: [0.4, 0.4, 0.4],
 			material: {
 				opacity: 0.9,
