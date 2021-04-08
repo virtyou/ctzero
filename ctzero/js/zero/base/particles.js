@@ -48,7 +48,8 @@ zero.base.particles = {
 		pmat: {
 			opacity: 0,
 			color: 0x888888,
-			transparent: true
+			transparent: true,
+			side: THREE.BackSide
 		}
 	},
 	fog: {
