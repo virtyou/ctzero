@@ -34,7 +34,8 @@ zero.core.Bit = CT.Class({
 		this.velocity = this.opts.velocity.map(v => v);
 	},
 	init: function(opts) {
-		this.opts = opts = CT.merge(opts, core.config.ctzero.env[opts.manager + "_bit"], {
+		var ename = opts.manager ? (opts.manager + "_bit") : opts.name;
+		this.opts = opts = CT.merge(opts, core.config.ctzero.env[ename], {
 			sphereGeometry: true
 		}, this.opts);
 		var vri, wobz = this.wobblers = {},
