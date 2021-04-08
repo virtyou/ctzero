@@ -1,7 +1,7 @@
 zero.core.Fire = CT.Class({
 	CLASSNAME: "zero.core.Fire",
 	tick: function(dts) {
-		for (var variety of ["flames", "sparks", "smoke", "glow"])
+		for (var variety of ["flames", "sparks", "smoke", "shine", "glow"])
 			this[variety] && this[variety].tick(dts);
 		this.light && this.light.setIntensity(0.5 + this.flicker[zero.core.util.ticker % 60]);
 	},
@@ -22,18 +22,18 @@ zero.core.Fire = CT.Class({
 			thing: "Hair",
 			density: 4,
 			coverage: [0.5, 0.5],
-			position: [0, 0, 0],
+			position: [0, -10, 0],
 			strand: {
 				pendmap: "Phong",
 				girth: 6,
 				length: 6,
 				segments: 4,
-				wiggle: 60,
+				wiggle: 600,
 				nograv: true,
 				flex: Math.PI / 8,
 				taper: [0.6, 0.9, 0.6],
 				material: {
-					opacity: 0.9,
+					opacity: 0.4,
 					color: 0xff0000,
 					transparent: true
 				}
@@ -46,13 +46,25 @@ zero.core.Fire = CT.Class({
 				thing: "Particles"
 			});
 		}
+		oz.shine && oz.parts.push({
+			name: "shine",
+			kind: "shiner",
+			thing: "Bit",
+			position: [0, 10, 0],
+			material: {
+				opacity: 0.6,
+				color: 0xffff00,
+				transparent: true,
+				side: THREE.DoubleSide
+			}
+		});
 		oz.glow && oz.parts.push({
 			name: "glow",
 			kind: "pulser",
 			thing: "Bit",
 			pulse: 0.01,
 			material: {
-				opacity: 0.2,
+				opacity: 0.1,
 				color: 0xff0000,
 				transparent: true,
 				side: THREE.BackSide
@@ -72,6 +84,7 @@ zero.core.Fire = CT.Class({
 			flames: true,
 			sparks: true,
 			smoke: true,
+			shine: true,
 			glow: true,
 			light: true
 		}, this.opts);
