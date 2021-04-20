@@ -58,6 +58,13 @@ zero.core.Body = CT.Class({
 			thing: "Particles"
 		});
 	},
+	boundOnRoom: function() {
+		var zcc = zero.core.current;
+		if (zcc.room && zcc.room.bounds)
+			this.setBounds();
+		else
+			setTimeout(this.boundOnRoom, 500);
+	},
 	_applyMod: function(gopts) {
 		for (var op in gopts)
 			for (var dim in gopts[op])
