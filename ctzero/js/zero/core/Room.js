@@ -323,7 +323,7 @@ zero.core.Room = CT.Class({
 			kind: "celestial",
 			sphereGeometry: true,
 			texture: opts.outside,
-			scale: [100, 100, 100],
+			scale: [500, 500, 500],
 			material: {
 				side: THREE.BackSide
 			}
