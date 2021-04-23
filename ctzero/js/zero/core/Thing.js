@@ -80,7 +80,8 @@ zero.core.Thing = CT.Class({
 				sz[pname].target = pz[pname].min;
 		},
 		shouldMin: function(pname, dim) { // fix multifloor-zone portals!
-			return dim == "y" && ["poster", "screen", "stream", "portal", "body"].indexOf(this.opts.kind) == -1;
+			return dim == "y" && this.vlower != "pool" &&
+				!(["poster", "screen", "stream", "portal", "body"].includes(this.opts.kind));
 		}
 	},
 	_xyz: ["x", "y", "z"],
@@ -111,6 +112,12 @@ zero.core.Thing = CT.Class({
 			if (snap)
 				s.value = s.target;
 		});
+	},
+	tickPos: function() {
+		var gp = this.group.position, sz = this.springs;
+		for (var axis of this._xyz)
+			if (sz[axis])
+				gp[axis] = sz[axis].value;
 	},
 	autoRot: function() {
 		if (["poster", "screen", "stream", "portal"].indexOf(this.opts.kind) != -1 && "wall" in this.opts)
