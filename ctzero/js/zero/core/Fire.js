@@ -4,6 +4,7 @@ zero.core.Fire = CT.Class({
 		for (var variety of ["flames", "sparks", "smoke", "glow"])
 			this[variety] && this[variety].tick(dts);
 		this.light && this.light.setIntensity(0.5 + this.flicker[zero.core.util.ticker % 60]);
+		this.tickPos();
 	},
 	onremove: function() {
 		this.smoke && this.smoke.undrip();
