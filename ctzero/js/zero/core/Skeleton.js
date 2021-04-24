@@ -43,8 +43,7 @@ zero.core.Skeleton = CT.Class({
 	},
 	aspRules: function(sname) {
 		var aspringz = {}, bspringz = {}, hspringz = {},
-			rs = CT.data.choice(["twist", "bow",
-				"lean", "shake", "nod", "tilt"]),
+			rs = CT.data.choice(["twist", "bow", "lean", "tilt"]),
 			ps = CT.data.choice(["ah", "ee", "ow",
 				"ff", "m", "n", "th"]),
 			fs = CT.data.choice(["asym", "smileEyes",
