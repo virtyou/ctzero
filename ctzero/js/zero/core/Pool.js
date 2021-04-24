@@ -17,11 +17,6 @@ zero.core.Pool = CT.Class({
 		this.bubbles && this.bubbles.tick(dts);
 		this.tickPos();
 	},
-	setLevel: function(val) {
-		this.adjust("position", "y", val);
-		if (this.springs.y)
-			this.springs.y.target = val;
-	},
 	getTop: function() {
 		return zero.core.current.room.bounds.min.y + 1;
 //		return this.bounds.min.y;

@@ -80,7 +80,7 @@ zero.core.Thing = CT.Class({
 				sz[pname].target = pz[pname].min;
 		},
 		shouldMin: function(pname, dim) { // fix multifloor-zone portals!
-			return dim == "y" && this.vlower != "pool" &&
+			return dim == "y" && this.vlower != "pool" && !this.opts.position[1] &&
 				!(["poster", "screen", "stream", "portal", "body"].includes(this.opts.kind));
 		}
 	},
@@ -101,6 +101,11 @@ zero.core.Thing = CT.Class({
 			max: pz[pname].max
 		};
 		pz[pname].unbounded = false;
+	},
+	setLevel: function(val) {
+		this.adjust("position", "y", val);
+		if (this.springs.y)
+			this.springs.y.target = val;
 	},
 	setPositioners: function(xyz, unbound, snap) {
 		var _xyz = this._xyz, sz = this.springs, s;
