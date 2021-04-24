@@ -45,12 +45,20 @@ zero.base.springs.body = function() {
 
         shake: {
             k: 20,
-            damp: 10
+            damp: 10,
+            bounds: {
+                min: -1,
+                max: 1
+            }
 //            breaks: true
         },
         nod: {
             k: 4,
-            damp: 2
+            damp: 2,
+            bounds: {
+                min: -1,
+                max: 1
+            }
 //            breaks: true
         },
         tilt: {
