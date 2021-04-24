@@ -70,15 +70,25 @@ zero.core.Controls = CT.Class({
 				}
 			});
 			_.acl.start();
+		},
+		cadrag: function(direction, distance, dx, dy, pixelsPerSecond) {
+			var _ = this._;
+			dy && _.look("DOWN", dy / 200);
+			dx && _.look("LEFT", dx / 400);
+		},
+		camouse: function() {
+			CT.require("CT.gesture", true);
+			CT.gesture.listen("drag", CT.dom.id("vnode") || CT.dom.id("ctmain"), this._.cadrag);
 		}
 	},
 	setXLRMode: function(m) {
 		this._.xlrmode = m;
 	},
 	setCams: function() {
-		var _ = this._;
+		var _ = this._, cfg = core.config.ctzero.camera;
 		["UP", "DOWN", "LEFT", "RIGHT"].forEach(_.cam);
-		core.config.ctzero.camera.vr && _.xlrometer();
+		cfg.vr && _.xlrometer();
+		cfg.mouse && _.camouse();
 	},
 	wallshift: function(shift, prev_spring) {
 		var target = this.target;
