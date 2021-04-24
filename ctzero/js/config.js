@@ -1,6 +1,7 @@
 {
 	"camera": {
 		"vr": false,
+		"mouse": true,
 		"xlro": {
 			"x": 20,
 			"y": -0.5
