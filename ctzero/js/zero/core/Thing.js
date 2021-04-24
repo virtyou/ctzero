@@ -119,7 +119,9 @@ zero.core.Thing = CT.Class({
 		});
 	},
 	tickPos: function() {
-		var gp = this.group.position, sz = this.springs;
+		var g = this.group;
+		if (!g) return;
+		var gp = g.position, sz = this.springs;
 		for (var axis of this._xyz)
 			if (sz[axis])
 				gp[axis] = sz[axis].value;
