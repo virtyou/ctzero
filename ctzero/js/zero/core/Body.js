@@ -139,7 +139,11 @@ zero.core.Body = CT.Class({
 			bobber.floored = otop >= bobber.value - 100;
 			this._.bounder("y", 1, otop, true);
 		}
-		changed && this.setFriction((obj || r).grippy && !wet, !bobber.hard || wet);
+		if (this.landing) {
+			changed = true;
+			this.flying = this.landing = false;
+		}
+		changed && this.setFriction(!wet && !this.flying && (obj || r).grippy, this.flying || wet || !bobber.hard);
 	},
 	energy: function() {
 		return this.person && this.person.energy;
