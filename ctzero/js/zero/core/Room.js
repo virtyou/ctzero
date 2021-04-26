@@ -103,8 +103,19 @@ zero.core.Room = CT.Class({
 		var isec = zcu.ray.intersectObject(this.thring)[0];
 		return isec && isec.point.y;
 	},
-	getObject: function(pos, radii, checkY) {
-		var i, k, o, obj, obst;
+	getTop: function(pos) {
+		return this.shelled ? this.dynFloor(pos) : this.bounds.min.y + 1;
+	},
+	within: function(pos, radii, checkY, kind) {
+		kind = kind || "furnishing";
+		for (var i = 0; i < this.objects.length; i++) {
+			obj = this.objects[i];
+			if (obj.opts.kind == kind && obj.overlaps(pos, radii, checkY))
+				return obj;
+		}
+	},
+	getObject: function(pos, radii, checkY, kind) {
+		var k, o, obj, obst;
 		for (k of this._bumpers) {
 			for (o in this[k]) {
 				obst = this[k][o];
@@ -112,11 +123,7 @@ zero.core.Room = CT.Class({
 					return obst;
 			}
 		}
-		for (i = 0; i < this.objects.length; i++) {
-			obj = this.objects[i];
-			if (obj.opts.kind == "furnishing" && obj.overlaps(pos, radii, checkY))
-				return obj;
-		}
+		return this.within(pos, radii, checkY, kind);
 	},
 	getSurface: function(pos, radii) {
 		var val, top, winner, test = function(obj) {
@@ -139,6 +146,7 @@ zero.core.Room = CT.Class({
 				}
 			}
 		}
+		this.shelled && test(this);
 		return winner;
 	},
 	ebound: function(spr, bod) {
@@ -381,7 +389,8 @@ zero.core.Room = CT.Class({
 			objects: [], // regular Things
 			cameras: []
 		});
-		if (opts.outside && !opts.stripset) {
+		this.shelled = !!opts.stripset;
+		if (opts.outside && !this.shelled) {
 			opts.material.transparent = true;
 			opts.material.opacity = opts.material.opacity || 0;
 		}

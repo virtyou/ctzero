@@ -117,30 +117,29 @@ zero.core.Body = CT.Class({
 		var r = zero.core.current.room;
 		if (!(r && r.isReady())) return;
 		var pos = this.group.position,
-			isRamp, otop, bobber = this.springs.bob,
-			obj = r.getSurface(pos, this.radii);
+			otop, bobber = this.springs.bob,
+			obj = r.getSurface(pos, this.radii),
+			within = r.within(pos, this.radii, true, "elemental"),
+			changed, wet = within && within.opts.state == "liquid";
+		if (within != this.within) {
+			this.log("within", within ? within.name : "nothing");
+			changed = true;
+			this.within = within;
+		}
 		if (obj != this.upon) {
 			this.log("upon", obj ? obj.name : "bottom");
+			changed = true;
 			this.upon = obj;
 			bobber.floored = false;
-			this.setFriction((obj || r).grippy,
-				!bobber.hard || (obj && obj.opts.state == "liquid"));
 			for (var ps of ["weave", "bob", "slide"])
 				this.springs[ps].pull = obj && obj.pull && obj.pull[ps];
 			this._.bounder("y", 1, obj && obj.getTop(pos));
-		} else {
-			if (obj) {
-				isRamp = obj.vlower == "ramp";
-				if (isRamp || obj.shifting("y"))
-					otop = obj.getTop(pos);
-			} else if (r.opts.stripset) // indicates custom surface.......
-				otop = r.dynFloor(pos);
-			if (otop) {
-				if (isRamp || r.opts.stripset) // eh....... why no y shifter?
-					bobber.floored = otop >= bobber.value - 100;
-				this._.bounder("y", 1, otop, true);
-			}
+		} else if (obj && (obj.shelled || obj.vlower == "ramp" || obj.shifting("y"))) {
+			otop = obj.getTop(pos);
+			bobber.floored = otop >= bobber.value - 100;
+			this._.bounder("y", 1, otop, true);
 		}
+		changed && this.setFriction((obj || r).grippy && !wet, !bobber.hard || wet);
 	},
 	energy: function() {
 		return this.person && this.person.energy;

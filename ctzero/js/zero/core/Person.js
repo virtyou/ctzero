@@ -214,19 +214,19 @@ zero.core.Person = CT.Class({
 		}, 500); // time for orientation...
 	},
 	jump: function() {
-		var plat = this.body.upon;
+		var within = this.body.within;
 		this.gesture("jump");
-		plat && plat.opts.state == "liquid" && this.body.bubbletrail.release(2);
+		within && within.opts.state == "liquid" && this.body.bubbletrail.release(2);
 	},
 	go: function(dur) {
-		var plat = this.body.upon, dance = "walk";
-		if (plat && plat.opts.state == "liquid") {
-			if (plat.above(this.body.position()))
-				dance = "fly";
-			else {
+		var within = this.body.within, dance = "walk";
+		if (within && within.opts.state == "liquid") {
+//			if (within.above(this.body.position()))
+//				dance = "fly";
+//			else {
 				dance = "swim";
 				this.body.bubbletrail.release(1);
-			}
+//			}
 		}
 		this.dance(dance, dur);
 	},
