@@ -184,6 +184,13 @@ zero.core.Thing = CT.Class({
 		}
 		this.onbound && this.onbound();
 	},
+	playSong: function(song) {
+		if (!this._audio) {
+			this._audio = CT.dom.audio();
+			document.body.appendChild(this._audio);
+		}
+		zero.core.util.playAudio(this._audio, song.item);
+	},
 	playPause: function() {
 		if (this.opts.video && this.material.map) {
 			var vnode = this.material.map.vnode;
@@ -191,6 +198,12 @@ zero.core.Thing = CT.Class({
 				vnode.play();
 			else
 				vnode.pause();
+		} else if (this.opts.playlist) {
+			CT.modal.choice({
+				prompt: "pick a song",
+				data: this.opts.playlist,
+				cb: this.playSong
+			});
 		}
 	},
 	unvideo: function() {
