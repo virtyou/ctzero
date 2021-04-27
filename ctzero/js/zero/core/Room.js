@@ -162,7 +162,7 @@ zero.core.Room = CT.Class({
 		if (bod.radii && this.getSolid(p, bod.radii, true))
 			spr.target = spr.value;
 	},
-	setVolumes: function(pos) {
+	setVolumes: function() {
 		if (!this.speaker) return;
 		for (var s of Object.values(this.speaker))
 			if (s.playing)

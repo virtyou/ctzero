@@ -162,6 +162,8 @@ zero.core.Body = CT.Class({
 			gp.x = pz.weave.value;
 			gp.z = pz.slide.value;
 			this.setBob();
+			var zcc = zero.core.current;
+			(this == zcc.person) && zcc.room.setVolumes(gp);
 		}
 	},
 	tick: function(dts) {
