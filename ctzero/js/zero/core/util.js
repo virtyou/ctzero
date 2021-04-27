@@ -122,6 +122,14 @@ zero.core.util = {
 	panorama: function(pos, node) {
 		zero.core.util._map(pos, "Panorama", node);
 	},
+	playAudio: function(player, src)_{
+		player.src = src;
+		player.play().catch(function() {
+			CT.modal.modal("let's get started!", function() {
+				player.play();
+			}, null, true);
+		});
+	},
 	audio: function(src) {
 		var a = new Audio(src);
 		document.body.appendChild(a);
