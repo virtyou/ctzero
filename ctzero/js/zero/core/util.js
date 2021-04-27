@@ -33,6 +33,12 @@ zero.core.util = {
 			xyzt = (vec.x * vec.x) + (vec.y * vec.y) + (vec.z * vec.z);
 		return Math.sqrt(xyzt);
 	},
+	close2u: function(thingo) {
+		var r = zero.core.current.room, you = zero.core.current.person,
+			diameter = r.bounds.min.distanceTo(r.bounds.max),
+			dist = thingo.position().distanceTo(you.body.position());
+		return 1 - dist / diameter;
+	},
 	vector: function(p1, p2) { // p2 - p1
 		return {
 			x: p2.x - p1.x,
