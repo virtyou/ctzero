@@ -163,7 +163,7 @@ zero.core.Body = CT.Class({
 			gp.z = pz.slide.value;
 			this.setBob();
 			var zcc = zero.core.current;
-			(this == zcc.person) && zcc.room.setVolumes(gp);
+			(this == zcc.person) && zcc.room.setVolumes();
 		}
 	},
 	tick: function(dts) {
