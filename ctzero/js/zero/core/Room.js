@@ -162,6 +162,12 @@ zero.core.Room = CT.Class({
 		if (bod.radii && this.getSolid(p, bod.radii, true))
 			spr.target = spr.value;
 	},
+	setVolumes: function(pos) {
+		if (!this.speaker) return;
+		for (var s of Object.values(this.speaker))
+			if (s.playing)
+				s._audio.volume = zero.core.util.close2u(s);
+	},
 	setBounds: function() {
 		this.bounds = this.bounds || new THREE.Box3();
 		this.bounds.setFromObject(this.getPlacer());
