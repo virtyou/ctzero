@@ -190,6 +190,7 @@ zero.core.Thing = CT.Class({
 			document.body.appendChild(this._audio);
 		}
 		zero.core.util.playAudio(this._audio, song.item);
+		this.playing = true; // TODO: probably unset at some point....?
 	},
 	playPause: function() {
 		if (this.opts.video && this.material.map) {
