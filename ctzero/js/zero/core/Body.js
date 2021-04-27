@@ -119,7 +119,7 @@ zero.core.Body = CT.Class({
 		var pos = this.group.position,
 			otop, bobber = this.springs.bob,
 			obj = r.getSurface(pos, this.radii),
-			within = r.within(pos, this.radii, true, "elemental"),
+			within = r.within(pos, this.radii, true),
 			changed, wet = within && within.opts.state == "liquid";
 		if (within != this.within) {
 			this.log("within", within ? within.name : "nothing");
