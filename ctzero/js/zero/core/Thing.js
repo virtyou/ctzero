@@ -189,7 +189,7 @@ zero.core.Thing = CT.Class({
 			this._audio = CT.dom.audio();
 			document.body.appendChild(this._audio);
 		}
-		zero.core.util.playAudio(this._audio, song.item);
+		zero.core.util.playTrack(this._audio, song);
 		this.playing = true; // TODO: probably unset at some point....?
 	},
 	playPause: function() {

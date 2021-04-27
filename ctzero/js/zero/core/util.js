@@ -128,13 +128,24 @@ zero.core.util = {
 	panorama: function(pos, node) {
 		zero.core.util._map(pos, "Panorama", node);
 	},
-	playAudio: function(player, src)_{
-		player.src = src;
+	playTrack: function(player, track) {
+		var zcc = zero.core.current, d, n,
+		player.src = track.item;
 		player.play().catch(function() {
 			CT.modal.modal("let's get started!", function() {
 				player.play();
 			}, null, true);
 		});
+		if (track.owners && track.owners.length) {
+			CT.cc.view({
+				identifier: "Resource (audio - " + track.kind + "): " + track.name,
+				owners: track.owners
+			});
+		} else if (zcc.adventure) { // vu only! ;)
+			[d, n] = name.split(": ");
+			zcc.adventure.menus.attribution("hearing",
+				n, "audio (" + track.kind + ")", d);
+		}
 	},
 	audio: function(src) {
 		var a = new Audio(src);
