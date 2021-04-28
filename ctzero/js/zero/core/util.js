@@ -129,7 +129,7 @@ zero.core.util = {
 		zero.core.util._map(pos, "Panorama", node);
 	},
 	playTrack: function(player, track) {
-		var zcc = zero.core.current, d, n,
+		var zcc = zero.core.current, d, n;
 		player.src = track.item;
 		player.play().catch(function() {
 			CT.modal.modal("let's get started!", function() {
