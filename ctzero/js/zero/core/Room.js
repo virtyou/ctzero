@@ -106,15 +106,16 @@ zero.core.Room = CT.Class({
 	getTop: function(pos) {
 		return this.shelled ? this.dynFloor(pos) : this.bounds.min.y + 1;
 	},
-	within: function(pos, radii, checkY, kind) {
-		kind = kind || "furnishing";
+	within: function(pos, radii, checkY, kind, prop) {
+		kind = kind || "elemental";
+		prop = prop || "kind";
 		for (var i = 0; i < this.objects.length; i++) {
 			obj = this.objects[i];
-			if (obj.opts.kind == kind && obj.overlaps(pos, radii, checkY))
+			if (obj.opts[prop] == kind && obj.overlaps(pos, radii, checkY))
 				return obj;
 		}
 	},
-	getObject: function(pos, radii, checkY, kind) {
+	getObject: function(pos, radii, checkY, kind, prop) {
 		var k, o, obj, obst;
 		for (k of this._bumpers) {
 			for (o in this[k]) {
@@ -123,7 +124,10 @@ zero.core.Room = CT.Class({
 					return obst;
 			}
 		}
-		return this.within(pos, radii, checkY, kind);
+		return this.within(pos, radii, checkY, kind, prop);
+	},
+	getSolid: function(pos, radii, checkY) {
+		return this.getObject(pos, radii, checkY, "solid", "state");
 	},
 	getSurface: function(pos, radii) {
 		var val, top, winner, test = function(obj) {
@@ -137,7 +141,7 @@ zero.core.Room = CT.Class({
 				}
 			}
 		}, i, k, flo, oz = this.opts;
-		test(this.getObject(pos, radii));
+		test(this.getSolid(pos, radii));
 		for (k of this._surfaces) {
 			if (oz[k]) {
 				for (i = oz[k].parts.length - 1; i > -1; i--) {
@@ -155,11 +159,14 @@ zero.core.Room = CT.Class({
 			x: bp.x, y: bp.y, z: bp.z
 		};
 		p[bod.positioner2axis(spr.name)] = spr.target;
-		if (bod.radii) {
-			var obj = this.getObject(p, bod.radii, true);
-			if (obj && obj.opts.state == "solid")
-				spr.target = spr.value;
-		}
+		if (bod.radii && this.getSolid(p, bod.radii, true))
+			spr.target = spr.value;
+	},
+	setVolumes: function() {
+		if (!this.speaker) return;
+		for (var s of Object.values(this.speaker))
+			if (s.playing)
+				s._audio.volume = zero.core.util.close2u(s);
 	},
 	setBounds: function() {
 		this.bounds = this.bounds || new THREE.Box3();

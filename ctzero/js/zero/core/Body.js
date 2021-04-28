@@ -119,7 +119,7 @@ zero.core.Body = CT.Class({
 		var pos = this.group.position,
 			otop, bobber = this.springs.bob,
 			obj = r.getSurface(pos, this.radii),
-			within = r.within(pos, this.radii, true, "elemental"),
+			within = r.within(pos, this.radii, true),
 			changed, wet = within && within.opts.state == "liquid";
 		if (within != this.within) {
 			this.log("within", within ? within.name : "nothing");
@@ -162,6 +162,8 @@ zero.core.Body = CT.Class({
 			gp.x = pz.weave.value;
 			gp.z = pz.slide.value;
 			this.setBob();
+			var zcc = zero.core.current;
+			(this == zcc.person) && zcc.room.setVolumes();
 		}
 	},
 	tick: function(dts) {

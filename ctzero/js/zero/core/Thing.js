@@ -184,13 +184,28 @@ zero.core.Thing = CT.Class({
 		}
 		this.onbound && this.onbound();
 	},
-	playPause: function() {
+	playSong: function(song, onPlaySong) {
+		if (!this._audio) {
+			this._audio = CT.dom.audio();
+			document.body.appendChild(this._audio);
+		}
+		zero.core.util.playTrack(this._audio, song);
+		this.playing = true; // TODO: probably unset at some point....?
+		onPlaySong && onPlaySong(song, this.opts.key);
+	},
+	playPause: function(onPlaySong) {
 		if (this.opts.video && this.material.map) {
 			var vnode = this.material.map.vnode;
 			if (vnode.paused)
 				vnode.play();
 			else
 				vnode.pause();
+		} else if (this.opts.playlist) {
+			CT.modal.choice({
+				prompt: "pick a song",
+				data: this.opts.playlist,
+				cb: (s) => this.playSong(s, onPlaySong)
+			});
 		}
 	},
 	unvideo: function() {
