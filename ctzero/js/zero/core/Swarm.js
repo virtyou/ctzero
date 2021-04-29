@@ -2,9 +2,14 @@ zero.core.Swarm = CT.Class({
 	CLASSNAME: "zero.core.Swarm",
 	tick: function(dts) {
 		if (!this.pool) return; // wait
-		var i, v, frame = this._nextFrame();
-		for (i = 0; i < frame.length; i++)
-			this.pool[i].position(frame[i]);
+		var zcu = zero.core.util, i, v, d,
+			frame = this._nextFrame();
+		for (i = 0; i < frame.length; i++) {
+			v = this.pool[i];
+			d = frame[i];
+			v.position([d[0] * 10, d[1] * 10, d[2] / 10]);
+			v.setColor(zcu.int2rgb(d[3]));
+		}
 	},
 	_nextFrame: function() {
 		var i, frames = this.opts.frames,
