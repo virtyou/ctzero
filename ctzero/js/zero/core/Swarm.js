@@ -7,8 +7,8 @@ zero.core.Swarm = CT.Class({
 		for (i = 0; i < frame.length; i++) {
 			v = this.pool[i];
 			d = frame[i];
-			v.position([d[0] * 10, d[1] * 10, d[2] / 10]);
-			v.setColor(zcu.int2rgb(d[3]));
+			v.position(d);
+			v.setColor(d[3]);
 		}
 	},
 	_nextFrame: function() {
@@ -39,6 +39,15 @@ zero.core.Swarm = CT.Class({
 			scale: [0.2, 0.2, 0.2]
 		};
 	},
+	_procFrames: function() {
+		var f, i, v, fz = this.opts.frames, zcu = zero.core.util;
+		for (f of fz) {
+			for (i in f) {
+				v = f[i];
+				f[i] = [v[0] * 10, v[1] * 10, v[2] / 10, zcu.int2rgb(v[3])];
+			}
+		}
+	},
 	assembled: function() {
 		this.pool = Object.values(this.voxel);
 		this._.built();
@@ -51,10 +60,12 @@ zero.core.Swarm = CT.Class({
 	},
 	init: function(opts) {
 		this.opts = opts = CT.merge(opts, {
+			procFrames: true,
 			size: 1600,
 			frames: []
 		}, this.opts);
 		this.frame = 0;
 		this.active = 0;
+		opts.procFrames && this._procFrames();
 	}
 }, zero.core.Thing);
