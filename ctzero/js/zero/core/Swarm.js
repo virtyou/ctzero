@@ -7,10 +7,11 @@ zero.core.Swarm = CT.Class({
 			this.pool[i].position(frame[i]);
 	},
 	_nextFrame: function() {
-		var i, frames = this.opts.frames, frame = frames[this.frame];
-		if (this.pool.length < frame.length) {
-			this.log("topping off with", frame.length - this.pool.length, "voxels");
-			for (i = this.pool.length; i < frame.length; i++)
+		var i, frames = this.opts.frames,
+			frame = frames[this.frame], padded = frame.length + 200;
+		if (this.pool.length < padded) {
+			this.log("topping off with", padded - this.pool.length, "voxels");
+			for (i = this.pool.length; i < padded; i++)
 				this.pool.push(this.attach(this._vox(i)));
 		}
 		if (this.active < frame.length) {
