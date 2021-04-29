@@ -21,7 +21,7 @@ zero.core.Swarm = CT.Class({
 				this.pool[i].hide();
 		}
 		this.active = frame.length;
-		this.frame = (this.frames + 1) % frames.length;
+		this.frame = (this.frame + 1) % frames.length;
 		return frame;
 	},
 	_vox: function(i) {
@@ -46,7 +46,7 @@ zero.core.Swarm = CT.Class({
 		this.opts = opts = CT.merge(opts, {
 			size: 1600,
 			frames: []
-		});
+		}, this.opts);
 		this.frame = 0;
 		this.active = 0;
 	}
