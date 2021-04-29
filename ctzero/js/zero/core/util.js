@@ -9,6 +9,30 @@ zero.core.util = {
 	_tickers: [],
 	rates: ["x-slow", "slow", "medium", "fast", "x-fast"],
 	pitches: ["x-low", "low", "medium", "high", "x-high"],
+	// https://stackoverflow.com/questions/5623838/rgb-to-hex-and-hex-to-rgb#5624139
+	hex2rgb: function(hex) {
+		var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+		return result ? {
+			r: parseInt(result[1], 16) / 255,
+			g: parseInt(result[2], 16) / 255,
+			b: parseInt(result[3], 16) / 255
+		} : null;
+	},
+	int2rgb: function(c) {
+		var zcu = zero.core.util,
+			h = zcu.componentToHex(c);
+		while (h.length < 6)
+			h = "0" + h;
+		return zcu.hex2rgb("#" + h);
+	},
+	componentToHex: function(c) {
+		var hex = c.toString(16);
+		return hex.length == 1 ? "0" + hex : hex;
+	},
+	rgbToHex: function(r, g, b) {
+		var c2h = zero.core.util.componentToHex;
+		return "#" + c2h(r) + c2h(g) + c2h(b);
+	},
 	coords: function(xyz, cb) {
 	    ["x", "y", "z"].forEach(function(dim, i) {
 	        var val = xyz[dim] != undefined ? xyz[dim] : xyz[i];
