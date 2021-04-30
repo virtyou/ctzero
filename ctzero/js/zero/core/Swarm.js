@@ -10,6 +10,7 @@ zero.core.Swarm = CT.Class({
 			v.position(d);
 			v.setColor(d[3]);
 		}
+		this.tickPos();
 	},
 	_nextFrame: function() {
 		var i, frames = this.opts.frames,
