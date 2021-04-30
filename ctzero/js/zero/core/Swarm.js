@@ -64,6 +64,8 @@ zero.core.Swarm = CT.Class({
 			size: 1600,
 			frames: []
 		}, this.opts);
+		if (typeof opts.frames == "string")
+			opts.frames = CT.net.get(opts.frames, null, true);
 		this.frame = 0;
 		this.active = 0;
 		opts.procFrames && this._procFrames();
