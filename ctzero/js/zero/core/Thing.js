@@ -3,18 +3,21 @@ zero.core.Thing = CT.Class({
 	_: {
 		customs: [], // stored here, only tick()ed in Thing subclasses that implement tick()
 		ready: false,
+		readycbs: [],
 		built: function() {
-			var thiz = this;
+			var thiz = this, _ = this._, cb;
 			this.opts.onassemble && this.opts.onassemble();
 			this.opts.onbuild && this.opts.onbuild(this);
 			this.opts.iterator && this.opts.iterator(this);
-			this._.ready = true;
+			_.ready = true;
 			this.opts.onclick && zero.core.click.register(this, function() {
 				thiz.opts.onclick(thiz);
 			});
 			this.opts.scroll && this.scroll();
 			this.opts.shift && this.shift();
 			this.opts.vstrip && this.vsplay();
+			for (cb of _.readycbs)
+				cb();
 		},
 		setd: function(dim, springs, positioners, pos) {
 			var spropts = {}, // body positioner!
@@ -87,6 +90,12 @@ zero.core.Thing = CT.Class({
 	_xyz: ["x", "y", "z"],
 	isReady: function() {
 		return this._.ready;
+	},
+	onReady: function(cb) {
+		if (this.isReady())
+			cb();
+		else
+			this._.readycbs.push(cb);
 	},
 	show: function() {
 		this.group.visible = true;
