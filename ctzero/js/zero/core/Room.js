@@ -17,6 +17,9 @@ zero.core.Room = CT.Class({
 		if (this.particles)
 			for (obj in this.particles)
 				this.particles[obj].tick(dts, rdts);
+		if (this.swarm)
+			for (obj in this.swarm)
+				this.swarm[obj].tick();
 		this.jostle();
 	},
 	bump: function(b1, b2, moshy) {
