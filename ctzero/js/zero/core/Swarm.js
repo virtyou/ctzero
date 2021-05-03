@@ -1,7 +1,7 @@
 zero.core.Swarm = CT.Class({
 	CLASSNAME: "zero.core.Swarm",
 	tick: function(dts) {
-		if (!this.pool) return; // wait
+		if (!this.pool || (zero.core.util.ticker % 2)) return; // wait
 		var zcu = zero.core.util, i, v, d,
 			frame = this._nextFrame();
 		for (i = 0; i < frame.length; i++) {
