@@ -262,6 +262,7 @@ zero.core.util = {
 	},
 	animate: function(now) {
 	    var zcu = zero.core.util, zcc = zero.core.current, dts, rdts, p, t;
+	    requestAnimationFrame(zcu.animate);
 	    if (zcu.now) {
 	    	zcu.rdts = (now - zcu.now) / 1000;
 	        zcu.dts = Math.min(zcu.dmax, zcu.rdts);
@@ -281,8 +282,7 @@ zero.core.util = {
 	    for (t of zcu._tickers)
 	    	t(dts, rdts);
 	    zero.core.camera.tick();
-	    zero.core.camera.render(); 
-	    requestAnimationFrame(zcu.animate);
+	    zero.core.camera.render();
 	},
 	ontick: function(cb) {
 		zero.core.util._tickers.push(cb);
