@@ -1,5 +1,6 @@
 var camera = zero.core.camera = {
 	_: {
+		ar: {},
 		profiles: {},
 		left: {},
 		right: {},
@@ -48,10 +49,15 @@ var camera = zero.core.camera = {
 		camera.resize();
 	},
 	resize: function(w, h) {
-		var _ = camera._, cont = _.outerContainer;
+		var _ = camera._, cont = _.outerContainer,
+			ccfg = core.config.ctzero.camera;
 		w = w || cont.clientWidth;
 		h = h || cont.clientHeight;
-		if (core.config.ctzero.camera.vr) {
+		if (ccfg.ar) {
+			_.ar.source.onResizeElement();
+			_.ar.source.copyElementSizeTo(_.renderer.domElement);
+			_.ar.context.arController && _.ar.source.copyElementSizeTo(_.ar.context.arController.canvas);
+		} else if (ccfg.vr) {
 			w = w / 2;
 			_.left.renderer.setSize(w, h);
 			_.right.renderer.setSize(w, h);
@@ -162,8 +168,13 @@ var camera = zero.core.camera = {
 		_.camera.lookAt(_.looker.position(null, true));
 	},
 	tick: function() {
-		if (camera._.useControls)
-			camera._.controls.update();
+		var _ = camera._;
+		if (core.config.ctzero.camera.ar) {
+			if (!_.ar.source.ready) return;
+			_.ar.context.update(_.ar.source.domElement);
+			camera.scene.visible = _.camera.visible;
+		} else if (_.useControls)
+			_.controls.update();
 		else {
 			camera._tickPerspective();
 			var s = camera.springs;
@@ -172,7 +183,7 @@ var camera = zero.core.camera = {
 				y: s.position.y.value,
 				z: s.position.z.value
 			});
-			if (camera._.subject)
+			if (_.subject)
 				camera._tickSubject();
 			else {
 				camera.rotation({
@@ -298,6 +309,8 @@ var camera = zero.core.camera = {
 		_ = _ || camera._;
 		_.container = CT.dom.div(null, cclass || "abs all0");
 		_.camera = new THREE.PerspectiveCamera(camcfg.fov, w / h, 0.2, 10000000);
+		if (camcfg.ar)
+			camcfg.opts.alpha = true;
 		_.renderer = new THREE.WebGLRenderer(camcfg.opts);
 		_.renderer.setSize(w, h);
 		_.container.appendChild(_.renderer.domElement);
@@ -319,6 +332,26 @@ var camera = zero.core.camera = {
 		};
 		return stand;
 	},
+	_initAR: function() {
+		var _ = camera._;
+		camera.scene.visible = false;
+		_.ar.source = new THREEx.ArToolkitSource({
+			sourceType: "webcam"
+		});
+		_.ar.context = new THREEx.ArToolkitContext({
+			cameraParametersUrl: "/ardata/camera_para.dat",
+			detectionMode: "mono"
+		});
+		_.ar.marker = new THREEx.ArMarkerControls(_.ar.context, _.camera, {
+			type: "pattern",
+			patternUrl: "/ardata/patt." + core.config.ctzero.camera.ar,
+			changeMatrixMode: "cameraTransformMatrix"
+		});
+		_.ar.source.init(() => setTimeout(camera.resize, 200));
+		_.ar.context.init(function() {
+			_.camera.projectionMatrix.copy(_.ar.context.getProjectionMatrix());
+		});
+	},
 	initCam: function() {
 		var _ = camera._, config = core.config.ctzero,
 			c = _.outerContainer = CT.dom.id(config.container) || document.body,
@@ -334,6 +367,7 @@ var camera = zero.core.camera = {
 			cam = camera._cam(WIDTH, HEIGHT);
 			camera.scene.add(cam);
 			CT.dom.addContent(_.outerContainer, cam.container);
+			config.camera.ar && this._initAR();
 		}
 	},
 	init: function() {
@@ -367,3 +401,6 @@ var camera = zero.core.camera = {
 		window.addEventListener("resize", camera.update, false);
 	}
 };
+
+if (core.config.ctzero.camera.ar)
+	CT.scriptImport("https://raw.githack.com/AR-js-org/AR.js/master/three.js/build/ar.js");
