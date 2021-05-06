@@ -9,7 +9,7 @@ copies = {
 }
 
 syms = {
-	".": ["_zero.py", "_speech.py"],
+	".": ["_zero.py", "_speech.py", "ardata"],
 	"js": ["zero", "shaders"]
 }
 model = {
@@ -20,7 +20,8 @@ routes = {
 	"/_speech": "_speech.py",
 	"/sound": "sound",
 	"/maps": "maps",
-	"/models": "models"
+	"/models": "models",
+	"/ardata": "ardata"
 }
 cfg = {
 	"asr": {
