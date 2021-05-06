@@ -1,5 +1,6 @@
 {
 	"camera": {
+		"ar": false,
 		"vr": false,
 		"mouse": true,
 		"xlro": {
