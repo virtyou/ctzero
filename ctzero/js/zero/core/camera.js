@@ -333,12 +333,16 @@ var camera = zero.core.camera = {
 		return stand;
 	},
 	_initMarker: function(marker, thopts) {
-		var a = camera._.ar, thing = a.things[marker] = zero.core.util.thing(thopts, function() {
-			a.markers[marker] = new THREEx.ArMarkerControls(a.context, thing.group, {
-				type: "pattern",
-				patternUrl: "/ardata/patt." + marker,
-				changeMatrixMode: "cameraTransformMatrix"
-			});
+		var a = camera._.ar, mopts, thing = a.things[marker] = zero.core.util.thing(thopts, function() {
+			mopts = { changeMatrixMode: "cameraTransformMatrix" };
+			if (isNaN(parseInt(marker))) {
+				mopts.type = "pattern";
+				mopts.patternUrl = "/ardata/patt." + marker;
+			} else {
+				mopts.type = "barcode";
+				mopts.barcodeValue = parseInt(marker);
+			}
+			a.markers[marker] = new THREEx.ArMarkerControls(a.context, thing.group, mopts);
 		});
 	},
 	_initMarkers: function() {
@@ -375,7 +379,8 @@ var camera = zero.core.camera = {
 		});
 		_.ar.context = new THREEx.ArToolkitContext({
 			cameraParametersUrl: "/ardata/camera_para.dat",
-			detectionMode: "mono",
+			detectionMode: "mono_and_matrix",
+			matrixCodeType: "3x3_HAMMING63",
 			maxDetectionRate: 30
 		});
 		camera.initMarkers();
