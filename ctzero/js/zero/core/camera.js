@@ -343,6 +343,11 @@ var camera = zero.core.camera = {
 	},
 	_initMarkers: function() {
 		var acfg = core.config.ctzero.camera.ar, m;
+		camera._.ar.light = zero.core.util.thing({
+			kind: "light",
+			thing: "Light",
+			variety: "ambient"
+		});
 		for (m in acfg)
 			camera._initMarker(m, acfg[m]);
 	},
