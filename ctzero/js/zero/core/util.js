@@ -219,6 +219,11 @@ zero.core.util = {
 			zero.core.current.room = new zero.core.Room(robj);
 		return zero.core.current.room;
 	},
+	thing: function(opts, parent) {
+		if (parent)
+			opts.scene = parent;
+		return new zero.core[opts.custom ? "Custom" : (opts.thing || "Thing")](opts);
+	},
 	back: function(node, bgsrc, robj) {
 		if (!zero.core.util._back) {
 			zero.core.util._back = CT.dom.div(null, "full low abs");
