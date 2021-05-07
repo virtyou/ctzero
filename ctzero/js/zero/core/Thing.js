@@ -543,8 +543,7 @@ zero.core.Thing = CT.Class({
 		}
 	},
 	attach: function(child, iterator, oneOff) {
-		var thing, customs = this._.customs, childopts = CT.merge(child, {
-			scene: this.group,
+		var customs = this._.customs, thing = zero.core.util.thing(CT.merge(child, {
 			path: this.path,
 			iterator: function(tng) {
 				tng.isCustom && customs.push(tng); // for tick()ing
@@ -552,11 +551,7 @@ zero.core.Thing = CT.Class({
 			},
 			bones: this.bones || [],
 			bmap: this.bmap || {}
-		});
-		if (child.custom)
-			thing = new zero.core.Custom(childopts);
-		else
-			thing = new zero.core[child.thing || "Thing"](childopts);
+		}), this.group);
 		this[thing.name] = thing;
 		if (child.kind) {
 			this[child.kind] = this[child.kind] || {};
