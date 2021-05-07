@@ -545,13 +545,12 @@ zero.core.Thing = CT.Class({
 	attach: function(child, iterator, oneOff) {
 		var customs = this._.customs, thing = zero.core.util.thing(CT.merge(child, {
 			path: this.path,
-			iterator: function(tng) {
-				tng.isCustom && customs.push(tng); // for tick()ing
-				iterator && iterator();
-			},
 			bones: this.bones || [],
 			bmap: this.bmap || {}
-		}), this.group);
+		}), function(tng) {
+			tng.isCustom && customs.push(tng); // for tick()ing
+			iterator && iterator();
+		}, this.group);
 		this[thing.name] = thing;
 		if (child.kind) {
 			this[child.kind] = this[child.kind] || {};

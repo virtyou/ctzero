@@ -219,7 +219,9 @@ zero.core.util = {
 			zero.core.current.room = new zero.core.Room(robj);
 		return zero.core.current.room;
 	},
-	thing: function(opts, parent) {
+	thing: function(opts, iterator, parent) {
+		if (iterator)
+			opts.iterator = iterator;
 		if (parent)
 			opts.scene = parent;
 		return new zero.core[opts.custom ? "Custom" : (opts.thing || "Thing")](opts);
