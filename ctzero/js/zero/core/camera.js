@@ -172,7 +172,7 @@ var camera = zero.core.camera = {
 		if (core.config.ctzero.camera.ar) {
 			if (!_.ar.source.ready) return;
 			_.ar.context.update(_.ar.source.domElement);
-			camera.scene.visible = _.camera.visible;
+//			camera.scene.visible = _.camera.visible;
 		} else if (_.useControls)
 			_.controls.update();
 		else {
@@ -332,21 +332,48 @@ var camera = zero.core.camera = {
 		};
 		return stand;
 	},
-	_initAR: function() {
+	_initMarker: function(marker, thopts) {
+		var a = camera._.ar, thing = a.things[marker] = zero.core.util.thing(thopts, function() {
+			a.markers[marker] = new THREEx.ArMarkerControls(a.context, thing.group, {
+				type: "pattern",
+				patternUrl: "/ardata/patt." + marker,
+				changeMatrixMode: "cameraTransformMatrix"
+			});
+		});
+	},
+	_initMarkers: function() {
+		var acfg = core.config.ctzero.camera.ar, m;
+		for (m in acfg)
+			camera._initMarker(m, acfg[m]);
+	},
+	initMarkers: function() {
+		var _ = camera._, acfg = core.config.ctzero.camera.ar, m,
+			keys = Object.values(acfg).filter(i => typeof i == "string");
+		_.ar.markers = {};
+		_.ar.things = {};
+		if (!keys.length)
+			return camera._initMarkers();
+		CT.db.multi(keys, function(things) {
+			things.forEach(function(thing) {
+				for (m in acfg)
+					if (acfg[m] == thing.key)
+						acfg[m] = thing;
+			});
+			camera._initMarkers();
+		}, "json");
+	},
+	initAR: function() {
 		var _ = camera._;
-		camera.scene.visible = false;
+//		camera.scene.visible = false;
 		_.ar.source = new THREEx.ArToolkitSource({
 			sourceType: "webcam"
 		});
 		_.ar.context = new THREEx.ArToolkitContext({
 			cameraParametersUrl: "/ardata/camera_para.dat",
-			detectionMode: "mono"
+			detectionMode: "mono",
+			maxDetectionRate: 30
 		});
-		_.ar.marker = new THREEx.ArMarkerControls(_.ar.context, _.camera, {
-			type: "pattern",
-			patternUrl: "/ardata/patt." + core.config.ctzero.camera.ar,
-			changeMatrixMode: "cameraTransformMatrix"
-		});
+		camera.initMarkers();
 		_.ar.source.init(() => setTimeout(camera.resize, 200));
 		_.ar.context.init(function() {
 			_.camera.projectionMatrix.copy(_.ar.context.getProjectionMatrix());
@@ -367,7 +394,7 @@ var camera = zero.core.camera = {
 			cam = camera._cam(WIDTH, HEIGHT);
 			camera.scene.add(cam);
 			CT.dom.addContent(_.outerContainer, cam.container);
-			config.camera.ar && this._initAR();
+			config.camera.ar && this.initAR();
 		}
 	},
 	init: function() {
@@ -401,6 +428,3 @@ var camera = zero.core.camera = {
 		window.addEventListener("resize", camera.update, false);
 	}
 };
-
-if (core.config.ctzero.camera.ar)
-	CT.scriptImport("https://raw.githack.com/AR-js-org/AR.js/master/three.js/build/ar.js");
