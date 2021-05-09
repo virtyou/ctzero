@@ -255,6 +255,9 @@ zero.core.util = {
 		} else
 			room.opts.onbuild = function(room) { onready(null, room); };
 	},
+	initAR: function() {
+		CT.scriptImport(core.config.ctzero.lib.ar);
+	},
 	init: function(onperson, onbuild) {
 		var cfg = core.config.ctzero;
 		zero.core.camera.init();
