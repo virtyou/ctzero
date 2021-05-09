@@ -34,7 +34,7 @@ var camera = zero.core.camera = {
 	},
 	aspect: function(ratio, cam) {
 		cam.aspect = ratio;
-		cam.updateProjectionMatrix();
+		cam.updateProjectionMatrix && cam.updateProjectionMatrix(); // pcam only
 	},
 	update: function() {
 		var _ = camera._, cont = _.outerContainer,
@@ -307,11 +307,13 @@ var camera = zero.core.camera = {
 	},
 	_cam: function(w, h, _, cclass) {
 		var camcfg = core.config.ctzero.camera;
-		if (camcfg.ar)
-			camcfg.opts.alpha = true;
 		_ = _ || camera._;
+		if (camcfg.ar) {
+			camcfg.opts.alpha = true;
+			_.camera = new THREE.Camera();
+		} else
+			_.camera = new THREE.PerspectiveCamera(camcfg.fov, w / h, 0.2, 10000000);
 		_.container = CT.dom.div(null, cclass || "abs all0");
-		_.camera = new THREE.PerspectiveCamera(camcfg.fov, w / h, 0.2, 10000000);
 		_.renderer = new THREE.WebGLRenderer(camcfg.opts);
 		_.renderer.setSize(w, h);
 		_.container.appendChild(_.renderer.domElement);
@@ -385,7 +387,7 @@ var camera = zero.core.camera = {
 			maxDetectionRate: 30
 		});
 		camera.initMarkers();
-		_.ar.source.init(() => setTimeout(camera.resize, 200));
+		_.ar.source.init(() => setTimeout(camera.update, 200));
 		_.ar.context.init(function() {
 			_.camera.projectionMatrix.copy(_.ar.context.getProjectionMatrix());
 		});
