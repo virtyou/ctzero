@@ -621,6 +621,12 @@ zero.core.Thing = CT.Class({
 				g = 1;
 			oz.geometry = new THREE.SphereGeometry(g);
 		}
+		if (oz.torusKnotGeometry) {
+			g = oz.torusKnotGeometry;
+			if (g == true)
+				g = [0.3, 0.1, 64, 16];
+			oz.geometry = new THREE.TorusKnotGeometry(g[0], g[1], g[2], g[3]);
+		}
 		if (oz.coneGeometry) {
 			var cgs = (typeof oz.coneGeometry == "number") ? oz.coneGeometry : 20;
 			oz.geometry = new THREE.ConeGeometry(cgs, cgs * 2);
