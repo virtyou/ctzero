@@ -603,18 +603,24 @@ zero.core.Thing = CT.Class({
 		map.offset.set.apply(map.offset, oz.offset);
 	},
 	build: function() {
-		var oz = this.opts, zcu = zero.core.util;
+		var g, oz = this.opts, zcu = zero.core.util;
 		if (oz.cubeGeometry) {
 			oz.boxGeometry = oz.cubeGeometry;
 			this.log("DEPRECATED: cubeGeometry - use boxGeometry!");
 		}
 		if (oz.boxGeometry) {
-			var g = oz.boxGeometry; // better way?
+			g = oz.boxGeometry; // better way?
+			if (g == true)
+				g = [1, 1, 1, 1, 1];
 			oz.geometry = new THREE.BoxGeometry(g[0],
 				g[1], g[2], g[3], g[4]);
 		}
-		if (oz.sphereGeometry)
-			oz.geometry = new THREE.SphereGeometry();
+		if (oz.sphereGeometry) {
+			g = oz.sphereGeometry;
+			if (g == true)
+				g = 1;
+			oz.geometry = new THREE.SphereGeometry(g);
+		}
 		if (oz.coneGeometry) {
 			var cgs = (typeof oz.coneGeometry == "number") ? oz.coneGeometry : 20;
 			oz.geometry = new THREE.ConeGeometry(cgs, cgs * 2);
