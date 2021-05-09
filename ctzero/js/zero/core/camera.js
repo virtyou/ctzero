@@ -57,7 +57,8 @@ var camera = zero.core.camera = {
 			_.ar.source.onResizeElement();
 			_.ar.source.copyElementSizeTo(_.renderer.domElement);
 			_.ar.context.arController && _.ar.source.copyElementSizeTo(_.ar.context.arController.canvas);
-		} else if (ccfg.vr) {
+		}
+		if (ccfg.vr) {
 			w = w / 2;
 			_.left.renderer.setSize(w, h);
 			_.right.renderer.setSize(w, h);
@@ -306,11 +307,11 @@ var camera = zero.core.camera = {
 	},
 	_cam: function(w, h, _, cclass) {
 		var camcfg = core.config.ctzero.camera;
+		if (camcfg.ar)
+			camcfg.opts.alpha = true;
 		_ = _ || camera._;
 		_.container = CT.dom.div(null, cclass || "abs all0");
 		_.camera = new THREE.PerspectiveCamera(camcfg.fov, w / h, 0.2, 10000000);
-		if (camcfg.ar)
-			camcfg.opts.alpha = true;
 		_.renderer = new THREE.WebGLRenderer(camcfg.opts);
 		_.renderer.setSize(w, h);
 		_.container.appendChild(_.renderer.domElement);
@@ -334,7 +335,7 @@ var camera = zero.core.camera = {
 	},
 	_initMarker: function(marker, thopts) {
 		var a = camera._.ar, mopts, thing = a.things[marker] = zero.core.util.thing(thopts, function() {
-			mopts = { changeMatrixMode: "cameraTransformMatrix" };
+			mopts = {};// changeMatrixMode: "cameraTransformMatrix" };
 			if (isNaN(parseInt(marker))) {
 				mopts.type = "pattern";
 				mopts.patternUrl = "/ardata/patt." + marker;
