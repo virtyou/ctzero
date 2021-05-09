@@ -4,6 +4,10 @@ from ctuser.model import CTUser
 class Member(CTUser):
     cc = db.JSON() # carecoin {person,membership}
 
+class Augmentation(db.TimeStampedBase):
+    owners = db.ForeignKey(kind=Member, repeated=True)
+    anchors = db.JSON()
+
 class Asset(db.TimeStampedBase):
     owners = db.ForeignKey(kind=Member, repeated=True)
     variety = db.String(choices=["texture", "stripset"])
