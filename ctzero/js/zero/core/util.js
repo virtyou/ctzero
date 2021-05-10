@@ -262,9 +262,6 @@ zero.core.util = {
 		} else
 			room.opts.onbuild = function(room) { onready(null, room); };
 	},
-	initAR: function() {
-		CT.scriptImport(core.config.ctzero.lib.ar);
-	},
 	init: function(onperson, onbuild) {
 		var cfg = core.config.ctzero;
 		zero.core.camera.init();
@@ -347,6 +344,17 @@ zero.core.util = {
 			zcu._counter = new zero.core.util.FrameCounter(className);
 		zcu._counter.on();
 		return zcu._counter;
+	}
+};
+
+zero.core.util.ar = {
+	start: function(ar) {
+		core.config.ctzero.camera.ar = ar;
+		zero.core.camera.init();
+		requestAnimationFrame(zero.core.util.animate);
+	},
+	init: function() {
+		CT.scriptImport(core.config.ctzero.lib.ar);
 	}
 };
 
