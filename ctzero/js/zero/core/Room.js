@@ -246,13 +246,21 @@ zero.core.Room = CT.Class({
 		this.cameras.push(cam);
 		this._cam = -1;
 	},
-	addLight: function(light, cb) {
+	setLights: function(lights) {
+		this.log("settings lights");
+		this.clearLights();
+		this.opts.lights = lights;
+		for (var lig of lights)
+			this.addLight(lig, null, true);
+	},
+	addLight: function(light, cb, opts2) {
 		this.log("adding light");
 		var part = this.attach(CT.merge(light, {
 			kind: "light",
 			thing: "Light"
 		}), this.it("lights", cb));
 		this.lights.push(part);
+		opts2 && this.opts.lights.push(light);
 		return part;
 	},
 	removeLight: function(light) {
@@ -289,6 +297,11 @@ zero.core.Room = CT.Class({
 			});
 		} else
 			this.remove();
+	},
+	clearLights: function() {
+		var i, lz = this.lights, ln = lz.length;
+		for (i = ln - 1; i >= 0; i--)
+			this.removeLight(lz[i]);
 	},
 	clearBox: function() {
 		var opts = this.opts, detach = this.detach;
