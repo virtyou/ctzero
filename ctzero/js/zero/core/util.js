@@ -219,6 +219,13 @@ zero.core.util = {
 			zero.core.current.room = new zero.core.Room(robj);
 		return zero.core.current.room;
 	},
+	light: function(opts) {
+		return zero.core.util.thing(CT.merge(opts, {
+			kind: "light",
+			thing: "Light",
+			variety: "ambient"
+		}));
+	},
 	thing: function(opts, iterator, parent) {
 		if (iterator)
 			opts.iterator = iterator;
