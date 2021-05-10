@@ -349,27 +349,22 @@ var camera = zero.core.camera = {
 		});
 	},
 	_initMarkers: function() {
-		var acfg = core.config.ctzero.camera.ar, m;
-		camera._.ar.light = zero.core.util.thing({
-			kind: "light",
-			thing: "Light",
-			variety: "ambient"
-		});
-		for (m in acfg)
-			camera._initMarker(m, acfg[m]);
+		var mcfg = core.config.ctzero.camera.ar.markers, m;
+		for (m in mcfg)
+			camera._initMarker(m, mcfg[m]);
 	},
 	initMarkers: function() {
-		var _ = camera._, acfg = core.config.ctzero.camera.ar, m,
-			keys = Object.values(acfg).filter(i => typeof i == "string");
+		var _ = camera._, mcfg = core.config.ctzero.camera.ar.markers, m,
+			keys = Object.values(mcfg).filter(i => typeof i == "string");
 		_.ar.markers = {};
 		_.ar.things = {};
 		if (!keys.length)
 			return camera._initMarkers();
 		CT.db.multi(keys, function(things) {
 			things.forEach(function(thing) {
-				for (m in acfg)
-					if (acfg[m] == thing.key)
-						acfg[m] = thing;
+				for (m in mcfg)
+					if (mcfg[m] == thing.key)
+						mcfg[m] = thing;
 			});
 			camera._initMarkers();
 		}, "json");
@@ -387,6 +382,7 @@ var camera = zero.core.camera = {
 			maxDetectionRate: 30
 		});
 		camera.initMarkers();
+		_.ar.lights = core.config.ctzero.camera.ar.lights.map(zero.core.util.light);
 		_.ar.source.init(() => setTimeout(camera.update, 200));
 		_.ar.context.init(function() {
 			_.camera.projectionMatrix.copy(_.ar.context.getProjectionMatrix());
