@@ -10,6 +10,9 @@ class Augmentation(db.TimeStampedBase):
     markers = db.JSON(default={})
     lights = db.JSON(default=[{}])
 
+    def json(self):
+        return self.data()
+
 class Asset(db.TimeStampedBase):
     owners = db.ForeignKey(kind=Member, repeated=True)
     variety = db.String(choices=["texture", "stripset"])
