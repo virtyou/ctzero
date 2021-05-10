@@ -7,8 +7,8 @@ class Member(CTUser):
 class Augmentation(db.TimeStampedBase):
     owners = db.ForeignKey(kind=Member, repeated=True)
     name = db.String()
-    markers = db.JSON()
-    lights = db.JSON()
+    markers = db.JSON(default={})
+    lights = db.JSON(default=[{}])
 
 class Asset(db.TimeStampedBase):
     owners = db.ForeignKey(kind=Member, repeated=True)
