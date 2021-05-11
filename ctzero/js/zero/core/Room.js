@@ -246,12 +246,15 @@ zero.core.Room = CT.Class({
 		this.cameras.push(cam);
 		this._cam = -1;
 	},
-	setLights: function(lights) {
+	setLights: function(lights, cb) {
+		var lig, c = 0, up = function() {
+			c += 1;
+			(c == lights.length) && cb();
+		};
 		this.log("settings lights");
 		this.clearLights();
-		this.opts.lights = lights;
-		for (var lig of lights)
-			this.addLight(lig);
+		for (lig of lights)
+			this.addLight(lig, up, true);
 	},
 	addLight: function(light, cb, opts2) {
 		this.log("adding light");
