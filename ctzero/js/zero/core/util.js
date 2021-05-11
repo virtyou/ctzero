@@ -349,7 +349,7 @@ zero.core.util = {
 
 zero.core.util.ar = {
 	start: function(ar) {
-		core.config.ctzero.camera.ar = ar;
+		core.config.ctzero.camera.ar = CT.merge(ar); // avoids modding original
 		zero.core.camera.init();
 		requestAnimationFrame(zero.core.util.animate);
 	},
