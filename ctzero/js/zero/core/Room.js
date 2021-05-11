@@ -251,7 +251,7 @@ zero.core.Room = CT.Class({
 		this.clearLights();
 		this.opts.lights = lights;
 		for (var lig of lights)
-			this.addLight(lig, null, true);
+			this.addLight(lig);
 	},
 	addLight: function(light, cb, opts2) {
 		this.log("adding light");
