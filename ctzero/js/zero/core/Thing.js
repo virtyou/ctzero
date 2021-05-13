@@ -16,6 +16,10 @@ zero.core.Thing = CT.Class({
 			this.opts.scroll && this.scroll();
 			this.opts.shift && this.shift();
 			this.opts.vstrip && this.vsplay();
+			if (this.opts.thringopts)
+				this.posRotScale(this.opts.thringopts, this.thring);
+			if (this.opts.autoplay)
+				this.playPause();
 			for (cb of _.readycbs)
 				cb();
 		},
@@ -206,7 +210,7 @@ zero.core.Thing = CT.Class({
 		if (this.opts.video && this.material.map) {
 			var vnode = this.material.map.vnode;
 			if (vnode.paused)
-				vnode.play();
+				zero.core.util.playMedia(vnode);
 			else
 				vnode.pause();
 		} else if (this.opts.playlist) {
@@ -423,14 +427,24 @@ zero.core.Thing = CT.Class({
 		this.place();
 		this.assemble();
 	},
-	adjust: function(property, dimension, value, additive) {
+	adjust: function(property, dimension, value, additive, thring) {
 		if (additive)
-			this.placer[property][dimension] += value;
+			(thring || this.placer)[property][dimension] += value;
 		else
-			this.placer[property][dimension] = value;
+			(thring || this.placer)[property][dimension] = value;
+	},
+	posRotScale: function(opts, thring, additive) {
+		var zcu = zero.core.util, adjust = this.adjust;
+		["position", "rotation", "scale"].forEach(function(prop) {
+			if (prop in opts) {
+				zcu.coords(opts[prop], function(dim, val) {
+					adjust(prop, dim, val, additive, thring);
+				});
+			}
+		});
 	},
 	update: function(opts) {
-		var zcu = zero.core.util, mat = this.material, adjust = this.adjust,
+		var zcu = zero.core.util, mat = this.material,
 			o, setter, hasT = "texture" in opts || "video" in opts, full = hasT && !mat;
 		full || ["stripset", "geometry", "matcat", "meshcat"].forEach(function(item) {
 			full = full || (item in opts);
@@ -461,13 +475,7 @@ zero.core.Thing = CT.Class({
 				}
 			}
 		}
-		["position", "rotation", "scale"].forEach(function(prop) {
-			if (prop in opts) {
-				zcu.coords(opts[prop], function(dim, val) {
-					adjust(prop, dim, val);
-				});
-			}
-		});
+		this.posRotScale(opts);
 	},
 	_vstrip: function(vs) {
 		var opts = this.opts, max = 16384, total;
