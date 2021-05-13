@@ -152,14 +152,17 @@ zero.core.util = {
 	panorama: function(pos, node) {
 		zero.core.util._map(pos, "Panorama", node);
 	},
-	playTrack: function(player, track) {
-		var zcc = zero.core.current, d, n;
-		player.src = track.item;
+	playMedia: function(player) {
 		player.play().catch(function() {
 			CT.modal.modal("let's get started!", function() {
 				player.play();
 			}, null, true);
 		});
+	},
+	playTrack: function(player, track) {
+		var zcc = zero.core.current, d, n;
+		player.src = track.item;
+		zero.core.util.playMedia(player);
 		if (track.owners && track.owners.length) {
 			CT.cc.view({
 				identifier: "Resource (audio - " + track.kind + "): " + track.name,
