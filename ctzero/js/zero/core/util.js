@@ -152,14 +152,17 @@ zero.core.util = {
 	panorama: function(pos, node) {
 		zero.core.util._map(pos, "Panorama", node);
 	},
-	playTrack: function(player, track) {
-		var zcc = zero.core.current, d, n;
-		player.src = track.item;
+	playMedia: function(player) {
 		player.play().catch(function() {
 			CT.modal.modal("let's get started!", function() {
 				player.play();
 			}, null, true);
 		});
+	},
+	playTrack: function(player, track) {
+		var zcc = zero.core.current, d, n;
+		player.src = track.item;
+		zero.core.util.playMedia(player);
 		if (track.owners && track.owners.length) {
 			CT.cc.view({
 				identifier: "Resource (audio - " + track.kind + "): " + track.name,
@@ -219,6 +222,20 @@ zero.core.util = {
 			zero.core.current.room = new zero.core.Room(robj);
 		return zero.core.current.room;
 	},
+	light: function(opts) {
+		return zero.core.util.thing(CT.merge(opts, {
+			kind: "light",
+			thing: "Light",
+			variety: "ambient"
+		}));
+	},
+	thing: function(opts, iterator, parent) {
+		if (iterator)
+			opts.iterator = iterator;
+		if (parent)
+			opts.scene = parent;
+		return new zero.core[opts.custom ? "Custom" : (opts.thing || "Thing")](opts);
+	},
 	back: function(node, bgsrc, robj) {
 		if (!zero.core.util._back) {
 			zero.core.util._back = CT.dom.div(null, "full low abs");
@@ -262,6 +279,7 @@ zero.core.util = {
 	},
 	animate: function(now) {
 	    var zcu = zero.core.util, zcc = zero.core.current, dts, rdts, p, t;
+	    requestAnimationFrame(zcu.animate);
 	    if (zcu.now) {
 	    	zcu.rdts = (now - zcu.now) / 1000;
 	        zcu.dts = Math.min(zcu.dmax, zcu.rdts);
@@ -281,8 +299,7 @@ zero.core.util = {
 	    for (t of zcu._tickers)
 	    	t(dts, rdts);
 	    zero.core.camera.tick();
-	    zero.core.camera.render(); 
-	    requestAnimationFrame(zcu.animate);
+	    zero.core.camera.render();
 	},
 	ontick: function(cb) {
 		zero.core.util._tickers.push(cb);
@@ -330,6 +347,17 @@ zero.core.util = {
 			zcu._counter = new zero.core.util.FrameCounter(className);
 		zcu._counter.on();
 		return zcu._counter;
+	}
+};
+
+zero.core.util.ar = {
+	start: function(ar) {
+		core.config.ctzero.camera.ar = CT.merge(ar); // avoids modding original
+		zero.core.camera.init();
+		requestAnimationFrame(zero.core.util.animate);
+	},
+	init: function() {
+		CT.scriptImport(core.config.ctzero.lib.ar);
 	}
 };
 

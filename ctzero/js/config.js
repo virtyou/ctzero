@@ -1,5 +1,9 @@
 {
+	"lib": {
+		"ar": "https://raw.githack.com/AR-js-org/AR.js/master/three.js/build/ar.js"
+	},
 	"camera": {
+		"ar": false,
 		"vr": false,
 		"mouse": true,
 		"xlro": {

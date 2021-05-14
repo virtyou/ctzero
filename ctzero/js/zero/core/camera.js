@@ -1,5 +1,6 @@
 var camera = zero.core.camera = {
 	_: {
+		ar: {},
 		profiles: {},
 		left: {},
 		right: {},
@@ -33,7 +34,7 @@ var camera = zero.core.camera = {
 	},
 	aspect: function(ratio, cam) {
 		cam.aspect = ratio;
-		cam.updateProjectionMatrix();
+		cam.updateProjectionMatrix && cam.updateProjectionMatrix(); // pcam only
 	},
 	update: function() {
 		var _ = camera._, cont = _.outerContainer,
@@ -48,10 +49,16 @@ var camera = zero.core.camera = {
 		camera.resize();
 	},
 	resize: function(w, h) {
-		var _ = camera._, cont = _.outerContainer;
+		var _ = camera._, cont = _.outerContainer,
+			ccfg = core.config.ctzero.camera;
 		w = w || cont.clientWidth;
 		h = h || cont.clientHeight;
-		if (core.config.ctzero.camera.vr) {
+		if (ccfg.ar) {
+			_.ar.source.onResizeElement();
+			_.ar.source.copyElementSizeTo(_.renderer.domElement);
+			_.ar.context.arController && _.ar.source.copyElementSizeTo(_.ar.context.arController.canvas);
+		}
+		if (ccfg.vr) {
 			w = w / 2;
 			_.left.renderer.setSize(w, h);
 			_.right.renderer.setSize(w, h);
@@ -162,8 +169,13 @@ var camera = zero.core.camera = {
 		_.camera.lookAt(_.looker.position(null, true));
 	},
 	tick: function() {
-		if (camera._.useControls)
-			camera._.controls.update();
+		var _ = camera._;
+		if (core.config.ctzero.camera.ar) {
+			if (!_.ar.source.ready) return;
+			_.ar.context.update(_.ar.source.domElement);
+//			camera.scene.visible = _.camera.visible;
+		} else if (_.useControls)
+			_.controls.update();
 		else {
 			camera._tickPerspective();
 			var s = camera.springs;
@@ -172,7 +184,7 @@ var camera = zero.core.camera = {
 				y: s.position.y.value,
 				z: s.position.z.value
 			});
-			if (camera._.subject)
+			if (_.subject)
 				camera._tickSubject();
 			else {
 				camera.rotation({
@@ -296,8 +308,12 @@ var camera = zero.core.camera = {
 	_cam: function(w, h, _, cclass) {
 		var camcfg = core.config.ctzero.camera;
 		_ = _ || camera._;
+		if (camcfg.ar) {
+			camcfg.opts.alpha = true;
+			_.camera = new THREE.Camera();
+		} else
+			_.camera = new THREE.PerspectiveCamera(camcfg.fov, w / h, 0.2, 10000000);
 		_.container = CT.dom.div(null, cclass || "abs all0");
-		_.camera = new THREE.PerspectiveCamera(camcfg.fov, w / h, 0.2, 10000000);
 		_.renderer = new THREE.WebGLRenderer(camcfg.opts);
 		_.renderer.setSize(w, h);
 		_.container.appendChild(_.renderer.domElement);
@@ -319,6 +335,59 @@ var camera = zero.core.camera = {
 		};
 		return stand;
 	},
+	_initMarker: function(marker, thopts) {
+		var a = camera._.ar, mopts, thing = a.things[marker] = zero.core.util.thing(thopts, function() {
+			mopts = {};// changeMatrixMode: "cameraTransformMatrix" };
+			if (isNaN(parseInt(marker))) {
+				mopts.type = "pattern";
+				mopts.patternUrl = "/ardata/patt." + marker;
+			} else {
+				mopts.type = "barcode";
+				mopts.barcodeValue = parseInt(marker);
+			}
+			a.markers[marker] = new THREEx.ArMarkerControls(a.context, thing.group, mopts);
+		});
+	},
+	_initMarkers: function() {
+		var mcfg = core.config.ctzero.camera.ar.markers, m;
+		for (m in mcfg)
+			camera._initMarker(m, mcfg[m]);
+	},
+	initMarkers: function() {
+		var _ = camera._, mcfg = core.config.ctzero.camera.ar.markers, m,
+			keys = Object.values(mcfg).filter(i => typeof i == "string");
+		_.ar.markers = {};
+		_.ar.things = {};
+		if (!keys.length)
+			return camera._initMarkers();
+		CT.db.multi(keys, function(things) {
+			things.forEach(function(thing) {
+				for (m in mcfg)
+					if (mcfg[m] == thing.key)
+						mcfg[m] = thing;
+			});
+			camera._initMarkers();
+		}, "json");
+	},
+	initAR: function() {
+		var _ = camera._;
+//		camera.scene.visible = false;
+		_.ar.source = new THREEx.ArToolkitSource({
+			sourceType: "webcam"
+		});
+		_.ar.context = new THREEx.ArToolkitContext({
+			cameraParametersUrl: "/ardata/camera_para.dat",
+			detectionMode: "mono_and_matrix",
+			matrixCodeType: "3x3_HAMMING63",
+			maxDetectionRate: 30
+		});
+		camera.initMarkers();
+		_.ar.lights = core.config.ctzero.camera.ar.lights.map(zero.core.util.light);
+		_.ar.source.init(() => setTimeout(camera.update, 200));
+		_.ar.context.init(function() {
+			_.camera.projectionMatrix.copy(_.ar.context.getProjectionMatrix());
+		});
+	},
 	initCam: function() {
 		var _ = camera._, config = core.config.ctzero,
 			c = _.outerContainer = CT.dom.id(config.container) || document.body,
@@ -334,6 +403,7 @@ var camera = zero.core.camera = {
 			cam = camera._cam(WIDTH, HEIGHT);
 			camera.scene.add(cam);
 			CT.dom.addContent(_.outerContainer, cam.container);
+			config.camera.ar && this.initAR();
 		}
 	},
 	init: function() {

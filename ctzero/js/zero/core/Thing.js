@@ -16,6 +16,10 @@ zero.core.Thing = CT.Class({
 			this.opts.scroll && this.scroll();
 			this.opts.shift && this.shift();
 			this.opts.vstrip && this.vsplay();
+			if (this.opts.thringopts)
+				this.posRotScale(this.opts.thringopts, this.thring);
+			if (this.opts.autoplay)
+				this.playPause();
 			for (cb of _.readycbs)
 				cb();
 		},
@@ -206,7 +210,7 @@ zero.core.Thing = CT.Class({
 		if (this.opts.video && this.material.map) {
 			var vnode = this.material.map.vnode;
 			if (vnode.paused)
-				vnode.play();
+				zero.core.util.playMedia(vnode);
 			else
 				vnode.pause();
 		} else if (this.opts.playlist) {
@@ -423,14 +427,24 @@ zero.core.Thing = CT.Class({
 		this.place();
 		this.assemble();
 	},
-	adjust: function(property, dimension, value, additive) {
+	adjust: function(property, dimension, value, additive, thring) {
 		if (additive)
-			this.placer[property][dimension] += value;
+			(thring || this.placer)[property][dimension] += value;
 		else
-			this.placer[property][dimension] = value;
+			(thring || this.placer)[property][dimension] = value;
+	},
+	posRotScale: function(opts, thring, additive) {
+		var zcu = zero.core.util, adjust = this.adjust;
+		["position", "rotation", "scale"].forEach(function(prop) {
+			if (prop in opts) {
+				zcu.coords(opts[prop], function(dim, val) {
+					adjust(prop, dim, val, additive, thring);
+				});
+			}
+		});
 	},
 	update: function(opts) {
-		var zcu = zero.core.util, mat = this.material, adjust = this.adjust,
+		var zcu = zero.core.util, mat = this.material,
 			o, setter, hasT = "texture" in opts || "video" in opts, full = hasT && !mat;
 		full || ["stripset", "geometry", "matcat", "meshcat"].forEach(function(item) {
 			full = full || (item in opts);
@@ -461,13 +475,7 @@ zero.core.Thing = CT.Class({
 				}
 			}
 		}
-		["position", "rotation", "scale"].forEach(function(prop) {
-			if (prop in opts) {
-				zcu.coords(opts[prop], function(dim, val) {
-					adjust(prop, dim, val);
-				});
-			}
-		});
+		this.posRotScale(opts);
 	},
 	_vstrip: function(vs) {
 		var opts = this.opts, max = 16384, total;
@@ -543,20 +551,14 @@ zero.core.Thing = CT.Class({
 		}
 	},
 	attach: function(child, iterator, oneOff) {
-		var thing, customs = this._.customs, childopts = CT.merge(child, {
-			scene: this.group,
+		var customs = this._.customs, thing = zero.core.util.thing(CT.merge(child, {
 			path: this.path,
-			iterator: function(tng) {
-				tng.isCustom && customs.push(tng); // for tick()ing
-				iterator && iterator();
-			},
 			bones: this.bones || [],
 			bmap: this.bmap || {}
-		});
-		if (child.custom)
-			thing = new zero.core.Custom(childopts);
-		else
-			thing = new zero.core[child.thing || "Thing"](childopts);
+		}), function(tng) {
+			tng.isCustom && customs.push(tng); // for tick()ing
+			iterator && iterator();
+		}, this.group);
 		this[thing.name] = thing;
 		if (child.kind) {
 			this[child.kind] = this[child.kind] || {};
@@ -609,18 +611,30 @@ zero.core.Thing = CT.Class({
 		map.offset.set.apply(map.offset, oz.offset);
 	},
 	build: function() {
-		var oz = this.opts, zcu = zero.core.util;
+		var g, oz = this.opts, zcu = zero.core.util;
 		if (oz.cubeGeometry) {
 			oz.boxGeometry = oz.cubeGeometry;
 			this.log("DEPRECATED: cubeGeometry - use boxGeometry!");
 		}
 		if (oz.boxGeometry) {
-			var g = oz.boxGeometry; // better way?
+			g = oz.boxGeometry; // better way?
+			if (g == true)
+				g = [1, 1, 1, 1, 1];
 			oz.geometry = new THREE.BoxGeometry(g[0],
 				g[1], g[2], g[3], g[4]);
 		}
-		if (oz.sphereGeometry)
-			oz.geometry = new THREE.SphereGeometry();
+		if (oz.sphereGeometry) {
+			g = oz.sphereGeometry;
+			if (g == true)
+				g = 1;
+			oz.geometry = new THREE.SphereGeometry(g);
+		}
+		if (oz.torusKnotGeometry) {
+			g = oz.torusKnotGeometry;
+			if (g == true)
+				g = [0.3, 0.1, 64, 16];
+			oz.geometry = new THREE.TorusKnotGeometry(g[0], g[1], g[2], g[3]);
+		}
 		if (oz.coneGeometry) {
 			var cgs = (typeof oz.coneGeometry == "number") ? oz.coneGeometry : 20;
 			oz.geometry = new THREE.ConeGeometry(cgs, cgs * 2);
