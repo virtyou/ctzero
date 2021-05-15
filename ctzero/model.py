@@ -8,7 +8,7 @@ class Augmentation(db.TimeStampedBase):
     owners = db.ForeignKey(kind=Member, repeated=True)
     name = db.String()
     markers = db.JSON(default={})
-    lights = db.JSON(default=[{}])
+    lights = db.JSON(default=[{"variety": "ambient"}])
 
     def json(self):
         return self.data()
