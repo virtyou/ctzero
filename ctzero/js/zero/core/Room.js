@@ -271,6 +271,7 @@ zero.core.Room = CT.Class({
 		var index = this.lights.indexOf(light);
 		this.lights.splice(index, 1);
 		this.opts.lights.splice(index, 1);
+		this._assembled.lights -= 1;
 		this.detach(light.name);
 	},
 	addObject: function(obj, cb) {
@@ -286,6 +287,7 @@ zero.core.Room = CT.Class({
 			if (this.objects[i].name == obj.name)
 				thing = this.objects[i];
 		CT.data.remove(this.objects, thing);
+		this._assembled.objects -= 1;
 		this.detach(obj.name);
 	},
 	clear: function(retain_lights) {
