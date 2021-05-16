@@ -87,6 +87,7 @@ zero.core.Thing = CT.Class({
 				sz[pname].target = pz[pname].min;
 		},
 		shouldMin: function(pname, dim) { // fix multifloor-zone portals!
+			if (!core.config.ctzero.room.gravity) return false;
 			return dim == "y" && this.vlower != "pool" && !this.opts.position[1] &&
 				!(["poster", "screen", "stream", "portal", "body"].includes(this.opts.kind));
 		}
@@ -195,7 +196,7 @@ zero.core.Thing = CT.Class({
 				});
 			};
 		}
-		this.onbound && this.onbound();
+		this.onbound && this.onbound(this);
 	},
 	playSong: function(song, onPlaySong) {
 		if (!this._audio) {
@@ -738,6 +739,8 @@ zero.core.Thing = CT.Class({
 		this.grippy = opts.grippy;
 		if ("bone" in opts)
 			opts.anchor = opts.bones[opts.bone];
+		if (opts.onbound)
+			this.onbound = opts.onbound;
 		var thiz = this, iz, name;
 		["spring", "aspect", "ticker"].forEach(function(influence) {
 			iz = influence + "s", influences = thiz[iz] = {};
