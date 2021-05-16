@@ -76,6 +76,11 @@ zero.core.util = {
 			vec[dim] = vec[dim] / dt;
 		return vec;
 	},
+	fit: function(thing, scale) {
+		var shortest = Math.min.apply(null, Object.values(thing.radii));
+		scale = scale || 1;
+		thing.scale(scale / shortest);
+	},
 	mergeBit: function(obj1, obj2, nval) {
 		for (var k in obj1) {
 			if (typeof obj1[k] == "number")
