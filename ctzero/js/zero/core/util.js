@@ -77,8 +77,8 @@ zero.core.util = {
 		return vec;
 	},
 	fit: function(thing, scale) {
-		var shortest = Math.min.apply(null, Object.values(thing.radii)),
-			ratio = (scale || 1) / shortest, bz = thing.bounds;
+		var bz = thing.getBounds(), shortest = Math.min.apply(null,
+			Object.values(thing.radii)), ratio = (scale || 1) / shortest;
 		thing.xyz(function(axis) {
 			thing.adjust("scale", axis, ratio, false, thing.thring);
 			thing.opts.centered && thing.adjust("position", axis,
