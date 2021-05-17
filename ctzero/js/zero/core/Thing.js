@@ -63,8 +63,8 @@ zero.core.Thing = CT.Class({
 		},
 		setBounds: function() {
 			var radii = this.radii = {},
-				bounds = this.bounds = this.bounds || new THREE.Box3();
-			bounds.setFromObject(this.group);
+				bounds = this.bounds = this.bounds || this.hardbounds || new THREE.Box3();
+			this.hardbounds || bounds.setFromObject(this.group);
 			["x", "y", "z"].forEach(function(dim) {
 				radii[dim] = (bounds.max[dim] - bounds.min[dim]) / 2;
 			});
@@ -73,8 +73,12 @@ zero.core.Thing = CT.Class({
 			var bz = zero.core.current.room.bounds, bax = this.bindAxis,
 				pz = this.positioners, rz = this.radii,
 				sz = this.springs, pname = this._xyz[i];
-			pz[pname].max = bz.max[dim] - rz[dim];
-			pz[pname].min = (typeof min == "number" ? min : bz.min[dim]) + rz[dim];
+			if (this.opts.centered)
+				pz[pname].max = pz[pname].min = 0;
+			else {
+				pz[pname].max = bz.max[dim] - rz[dim];
+				pz[pname].min = (typeof min == "number" ? min : bz.min[dim]) + rz[dim];
+			}
 			if (this._yoff && dim == "y") {
 				var offer = -this.bones[0].position.y;
 				pz[pname].max += offer;
@@ -93,6 +97,9 @@ zero.core.Thing = CT.Class({
 		}
 	},
 	_xyz: ["x", "y", "z"],
+	xyz: function(cb) {
+		this._xyz.forEach(cb);
+	},
 	isReady: function() {
 		return this._.ready;
 	},
