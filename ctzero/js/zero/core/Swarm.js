@@ -48,7 +48,7 @@ zero.core.Swarm = CT.Class({
 			for (i in f) {
 				v = f[i];
 				f[i] = [v[0] * 10, v[1] * 10, v[2] / 10, zcu.int2rgb(v[3])];
-				this._xyz.forEach(function(axis, aindex) {
+				this.xyz(function(axis, aindex) {
 					av = f[i][aindex];
 					if (!(axis in hbz.min))
 						hbz.min[axis] = hbz.max[axis] = av;
