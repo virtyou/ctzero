@@ -183,6 +183,11 @@ zero.core.Thing = CT.Class({
 	getTop: function() {
 		return this.bounds.max.y;
 	},
+	getBounds: function() {
+		if (!this.bounds)
+			this._.setBounds();
+		return this.bounds;
+	},
 	setBounds: function(rebound, nosnap) {
 		var xyz = ["x", "y", "z"], thaz = this;
 		this._.nosnap = nosnap;
