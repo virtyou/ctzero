@@ -14,7 +14,7 @@ zero.core.Swarm = CT.Class({
 	},
 	_nextFrame: function() {
 		var i, frames = this.opts.frames,
-			frame = frames[this.frame], padded = frame.length + 200;
+			frame = frames[this.frame], padded = frame.length + this.opts.buffer;
 		if (this.pool.length < padded) {
 			this.log("topping off with", padded - this.pool.length, "voxels");
 			for (i = this.pool.length; i < padded; i++)
@@ -41,11 +41,22 @@ zero.core.Swarm = CT.Class({
 		};
 	},
 	_procFrames: function() {
-		var f, i, v, fz = this.opts.frames, zcu = zero.core.util;
+		var f, i, v, av, hbz = this.hardbounds = {
+			min: {}, max: {}
+		}, zcu = zero.core.util, fz = this.opts.frames;
 		for (f of fz) {
 			for (i in f) {
 				v = f[i];
 				f[i] = [v[0] * 10, v[1] * 10, v[2] / 10, zcu.int2rgb(v[3])];
+				this._xyz.forEach(function(axis, aindex) {
+					av = f[i][aindex];
+					if (!(axis in hbz.min))
+						hbz.min[axis] = hbz.max[axis] = av;
+					else {
+						hbz.min[axis] = Math.min(hbz.min[axis], av);
+						hbz.max[axis] = Math.max(hbz.max[axis], av);
+					}
+				});
 			}
 		}
 	},
@@ -62,7 +73,8 @@ zero.core.Swarm = CT.Class({
 	init: function(opts) {
 		this.opts = opts = CT.merge(opts, {
 			procFrames: true,
-			size: 1600,
+			buffer: 400,
+			size: 2000,
 			frames: []
 		}, this.opts);
 		if (typeof opts.frames == "string")
