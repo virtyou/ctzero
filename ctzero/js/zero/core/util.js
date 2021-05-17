@@ -77,9 +77,13 @@ zero.core.util = {
 		return vec;
 	},
 	fit: function(thing, scale) {
-		var shortest = Math.min.apply(null, Object.values(thing.radii));
-		scale = scale || 1;
-		thing.scale(scale / shortest);
+		var shortest = Math.min.apply(null, Object.values(thing.radii)),
+			ratio = (scale || 1) / shortest, bz = thing.bounds;
+		thing.xyz(function(axis) {
+			thing.adjust("scale", axis, ratio, false, thing.thring);
+			thing.opts.centered && thing.adjust("position", axis,
+				-ratio * (bz.min[axis] + bz.max[axis]) / 2, false, thing.thring);
+		});
 	},
 	mergeBit: function(obj1, obj2, nval) {
 		for (var k in obj1) {
