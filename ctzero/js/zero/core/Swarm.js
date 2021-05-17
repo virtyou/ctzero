@@ -36,8 +36,7 @@ zero.core.Swarm = CT.Class({
 			name: "v" + i,
 			kind: "voxel",
 			invisible: true,
-			sphereGeometry: true,
-			scale: [0.2, 0.2, 0.2]
+			sphereGeometry: 5
 		};
 	},
 	_procFrames: function() {
