@@ -3,7 +3,7 @@ zero.base.particles = {
 		velocity: [0, 25, 0],
 		variance: [1, 0, 1],
 		pmat: {
-			opacity: 0.6,
+			opacity: 0.3,
 			shininess: 150,
 			color: 0x22ccff,
 			transparent: true
@@ -24,8 +24,8 @@ zero.base.particles = {
 	},
 	sparks: {
 		count: 20,
-		size: 0.01,
-		sizeVariance: 0.04,
+		size: 1,
+		sizeVariance: 2,
 		velocity: [0, 24, 0],
 		acceleration: [0, -24, 0],
 		velVariance: [40, 0, 40],
@@ -40,6 +40,7 @@ zero.base.particles = {
 	},
 	smoke: {
 		count: 4,
+		sizeVariance: 10,
 		velocity: [0, 8, 0],
 		velVariance: [4, 0, 4],
 		dissolve: 0.1,
@@ -70,7 +71,7 @@ zero.base.particles = {
 	},
 	rain: {
 		count: 400,
-		size: 0.02,
+		size: 2,
 		velocity: [0, -800, 0],
 		pmat: {
 			opacity: 0.6,
