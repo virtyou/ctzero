@@ -81,8 +81,8 @@ zero.core.Particles = CT.Class({
 	init: function(opts) {
 		this.opts = opts = CT.merge(opts, core.config.ctzero.env[opts.name], zero.base.particles[opts.name], {
 			count: 50,
-			size: 0.05,
-			sizeVariance: 0.1,
+			size: 5,
+			sizeVariance: 5,
 			velocity: [0, 0, 0],
 			variance: [0, 0, 0]
 		}, this.opts);
