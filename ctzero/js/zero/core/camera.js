@@ -336,7 +336,12 @@ var camera = zero.core.camera = {
 		return stand;
 	},
 	_initMarker: function(marker, thopts) {
-		var a = camera._.ar, mopts, thing = a.things[marker] = zero.core.util.thing(thopts, function() {
+		var a = camera._.ar, mopts, thing = a.things[marker] = zero.core.util.thing(CT.merge({
+			centered: true, // for bound/fit
+			scale: [1, 1, 1],
+			position: [0, 0, 0],
+			onbound: zero.core.util.fit
+		}, thopts), function() {
 			mopts = {};// changeMatrixMode: "cameraTransformMatrix" };
 			if (isNaN(parseInt(marker))) {
 				mopts.type = "pattern";
@@ -344,6 +349,10 @@ var camera = zero.core.camera = {
 			} else {
 				mopts.type = "barcode";
 				mopts.barcodeValue = parseInt(marker);
+			}
+			if (thopts.kind != "video") {
+				zero.core.util.fit(thing);
+				(thopts.kind == "swarm") && zero.core.util.ontick(thing.tick);
 			}
 			a.markers[marker] = new THREEx.ArMarkerControls(a.context, thing.group, mopts);
 		});

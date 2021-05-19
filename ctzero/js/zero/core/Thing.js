@@ -63,18 +63,23 @@ zero.core.Thing = CT.Class({
 		},
 		setBounds: function() {
 			var radii = this.radii = {},
-				bounds = this.bounds = this.bounds || new THREE.Box3();
-			bounds.setFromObject(this.group);
+				bounds = this.bounds = this.bounds || this.hardbounds || new THREE.Box3();
+			this.hardbounds || bounds.setFromObject(this.group);
 			["x", "y", "z"].forEach(function(dim) {
 				radii[dim] = (bounds.max[dim] - bounds.min[dim]) / 2;
 			});
 		},
 		bounder: function(dim, i, min, upspring) {
-			var bz = zero.core.current.room.bounds, bax = this.bindAxis,
+			var bz, bax = this.bindAxis,
 				pz = this.positioners, rz = this.radii,
 				sz = this.springs, pname = this._xyz[i];
-			pz[pname].max = bz.max[dim] - rz[dim];
-			pz[pname].min = (typeof min == "number" ? min : bz.min[dim]) + rz[dim];
+			if (this.opts.centered)
+				pz[pname].max = pz[pname].min = 0;
+			else {
+				bz = zero.core.current.room.bounds;
+				pz[pname].max = bz.max[dim] - rz[dim];
+				pz[pname].min = (typeof min == "number" ? min : bz.min[dim]) + rz[dim];
+			}
 			if (this._yoff && dim == "y") {
 				var offer = -this.bones[0].position.y;
 				pz[pname].max += offer;
@@ -87,11 +92,15 @@ zero.core.Thing = CT.Class({
 				sz[pname].target = pz[pname].min;
 		},
 		shouldMin: function(pname, dim) { // fix multifloor-zone portals!
+			if (!core.config.ctzero.room.gravity) return false;
 			return dim == "y" && this.vlower != "pool" && !this.opts.position[1] &&
 				!(["poster", "screen", "stream", "portal", "body"].includes(this.opts.kind));
 		}
 	},
 	_xyz: ["x", "y", "z"],
+	xyz: function(cb) {
+		this._xyz.forEach(cb);
+	},
 	isReady: function() {
 		return this._.ready;
 	},
@@ -175,6 +184,11 @@ zero.core.Thing = CT.Class({
 	getTop: function() {
 		return this.bounds.max.y;
 	},
+	getBounds: function() {
+		if (!this.bounds)
+			this._.setBounds();
+		return this.bounds;
+	},
 	setBounds: function(rebound, nosnap) {
 		var xyz = ["x", "y", "z"], thaz = this;
 		this._.nosnap = nosnap;
@@ -195,7 +209,7 @@ zero.core.Thing = CT.Class({
 				});
 			};
 		}
-		this.onbound && this.onbound();
+		this.onbound && this.onbound(this);
 	},
 	playSong: function(song, onPlaySong) {
 		if (!this._audio) {
@@ -738,6 +752,8 @@ zero.core.Thing = CT.Class({
 		this.grippy = opts.grippy;
 		if ("bone" in opts)
 			opts.anchor = opts.bones[opts.bone];
+		if (opts.onbound)
+			this.onbound = opts.onbound;
 		var thiz = this, iz, name;
 		["spring", "aspect", "ticker"].forEach(function(influence) {
 			iz = influence + "s", influences = thiz[iz] = {};
