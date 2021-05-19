@@ -36,7 +36,8 @@ zero.core.Swarm = CT.Class({
 			name: "v" + i,
 			kind: "voxel",
 			invisible: true,
-			sphereGeometry: 5
+			sphereGeometry: 5,
+			anchor: this.thring
 		};
 	},
 	_procFrames: function() {
@@ -66,6 +67,7 @@ zero.core.Swarm = CT.Class({
 	preassemble: function() {
 		var i, oz = this.opts, pz = oz.parts, size = oz.size;
 		this.log("initializing with", size, "voxels");
+		this.thring = new THREE.Object3D();
 		for (i = 0; i < size; i++)
 			pz.push(this._vox(i));
 	},
