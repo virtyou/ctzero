@@ -350,7 +350,10 @@ var camera = zero.core.camera = {
 				mopts.type = "barcode";
 				mopts.barcodeValue = parseInt(marker);
 			}
-			(thopts.kind == "video") || zero.core.util.fit(thing);
+			if (thopts.kind != "video") {
+				zero.core.util.fit(thing);
+				(thopts.kind == "swarm") && zero.core.util.ontick(thing.tick);
+			}
 			a.markers[marker] = new THREEx.ArMarkerControls(a.context, thing.group, mopts);
 		});
 	},
