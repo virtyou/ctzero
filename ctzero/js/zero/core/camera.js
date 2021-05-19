@@ -339,7 +339,8 @@ var camera = zero.core.camera = {
 		var a = camera._.ar, mopts, thing = a.things[marker] = zero.core.util.thing(CT.merge({
 			centered: true, // for bound/fit
 			scale: [1, 1, 1],
-			position: [0, 0, 0]
+			position: [0, 0, 0],
+			onbound: zero.core.util.fit
 		}, thopts), function() {
 			mopts = {};// changeMatrixMode: "cameraTransformMatrix" };
 			if (isNaN(parseInt(marker))) {
