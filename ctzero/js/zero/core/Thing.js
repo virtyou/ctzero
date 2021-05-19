@@ -70,12 +70,13 @@ zero.core.Thing = CT.Class({
 			});
 		},
 		bounder: function(dim, i, min, upspring) {
-			var bz = zero.core.current.room.bounds, bax = this.bindAxis,
+			var bz, bax = this.bindAxis,
 				pz = this.positioners, rz = this.radii,
 				sz = this.springs, pname = this._xyz[i];
 			if (this.opts.centered)
 				pz[pname].max = pz[pname].min = 0;
 			else {
+				bz = zero.core.current.room.bounds;
 				pz[pname].max = bz.max[dim] - rz[dim];
 				pz[pname].min = (typeof min == "number" ? min : bz.min[dim]) + rz[dim];
 			}
