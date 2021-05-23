@@ -359,17 +359,6 @@ zero.core.util = {
 	}
 };
 
-zero.core.util.ar = {
-	start: function(ar) {
-		core.config.ctzero.camera.ar = CT.merge(ar); // avoids modding original
-		zero.core.camera.init();
-		requestAnimationFrame(zero.core.util.animate);
-	},
-	init: function() {
-		CT.scriptImport(core.config.ctzero.lib.ar);
-	}
-};
-
 zero.core.util.FrameCounter = CT.Class({
 	CLASSNAME: "zero.core.util.FrameCounter",
 	on: function() {

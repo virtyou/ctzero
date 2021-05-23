@@ -53,11 +53,7 @@ var camera = zero.core.camera = {
 			ccfg = core.config.ctzero.camera;
 		w = w || cont.clientWidth;
 		h = h || cont.clientHeight;
-		if (ccfg.ar) {
-			_.ar.source.onResizeElement();
-			_.ar.source.copyElementSizeTo(_.renderer.domElement);
-			_.ar.context.arController && _.ar.source.copyElementSizeTo(_.ar.context.arController.canvas);
-		}
+		ccfg.ar && zero.core.ar.resize(_.renderer);
 		if (ccfg.vr) {
 			w = w / 2;
 			_.left.renderer.setSize(w, h);
@@ -170,11 +166,9 @@ var camera = zero.core.camera = {
 	},
 	tick: function() {
 		var _ = camera._;
-		if (core.config.ctzero.camera.ar) {
-			if (!_.ar.source.ready) return;
-			_.ar.context.update(_.ar.source.domElement);
-//			camera.scene.visible = _.camera.visible;
-		} else if (_.useControls)
+		if (core.config.ctzero.camera.ar)
+			zero.core.ar.tick();
+		else if (_.useControls)
 			_.controls.update();
 		else {
 			camera._tickPerspective();
@@ -335,68 +329,6 @@ var camera = zero.core.camera = {
 		};
 		return stand;
 	},
-	_initMarker: function(marker, thopts) {
-		var a = camera._.ar, mopts, thing = a.things[marker] = zero.core.util.thing(CT.merge({
-			centered: true, // for bound/fit
-			scale: [1, 1, 1],
-			position: [0, 0, 0],
-			onbound: zero.core.util.fit
-		}, thopts), function() {
-			mopts = {};// changeMatrixMode: "cameraTransformMatrix" };
-			if (isNaN(parseInt(marker))) {
-				mopts.type = "pattern";
-				mopts.patternUrl = "/ardata/patt." + marker;
-			} else {
-				mopts.type = "barcode";
-				mopts.barcodeValue = parseInt(marker);
-			}
-			if (thopts.kind != "video") {
-				zero.core.util.fit(thing);
-				(thopts.kind == "swarm") && zero.core.util.ontick(thing.tick);
-			}
-			a.markers[marker] = new THREEx.ArMarkerControls(a.context, thing.group, mopts);
-		});
-	},
-	_initMarkers: function() {
-		var mcfg = core.config.ctzero.camera.ar.markers, m;
-		for (m in mcfg)
-			camera._initMarker(m, mcfg[m]);
-	},
-	initMarkers: function() {
-		var _ = camera._, mcfg = core.config.ctzero.camera.ar.markers, m,
-			keys = Object.values(mcfg).filter(i => typeof i == "string");
-		_.ar.markers = {};
-		_.ar.things = {};
-		if (!keys.length)
-			return camera._initMarkers();
-		CT.db.multi(keys, function(things) {
-			things.forEach(function(thing) {
-				for (m in mcfg)
-					if (mcfg[m] == thing.key)
-						mcfg[m] = thing;
-			});
-			camera._initMarkers();
-		}, "json");
-	},
-	initAR: function() {
-		var _ = camera._;
-//		camera.scene.visible = false;
-		_.ar.source = new THREEx.ArToolkitSource({
-			sourceType: "webcam"
-		});
-		_.ar.context = new THREEx.ArToolkitContext({
-			cameraParametersUrl: "/ardata/camera_para.dat",
-			detectionMode: "mono_and_matrix",
-			matrixCodeType: "3x3_HAMMING63",
-			maxDetectionRate: 30
-		});
-		camera.initMarkers();
-		_.ar.lights = core.config.ctzero.camera.ar.lights.map(zero.core.util.light);
-		_.ar.source.init(() => setTimeout(camera.update, 200));
-		_.ar.context.init(function() {
-			_.camera.projectionMatrix.copy(_.ar.context.getProjectionMatrix());
-		});
-	},
 	initCam: function() {
 		var _ = camera._, config = core.config.ctzero,
 			c = _.outerContainer = CT.dom.id(config.container) || document.body,
@@ -412,7 +344,7 @@ var camera = zero.core.camera = {
 			cam = camera._cam(WIDTH, HEIGHT);
 			camera.scene.add(cam);
 			CT.dom.addContent(_.outerContainer, cam.container);
-			config.camera.ar && this.initAR();
+			config.camera.ar && zero.core.ar.build();
 		}
 	},
 	init: function() {
