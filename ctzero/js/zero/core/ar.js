@@ -43,6 +43,7 @@ zero.core.ar = {
 							mcfg[m] = thing;
 				});
 				zcar.markers.build();
+				CT.cc.views(zcar.components());
 			}, "json");
 		}
 	},
@@ -75,8 +76,15 @@ zero.core.ar = {
 		_.source.copyElementSizeTo(renderer.domElement);
 		_.context.arController && _.source.copyElementSizeTo(_.context.arController.canvas);
 	},
-	comp: function(ar) {
-		
+	components: function() {
+		var aug = core.config.ctzero.camera.ar, compz = [{
+			identifier: "Augmentation: " + aug.name,
+			owners: aug.owners
+		}];
+		Object.values(aug.markers).forEach(function(thing) {
+			compz = compz.concat(zero.core.util.components(thing, aug.name));
+		});
+		return compz;
 	},
 	start: function(ar) {
 		core.config.ctzero.camera.ar = CT.merge(ar); // avoids modding original
