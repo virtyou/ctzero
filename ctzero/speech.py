@@ -1,7 +1,7 @@
 # coding=utf-8
 import os, string, json, time
 from cantools.util import read, write, cmd, output
-from cantools.web import log, read_file
+from cantools.web import log, post, read_file
 from cantools import config
 try:
     from string import letters
@@ -26,6 +26,16 @@ CMDS = {
     },
     "baidu_token": 'wget "https://openapi.baidu.com/oauth/2.0/token?grant_type=client_credentials&client_id=%s&client_secret=%s&" -O baidu.token' # id, secret
 }
+AIZ = {
+    "aiio": {
+        "host": "localhost:8081",
+        "path": "_respond",
+        "proto": "http"
+    },
+    "pandorabots": {
+        "host": "aiaas.pandorabots.com"
+    }
+}
 BAIDU_TOKEN_LIFE = 2592000
 
 def load_token(now):
@@ -46,10 +56,16 @@ def baidu_token():
         cmd(CMDS["baidu_token"]%(cfg.id, cfg.secret))
         load_token(now)
 
-def chat(question):
-    from pb_py import main as PB
+def chat(question, identity=None):
     cfg = config.ctzero.chat
-    resp = PB.talk(cfg.userkey, cfg.appid, cfg.host, cfg.botname, question)["response"]
+    aicfg = AIZ[cfg.mode]
+    if cfg.mode == "aiio":
+        return post("%s://%s/%s"%(aicfg["proto"], aicfg["host"], aicfg["path"]), data={
+            "identity": identity or cfg.botname,
+            "statement": question
+        }, ctjson=True)
+    from pb_py import main as PB
+    resp = PB.talk(cfg.userkey, cfg.appid, aicfg["host"], cfg.botname, question)["response"]
     return resp.split("[URL]")[0]
 
 def say(language, voice, words, prosody):
