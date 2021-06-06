@@ -26,14 +26,14 @@ routes = {
 cfg = {
 	"asr": {
 		"audlib": "ffmpeg", # or avconv (certain older distros)
-		"mode": "gcloud", # or "baidu" -- default "gcloud" mode requires gcloud to be installed and configured
-		"id": None,       # baidu only
-		"secret": None    # baidu only
+		"mode": "gcloud",   # or "baidu" -- default "gcloud" mode requires gcloud to be installed and configured
+		"id": None,         # baidu only
+		"secret": None      # baidu only
 	},
-	"chat": {             # currently supports pandorabots mode
-		"host": "aiaas.pandorabots.com",
-		"appid": None,
-		"userkey": None,
+	"chat": {
+		"mode": "aiio",     # aiio | pandorabots
+		"appid": None,      # pb only
+		"userkey": None,    # pb only
 		"botname": None
 	}
 }
