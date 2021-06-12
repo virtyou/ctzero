@@ -56,13 +56,14 @@ def baidu_token():
         cmd(CMDS["baidu_token"]%(cfg.id, cfg.secret))
         load_token(now)
 
-def chat(question, identity=None):
+def chat(question, identity=None, mood=None):
     cfg = config.ctzero.chat
     aicfg = AIZ[cfg.mode]
     if cfg.mode == "aiio":
         return post("%s://%s/%s"%(aicfg["proto"], aicfg["host"], aicfg["path"]), data={
             "identity": identity or cfg.botname,
-            "statement": question
+            "statement": question,
+            "mood": mood
         }, ctjson=True)
     from pb_py import main as PB
     resp = PB.talk(cfg.userkey, cfg.appid, aicfg["host"], cfg.botname, question)["response"]
