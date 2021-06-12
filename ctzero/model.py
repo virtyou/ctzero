@@ -108,6 +108,7 @@ class Person(db.TimeStampedBase):
     dances = db.JSON()
     gestures = db.JSON()
     responses = db.JSON()
+    ai = db.JSON() # {identity"",options{quote,opinion,retort,fallback,brief}}
 
     def packed(self):
         pz = ["mood", "vibe", "mods", "gear", "dances", "gestures", "responses"]
@@ -137,6 +138,7 @@ class Person(db.TimeStampedBase):
             "key": self.key.urlsafe(),
             "name": self.name,
             "voice": self.voice,
+            "ai": self.ai,
             "body": self.body.get().json(),
             "owners": [o.urlsafe() for o in self.owners]
         }
