@@ -148,7 +148,8 @@ zero.core.Brain = CT.Class({
 			path: "/_speech",
 			params: {
 				action: "chat",
-				question: phrase
+				question: phrase,
+				mood: this.person.mood.snapshot() // TODO: identity, options!
 			},
 			cb: cb
 		});
