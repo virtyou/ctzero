@@ -4,7 +4,10 @@ from ctzero.speech import chat, say, rec
 def response():
     action = cgi_get("action", choices=["say", "rec", "chat"])
     if action == "chat":
-        succeed(chat(cgi_get("question")))
+        succeed(chat(cgi_get("question"),
+            cgi_get("identity", required=False),
+            cgi_get("mood", required=False),
+            cgi_get("options", required=False)))
     language = cgi_get("language")
     voice = cgi_get("voice", default="Joanna")
     if action == "say":

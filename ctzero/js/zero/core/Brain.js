@@ -146,10 +146,11 @@ zero.core.Brain = CT.Class({
 			return cb(this.get_response(defresp));
 		core.config.ctzero.brain.noChat || CT.net.post({
 			path: "/_speech",
-			params: {
+			params: CT.merge({
 				action: "chat",
-				question: phrase
-			},
+				question: phrase,
+				mood: this.person.mood.snapshot() // TODO: identity, options!
+			}, this.person.opts.ai),
 			cb: cb
 		});
 	},
