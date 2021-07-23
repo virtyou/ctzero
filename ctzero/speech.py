@@ -28,9 +28,9 @@ CMDS = {
 }
 AIZ = {
     "aiio": {
-        "host": "localhost:8081",
+        "host": "ai.samsaravr.io",
         "path": "_respond",
-        "proto": "http"
+        "proto": "https"
     },
     "pandorabots": {
         "host": "aiaas.pandorabots.com"
