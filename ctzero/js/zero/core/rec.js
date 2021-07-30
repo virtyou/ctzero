@@ -2,6 +2,7 @@ var rec = zero.core.rec = {
 	_: {
 		language: "english",
 		indicator: null,
+		tryLocal: !!window.webkitSpeechRecognition,
 		record: function(stream) {
 			rec.active = true;
 			var recorder = rec._.recorder = new MediaRecorder(stream);
@@ -26,9 +27,15 @@ var rec = zero.core.rec = {
 		oops: function(cb) {
 			return function(err) {
 				rec.active = false;
+				rec.toggleIndicator();
 				CT.log("oh no it didn't work!");
 				CT.log(err);
-				rec._.oops_cb && rec._.oops_cb(cb);
+				if (rec._.tryLocal) {
+					CT.log("disabling local speech rec and retrying");
+					rec._.tryLocal = false;
+					rec.listen(cb);
+				} else if (rec._.oops_cb)
+					rec._.oops_cb(cb);
 			};
 		}
 	},
@@ -70,7 +77,7 @@ var rec = zero.core.rec = {
 		if (onfail)
 			zero.core.rec.onfail(onfail);
 		rec.toggleIndicator();
-		if (window.webkitSpeechRecognition)
+		if (rec._.tryLocal)
 			return rec.local(cb);
 		rec._.cb = cb;
 		navigator.mediaDevices.getUserMedia({ audio: true }).then(rec._.record)["catch"](rec._.oops(cb));
