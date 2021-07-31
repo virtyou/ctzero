@@ -149,7 +149,8 @@ zero.core.Brain = CT.Class({
 			params: CT.merge({
 				action: "chat",
 				question: phrase,
-				mood: this.person.mood.snapshot() // TODO: identity, options!
+				asker: this.person.name,
+				mood: this.person.mood.snapshot()
 			}, this.person.opts.ai),
 			cb: cb
 		});
