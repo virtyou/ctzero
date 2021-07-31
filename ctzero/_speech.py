@@ -10,6 +10,7 @@ def response():
             cgi_get("identity", required=False),
             cgi_get("mood", required=False),
             cgi_get("options", required=False),
+            cgi_get("name", required=False),
             cgi_get("asker", default=addr)))
     language = cgi_get("language")
     voice = cgi_get("voice", default="Joanna")
