@@ -54,7 +54,8 @@ var rec = zero.core.rec = {
 						action: "rec",
 						language: rec._.language
 					},
-					cb: rec._.cb
+					cb: rec._.cb,
+					eb: rec._.oops(rec._.cb)
 				});
 			};
 			rec._.detectSilence(stream, () => recorder.stop(), () => recorder.start());
