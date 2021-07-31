@@ -14,21 +14,23 @@ var rec = zero.core.rec = {
 
 			const data = new Uint8Array(analyser.frequencyBinCount); // will hold our data
 			let silence_start = performance.now();
-			let triggered = false; // trigger only once per silence event
+			let triggered = true; // trigger only once per silence event
 			let hasSpoken = false; // skip onSoundEnd() on initial silence
 
 			function loop(time) {
 				analyser.getByteFrequencyData(data); // get current data
 				if (data.some(v => v)) { // if there is data above the given db limit
-					if(triggered){
+					if(triggered) {
 						hasSpoken = true;
 						triggered = false;
+						CT.log("speaking");
 						onSoundStart();
 					}
 					silence_start = time; // set it to now
 				}
 				if (!triggered && time - silence_start > silence_delay) {
 					triggered = true;
+					CT.log("silent");
 					if (hasSpoken) {
 						onSoundEnd();
 						return; // TODO: allow continuous...
