@@ -144,14 +144,18 @@ zero.core.Brain = CT.Class({
 		var defresp = this.triggers["*"] || respz["*"];
 		if (defresp) // default response object
 			return cb(this.get_response(defresp));
-		core.config.ctzero.brain.noChat || CT.net.post({
+		if (core.config.ctzero.brain.noChat) return;
+		var chopts = {
+			action: "chat",
+			question: phrase,
+			name: this.person.name,
+			mood: this.person.mood.snapshot()
+		}, zcc = zero.core.current;
+		if (zcc.person && zcc.person != this.person)
+			chopts.asker = zcc.person.name;
+		CT.net.post({
 			path: "/_speech",
-			params: CT.merge({
-				action: "chat",
-				question: phrase,
-				asker: this.person.name,
-				mood: this.person.mood.snapshot()
-			}, this.person.opts.ai),
+			params: CT.merge(chopts, this.person.opts.ai),
 			cb: cb
 		});
 	},
