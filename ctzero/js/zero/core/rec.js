@@ -3,6 +3,42 @@ var rec = zero.core.rec = {
 		language: "english",
 		indicator: null,
 		tryLocal: !!window.webkitSpeechRecognition,
+
+		// detectSilence adapted from https://jsfiddle.net/53watgqu/
+		detectSilence: function(stream, onSoundEnd = _=>{}, onSoundStart = _=>{}, silence_delay = 500, min_decibels = -80) {
+			const ctx = new AudioContext();
+			const analyser = ctx.createAnalyser();
+			const streamNode = ctx.createMediaStreamSource(stream);
+			streamNode.connect(analyser);
+			analyser.minDecibels = min_decibels;
+
+			const data = new Uint8Array(analyser.frequencyBinCount); // will hold our data
+			let silence_start = performance.now();
+			let triggered = false; // trigger only once per silence event
+			let hasSpoken = false; // skip onSoundEnd() on initial silence
+
+			function loop(time) {
+				analyser.getByteFrequencyData(data); // get current data
+				if (data.some(v => v)) { // if there is data above the given db limit
+					if(triggered){
+						hasSpoken = true;
+						triggered = false;
+						onSoundStart();
+					}
+					silence_start = time; // set it to now
+				}
+				if (!triggered && time - silence_start > silence_delay) {
+					triggered = true;
+					if (hasSpoken) {
+						onSoundEnd();
+						return; // TODO: allow continuous...
+					}
+				}
+				requestAnimationFrame(loop); // we'll loop every 60th of a second to check
+			}
+			loop();
+		},
+
 		record: function(stream) {
 			rec.active = true;
 			var recorder = rec._.recorder = new MediaRecorder(stream);
@@ -21,8 +57,7 @@ var rec = zero.core.rec = {
 					cb: rec._.cb
 				});
 			};
-			recorder.start();
-			recorder.timeout = setTimeout(function() { recorder.stop(); }, 3000);
+			rec._.detectSilence(stream, () => recorder.stop(), () => recorder.start());
 		},
 		oops: function(cb) {
 			return function(err) {
