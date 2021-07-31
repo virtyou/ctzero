@@ -1,13 +1,16 @@
-from cantools.web import respond, succeed, cgi_get
+from cantools.web import respond, succeed, cgi_get, local
 from ctzero.speech import chat, say, rec
 
 def response():
     action = cgi_get("action", choices=["say", "rec", "chat"])
     if action == "chat":
+        res = local('response')
+        addr = res and res.ip or "rando"
         succeed(chat(cgi_get("question"),
             cgi_get("identity", required=False),
             cgi_get("mood", required=False),
-            cgi_get("options", required=False)))
+            cgi_get("options", required=False),
+            cgi_get("asker", default=addr)))
     language = cgi_get("language")
     voice = cgi_get("voice", default="Joanna")
     if action == "say":
