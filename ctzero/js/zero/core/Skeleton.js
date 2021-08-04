@@ -49,16 +49,23 @@ zero.core.Skeleton = CT.Class({
 			fs = CT.data.choice(["asym", "smileEyes",
 				"smile", "bigSmile", "brow",
 				"browAsym", "browSad", "frown"]),
+			majors = ["elbow", "shoulder"],
 			minors = ["pinkie", "ring", "middle", "wrist", "thumb", "pointer"],
-			mindims = ["curl", "x", "y", "z"], d, w;
+			mindims = ["curl", "x", "y", "z"],
+			d = sname.split("_").pop(), w, iz;
 		aspringz[sname] = 1;
 		bspringz[rs] = 1 - Math.random() * 2;
 		hspringz[fs] = 0.025 - Math.random() * 0.05;
 		if (minors.includes(part)) {
-			d = sname.split("_").pop();
 			w = 1.5 - (minors.indexOf(part) + mindims.indexOf(d)) / 8;
 			hspringz[ps] = w - Math.random() * 2 * w;
-			this.log("aspRules", part, sname, d, w, hspringz[ps]);
+//			this.log("aspRules", part, sname, d, w, hspringz[ps]);
+		} else if (majors.includes(part)) {
+			iz = majors.indexOf(part) + this.dims.indexOf(d);
+			w = 1 - iz / 3;
+//			w = 1.5 - Math.random() / (4 - (majors.indexOf(part) + this.dims.indexOf(d)));
+			aspringz["gesticulate_" + part] = w + Math.random() / (iz + 2);
+			this.log("aspRules", part, sname, "gesticulate", iz, w, aspringz["gesticulate_" + part]);
 		}
 		return {
 			springs: aspringz,
