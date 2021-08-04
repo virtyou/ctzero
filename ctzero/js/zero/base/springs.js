@@ -68,6 +68,17 @@ zero.base.springs.body = function() {
     };
 };
 
+zero.base.springs.arm = {
+    elbow: {
+        k: 40,
+        damp: 10
+    },
+    shoulder: {
+        k: 20,
+        damp: 80
+    }
+};
+
 zero.base.springs.head = function() {
     return {
         asym: {
