@@ -60,9 +60,9 @@ zero.core.Skeleton = CT.Class({
 //			this.log("aspRules", part, sname, d, w, hspringz[ps]);
 		} else if (majors.includes(part)) {
 			iz = majors.indexOf(part) + this.dims.indexOf(d);
-			w = 1 - iz / 3;
-//			w = 1.5 - Math.random() / (4 - (majors.indexOf(part) + this.dims.indexOf(d)));
-			aspringz["gesticulate_" + part] = w + Math.random() / (iz + 2);
+//			w = 1 - iz / 3;
+			w = 1.5 - Math.random() / (4 - iz);
+			aspringz["gesticulate_" + part] = w;// + Math.random() / (iz + 2);
 			this.log("aspRules", part, sname, "gesticulate", iz, w, aspringz["gesticulate_" + part]);
 		}
 		return {
