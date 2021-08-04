@@ -6,7 +6,7 @@ zero.core.Ticker = CT.Class({
 		if (propts) {
 			s[property] = propts.base || 0;
 			if (propts.coefficient)
-				s[property] += propts.coefficient * Math.random(); 
+				s[property] += propts.coefficient * Math.random();
 			if ((property == "target") && !this.opts.noTargetMult) {
 				var energy = this.parent.energy();
 				if (energy)
