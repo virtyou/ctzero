@@ -41,18 +41,25 @@ zero.core.Skeleton = CT.Class({
 			return pdata[dim];
 		return pdata;
 	},
-	aspRules: function(sname) {
+	aspRules: function(sname, part) {
 		var aspringz = {}, bspringz = {}, hspringz = {},
 			rs = CT.data.choice(["twist", "bow", "lean", "tilt"]),
 			ps = CT.data.choice(["ah", "ee", "ow",
 				"ff", "m", "n", "th"]),
 			fs = CT.data.choice(["asym", "smileEyes",
 				"smile", "bigSmile", "brow",
-				"browAsym", "browSad", "frown"]);
+				"browAsym", "browSad", "frown"]),
+			minors = ["pinkie", "ring", "middle", "wrist", "thumb", "pointer"],
+			mindims = ["curl", "x", "y", "z"], d, w;
 		aspringz[sname] = 1;
 		bspringz[rs] = 1 - Math.random() * 2;
-//		hspringz[ps] = 0.025 - Math.random() * 0.05;
 		hspringz[fs] = 0.025 - Math.random() * 0.05;
+		if (minors.includes(part)) {
+			d = sname.split("_").pop();
+			w = 1.5 - (minors.indexOf(part) + mindims.indexOf(d)) / 8;
+			hspringz[ps] = w - Math.random() * 2 * w;
+			this.log("aspRules", part, sname, d, w, hspringz[ps]);
+		}
 		return {
 			springs: aspringz,
 			bsprings: bspringz,
@@ -72,7 +79,7 @@ zero.core.Skeleton = CT.Class({
 				max: -jrules.min
 			}, jrules);
 		}
-		rz = CT.merge(this.aspRules(sname), jrules);
+		rz = CT.merge(this.aspRules(sname, part), jrules);
 		["springs", "bsprings", "hsprings"].forEach(function(sz) {
 			rz[sz] = CT.merge(jrules[sz], rz[sz]);
 		});
