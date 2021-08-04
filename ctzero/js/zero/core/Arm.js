@@ -34,6 +34,12 @@ zero.core.Arm = CT.Class({
 	setBody: function(bod) {
 		this.body = bod;
 		this.hand && this.hand.setBody(bod);
+		for (var p in zero.base.tickers.arm) {
+			var sname = "gesticulate_" + p;
+			this.springs[sname] = zero.core.springController.add(zero.base.springs.arm[p], sname, this);
+			this.tickers[sname] = zero.core.tickerController.add(zero.base.tickers.arm[p],
+				sname, this, this.body);
+		}
 	},
 	build: function() {
 		var oz = this.opts, bones = oz.bones, bmap = oz.bonemap;

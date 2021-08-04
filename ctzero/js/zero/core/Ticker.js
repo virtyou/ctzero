@@ -6,7 +6,7 @@ zero.core.Ticker = CT.Class({
 		if (propts) {
 			s[property] = propts.base || 0;
 			if (propts.coefficient)
-				s[property] += propts.coefficient * Math.random(); 
+				s[property] += propts.coefficient * Math.random();
 			if ((property == "target") && !this.opts.noTargetMult) {
 				var energy = this.parent.energy();
 				if (energy)
@@ -34,7 +34,7 @@ zero.core.Ticker = CT.Class({
 	tick: function() {
 		var condition, direction, opts, s, up = this._up;
 		for (condition in this.conditions) {
-			direction = this.parent[condition] ? "yes" : "no";
+			direction = this.conditioner[condition] ? "yes" : "no";
 			opts = this.conditions[condition][direction];
 			this.reschedule(opts);
 			if (opts.once) {
@@ -58,6 +58,7 @@ zero.core.Ticker = CT.Class({
 		this.opts = opts;
 		this.name = opts.name;
 		this.parent = opts.parent;
+		this.conditioner = opts.conditioner || opts.parent;
 		this.conditions = opts.conditions;
 		this.oncers = {};
 		this.tick();
@@ -65,11 +66,12 @@ zero.core.Ticker = CT.Class({
 });
 
 var ticker = zero.core.tickerController = new zero.core.Controller({
-	initializer: function(opts, name, parent) {
+	initializer: function(opts, name, parent, conditioner) {
 		return new zero.core.Ticker({
 			name: name,
 			parent: parent,
-			conditions: opts
+			conditions: opts,
+			conditioner: conditioner
 		});
 	}
 });

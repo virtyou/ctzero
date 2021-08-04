@@ -6,8 +6,6 @@ zero.core.Skeleton = CT.Class({
 	},
 	setJoints: function() {
 		var part, bmap = this.bmap();
-		this.springs = {};
-		this.aspects = {};
 		for (part in bmap)
 			this.setPart(bmap, part);
 	},
@@ -41,18 +39,28 @@ zero.core.Skeleton = CT.Class({
 			return pdata[dim];
 		return pdata;
 	},
-	aspRules: function(sname) {
+	aspRules: function(sname, part) {
 		var aspringz = {}, bspringz = {}, hspringz = {},
 			rs = CT.data.choice(["twist", "bow", "lean", "tilt"]),
 			ps = CT.data.choice(["ah", "ee", "ow",
 				"ff", "m", "n", "th"]),
 			fs = CT.data.choice(["asym", "smileEyes",
 				"smile", "bigSmile", "brow",
-				"browAsym", "browSad", "frown"]);
+				"browAsym", "browSad", "frown"]),
+			majors = ["elbow", "shoulder", "clavicle"],
+			minors = ["pinkie", "ring", "middle", "wrist", "thumb", "pointer"],
+			mindims = ["curl", "x", "y", "z"],
+			d = sname.split("_").pop(), w;
 		aspringz[sname] = 1;
 		bspringz[rs] = 1 - Math.random() * 2;
-//		hspringz[ps] = 0.025 - Math.random() * 0.05;
 		hspringz[fs] = 0.025 - Math.random() * 0.05;
+		if (minors.includes(part)) {
+			w = 1.5 - (minors.indexOf(part) + mindims.indexOf(d)) / 8;
+			hspringz[ps] = w - Math.random() * 2 * w;
+		} else if (majors.includes(part)) {
+			w = 1.5 - Math.random() / (5 - (majors.indexOf(part) + this.dims.indexOf(d)));
+			aspringz["gesticulate_" + part] = w;
+		}
 		return {
 			springs: aspringz,
 			bsprings: bspringz,
@@ -72,7 +80,7 @@ zero.core.Skeleton = CT.Class({
 				max: -jrules.min
 			}, jrules);
 		}
-		rz = CT.merge(this.aspRules(sname), jrules);
+		rz = CT.merge(this.aspRules(sname, part), jrules);
 		["springs", "bsprings", "hsprings"].forEach(function(sz) {
 			rz[sz] = CT.merge(jrules[sz], rz[sz]);
 		});
@@ -127,6 +135,9 @@ zero.core.Skeleton = CT.Class({
 		this.variety = this.CLASSNAME.split(".")[2];
 		this.vlower = this.variety.toLowerCase(); // should these be automated by CT.Class?
 		this.parent = opts.parent || opts.body;
+		this.springs = {};
+		this.aspects = {};
+		this.tickers = {};
 		opts.body && this.setBody(opts.body);
 		this.build();
 	}

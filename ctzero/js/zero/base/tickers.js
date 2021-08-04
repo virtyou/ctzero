@@ -190,6 +190,81 @@ zero.base.tickers.body = function() {
     };
 };
 
+zero.base.tickers.arm = { // gesticulate
+    clavicle: {
+        talking: {
+            yes: {
+                reschedule: {
+                    base: 0.5,
+                    coefficient: 0.5
+                },
+                target: {
+                    base: -0.5,
+                    coefficient: 1
+                }
+            },
+            no: {
+                reschedule: {
+                    base: 3,
+                    coefficient: 4
+                },
+                target: {
+                    base: -0.2,
+                    coefficient: 0.4
+                }
+            }
+        }
+    },
+    shoulder: {
+        talking: {
+            yes: {
+                reschedule: {
+                    base: 0.5,
+                    coefficient: 0.5
+                },
+                target: {
+                    base: -3,
+                    coefficient: 4
+                }
+            },
+            no: {
+                reschedule: {
+                    base: 2,
+                    coefficient: 4
+                },
+                target: {
+                    base: -0.25,
+                    coefficient: 0.5
+                }
+            }
+        }
+    },
+    elbow: {
+        talking: {
+            yes: {
+                reschedule: {
+                    base: 0.25,
+                    coefficient: 0.5
+                },
+                target: {
+                    base: -2,
+                    coefficient: 2
+                }
+            },
+            no: {
+                reschedule: {
+                    base: 2,
+                    coefficient: 3
+                },
+                target: {
+                    base: -0.5,
+                    coefficient: 0.5
+                }
+            }
+        }
+    }
+};
+
 zero.base.tickers.head = function() {
     return {
         asym: {

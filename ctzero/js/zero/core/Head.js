@@ -18,6 +18,10 @@ zero.core.Head = CT.Class({
 					this.tickers[t].tick();
 				for (t in this.body.tickers)
 					this.body.tickers[t].tick();
+				var side, arms = this.body.torso.arms;
+				for (side in arms)
+					for (t in arms[side].tickers)
+						arms[side].tickers[t].tick();
 			} else
 				this.talking = this.body.talking = talking;
 			if (talking || changed) {
