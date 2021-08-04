@@ -76,6 +76,10 @@ zero.base.springs.arm = {
     shoulder: {
         k: 20,
         damp: 80
+    },
+    clavicle: {
+        k: 20,
+        damp: 40
     }
 };
 
