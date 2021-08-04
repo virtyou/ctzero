@@ -47,7 +47,7 @@ zero.core.Skeleton = CT.Class({
 			fs = CT.data.choice(["asym", "smileEyes",
 				"smile", "bigSmile", "brow",
 				"browAsym", "browSad", "frown"]),
-			majors = ["elbow", "shoulder"],
+			majors = ["elbow", "shoulder", "clavicle"],
 			minors = ["pinkie", "ring", "middle", "wrist", "thumb", "pointer"],
 			mindims = ["curl", "x", "y", "z"],
 			d = sname.split("_").pop(), w, iz;
@@ -61,7 +61,7 @@ zero.core.Skeleton = CT.Class({
 		} else if (majors.includes(part)) {
 			iz = majors.indexOf(part) + this.dims.indexOf(d);
 //			w = 1 - iz / 3;
-			w = 1.5 - Math.random() / (4 - iz);
+			w = 1.5 - Math.random() / (5 - iz);
 			aspringz["gesticulate_" + part] = w;// + Math.random() / (iz + 2);
 			this.log("aspRules", part, sname, "gesticulate", iz, w, aspringz["gesticulate_" + part]);
 		}
