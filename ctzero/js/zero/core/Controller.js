@@ -28,13 +28,13 @@ zero.core.Controller = CT.Class({
 			return this._.collection[name][index];
 		return this._.collection[name];
 	},
-	add: function(opts, name, parent) {
+	add: function(opts, name, parent, extra) {
 		if (this.opts.abstraction) {
 			opts.name = name || opts.name;
 			opts.parent = parent;
 			var a = new this.opts.abstraction(opts);
 		} else
-			var a = this.opts.initializer(opts, name, parent);
+			var a = this.opts.initializer(opts, name, parent, extra);
 		if (!this._.collection[opts.name])
 			this._.collection[opts.name] = [];
 		this._.collection[opts.name].push(a);
