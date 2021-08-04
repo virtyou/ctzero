@@ -6,8 +6,6 @@ zero.core.Skeleton = CT.Class({
 	},
 	setJoints: function() {
 		var part, bmap = this.bmap();
-		this.springs = {};
-		this.aspects = {};
 		for (part in bmap)
 			this.setPart(bmap, part);
 	},
@@ -141,6 +139,9 @@ zero.core.Skeleton = CT.Class({
 		this.variety = this.CLASSNAME.split(".")[2];
 		this.vlower = this.variety.toLowerCase(); // should these be automated by CT.Class?
 		this.parent = opts.parent || opts.body;
+		this.springs = {};
+		this.aspects = {};
+		this.tickers = {};
 		opts.body && this.setBody(opts.body);
 		this.build();
 	}
