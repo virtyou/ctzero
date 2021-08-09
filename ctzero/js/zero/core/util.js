@@ -112,9 +112,12 @@ zero.core.util = {
 		var blob = new Blob(byteArrays, {type: contentType});
 		return blob;
 	},
-	singer: function(cbox, saycb) {
+	singer: function(cbox, saycb, buttName) {
 		var zcu = zero.core.util;
-		return CT.dom.button("sing", function(e) {
+		saycb = saycb || function(song) {
+			cbox.value = song;
+		};
+		return CT.dom.button(buttName || "sing", function(e) {
 			if (!cbox.value) return;
 			var words = cbox.value.split(" "),
 				i, durs = [];
