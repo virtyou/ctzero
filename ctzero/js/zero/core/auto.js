@@ -1,12 +1,11 @@
 zero.core.auto = {
 	_: {},
-	init: function(autos) { // [{person(key),interval{base,coefficient,randomize},activities[]}]
-		var _ = zero.core.auto._; 
+	init: function(autos) { // [{person(key),program{interval{base,coefficient,randomize},activities[]}}]
 		CT.db.multi(autos.map(a=>a.person), function(people) {
-			_.autos = people.map(function(p, i) {
+			zero.core.current.room.automatons = people.map(function(p, i) {
 				return new zero.core.auto.Automaton({
 					person: p,
-					program: autos[i]
+					program: autos[i].program
 				});
 			});
 		}, "json");
@@ -46,6 +45,7 @@ zero.core.auto.Automaton = CT.Class({
 	joined: function(person) {
 		this.person = person;
 		this.program.activities.length && this.play();
+		this.opts.onjoin && this.opts.onjoin(person);
 	},
 	reprogram: function(p) {
 		this.program = CT.merge(p, this.program, this.opts.program);
