@@ -241,6 +241,16 @@ zero.core.Person = CT.Class({
 			cb && cb();
 		}, true);
 	},
+	wander: function(where, cb) {
+		where = where || "room";
+		var r = zero.core.current.room,
+			bz = (where == "room") ? r.bounds : r[where].bounds,
+			min = bz.min, max = bz.max;
+		this.move({
+			weave: min.x + CT.data.random(max.x - min.x, true),
+			slide: min.z + CT.data.random(max.z - min.z, true)
+		}, cb);
+	},
 	move: function(opts, cb, watch) {
 		var k, dur = 1000; // TODO: ACTUALLY CALC DUR!!!!
 		for (var k in opts)
