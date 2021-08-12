@@ -154,6 +154,7 @@ class Room(db.TimeStampedBase):
     material = db.JSON()
     lights = db.JSON()
     cameras = db.JSON()
+    people = db.JSON() # [{personKey,interval{base,coefficient,randomize},activities[]}]
     opts = db.JSON() # merged into Thing.opts{}
 
     def json(self):
@@ -162,7 +163,7 @@ class Room(db.TimeStampedBase):
         if "key" in d: # thing key
             d["thing_key"] = d["key"]
         d["key"] = self.key.urlsafe()
-        for iname in ["name", "environment", "lights", "cameras"]:
+        for iname in ["name", "environment", "lights", "cameras", "people"]:
             item = getattr(self, iname)
             if item:
                 d[iname] = item
