@@ -428,6 +428,7 @@ zero.core.Room = CT.Class({
 		this.lights = [];
 		this.objects = [];
 		this.cameras = [];
+		this.automatons = [];
 		zero.core.util.onCurPer(() => this.setFriction(opts.grippy));
 	}
 }, zero.core.Thing);
