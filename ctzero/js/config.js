@@ -78,7 +78,7 @@
 			"variety": "ambient"
 		}],
 		"objects": [],
-		"people": []
+		"automatons": []
 	},
 	"people": [],
 	"script": [],
