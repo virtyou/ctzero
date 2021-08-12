@@ -416,7 +416,8 @@ zero.core.Room = CT.Class({
 		}, eopts, this.opts, {
 			lights: [],  // Lights
 			objects: [], // regular Things
-			cameras: []
+			cameras: [],
+			people: []
 		});
 		this.shelled = !!opts.stripset;
 		if (opts.outside && !this.shelled) {
