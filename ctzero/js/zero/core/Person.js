@@ -132,9 +132,9 @@ zero.core.Person = CT.Class({
 		this.subject = subject;
 		orient && this.orient(subject);
 	},
-	orient: function(subject) {
-		var pos = this.body.group.position,
-			spos = subject.position();
+	orient: function(subject, spos) {
+		var pos = this.body.group.position;
+		spos = spos || subject.position();
 		this.orientation(Math.atan2(spos.x
 			- pos.x, spos.z - pos.z));
 	},
@@ -243,12 +243,17 @@ zero.core.Person = CT.Class({
 	},
 	wander: function(where, cb) {
 		where = where || "room";
-		var r = zero.core.current.room,
+		var r = zero.core.current.room, coords,
 			bz = (where == "room") ? r.bounds : r[where].bounds,
 			min = bz.min, max = bz.max;
+		coords = {
+			x: min.x + CT.data.random(max.x - min.x, true),
+			z: min.z + CT.data.random(max.z - min.z, true)
+		};
+		this.orient(null, coords);
 		this.move({
-			weave: min.x + CT.data.random(max.x - min.x, true),
-			slide: min.z + CT.data.random(max.z - min.z, true)
+			weave: coords.x,
+			slide: coords.z
 		}, cb);
 	},
 	move: function(opts, cb, watch) {
