@@ -47,6 +47,7 @@ zero.core.auto.Automaton = CT.Class({
 	},
 	joined: function(person) {
 		this.person = person;
+		this.opts.wander && person.wander();
 		this.program.activities.length && this.play();
 		this.opts.onjoin && this.opts.onjoin(person);
 	},
@@ -61,6 +62,7 @@ zero.core.auto.Automaton = CT.Class({
 	},
 	init: function(opts) {
 		this.opts = opts = CT.merge({ // required: person{}
+			wander: true,
 			program: {
 				base: 3,
 				coefficient: 7,
