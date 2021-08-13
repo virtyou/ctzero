@@ -1,7 +1,7 @@
 zero.core.auto = {
 	_: {},
 	json: function() {
-		return zero.core.current.zone.automatons.map(a => a.json());
+		return zero.core.current.room.automatons.map(a => a.json());
 	},
 	init: function(autos) { // [{person(key),program{base,coefficient,randomize},activities[]}]
 		CT.db.multi(autos.map(a=>a.person), function(people) {
@@ -36,9 +36,10 @@ zero.core.auto.Automaton = CT.Class({
 			this.person[act.action](act.value, this.play);
 	},
 	play: function() {
+		this.pause(); // guards against multiplay
 		var pr = this.program;
 		this._.timeout = setTimeout(this.tick,
-			pr.base + CT.data.random(pr.coefficient, true));
+			1000 * pr.base + CT.data.random(pr.coefficient, true));
 	},
 	pause: function() {
 		clearTimeout(this._.timeout);
