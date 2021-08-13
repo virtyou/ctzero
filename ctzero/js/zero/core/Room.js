@@ -201,6 +201,7 @@ zero.core.Room = CT.Class({
 			this._.assembled) {
 				this.setBounds();
 				this._.built();
+				this.opts.automatons.length && zero.core.auto.init(this.opts.automatons);
 			}
 	},
 	it: function(kind, cb) {
@@ -416,7 +417,8 @@ zero.core.Room = CT.Class({
 		}, eopts, this.opts, {
 			lights: [],  // Lights
 			objects: [], // regular Things
-			cameras: []
+			cameras: [],
+			automatons: []
 		});
 		this.shelled = !!opts.stripset;
 		if (opts.outside && !this.shelled) {
@@ -426,6 +428,7 @@ zero.core.Room = CT.Class({
 		this.lights = [];
 		this.objects = [];
 		this.cameras = [];
+		this.automatons = [];
 		zero.core.util.onCurPer(() => this.setFriction(opts.grippy));
 	}
 }, zero.core.Thing);

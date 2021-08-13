@@ -77,7 +77,8 @@
 		"lights": [{
 			"variety": "ambient"
 		}],
-		"objects": []
+		"objects": [],
+		"automatons": []
 	},
 	"people": [],
 	"script": [],
