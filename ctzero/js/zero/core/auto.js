@@ -18,6 +18,7 @@ zero.core.auto.Automaton = CT.Class({
 	CLASSNAME: "zero.core.auto.Automaton",
 	_: {
 		index: -1,
+		onperson: [],
 		next: function() {
 			var _ = this._, alen = this.activities.length;
 			if (this.program.randomize)
@@ -44,11 +45,18 @@ zero.core.auto.Automaton = CT.Class({
 	pause: function() {
 		clearTimeout(this._.timeout);
 	},
+	onperson: function(cb) {
+		if (this.person)
+			return cb(this.person);
+		this._.onperson.push(cb);
+	},
 	joined: function(person) {
 		this.person = person;
 		this.opts.wander && person.wander();
 		this.activities.length && this.play();
 		this.opts.onjoin && this.opts.onjoin(person);
+		for (var cb of this._.onperson)
+			cb(this.person);
 	},
 	reprogram: function(p) {
 		this.program = CT.merge(p, this.program, this.opts.program);
@@ -68,8 +76,8 @@ zero.core.auto.Automaton = CT.Class({
 			wander: true,
 			activities: [],
 			program: {
-				base: 3,
-				coefficient: 7,
+				base: 5,
+				coefficient: 10,
 				randomize: true
 			}
 		});
