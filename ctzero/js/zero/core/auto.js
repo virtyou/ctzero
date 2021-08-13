@@ -1,6 +1,9 @@
 zero.core.auto = {
 	_: {},
-	init: function(autos) { // [{person(key),program{interval{base,coefficient,randomize},activities[]}}]
+	json: function() {
+		return zero.core.current.zone.automatons.map(a => a.json());
+	},
+	init: function(autos) { // [{person(key),program{base,coefficient,randomize,activities[]}}]
 		CT.db.multi(autos.map(a=>a.person), function(people) {
 			zero.core.current.room.automatons = people.map(function(p, i) {
 				return new zero.core.auto.Automaton({
@@ -17,9 +20,9 @@ zero.core.auto.Automaton = CT.Class({
 	_: {
 		index: -1,
 		next: function() {
-			var pr = this.program, pi = pr.interval,
-				_ = this._, alen = pr.activities.length;
-			if (pi.randomize)
+			var _ = this._, pr = this.program,
+				alen = pr.activities.length;
+			if (pr.randomize)
 				_.index = CT.data.random(alen);
 			else
 				_.index = (_.index + 1) % alen;
@@ -35,9 +38,9 @@ zero.core.auto.Automaton = CT.Class({
 			this.person[act.action](act.value, this.play);
 	},
 	play: function() {
-		var pi = this.program.interval;
+		var pr = this.program;
 		this._.timeout = setTimeout(this.tick,
-			pi.base + CT.data.random(pi.coefficient, true));
+			pr.base + CT.data.random(pr.coefficient, true));
 	},
 	pause: function() {
 		clearTimeout(this._.timeout);
@@ -50,15 +53,19 @@ zero.core.auto.Automaton = CT.Class({
 	reprogram: function(p) {
 		this.program = CT.merge(p, this.program, this.opts.program);
 	},
+	json: function() {
+		return {
+			person: this.person.opts.key,
+			program: this.program
+		};
+	},
 	init: function(opts) {
 		this.opts = opts = CT.merge({ // required: person{}
 			program: {
-				interval: {
-					base: 3,
-					coefficient: 7,
-					randomize: true
-				},
-				activities: []
+				base: 3,
+				coefficient: 7,
+				activities: [],
+				randomize: true
 			}
 		});
 		this.reprogram();
