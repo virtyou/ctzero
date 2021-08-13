@@ -3,13 +3,12 @@ zero.core.auto = {
 	json: function() {
 		return zero.core.current.zone.automatons.map(a => a.json());
 	},
-	init: function(autos) { // [{person(key),program{base,coefficient,randomize,activities[]}}]
+	init: function(autos) { // [{person(key),program{base,coefficient,randomize},activities[]}]
 		CT.db.multi(autos.map(a=>a.person), function(people) {
 			zero.core.current.room.automatons = people.map(function(p, i) {
-				return new zero.core.auto.Automaton({
-					person: p,
-					program: autos[i].program
-				});
+				return new zero.core.auto.Automaton(CT.merge({
+					person: p
+				}, autos[i]));
 			});
 		}, "json");
 	}
@@ -20,13 +19,12 @@ zero.core.auto.Automaton = CT.Class({
 	_: {
 		index: -1,
 		next: function() {
-			var _ = this._, pr = this.program,
-				alen = pr.activities.length;
-			if (pr.randomize)
+			var _ = this._, alen = this.activities.length;
+			if (this.program.randomize)
 				_.index = CT.data.random(alen);
 			else
 				_.index = (_.index + 1) % alen;
-			return pr.activities[_.index];
+			return this.activities[_.index];
 		}
 	},
 	tick: function() {
@@ -48,29 +46,34 @@ zero.core.auto.Automaton = CT.Class({
 	joined: function(person) {
 		this.person = person;
 		this.opts.wander && person.wander();
-		this.program.activities.length && this.play();
+		this.activities.length && this.play();
 		this.opts.onjoin && this.opts.onjoin(person);
 	},
 	reprogram: function(p) {
 		this.program = CT.merge(p, this.program, this.opts.program);
 	},
+	reactivitate: function(a) {
+		this.activities = a;
+	},
 	json: function() {
 		return {
 			person: this.person.opts.key,
+			activities: this.activities,
 			program: this.program
 		};
 	},
 	init: function(opts) {
 		this.opts = opts = CT.merge(opts, { // required: person{}
 			wander: true,
+			activities: [],
 			program: {
 				base: 3,
 				coefficient: 7,
-				activities: [],
 				randomize: true
 			}
 		});
 		this.reprogram();
+		this.reactivitate(opts.activities);
 		zero.core.util.join(opts.person, this.joined, true);
 	}
 });
