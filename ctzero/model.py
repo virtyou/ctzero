@@ -154,7 +154,7 @@ class Room(db.TimeStampedBase):
     material = db.JSON()
     lights = db.JSON()
     cameras = db.JSON()
-    automatons = db.JSON() # [{person,program{interval{base,coefficient,randomize},activities[]}}]
+    automatons = db.JSON() # [{person,program{base,coefficient,randomize,activities[]}]
     opts = db.JSON() # merged into Thing.opts{}
 
     def json(self):
