@@ -61,7 +61,7 @@ zero.core.auto.Automaton = CT.Class({
 		};
 	},
 	init: function(opts) {
-		this.opts = opts = CT.merge({ // required: person{}
+		this.opts = opts = CT.merge(opts, { // required: person{}
 			wander: true,
 			program: {
 				base: 3,
