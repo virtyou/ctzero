@@ -15,7 +15,7 @@ This package contains the core zero libraries.
     }
     
     syms = {
-    	".": ["_zero.py", "_speech.py"],
+    	".": ["_zero.py", "_speech.py", "ardata"],
     	"js": ["zero", "shaders"]
     }
     model = {
@@ -26,19 +26,20 @@ This package contains the core zero libraries.
     	"/_speech": "_speech.py",
     	"/sound": "sound",
     	"/maps": "maps",
-    	"/models": "models"
+    	"/models": "models",
+    	"/ardata": "ardata"
     }
     cfg = {
     	"asr": {
     		"audlib": "ffmpeg", # or avconv (certain older distros)
-    		"mode": "gcloud", # or "baidu" -- default "gcloud" mode requires gcloud to be installed and configured
-    		"id": None,       # baidu only
-    		"secret": None    # baidu only
+    		"mode": "gcloud",   # or "baidu" -- default "gcloud" mode requires gcloud to be installed and configured
+    		"id": None,         # baidu only
+    		"secret": None      # baidu only
     	},
-    	"chat": {             # currently supports pandorabots mode
-    		"host": "aiaas.pandorabots.com",
-    		"appid": None,
-    		"userkey": None,
+    	"chat": {
+    		"mode": "aiio",     # aiio | pandorabots
+    		"appid": None,      # pb only
+    		"userkey": None,    # pb only
     		"botname": None
     	}
     }
@@ -49,8 +50,17 @@ This package contains the core zero libraries.
 ## core.config.ctzero
 ### Import line: 'CT.require("core.config");'
     {
+    	"lib": {
+    		"ar": "https://raw.githack.com/AR-js-org/AR.js/master/three.js/build/ar.js"
+    	},
     	"camera": {
+    		"ar": false,
     		"vr": false,
+    		"mouse": true,
+    		"xlro": {
+    			"x": 20,
+    			"y": -0.5
+    		},
     		"opts": {
     			"antialias": true
     		},
@@ -118,7 +128,8 @@ This package contains the core zero libraries.
     		"lights": [{
     			"variety": "ambient"
     		}],
-    		"objects": []
+    		"objects": [],
+    		"automatons": []
     	},
     	"people": [],
     	"script": [],
@@ -128,6 +139,7 @@ This package contains the core zero libraries.
     	"media": {
     		"proxy": true
     	},
+    	"env": {},
     	"brain": {
     		"noChat": false,
     		"chain": {
