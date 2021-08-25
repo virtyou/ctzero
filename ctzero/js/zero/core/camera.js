@@ -360,7 +360,7 @@ var camera = zero.core.camera = {
 			geometry: new THREE.CubeGeometry(1, 1, 15),
 			material: {
 				color: 0x00ff00,
-				visible: false
+				visible: config.helpers
 			}
 		});
 

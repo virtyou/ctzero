@@ -46,7 +46,7 @@ zero.core.Body = CT.Class({
 			boxGeometry: [1, 1, 5],
 			material: {
 			    color: 0x00ff00,
-			    visible: false
+			    visible: core.config.ctzero.helpers
 			}
 		});
 	},
