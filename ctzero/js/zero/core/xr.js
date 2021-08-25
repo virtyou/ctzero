@@ -4,35 +4,27 @@ zero.core.xr = { // https://01.org/blogs/darktears/2019/rendering-immersive-web-
 			var _ = zero.core.xr._, rnd = _.renderer,
 				scene = camera.scene, cam = camera.get();
 			rnd.setViewport(viewport.x, viewport.y, viewport.width, viewport.height);
-//			var projectionMatrix = view.projectionMatrix;
-//			var viewMatrix = new THREE.Matrix4();
-//			viewMatrix.fromArray(viewMatrixArray);
-//			cam.projectionMatrix.fromArray(projectionMatrix);
-//			cam.matrixWorldInverse.copy(viewMatrix);
-
-
 			rnd.render(scene, camera._[view.eye].camera || cam);
 			rnd.clearDepth();
 		},
 		rigidTrans: function(space, pos, rot) {
 			return space.getOffsetReferenceSpace(new XRRigidTransform(pos, rot));
+		},
+		perup: function(orientation) {
+			var per = zero.core.current.person, pbs,
+				rot = new THREE.Euler().setFromQuaternion(orientation);
+			pbs = per.body.springs;
+			pbs.shake.target = rot.y;
+			pbs.nod.target = -rot.x;
+//			pbs.tilt.target = rot.z; // TODO: (rig pov cam to rotate)
 		}
 	},
 	tick: function(time, frame) {
 		var _ = zero.core.xr._, view, viewport,
-			pose = frame.getViewerPose(_.space),
-			cam = camera.get();
+			pose = frame.getViewerPose(_.space);
 		if (pose) {
-
-			// NB: rotating _stand_ -> rotate stand's parent instead?
-
-//			cam.position.x = pose.transform.position.x;
-//			cam.position.y = pose.transform.position.y;
-//			cam.position.z = pose.transform.position.z;
-			cam.setRotationFromQuaternion(pose.transform.orientation);
+			_.perup(pose.transform.orientation);
 			camera.scene.updateMatrixWorld(true);
-
-
 			for (view of pose.views) {
 				viewport = _.sesh.baseLayer.getViewport(view);
 				_.eye(pose.viewMatrix, view, viewport);
@@ -51,19 +43,18 @@ zero.core.xr = { // https://01.org/blogs/darktears/2019/rendering-immersive-web-
 			y: rot.y.target,
 			z: rot.z.target
 		});
-		CT.log("oriented space");
+		CT.log("oriented space - switching to pov and starting tick");
+		setTimeout(() => zero.core.camera.angle("pov"));
+		_.sesh.requestAnimationFrame(zero.core.xr.tick);
 	},
 	launch: function(space) {
 		var _ = zero.core.xr._, rnd = _.renderer = new THREE.WebGLRenderer(),
 			ctx = rnd.context, scene = camera.scene, bl;
 		_.space = space;
 		ctx.makeXRCompatible().then(function() {
-
-//			setTimeout(zero.core.xr.orient, 5000);
-
+			zero.core.util.onCurPer(zero.core.xr.orient);
 			bl = _.sesh.baseLayer = new XRWebGLLayer(_.sesh, ctx);
 			_.sesh.updateRenderState({ baseLayer: bl });
-			_.sesh.requestAnimationFrame(zero.core.xr.tick);
 			scene.matrixAutoUpdate = false;
 			rnd.autoClear = false;
 			rnd.clear();
