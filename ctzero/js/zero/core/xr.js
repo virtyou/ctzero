@@ -61,15 +61,25 @@ zero.core.xr = { // https://01.org/blogs/darktears/2019/rendering-immersive-web-
 			sesh.requestReferenceSpace("local").then(zero.core.xr.launch);
 		});
 	},
-	init: function() {
-		navigator.xr && navigator.xr.isSessionSupported('immersive-vr').then(function(isit) {
-			isit ? CT.modal.choice({
-				prompt: "enter immersive vr?",
-				data: ["yah", "nah"],
-				cb: function(answer) {
-					(answer == "yah") && zero.core.xr.setup();
-				}
-			}) : CT.log("webxr (immersive-vr) not supported");
-		});
+	init: function(opts) {
+		var _ = zero.core.xr._, opts = _.opts = CT.merge(opts, {
+			ondecide: function() {}
+		}), affirmative;
+		navigator.xr ? navigator.xr.isSessionSupported('immersive-vr').then(function(isit) {
+			if (isit) {
+				CT.modal.choice({
+					prompt: "enter immersive vr?",
+					data: ["yah", "nah"],
+					cb: function(answer) {
+						affirmative = answer == "yah";
+						opts.ondecide(affirmative);
+						affirmative && zero.core.xr.setup();
+					}
+				});
+			} else {
+				CT.log("webxr (immersive-vr) not supported");
+				opts.ondecide();
+			}
+		}) : opts.ondecide();
 	}
 };
