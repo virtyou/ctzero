@@ -143,7 +143,8 @@ zero.core.Body = CT.Class({
 			changed = true;
 			this.flying = this.landing = false;
 		}
-		changed && this.setFriction(!wet && !this.flying && (obj || r).grippy, this.flying || wet || !bobber.hard);
+		changed && this.setFriction(this.person.grippy && !wet && !this.flying && (obj || r).grippy,
+			this.flying || wet || !bobber.hard);
 	},
 	energy: function() {
 		return this.person && this.person.energy;
