@@ -1,27 +1,38 @@
 zero.core.xr = { // https://01.org/blogs/darktears/2019/rendering-immersive-web-experiences-threejs-webxr
 	_: {
-		eye: function(viewMatrixArray, projectionMatrix, viewport) {
+		eye: function(viewMatrixArray, view, viewport) {
 			var _ = zero.core.xr._, rnd = _.renderer,
 				scene = camera.scene, cam = camera.get();
 			rnd.setViewport(viewport.x, viewport.y, viewport.width, viewport.height);
+//			var projectionMatrix = view.projectionMatrix;
 //			var viewMatrix = new THREE.Matrix4();
 //			viewMatrix.fromArray(viewMatrixArray);
 //			cam.projectionMatrix.fromArray(projectionMatrix);
 //			cam.matrixWorldInverse.copy(viewMatrix);
-			scene.updateMatrixWorld(true);
-			rnd.render(scene, cam);
+
+
+			rnd.render(scene, camera._[view.eye].camera || cam);
 			rnd.clearDepth();
 		}
 	},
 	tick: function(time, frame) {
 		var _ = zero.core.xr._, view, viewport,
-			pose = frame.getViewerPose(_.space);
-		CT.log("xr tick!");
+			pose = frame.getViewerPose(_.space),
+			cam = camera.get();
 		if (pose) {
-			CT.log("ticking " + pose.views.length + " views");
+
+			// NB: rotating _stand_ -> rotate stand's parent instead?
+
+//			cam.position.x = pose.transform.position.x;
+//			cam.position.y = pose.transform.position.y;
+//			cam.position.z = pose.transform.position.z;
+			cam.setRotationFromQuaternion(pose.transform.orientation);
+			camera.scene.updateMatrixWorld(true);
+
+
 			for (view of pose.views) {
 				viewport = _.sesh.baseLayer.getViewport(view);
-				_.eye(pose.viewMatrix, view.projectionMatrix, viewport);
+				_.eye(pose.viewMatrix, view, viewport);
 			}
 		}
 		_.sesh.requestAnimationFrame(zero.core.xr.tick);
@@ -58,7 +69,7 @@ zero.core.xr = { // https://01.org/blogs/darktears/2019/rendering-immersive-web-
 				cb: function(answer) {
 					(answer == "yah") && zero.core.xr.setup();
 				}
-			}) : CT.log("webxr (immersive-vr) not supported: " + err);
+			}) : CT.log("webxr (immersive-vr) not supported");
 		});
 	}
 };
