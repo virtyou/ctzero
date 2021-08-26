@@ -2,6 +2,7 @@ zero.core.xr = { // https://01.org/blogs/darktears/2019/rendering-immersive-web-
 	_: {
 		dims: ["x", "y", "z"],
 		things: ["grip", "targetRay"],
+		rot: new THREE.Euler(),
 		eye: function(viewMatrixArray, view, viewport) {
 			var _ = zero.core.xr._, rnd = _.renderer,
 				scene = camera.scene, cam = camera.get();
@@ -13,32 +14,31 @@ zero.core.xr = { // https://01.org/blogs/darktears/2019/rendering-immersive-web-
 			return space.getOffsetReferenceSpace(new XRRigidTransform(pos, rot));
 		},
 		perUp: function(orientation) {
-			var per = zero.core.current.person, pbs,
-				rot = new THREE.Euler().setFromQuaternion(orientation);
+			var _ = zero.core.xr._, per = zero.core.current.person,
+				rot = _.rot.setFromQuaternion(orientation), pbs;
 			pbs = per.body.springs;
 			pbs.shake.target = rot.y;
 			pbs.nod.target = -rot.x;
 //			pbs.tilt.target = rot.z; // TODO: (rig pov cam to rotate)
 		},
-		gripUp: function(thring, pose) {
-			pose.gripMatrix && thring.matrix.fromArray(pose.gripMatrix);
-		},
-		targetRayUp: function(thring, pose) {
-			var _ = zero.core.xr._, dim;
-			for (dim of _.dims)
-				thring.position[dim] = pose.transform.position[dim];
-			thring.setRotationFromQuaternion(pose.transform.orientation);
-		},
 		contrUp: function(frame) {
-			var _ = zero.core.xr._, c, t, pose, thring;
+			var _ = zero.core.xr._, c, t, i, bz, ax,
+				pose, thring, dim, cp = camera.position();
 			if (!_.controllers) return;
-			CT.log(_.controllers.length + " controllers to tick");
 			for (c of _.controllers) {
+				bz = c.gamepad.buttons;
+//				for (i = 0; i < bz.length; i++)
+//					if (bz[i].value)
+//						CT.log(c.handedness + " " + i + " " + bz[i].value);
+				ax = c.gamepad.axes;
+				if (ax[0] || ax[1]) CT.log(ax[0] + " " + ax[1]);
 				for (t of _.things) {
 					pose = frame.getPose(c[t + "Space"], _.space);
 					thring = _[t][c.handedness].thring;
 					if (!thring || !pose) continue;
-					_[t + "Up"](thring, pose);
+					for (dim of _.dims)
+						thring.position[dim] = pose.transform.position[dim];// + cp[dim];
+					thring.setRotationFromQuaternion(pose.transform.orientation);
 					thring.updateMatrixWorld(true);
 				}
 			}
@@ -50,6 +50,7 @@ zero.core.xr = { // https://01.org/blogs/darktears/2019/rendering-immersive-web-
 			_.controllers = _.sesh.inputSources;
 			CT.log(_.controllers.length + " registered controllers");
 			for (c of _.controllers) {
+				CT.log(c.handedness + " " + c.gamepad.buttons.length);
 				_.grip[c.handedness] = new zero.core.Thing({
 					name: c.handedness + "grip",
 					geometry: new THREE.CubeGeometry(10, 10, 10),
