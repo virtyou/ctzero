@@ -31,8 +31,13 @@ zero.core.Body = CT.Class({
 			s.bob.hard = grippy;
 			s.bob.acceleration = grippy ? -1000 : 0;
 		}
-		if (core.config.ctzero.camera.vr && this.person == zero.core.current.person)
-			s.shake.hard = s.nod.hard = true; // gives control to headset
+		if (core.config.ctzero.camera.vr && this.person == zero.core.current.person) {
+			if (!s.shake.hard) {
+				s.shake.hard = s.nod.hard = true; // gives control to headset
+				this.tickers.shake.stop();
+				this.tickers.nod.stop();
+			}
+		}
 	},
 	_lookers: {
 		watcher: [0, 5, 15],
