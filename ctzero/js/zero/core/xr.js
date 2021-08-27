@@ -21,22 +21,15 @@ zero.core.xr = { // https://01.org/blogs/darktears/2019/rendering-immersive-web-
 //			pbs.tilt.target = rot.z; // TODO: (rig pov cam to rotate)
 		},
 		contrUp: function(frame, space) {
-			var _ = zero.core.xr._, c, t, i, bz, ax,
-				pose, thring, dim, cp = camera.position();
+			var _ = zero.core.xr._, c, t, pose, thring, dim;
 			if (!_.controllers) return;
 			for (c of _.controllers) {
-				bz = c.gamepad.buttons;
-//				for (i = 0; i < bz.length; i++)
-//					if (bz[i].value)
-//						CT.log(c.handedness + " " + i + " " + bz[i].value);
-				ax = c.gamepad.axes;
-				if (ax[0] || ax[1]) CT.log(ax[0] + " " + ax[1]);
 				for (t of _.things) {
 					pose = frame.getPose(c[t + "Space"], space);
 					thring = _[t][c.handedness].thring;
 					if (!thring || !pose) continue;
 					for (dim of _.dims)
-						thring.position[dim] = pose.transform.position[dim];// + cp[dim];
+						thring.position[dim] = pose.transform.position[dim];
 					thring.setRotationFromQuaternion(pose.transform.orientation);
 					thring.updateMatrixWorld(true);
 				}
@@ -69,6 +62,40 @@ zero.core.xr = { // https://01.org/blogs/darktears/2019/rendering-immersive-web-
 					}
 				});
 			}
+		},
+		bval: function(controller, cb) {
+			var gp = controller.gamepad, bz = gp.buttons, i, v;
+			for (i = 0; i < bz.length; i++) {
+				v = bz[i].value;
+				if (!v) continue;
+				cb(i, v, controller);
+			}
+			var ax = gp.axes, a;
+			for (i = 0; i < ax.length; i++) {
+				v = ax[i].value;
+				v && CT.log(controller.handedness + " axis " + i + ": " + v);
+			}
+		},
+		select: function(i, v, controller) {
+			CT.log(controller.handedness + " select: (jump) " + i + " " + v);
+			zero.core.current.controls.mover(500, "y")(); // TODO: clean up
+		},
+		squeeze: function(i, v, controller) { // TODO: unsqueeze
+			var zcc = zero.core.current, pcont = zcc.controls,
+				s = (controller.handedness == "left") ? v : -v;
+			CT.log(controller.handedness + " squeeze: " + i + " " + v + " " + s);
+			zcc.person.go();
+			if (i)
+				pcont.direct(s * 1000);
+			else // TODO: do cleaner (w/o extra function gen)
+				pcont.mover(s * 50, "orientation")();
+		},
+		events: function() {
+			var _ = zero.core.xr._, sesh = _.sesh;
+			sesh.addEventListener("inputsourceschange", _.contReg);
+			sesh.addEventListener("end", () => CT.log("vr session ended"));
+			sesh.addEventListener("select", (e) => _.bval(e.inputSource, _.select));
+			sesh.addEventListener("squeeze", (e) => _.bval(e.inputSource, _.squeeze));
 		}
 	},
 	tick: function(time, frame) {
@@ -118,12 +145,11 @@ zero.core.xr = { // https://01.org/blogs/darktears/2019/rendering-immersive-web-
 		});
 	},
 	setup: function() {
-		var _ = zero.core.xr._;
+		var xr = zero.core.xr, _ = xr._;
 		navigator.xr.requestSession('immersive-vr').then(function(sesh) {
 			_.sesh = sesh;
-			sesh.addEventListener("inputsourceschange", _.contReg);
-			sesh.addEventListener("end", () => CT.log("vr session ended"));
-			sesh.requestReferenceSpace("local").then(zero.core.xr.launch);
+			_.events();
+			sesh.requestReferenceSpace("local").then(xr.launch);
 		});
 	},
 	init: function(opts) {
