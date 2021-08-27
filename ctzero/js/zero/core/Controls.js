@@ -188,12 +188,20 @@ zero.core.Controls = CT.Class({
 		var placer = this.placer, mover = this.mover, sz = this._.speed,
 			speed = sz.base, ospeed = sz.orientation, jspeed = sz.jump,
 			wall, gestures, dances, num = 0, runner = this.runner;
+		this.jump = mover(0, "y");
+		this.unjump = mover(jspeed, "y");
+		this.forward = mover(speed);
+		this.backward = mover(-speed);
+		this.stop = mover(0);
+		this.still = mover(0, "orientation");
+		this.left = mover(ospeed, "orientation");
+		this.right = mover(-ospeed, "orientation");
 		if (this.target.gesture) { // person
-			CT.key.on("w", mover(0), mover(speed));
-			CT.key.on("s", mover(0), mover(-speed));
-			CT.key.on("a", mover(0, "orientation"), mover(ospeed, "orientation"));
-			CT.key.on("d", mover(0, "orientation"), mover(-ospeed, "orientation"));
-			CT.key.on("SPACE", mover(0, "y"), mover(jspeed, "y"));
+			CT.key.on("w", this.stop, this.forward);
+			CT.key.on("s", this.stop, this.backward);
+			CT.key.on("a", this.still, this.left);
+			CT.key.on("d", this.still, this.right);
+			CT.key.on("SPACE", this.jump, this.unjump);
 			CT.key.on("SHIFT", runner(), runner(true));
 			gestures = Object.keys(this.target.opts.gestures);
 			dances = Object.keys(this.target.opts.dances);
