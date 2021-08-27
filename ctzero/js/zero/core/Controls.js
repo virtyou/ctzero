@@ -188,8 +188,8 @@ zero.core.Controls = CT.Class({
 		var placer = this.placer, mover = this.mover, sz = this._.speed,
 			speed = sz.base, ospeed = sz.orientation, jspeed = sz.jump,
 			wall, gestures, dances, num = 0, runner = this.runner;
-		this.jump = mover(0, "y");
-		this.unjump = mover(jspeed, "y");
+		this.jump = mover(jspeed, "y");
+		this.unjump = mover(0, "y");
 		this.forward = mover(speed);
 		this.backward = mover(-speed);
 		this.stop = mover(0);
