@@ -64,38 +64,73 @@ zero.core.xr = { // https://01.org/blogs/darktears/2019/rendering-immersive-web-
 			}
 		},
 		bval: function(controller, cb) {
-			var gp = controller.gamepad, bz = gp.buttons, i, v;
+			var _ = zero.core.xr._, gp = controller.gamepad,
+				bz = gp.buttons, ax = gp.axes, joying, i, v;
 			for (i = 0; i < bz.length; i++) {
 				v = bz[i].value;
 				if (!v) continue;
 				cb(i, v, controller);
 			}
-			var ax = gp.axes, a;
 			for (i = 0; i < ax.length; i++) {
 				v = ax[i].value;
-				v && CT.log(controller.handedness + " axis " + i + ": " + v);
+				if (v) {
+					joying = true;
+					_.joy(i, v, controller);
+				}
+			}
+			joying || _.unjoy();
+		},
+		unjoy: function() {
+			var _ = zero.core.xr._, pco = zero.core.current.controls;
+			if (_.going) {
+				_.going = false;
+				pco.stop();
+			}
+			if (_.spinning) {
+				_.spinning = false;
+				pco.still();
+			}
+		},
+		joy: function(i, v, controller) {
+			CT.log(controller.handedness + " axis " + i + ": " + v);
+			var _ = zero.core.xr._, pco = zero.core.current.controls, pos = v > 1;
+			if (i % 2) { // y
+				_.going = true;
+				pco[pos ? "forward" : "backward"]();
+			} else { // x
+				_.spinning = true;
+				pco[pos ? "right" : "left"]();
 			}
 		},
 		select: function(i, v, controller) {
-			CT.log(controller.handedness + " select: (jump) " + i + " " + v);
-			zero.core.current.controls.mover(500, "y")(); // TODO: clean up
+			CT.log(controller.handedness + " select (none)" + i + " " + v);
 		},
-		squeeze: function(i, v, controller) { // TODO: unsqueeze
-			var zcc = zero.core.current, pcont = zcc.controls,
-				s = (controller.handedness == "left") ? v : -v;
-			CT.log(controller.handedness + " squeeze: " + i + " " + v + " " + s);
-			zcc.person.go();
-			if (i)
-				pcont.direct(s * 1000);
-			else // TODO: do cleaner (w/o extra function gen)
-				pcont.mover(s * 50, "orientation")();
+		selectstart: function(i, v, controller) {
+			CT.log(controller.handedness + " selectstart (jump) " + i + " " + v);
+			zero.core.current.controls.jump();
+		},
+		selectend: function(i, v, controller) {
+			CT.log(controller.handedness + " selectend (unjump) " + i + " " + v);
+			zero.core.current.controls.unjump();
+		},
+		squeeze: function(i, v, controller) {
+			CT.log(controller.handedness + " squeeze (none)" + i + " " + v);
+		},
+		squeezestart: function(i, v, controller) {
+			CT.log(controller.handedness + " squeezestart (finger curl) " + i + " " + v);
+			zero.core.current.person.body.torso.hands[controller.handedness].curl(v);
+		},
+		squeezeend: function(i, v, controller) {
+			CT.log(controller.handedness + " squeezeend: (finger uncurl) " + i + " " + v);
+			zero.core.current.person.body.torso.hands[controller.handedness].curl(0);
 		},
 		events: function() {
 			var _ = zero.core.xr._, sesh = _.sesh;
 			sesh.addEventListener("inputsourceschange", _.contReg);
 			sesh.addEventListener("end", () => CT.log("vr session ended"));
-			sesh.addEventListener("select", (e) => _.bval(e.inputSource, _.select));
-			sesh.addEventListener("squeeze", (e) => _.bval(e.inputSource, _.squeeze));
+			["select", "selectstart", "selectend", "squeeze", "squeezestart", "squeezeend"].forEach((name) => {
+				sesh.addEventListener(name, (e) => _.bval(e.inputSource, _[name]));
+			});
 		}
 	},
 	tick: function(time, frame) {
