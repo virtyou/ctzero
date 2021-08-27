@@ -121,7 +121,7 @@ zero.core.xr = { // https://01.org/blogs/darktears/2019/rendering-immersive-web-
 		},
 		squeezestart: function(i, v, controller) {
 			CT.log(controller.handedness + " squeezestart (finger curl) " + i + " " + v);
-			zero.core.current.person.body.torso.hands[controller.handedness].curl(v);
+			zero.core.current.person.body.torso.hands[controller.handedness].curl(v * 2);
 		},
 		squeezeend: function(i, v, controller) {
 			CT.log(controller.handedness + " squeezeend: (finger uncurl) " + i + " " + v);
