@@ -107,6 +107,7 @@ zero.core.xr = { // https://01.org/blogs/darktears/2019/rendering-immersive-web-
 		},
 		selectstart: function(i, v, controller) {
 			CT.log(controller.handedness + " selectstart (jump) " + i + " " + v);
+			controller.gamepad.hapticActuators[0].pulse(0.8, 100);
 			zero.core.current.controls.jump();
 		},
 		selectend: function(i, v, controller) {
