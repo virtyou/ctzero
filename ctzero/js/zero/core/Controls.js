@@ -87,7 +87,7 @@ zero.core.Controls = CT.Class({
 	setCams: function() {
 		var _ = this._, cfg = core.config.ctzero.camera;
 		["UP", "DOWN", "LEFT", "RIGHT"].forEach(_.cam);
-		cfg.vr && _.xlrometer();
+		cfg.cardboard && _.xlrometer();
 		cfg.mouse && _.camouse();
 	},
 	wallshift: function(shift, prev_spring) {
