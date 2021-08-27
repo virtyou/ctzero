@@ -102,21 +102,22 @@ zero.core.xr = { // https://01.org/blogs/darktears/2019/rendering-immersive-web-
 				pco[pos ? "right" : "left"]();
 			}
 		},
-		select: function(i, v, controller) {
-			CT.log(controller.handedness + " select (none)" + i + " " + v);
-		},
 		selectstart: function(i, v, controller) {
-			var ha = controller.gamepad.hapticActuators;
 			CT.log(controller.handedness + " selectstart (jump) " + i + " " + v);
-			zero.core.current.controls.jump();
-			ha && ha[0].pulse(0.8, 100);
+			if (controller.handedness == "left")
+				zero.core.camera.angle("behind");
+			else {
+				var ha = controller.gamepad.hapticActuators;
+				zero.core.current.controls.jump();
+				ha && ha[0].pulse(0.8, 100);
+			}
 		},
 		selectend: function(i, v, controller) {
 			CT.log(controller.handedness + " selectend (unjump) " + i + " " + v);
-			zero.core.current.controls.unjump();
-		},
-		squeeze: function(i, v, controller) {
-			CT.log(controller.handedness + " squeeze (none)" + i + " " + v);
+			if (controller.handedness == "left")
+				zero.core.camera.angle("pov");
+			else
+				zero.core.current.controls.unjump();
 		},
 		squeezestart: function(i, v, controller) {
 			CT.log(controller.handedness + " squeezestart (finger curl) " + i + " " + v);
@@ -130,7 +131,7 @@ zero.core.xr = { // https://01.org/blogs/darktears/2019/rendering-immersive-web-
 			var _ = zero.core.xr._, sesh = _.sesh;
 			sesh.addEventListener("inputsourceschange", _.contReg);
 			sesh.addEventListener("end", () => CT.log("vr session ended"));
-			["select", "selectstart", "selectend", "squeeze", "squeezestart", "squeezeend"].forEach((name) => {
+			["selectstart", "selectend", "squeezestart", "squeezeend"].forEach((name) => {
 				sesh.addEventListener(name, (e) => _.bval(e.inputSource, _[name]));
 			});
 		}
