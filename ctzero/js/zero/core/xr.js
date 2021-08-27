@@ -65,14 +65,13 @@ zero.core.xr = { // https://01.org/blogs/darktears/2019/rendering-immersive-web-
 		},
 		bval: function(controller, cb) {
 			var _ = zero.core.xr._, gp = controller.gamepad,
-				bz = gp.buttons, ax = gp.axes, joying, i, v;
+				bz = gp.buttons, ax = gp.axes, joying, i, b, v;
 			for (i = 0; i < bz.length; i++) {
-				v = bz[i].value;
-				if (!v) continue;
-				cb(i, v, controller);
+				b = bz[i];
+				(b.touched || b.pressed || b.value) && cb(i, b, controller);
 			}
 			for (i = 0; i < ax.length; i++) {
-				v = ax[i].value;
+				v = ax[i];
 				if (v) {
 					joying = true;
 					_.joy(i, v, controller);
@@ -102,9 +101,12 @@ zero.core.xr = { // https://01.org/blogs/darktears/2019/rendering-immersive-web-
 				pco[pos ? "right" : "left"]();
 			}
 		},
-		selectstart: function(i, v, controller) {
-//			CT.log(controller.handedness + " selectstart (jump) " + i + " " + v);
-			if (controller.handedness == "left")
+		selectstart: function(i, b, controller) {
+			var hand = controller.handedness;
+			CT.log(hand + " selectstart (jump) " + i + " " + b.touched + " " + b.pressed + " " + b.value);
+			if (i) // non-trigger
+				zero.core.current.person.body.torso.hands[hand].curl(b.touched ? 0.5 : 1, true);
+			else if (hand == "left")
 				zero.core.camera.angle("behind");
 			else {
 				var ha = controller.gamepad.hapticActuators;
@@ -112,19 +114,22 @@ zero.core.xr = { // https://01.org/blogs/darktears/2019/rendering-immersive-web-
 				ha && ha[0].pulse(0.8, 100);
 			}
 		},
-		selectend: function(i, v, controller) {
-//			CT.log(controller.handedness + " selectend (unjump) " + i + " " + v);
-			if (controller.handedness == "left")
+		selectend: function(i, b, controller) {
+			var hand = controller.handedness;
+			CT.log(hand + " selectend (unjump) " + i + " " + b.touched + " " + b.pressed + " " + b.value);
+			if (i) // non-trigger
+				zero.core.current.person.body.torso.hands[hand].curl(0, true);
+			else if (controller.handedness == "left")
 				zero.core.camera.angle("pov");
 			else
 				zero.core.current.controls.unjump();
 		},
-		squeezestart: function(i, v, controller) {
-//			CT.log(controller.handedness + " squeezestart (finger curl) " + i + " " + v);
-			zero.core.current.person.body.torso.hands[controller.handedness].curl(v * 2);
+		squeezestart: function(i, b, controller) {
+			CT.log(controller.handedness + " squeezestart (finger curl) " + i + " " + b.touched + " " + b.pressed + " " + b.value);
+			zero.core.current.person.body.torso.hands[controller.handedness].curl(b.value * 2);
 		},
-		squeezeend: function(i, v, controller) {
-//			CT.log(controller.handedness + " squeezeend: (finger uncurl) " + i + " " + v);
+		squeezeend: function(i, b, controller) {
+			CT.log(controller.handedness + " squeezeend: (finger uncurl) " + i + " " + b.touched + " " + b.pressed + " " + b.value);
 			zero.core.current.person.body.torso.hands[controller.handedness].curl(0);
 		},
 		events: function() {
