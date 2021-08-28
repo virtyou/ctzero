@@ -131,10 +131,11 @@ zero.core.Controls = CT.Class({
 			springz[dim].boost = speed * vec[dim];
 		});
 	},
-	mover: function(amount, dir) {
+	mover: function(fullAmount, dir) {
 		var target = this.target, spr = this.springs[dir], _ = this._,
 			speed = _.speed.base, direct = this.direct, moveCb = _.moveCb;
-		return function() {
+		return function(mult) {
+			amount = mult ? fullAmount * mult : fullAmount;
 			if (amount) {
 				if (dir == "y")
 					target.jump();
