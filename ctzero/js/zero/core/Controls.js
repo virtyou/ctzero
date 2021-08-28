@@ -132,7 +132,7 @@ zero.core.Controls = CT.Class({
 		});
 	},
 	mover: function(fullAmount, dir) {
-		var target = this.target, spr = this.springs[dir], _ = this._,
+		var target = this.target, spr = this.springs[dir], _ = this._, amount,
 			speed = _.speed.base, direct = this.direct, moveCb = _.moveCb;
 		return function(mult) {
 			amount = mult ? fullAmount * mult : fullAmount;
