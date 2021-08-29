@@ -21,8 +21,8 @@ zero.core.xr = { // https://01.org/blogs/darktears/2019/rendering-immersive-web-
 //			pbs.tilt.target = rot.z; // TODO: (rig pov cam to rotate)
 		},
 		contrUp: function(frame, space) {
-			var _ = zero.core.xr._, gp, bz, ax, joying, i,
-				v, c, t, pose, thring, dim, per, thumb;
+			var _ = zero.core.xr._, gp, bz, ax, joying, i, v,
+				c, t, pose, thring, dim, per, thumb, tp, tf;
 			if (!_.controllers) return;
 			per = zero.core.current.person;
 			for (c of _.controllers) {
@@ -45,15 +45,21 @@ zero.core.xr = { // https://01.org/blogs/darktears/2019/rendering-immersive-web-
 					pose = frame.getPose(c[t + "Space"], space);
 					thring = _[t][c.handedness].thring;
 					if (!thring || !pose) continue;
+					tp = thring.position;
+					tf = pose.transform;
 					for (dim of _.dims)
-						thring.position[dim] = pose.transform.position[dim];
-					thring.setRotationFromQuaternion(pose.transform.orientation);
+						tp[dim] = 25 - 50 * tf.position[dim];
+					tp.y *= -1;
+					tp.y += 20;
+					thring.setRotationFromQuaternion(tf.orientation);
+					thring.rotation.x *= -1;
 					thring.updateMatrixWorld(true);
 				}
 			}
 		},
 		contReg: function() {
-			var _ = zero.core.xr._, c;
+			var _ = zero.core.xr._, c,
+				anchor = zero.core.current.person.body.lookAt.thring;
 			_.grip = {};
 			_.targetRay = {};
 			_.controllers = _.sesh.inputSources;
@@ -62,8 +68,8 @@ zero.core.xr = { // https://01.org/blogs/darktears/2019/rendering-immersive-web-
 				CT.log(c.handedness + " " + c.gamepad.buttons.length);
 				_.grip[c.handedness] = new zero.core.Thing({
 					name: c.handedness + "grip",
-//					scene: camera._.camera,
-					geometry: new THREE.CubeGeometry(10, 10, 10),
+					scene: anchor,
+					geometry: new THREE.CubeGeometry(5, 5, 5),
 					material: {
 						color: 0xff0000,
 						visible: core.config.ctzero.helpers
@@ -71,8 +77,8 @@ zero.core.xr = { // https://01.org/blogs/darktears/2019/rendering-immersive-web-
 				});
 				_.targetRay[c.handedness] = new zero.core.Thing({
 					name: c.handedness + "targetRay",
-//					scene: camera._.camera,
-					geometry: new THREE.CubeGeometry(1, 1, 30),
+					scene: anchor,
+					geometry: new THREE.CubeGeometry(1, 1, 60),
 					material: {
 						color: 0x00ff00,
 						visible: core.config.ctzero.helpers
@@ -146,8 +152,7 @@ zero.core.xr = { // https://01.org/blogs/darktears/2019/rendering-immersive-web-
 	},
 	tick: function(time, frame) {
 		var _ = zero.core.xr._, view, viewport,
-			space = zero.core.xr.orient(),
-			pose = frame.getViewerPose(space);
+			pose = frame.getViewerPose(_.space);
 		if (pose) {
 			_.perUp(pose.transform.orientation);
 			camera.scene.updateMatrixWorld(true);
@@ -155,21 +160,9 @@ zero.core.xr = { // https://01.org/blogs/darktears/2019/rendering-immersive-web-
 				viewport = _.sesh.baseLayer.getViewport(view);
 				_.eye(pose.viewMatrix, view, viewport);
 			}
-			_.contrUp(frame, space);
+			_.contrUp(frame, _.space);
 		}
 		_.sesh.requestAnimationFrame(zero.core.xr.tick);
-	},
-	orient: function() {
-		var _ = zero.core.xr._, sprz = camera.springs, pos = sprz.position, rot = sprz.rotation;
-		return _.trans(_.space, {
-			x: pos.x.target,
-			y: pos.y.target,
-			z: pos.z.target
-		}, {
-			x: rot.x.target,
-			y: rot.y.target,
-			z: rot.z.target
-		});
 	},
 	launch: function(space) {
 		var _ = zero.core.xr._, rnd = _.renderer = new THREE.WebGLRenderer(),
