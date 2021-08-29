@@ -357,7 +357,7 @@ var camera = zero.core.camera = {
 			_.controls = new THREE.TrackballControls(_.camera);
 		_.looker = new zero.core.Thing({
 			name: "looker",
-			geometry: new THREE.CubeGeometry(1, 1, 15),
+			boxGeometry: [1, 1, 15],
 			material: {
 				color: 0x00ff00,
 				visible: config.helpers

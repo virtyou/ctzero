@@ -69,7 +69,7 @@ zero.core.xr = { // https://01.org/blogs/darktears/2019/rendering-immersive-web-
 				_.grip[c.handedness] = new zero.core.Thing({
 					name: c.handedness + "grip",
 					scene: anchor,
-					geometry: new THREE.CubeGeometry(5, 5, 5),
+					boxGeometry: [5, 5, 5],
 					material: {
 						color: 0xff0000,
 						visible: core.config.ctzero.helpers
@@ -78,7 +78,7 @@ zero.core.xr = { // https://01.org/blogs/darktears/2019/rendering-immersive-web-
 				_.targetRay[c.handedness] = new zero.core.Thing({
 					name: c.handedness + "targetRay",
 					scene: anchor,
-					geometry: new THREE.CubeGeometry(1, 1, 60),
+					boxGeometry: [1, 1, 60],
 					material: {
 						color: 0x00ff00,
 						visible: core.config.ctzero.helpers
