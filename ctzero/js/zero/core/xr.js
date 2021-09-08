@@ -22,9 +22,9 @@ zero.core.xr = { // https://01.org/blogs/darktears/2019/rendering-immersive-web-
 		},
 		contrUp: function(frame, space) {
 			var _ = zero.core.xr._, gp, bz, ax, joying, i, v,
-				c, t, pose, thring, dim, per, thumb, tp, tf;
+				c, t, pose, thring, dim, tor, thumb, tp, tf;
 			if (!_.controllers) return;
-			per = zero.core.current.person;
+			tor = zero.core.current.person.body.torso;
 			for (c of _.controllers) {
 				gp = c.gamepad;
 				bz = gp.buttons;
@@ -32,7 +32,7 @@ zero.core.xr = { // https://01.org/blogs/darktears/2019/rendering-immersive-web-
 				thumb = 0;
 				for (i = 1; i < bz.length; i++) // skipping primary....
 					thumb = Math.max(thumb, bz[i].value);
-				per.body.torso.hands[c.handedness].curl(thumb, true);
+				tor.hands[c.handedness].curl(thumb, true);
 				for (i = 0; i < ax.length; i++) {
 					v = ax[i];
 					if (v) {
@@ -55,6 +55,10 @@ zero.core.xr = { // https://01.org/blogs/darktears/2019/rendering-immersive-web-
 					thring.rotation.x *= -1;
 					thring.updateMatrixWorld(true);
 				}
+
+				///// ARM TRACKING DOESN'T WORK YET :'(
+
+				_.armsOn && tor.arms[c.handedness].pose(_.grip[c.handedness]);
 			}
 		},
 		contReg: function() {
@@ -166,7 +170,7 @@ zero.core.xr = { // https://01.org/blogs/darktears/2019/rendering-immersive-web-
 	},
 	launch: function(space) {
 		var _ = zero.core.xr._, rnd = _.renderer = new THREE.WebGLRenderer(),
-			ctx = rnd.context, scene = camera.scene, bl;
+			ctx = rnd.context, scene = camera.scene, bl, side;
 		_.space = space;
 		ctx.makeXRCompatible().then(function() {
 			bl = _.sesh.baseLayer = new XRWebGLLayer(_.sesh, ctx);
@@ -176,9 +180,14 @@ zero.core.xr = { // https://01.org/blogs/darktears/2019/rendering-immersive-web-
 			rnd.clear();
 			rnd.setSize(bl.framebufferWidth, bl.framebufferHeight, false);
 			ctx.bindFramebuffer(ctx.FRAMEBUFFER, bl.framebuffer);
-			zero.core.util.onCurPer(function() {
+			zero.core.util.onCurPer(function(per) {
 				setTimeout(() => zero.core.camera.angle("pov"));
 				_.sesh.requestAnimationFrame(zero.core.xr.tick);
+				setTimeout(function() {
+					_.armsOn = true;
+					for (side of ["left", "right"])
+						per.body.torso.arms[side].unspring();
+				}, 5000); // ugh
 			});
 			CT.log("launched!");
 		});
