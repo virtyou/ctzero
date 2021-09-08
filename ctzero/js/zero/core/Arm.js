@@ -31,6 +31,30 @@ zero.core.Arm = CT.Class({
 		zero.core[this.variety].parts.forEach(this.tickPart);
 		this.hand.tick();
 	},
+	unspring: function() {
+		var a, asp;
+		for (asp in this.aspects) {
+			a = this.aspects[asp];
+			a.bsprings = {};
+			a.hsprings = {};
+			a.springs = {};
+			a.springs[asp] = 1;
+		}
+	},
+	pose: function(target) {      // TODO!!!!!
+		var r = target.rotation(),
+			p = target.position();
+//		this.orient("shoulder", "z", r.z);
+//		this.orient("shoulder", "x", r.x);
+//		for (var d in this.dims) {
+
+//		}
+//		this.orient("wrist", "x", );
+
+//		this.point("shoulder", target);
+//		this.point("elbow", target);
+//		this.point("wrist", target);
+	},
 	setBody: function(bod) {
 		this.body = bod;
 		this.hand && this.hand.setBody(bod);
