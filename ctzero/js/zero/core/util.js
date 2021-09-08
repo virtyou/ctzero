@@ -393,14 +393,14 @@ zero.core.util = {
 	_cpcbz: [],
 	onCurPer: function(cb) {
 		if (zero.core.current.person)
-			cb();
+			cb(zero.core.current.person);
 		else
 			zero.core.util._cpcbz.push(cb);
 	},
 	setCurPer: function(person) {
 		zero.core.current.person = person;
 		for (var cpcb of zero.core.util._cpcbz)
-			cpcb();
+			cpcb(person);
 		zero.core.util._cpcbz.length = 0;
 	},
 	join: function(pobj, onready, nowatch, lookcam, current) {
