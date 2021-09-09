@@ -21,15 +21,14 @@ zero.core.Hand = CT.Class({
 	shouldReverse: function(part, dim) {
 		return part != "thumb" && (dim == "z" || dim == "curl");
 	},
-	curl: function(degree, thumbOnly) {
+	curl: function(degree, thumbOnly, fingers) {
 		if (thumbOnly)
 			return this.move({ thumb: { curl: degree }});
 		if (this.opts.side == "left")
 			degree *= -1;
 		var digit, opts = {};
-		for (digit of zero.core.Hand.parts)
-			if (digit != "thumb")
-				opts[digit] = { curl: degree };
+		for (digit of fingers || zero.core.Hand.fingers)
+			opts[digit] = { curl: degree };
 		this.move(opts);
 	},
 	grasp: function() {
@@ -64,6 +63,7 @@ zero.core.Hand = CT.Class({
 }, zero.core.Skeleton);
 
 zero.core.Hand.parts = ["thumb", "pointer", "middle", "ring", "pinkie"];
+zero.core.Hand.fingers = zero.core.Hand.parts.slice(1);
 zero.core.Hand.parts.forEach(function(digit) {
     zero.base.aspects.hand[digit] = (digit == "thumb") ? {
         x: {
