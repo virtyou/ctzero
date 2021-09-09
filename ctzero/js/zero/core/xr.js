@@ -2,6 +2,10 @@ zero.core.xr = { // https://01.org/blogs/darktears/2019/rendering-immersive-web-
 	_: {
 		dims: ["x", "y", "z"],
 		things: ["grip", "targetRay"],
+		fings: [
+			["pointer"],
+			["middle", "ring", "pinkie"]
+		],
 		rot: new THREE.Euler(),
 		eye: function(viewMatrixArray, view, viewport) {
 			var _ = zero.core.xr._, rnd = _.renderer,
@@ -20,19 +24,42 @@ zero.core.xr = { // https://01.org/blogs/darktears/2019/rendering-immersive-web-
 			pbs.nod.target = -rot.x;
 //			pbs.tilt.target = rot.z; // TODO: (rig pov cam to rotate)
 		},
+		aButts: {},
+		aButters: {
+			left: function(isPressed) {
+				zero.core.camera.angle(isPressed ? "behind" : "pov");
+			},
+			right: function(isPressed) {
+				zero.core.current.controls[isPressed ? "jump": "unjump"]();
+			}
+		},
+		aButt: function(side, isPressed) {
+			var _ = zero.core.xr._;
+			if (_.aButts[side] == isPressed)
+				return;
+			_.aButts[side] = isPressed;
+			_.aButters[side](isPressed);
+		},
 		contrUp: function(frame, space) {
 			var _ = zero.core.xr._, gp, bz, ax, joying, i, v,
-				c, t, pose, thring, dim, tor, thumb, tp, tf;
+				c, t, pose, thring, dim, tor, thumb, tp, tf, hand;
 			if (!_.controllers) return;
 			tor = zero.core.current.person.body.torso;
 			for (c of _.controllers) {
 				gp = c.gamepad;
 				bz = gp.buttons;
 				ax = gp.axes;
-				thumb = 0;
-				for (i = 1; i < bz.length; i++) // skipping primary....
-					thumb = Math.max(thumb, bz[i].value);
-				tor.hands[c.handedness].curl(thumb, true);
+
+				hand = tor.hands[c.handedness];
+				hand.curl(bz[0].value * 2, false, _.fings[0]);
+				hand.curl(bz[1].value * 2, false, _.fings[1]);
+				thumb = bz[5];
+				if (thumb.touched)
+					hand.curl(thumb.pressed ? 1 : 0.5, true);
+				else
+					hand.curl(0, true);
+				_.aButt(c.handedness, bz[4].pressed);
+
 				for (i = 0; i < ax.length; i++) {
 					v = ax[i];
 					if (v) {
@@ -55,9 +82,6 @@ zero.core.xr = { // https://01.org/blogs/darktears/2019/rendering-immersive-web-
 					thring.rotation.x *= -1;
 					thring.updateMatrixWorld(true);
 				}
-
-				///// ARM TRACKING DOESN'T WORK YET :'(
-
 				_.armsOn && tor.arms[c.handedness].pose(_.grip[c.handedness]);
 			}
 		},
@@ -120,30 +144,32 @@ zero.core.xr = { // https://01.org/blogs/darktears/2019/rendering-immersive-web-
 		},
 		selectstart: function(b, controller) {
 			var hand = controller.handedness;
-//			CT.log(hand + " selectstart (jump) " + b.touched + " " + b.pressed + " " + b.value);
-			if (hand == "left")
-				zero.core.camera.angle("behind");
-			else {
-				var ha = controller.gamepad.hapticActuators;
-				zero.core.current.controls.jump();
-				ha && ha[0].pulse(0.8, 100);
-			}
+			CT.log(hand + " DISABLED selectstart (jump) " + b.touched + " " + b.pressed + " " + b.value);
+//			if (hand == "left")
+//				zero.core.camera.angle("behind");
+//			else {
+//				var ha = controller.gamepad.hapticActuators;
+//				zero.core.current.controls.jump();
+//				ha && ha[0].pulse(0.8, 100);
+//			}
 		},
 		selectend: function(b, controller) {
 			var hand = controller.handedness;
-//			CT.log(hand + " selectend (unjump) " + b.touched + " " + b.pressed + " " + b.value);
-			if (controller.handedness == "left")
-				zero.core.camera.angle("pov");
-			else
-				zero.core.current.controls.unjump();
+			CT.log(hand + " DISABLED selectend (unjump) " + b.touched + " " + b.pressed + " " + b.value);
+//			if (controller.handedness == "left")
+//				zero.core.camera.angle("pov");
+//			else
+//				zero.core.current.controls.unjump();
 		},
 		squeezestart: function(b, controller) {
-//			CT.log(controller.handedness + " squeezestart (finger curl) " + b.touched + " " + b.pressed + " " + b.value);
-			zero.core.current.person.body.torso.hands[controller.handedness].curl(b.value * 2);
+			var pv = b.value * 1000000,
+				v = 5 * (pv - 0.5);
+			CT.log(controller.handedness + " DISABLED squeezestart (finger curl) " + b.touched + " " + b.pressed + " " + b.value + " " + pv + " " + v);
+//			zero.core.current.person.body.torso.hands[controller.handedness].curl(v);
 		},
 		squeezeend: function(b, controller) {
-//			CT.log(controller.handedness + " squeezeend: (finger uncurl) " + b.touched + " " + b.pressed + " " + b.value);
-			zero.core.current.person.body.torso.hands[controller.handedness].curl(0);
+			CT.log(controller.handedness + " DISABLED squeezeend: (finger uncurl) " + b.touched + " " + b.pressed + " " + b.value);
+//			zero.core.current.person.body.torso.hands[controller.handedness].curl(0);
 		},
 		events: function() {
 			var _ = zero.core.xr._, sesh = _.sesh;
@@ -185,8 +211,10 @@ zero.core.xr = { // https://01.org/blogs/darktears/2019/rendering-immersive-web-
 				_.sesh.requestAnimationFrame(zero.core.xr.tick);
 				setTimeout(function() {
 					_.armsOn = true;
-					for (side of ["left", "right"])
+					for (side of ["left", "right"]) {
 						per.body.torso.arms[side].unspring();
+						per.body.torso.hands[side].unspring("thumb_curl");
+					}
 				}, 5000); // ugh
 			});
 			CT.log("launched!");
