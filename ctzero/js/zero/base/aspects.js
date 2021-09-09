@@ -216,7 +216,7 @@ zero.base.aspects.arm = {
             min: -0.5
         },
         z: {
-            max: 0,
+            max: 1,
             min: -2
         }
     },
