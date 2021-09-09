@@ -45,6 +45,10 @@ zero.core.Body = CT.Class({
 		lookAt: [0, 5, 60],
 		lookHigh: [0, 10, 60]
 	},
+	_lcolors: {
+		watcher: 0xff0000,
+		looker: 0x0000ff
+	},
 	_looker: function(name) {
 		this.opts.parts.push({
 			name: name,
@@ -52,7 +56,7 @@ zero.core.Body = CT.Class({
 			position: this._lookers[name],
 			boxGeometry: [1, 1, 5],
 			material: {
-			    color: 0x00ff00,
+			    color: this._lcolors[name] || 0x00ff00,
 			    visible: core.config.ctzero.helpers
 			}
 		});
