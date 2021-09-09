@@ -106,6 +106,18 @@ zero.core.Skeleton = CT.Class({
 			p.worldToLocal(thing.position(null, true)));
 		this.orient(part, "x", -(Math.atan(v.y / v.z) + Math.PI / 2));
 	},
+	unspring: function(nohard) {
+		var a, asp;
+		for (asp in this.aspects) {
+			a = this.aspects[asp];
+			a.bsprings = {};
+			a.hsprings = {};
+			a.springs = {};
+			a.springs[asp] = 1;
+			if (asp != nohard)
+				this.springs[asp].hard = true;
+		}
+	},
 	setSprings: function(opts) {
 		for (var part in opts)
 			this.partUp(part, opts[part]);
