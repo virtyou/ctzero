@@ -31,17 +31,6 @@ zero.core.Arm = CT.Class({
 		zero.core[this.variety].parts.forEach(this.tickPart);
 		this.hand.tick();
 	},
-	unspring: function() {
-		var a, asp;
-		for (asp in this.aspects) {
-			a = this.aspects[asp];
-			a.bsprings = {};
-			a.hsprings = {};
-			a.springs = {};
-			a.springs[asp] = 1;
-			this.springs[asp].hard = true;
-		}
-	},
 	poseRange: {
 		position: {
 			min: {
@@ -67,7 +56,7 @@ zero.core.Arm = CT.Class({
 		var asp, pr, coords, dim, v, side,
 			prz = this.poseRange,
 			sz = this.springs;
-	for (asp in prz) {
+		for (asp in prz) {
 			pr = prz[asp];
 			coords = target.thring[asp];
 			if (coords) {
@@ -95,16 +84,22 @@ zero.core.Arm = CT.Class({
 		var r = target.thring.rotation,
 			p = target.thring.position,
 			prz = this.poseRange, ex,
-			d = prz.distance.cur = 0.5 - p.z / 50, // ?
-			h = prz.height.cur = -p.y / 12 - 2,
-			s = prz.sway.cur = p.x / 25 + (this.opts.side == "right" ? 0.5 : -0.5),
+			dep = p.z / 25,
+			ver = -p.y / 25,
+			d = prz.distance.cur = 0.5 - dep / 2,
+			h = prz.height.cur = 2 * ver - 2,
+			isRight = this.opts.side == "right",
+			s = prz.sway.cur = p.x / 25 + (isRight ? 0.5 : -0.5),
 			sz = this.springs;
+		sz.clavicle_z.target = isRight ? ver : -ver;
+		sz.clavicle_y.target = isRight ? dep : -dep;
 		ex = sz.elbow_x.target = h * d;
 		sz.shoulder_x.target = h - ex;
-		sz.shoulder_z.target = s;
+		sz.shoulder_z.target = s - sz.clavicle_y.target;
 		sz.elbow_y.target = r.y;
 		sz.wrist_x.target = -r.x;
 		sz.wrist_z.target = -r.z;
+
 //		this.anaPose(target); // <- logger
 	},
 	setBody: function(bod) {
