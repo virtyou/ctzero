@@ -24,25 +24,25 @@ zero.core.xr = { // https://01.org/blogs/darktears/2019/rendering-immersive-web-
 			pbs.nod.target = -rot.x;
 //			pbs.tilt.target = rot.z; // TODO: (rig pov cam to rotate)
 		},
-		aButts: {},
-		aButters: {
-			left: function(isPressed) {
+		butts: {},
+		butters: { // for right controller....
+			a: function(isPressed) {
 				zero.core.camera.angle(isPressed ? "behind" : "pov");
 			},
-			right: function(isPressed) {
+			b: function(isPressed) {
 				zero.core.current.controls[isPressed ? "jump": "unjump"]();
 			}
 		},
-		aButt: function(side, isPressed) {
+		butt: function(butt, isPressed) {
 			var _ = zero.core.xr._;
-			if (_.aButts[side] == isPressed)
+			if (_.butts[butt] == isPressed)
 				return;
-			_.aButts[side] = isPressed;
-			_.aButters[side](isPressed);
+			_.butts[butt] = isPressed;
+			_.butters[butt](isPressed);
 		},
 		contrUp: function(frame, space) {
 			var _ = zero.core.xr._, gp, bz, ax, joying, i, v,
-				c, t, pose, thring, dim, tor, thumb, tp, tf, hand;
+				c, t, pose, thring, dim, tor, thumb, tp, tf, ab, bb, hand;
 			if (!_.controllers) return;
 			tor = zero.core.current.person.body.torso;
 			for (c of _.controllers) {
@@ -51,14 +51,17 @@ zero.core.xr = { // https://01.org/blogs/darktears/2019/rendering-immersive-web-
 				ax = gp.axes;
 
 				hand = tor.hands[c.handedness];
-				hand.curl(bz[0].value * 2, false, _.fings[0]);
-				hand.curl(bz[1].value * 2, false, _.fings[1]);
-				thumb = bz[5];
-				if (thumb.touched)
-					hand.curl(thumb.pressed ? 1 : 0.5, true);
-				else
-					hand.curl(0, true);
-				_.aButt(c.handedness, bz[4].pressed);
+				hand.curl(bz[0].value * 3 / 2, false, _.fings[0]);
+				hand.curl(bz[1].value * 3 / 2, false, _.fings[1]);
+
+				ab = bz[4];
+				bb = bz[5];
+				thumb = (ab.touched * 0.5) + (bb.touched * 0.5);
+				hand.curl(thumb, true);
+				if (c.handedness == "right") {
+					_.butt("a", ab.pressed);
+					_.butt("b", bb.pressed);
+				}
 
 				for (i = 0; i < ax.length; i++) {
 					v = ax[i];
