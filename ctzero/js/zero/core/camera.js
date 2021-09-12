@@ -7,7 +7,7 @@ var camera = zero.core.camera = {
 		lookers: {
 			pov: {
 				y: 5,
-				z: 10
+				z: 15
 			},
 			behind: {
 				y: 85,
@@ -320,8 +320,8 @@ var camera = zero.core.camera = {
 		stand.aspect = aspect;
 		stand.add(cam1);
 		stand.add(cam2);
-		cam1.position.x = -10;
-		cam2.position.x = 10;
+		cam1.position.x = -2.8;
+		cam2.position.x = 2.8;
 		var keanu = new THREE.Matrix4();
 		stand.lookAt = function(vec) {
 			keanu.lookAt(stand.position, vec, stand.up);
