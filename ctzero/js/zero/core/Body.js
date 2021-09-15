@@ -31,12 +31,23 @@ zero.core.Body = CT.Class({
 			s.bob.hard = grippy;
 			s.bob.acceleration = grippy ? -1000 : 0;
 		}
+		if (core.config.ctzero.camera.vr && this.person == zero.core.current.person) {
+			if (!s.shake.hard) {
+				s.shake.hard = s.nod.hard = true; // gives control to headset
+				this.tickers.shake.stop();
+				this.tickers.nod.stop();
+			}
+		}
 	},
 	_lookers: {
 		watcher: [0, 5, 15],
 		looker: [0, 5, 15],
 		lookAt: [0, 5, 60],
 		lookHigh: [0, 10, 60]
+	},
+	_lcolors: {
+		watcher: 0xff0000,
+		looker: 0x0000ff
 	},
 	_looker: function(name) {
 		this.opts.parts.push({
@@ -45,8 +56,8 @@ zero.core.Body = CT.Class({
 			position: this._lookers[name],
 			boxGeometry: [1, 1, 5],
 			material: {
-			    color: 0x00ff00,
-			    visible: false
+			    color: this._lcolors[name] || 0x00ff00,
+			    visible: core.config.ctzero.helpers
 			}
 		});
 	},
@@ -143,7 +154,8 @@ zero.core.Body = CT.Class({
 			changed = true;
 			this.flying = this.landing = false;
 		}
-		changed && this.setFriction(!wet && !this.flying && (obj || r).grippy, this.flying || wet || !bobber.hard);
+		changed && this.setFriction(this.person.grippy && !wet && !this.flying && (obj || r).grippy,
+			this.flying || wet || !bobber.hard);
 	},
 	energy: function() {
 		return this.person && this.person.energy;

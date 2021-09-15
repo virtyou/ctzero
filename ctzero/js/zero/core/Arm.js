@@ -31,6 +31,77 @@ zero.core.Arm = CT.Class({
 		zero.core[this.variety].parts.forEach(this.tickPart);
 		this.hand.tick();
 	},
+	poseRange: {
+		position: {
+			min: {
+				x: 0, y: 0, z: 0
+			},
+			max: {
+				x: 0, y: 0, z: 0
+			}
+		},
+		rotation: {
+			min: {
+				x: 0, y: 0, z: 0
+			},
+			max: {
+				x: 0, y: 0, z: 0
+			}
+		},
+		sway: {},
+		height: {},
+		distance: {}
+	},
+	anaPose: function(target) {
+		var asp, pr, coords, dim, v, side,
+			prz = this.poseRange,
+			sz = this.springs;
+		for (asp in prz) {
+			pr = prz[asp];
+			coords = target.thring[asp];
+			if (coords) {
+				for (dim of this.dims) {
+					v = coords[dim];
+					pr.min[dim] = Math.min(v, pr.min[dim]);
+					pr.max[dim] = Math.max(v, pr.max[dim]);
+				}
+				this.log(asp, "cur", coords.x, coords.y, coords.z);
+				for (side in pr)
+					this.log(asp, side, pr[side].x, pr[side].y, pr[side].z);
+			} else {
+				if (!("min" in pr))
+					pr.min = pr.max = pr.cur;
+				else {
+					pr.min = Math.min(pr.cur, pr.min);
+					pr.max = Math.max(pr.cur, pr.max);
+				}
+				this.log(asp, pr.cur, pr.min, pr.max);
+			}
+		}
+		this.log(sz.shoulder_x.target, sz.elbow_x.target);
+	},
+	pose: function(target) {
+		var r = target.thring.rotation,
+			p = target.thring.position,
+			prz = this.poseRange, ex,
+			dep = p.z / 25,
+			ver = -p.y / 25,
+			d = prz.distance.cur = 0.5 - dep / 2,
+			h = prz.height.cur = 2 * ver - 2,
+			isRight = this.opts.side == "right",
+			s = prz.sway.cur = p.x / 25 + (isRight ? 0.5 : -0.5),
+			sz = this.springs;
+		sz.clavicle_z.target = isRight ? ver : -ver;
+		sz.clavicle_y.target = isRight ? dep : -dep;
+		ex = sz.elbow_x.target = h * d;
+		sz.shoulder_x.target = h - ex;
+		sz.shoulder_z.target = s - sz.clavicle_y.target;
+		sz.elbow_y.target = r.y;
+		sz.wrist_x.target = -r.x;
+		sz.wrist_z.target = -r.z;
+
+//		this.anaPose(target); // <- logger
+	},
 	setBody: function(bod) {
 		this.body = bod;
 		this.hand && this.hand.setBody(bod);
