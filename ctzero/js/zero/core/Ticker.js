@@ -32,11 +32,13 @@ zero.core.Ticker = CT.Class({
 		this._timeout = setTimeout(this.tick, dur);
 	},
 	tick: function() {
-		var condition, direction, opts, s, up = this._up;
+		var condition, direction, opts, s, up = this._up, zcu = zero.core.util;
 		for (condition in this.conditions) {
 			direction = this.conditioner[condition] ? "yes" : "no";
 			opts = this.conditions[condition][direction];
 			this.reschedule(opts);
+			if (zcu.dts == zcu.dmax)
+				return this.log("low fps - skipping ticker:", this.name);
 			if (opts.once) {
 				if (this.oncers[direction])
 					continue;
