@@ -260,6 +260,8 @@ zero.core.Room = CT.Class({
 	},
 	addLight: function(light, cb, opts2) {
 		this.log("adding light");
+		if (light.variety != "ambient" && !light.position)
+			light.position = [0, 0, 0];
 		var part = this.attach(CT.merge(light, {
 			kind: "light",
 			thing: "Light"
