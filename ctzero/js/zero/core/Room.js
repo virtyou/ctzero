@@ -265,7 +265,7 @@ zero.core.Room = CT.Class({
 			thing: "Light"
 		}), this.it("lights", cb));
 		this.lights.push(part);
-		opts2 && this.opts.lights.push(light);
+		(opts2 == true) && this.opts.lights.push(light);
 		return part;
 	},
 	removeLight: function(light) {
