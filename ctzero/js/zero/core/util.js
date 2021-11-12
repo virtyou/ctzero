@@ -262,8 +262,15 @@ zero.core.util = {
 		document.body.appendChild(a);
 		a.play();
 	},
+	vidNode: function(src, className, autoplay) {
+		return CT.dom.video({
+			src: src,
+			className: className || "full",
+			autoplay: autoplay
+		});
+	},
 	video: function(src) {
-		var v = CT.dom.video(src, "full");
+		var v = zero.core.util.vidNode(src);
 		zero.core.util.back(v);
 		v.play();
 	},
@@ -283,7 +290,8 @@ zero.core.util = {
 			}
 			v = svids[chan].video;
 		} else {
-			v = CT.dom.video(src, vclass);
+			v = zero.core.util.vidNode(src, vclass,
+				zero.core.current.room.opts.autovid);
 			document.body.appendChild(v);
 		}
 		vt = new THREE.VideoTexture(v);
