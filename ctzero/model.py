@@ -32,6 +32,10 @@ def assetize(ent, d):
         a = getattr(ent, item, None)
         if a:
             ast = a.get()
+            if not ast:
+                from cantools.util import error
+                error("assetize failure: %s [%s] %s"%(ent.__class__.__name__,
+                    ent.name, item))
             d[item] = ast.path()
             d["%s_name"%(item,)] = ast.name
             d["%s_owners"%(item,)] = [o.urlsafe() for o in ast.owners]
