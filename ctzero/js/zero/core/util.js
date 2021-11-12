@@ -235,11 +235,21 @@ zero.core.util = {
 	panorama: function(pos, node) {
 		zero.core.util._map(pos, "Panorama", node);
 	},
+	waiters: [],
+	playWaiters: function() {
+		var w, wz = zero.core.util.waiters;
+		for (w of wz)
+			w.play();
+		wz.length = 0;
+	},
 	playMedia: function(player) {
+		var zcu = zero.core.util;
+		if (!zcu.unwaiter)
+			zcu.unwaiter = CT.modal.modal("let's get started!",
+				zcu.playWaiters, null, true, true);
 		player.play().catch(function() {
-			CT.modal.modal("let's get started!", function() {
-				player.play();
-			}, null, true);
+			zcu.waiters.push(player);
+			zcu.unwaiter.show();
 		});
 	},
 	playTrack: function(player, track) {
@@ -263,11 +273,16 @@ zero.core.util = {
 		a.play();
 	},
 	vidNode: function(src, className, autoplay) {
-		return CT.dom.video({
+		var v = CT.dom.video({
 			src: src,
 			className: className || "full",
-			autoplay: autoplay
+//			autoplay: autoplay
+			oncanplay: autoplay && function() {
+				zero.core.util.playMedia(v);
+			}
 		});
+
+		return v;
 	},
 	video: function(src) {
 		var v = zero.core.util.vidNode(src);
