@@ -743,6 +743,8 @@ zero.core.Thing = CT.Class({
 			grippy: true,
 			frustumCulled: true
 		});
+		if (opts.kind == "portal")
+			opts.state = "threshold";
 		if (CT.info.mobile)
 			opts.matcat = "Basic";
 		this.variety = this.CLASSNAME.split(".")[2];
