@@ -59,7 +59,7 @@ zero.core.Skeleton = CT.Class({
 			hspringz[ps] = w - Math.random() * 2 * w;
 		} else if (majors.includes(part)) {
 			w = 1.5 - Math.random() / (5 - (majors.indexOf(part) + this.dims.indexOf(d)));
-			aspringz["gesticulate_" + part] = w;
+			aspringz["gesticulate_" + part] = this.shouldReverse(part, d) ? -w : w;
 		}
 		return {
 			springs: aspringz,
@@ -74,7 +74,7 @@ zero.core.Skeleton = CT.Class({
 			k: 40,
 			damp: 10
 		}, sname, this);
-		if (this.opts.side == "left" && this.shouldReverse(part, dim)) {
+		if (this.shouldReverse(part, dim)) {
 			jrules = CT.merge({
 				min: -jrules.max,
 				max: -jrules.min
@@ -90,7 +90,7 @@ zero.core.Skeleton = CT.Class({
 		this.body = bod;
 	},
 	shouldReverse: function(part, dim) {
-		return dim == "z";
+		return this.opts.side == "left" && dim == "z";
 	},
 	partUp: function(part, rotation) {
 		var springs = this.springs;
