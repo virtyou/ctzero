@@ -72,9 +72,9 @@
 		"patterns": {}
 	},
 	"multi": false,
+	"gravity": true,
 	"room": {
 		"skyscale": 10000,
-		"gravity": true,
 		"name": "vroom",
 		"lights": [{
 			"variety": "ambient"

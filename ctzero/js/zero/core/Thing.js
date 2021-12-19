@@ -92,7 +92,7 @@ zero.core.Thing = CT.Class({
 				sz[pname].target = pz[pname].min;
 		},
 		shouldMin: function(pname, dim) { // fix multifloor-zone portals!
-			if (!core.config.ctzero.room.gravity) return false;
+			if (!core.config.ctzero.gravity) return false;
 			return dim == "y" && this.vlower != "pool" && !this.opts.position[1] &&
 				!(["poster", "screen", "stream", "portal", "body"].includes(this.opts.kind));
 		}

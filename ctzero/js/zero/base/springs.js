@@ -8,7 +8,7 @@ zero.base.springs.body = function() {
             hard: true,
             floory: true,
             acceleration: -1000,
-            floored: !cfg.room.gravity
+            floored: !cfg.gravity
         },
         weave: {
             k: 10,

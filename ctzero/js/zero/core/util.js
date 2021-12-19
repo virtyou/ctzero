@@ -433,7 +433,7 @@ zero.core.util = {
 				nowatch || person.watch();
 				lookcam && person.look(zero.core.camera);
 				current && zero.core.util.setCurPer(person);
-				core.config.ctzero.room.gravity && person.body.boundOnRoom();
+				core.config.ctzero.gravity && person.body.boundOnRoom();
 				onready && onready(person);
 			}
 		}));
