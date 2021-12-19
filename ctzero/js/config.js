@@ -73,6 +73,7 @@
 	},
 	"multi": false,
 	"room": {
+		"skyscale": 10000,
 		"gravity": true,
 		"name": "vroom",
 		"lights": [{
