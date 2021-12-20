@@ -323,6 +323,10 @@ zero.core.Room = CT.Class({
 	clearObjects: function() {
 		this.opts.objects.forEach(this.removeObject);
 	},
+	unload: function() {
+		zero.core.auto.unload();
+		this.remove();
+	},
 	getPlacer: function() {
 		this.placer = this.placer || this.thring || this.getGroup();
 		return this.placer;
