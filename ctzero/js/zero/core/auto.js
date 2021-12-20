@@ -3,6 +3,9 @@ zero.core.auto = {
 	json: function() {
 		return zero.core.current.room.automatons.map(a => a.json());
 	},
+	unload: function() {
+		zero.core.current.room.automatons.forEach(a => a.pause());
+	},
 	init: function(autos) { // [{person(key),program{base,coefficient,randomize},activities[]}]
 		CT.db.multi(autos.map(a=>a.person), function(people) {
 			zero.core.current.room.automatons = people.map(function(p, i) {
