@@ -28,7 +28,7 @@ zero.core.Hair = CT.Class({
 	_pass: function(func, a1, a2) {
 		var zcu = zero.core.util;
 		if (zcu.dts == zcu.dmax)
-			return this.log("low fps - skipping ticker:", this.name);
+			return;// this.log("low fps - skipping ticker:", this.name);
 		for (var i = 0; i < this.count; i++)
 			this["strand" + i][func](a1, a2);
 	},
