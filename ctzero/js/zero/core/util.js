@@ -413,9 +413,9 @@ zero.core.util = {
 	untick: function(cb) {
 		CT.data.remove(zero.core.util._tickers, cb);
 	},
-	shouldSkip: function() {
+	shouldSkip: function(hard) {
 		var zcu = zero.core.util;
-		return zcu.dts == zcu.dmax;
+		return (zcu.dts == zcu.dmax) && (hard || !(zcu.ticker%10));
 	},
 	_cpcbz: [],
 	onCurPer: function(cb) {
