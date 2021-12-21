@@ -26,9 +26,6 @@ zero.core.Hair = CT.Class({
 		this.count = i;
 	},
 	_pass: function(func, a1, a2) {
-		var zcu = zero.core.util;
-		if (zcu.dts == zcu.dmax)
-			return;// this.log("low fps - skipping ticker:", this.name);
 		for (var i = 0; i < this.count; i++)
 			this["strand" + i][func](a1, a2);
 	},
@@ -39,7 +36,8 @@ zero.core.Hair = CT.Class({
 		this._pass("setTexture", tx);
 	},
 	tick: function() {
-		this._pass("tick", zero.core.util.dts);
+		var zcu = zero.core.util;
+		zcu.shouldSkip() || this._pass("tick", zcu.dts);
 	},
 	init: function(opts) {
 		this.opts = opts = CT.merge(opts, {

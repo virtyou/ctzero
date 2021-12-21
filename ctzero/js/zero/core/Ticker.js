@@ -37,7 +37,7 @@ zero.core.Ticker = CT.Class({
 			direction = this.conditioner[condition] ? "yes" : "no";
 			opts = this.conditions[condition][direction];
 			this.reschedule(opts);
-			if (zcu.dts == zcu.dmax)
+			if (zcu.shouldSkip())
 				return this.log("low fps - skipping ticker:", this.name);
 			if (opts.once) {
 				if (this.oncers[direction])

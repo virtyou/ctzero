@@ -1,9 +1,11 @@
 zero.core.Fire = CT.Class({
 	CLASSNAME: "zero.core.Fire",
 	tick: function(dts) {
-		for (var variety of ["flames", "sparks", "smoke", "glow"])
+		var zcu = zero.core.util, variety;
+		if (zcu.shouldSkip()) return;
+		for (variety of ["flames", "sparks", "smoke", "glow"])
 			this[variety] && this[variety].tick(dts);
-		this.light && this.light.setIntensity(0.5 + this.flicker[zero.core.util.ticker % 60]);
+		this.light && this.light.setIntensity(0.5 + this.flicker[zcu.ticker % 60]);
 		this.tickPos();
 	},
 	onremove: function() {

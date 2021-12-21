@@ -2,7 +2,9 @@ zero.core.Pool = CT.Class({
 	CLASSNAME: "zero.core.Pool",
 	tick: function(dts) {
 		if (!this.thring) return; // for dynamic attachment
-		var smap = this.smap, t = zero.core.util.ticker, i,
+		var zcu = zero.core.util;
+		if (zcu.shouldSkip()) return;
+		var smap = this.smap, t = zcu.ticker, i,
 			geo = this.thring.geometry, vertices = geo.vertices,
 			mainCam = zero.core.camera, campos = mainCam.position();
 		for (i = 0; i < vertices.length; i ++)
