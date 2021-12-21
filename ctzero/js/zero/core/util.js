@@ -413,6 +413,10 @@ zero.core.util = {
 	untick: function(cb) {
 		CT.data.remove(zero.core.util._tickers, cb);
 	},
+	shouldSkip: function() {
+		var zcu = zero.core.util;
+		return zcu.dts == zcu.dmax;
+	},
 	_cpcbz: [],
 	onCurPer: function(cb) {
 		if (zero.core.current.person)
