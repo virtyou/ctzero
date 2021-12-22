@@ -31,10 +31,8 @@ zero.core.morphs = {
 			val = thing.aspects[a].value;
 			if (val) { // should be safe...
 				stack = thing.morphs[a];
-				for (i in stack) {
-					modz[i] = modz[i] || base[i];
-					modz[i] += stack[i] * val;
-				}
+				for (i in stack)
+					modz[i] = (modz[i] || base[i]) + stack[i] * val;
 			}
 		}
 		for (i in modz)
