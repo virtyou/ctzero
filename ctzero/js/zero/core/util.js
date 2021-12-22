@@ -6,7 +6,7 @@ zero.core.util = {
 	dts: 0.032,
 	rdts: 0.032,
 	dmax: 0.032,
-	dperf: 0.016,
+	dperf: 0.01,
 	_tickers: [],
 	rates: ["x-slow", "slow", "medium", "fast", "x-fast"],
 	pitches: ["x-low", "low", "medium", "high", "x-high"],
