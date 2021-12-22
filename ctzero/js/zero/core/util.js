@@ -299,7 +299,7 @@ zero.core.util = {
 			if (!svids[chan]) {
 				CT.require("CT.stream", true); // just in case
 				svids[chan] = CT.stream.util.fzn.video(chan, vclass, function() {
-					CT.log("FZN VIDEO UPDATE");
+					CT.log("FZN Video Update");
 					thing.update({ video: src });
 				});
 				document.body.appendChild(svids[chan].node);
@@ -420,7 +420,9 @@ zero.core.util = {
 	},
 	shouldSkip: function(hard) {
 		var zcu = zero.core.util;
-		return (zcu.dts == zcu.dmax) && (hard || !(zcu.ticker%10));
+		if (hard && zcu.ticker < 100) return true;
+		if (zcu.dts == zcu.dmax)
+			return hard || !CT.data.random(3);
 	},
 	_cpcbz: [],
 	onCurPer: function(cb) {
