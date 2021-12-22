@@ -3,21 +3,17 @@ zero.core.Pendulum = CT.Class({
 	dims: ["x", "z"],
 	other: { x: "z", z: "x" },
 	ticks: {
-		hard: function(dts, pos) {
+		hard: function(dts) {
 			var pendz = this.pends, dim, pend,
-				rot = this.rotation(null, true),
-				zsin = zero.core.trig.sin,
-				w = this.wiggler, t, oz = this.opts;
-			if (w)
-				t = (zero.core.util.ticker + this.wigdex) % oz.wiggle;
+				w = this.wiggler, gravvy = this.gravvy, accy = this.accy,
+				rot = gravvy && this.rotation(null, true), zsin = zero.core.trig.sin,
+				b = w ? w[(zero.core.util.ticker + this.wigdex) % this.opts.wiggle] : 0;
 			for (dim of this.dims) {
 				pend = pendz[dim];
-				if (w || !oz.nograv) {
-					pend.acceleration = 0;
-					if (!oz.nograv)
+				if (accy) {
+					pend.acceleration = b;
+					if (gravvy)
 						pend.acceleration += zsin(rot[dim]);
-					if (w)
-						pend.acceleration += w[t];
 				}
 				this.adjust("rotation", dim, pend.value);
 			};
@@ -37,17 +33,16 @@ zero.core.Pendulum = CT.Class({
 				this.adjust("rotation", dim, pend.value);
 			};
 		},
-		soft: function(dts, pos) {
-			var loc = this.localize, velo = zero.core.util.velocity,
-				vel = velo(loc(this.pos), loc(pos), dts);
-			this.vel && this.ticks._soft(dts, vel, velo(this.vel, vel, dts));
-			this.vel = vel;
+		soft: function(dts) {
+			var pos = this.position(null, true);
+			if (this.pos) {
+				var loc = this.localize, velo = zero.core.util.velocity,
+					vel = velo(loc(this.pos), loc(pos), dts);
+				this.vel && this.ticks._soft(dts, vel, velo(this.vel, vel, dts));
+				this.vel = vel;
+			}
+			this.pos = pos;
 		}
-	},
-	tick: function(dts) {
-		var pos = this.position(null, true);
-		this.pos && this._tick(dts, pos);
-		this.pos = pos;
 	},
 	setSprings: function() {
 		var oz = this.opts, thaz = this,
@@ -66,11 +61,13 @@ zero.core.Pendulum = CT.Class({
 		});
 	},
 	init: function(opts) {
-		this._tick = this.ticks[this.opts.hard ? "hard" : "soft"];
+		this.tick = this.ticks[this.opts.hard ? "hard" : "soft"];
 		this.setSprings();
 		if (this.opts.wiggle) {
 			this.wigdex = CT.data.random(this.opts.wiggle);
 			this.wiggler = zero.core.trig.segs(this.opts.wiggle);
 		}
+		this.gravvy = !this.opts.nograv;
+		this.accy = this.gravvy || !!this.wiggler;
 	}
 }, zero.core.Thing);
