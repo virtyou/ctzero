@@ -25,8 +25,10 @@ zero.core.Hair = CT.Class({
 		}
 		this.count = i;
 	},
-	_pass: function(func, a1, a2) {
-		for (var i = 0; i < this.count; i++)
+	_pass: function(func, a1, a2, start, end) {
+		start = start || 0;
+		end = end || this.count;
+		for (var i = start; i < end; i++)
 			this["strand" + i][func](a1, a2);
 	},
 	setColor: function(col) {
@@ -35,9 +37,14 @@ zero.core.Hair = CT.Class({
 	setTexture: function(tx) {
 		this._pass("setTexture", tx);
 	},
+	tickBatch: function() {
+		var zcu = zero.core.util, rate = zcu.tickRate(),
+			max = Math.min(this.count, this.cur + parseInt(this.count * rate));
+		this._pass("tick", zcu.dts, null, this.cur, max);
+		this.cur = (max == this.count) ? 0 : max;
+	},
 	tick: function() {
-		var zcu = zero.core.util;
-		zcu.shouldSkip() || this._pass("tick", zcu.dts);
+		zero.core.util.shouldSkip() || this.tickBatch();
 	},
 	init: function(opts) {
 		this.opts = opts = CT.merge(opts, {
@@ -48,6 +55,7 @@ zero.core.Hair = CT.Class({
 			offz: 0,
 			position: [0, 10, 4]
 		}, this.opts);
+		this.cur = 0;
 		this.isCustom = true; // for tick
 	}
 }, zero.core.Thing);

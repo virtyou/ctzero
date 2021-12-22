@@ -4,11 +4,15 @@ zero.core.Pool = CT.Class({
 		if (!this.thring) return; // for dynamic attachment
 		var zcu = zero.core.util;
 		if (zcu.shouldSkip()) return;
-		var smap = this.smap, t = zcu.ticker, i,
-			geo = this.thring.geometry, vertices = geo.vertices,
-			mainCam = zero.core.camera, campos = mainCam.position();
-		for (i = 0; i < vertices.length; i ++)
+		var rate = zcu.tickRate(), smap = this.smap, t = zcu.ticker, i,
+			geo = this.thring.geometry, vertices = geo.vertices, vl = vertices.length,
+			mainCam = zero.core.camera, campos = mainCam.position(),
+			max = Math.min(vl, this.cur + vl * rate);
+		for (i = this.cur; i < max; i++)
 			vertices[i].z = smap[(t + i) % 60];
+		this.cur = i;
+		if (i != vl) return;
+		this.cur = 0;
 		geo.computeFaceNormals();
 		geo.computeVertexNormals();
 		geo.verticesNeedUpdate = true;
@@ -103,6 +107,7 @@ zero.core.Pool = CT.Class({
 			},
 			pull: { bob: 600 }
 		}, this.opts);
+		this.cur = 0;
 		this.pull = opts.pull;
 		this.grippy = opts.grippy;
 		if (opts.plane && !opts.geometry) {
