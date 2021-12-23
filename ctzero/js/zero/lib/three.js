@@ -19606,7 +19606,7 @@
 
 		// frustum
 
-		_frustum = new Frustum(),
+		_frustum = this.frustum = new Frustum(),
 
 		// clipping
 
