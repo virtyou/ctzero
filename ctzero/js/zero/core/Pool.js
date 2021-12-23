@@ -3,7 +3,7 @@ zero.core.Pool = CT.Class({
 	tick: function(dts) {
 		if (!this.thring) return; // for dynamic attachment
 		var zcu = zero.core.util;
-		if (zcu.shouldSkip()) return;
+		if (zcu.shouldSkip() || !zero.core.camera.visible(this)) return;
 		var rate = zcu.tickRate(), smap = this.smap, t = zcu.ticker, i,
 			geo = this.thring.geometry, vertices = geo.vertices, vl = vertices.length,
 			mainCam = zero.core.camera, campos = mainCam.position(),

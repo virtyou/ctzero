@@ -3,8 +3,9 @@ zero.core.Fire = CT.Class({
 	tick: function(dts) {
 		var zcu = zero.core.util, variety;
 		if (zcu.shouldSkip()) return;
-		for (variety of ["flames", "sparks", "smoke", "glow"])
-			this[variety] && this[variety].tick(dts);
+		if (!this.glow || zero.core.camera.visible(this.glow))
+			for (variety of ["flames", "sparks", "smoke", "glow"])
+				this[variety] && this[variety].tick(dts);
 		this.light && this.light.setIntensity(0.5 + this.flicker[zcu.ticker % 60]);
 		this.tickPos();
 	},
