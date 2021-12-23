@@ -63,6 +63,9 @@ var camera = zero.core.camera = {
 		if (_.useControls)
 			_.controls.handleResize();
 	},
+	visible: function(obj) {
+		return camera._.frustum.intersectsObject(obj.thring);
+	},
 	upsprings: function(opts) {
 		var o, s, sz = this.springs.position;
 		for (s in sz)
@@ -310,6 +313,7 @@ var camera = zero.core.camera = {
 		_.container = CT.dom.div(null, cclass || "abs all0");
 		_.renderer = new THREE.WebGLRenderer(camcfg.opts);
 		_.renderer.setSize(w, h);
+		_.frustum = _.renderer.frustum;
 		_.container.appendChild(_.renderer.domElement);
 		_.camera.container = _.container;
 		return _.camera;
