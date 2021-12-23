@@ -539,6 +539,7 @@ zero.core.Thing = CT.Class({
 	},
 	remove: function() {
 		var oz = this.opts;
+		this.removed = true;
 		(oz.anchor || oz.scene).remove(this.group);
 		this.unscroll();
 		this.unshift();
