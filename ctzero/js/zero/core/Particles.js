@@ -37,7 +37,7 @@ zero.core.Particles = CT.Class({
 			this.active.push(activated);
 			number -= 1;
 		}
-		number && this.log("unable to release", number, "particles");
+		//number && this.log("unable to release", number, "particles");
 	},
 	rebound: function() {
 		var p, part, oz = this.opts,
