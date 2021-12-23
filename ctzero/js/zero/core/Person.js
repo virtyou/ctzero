@@ -189,28 +189,32 @@ zero.core.Person = CT.Class({
 		bso.hard = false;
 //		this.look(subject, true);
 		orient(subject);
+		go();
 		var revec = function() {
 			vec = getd();
 			bod.springs.weave.boost = 100 * vec.x;
 			bod.springs.slide.boost = 100 * vec.z;
 		};
 		setTimeout(function() { // adapted from Controls.mover()... revise?
-			go();
 			revec();
 			bso.k = 20;
 			bso.hard = bsohard;
-			var chkr = setInterval(function() {
-				if (zero.core.util.touching(bod, subject, 60)) {
-					bod.springs.weave.boost = 0;
-					bod.springs.slide.boost = 0;
-					clearInterval(chkr);
+			var clr = function() {
+				bod.springs.weave.boost = 0;
+				bod.springs.slide.boost = 0;
+				clearInterval(chkr);
+			}, chkr = setInterval(function() {
+				if (bod.removed || subject.removed)
+					clr();
+				else if (zero.core.util.touching(bod, subject, 60)) {
+					clr();
 					undance();
 					cb && cb();
 				} else if (chase) {
 					orient(subject);
 					revec();
 				}
-			}, 200);
+			}, 500);
 		}, 500); // time for orientation...
 	},
 	jump: function() {
