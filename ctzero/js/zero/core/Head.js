@@ -9,8 +9,9 @@ zero.core.Head = CT.Class({
 		},
 		mouth: function() {
 			var cur = this.currentPhoneme, vis = this._viseme,
-				phonemes = zero.core.phonemes,
-				t, talking = cur && cur != "pau" && cur != "sil", changed;
+				phonemes = zero.core.phonemes, pdata, changed,
+				talking = cur && cur != "pau" && cur != "sil",
+				shape, morphs, morph, m, t, sval;
 			if (talking != this.talking) {
 				changed = true;
 				this.talking = this.body.talking = talking;
@@ -25,7 +26,7 @@ zero.core.Head = CT.Class({
 			} else
 				this.talking = this.body.talking = talking;
 			if (talking || changed) {
-				phonemes.forEach(function(pdata) {
+				for (pdata of phonemes) {
 					if (pdata.phones.indexOf(cur) != -1) {
 						vis(pdata, "target");
 						vis(pdata, "k");
@@ -33,15 +34,15 @@ zero.core.Head = CT.Class({
 						vis(pdata.otherwise, "target");
 						vis(pdata.otherwise, "k");
 					}
-				});
+				}
 				this.teeth.morphTargetInfluences(1, 0);
 				this.tongue.morphTargetInfluences(1, 0);
-				for (var shape in phonemes.forms) {
-					var morphs = phonemes.forms[shape].morphs;
+				for (shape in phonemes.forms) {
+					morphs = phonemes.forms[shape].morphs;
 					if (morphs) {
-						var sval = this.springs[shape].value;
-						for (var m in morphs) {
-							var morph = morphs[m];
+						sval = this.springs[shape].value;
+						for (m in morphs) {
+							morph = morphs[m];
 							this[m].morphTargetInfluences(morph.influence,
 								morph.factor * sval, true, true);
 						}
@@ -58,7 +59,7 @@ zero.core.Head = CT.Class({
 		return this.person && this.person.energy;
 	},
 	tick: function() {
-		if (!this.isReady()) return;
+		if (!this.isReady() || !zero.core.camera.visible(this)) return;
 		this.updaters.eyes();
 		this.updaters.mouth();
 		zero.core.morphs.tick(this);
