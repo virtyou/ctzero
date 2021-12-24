@@ -419,11 +419,11 @@ zero.core.util = {
 		var zcu = zero.core.util;
 		return zcu.dperf / zcu.dts;
 	},
-	shouldSkip: function(hard) {
+	shouldSkip: function(hard, rando) {
 		var zcu = zero.core.util;
 		if (hard && zcu.ticker < 100) return true;
 		if (zcu.dts == zcu.dmax)
-			return hard || !CT.data.random(60);
+			return hard || !CT.data.random(rando || 10);
 	},
 	_cpcbz: [],
 	onCurPer: function(cb) {
