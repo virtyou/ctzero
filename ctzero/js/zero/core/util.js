@@ -423,7 +423,7 @@ zero.core.util = {
 		var zcu = zero.core.util;
 		if (hard && zcu.ticker < 100) return true;
 		if (zcu.dts == zcu.dmax)
-			return hard || !CT.data.random(10);
+			return hard || !CT.data.random(60);
 	},
 	_cpcbz: [],
 	onCurPer: function(cb) {
