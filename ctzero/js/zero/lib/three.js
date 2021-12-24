@@ -23683,11 +23683,13 @@
 
 		function update() {
 
+			if (scope.zeronode && scope.zeronode.removed) return console.log("VideoTexture decommissioned");
+
 			requestAnimationFrame( update );
 
 			if ( video.readyState >= video.HAVE_CURRENT_DATA ) {
 
-				scope.needsUpdate = true;
+				scope.needsUpdate = scope.zeronode ? zero.core.camera.visible(scope.zeronode) : true;
 
 			}
 
