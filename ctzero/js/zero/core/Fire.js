@@ -2,7 +2,7 @@ zero.core.Fire = CT.Class({
 	CLASSNAME: "zero.core.Fire",
 	tick: function(dts) {
 		var zcu = zero.core.util, variety;
-		if (zcu.shouldSkip()) return;
+		if (zcu.shouldSkip(false, 100)) return;
 		if (!this.glow || zero.core.camera.visible(this.glow))
 			for (variety of ["flames", "sparks", "smoke", "glow"])
 				this[variety] && this[variety].tick(dts);
