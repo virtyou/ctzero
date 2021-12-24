@@ -249,11 +249,12 @@ zero.core.Thing = CT.Class({
 	},
 	vsplay: function() {
 		var zcu = zero.core.util,
-			vs = this.opts.vstrip,
+			vs = this.opts.vstrip, thaz = this,
 			randoff = CT.data.random(vs.frames),
 			mat = this.material, t, max = 128;
 		this.unvsplay();
 		this._.vsplayer = function() {
+			if (!zero.core.camera.visible(thaz)) return;
 			t = (zcu.ticker + randoff) % vs.frames;
 			mat.map.offset.x = ((t % max) * vs.fwidth) / vs.width;
 			mat.map.offset.y = (vs.height - vs.fheight * (1 + Math.floor(t / max))) / vs.height;
