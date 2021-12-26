@@ -33,6 +33,7 @@ zero.core.Controls = CT.Class({
 				RIGHT: ["shake", -0.5]
 			}
 		},
+		dirs: ["w", "s", "a", "d"],
 		xlrmode: "walk", // walk|look|dance
 		look: function(dir, mult) {
 			var _ = this._, cz = _.cams, mode,
@@ -141,7 +142,7 @@ zero.core.Controls = CT.Class({
 					target.jump();
 				else
 					target.go();
-			} else if (!CT.key.downs(["w", "s", "a", "d"]).length)
+			} else if (!CT.key.downs(_.dirs).length)
 				target.undance();
 			if (dir == "y") {
 				if (amount) {
