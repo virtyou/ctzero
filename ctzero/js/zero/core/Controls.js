@@ -156,9 +156,9 @@ zero.core.Controls = CT.Class({
 			} else if (dir == "orientation") {
 				spr.boost = amount;
 				if (CT.key.down("w"))
-					direct(speed);
+					direct(speed * target.energy.k);
 				else if (CT.key.down("s"))
-					direct(-speed);
+					direct(-speed * target.energy.k);
 			} else
 				direct(amount * target.energy.k);
 			moveCb && moveCb(target.name);
