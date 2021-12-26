@@ -132,9 +132,15 @@ zero.core.Controls = CT.Class({
 			springz[dim].boost = speed * vec[dim];
 		});
 	},
+	go: function() {
+		if (CT.key.down("w"))
+			this.direct(this._.speed.base * this.target.energy.k);
+		else if (CT.key.down("s"))
+			this.direct(-this._.speed.base * this.target.energy.k);
+	},
 	mover: function(fullAmount, dir) {
 		var target = this.target, spr = this.springs[dir], _ = this._, amount,
-			speed = _.speed.base, direct = this.direct, moveCb = _.moveCb;
+			direct = this.direct, go = this.go, moveCb = _.moveCb;
 		return function(mult) {
 			amount = mult ? fullAmount * mult : fullAmount;
 			if (amount) {
@@ -155,10 +161,7 @@ zero.core.Controls = CT.Class({
 					spr.boost = _.speed.descent;
 			} else if (dir == "orientation") {
 				spr.boost = amount;
-				if (CT.key.down("w"))
-					direct(speed * target.energy.k);
-				else if (CT.key.down("s"))
-					direct(-speed * target.energy.k);
+				go();
 			} else
 				direct(amount * target.energy.k);
 			moveCb && moveCb(target.name);
@@ -177,12 +180,13 @@ zero.core.Controls = CT.Class({
 		});
 	},
 	runner: function(running) {
-		var t = this.target, m = t.mood, en = t.energy,
+		var go = this.go, t = this.target, m = t.mood, en = t.energy,
 			oe = m.orig_opts.energy || 1, od = en.opts.damp,
 			e = running ? 2 * oe : oe, d = running ? 0.6 * od : od;
 		return function() {
 			m.update({ energy: e });
 			en.damp = d;
+			setTimeout(go, 100); // wait for Mood.tick() to update energy k
 		};
 	},
 	setKeys: function() {
