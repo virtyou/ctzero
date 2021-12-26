@@ -207,7 +207,7 @@ zero.core.Controls = CT.Class({
 			CT.key.on("s", this.stop, this.backward);
 			CT.key.on("a", this.still, this.left);
 			CT.key.on("d", this.still, this.right);
-			CT.key.on("SPACE", this.jump, this.unjump);
+			CT.key.on("SPACE", this.unjump, this.jump);
 			CT.key.on("SHIFT", runner(), runner(true));
 			gestures = Object.keys(this.target.opts.gestures);
 			dances = Object.keys(this.target.opts.dances);
