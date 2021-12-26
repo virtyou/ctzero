@@ -69,9 +69,9 @@ zero.core.Fire = CT.Class({
 			kind: "shiner",
 			thing: "Bit",
 			position: [0, 20, 0],
-			scale: [0.4, 0.4, 0.4],
+			scale: [20, 20, 20],
 			material: {
-				opacity: 0.9,
+				opacity: 0.5,
 				color: 0xffff00,
 				transparent: true,
 				side: THREE.DoubleSide
@@ -81,7 +81,8 @@ zero.core.Fire = CT.Class({
 			name: "glow",
 			kind: "pulser",
 			thing: "Bit",
-			pulse: 0.01,
+			pulse: 0.2,
+			size: 40,
 			material: {
 				opacity: 0.1,
 				color: 0xff0000,
