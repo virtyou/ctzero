@@ -26,10 +26,11 @@ zero.core.Hair = CT.Class({
 		this.count = i;
 	},
 	_pass: function(func, a1, a2, start, end) {
+		var i, parts = this.parts;
 		start = start || 0;
 		end = end || this.count;
-		for (var i = start; i < end; i++)
-			this["strand" + i][func](a1, a2);
+		for (i = start; i < end; i++)
+			parts[i][func](a1, a2);
 	},
 	setColor: function(col) {
 		this._pass("setColor", col);
