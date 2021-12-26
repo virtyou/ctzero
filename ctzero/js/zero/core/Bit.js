@@ -1,9 +1,9 @@
 zero.core.Bit = CT.Class({
 	CLASSNAME: "zero.core.Bit",
 	tick: function(dts) {
-		var pos, v, h, oz = this.opts, bz = oz.bounder && oz.bounder.bounds,
+		var oz = this.opts, dz = this._xyz, bz = oz.bounder && oz.bounder.bounds,
 			wobz = this.wobblers, vel = this.velocity, acc = oz.acceleration,
-			i = oz.index, t = zero.core.util.ticker % 60, adjust = this.adjust;
+			pos, i, d, v, h, t = zero.core.util.ticker % 60, adjust = this.adjust;
 		if (oz.grow || oz.pulse) {
 			if (oz.grow)
 				this._size += oz.grow * dts;
@@ -11,24 +11,28 @@ zero.core.Bit = CT.Class({
 				this._size += this.pulser[t];
 			this.scale(this._size);
 		}
-		vel && this._xyz.forEach(function(d, i) {
-			v = vel[i] * dts;
-			if (acc)
-				vel[i] += acc[i] * dts;
-			if (wobz[d])
-				v += wobz[d][t];
-			v && adjust("position", d, v, true);
-		});
+		if (vel) {
+			for (i = 0; i < 3; i++) {
+				d = dz[i];
+				v = vel[i] * dts;
+				if (acc)
+					vel[i] += acc[i] * dts;
+				if (wobz[d])
+					v += wobz[d][t];
+				v && adjust("position", d, v, true);
+			}
+		}
 		if (!bz) return;
 		pos = this.position();
-		this._xyz.forEach(function(d, i) {
-			if (!vel[i]) return;
+		for (i = 0; i < 3; i++) {
+			if (!vel[i]) continue;
+			d = dz[i];
 			h = (bz.max[d] - bz.min[d]) / 2;
 			if (pos[d] < -h)
 				pos[d] = h;
 			else if (pos[d] > h)
 				pos[d] = -h;
-		});
+		}
 	},
 	setVelocity: function() {
 		this.velocity = this.opts.velocity.map(v => v);
