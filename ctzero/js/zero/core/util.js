@@ -6,7 +6,8 @@ zero.core.util = {
 	dts: 0.032,
 	rdts: 0.032,
 	dmax: 0.032,
-	dperf: 0.01,
+	dslow: 0.022,
+	dperf: 0.016,
 	_tickers: [],
 	rates: ["x-slow", "slow", "medium", "fast", "x-fast"],
 	pitches: ["x-low", "low", "medium", "high", "x-high"],
@@ -422,8 +423,8 @@ zero.core.util = {
 	shouldSkip: function(hard, rando) {
 		var zcu = zero.core.util;
 		if (hard && zcu.ticker < 100) return true;
-		if (zcu.dts == zcu.dmax)
-			return hard || !CT.data.random(rando || 2);
+		if (zcu.dts > zcu.dslow)
+			return hard || CT.data.random(rando || 20);
 	},
 	_cpcbz: [],
 	onCurPer: function(cb) {

@@ -16,6 +16,7 @@ zero.core.morphs = {
 		geo.verticesNeedUpdate = true;
 	},
 	tick: function(thing) {
+		if (zero.core.util.shouldSkip(false, 120)) return;
 		if (thing.opts.shader)
 			return zero.core.shaders.tick(thing);
 		var geo = thing.thring.geometry, modz = {},

@@ -45,7 +45,7 @@ zero.core.Hair = CT.Class({
 		this.cur = (max == this.count) ? 0 : max;
 	},
 	tick: function() {
-		zero.core.util.shouldSkip() || this.tickBatch();
+		zero.core.util.shouldSkip(false, 120) || this.tickBatch();
 	},
 	init: function(opts) {
 		this.opts = opts = CT.merge(opts, {
