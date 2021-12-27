@@ -286,7 +286,7 @@ zero.core.Person = CT.Class({
 		return this.body.bones[0].getWorldDirection();
 	},
 	_dance: function() {
-		if (!this.activeDance)
+		if (!this.body || !this.activeDance)
 			return;
 		var dance = this.opts.dances[this.activeDance];
 		dance.step = (dance.step + 1) % dance.steps.length;
