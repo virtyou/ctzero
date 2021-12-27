@@ -392,6 +392,7 @@ zero.core.util = {
 	    if (zcu.now) {
 	    	zcu.rdts = (now - zcu.now) / 1000;
 	        zcu.dts = Math.min(zcu.dmax, zcu.rdts);
+	        zcu.slow = zcu.dts > zcu.dslow;
 	    }
 	    dts = zcu.dts;
 	    rdts = zcu.rdts;
@@ -421,10 +422,7 @@ zero.core.util = {
 		return zcu.dperf / zcu.dts;
 	},
 	shouldSkip: function(hard, rando) {
-		var zcu = zero.core.util;
-		if (hard && zcu.ticker < 100) return true;
-		if (zcu.dts > zcu.dslow)
-			return hard || CT.data.random(rando || 20);
+		return zero.core.util.slow && (hard || CT.data.random(rando || 20));
 	},
 	_cpcbz: [],
 	onCurPer: function(cb) {
