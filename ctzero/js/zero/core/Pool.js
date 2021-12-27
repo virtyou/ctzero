@@ -6,8 +6,7 @@ zero.core.Pool = CT.Class({
 		if (zcu.shouldSkip() || !zero.core.camera.visible(this)) return;
 		var rate = zcu.tickRate(), smap = this.smap, t = zcu.ticker, i,
 			geo = this.thring.geometry, vertices = geo.vertices, vl = vertices.length,
-			mainCam = zero.core.camera, campos = mainCam.position(),
-			max = Math.min(vl, this.cur + vl * rate);
+			mainCam, campos, max = Math.min(vl, this.cur + vl * rate);
 		for (i = this.cur; i < max; i++)
 			vertices[i].z = smap[(t + i) % 60];
 		this.cur = i;
@@ -16,10 +15,14 @@ zero.core.Pool = CT.Class({
 		geo.computeFaceNormals();
 		geo.computeVertexNormals();
 		geo.verticesNeedUpdate = true;
-		this.cam.updateCubeMap(mainCam.get("renderer"), mainCam.scene);
-		this.cam.position.y = -campos.y - 80;
-		this.cam.position.z = campos.z;//+22;
-		this.cam.position.x = campos.x;
+		if (!(t % 50)) {
+			mainCam = zero.core.camera;
+			campos = mainCam.position();
+			this.cam.position.y = -campos.y - 80;
+			this.cam.position.z = campos.z;//+22;
+			this.cam.position.x = campos.x;
+			this.cam.updateCubeMap(mainCam.get("renderer"), mainCam.scene);
+		}
 		this.bubbles && this.bubbles.tick(dts);
 		this.tickPos();
 	},
