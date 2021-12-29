@@ -59,8 +59,8 @@ zero.base.particles = {
 //		grow: 0.02,
 //		dissolve: 0.02,
 		sizeVariance: 0.8,
-		posVariance: [200, 20, 200],
-//		velVariance: [4, 2, 4],
+//		posVariance: [200, 20, 200],
+		velVariance: [1, 0.5, 1],
 		scale: [40, 4, 80],
 		pmat: {
 			opacity: 1,
