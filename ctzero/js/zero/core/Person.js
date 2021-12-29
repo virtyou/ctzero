@@ -152,18 +152,29 @@ zero.core.Person = CT.Class({
 			}, 600);
 		});
 	},
-	get: function(subject, cb) {
+	get: function(target, cb) {
 		var g = this.opts.gear, h = g.held = g.held || {},
-			side = "right", bod = this.body, gobj = {};
+			gobj = {}, side = "right", bod = this.body,
+			to = target.opts, held = to.kind == "held", loc;
 		if (h.right) {
 			if (h.left)
 				return this.say("i don't have any free hands");
 			side = "left";
 		}
-		this.touch(subject, function() {
-			gobj[side] = g.held[side] = subject.opts.key;
-			bod.gear(gobj, true);
-			zero.core.current.room.removeObject(subject);
+		this.touch(target, function() {
+			if (held)
+				gobj[side] = g.held[side] = to.key;
+			else { // TODO: non-spine (body; left/right hand/arm/leg)
+				if (!g.worn)
+					g.worn = {};
+				if (!g.worn.spine)
+					g.worn.spine = {};
+				loc = to.kind.split("_").pop();
+				g.worn.spine[loc] = to.key;
+				gobj[loc] = to.key;
+			}
+			bod.gear(gobj, held);
+			zero.core.current.room.removeObject(target);
 			cb && cb();
 		}, side);
 	},

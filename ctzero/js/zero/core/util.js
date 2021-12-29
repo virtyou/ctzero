@@ -11,6 +11,29 @@ zero.core.util = {
 	_tickers: [],
 	rates: ["x-slow", "slow", "medium", "fast", "x-fast"],
 	pitches: ["x-low", "low", "medium", "high", "x-high"],
+	worns: [
+		"aura", "pelvis", "lumbar", "ribs", "neck", "head", "finger",
+		"hip", "knee", "ankle", "toe", "clavicle", "shoulder", "elbow", "wrist"
+	].map(k => "worn_" + k),
+	gear2bone: function(kind, side, sub, part) {
+		var zcc = zero.core.current, bone, part,
+			p = zcc.person || Object.values(zcc.people)[0],
+			bm = p.body.bmap, bms = side && bm[side];
+		if (kind == "held")
+			bone = bms.arm.wrist;
+		else if (kind.startsWith("worn_")) {
+			part = part || kind.split("_")[1];
+			if (part in bm)
+				bone = bm[part];
+			else if (bms) {
+				bone = sub ? bms[sub][part] : bms[part];
+				if (sub == "hand")
+					bone = bone[0];
+			} else // aura...
+				bone = 0; // i guess
+		}
+		return bone;
+	},
 	// https://stackoverflow.com/questions/5623838/rgb-to-hex-and-hex-to-rgb#5624139
 	hex2rgb: function(hex) {
 		var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
