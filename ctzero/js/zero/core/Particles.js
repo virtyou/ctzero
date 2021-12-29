@@ -69,6 +69,7 @@ zero.core.Particles = CT.Class({
 				velVariance: oz.velVariance,
 				acceleration: oz.acceleration,
 				scale: [size, size, size],
+				swarmScale: oz.scale,
 				size: size,
 				manager: oz.name
 			});
