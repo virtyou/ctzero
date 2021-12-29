@@ -11,23 +11,22 @@ zero.core.Bit = CT.Class({
 				this._size += this.pulser[t];
 			this.scale(this._size);
 		}
-		if (vel) {
-			for (i = 0; i < 3; i++) {
-				d = dz[i];
-				v = vel[i] * dts;
-				if (acc)
-					vel[i] += acc[i] * dts;
-				if (wobz[d])
-					v += wobz[d][t];
-				v && adjust("position", d, v, true);
-			}
+		if (!vel) return;
+		for (i = 0; i < 3; i++) {
+			d = dz[i];
+			v = vel[i] * dts;
+			if (acc)
+				vel[i] += acc[i] * dts;
+			if (wobz[d])
+				v += wobz[d][t];
+			v && adjust("position", d, v, true);
 		}
 		if (!bz) return;
 		pos = this.position();
 		for (i = 0; i < 3; i++) {
 			if (!vel[i]) continue;
 			d = dz[i];
-			h = (bz.max[d] - bz.min[d]) / 2;
+			h = ((bz.max[d] - bz.min[d]) / 2) / oz.swarmScale[i];
 			if (pos[d] < -h)
 				pos[d] = h;
 			else if (pos[d] > h)
@@ -42,18 +41,20 @@ zero.core.Bit = CT.Class({
 		this.opts = opts = CT.merge(opts, core.config.ctzero.env[ename], {
 			sphereGeometry: true
 		}, this.opts);
-		var vri, wobz = this.wobblers = {},
-			vv = opts.velVariance, pv = opts.posVariance;
+		var vel = opts.velocity, wobz = this.wobblers = {},
+			vri, vv = opts.velVariance, pv = opts.posVariance;
 		opts.variance && this._xyz.forEach(function(d, i) {
 			vri = opts.variance[i];
 			if (vri)
 				wobz[d] = zero.core.trig.segs(60, vri);
 		});
 		if (vv) {
-			opts.velocity = opts.velocity.map(function(v, i) {
+			opts.velocity = vel.map(function(v, i) {
 				return v + Math.random() * 2 * vv[i] - vv[i];
 			});
-		}
+		} else if (vel && !opts.acceleration && !Object.keys(wobz).length)
+			if (!vel[0] && !vel[1] && !vel[2])
+				opts.velocity = null;
 		if (pv) {
 			opts.position = opts.position.map(function(p, i) {
 				return p + Math.random() * 2 * pv[i] - pv[i];
