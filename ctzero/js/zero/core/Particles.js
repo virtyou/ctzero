@@ -40,15 +40,11 @@ zero.core.Particles = CT.Class({
 		//number && this.log("unable to release", number, "particles");
 	},
 	rebound: function() {
-		var p, part, oz = this.opts,
-			bz = oz.bounder.bounds, r = Math.random,
-			xl = bz.max.x - bz.min.y, xh = xl / 2,
-			yl = bz.max.y - bz.min.y, yh = yl / 2
-			zl = bz.max.z - bz.min.z, zh = zl / 2;
-		for (p in this.particle) {
-			part = this.particle[p];
-			part.position([r() * xl - xh, r() * yl - yh, r() * zl - zh]);
-		}
+		var p, oz = this.opts, bz = oz.bounder.bounds,
+			lens = this._xyz.map((d, i) => (bz.max[d] - bz.min[d]) / oz.scale[i]),
+			halves = lens.map(v => v / 2);
+		for (p in this.particle)
+			this.particle[p].setLimits(lens, halves);
 	},
 	preassemble: function() {
 		var i, size, oz = this.opts, pz = oz.parts;
@@ -69,7 +65,6 @@ zero.core.Particles = CT.Class({
 				velVariance: oz.velVariance,
 				acceleration: oz.acceleration,
 				scale: [size, size, size],
-				swarmScale: oz.scale,
 				size: size,
 				manager: oz.name
 			});
