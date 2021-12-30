@@ -1,9 +1,9 @@
 zero.core.Bit = CT.Class({
 	CLASSNAME: "zero.core.Bit",
 	tick: function(dts) {
-		var oz = this.opts, dz = this._xyz, bz = oz.bounder && oz.bounder.bounds,
-			wobz = this.wobblers, vel = this.velocity, acc = oz.acceleration,
-			pos, i, d, v, h, t = zero.core.util.ticker % 60, adjust = this.adjust;
+		var oz = this.opts, dz = this._xyz, wobz = this.wobblers,
+			vel = this.velocity, acc = oz.acceleration, pos, i, d,
+			v, h, t = zero.core.util.ticker % 60, adjust = this.adjust;
 		if (oz.grow || oz.pulse) {
 			if (oz.grow)
 				this._size += oz.grow * dts;
@@ -21,12 +21,12 @@ zero.core.Bit = CT.Class({
 				v += wobz[d][t];
 			v && adjust("position", d, v, true);
 		}
-		if (!bz) return;
+		if (!this.limits) return;
 		pos = this.position();
 		for (i = 0; i < 3; i++) {
 			if (!vel[i]) continue;
 			d = dz[i];
-			h = ((bz.max[d] - bz.min[d]) / 2) / oz.swarmScale[i];
+			h = this.limits[i];
 			if (pos[d] < -h)
 				pos[d] = h;
 			else if (pos[d] > h)
@@ -35,6 +35,10 @@ zero.core.Bit = CT.Class({
 	},
 	setVelocity: function() {
 		this.velocity = this.opts.velocity.map(v => v);
+	},
+	setLimits: function(lens, halves) {
+		this.limits = halves;
+		this.position(lens.map((v, i) => Math.random() * v - halves[i]));
 	},
 	init: function(opts) {
 		var ename = opts.manager ? (opts.manager + "_bit") : opts.name;
