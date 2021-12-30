@@ -186,7 +186,7 @@ zero.core.Room = CT.Class({
 					this[kind][item].setBounds();
 		}
 		this.rain && this.rain.rebound();
-//		this.fog && this.fog.rebound();
+		this.fog && this.fog.rebound();
 	},
 	setFriction: function(grippy) {
 		this.grippy = this.opts.grippy = grippy;
@@ -349,7 +349,7 @@ zero.core.Room = CT.Class({
 			thing: "Particles",
 			bounder: this
 		});
-		if (ename == "rain") setTimeout(function() {
+		setTimeout(function() {
 			thaz[ename].rebound();
 		});
 	},
