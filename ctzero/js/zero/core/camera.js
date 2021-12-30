@@ -7,7 +7,7 @@ var camera = zero.core.camera = {
 		lookers: {
 			pov: {
 				y: 5,
-				z: 15
+				z: 25
 			},
 			behind: {
 				y: 85,
