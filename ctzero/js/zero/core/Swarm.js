@@ -1,9 +1,10 @@
 zero.core.Swarm = CT.Class({
 	CLASSNAME: "zero.core.Swarm",
 	tick: function(dts) {
-		if (!this.pool || (zero.core.util.ticker % 2)) return; // wait
-		var zcu = zero.core.util, i, v, d,
-			frame = this._nextFrame();
+		var zc = zero.core, zcu = zc.util, i, v, d;
+		if (!this.pool || (zcu.ticker % 5) || !zc.camera.visible(this.pool[0]))
+			return; // wait
+		var frame = this._nextFrame();
 		for (i = 0; i < frame.length; i++) {
 			v = this.pool[i];
 			d = frame[i];
