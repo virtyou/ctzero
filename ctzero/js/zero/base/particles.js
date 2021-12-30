@@ -54,14 +54,14 @@ zero.base.particles = {
 		}
 	},
 	fog: {
-		count: 3,
+		count: 6,
 //		drip: true,
 //		grow: 0.02,
 //		dissolve: 0.02,
 		sizeVariance: 0.8,
 //		posVariance: [200, 20, 200],
 		velVariance: [1, 0.5, 1],
-		scale: [40, 4, 80],
+		scale: [200, 20, 400],
 		pmat: {
 			opacity: 1,
 			color: 0x999999,
