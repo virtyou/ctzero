@@ -72,7 +72,8 @@ zero.base.particles = {
 	rain: {
 		count: 400,
 		size: 2,
-		velocity: [0, -800, 0],
+		velocity: [0, -300, 0],
+		scale: [1, 4, 1],
 		pmat: {
 			opacity: 0.6,
 			shininess: 150,
