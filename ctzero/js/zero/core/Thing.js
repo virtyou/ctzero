@@ -460,7 +460,8 @@ zero.core.Thing = CT.Class({
 	},
 	update: function(opts) {
 		var zcu = zero.core.util, mat = this.material,
-			o, setter, hasT = "texture" in opts || "video" in opts, full = hasT && !mat;
+			hasT = "texture" in opts || "video" in opts || "vstrip" in opts,
+			o, setter, full = hasT && !mat;
 		full || ["stripset", "geometry", "matcat", "meshcat"].forEach(function(item) {
 			full = full || (item in opts);
 		});
