@@ -11,6 +11,6 @@ zero.base.flora = {
 	tree: { // stem[trunk], branches, leaves, fruit
 		segments: 4,
 		branches: 8,
-		scale: [100, 100, 100]
+		scale: [2, 2, 2]
 	}
 };

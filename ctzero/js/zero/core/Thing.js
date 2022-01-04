@@ -654,11 +654,11 @@ zero.core.Thing = CT.Class({
 		}
 		if (oz.coneGeometry) {
 			var cgs = (typeof oz.coneGeometry == "number") ? oz.coneGeometry : 20;
-			oz.geometry = new THREE.ConeGeometry(cgs, cgs * 2);
+			oz.geometry = new THREE.ConeGeometry(cgs, cgs * (oz.geomult || 2));
 		}
 		if (oz.cylinderGeometry) {
 			var cgs = (typeof oz.cylinderGeometry == "number") ? oz.cylinderGeometry : 10;
-			oz.geometry = new THREE.CylinderGeometry(cgs, cgs, cgs * 2);
+			oz.geometry = new THREE.CylinderGeometry(cgs, cgs, cgs * (oz.geomult || 2));
 		}
 		if (oz.planeGeometry) {
 			var g = oz.planeGeometry; // better way?

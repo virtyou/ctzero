@@ -13,7 +13,7 @@ zero.core.Flora = CT.Class({
 		}
 	},
 	init: function(opts) {
-		this.opts = CT.merge(opts, zero.base.flora[opts.name], {
+		this.opts = CT.merge(opts, zero.base.flora[opts.kind], {
 			stem: "brown",
 			leaf: "green",
 			fruit: "red",
@@ -24,8 +24,9 @@ zero.core.Flora = CT.Class({
 			segments: 2, // per stem/branch
 			branches: 2, // per segment
 			flowers: 1, // max per (outer) segment
+			petals: 8, // max per flower
 			fruits: 1, // max per (outer) segment
-			leaves: 3 // max per (outer) segment
+			leaves: 3 // max per segment
 		}, this.opts);
 	}
 }, zero.core.Thing);
@@ -36,7 +37,7 @@ zero.core.Flora.Stem = CT.Class({
 		var oz = this.opts, pz = oz.parts, ploz = oz.plant.opts,
 			soz, s = 1, i, lev = oz.levels - 1, r = Math.random;
 		for (i = 0; i < ploz.segments; i++) {
-			s -= 0.1;
+//			s -= 0.1;
 			soz = {
 				subclass: zero.core.Flora.Segment,
 				index: i,
@@ -44,8 +45,8 @@ zero.core.Flora.Stem = CT.Class({
 				kind: "segment",
 				levels: lev,
 				plant: oz.plant,
-				scale: [s, s, s],
-				position: [0, 0, 20],
+//				scale: [s, s, s],
+				position: [0, 10, 0],
 				rotation: [r() - 0.5, r() - 0.5, r() - 0.5]
 			};
 			pz.push(soz);
@@ -64,15 +65,16 @@ zero.core.Flora.Segment = CT.Class({
 		var oz = this.opts, pz = oz.parts,
 			i, ploz = oz.plant.opts,
 			endz = zero.core.Flora.enders,
-			subclass = endz.subclasses[variety],
-			sing = endz.sings[variety];
+			sing = endz.sings[variety],
+			subclass = endz.subclasses[sing];
 		for (i = 0; i < CT.data.random(ploz[variety] + 1); i ++) {
 			pz.push({
 				subclass: subclass,
 				index: i,
 				name: sing + i,
 				kind: sing,
-				plant: oz.plant
+				plant: oz.plant,
+				position: [0, 5, 0]
 			});
 		}
 	},
@@ -91,12 +93,15 @@ zero.core.Flora.Segment = CT.Class({
 					rotation: [r() - 0.5, r() - 0.5, r() - 0.5]
 				});
 			}
-		} else
+		} else if (oz.index)
 			["leaves", "fruits", "flowers"].forEach(this.enders);
+		else
+			this.enders("leaves");
 	},
 	init: function(opts) {
 		this.opts = CT.merge(opts, {
-			cylinderGeometry: true,
+			cylinderGeometry: 1,
+			geomult: 10,
 			material: {
 				color: zero.core.util.randHue(opts.plant.opts.stem)
 			}
@@ -108,7 +113,9 @@ zero.core.Flora.Leaf = CT.Class({
 	CLASSNAME: "zero.core.Flora.Leaf",
 	init: function(opts) {
 		this.opts = CT.merge(opts, {
-			coneGeometry: true,
+			coneGeometry: 2,
+			rotation: [0, CT.data.random(Math.PI, true), 2],
+			scale: [0.3, 1, 1],
 			material: {
 				color: zero.core.util.randHue(opts.plant.opts.leaf)
 			}
@@ -120,7 +127,8 @@ zero.core.Flora.Fruit = CT.Class({
 	CLASSNAME: "zero.core.Flora.Fruit",
 	init: function(opts) {
 		this.opts = CT.merge(opts, {
-			sphereGeometry: true,
+			sphereGeometry: 2,
+			rotation: [0, CT.data.random(Math.PI, true), 1],
 			material: {
 				color: zero.core.util.randHue(opts.plant.opts.fruit)
 			}
@@ -130,12 +138,39 @@ zero.core.Flora.Fruit = CT.Class({
 
 zero.core.Flora.Flower = CT.Class({
 	CLASSNAME: "zero.core.Flora.Flower",
+	preassemble: function() {
+		var i, oz = this.opts, pz = oz.parts,
+			ploz = oz.plant.opts, seg = Math.PI * 2 / ploz.petals;
+//		for (i = 0; i < CT.data.random(ploz.petals) + 1; i++) {
+		for (i = 0; i < ploz.petals; i++) {
+			pz.push({
+				subclass: zero.core.Flora.Petal,
+				index: i,
+				name: "petal" + i,
+				kind: "petal",
+				plant: oz.plant,
+				rotation: [0, i * seg, 1 + Math.random()],
+			});
+		}
+	},
 	init: function(opts) {
-		// TODO: add petals!
 		this.opts = CT.merge(opts, {
-			sphereGeometry: true,
+			sphereGeometry: 1.4,
 			material: {
 				color: zero.core.util.randHue(opts.plant.opts.flower)
+			}
+		}, this.opts);
+	}
+}, zero.core.Thing);
+
+zero.core.Flora.Petal = CT.Class({
+	CLASSNAME: "zero.core.Flora.Petal",
+	init: function(opts) {
+		this.opts = CT.merge(opts, {
+			coneGeometry: 1.8,
+			scale: [0.2, 1, 1],
+			material: {
+				color: zero.core.util.randHue(opts.plant.opts.petal)
 			}
 		}, this.opts);
 	}
@@ -144,9 +179,9 @@ zero.core.Flora.Flower = CT.Class({
 var F = zero.core.Flora;
 F.enders = {
 	subclasses: {
-		leaves: F.Leaf,
-		fruits: F.Fruit,
-		flowers: F.Flower
+		leaf: F.Leaf,
+		fruit: F.Fruit,
+		flower: F.Flower
 	},
 	sings: {
 		leaves: "leaf",
@@ -154,3 +189,35 @@ F.enders = {
 		flowers: "flower"
 	}
 };
+
+zero.core.Flora.Garden = CT.Class({
+	CLASSNAME: "zero.core.Flora.Garden",
+	row: function(plant, spacing, z) {
+		var i, oz = this.opts, pz = oz.parts,
+			width = oz[plant] * spacing,
+			x = -width / 2;
+		for (i = 0; i < oz[plant]; i++) {
+			pz.push({
+				thing: "Flora",
+				index: i,
+				name: plant + i,
+				kind: plant,
+				position: [x, 0, z]
+			});
+			x += spacing;
+		}
+	},
+	preassemble: function() {
+		// TODO: modes, rows vs random
+		this.row("flower", 30, 50);
+		this.row("bush", 50, 0);
+		this.row("tree", 80, -80);
+	},
+	init: function(opts) {
+		this.opts = CT.merge(opts, {
+			flower: 10,
+			bush: 4,
+			tree: 2
+		}, this.opts);
+	}
+}, zero.core.Thing);

@@ -18,14 +18,16 @@ zero.core.util = {
 	randHue: function(family) {
 		var zcu = zero.core.util, cz = zcu._colors, i2, lz,
 			cstr = "0000", c1, c2, d = CT.data, r = d.random;
-		if (family == "brown")
-			return "#" + (20 + r(20)) + "" + (60 + r(20)) + "00";
 		if (family == "yellow")
+			return "#" + (80 + r(20)) + "" + (80 + r(20)) + "" + (10 + r(10));
+		if (family == "green") // eh........
+			return "#" + (20 + r(20)) + "" + (60 + r(20)) + "00";
+		if (family == "brown")
 			return "#" + (60 + r(20)) + "" + (20 + r(20)) + "00";
 		if (!cz) {
 			cz = zcu._colors = {};
 			lz = ["a", "b", "c", "d", "e", "f"];
-			["red", "green", "blue"].forEach(function(c, i) {
+			["red", "green", "blue"].forEach(function(c, i) { // eh green....
 				i2 = i * 2;
 				c1 = cstr.slice(0, i2);
 				c2 = cstr.slice(i2);
