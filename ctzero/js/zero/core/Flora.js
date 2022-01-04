@@ -27,14 +27,19 @@ zero.core.Flora = CT.Class({
 zero.core.Flora.Stem = CT.Class({
 	CLASSNAME: "zero.core.Flora.Stem",
 	preassemble: function() {
-		var oz = this.opts, pz = oz.parts,
-			i, lev = oz.level - 1;
+		var oz = this.opts, pz = oz.parts, s = 1,
+			i, lev = oz.level - 1, r = Math.random;
 		for (i = 0; i < oz.segments; i++) {
+			s -= 0.1;
 			pz.push(CT.merge({
 				subclass: zero.core.Flora.Segment,
 				index: i,
 				name: "segment" + i,
-				kind: "segment"
+				kind: "segment",
+				level: lev,
+				scale: [s, s, s],
+				position: [0, 0, 20 * i],
+				rotation: [r() - 0.5, r() - 0.5, r() - 0.5]
 			}, oz));
 		}
 	}
@@ -46,6 +51,23 @@ zero.core.Flora.Branch = CT.Class({
 
 zero.core.Flora.Segment = CT.Class({
 	CLASSNAME: "zero.core.Flora.Segment",
+	preassemble: function() {
+		var i, oz = this.opts, pz = oz.parts, r = Math.random;
+		for (i = 0; i < oz.branches; i++) {
+
+			// TODO: Leaf/Flower if !lev
+
+			pz.push(CT.merge({
+				subclass: zero.core.Flora.Branch,
+				index: i,
+				name: "branch" + i,
+				kind: "branch",
+				level: lev,
+				scale: [0.8, 0.8, 0.8],
+				rotation: [r() - 0.5, r() - 0.5, r() - 0.5]
+			}, oz));
+		}
+	},
 	init: function(opts) {
 		this.opts = CT.merge(opts, {
 			cylinderGeometry: true,
