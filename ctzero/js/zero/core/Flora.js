@@ -13,13 +13,18 @@ zero.core.Flora = CT.Class({
 	},
 	init: function(opts) {
 		this.opts = CT.merge(opts, zero.base.flora[opts.name], {
-			color: "brown",
+			stem: "brown",
+			leaf: "green",
+			fruit: "red",
+			flower: "blue",
+			petal: "yellow",
 			stems: 1,
-			levels: 2, // max depth (branch layers)
-			segments: 2, // max per branch(?) ; stem total
-			branches: 2, // max per segment
-			leaves: 3, // max per segment - outer branches mostly?
-			flower: "blossom", // |berry|fruit - outer branches only
+			levels: 2, // depth (branch layers)
+			segments: 2, // per stem/branch
+			branches: 2, // per segment
+			flowers: 1, // max per (outer) segment
+			fruits: 1, // max per (outer) segment
+			leaves: 3 // max per (outer) segment
 		});
 	}
 }, zero.core.Thing);
@@ -72,7 +77,7 @@ zero.core.Flora.Segment = CT.Class({
 		this.opts = CT.merge(opts, {
 			cylinderGeometry: true,
 			material: {
-				color: zero.core.util.randHue(opts.color)
+				color: zero.core.util.randHue(opts.stem)
 			}
 		});
 	}
@@ -84,7 +89,7 @@ zero.core.Flora.Leaf = CT.Class({
 		this.opts = CT.merge(opts, {
 			coneGeometry: true,
 			material: {
-				color: zero.core.util.randHue("green")
+				color: zero.core.util.randHue(opts.leaf)
 			}
 		});
 	}
@@ -96,7 +101,20 @@ zero.core.Flora.Fruit = CT.Class({
 		this.opts = CT.merge(opts, {
 			sphereGeometry: true,
 			material: {
-				color: zero.core.util.randHue("red")
+				color: zero.core.util.randHue(opts.fruit)
+			}
+		});
+	}
+}, zero.core.Thing);
+
+zero.core.Flora.Flower = CT.Class({
+	CLASSNAME: "zero.core.Flora.Flower",
+	init: function(opts) {
+		// TODO: add petals!
+		this.opts = CT.merge(opts, {
+			sphereGeometry: true,
+			material: {
+				color: zero.core.util.randHue(opts.flower)
 			}
 		});
 	}
