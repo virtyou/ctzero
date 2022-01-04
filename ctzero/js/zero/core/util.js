@@ -20,6 +20,8 @@ zero.core.util = {
 			cstr = "0000", c1, c2, d = CT.data, r = d.random;
 		if (family == "brown")
 			return "#" + (20 + r(20)) + "" + (60 + r(20)) + "00";
+		if (family == "yellow")
+			return "#" + (60 + r(20)) + "" + (20 + r(20)) + "00";
 		if (!cz) {
 			cz = zcu._colors = {};
 			lz = ["a", "b", "c", "d", "e", "f"];
