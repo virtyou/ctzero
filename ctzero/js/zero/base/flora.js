@@ -2,15 +2,16 @@ zero.base.flora = {
 	flower: { // stem, leaves, flower
 		stem: "green",
 		fruits: 0,
-		flowers: 2
+		flowers: 2,
+		levels: 1
 	},
 	bush: { // stems, leaves, fruit[berry]
-		stems: 10,
+		stems: 8,
 		segments: 3
 	},
 	tree: { // stem[trunk], branches, leaves, fruit
-		segments: 4,
-		branches: 8,
-		scale: [2, 2, 2]
+		segments: 3,
+		branches: 3,
+		scale: [4, 4, 4]
 	}
 };

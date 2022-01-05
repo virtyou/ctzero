@@ -8,6 +8,7 @@ zero.core.Flora = CT.Class({
 				index: i,
 				name: "stem" + i,
 				kind: "stem",
+				levels: oz.levels,
 				plant: this
 			});
 		}
@@ -20,7 +21,7 @@ zero.core.Flora = CT.Class({
 			flower: "blue",
 			petal: "yellow",
 			stems: 1,
-			levels: 1, // depth (branch layers)
+			levels: 2, // depth (branch layers)
 			segments: 2, // per stem/branch
 			branches: 2, // per segment
 			flowers: 1, // max per (outer) segment
@@ -90,6 +91,7 @@ zero.core.Flora.Segment = CT.Class({
 					kind: "branch",
 					plant: oz.plant,
 					scale: [0.8, 0.8, 0.8],
+//					rotation: [0, Math.random * 2 * Math.PI, 1 + Math.random()],
 					rotation: [r() - 0.5, r() - 0.5, r() - 0.5]
 				});
 			}
@@ -99,13 +101,18 @@ zero.core.Flora.Segment = CT.Class({
 			this.enders("leaves");
 	},
 	init: function(opts) {
-		this.opts = CT.merge(opts, {
+		var basics = {
 			cylinderGeometry: 1,
 			geomult: 10,
 			material: {
 				color: zero.core.util.randHue(opts.plant.opts.stem)
 			}
-		}, this.opts);
+		};
+		if (opts.plant.opts.kind == "tree") {
+			basics.cylinderGeometry = 4;
+			basics.geomult = 2.5;
+		}
+		this.opts = CT.merge(opts, basics, this.opts);
 	}
 }, zero.core.Thing);
 
@@ -113,7 +120,7 @@ zero.core.Flora.Leaf = CT.Class({
 	CLASSNAME: "zero.core.Flora.Leaf",
 	init: function(opts) {
 		this.opts = CT.merge(opts, {
-			coneGeometry: 2,
+			coneGeometry: 4,
 			rotation: [0, CT.data.random(Math.PI, true), 2],
 			scale: [0.3, 1, 1],
 			material: {
