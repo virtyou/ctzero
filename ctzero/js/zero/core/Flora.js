@@ -70,6 +70,7 @@ zero.core.Flora.Segment = CT.Class({
 			subclass = endz.subclasses[sing];
 		for (i = 0; i < CT.data.random(ploz[variety] + 1); i ++) {
 			pz.push({
+//				matcat: "Basic",
 				subclass: subclass,
 				index: i,
 				name: sing + i,
@@ -102,6 +103,7 @@ zero.core.Flora.Segment = CT.Class({
 	},
 	init: function(opts) {
 		var basics = {
+//			matcat: "Basic",
 			cylinderGeometry: 1,
 			geomult: 10,
 			material: {
@@ -214,14 +216,35 @@ zero.core.Flora.Garden = CT.Class({
 			x += spacing;
 		}
 	},
+	random: function(plant) {
+		var i, oz = this.opts, pz = oz.parts,
+			bz = zero.core.current.room.bounds,
+			xmin = bz.min.x, zmin = bz.min.z,
+			xmax = bz.max.x, zmax = bz.max.z;
+			xrange = xmax - xmin, zrange = zmax - zmin,
+			xhalf = xrange / 2, zhalf = zrange / 2;
+		for (i = 0; i < oz[plant]; i++) {
+			pz.push({
+				thing: "Flora",
+				index: i,
+				name: plant + i,
+				kind: plant,
+				position: [CT.data.random(xrange) - xhalf,
+					0, CT.data.random(zrange) - zhalf]
+			});
+		}
+	},
 	preassemble: function() {
-		// TODO: modes, rows vs random
-		this.row("flower", 30, 50);
-		this.row("bush", 50, 0);
-		this.row("tree", 80, -80);
+		if (this.opts.mode == "rows") {
+			this.row("flower", 30, 50);
+			this.row("bush", 50, 0);
+			this.row("tree", 80, -80);
+		} else
+			["tree", "bush", "flower"].forEach(this.random);
 	},
 	init: function(opts) {
 		this.opts = CT.merge(opts, {
+			mode: "random", // |rows
 			flower: 10,
 			bush: 4,
 			tree: 2
