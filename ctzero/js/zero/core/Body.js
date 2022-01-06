@@ -23,6 +23,7 @@ zero.core.Body = CT.Class({
 		this._.setFlippers();
 		this._.setGrowers();
 		this._.setBounds();
+		core.config.ctzero.gravity && setTimeout(this.setBob);
 	},
 	setFriction: function(grippy, vertical) {
 		var s = this.springs;
