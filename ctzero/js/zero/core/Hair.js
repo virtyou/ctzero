@@ -6,19 +6,22 @@ zero.core.Hair = CT.Class({
 			this.count = 0;
 			return;
 		}
+		var material = CT.merge(oz.strand.material, oz.material);
+		if (oz.texture)
+			material.map = zero.core.util.texture(oz.texture);
 		var space = r * 2 / oz.density,
 			pz = oz.parts, c = oz.coverage,
 			xr = r * c[0], zr = r * c[1],
 			shift = oz.shift, i = 0, x, z,
-			offx = oz.offx, offz = oz.offz;
+			offx = oz.offx, offz = oz.offz,
+			mat = new THREE["Mesh" + oz.matcat + "Material"](material);
 		for (x = offx - xr; x <= offx + xr; x += space) {
 			for (z = offz - zr; z <= offz + zr; z += space) {
 				pz.push(CT.merge(oz.strand, {
 					thing: "Strand",
 					name: "strand" + i,
 					rotation: [x, 0, z],
-					texture: oz.texture,
-					material: oz.material
+					matinstance: mat
 				}));
 				i += 1;
 			}
