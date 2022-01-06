@@ -6,12 +6,13 @@ zero.base.flora = {
 		levels: 1
 	},
 	bush: { // stems, leaves, fruit[berry]
-		stems: 8,
-		segments: 3
+		stems: 4,
+//		segments: 3,
+		scale: [2, 2, 2]
 	},
 	tree: { // stem[trunk], branches, leaves, fruit
 		segments: 3,
 		branches: 3,
-		scale: [4, 4, 4]
+		scale: [6, 6, 6]
 	}
 };
