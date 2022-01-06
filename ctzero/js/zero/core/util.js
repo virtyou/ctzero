@@ -15,6 +15,27 @@ zero.core.util = {
 		"aura", "pelvis", "lumbar", "ribs", "neck", "head", "finger",
 		"hip", "knee", "ankle", "toe", "clavicle", "shoulder", "elbow", "wrist"
 	].map(k => "worn_" + k),
+	randHue: function(family) {
+		var zcu = zero.core.util, cz = zcu._colors, i2, lz,
+			cstr = "0000", c1, c2, d = CT.data, r = d.random;
+		if (family == "yellow")
+			return "#" + (80 + r(20)) + "" + (80 + r(20)) + "" + (10 + r(10));
+		if (family == "green") // eh........
+			return "#" + (20 + r(20)) + "" + (60 + r(20)) + "00";
+		if (family == "brown")
+			return "#" + (60 + r(20)) + "" + (20 + r(20)) + "00";
+		if (!cz) {
+			cz = zcu._colors = {};
+			lz = ["a", "b", "c", "d", "e", "f"];
+			["red", "green", "blue"].forEach(function(c, i) { // eh green....
+				i2 = i * 2;
+				c1 = cstr.slice(0, i2);
+				c2 = cstr.slice(i2);
+				cz[c] = lz.map(l => "#" + c1 + l + l + c2);
+			});
+		}
+		return d.choice(cz[family]);
+	},
 	gear2bone: function(kind, side, sub, part) {
 		var zcc = zero.core.current, bone, part,
 			p = zcc.person || Object.values(zcc.people)[0],
@@ -366,7 +387,7 @@ zero.core.util = {
 			opts.iterator = iterator;
 		if (parent)
 			opts.scene = parent;
-		return new zero.core[opts.custom ? "Custom" : (opts.thing || "Thing")](opts);
+		return new (opts.subclass || zero.core[opts.custom ? "Custom" : (opts.thing || "Thing")])(opts);
 	},
 	back: function(node, bgsrc, robj) {
 		if (!zero.core.util._back) {

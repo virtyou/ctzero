@@ -654,11 +654,11 @@ zero.core.Thing = CT.Class({
 		}
 		if (oz.coneGeometry) {
 			var cgs = (typeof oz.coneGeometry == "number") ? oz.coneGeometry : 20;
-			oz.geometry = new THREE.ConeGeometry(cgs, cgs * 2);
+			oz.geometry = new THREE.ConeGeometry(cgs, cgs * (oz.geomult || 2));
 		}
 		if (oz.cylinderGeometry) {
 			var cgs = (typeof oz.cylinderGeometry == "number") ? oz.cylinderGeometry : 10;
-			oz.geometry = new THREE.CylinderGeometry(cgs, cgs, cgs * 2);
+			oz.geometry = new THREE.CylinderGeometry(cgs, cgs, cgs * (oz.geomult || 2));
 		}
 		if (oz.planeGeometry) {
 			var g = oz.planeGeometry; // better way?
@@ -668,26 +668,30 @@ zero.core.Thing = CT.Class({
 			var meshname = (oz.shader ? "Shader"
 				: ("Mesh" + oz.matcat)) + "Material",
 				map, meshopts = oz.material;
-			if (oz.vstrip) this._vstrip(oz.vstrip);
-			if (oz.texture || oz.video) {
-				map = oz.texture ? zcu.texture(oz.texture)
-					: zcu.videoTexture(oz.video.item || oz.video, this);
-				this.repOff(map);
-				map.minFilter = THREE[oz.minfilt];
-				map.magFilter = THREE[oz.magfilt];
-				meshopts = CT.merge(meshopts, { map: map });
+			if (oz.matinstance)
+				this.material = oz.matinstance;
+			else {
+				if (oz.vstrip) this._vstrip(oz.vstrip);
+				if (oz.texture || oz.video) {
+					map = oz.texture ? zcu.texture(oz.texture)
+						: zcu.videoTexture(oz.video.item || oz.video, this);
+					this.repOff(map);
+					map.minFilter = THREE[oz.minfilt];
+					map.magFilter = THREE[oz.magfilt];
+					meshopts = CT.merge(meshopts, { map: map });
+				}
+				if (oz.shader) {
+					meshopts.vertexShader = zero.core.shaders.vertex(this);
+					meshopts.fragmentShader = zero.core.shaders.fragment(this);
+					meshopts.uniforms = zero.core.shaders.uniforms(this, map);
+					meshopts.attributes = zero.core.shaders.attributes(this);
+				}
+				if (this.material) {
+					this.material.dispose();
+					delete this.material;
+				}
+				this.material = new THREE[meshname](meshopts);
 			}
-			if (oz.shader) {
-				meshopts.vertexShader = zero.core.shaders.vertex(this);
-				meshopts.fragmentShader = zero.core.shaders.fragment(this);
-				meshopts.uniforms = zero.core.shaders.uniforms(this, map);
-				meshopts.attributes = zero.core.shaders.attributes(this);
-			}
-			if (this.material) {
-				this.material.dispose();
-				delete this.material;
-			}
-			this.material = new THREE[meshname](meshopts);
 			if (oz.stripset)
 				(new THREE[oz.loader]()).load(oz.stripset, this.setGeometry);
 			else
