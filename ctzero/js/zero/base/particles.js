@@ -70,10 +70,11 @@ zero.base.particles = {
 		}
 	},
 	rain: {
-		count: 400,
+		count: 800,
 		size: 2,
 		velocity: [0, -300, 0],
 		scale: [1, 4, 1],
+		sharemat: true,
 		pmat: {
 			opacity: 0.6,
 			shininess: 150,
