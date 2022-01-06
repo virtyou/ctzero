@@ -47,7 +47,8 @@ zero.core.Particles = CT.Class({
 			this.particle[p].setLimits(lens, halves);
 	},
 	preassemble: function() {
-		var i, size, oz = this.opts, pz = oz.parts;
+		var i, size, oz = this.opts, pz = oz.parts,
+			matinst = oz.sharemat && new THREE["Mesh" + oz.matcat + "Material"](oz.pmat);
 		for (i = 0; i < oz.count; i++) {
 			size = oz.size + oz.sizeVariance * Math.random();
 			pz.push({
@@ -58,6 +59,7 @@ zero.core.Particles = CT.Class({
 				grow: oz.grow,
 				pulse: oz.pulse,
 				material: oz.pmat,
+				matinstance: matinst,
 				bounder: oz.bounder,
 				stripset: oz.pstrip,
 				variance: oz.variance,
