@@ -233,7 +233,7 @@ zero.core.Person = CT.Class({
 		this.gesture("jump");
 		if (within) {
 			if (within.opts.state == "liquid")
-				bod.bubbletrail.release(1);
+				(zero.core.util.ticker % 10) || bod.bubbletrail.release(1);
 			else if (within.opts.state == "plasma") {
 				bod.flying = true;
 				setTimeout(function() { bod.landing = true; }, 8000);
@@ -245,7 +245,7 @@ zero.core.Person = CT.Class({
 			dance = bod.flying ? "fly" : "walk";
 		if (within && within.opts.state == "liquid") {
 			dance = "swim";
-			bod.bubbletrail.release(1);
+			(zero.core.util.ticker % 20) || bod.bubbletrail.release(1);
 		}
 		this.dance(dance, dur);
 	},
