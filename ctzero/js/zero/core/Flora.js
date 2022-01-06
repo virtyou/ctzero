@@ -144,7 +144,7 @@ zero.core.Flora.Fruit = CT.Class({
 	CLASSNAME: "zero.core.Flora.Fruit",
 	init: function(opts) {
 		this.opts = CT.merge(opts, {
-			sphereGeometry: 2,
+			sphereGeometry: 4,
 			rotation: [0, CT.data.random(Math.PI, true), 1],
 			matinstance: opts.plant.materials.fruit
 		}, this.opts);
@@ -169,7 +169,7 @@ zero.core.Flora.Flower = CT.Class({
 	},
 	init: function(opts) {
 		this.opts = CT.merge(opts, {
-			sphereGeometry: 1.4,
+			sphereGeometry: 2,
 			matinstance: opts.plant.materials.flower
 		}, this.opts);
 	}
@@ -179,7 +179,7 @@ zero.core.Flora.Petal = CT.Class({
 	CLASSNAME: "zero.core.Flora.Petal",
 	init: function(opts) {
 		this.opts = CT.merge(opts, {
-			coneGeometry: 1.8,
+			coneGeometry: 3,
 			scale: [0.2, 1, 1],
 			matinstance: opts.plant.materials.petal
 		}, this.opts);
@@ -244,11 +244,15 @@ zero.core.Flora.Garden = CT.Class({
 			["tree", "bush", "flower"].forEach(this.random);
 	},
 	init: function(opts) {
-		this.opts = CT.merge(opts, {
+		opts = this.opts = CT.merge(opts, {
 			mode: "random", // |rows
 			flower: 10,
 			bush: 4,
-			tree: 2
+			tree: 2,
+			mult: 1
 		}, this.opts);
+		["flower", "bush", "tree"].forEach(function(plant) {
+			opts[plant] *= opts.mult;
+		});
 	}
 }, zero.core.Thing);
