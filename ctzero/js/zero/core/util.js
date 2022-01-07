@@ -36,6 +36,11 @@ zero.core.util = {
 		}
 		return d.choice(cz[family]);
 	},
+	randMat: function(color) {
+		return new THREE.MeshPhongMaterial({
+			color: zero.core.util.randHue(color)
+		});
+	},
 	gear2bone: function(kind, side, sub, part) {
 		var zcc = zero.core.current, bone, part,
 			p = zcc.person || Object.values(zcc.people)[0],
