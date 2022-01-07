@@ -13,17 +13,13 @@ zero.core.Flora = CT.Class({
 			});
 		}
 	},
-	setMat: function(part) {
-		this.materials[part] = new THREE.MeshPhongMaterial({
-			color: zero.core.util.randHue(this.opts[part])
-		});
-	},
 	buildMaterials: function() {
-		var oz = this.opts, smat = this.setMat;
-		this.materials = {};
-		oz.leaves && smat("leaf");
+		var oz = this.opts, mats = this.materials = {};
+		if (oz.leaves)
+			mats[part] = zero.core.util.randMat(oz.leaf);
 		["stem", "fruit", "flower", "petal"].forEach(function(part) {
-			oz[part + "s"] && smat(part);
+			if (oz[part + "s"])
+				mats[part] = zero.core.util.randMat(oz[part]);
 		});
 	},
 	init: function(opts) {
