@@ -6,10 +6,12 @@ zero.base.fauna = {
 		segments: 10
 	},
 	spider: {
+		heft: 6,
 		legs: 8
 	},
 	centipede: {
-		segments: 8
-		legs: 2
+		segments: 8,
+		legs: 2,
+		heft: 6
 	}
 };
