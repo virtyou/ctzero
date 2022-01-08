@@ -10,7 +10,8 @@ zero.core.Fauna = CT.Class({
 				kind: "head",
 				animal: this,
 				matinstance: bmat,
-				sphereGeometry: oz.heft * oz.head
+				sphereGeometry: oz.heft,
+				scale: [oz.head, oz.head, oz.head]
 			});
 		}
 		for (i = 0; i < oz.segments; i++) {
@@ -54,7 +55,7 @@ zero.core.Fauna = CT.Class({
 			wing: "yellow",
 			segments: 1,
 			tail: false,
-			head: 1, // heft multiplier
+			head: 1, // scale
 			heft: 4, // body segment size
 			taper: 1, // segment scale multiplier
 			wings: 0, // per body segment
@@ -69,10 +70,11 @@ zero.core.Fauna.Segment = CT.Class({
 	limbs: function(kind, level) {
 		var oz = this.opts, pz = oz.parts, ani = oz.animal,
 			i, aoz = ani.opts, mats = ani.materials,
-			plur = kind + "s", seg = Math.PI * 2 / aoz[plur],
+			mat = mats[kind] || mats.body, plur = kind + "s",
+			count = aoz[plur], seg = Math.PI * 2 / count,
 			sub = zero.core.Fauna[CT.parse.capitalize(kind)],
-			mat = mats[kind] || mats.body;
-		for (i = 0; i < aoz[plur]; i++) {
+			roff = (count == 4 || count == 8) ? (Math.PI / count) : 0;
+		for (i = 0; i < count; i++) {
 			pz.push({
 				subclass: sub,
 				index: i,
@@ -80,7 +82,7 @@ zero.core.Fauna.Segment = CT.Class({
 				kind: kind,
 				animal: ani,
 				matinstance: mat,
-				rotation: [0, i * seg, level]
+				rotation: [0, i * seg + roff, level]
 			});
 		}
 	},
