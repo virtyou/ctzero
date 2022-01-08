@@ -1,7 +1,18 @@
 zero.core.Fauna = CT.Class({
 	CLASSNAME: "zero.core.Fauna",
 	preassemble: function() {
-		var oz = this.opts, pz = oz.parts, i, soz;
+		var oz = this.opts, pz = oz.parts,
+			i, soz, bmat = this.materials.body;
+		if (oz.head) {
+			pz.push({
+				subclass: zero.core.Fauna.Head,
+				name: "header",
+				kind: "head",
+				animal: this,
+				matinstance: bmat,
+				sphereGeometry: oz.heft * oz.head
+			});
+		}
 		for (i = 0; i < oz.segments; i++) {
 			soz = {
 				subclass: zero.core.Fauna.Segment,
@@ -9,13 +20,21 @@ zero.core.Fauna = CT.Class({
 				name: "segment" + i,
 				kind: "segment",
 				animal: this,
+				matinstance: bmat,
 				sphereGeometry: oz.heft,
-				matinstance: this.materials.body,
 				position: [0, 0, oz.heft],
 				scale: [oz.taper, oz.taper, oz.taper]
 			};
 			pz.push(soz);
 			pz = soz.parts = [];
+		}
+		if (oz.tail) {
+			pz.push(CT.merge(zero.base.body.tail[oz.tail], {
+				name: "wagger",
+				kind: "tail",
+				thing: "Tail",
+				matinstance: bmat
+			}));
 		}
 	},
 	buildMaterials: function() {
@@ -31,6 +50,8 @@ zero.core.Fauna = CT.Class({
 			eye: "green",
 			wing: "yellow",
 			segments: 1,
+			tail: false,
+			head: 1, // heft multiplier
 			heft: 4, // body segment size
 			taper: 1, // segment scale multiplier
 			wings: 0, // per body segment
@@ -100,7 +121,7 @@ zero.core.Fauna.Leg = CT.Class({
 }, zero.core.Thing);
 
 zero.core.Fauna.Bone = CT.Class({
-	CLASSNAME: "zero.core.Fauna.Leg",
+	CLASSNAME: "zero.core.Fauna.Bone",
 	init: function(opts) {
 		this.opts = CT.merge(opts, {
 			cylinderGeometry: 1,
@@ -109,9 +130,14 @@ zero.core.Fauna.Bone = CT.Class({
 	}
 }, zero.core.Thing);
 
+zero.core.Fauna.Head = CT.Class({
+	CLASSNAME: "zero.core.Fauna.Head",
+	preassemble: function() {
+		// TODO: Eyes, Ears, Mouth, Hair?
+	}
+}, zero.core.Thing);
+
 // TODO:
-// - Tail
-// - Head > Eyes, Ears, Hair?
 // - motion > tick, springz
 // - movement > wander
 
