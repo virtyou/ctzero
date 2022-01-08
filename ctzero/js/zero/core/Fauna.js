@@ -1,7 +1,7 @@
 zero.core.Fauna = CT.Class({
 	CLASSNAME: "zero.core.Fauna",
 	preassemble: function() {
-		var oz = this.opts, pz = oz.parts,
+		var oz = this.opts, pz = oz.parts, tbase,
 			i, soz, bmat = this.materials.body;
 		if (oz.head) {
 			pz.push({
@@ -29,12 +29,15 @@ zero.core.Fauna = CT.Class({
 			pz = soz.parts = [];
 		}
 		if (oz.tail) {
-			pz.push(CT.merge(zero.base.body.tail[oz.tail], {
+			tbase = zero.base.body.tail[oz.tail];
+			pz.push(CT.merge({
 				name: "wagger",
 				kind: "tail",
 				thing: "Tail",
-				matinstance: bmat
-			}));
+				matinstance: bmat,
+				offx: Math.PI / 2,
+				position: [0, 0, 0]
+			}, tbase));
 		}
 	},
 	buildMaterials: function() {
