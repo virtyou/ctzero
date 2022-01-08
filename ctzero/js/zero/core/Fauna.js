@@ -9,7 +9,9 @@ zero.core.Fauna = CT.Class({
 				name: "segment" + i,
 				kind: "segment",
 				animal: this,
-				position: [0, 8, 0],
+				sphereGeometry: oz.heft,
+				matinstance: this.materials.body,
+				position: [0, 0, oz.heft],
 				scale: [oz.taper, oz.taper, oz.taper]
 			};
 			pz.push(soz);
@@ -29,6 +31,7 @@ zero.core.Fauna = CT.Class({
 			eye: "green",
 			wing: "yellow",
 			segments: 1,
+			heft: 4, // body segment size
 			taper: 1, // segment scale multiplier
 			wings: 0, // per body segment
 			legs: 0 // per body segment
@@ -51,6 +54,7 @@ zero.core.Fauna.Segment = CT.Class({
 				index: i,
 				name: kind + i,
 				kind: kind,
+				animal: ani,
 				matinstance: mat,
 				rotation: [0, i * seg, level]
 			});
@@ -60,27 +64,92 @@ zero.core.Fauna.Segment = CT.Class({
 		var aoz = this.opts.animal.opts;
 		aoz.wings && this.limbs("wing", 2);
 		aoz.legs && this.limbs("leg", 1);
-	},
-	init: function(opts) {
-		this.opts = CT.merge(opts, {
-			sphereGeometry: 8,
-			matinstance: opts.animal.materials.body
-		}, this.opts);
 	}
-});
+}, zero.core.Thing);
 
 zero.core.Fauna.Wing = CT.Class({
 	CLASSNAME: "zero.core.Fauna.Wing",
 	init: function(opts) {
 		this.opts = CT.merge(opts, {
-			coneGeometry: 4,
+			coneGeometry: 8,
 			scale: [0.2, 1, 1]
 		}, this.opts);
 	}
-});
+}, zero.core.Thing);
+
+zero.core.Fauna.Leg = CT.Class({
+	CLASSNAME: "zero.core.Fauna.Leg",
+	preassemble: function() {
+		var oz = this.opts, pz = oz.parts, ani = oz.animal,
+			i, aoz = ani.opts, mat = ani.materials.body;
+		for (i = 0; i < 2; i++) {
+			soz = {
+				subclass: zero.core.Fauna.Bone,
+				index: i,
+				name: "bone" + i,
+				kind: "bone",
+				matinstance: mat,
+				position: [-3, 6, 0],
+				rotation: [0, 0, i],
+				scale: [aoz.taper, aoz.taper, aoz.taper]
+			};
+			pz.push(soz);
+			pz = soz.parts = [];
+		}
+	}
+}, zero.core.Thing);
+
+zero.core.Fauna.Bone = CT.Class({
+	CLASSNAME: "zero.core.Fauna.Leg",
+	init: function(opts) {
+		this.opts = CT.merge(opts, {
+			cylinderGeometry: 1,
+			geomult: 8
+		}, this.opts);
+	}
+}, zero.core.Thing);
 
 // TODO:
-// - Leg (cylinder segments w/ knee)
-// - Head > Eyes, Ears
+// - Tail
+// - Head > Eyes, Ears, Hair?
 // - motion > tick, springz
 // - movement > wander
+
+// TODO: zero.core.Collection base class for Menagerie/Garden?
+zero.core.Fauna.Menagerie = CT.Class({
+	CLASSNAME: "zero.core.Fauna.Menagerie",
+	row: function(animal, spacing, x) {
+		var i, oz = this.opts, pz = oz.parts,
+			width = oz[animal] * spacing,
+			z = -width / 2;
+		for (i = 0; i < oz[animal]; i++) {
+			pz.push({
+				thing: "Fauna",
+				index: i,
+				name: animal + i,
+				kind: animal,
+				position: [x, 0, z]
+			});
+			z += spacing;
+		}
+	},
+	random: function(animals) {},
+	preassemble: function() {
+		if (this.opts.mode == "rows") {
+			this.row("moth", 30, 50);
+			this.row("snake", 80, 0);
+			this.row("spider", 50, -50);
+			this.row("centipede", 80, -100);
+		} else
+			["moth", "snake", "spider", "centipede"].forEach(this.random);
+	},
+	init: function(opts) {
+		this.opts = CT.merge(opts, {
+			mode: "rows", // |random
+			moth: 1,
+			snake: 1,
+			spider: 1,
+			centipede: 1
+		}, this.opts);
+	}
+}, zero.core.Thing);
