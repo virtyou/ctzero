@@ -45,8 +45,9 @@ zero.core.Fauna = CT.Class({
 	buildMaterials: function() {
 		var oz = this.opts, mats = this.materials = {},
 			randMat = zero.core.util.randMat;
-		mats.body = randMat(oz.body);
-		mats.mouth = randMat(oz.mouth);
+		["body", "mouth", "hair"].forEach(function(kind) {
+			mats[kind] = randMat(oz[kind]);
+		});
 		["wing", "eye"].forEach(function(kind) {
 			if (oz[kind + "s"])
 				mats[kind] = randMat(oz[kind]);
@@ -58,6 +59,7 @@ zero.core.Fauna = CT.Class({
 			eye: "green",
 			wing: "yellow",
 			mouth: "red",
+			hair: "blue",
 			segments: 1,
 			tail: false,
 			head: 1, // scale
@@ -146,7 +148,6 @@ zero.core.Fauna.Head = CT.Class({
 		return posz;
 	},
 	preassemble: function() {
-		// TODO: Ears, Hair?
 		var i, oz = this.opts, pz = oz.parts, animal = oz.animal,
 			aoz = animal.opts, placement = this.eyePlacement(),
 			h = aoz.heft, my = -h / 2, mz = -Math.sqrt(h * h - my * my),
@@ -181,6 +182,12 @@ zero.core.Fauna.Head = CT.Class({
 				matinstance: animal.materials.eye
 			});
 		}
+		aoz.hairStyle && pz.push(CT.merge(zero.base.body.hair[aoz.hairStyle], {
+			name: aoz.hairStyle,
+			kind: "hair",
+			thing: "Hair",
+			matinstance: animal.materials.hair
+		}));
 	}
 }, zero.core.Thing);
 

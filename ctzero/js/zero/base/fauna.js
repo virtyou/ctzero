@@ -37,6 +37,7 @@ zero.base.fauna = {
 		segments: 2,
 		tail: "horse",
 		legShift: true,
-		scale: [1, 2, 3]
+		scale: [1, 2, 3],
+		hairStyle: "mohawk"
 	}
 };
