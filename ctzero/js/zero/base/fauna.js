@@ -15,9 +15,20 @@ zero.base.fauna = {
 		head: 0.4
 	},
 	centipede: {
-		segments: 8,
+		segments: 12,
 		legs: 2,
 		heft: 6,
-		head: 1.4
+		head: 1.4,
+		taper: 0.9
+	},
+	horse: {
+		legs: 2,
+		heft: 20,
+		head: 0.5,
+		taper: 0.8,
+		segments: 2,
+		tail: "horse",
+		headPos: [0, 15, 0],
+		scale: [1, 2, 3]
 	}
 };

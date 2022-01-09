@@ -10,6 +10,7 @@ zero.core.Fauna = CT.Class({
 				kind: "head",
 				animal: this,
 				matinstance: bmat,
+				position: oz.headPos,
 				sphereGeometry: oz.heft,
 				scale: [oz.head, oz.head, oz.head]
 			});
@@ -62,7 +63,8 @@ zero.core.Fauna = CT.Class({
 			taper: 1, // segment scale multiplier
 			wings: 0, // per body segment
 			legs: 0, // per body segment
-			eyes: 2
+			eyes: 2,
+			headPos: [0, 0, 0]
 		}, this.opts);
 		this.buildMaterials();
 	}
@@ -110,31 +112,23 @@ zero.core.Fauna.Leg = CT.Class({
 	CLASSNAME: "zero.core.Fauna.Leg",
 	preassemble: function() {
 		var oz = this.opts, pz = oz.parts, ani = oz.animal,
-			i, aoz = ani.opts, mat = ani.materials.body;
+			aoz = ani.opts, mat = ani.materials.body,
+			i, size = aoz.heft / 4;
 		for (i = 0; i < 2; i++) {
 			soz = {
-				subclass: zero.core.Fauna.Bone,
 				index: i,
 				name: "bone" + i,
 				kind: "bone",
 				matinstance: mat,
-				position: [-3, 6, 0],
 				rotation: [0, 0, i],
-				scale: [aoz.taper, aoz.taper, aoz.taper]
+				position: [-3 * size, 6 * size, 0],
+				scale: [aoz.taper, aoz.taper, aoz.taper],
+				cylinderGeometry: size,
+				geomult: 8
 			};
 			pz.push(soz);
 			pz = soz.parts = [];
 		}
-	}
-}, zero.core.Thing);
-
-zero.core.Fauna.Bone = CT.Class({
-	CLASSNAME: "zero.core.Fauna.Bone",
-	init: function(opts) {
-		this.opts = CT.merge(opts, {
-			cylinderGeometry: 1,
-			geomult: 8
-		}, this.opts);
 	}
 }, zero.core.Thing);
 
@@ -171,7 +165,7 @@ zero.core.Fauna.Head = CT.Class({
 // TODO: zero.core.Collection base class for Menagerie/Garden?
 zero.core.Fauna.Menagerie = CT.Class({
 	CLASSNAME: "zero.core.Fauna.Menagerie",
-	row: function(animal, spacing, x) {
+	col: function(animal, spacing, x) {
 		var i, oz = this.opts, pz = oz.parts,
 			width = oz[animal] * spacing,
 			z = -width / 2;
@@ -189,10 +183,11 @@ zero.core.Fauna.Menagerie = CT.Class({
 	random: function(animals) {},
 	preassemble: function() {
 		if (this.opts.mode == "rows") {
-			this.row("moth", 30, 50);
-			this.row("snake", 80, 0);
-			this.row("spider", 50, -50);
-			this.row("centipede", 80, -100);
+			this.col("moth", 30, 50);
+			this.col("snake", 80, 0);
+			this.col("spider", 50, -50);
+			this.col("centipede", 80, -100);
+			this.col("horse", 200, 120);
 		} else
 			["moth", "snake", "spider", "centipede"].forEach(this.random);
 	},
@@ -202,7 +197,8 @@ zero.core.Fauna.Menagerie = CT.Class({
 			moth: 1,
 			snake: 1,
 			spider: 1,
-			centipede: 1
+			centipede: 1,
+			horse: 1
 		}, this.opts);
 	}
 }, zero.core.Thing);
