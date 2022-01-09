@@ -11,6 +11,7 @@ zero.base.fauna = {
 	spider: {
 		heft: 6,
 		legs: 8,
+		eyes: 8,
 		head: 0.4
 	},
 	centipede: {

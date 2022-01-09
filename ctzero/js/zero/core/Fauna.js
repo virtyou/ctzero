@@ -45,8 +45,10 @@ zero.core.Fauna = CT.Class({
 		var oz = this.opts, mats = this.materials = {},
 			randMat = zero.core.util.randMat;
 		mats.body = randMat(oz.body);
-		if (oz.wings)
-			mats.wing = randMat(oz.wing);
+		["wing", "eye"].forEach(function(kind) {
+			if (oz[kind + "s"])
+				mats[kind] = randMat(oz[kind]);
+		});
 	},
 	init: function(opts) {
 		this.opts = CT.merge(opts, zero.base.fauna[opts.kind], {
@@ -59,7 +61,8 @@ zero.core.Fauna = CT.Class({
 			heft: 4, // body segment size
 			taper: 1, // segment scale multiplier
 			wings: 0, // per body segment
-			legs: 0 // per body segment
+			legs: 0, // per body segment
+			eyes: 2
 		}, this.opts);
 		this.buildMaterials();
 	}
@@ -137,13 +140,32 @@ zero.core.Fauna.Bone = CT.Class({
 
 zero.core.Fauna.Head = CT.Class({
 	CLASSNAME: "zero.core.Fauna.Head",
+	eyePlacement: function() {
+		var oz = this.opts, aoz = oz.animal.opts,
+			i, z = -aoz.heft, posz = [];
+		for (i = 0; i < aoz.eyes; i++)
+			posz.push([(i % 2) * 2 - 1, Math.floor(i / 2), z]);
+		return posz;
+	},
 	preassemble: function() {
-		// TODO: Eyes, Ears, Mouth, Hair?
+		// TODO: Ears, Mouth, Hair?
+		var i, oz = this.opts, pz = oz.parts, animal = oz.animal,
+			aoz = animal.opts, placement = this.eyePlacement();
+		for (i = 0; i < aoz.eyes; i++) {
+			pz.push({
+				index: i,
+				name: "eye" + i,
+				kind: "eye",
+				sphereGeometry: 1,
+				position: placement[i],
+				matinstance: animal.materials.eye
+			});
+		}
 	}
 }, zero.core.Thing);
 
 // TODO:
-// - motion > tick, springz
+// - motion > tick ; trig or springz? (probs trig...)
 // - movement > wander
 
 // TODO: zero.core.Collection base class for Menagerie/Garden?
