@@ -10,7 +10,7 @@ zero.core.Fauna = CT.Class({
 				kind: "head",
 				animal: this,
 				matinstance: bmat,
-				position: oz.headPos,
+				position: [0, oz.headY, 0],
 				sphereGeometry: oz.heft,
 				scale: [oz.head, oz.head, oz.head]
 			});
@@ -66,7 +66,7 @@ zero.core.Fauna = CT.Class({
 			wings: 0, // per body segment
 			legs: 0, // per body segment
 			eyes: 2,
-			headPos: [0, 0, 0]
+			headY: 0
 		}, this.opts);
 		this.buildMaterials();
 	}
@@ -149,7 +149,8 @@ zero.core.Fauna.Head = CT.Class({
 		// TODO: Ears, Hair?
 		var i, oz = this.opts, pz = oz.parts, animal = oz.animal,
 			aoz = animal.opts, placement = this.eyePlacement(),
-			h = aoz.heft, my = -h / 2, mz = -Math.sqrt(h * h - my * my);
+			h = aoz.heft, my = -h / 2, mz = -Math.sqrt(h * h - my * my),
+			earSize = h / 6, earX = earSize;
 		pz.push({
 			name: "mouth",
 			kind: "facial",
@@ -158,6 +159,18 @@ zero.core.Fauna.Head = CT.Class({
 			position: [0, my, mz],
 			matinstance: animal.materials.mouth
 		});
+		for (i = 0; i < 2; i++) {
+			pz.push({
+				index: i,
+				name: "ear" + i,
+				kind: "facial",
+				geomult: aoz.earMult,
+				coneGeometry: earSize,
+				position: [earX, h, 0],
+				matinstance: animal.materials.body
+			});
+			earX *= -1;
+		}
 		for (i = 0; i < aoz.eyes; i++) {
 			pz.push({
 				index: i,
@@ -196,17 +209,19 @@ zero.core.Fauna.Menagerie = CT.Class({
 	random: function(animals) {},
 	preassemble: function() {
 		if (this.opts.mode == "rows") {
+			this.col("horse", 200, 100);
 			this.col("moth", 30, 50);
 			this.col("snake", 80, 0);
-			this.col("spider", 50, -50);
-			this.col("centipede", 80, -100);
-			this.col("horse", 200, 120);
+			this.col("spider", 50, -40);
+			this.col("ant", 50, -90);
+			this.col("centipede", 80, -130);
 		} else
 			["moth", "snake", "spider", "centipede"].forEach(this.random);
 	},
 	init: function(opts) {
 		this.opts = CT.merge(opts, {
 			mode: "rows", // |random
+			ant: 1,
 			moth: 1,
 			snake: 1,
 			spider: 1,

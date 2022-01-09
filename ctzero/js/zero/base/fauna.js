@@ -14,6 +14,12 @@ zero.base.fauna = {
 		eyes: 8,
 		head: 0.4
 	},
+	ant: {
+		legs: 2,
+		headY: 5,
+		earMult: 10,
+		segments: 3
+	},
 	centipede: {
 		segments: 12,
 		legs: 2,
@@ -25,11 +31,12 @@ zero.base.fauna = {
 		legs: 2,
 		heft: 20,
 		head: 0.5,
+		headY: 15,
 		taper: 0.8,
+		earMult: 4,
 		segments: 2,
 		tail: "horse",
 		legShift: true,
-		headPos: [0, 15, 0],
 		scale: [1, 2, 3]
 	}
 };
