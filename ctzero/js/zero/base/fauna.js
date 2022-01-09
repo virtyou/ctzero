@@ -17,7 +17,7 @@ zero.base.fauna = {
 	ant: {
 		legs: 2,
 		headY: 5,
-		earMult: 10,
+		earMult: 20,
 		segments: 3
 	},
 	centipede: {

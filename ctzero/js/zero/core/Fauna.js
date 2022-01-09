@@ -168,6 +168,7 @@ zero.core.Fauna.Head = CT.Class({
 				geomult: aoz.earMult,
 				coneGeometry: earSize,
 				position: [earX, h, 0],
+				rotation: [0, 0, i - 0.5],
 				matinstance: animal.materials.body
 			});
 			earX *= -1;
