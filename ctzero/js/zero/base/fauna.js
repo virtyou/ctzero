@@ -28,6 +28,7 @@ zero.base.fauna = {
 		taper: 0.8,
 		segments: 2,
 		tail: "horse",
+		legShift: true,
 		headPos: [0, 15, 0],
 		scale: [1, 2, 3]
 	}

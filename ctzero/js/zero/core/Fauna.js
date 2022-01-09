@@ -78,7 +78,8 @@ zero.core.Fauna.Segment = CT.Class({
 			mat = mats[kind] || mats.body, plur = kind + "s",
 			count = aoz[plur], seg = Math.PI * 2 / count,
 			sub = zero.core.Fauna[CT.parse.capitalize(kind)],
-			roff = (count == 4 || count == 8) ? (Math.PI / count) : 0;
+			roff = (count == 4 || count == 8) ? (Math.PI / count) : 0,
+			legShift = aoz.legShift ? (oz.index % 2 ? 1 : -1) : 0;
 		for (i = 0; i < count; i++) {
 			pz.push({
 				subclass: sub,
@@ -87,14 +88,15 @@ zero.core.Fauna.Segment = CT.Class({
 				kind: kind,
 				animal: ani,
 				matinstance: mat,
-				rotation: [0, i * seg + roff, level]
+				rotation: [0, i * seg + roff + legShift, level]
 			});
+			legShift *= -1;
 		}
 	},
 	preassemble: function() {
 		var aoz = this.opts.animal.opts;
 		aoz.wings && this.limbs("wing", 2);
-		aoz.legs && this.limbs("leg", 1);
+		aoz.legs && this.limbs("leg", aoz.legShift ? 2 : 1);
 	}
 }, zero.core.Thing);
 
