@@ -16,7 +16,7 @@ zero.core.Flora = CT.Class({
 	buildMaterials: function() {
 		var oz = this.opts, mats = this.materials = {};
 		if (oz.leaves)
-			mats[part] = zero.core.util.randMat(oz.leaf);
+			mats.leaf = zero.core.util.randMat(oz.leaf);
 		["stem", "fruit", "flower", "petal"].forEach(function(part) {
 			if (oz[part + "s"])
 				mats[part] = zero.core.util.randMat(oz[part]);
@@ -198,53 +198,11 @@ F.enders = {
 
 zero.core.Flora.Garden = CT.Class({
 	CLASSNAME: "zero.core.Flora.Garden",
-	row: function(plant, spacing, z) {
-		var i, oz = this.opts, pz = oz.parts,
-			width = oz[plant] * spacing,
-			x = -width / 2;
-		for (i = 0; i < oz[plant]; i++) {
-			pz.push({
-				thing: "Flora",
-				index: i,
-				name: plant + i,
-				kind: plant,
-				position: [x, 0, z]
-			});
-			x += spacing;
-		}
+	kinds: ["tree", "bush", "flower"],
+	counts: {
+		flower: 10,
+		bush: 4,
+		tree: 2
 	},
-	random: function(plant) {
-		var i, oz = this.opts, pz = oz.parts,
-			bz = zero.core.current.room.bounds,
-			xmin = bz.min.x, zmin = bz.min.z,
-			xmax = bz.max.x, zmax = bz.max.z;
-			xrange = xmax - xmin, zrange = zmax - zmin,
-			xhalf = xrange / 2, zhalf = zrange / 2;
-		for (i = 0; i < oz[plant]; i++) {
-			pz.push({
-				thing: "Flora",
-				index: i,
-				name: plant + i,
-				kind: plant,
-				position: [CT.data.random(xrange) - xhalf,
-					0, CT.data.random(zrange) - zhalf]
-			});
-		}
-	},
-	preassemble: function() {
-		if (this.opts.mode == "rows") {
-			this.row("flower", 30, 50);
-			this.row("bush", 50, 0);
-			this.row("tree", 80, -80);
-		} else
-			["tree", "bush", "flower"].forEach(this.random);
-	},
-	init: function(opts) {
-		this.opts = CT.merge(opts, {
-			mode: "random", // |rows
-			flower: 10,
-			bush: 4,
-			tree: 2
-		}, this.opts);
-	}
-}, zero.core.Thing);
+	member: "Flora"
+}, zero.core.Collection);

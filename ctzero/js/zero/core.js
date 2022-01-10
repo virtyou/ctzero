@@ -35,6 +35,7 @@ CT.require("zero.core.Bit");
 CT.require("zero.core.Particles");
 CT.require("zero.core.Fire");
 CT.require("zero.core.Swarm");
+CT.require("zero.core.Collection");
 CT.require("zero.core.Flora");
 CT.require("zero.core.Fauna");
 

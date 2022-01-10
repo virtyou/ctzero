@@ -222,55 +222,25 @@ zero.core.Fauna.Head = CT.Class({
 	}
 }, zero.core.Thing);
 
-// TODO:
-// - motion > tick ; trig or springz? (probs trig...)
-// - movement > wander
+// TODO: movement > wander [ orient ; move ]
 
 // TODO: zero.core.Collection base class for Menagerie/Garden?
 zero.core.Fauna.Menagerie = CT.Class({
 	CLASSNAME: "zero.core.Fauna.Menagerie",
 	kinds: ["horse", "moth", "snake", "spider", "ant", "centipede"],
+	counts: {
+		ant: 1,
+		moth: 1,
+		snake: 1,
+		spider: 1,
+		centipede: 1,
+		horse: 1
+	},
+	member: "Fauna",
 	tick: function(dts) {
-		for (var kind of this.kinds)
-			for (var aname in this[kind])
-				this[kind][aname].tick(dts);
-	},
-	col: function(animal, spacing, x) {
-		var i, oz = this.opts, pz = oz.parts,
-			width = oz[animal] * spacing,
-			z = -width / 2;
-		for (i = 0; i < oz[animal]; i++) {
-			pz.push({
-				thing: "Fauna",
-				index: i,
-				name: animal + i,
-				kind: animal,
-				position: [x, 0, z]
-			});
-			z += spacing;
-		}
-	},
-	random: function(animals) {},
-	preassemble: function() {
-		if (this.opts.mode == "rows") {
-			this.col("horse", 200, 100);
-			this.col("moth", 30, 50);
-			this.col("snake", 80, 0);
-			this.col("spider", 50, -40);
-			this.col("ant", 50, -90);
-			this.col("centipede", 80, -130);
-		} else
-			this.kinds.forEach(this.random);
-	},
-	init: function(opts) {
-		this.opts = CT.merge(opts, {
-			mode: "rows", // |random
-			ant: 1,
-			moth: 1,
-			snake: 1,
-			spider: 1,
-			centipede: 1,
-			horse: 1
-		}, this.opts);
+		var kind, name;
+		for (kind of this.kinds)
+			for (name in this[kind])
+				this[kind][name].tick(dts);
 	}
-}, zero.core.Thing);
+}, zero.core.Collection);
