@@ -4,6 +4,7 @@ zero.core.Strand = CT.Class({
 		var oz = this.opts, len = oz.length,
 			ypos = index ? len : oz.yoff;
 		return {
+			index: index,
 			thing: "Pendulum",
 			name: "seg" + index,
 			position: [0, ypos, 0],
