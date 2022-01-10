@@ -64,7 +64,7 @@ zero.core.Pendulum = CT.Class({
 		this.tick = this.ticks[this.opts.hard ? "hard" : "soft"];
 		this.setSprings();
 		if (this.opts.wiggle) {
-			this.wigdex = CT.data.random(this.opts.wiggle);
+			this.wigdex = this.opts.index;//CT.data.random(this.opts.wiggle);
 			this.wiggler = zero.core.trig.segs(this.opts.wiggle);
 		}
 		this.gravvy = !this.opts.nograv;
