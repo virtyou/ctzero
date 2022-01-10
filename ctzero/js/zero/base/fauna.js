@@ -32,6 +32,16 @@ zero.base.fauna = {
 		taper: 0.9,
 		wiggle: 60
 	},
+	lizard: {
+		body: "green",
+		eye: "red",
+		legs: 2,
+		headY: 5,
+		wiggle: 60,
+		segments: 2,
+		tail: "lizard",
+		scale: [2, 1, 3]
+	},
 	horse: {
 		bob: 20,
 		legs: 2,

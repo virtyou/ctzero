@@ -243,14 +243,15 @@ zero.core.Fauna.Head = CT.Class({
 
 zero.core.Fauna.Menagerie = CT.Class({
 	CLASSNAME: "zero.core.Fauna.Menagerie",
-	kinds: ["horse", "moth", "snake", "spider", "ant", "centipede"],
+	kinds: ["horse", "moth", "snake", "spider", "ant", "centipede", "lizard"],
 	counts: {
 		ant: 1,
 		moth: 1,
 		snake: 1,
 		spider: 1,
 		centipede: 1,
-		horse: 1
+		horse: 1,
+		lizard: 1
 	},
 	member: "Fauna",
 	tick: function(dts) {
