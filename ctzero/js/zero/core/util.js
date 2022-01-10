@@ -41,6 +41,11 @@ zero.core.util = {
 			color: zero.core.util.randHue(color)
 		});
 	},
+	outBound: function(thing) {
+		var rb = zero.core.current.room.bounds,
+			min = rb.min, max = rb.max, p = thing.position();
+		return p.x < min.x || p.x > max.x || p.z < min.z || p.z > max.z;
+	},
 	randPos: function() {
 		var r = zero.core.current.room;
 		if (!r.ranges) {
