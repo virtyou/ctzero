@@ -96,7 +96,7 @@ zero.core.Fauna = CT.Class({
 		}, this.opts);
 		this.buildMaterials();
 		this.ticker = zero.core.trig.segs(60, 0.5);
-		this.wiggler = opts.wiggle && zero.core.trig.segs(opts.wiggle, 0.1);
+		this.wiggler = opts.wiggle && zero.core.trig.segs(opts.wiggle, 0.05);
 		this.bobber = opts.bob && zero.core.trig.segs(30, opts.bob);
 	}
 }, zero.core.Thing);
