@@ -12,7 +12,7 @@ zero.core.Fauna = CT.Class({
 	direct: function(amount) {
 		var zcu = zero.core.util;
 		if (zcu.outBound(this)) {
-			this.look(zcu.randPos());
+			this.look(zcu.randPos(true));
 			delete this.direction;
 		}
 		if (!this.direction)
