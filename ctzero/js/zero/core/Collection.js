@@ -35,20 +35,14 @@ zero.core.Collection = CT.Class({
 		this._rower(kind, index);
 	},
 	random: function(kind) {
-		var i, oz = this.opts, pz = oz.parts,
-			bz = zero.core.current.room.bounds,
-			xmin = bz.min.x, zmin = bz.min.z,
-			xmax = bz.max.x, zmax = bz.max.z;
-			xrange = xmax - xmin, zrange = zmax - zmin,
-			xhalf = xrange / 2, zhalf = zrange / 2;
+		var i, oz = this.opts, pz = oz.parts;
 		for (i = 0; i < oz[kind]; i++) {
 			pz.push({
 				thing: this.member,
 				index: i,
 				name: kind + i,
 				kind: kind,
-				position: [CT.data.random(xrange) - xhalf,
-					0, CT.data.random(zrange) - zhalf]
+				position: zero.core.util.randPos()
 			});
 		}
 	},
