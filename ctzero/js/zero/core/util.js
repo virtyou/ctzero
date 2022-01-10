@@ -41,6 +41,24 @@ zero.core.util = {
 			color: zero.core.util.randHue(color)
 		});
 	},
+	randPos: function() {
+		var r = zero.core.current.room;
+		if (!r.ranges) {
+			var bz = r.bounds,
+				xmin = bz.min.x, zmin = bz.min.z,
+				xmax = bz.max.x, zmax = bz.max.z;
+				xrange = xmax - xmin, zrange = zmax - zmin,
+				xhalf = xrange / 2, zhalf = zrange / 2;
+			r.ranges = {
+				xrange: xrange,
+				zrange: zrange,
+				xhalf: xhalf,
+				zhalf: zhalf
+			};
+		}
+		return [CT.data.random(r.ranges.xrange) - r.ranges.xhalf,
+			0, CT.data.random(r.ranges.zrange) - r.ranges.zhalf];
+	},
 	gear2bone: function(kind, side, sub, part) {
 		var zcc = zero.core.current, bone, part,
 			p = zcc.person || Object.values(zcc.people)[0],
