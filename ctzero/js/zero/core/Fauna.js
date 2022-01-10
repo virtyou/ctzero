@@ -1,12 +1,14 @@
 zero.core.Fauna = CT.Class({
 	CLASSNAME: "zero.core.Fauna",
 	tick: function(dts) {
-		var oz = this.opts, t = zero.core.util.ticker,
+		var oz = this.opts;
+		this.direct(oz.speed * dts);
+		if (!zero.core.camera.visible(this.segment0)) return;
+		var t = zero.core.util.ticker,
 			t1 = t % 60, t2 = (t + 30) % 60;
 		oz.hairStyle && this.header[oz.hairStyle].tick();
 		this.segment0 && this.segment0.tick(this.ticker[t1], this.ticker[t2]);
 		this.bobber && this.adjust("position", "y", this.bobber[t % 30]);
-		this.direct(oz.speed * dts);
 	},
 	direct: function(amount) {
 		var zcu = zero.core.util;
