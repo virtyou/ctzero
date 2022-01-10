@@ -2,10 +2,9 @@ zero.core.Fauna = CT.Class({
 	CLASSNAME: "zero.core.Fauna",
 	tick: function(dts) {
 		var oz = this.opts, t = zero.core.util.ticker,
-			t1 = t % 60, t2 = (t + 30) % 60, w = this.wiggler;
+			t1 = t % 60, t2 = (t + 30) % 60;
 		oz.hairStyle && this.header[oz.hairStyle].tick();
-		this.segment0 && this.segment0.tick(this.ticker[t1],
-			this.ticker[t2], w && w[t1], w && w[t2]);
+		this.segment0 && this.segment0.tick(this.ticker[t1], this.ticker[t2]);
 		this.bobber && this.adjust("position", "y", this.bobber[t % 30]);
 		this.direct(oz.speed * dts);
 	},
@@ -95,19 +94,20 @@ zero.core.Fauna = CT.Class({
 		}, this.opts);
 		this.buildMaterials();
 		this.ticker = zero.core.trig.segs(60, 0.5);
-		this.wiggler = this.opts.wiggle && zero.core.trig.segs(60, 0.1);
+		this.wiggler = this.opts.wiggle && zero.core.trig.segs(30, 0.1);
 		this.bobber = this.opts.bob && zero.core.trig.segs(30, this.opts.bob);
 	}
 }, zero.core.Thing);
 
 zero.core.Fauna.Segment = CT.Class({
 	CLASSNAME: "zero.core.Fauna.Segment",
-	tick: function(t1, t2, w1, w2) {
-		var seg, leg, lego, wing, wingo,
-			oz = this.opts, index = oz.index,
+	tick: function(t1, t2) {
+		var seg, leg, lego, wing, wingo, oz = this.opts,
+			anim = oz.animal, index = oz.index,
 			legz1 = this.legz + t1, legz2 = this.legz + t2,
 			wingz = this.wingz + t1;
-		w1 && this.adjust("rotation", "y", (index % 2) ? w1 : w2);
+		anim.wiggler && this.adjust("rotation", "y",
+			anim.wiggler[(oz.index + zero.core.util.ticker) % 30]);
 		if (this.leg) for (lego in this.leg) {
 			leg = this.leg[lego];
 			leg.adjust("rotation", "z", ((index + leg.opts.index) % 2) ? legz1 : legz2);
