@@ -1,5 +1,12 @@
 zero.core.Fauna = CT.Class({
 	CLASSNAME: "zero.core.Fauna",
+	tick: function(dts) {
+		var oz = this.opts, t = zero.core.util.ticker,
+			t1 = t % 60, t2 = (t + 30) % 60, w = this.wiggler;
+		oz.hairStyle && this.header[oz.hairStyle].tick();
+		this.segment0 && this.segment0.tick(this.ticker[t1],
+			this.ticker[t2], w && w[t1], w && w[t2]);
+	},
 	preassemble: function() {
 		var oz = this.opts, pz = oz.parts, tbase,
 			i, soz, bmat = this.materials.body;
@@ -38,7 +45,7 @@ zero.core.Fauna = CT.Class({
 				thing: "Tail",
 				matinstance: bmat,
 				offx: Math.PI / 2,
-				position: [0, 0, 0]
+				position: [0, 0, 20]
 			}, tbase));
 		}
 	},
@@ -71,11 +78,32 @@ zero.core.Fauna = CT.Class({
 			headY: 0
 		}, this.opts);
 		this.buildMaterials();
+		this.ticker = zero.core.trig.segs(60, 0.5);
+		this.wiggler = this.opts.wiggle && zero.core.trig.segs(60, 0.1);
 	}
 }, zero.core.Thing);
 
 zero.core.Fauna.Segment = CT.Class({
 	CLASSNAME: "zero.core.Fauna.Segment",
+	tick: function(t1, t2, w1, w2) {
+		var seg, leg, lego, wing, wingo,
+			oz = this.opts, index = oz.index,
+			legz1 = this.legz + t1, legz2 = this.legz + t2,
+			wingz = this.wingz + t1;
+		w1 && this.adjust("rotation", "y", (index % 2) ? w1 : w2);
+		if (this.leg) for (lego in this.leg) {
+			leg = this.leg[lego];
+			leg.adjust("rotation", "z", ((index + leg.opts.index) % 2) ? legz1 : legz2);
+		}
+		if (this.wing)
+			for (wingo in this.wing)
+				this.wing[wingo].adjust("rotation", "z", wingz);
+		if (this.segment) {
+			for (seg in this.segment) // should only be one
+				this.segment[seg].tick(t1, t2);
+		} else if (this.wagger)
+			this.wagger.tick();
+	},
 	limbs: function(kind, level) {
 		var oz = this.opts, pz = oz.parts, ani = oz.animal,
 			i, aoz = ani.opts, mats = ani.materials,
@@ -99,8 +127,10 @@ zero.core.Fauna.Segment = CT.Class({
 	},
 	preassemble: function() {
 		var aoz = this.opts.animal.opts;
-		aoz.wings && this.limbs("wing", 2);
-		aoz.legs && this.limbs("leg", aoz.legShift ? 2 : 1);
+		this.wingz = 2;
+		this.legz = aoz.legShift ? 2 : 1;
+		aoz.wings && this.limbs("wing", this.wingz);
+		aoz.legs && this.limbs("leg", this.legz);
 	}
 }, zero.core.Thing);
 
@@ -199,6 +229,12 @@ zero.core.Fauna.Head = CT.Class({
 // TODO: zero.core.Collection base class for Menagerie/Garden?
 zero.core.Fauna.Menagerie = CT.Class({
 	CLASSNAME: "zero.core.Fauna.Menagerie",
+	kinds: ["horse", "moth", "snake", "spider", "ant", "centipede"],
+	tick: function(dts) {
+		for (var kind of this.kinds)
+			for (var aname in this[kind])
+				this[kind][aname].tick(dts);
+	},
 	col: function(animal, spacing, x) {
 		var i, oz = this.opts, pz = oz.parts,
 			width = oz[animal] * spacing,
@@ -224,7 +260,7 @@ zero.core.Fauna.Menagerie = CT.Class({
 			this.col("ant", 50, -90);
 			this.col("centipede", 80, -130);
 		} else
-			["moth", "snake", "spider", "centipede"].forEach(this.random);
+			this.kinds.forEach(this.random);
 	},
 	init: function(opts) {
 		this.opts = CT.merge(opts, {
