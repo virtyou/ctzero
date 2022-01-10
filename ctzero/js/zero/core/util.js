@@ -46,7 +46,7 @@ zero.core.util = {
 			min = rb.min, max = rb.max, p = thing.position();
 		return p.x < min.x || p.x > max.x || p.z < min.z || p.z > max.z;
 	},
-	randPos: function() {
+	randPos: function(objStyle) {
 		var r = zero.core.current.room;
 		if (!r.ranges) {
 			var bz = r.bounds,
@@ -61,8 +61,9 @@ zero.core.util = {
 				zhalf: zhalf
 			};
 		}
-		return [CT.data.random(r.ranges.xrange) - r.ranges.xhalf,
-			0, CT.data.random(r.ranges.zrange) - r.ranges.zhalf];
+		var x = CT.data.random(r.ranges.xrange) - r.ranges.xhalf,
+			z = CT.data.random(r.ranges.zrange) - r.ranges.zhalf;
+		return objStyle ? { x: x, y: 0, z: z } : [x, 0, z];
 	},
 	gear2bone: function(kind, side, sub, part) {
 		var zcc = zero.core.current, bone, part,
