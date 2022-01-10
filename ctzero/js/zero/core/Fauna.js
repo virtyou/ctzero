@@ -7,10 +7,15 @@ zero.core.Fauna = CT.Class({
 		this.segment0 && this.segment0.tick(this.ticker[t1],
 			this.ticker[t2], w && w[t1], w && w[t2]);
 		this.bobber && this.adjust("position", "y", this.bobber[t % 30]);
-//		this.direct(-oz.speed * dts); // backwards meh...
+		this.direct(oz.speed * dts);
 	},
 	direct: function(amount) {
-		if (!this.direction) // TODO: change this! wander! orient() function .. wall bounce?
+		var zcu = zero.core.util;
+		if (zcu.outBound(this)) {
+			this.look(zcu.randPos());
+			delete this.direction;
+		}
+		if (!this.direction)
 			this.direction = this.group.getWorldDirection();
 		this.adjust("position", "x", amount * this.direction.x, true);
 		this.adjust("position", "z", amount * this.direction.z, true);
@@ -39,7 +44,7 @@ zero.core.Fauna = CT.Class({
 				animal: this,
 				matinstance: bmat,
 				sphereGeometry: oz.heft,
-				position: [0, 0, oz.heft],
+				position: [0, 0, -oz.heft],
 				scale: [oz.taper, oz.taper, oz.taper]
 			};
 			pz.push(soz);
@@ -52,8 +57,7 @@ zero.core.Fauna = CT.Class({
 				kind: "tail",
 				thing: "Tail",
 				matinstance: bmat,
-				offx: Math.PI / 2,
-				position: [0, 0, oz.tailZ]
+				position: [0, 0, -oz.tailZ]
 			}, tbase));
 		}
 	},
@@ -124,7 +128,7 @@ zero.core.Fauna.Segment = CT.Class({
 			count = aoz[plur], seg = Math.PI * 2 / count,
 			sub = zero.core.Fauna[CT.parse.capitalize(kind)],
 			roff = (count == 4 || count == 8) ? (Math.PI / count) : 0,
-			legShift = aoz.legShift ? (oz.index % 2 ? 1 : -1) : 0;
+			legShift = aoz.legShift ? (oz.index % 2 ? -1 : 1) : 0;
 		for (i = 0; i < count; i++) {
 			pz.push({
 				subclass: sub,
@@ -185,7 +189,7 @@ zero.core.Fauna.Head = CT.Class({
 	CLASSNAME: "zero.core.Fauna.Head",
 	eyePlacement: function() {
 		var oz = this.opts, aoz = oz.animal.opts,
-			i, z = -aoz.heft, posz = [];
+			i, z = aoz.heft, posz = [];
 		for (i = 0; i < aoz.eyes; i++)
 			posz.push([(i % 2) * 2 - 1, Math.floor(i / 2), z]);
 		return posz;
@@ -193,7 +197,7 @@ zero.core.Fauna.Head = CT.Class({
 	preassemble: function() {
 		var i, oz = this.opts, pz = oz.parts, animal = oz.animal,
 			aoz = animal.opts, placement = this.eyePlacement(),
-			h = aoz.heft, my = -h / 2, mz = -Math.sqrt(h * h - my * my),
+			h = aoz.heft, my = -h / 2, mz = Math.sqrt(h * h - my * my),
 			earSize = h / 6, earX = earSize;
 		pz.push({
 			name: "mouth",
