@@ -1,5 +1,6 @@
 zero.base.fauna = {
 	moth: {
+		bob: 5,
 		wings: 2,
 		head: 0.6
 	},
@@ -10,6 +11,7 @@ zero.base.fauna = {
 		tail: "lizard"
 	},
 	spider: {
+		bob: 3,
 		heft: 6,
 		legs: 8,
 		eyes: 8,
@@ -31,10 +33,13 @@ zero.base.fauna = {
 		wiggle: true
 	},
 	horse: {
+		bob: 20,
 		legs: 2,
 		heft: 20,
 		head: 0.5,
 		headY: 15,
+		tailZ: 15,
+		speed: 100,
 		taper: 0.8,
 		earMult: 4,
 		segments: 2,

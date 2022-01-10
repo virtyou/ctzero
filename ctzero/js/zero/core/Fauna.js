@@ -6,6 +6,14 @@ zero.core.Fauna = CT.Class({
 		oz.hairStyle && this.header[oz.hairStyle].tick();
 		this.segment0 && this.segment0.tick(this.ticker[t1],
 			this.ticker[t2], w && w[t1], w && w[t2]);
+		this.bobber && this.adjust("position", "y", this.bobber[t % 30]);
+//		this.direct(-oz.speed * dts); // backwards meh...
+	},
+	direct: function(amount) {
+		if (!this.direction) // TODO: change this! wander! orient() function .. wall bounce?
+			this.direction = this.group.getWorldDirection();
+		this.adjust("position", "x", amount * this.direction.x, true);
+		this.adjust("position", "z", amount * this.direction.z, true);
 	},
 	preassemble: function() {
 		var oz = this.opts, pz = oz.parts, tbase,
@@ -45,7 +53,7 @@ zero.core.Fauna = CT.Class({
 				thing: "Tail",
 				matinstance: bmat,
 				offx: Math.PI / 2,
-				position: [0, 0, 20]
+				position: [0, 0, oz.tailZ]
 			}, tbase));
 		}
 	},
@@ -67,19 +75,24 @@ zero.core.Fauna = CT.Class({
 			wing: "yellow",
 			mouth: "red",
 			hair: "blue",
+			speed: 20,
 			segments: 1,
+			wiggle: false,
 			tail: false,
+			bob: 0,
 			head: 1, // scale
 			heft: 4, // body segment size
 			taper: 1, // segment scale multiplier
 			wings: 0, // per body segment
 			legs: 0, // per body segment
 			eyes: 2,
-			headY: 0
+			headY: 0,
+			tailZ: 0
 		}, this.opts);
 		this.buildMaterials();
 		this.ticker = zero.core.trig.segs(60, 0.5);
 		this.wiggler = this.opts.wiggle && zero.core.trig.segs(60, 0.1);
+		this.bobber = this.opts.bob && zero.core.trig.segs(30, this.opts.bob);
 	}
 }, zero.core.Thing);
 
@@ -222,9 +235,6 @@ zero.core.Fauna.Head = CT.Class({
 	}
 }, zero.core.Thing);
 
-// TODO: movement > wander [ orient ; move ]
-
-// TODO: zero.core.Collection base class for Menagerie/Garden?
 zero.core.Fauna.Menagerie = CT.Class({
 	CLASSNAME: "zero.core.Fauna.Menagerie",
 	kinds: ["horse", "moth", "snake", "spider", "ant", "centipede"],
