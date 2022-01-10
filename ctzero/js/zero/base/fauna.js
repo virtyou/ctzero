@@ -7,7 +7,7 @@ zero.base.fauna = {
 	snake: {
 		head: 2,
 		wiggle: 30,
-		segments: 10,
+		segments: 20,
 		tail: "lizard"
 	},
 	spider: {
