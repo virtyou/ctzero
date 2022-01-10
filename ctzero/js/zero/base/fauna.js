@@ -6,8 +6,8 @@ zero.base.fauna = {
 	},
 	snake: {
 		head: 2,
+		wiggle: 30,
 		segments: 10,
-		wiggle: true,
 		tail: "lizard"
 	},
 	spider: {
@@ -20,9 +20,9 @@ zero.base.fauna = {
 	ant: {
 		legs: 2,
 		headY: 5,
+		wiggle: 60,
 		earMult: 20,
-		segments: 3,
-		wiggle: true
+		segments: 3
 	},
 	centipede: {
 		segments: 12,
@@ -30,7 +30,7 @@ zero.base.fauna = {
 		heft: 6,
 		head: 1.4,
 		taper: 0.9,
-		wiggle: true
+		wiggle: 60
 	},
 	horse: {
 		bob: 20,

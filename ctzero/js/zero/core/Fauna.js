@@ -72,7 +72,7 @@ zero.core.Fauna = CT.Class({
 		});
 	},
 	init: function(opts) {
-		this.opts = CT.merge(opts, zero.base.fauna[opts.kind], {
+		opts = this.opts = CT.merge(opts, zero.base.fauna[opts.kind], {
 			body: "brown",
 			eye: "green",
 			wing: "yellow",
@@ -94,8 +94,8 @@ zero.core.Fauna = CT.Class({
 		}, this.opts);
 		this.buildMaterials();
 		this.ticker = zero.core.trig.segs(60, 0.5);
-		this.wiggler = this.opts.wiggle && zero.core.trig.segs(30, 0.1);
-		this.bobber = this.opts.bob && zero.core.trig.segs(30, this.opts.bob);
+		this.wiggler = opts.wiggle && zero.core.trig.segs(opts.wiggle, 0.1);
+		this.bobber = opts.bob && zero.core.trig.segs(30, opts.bob);
 	}
 }, zero.core.Thing);
 
@@ -103,11 +103,11 @@ zero.core.Fauna.Segment = CT.Class({
 	CLASSNAME: "zero.core.Fauna.Segment",
 	tick: function(t1, t2) {
 		var seg, leg, lego, wing, wingo, oz = this.opts,
-			anim = oz.animal, index = oz.index,
+			anim = oz.animal, aoz = anim.opts, index = oz.index,
 			legz1 = this.legz + t1, legz2 = this.legz + t2,
 			wingz = this.wingz + t1;
 		anim.wiggler && this.adjust("rotation", "y",
-			anim.wiggler[(oz.index + zero.core.util.ticker) % 30]);
+			anim.wiggler[(oz.index + zero.core.util.ticker) % aoz.wiggle]);
 		if (this.leg) for (lego in this.leg) {
 			leg = this.leg[lego];
 			leg.adjust("rotation", "z", ((index + leg.opts.index) % 2) ? legz1 : legz2);
