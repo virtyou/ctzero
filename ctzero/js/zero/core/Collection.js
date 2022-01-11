@@ -40,7 +40,7 @@ zero.core.Collection = CT.Class({
 			for (name in this[kind]) {
 				mem = this[kind][name];
 				mem.basicBound();
-				mem.look(zcu.randPos(true, mem.group.position.y));
+				mem.look(zcu.randPos(true, mem.position(null, true).y));
 			}
 		}
 		delete this.awaitBound;
@@ -71,7 +71,6 @@ zero.core.Collection = CT.Class({
 			}
 			pz.push(mopts);
 		}
-		this.awaitBound && zero.core.current.room.onbounded(this.randomize);
 	},
 	preassemble: function() {
 		var r = zero.core.current.room;
@@ -80,8 +79,10 @@ zero.core.Collection = CT.Class({
 			this.kinds.forEach(this.row);
 		else if (this.opts.mode == "cols")
 			this.kinds.forEach(this.col);
-		else
+		else {
 			this.kinds.forEach(this.random);
+			this.awaitBound && r.onbounded(this.randomize);
+		}
 		this.awaitBound && r.onbounded(this.boundize);
 	},
 	init: function(opts) {
