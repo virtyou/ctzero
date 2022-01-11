@@ -2,7 +2,8 @@ zero.base.fauna = {
 	moth: {
 		bob: 5,
 		wings: 2,
-		head: 0.6
+		head: 0.6,
+		flying: true
 	},
 	snake: {
 		head: 2,

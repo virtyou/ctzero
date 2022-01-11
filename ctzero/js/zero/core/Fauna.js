@@ -8,7 +8,8 @@ zero.core.Fauna = CT.Class({
 			t1 = t % 60, t2 = (t + 30) % 60;
 		oz.hairStyle && this.header[oz.hairStyle].tick();
 		this.segment0 && this.segment0.tick(this.ticker[t1], this.ticker[t2]);
-		this.bobber && this.adjust("position", "y", this.bobber[t % 30]);
+		this.bobber && this.adjust("position", "y",
+			this.homeY + this.bobber[t % 30]);
 	},
 	direct: function(amount) {
 		var zcu = zero.core.util;
@@ -20,6 +21,16 @@ zero.core.Fauna = CT.Class({
 			this.direction = this.group.getWorldDirection();
 		this.adjust("position", "x", amount * this.direction.x, true);
 		this.adjust("position", "z", amount * this.direction.z, true);
+	},
+	assembled: function() {
+		if (!this.opts.flying) {
+			this.setBounds();
+			this.adjust("position", "y",
+				zero.core.current.room.bounds.min.y
+					- this.bounds.min.y);
+		}
+		this.homeY = this.position().y;
+		this._.built();
 	},
 	preassemble: function() {
 		var oz = this.opts, pz = oz.parts, tbase,
@@ -93,7 +104,8 @@ zero.core.Fauna = CT.Class({
 			eyes: 2,
 			headY: 0,
 			tailZ: 0,
-			limbScale: 1
+			limbScale: 1,
+			wingSmush: 0.2
 		}, this.opts);
 		this.buildMaterials();
 		this.ticker = zero.core.trig.segs(60, 0.5);
@@ -131,7 +143,10 @@ zero.core.Fauna.Segment = CT.Class({
 			count = aoz[plur], seg = Math.PI * 2 / count,
 			sub = zero.core.Fauna[CT.parse.capitalize(kind)],
 			roff = (count == 4 || count == 8) ? (Math.PI / count) : 0,
-			legShift = aoz.legShift ? (oz.index % 2 ? -1 : 1) : 0;
+			legShift = aoz.legShift ? (oz.index % 2 ? -1 : 1) : 0,
+			scaleX = aoz.limbScale;
+		if (kind == "wing")
+			scaleX *= aoz.wingSmush;
 		for (i = 0; i < count; i++) {
 			pz.push({
 				subclass: sub,
@@ -141,7 +156,7 @@ zero.core.Fauna.Segment = CT.Class({
 				animal: ani,
 				matinstance: mat,
 				rotation: [0, i * seg + roff + legShift, level],
-				scale: [aoz.limbScale, aoz.limbScale, aoz.limbScale]
+				scale: [scaleX, aoz.limbScale, aoz.limbScale]
 			});
 			legShift *= -1;
 		}
