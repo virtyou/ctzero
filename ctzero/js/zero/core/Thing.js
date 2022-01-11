@@ -214,15 +214,18 @@ zero.core.Thing = CT.Class({
 		this._.postboundz.forEach(f => f());
 	},
 	basicBound: function() { // bare bones
-		var r = zero.core.current.room, y,
-			atop, pos = this.group.position;
+		var r = zero.core.current.room,
+			pos = this.group.position,
+			oz = this.opts, atop;
 		this._.setBounds();
 		atop = r.getSurface(pos, this.radii);
-		y = atop ? atop.getTop(pos) : r.bounds.min.y;
-		if (this.opts.flying)
-			y += 100 + CT.data.random(100);
-		this.adjust("position", "y", y + this.radii.y);
-		this.homeY = this.position().y;
+		this.homeY = atop ? atop.getTop(pos) : r.bounds.min.y;
+		if (oz.flying)
+			this.homeY += 100 + CT.data.random(100);
+		this.homeY += this.radii.y;
+		if (oz.bob)
+			this.homeY += oz.bob * Math.PI;
+		this.adjust("position", "y", this.homeY);
 	},
 	onbounded: function(cb) {
 		if (this.bounds)
