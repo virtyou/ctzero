@@ -25,7 +25,6 @@ zero.core.Flora = CT.Class({
 	},
 	init: function(opts) {
 		this.opts = CT.merge(opts, zero.base.flora[opts.kind], {
-			basicBound: true,
 			stem: "brown",
 			leaf: "green",
 			fruit: "red",

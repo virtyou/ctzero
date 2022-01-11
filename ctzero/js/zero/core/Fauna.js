@@ -22,16 +22,6 @@ zero.core.Fauna = CT.Class({
 		this.adjust("position", "x", amount * this.direction.x, true);
 		this.adjust("position", "z", amount * this.direction.z, true);
 	},
-	assembled: function() {
-		if (!this.opts.flying) {
-			this.setBounds();
-			this.adjust("position", "y",
-				zero.core.current.room.bounds.min.y
-					- this.bounds.min.y);
-		}
-		this.homeY = this.position().y;
-		this._.built();
-	},
 	preassemble: function() {
 		var oz = this.opts, pz = oz.parts, tbase,
 			i, soz, bmat = this.materials.body;
@@ -273,9 +263,16 @@ zero.core.Fauna.Menagerie = CT.Class({
 	},
 	member: "Fauna",
 	tick: function(dts) {
+		if (this.awaitBound) return;
 		var kind, name;
 		for (kind of this.kinds)
 			for (name in this[kind])
 				this[kind][name].tick(dts);
+	},
+	onremove: function() {
+		this.opts.regTick && zero.core.current.room.unregTicker(this);
+	},
+	init: function(opts) {
+		this.opts.regTick && zero.core.current.room.regTicker(this);
 	}
 }, zero.core.Collection);
