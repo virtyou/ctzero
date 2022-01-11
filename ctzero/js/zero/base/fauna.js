@@ -57,5 +57,18 @@ zero.base.fauna = {
 		legShift: true,
 		scale: [1, 2, 3],
 		hairStyle: "mohawk"
+	},
+	cow: {
+		bob: 10,
+		legs: 2,
+		heft: 20,
+		head: 0.5,
+		headY: -5,
+		tailZ: 15,
+		speed: 40,
+		segments: 2,
+		tail: "horse",
+		limbScale: 0.5,
+		legShift: true
 	}
 };

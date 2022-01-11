@@ -92,7 +92,8 @@ zero.core.Fauna = CT.Class({
 			legs: 0, // per body segment
 			eyes: 2,
 			headY: 0,
-			tailZ: 0
+			tailZ: 0,
+			limbScale: 1
 		}, this.opts);
 		this.buildMaterials();
 		this.ticker = zero.core.trig.segs(60, 0.5);
@@ -139,7 +140,8 @@ zero.core.Fauna.Segment = CT.Class({
 				kind: kind,
 				animal: ani,
 				matinstance: mat,
-				rotation: [0, i * seg + roff + legShift, level]
+				rotation: [0, i * seg + roff + legShift, level],
+				scale: [aoz.limbScale, aoz.limbScale, aoz.limbScale]
 			});
 			legShift *= -1;
 		}
@@ -243,7 +245,7 @@ zero.core.Fauna.Head = CT.Class({
 
 zero.core.Fauna.Menagerie = CT.Class({
 	CLASSNAME: "zero.core.Fauna.Menagerie",
-	kinds: ["horse", "moth", "snake", "spider", "ant", "centipede", "lizard"],
+	kinds: ["horse", "moth", "snake", "spider", "ant", "centipede", "lizard", "cow"],
 	counts: {
 		ant: 1,
 		moth: 1,
@@ -251,7 +253,8 @@ zero.core.Fauna.Menagerie = CT.Class({
 		spider: 1,
 		centipede: 1,
 		horse: 1,
-		lizard: 1
+		lizard: 1,
+		cow: 1
 	},
 	member: "Fauna",
 	tick: function(dts) {
