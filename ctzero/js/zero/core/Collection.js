@@ -34,17 +34,36 @@ zero.core.Collection = CT.Class({
 	col: function(kind, index) {
 		this._rower(kind, index);
 	},
+	randomize: function() {
+		var kind, name, mem, zcu = zero.core.util;
+		for (kind of this.kinds) {
+			for (name in this[kind]) {
+				mem = this[kind][name];
+				mem.update({
+					position: zcu.randPos(true)
+				});
+				mem.look(zcu.randPos(true));
+			}
+		}
+	},
 	random: function(kind) {
-		var i, oz = this.opts, pz = oz.parts;
+		var i, oz = this.opts, pz = oz.parts, mopts,
+			r = zero.core.current.room, deferRand = !r.bounds;
 		for (i = 0; i < oz[kind]; i++) {
-			pz.push({
+			mopts = {
 				thing: this.member,
 				index: i,
 				name: kind + i,
-				kind: kind,
-				position: zero.core.util.randPos()
-			});
+				kind: kind
+			};
+			if (!deferRand) {
+				mopts.position = zero.core.util.randPos();
+				mopts.rotation = [0,
+					CT.data.random(Math.PI * 2, true), 0];
+			}
+			pz.push(mopts);
 		}
+		deferRand && r.onbounded(this.randomize);
 	},
 	preassemble: function() {
 		if (this.opts.mode == "rows")
