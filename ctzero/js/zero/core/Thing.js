@@ -4,6 +4,7 @@ zero.core.Thing = CT.Class({
 		customs: [], // stored here, only tick()ed in Thing subclasses that implement tick()
 		ready: false,
 		readycbs: [],
+		postboundz: [],
 		built: function() {
 			var thiz = this, _ = this._, cb;
 			this.opts.onassemble && this.opts.onassemble();
@@ -210,6 +211,13 @@ zero.core.Thing = CT.Class({
 			};
 		}
 		this.onbound && this.onbound(this);
+		this._.postboundz.forEach(f => f());
+	},
+	onbounded: function(cb) {
+		if (this.bounds)
+			cb();
+		else
+			this._.postboundz.push(cb);
 	},
 	playSong: function(song, onPlaySong) {
 		if (!this._audio) {
