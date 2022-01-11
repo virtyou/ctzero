@@ -9,7 +9,8 @@ zero.core.Flora = CT.Class({
 				name: "stem" + i,
 				kind: "stem",
 				levels: oz.levels,
-				plant: this
+				plant: this,
+				position: [0, -20, 0]
 			});
 		}
 	},
@@ -24,6 +25,7 @@ zero.core.Flora = CT.Class({
 	},
 	init: function(opts) {
 		this.opts = CT.merge(opts, zero.base.flora[opts.kind], {
+			basicBound: true,
 			stem: "brown",
 			leaf: "green",
 			fruit: "red",
@@ -85,7 +87,8 @@ zero.core.Flora.Segment = CT.Class({
 				name: sing + i,
 				kind: sing,
 				plant: oz.plant,
-				position: [0, 5, 0]
+				position: [CT.data.random(10) - 5,
+					5, CT.data.random(10) - 5]
 			});
 		}
 	},
@@ -141,7 +144,7 @@ zero.core.Flora.Fruit = CT.Class({
 	init: function(opts) {
 		this.opts = CT.merge(opts, {
 			sphereGeometry: 2,
-			rotation: [0, CT.data.random(Math.PI, true), 1],
+//			rotation: [0, CT.data.random(Math.PI, true), 1],
 			matinstance: opts.plant.materials.fruit
 		}, this.opts);
 	}
@@ -159,7 +162,7 @@ zero.core.Flora.Flower = CT.Class({
 				name: "petal" + i,
 				kind: "petal",
 				plant: oz.plant,
-				rotation: [0, i * seg, 1 + Math.random()],
+				rotation: [0, i * seg, 1 + Math.random()]
 			});
 		}
 	},
