@@ -43,13 +43,14 @@ zero.core.util = {
 			color: zero.core.util.randHue(color)
 		});
 	},
-	outBound: function(thing) {
-		var rb = zero.core.current.room.bounds,
-			min = rb.min, max = rb.max, p = thing.position();
+	outBound: function(thing, bounder, p) {
+		var rb = (bounder || zero.core.current.room).bounds,
+			min = rb.min, max = rb.max;
+		p = p || thing.position(null, true);
 		return p.x < min.x || p.x > max.x || p.z < min.z || p.z > max.z;
 	},
-	randPos: function(objStyle, y) {
-		var r = zero.core.current.room;
+	randPos: function(objStyle, y, bounder) {
+		var r = bounder || zero.core.current.room;
 		y = y || 0;
 		if (!r.ranges) {
 			var bz = r.bounds,
