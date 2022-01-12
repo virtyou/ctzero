@@ -1,6 +1,6 @@
 zero.core.Fire = CT.Class({
 	CLASSNAME: "zero.core.Fire",
-	tickerz: ["flames", "sparks", "smoke", "glow"],
+	tickerz: ["flames", "sparks", "smoke", "glow", "moths"],
 	tick: function(dts) {
 		var zcu = zero.core.util, variety;
 		if (!this.isReady() || zcu.shouldSkip()) return;
@@ -97,6 +97,13 @@ zero.core.Fire = CT.Class({
 			variety: "point",
 			color: 0xffaaaa
 		});
+		oz.moths && oz.parts.push({
+			within: this,
+			name: "moths",
+			kind: "menagerie",
+			collection: "fire",
+			subclass: zero.core.Fauna.Menagerie
+		});
 	},
 	init: function(opts) {
 		this.opts = opts = CT.merge(opts, {
@@ -107,7 +114,8 @@ zero.core.Fire = CT.Class({
 			shine: true,
 			heart: true,
 			glow: true,
-			light: true
+			light: true,
+			moths: true
 		}, this.opts);
 		if (opts.light)
 			this.flicker = zero.core.trig.segs(60, 0.05);
