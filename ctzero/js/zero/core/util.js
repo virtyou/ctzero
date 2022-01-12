@@ -50,7 +50,7 @@ zero.core.util = {
 		return p.x < min.x || p.x > max.x || p.z < min.z || p.z > max.z;
 	},
 	randPos: function(objStyle, y, bounder) {
-		var r = bounder || zero.core.current.room;
+		var r = bounder || zero.core.current.room, bpos;
 		y = y || 0;
 		if (!r.ranges) {
 			var bz = r.bounds,
@@ -67,6 +67,11 @@ zero.core.util = {
 		}
 		var x = CT.data.random(r.ranges.xrange) - r.ranges.xhalf,
 			z = CT.data.random(r.ranges.zrange) - r.ranges.zhalf;
+		if (bounder) {
+			bpos = bounder.group.position;
+			x += bpos.x;
+			z += bpos.z;
+		}
 		return objStyle ? { x: x, y: y, z: z } : [x, y, z];
 	},
 	gear2bone: function(kind, side, sub, part) {
