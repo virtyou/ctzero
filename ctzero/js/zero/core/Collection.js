@@ -1,8 +1,22 @@
 zero.core.Collection = CT.Class({
 	CLASSNAME: "zero.core.Collection",
 	kinds: [],
+	sets: {},
 	spacing: 50,
 	member: "Thing",
+	_mem: function(kind, i, pos) {
+		var mem = {
+			thing: this.member,
+			index: i,
+			name: kind + i,
+			kind: kind
+		};
+		if (pos)
+			mem.position = pos;
+		if (this.within)
+			mem.within = this.within;
+		return mem;
+	},
 	_rower: function(kind, strip, isrow) {
 		var i, oz = this.opts, pz = oz.parts,
 			spacing = this.spacing, width = oz[kind] * spacing,
@@ -15,13 +29,7 @@ zero.core.Collection = CT.Class({
 			x = b;
 		}
 		for (i = 0; i < oz[kind]; i++) {
-			pz.push({
-				thing: this.member,
-				index: i,
-				name: kind + i,
-				kind: kind,
-				position: [x, 0, z]
-			});
+			pz.push(this._mem(kind, i, [x, 0, z]));
 			if (isrow)
 				x += spacing;
 			else
@@ -40,7 +48,7 @@ zero.core.Collection = CT.Class({
 			for (name in this[kind]) {
 				mem = this[kind][name];
 				mem.basicBound();
-				mem.look(zcu.randPos(true, mem.position(null, true).y));
+				mem.look(zcu.randPos(true, mem.position(null, true).y, this.within));
 			}
 		}
 		delete this.awaitBound;
@@ -50,7 +58,7 @@ zero.core.Collection = CT.Class({
 		for (kind of this.kinds) {
 			for (name in this[kind]) {
 				this[kind][name].update({
-					position: zcu.randPos(true)
+					position: zcu.randPos(true, null, this.within)
 				});
 			}
 		}
@@ -58,12 +66,7 @@ zero.core.Collection = CT.Class({
 	random: function(kind) {
 		var i, oz = this.opts, pz = oz.parts, mopts;
 		for (i = 0; i < oz[kind]; i++) {
-			mopts = {
-				thing: this.member,
-				index: i,
-				name: kind + i,
-				kind: kind
-			};
+			mopts = this._mem(kind, i);
 			if (!this.awaitBound) {
 				mopts.position = zero.core.util.randPos();
 				mopts.rotation = [0,
@@ -73,7 +76,7 @@ zero.core.Collection = CT.Class({
 		}
 	},
 	preassemble: function() {
-		var r = zero.core.current.room;
+		var r = this.within || zero.core.current.room;
 		this.awaitBound = !r.bounds;
 		if (this.opts.mode == "rows")
 			this.kinds.forEach(this.row);
@@ -88,6 +91,9 @@ zero.core.Collection = CT.Class({
 	init: function(opts) {
 		this.opts = CT.merge(opts, {
 			mode: "random", // |rows|cols
-		}, this.counts, this.opts);
+		}, opts.collection ? this.sets[opts.collection]
+			: this.counts, this.opts);
+		if (opts.within)
+			this.within = opts.within;
 	}
 }, zero.core.Thing);
