@@ -667,7 +667,8 @@ zero.core.Thing = CT.Class({
 			g = oz.sphereGeometry;
 			if (g == true)
 				g = 1;
-			oz.geometry = new THREE.SphereGeometry(g);
+			oz.geometry = new THREE.SphereGeometry(g,
+				oz.sphereSegs, oz.sphereSegs);
 		}
 		if (oz.torusKnotGeometry) {
 			g = oz.torusKnotGeometry;
@@ -771,7 +772,8 @@ zero.core.Thing = CT.Class({
 			scroll: null,
 			shift: null,
 			grippy: true,
-			frustumCulled: true
+			frustumCulled: true,
+			sphereSegs: core.config.ctzero.sphereSegs
 		});
 		if (opts.kind == "portal")
 			opts.state = "threshold";
