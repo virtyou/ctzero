@@ -4,7 +4,7 @@ zero.core.Fauna = CT.Class({
 		var oz = this.opts;
 		this.direct(oz.speed * dts);
 		if (!zero.core.camera.visible(this.segment0)) return;
-		var t = zero.core.util.ticker,
+		var t = zero.core.util.ticker + this.randOff,
 			t1 = t % 60, t2 = (t + 30) % 60;
 		oz.hairStyle && this.header[oz.hairStyle].tick();
 		this.segment0 && this.segment0.tick(this.ticker[t1], this.ticker[t2]);
@@ -103,6 +103,7 @@ zero.core.Fauna = CT.Class({
 		if (opts.within)
 			this.within = opts.within;
 		this.buildMaterials();
+		this.randOff = CT.data.random(100);
 		this.ticker = zero.core.trig.segs(60, 0.5);
 		this.wiggler = opts.wiggle && zero.core.trig.segs(opts.wiggle, 0.05);
 		this.bobber = opts.bob && zero.core.trig.segs(30, opts.bob);
