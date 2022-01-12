@@ -218,11 +218,15 @@ zero.core.Thing = CT.Class({
 			pos = this.group.position,
 			oz = this.opts, atop;
 		this._.setBounds();
-		atop = r.getSurface(pos, this.radii);
-		this.homeY = atop ? atop.getTop(pos) : r.bounds.min.y;
-		if (oz.flying)
-			this.homeY += 100 + CT.data.random(100);
-		this.homeY += this.radii.y;
+		this.homeY = this.radii.y;
+		if (this.within)
+			this.homeY += this.within.group.position.y;
+		else {
+			atop = r.getSurface(pos, this.radii);
+			this.homeY += atop ? atop.getTop(pos) : r.bounds.min.y;
+			if (oz.flying)
+				this.homeY += 100 + CT.data.random(100);
+		}
 		if (oz.bob)
 			this.homeY += oz.bob * Math.PI;
 		this.adjust("position", "y", this.homeY);
@@ -608,7 +612,7 @@ zero.core.Thing = CT.Class({
 		return thing;
 	},
 	assembled: function() {
-		this.opts.basicBound && zero.core.current.room.bounds && this.basicBound();
+		this.opts.basicBound && (this.within || zero.core.current.room).bounds && this.basicBound();
 		this._.built();
 	},
 	getGroup: function() {
