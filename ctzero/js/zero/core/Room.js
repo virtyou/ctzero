@@ -367,6 +367,7 @@ zero.core.Room = CT.Class({
 		opts.outside && opts.parts.push({
 			name: "sky",
 			kind: "celestial",
+			matcat: "Basic",
 			sphereGeometry: true,
 			texture: opts.outside,
 			scale: [opts.skyscale, opts.skyscale, opts.skyscale],
