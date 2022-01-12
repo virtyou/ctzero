@@ -224,9 +224,9 @@ zero.core.Thing = CT.Class({
 		else {
 			atop = r.getSurface(pos, this.radii);
 			this.homeY += atop ? atop.getTop(pos) : r.bounds.min.y;
-			if (oz.flying)
-				this.homeY += 100 + CT.data.random(100);
 		}
+		if (oz.flying)
+			this.homeY += 10 + CT.data.random(30);
 		if (oz.bob)
 			this.homeY += oz.bob * Math.PI;
 		this.adjust("position", "y", this.homeY);
