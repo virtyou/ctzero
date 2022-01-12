@@ -12,9 +12,9 @@ zero.core.Fauna = CT.Class({
 			this.homeY + this.bobber[t % 30]);
 	},
 	direct: function(amount) {
-		var zcu = zero.core.util;
-		if (zcu.outBound(this)) {
-			this.look(zcu.randPos(true, this.position(null, true).y));
+		var zcu = zero.core.util, pos = this.position(null, true);
+		if (zcu.outBound(this, this.within, pos)) {
+			this.look(zcu.randPos(true, pos.y, this.within));
 			delete this.direction;
 		}
 		if (!this.direction)
@@ -76,6 +76,7 @@ zero.core.Fauna = CT.Class({
 	},
 	init: function(opts) {
 		opts = this.opts = CT.merge(opts, zero.base.fauna[opts.kind], {
+			basicBound: true,
 			body: "brown",
 			eye: "green",
 			wing: "yellow",
@@ -94,9 +95,13 @@ zero.core.Fauna = CT.Class({
 			eyes: 2,
 			headY: 0,
 			tailZ: 0,
+			limbMult: 8,
 			limbScale: 1,
-			wingSmush: 0.2
+			wingSmush: 0.2,
+			flapDim: "z"
 		}, this.opts);
+		if (opts.within)
+			this.within = opts.within;
 		this.buildMaterials();
 		this.ticker = zero.core.trig.segs(60, 0.5);
 		this.wiggler = opts.wiggle && zero.core.trig.segs(opts.wiggle, 0.05);
@@ -119,7 +124,7 @@ zero.core.Fauna.Segment = CT.Class({
 		}
 		if (this.wing)
 			for (wingo in this.wing)
-				this.wing[wingo].adjust("rotation", "z", wingz);
+				this.wing[wingo].adjust("rotation", aoz.flapDim, wingz);
 		if (this.segment) {
 			for (seg in this.segment) // should only be one
 				this.segment[seg].tick(t1, t2);
@@ -165,7 +170,7 @@ zero.core.Fauna.Wing = CT.Class({
 	init: function(opts) {
 		this.opts = CT.merge(opts, {
 			coneGeometry: 8,
-			scale: [0.2, 1, 1]
+			geomult: opts.animal.opts.limbMult
 		}, this.opts);
 	}
 }, zero.core.Thing);
@@ -186,7 +191,7 @@ zero.core.Fauna.Leg = CT.Class({
 				position: [-3 * size, 6 * size, 0],
 				scale: [aoz.taper, aoz.taper, aoz.taper],
 				cylinderGeometry: size,
-				geomult: 8
+				geomult: aoz.limbMult
 			};
 			pz.push(soz);
 			pz = soz.parts = [];
@@ -250,7 +255,7 @@ zero.core.Fauna.Head = CT.Class({
 
 zero.core.Fauna.Menagerie = CT.Class({
 	CLASSNAME: "zero.core.Fauna.Menagerie",
-	kinds: ["horse", "moth", "snake", "spider", "ant", "centipede", "lizard", "cow"],
+	kinds: ["horse", "moth", "snake", "spider", "ant", "centipede", "lizard", "cow", "eel", "fish"],
 	counts: {
 		ant: 1,
 		moth: 1,
@@ -260,6 +265,15 @@ zero.core.Fauna.Menagerie = CT.Class({
 		horse: 1,
 		lizard: 1,
 		cow: 1
+	},
+	sets: {
+		fire: {
+			moth: 2
+		},
+		pool: {
+			eel: 1,
+			fish: 2
+		}
 	},
 	member: "Fauna",
 	tick: function(dts) {
