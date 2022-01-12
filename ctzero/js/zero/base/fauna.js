@@ -3,13 +3,34 @@ zero.base.fauna = {
 		bob: 5,
 		wings: 2,
 		head: 0.6,
-		flying: true
+		flying: true,
+		scale: [0.4, 0.4, 0.4]
 	},
 	snake: {
 		head: 2,
 		wiggle: 30,
 		segments: 20,
 		tail: "lizard"
+	},
+	eel: {
+		head: 2,
+		wiggle: 30,
+		segments: 20,
+		scale: [1, 2, 3],
+		body: "green",
+		eye: "yellow"
+		//swimming?
+	},
+	fish: {
+		wings: 1,
+		head: 0.4,
+		body: "blue",
+		wiggle: true,
+		limbMult: 10,
+		limbScale: 0.1,
+		wingSmush: 5,
+		flapDim: "y",
+		scale: [1, 2, 4]
 	},
 	spider: {
 		bob: 3,
