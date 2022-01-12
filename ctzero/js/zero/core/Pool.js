@@ -24,6 +24,7 @@ zero.core.Pool = CT.Class({
 			this.cam.updateCubeMap(mainCam.get("renderer"), mainCam.scene);
 		}
 		this.bubbles && this.bubbles.tick(dts);
+		this.creatures && this.creatures.tick(dts);
 		this.tickPos();
 	},
 	getTop: function() {
@@ -93,6 +94,14 @@ zero.core.Pool = CT.Class({
 			bounder: this,
 			rotation: [Math.PI / 2, 0, 0]
 		});
+		oz.creatures && partz.push({
+			within: this,
+			name: "creatures",
+			kind: "menagerie",
+			collection: "pool",
+			rotation: [Math.PI / 2, 0, 0],
+			subclass: zero.core.Fauna.Menagerie
+		});
 	},
 	init: function(opts) {
 		this.opts = opts = CT.merge(opts, {
@@ -103,6 +112,7 @@ zero.core.Pool = CT.Class({
 			sides: true,
 			bubbles: true,
 			watermat: true,
+			creatures: true,
 			plane: [800, 800, 22, 44],
 			cam: [1, 1000000, 512],
 			camPos: {

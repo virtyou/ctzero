@@ -11,6 +11,7 @@ CT.require("zero.base.tickers");
 CT.require("zero.base.body");
 CT.require("zero.base.particles");
 CT.require("zero.base.flora");
+CT.require("zero.base.fauna");
 
 CT.require("zero.core.util");
 CT.require("zero.core.trig");
@@ -34,7 +35,9 @@ CT.require("zero.core.Bit");
 CT.require("zero.core.Particles");
 CT.require("zero.core.Fire");
 CT.require("zero.core.Swarm");
+CT.require("zero.core.Collection");
 CT.require("zero.core.Flora");
+CT.require("zero.core.Fauna");
 
 CT.require("zero.core.Skeleton");
 CT.require("zero.core.Spine");

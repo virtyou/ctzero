@@ -167,6 +167,8 @@ zero.base.body.tail = {
         strand: {
             girth: 6,
             hard: true,
+            wiggle: 60,
+            nograv: true,
             flex: Math.PI / 16
         }
     }

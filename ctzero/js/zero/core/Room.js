@@ -187,6 +187,8 @@ zero.core.Room = CT.Class({
 		}
 		this.rain && this.rain.rebound();
 		this.fog && this.fog.rebound();
+		this.onbound && this.onbound(this);
+		this._.postboundz.forEach(f => f());
 	},
 	setFriction: function(grippy) {
 		this.grippy = this.opts.grippy = grippy;

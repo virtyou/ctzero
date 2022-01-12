@@ -18,6 +18,8 @@ zero.core.util = {
 	randHue: function(family) {
 		var zcu = zero.core.util, cz = zcu._colors, i2, lz,
 			cstr = "0000", c1, c2, d = CT.data, r = d.random;
+		if (family == "black")
+			return "#" + (10 + r(20)) + "" + (10 + r(20)) + "" + (10 + r(20));
 		if (family == "yellow")
 			return "#" + (80 + r(20)) + "" + (80 + r(20)) + "" + (10 + r(10));
 		if (family == "green") // eh........
@@ -35,6 +37,42 @@ zero.core.util = {
 			});
 		}
 		return d.choice(cz[family]);
+	},
+	randMat: function(color) {
+		return new THREE.MeshPhongMaterial({
+			color: zero.core.util.randHue(color)
+		});
+	},
+	outBound: function(thing, bounder, p) {
+		var rb = (bounder || zero.core.current.room).bounds,
+			min = rb.min, max = rb.max;
+		p = p || thing.position(null, true);
+		return p.x < min.x || p.x > max.x || p.z < min.z || p.z > max.z;
+	},
+	randPos: function(objStyle, y, bounder) {
+		var r = bounder || zero.core.current.room, bpos;
+		y = y || 0;
+		if (!r.ranges) {
+			var bz = r.bounds,
+				xmin = bz.min.x, zmin = bz.min.z,
+				xmax = bz.max.x, zmax = bz.max.z;
+				xrange = xmax - xmin, zrange = zmax - zmin,
+				xhalf = xrange / 2, zhalf = zrange / 2;
+			r.ranges = {
+				xrange: xrange,
+				zrange: zrange,
+				xhalf: xhalf,
+				zhalf: zhalf
+			};
+		}
+		var x = CT.data.random(r.ranges.xrange) - r.ranges.xhalf,
+			z = CT.data.random(r.ranges.zrange) - r.ranges.zhalf;
+		if (bounder) {
+			bpos = bounder.group.position;
+			x += bpos.x;
+			z += bpos.z;
+		}
+		return objStyle ? { x: x, y: y, z: z } : [x, y, z];
 	},
 	gear2bone: function(kind, side, sub, part) {
 		var zcc = zero.core.current, bone, part,

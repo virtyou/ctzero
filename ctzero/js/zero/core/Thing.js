@@ -4,6 +4,7 @@ zero.core.Thing = CT.Class({
 		customs: [], // stored here, only tick()ed in Thing subclasses that implement tick()
 		ready: false,
 		readycbs: [],
+		postboundz: [],
 		built: function() {
 			var thiz = this, _ = this._, cb;
 			this.opts.onassemble && this.opts.onassemble();
@@ -210,6 +211,31 @@ zero.core.Thing = CT.Class({
 			};
 		}
 		this.onbound && this.onbound(this);
+		this._.postboundz.forEach(f => f());
+	},
+	basicBound: function() { // bare bones
+		var r = zero.core.current.room,
+			pos = this.group.position,
+			oz = this.opts, atop;
+		this._.setBounds();
+		this.homeY = this.radii.y;
+		if (this.within)
+			this.homeY += this.within.group.position.y;
+		else {
+			atop = r.getSurface(pos, this.radii);
+			this.homeY += atop ? atop.getTop(pos) : r.bounds.min.y;
+		}
+		if (oz.flying)
+			this.homeY += 10 + CT.data.random(30);
+		if (oz.bob)
+			this.homeY += oz.bob * Math.PI;
+		this.adjust("position", "y", this.homeY);
+	},
+	onbounded: function(cb) {
+		if (this.bounds)
+			cb();
+		else
+			this._.postboundz.push(cb);
 	},
 	playSong: function(song, onPlaySong) {
 		if (!this._audio) {
@@ -586,6 +612,7 @@ zero.core.Thing = CT.Class({
 		return thing;
 	},
 	assembled: function() {
+		this.opts.basicBound && (this.within || zero.core.current.room).bounds && this.basicBound();
 		this._.built();
 	},
 	getGroup: function() {
@@ -644,7 +671,8 @@ zero.core.Thing = CT.Class({
 			g = oz.sphereGeometry;
 			if (g == true)
 				g = 1;
-			oz.geometry = new THREE.SphereGeometry(g);
+			oz.geometry = new THREE.SphereGeometry(g,
+				oz.sphereSegs, oz.sphereSegs);
 		}
 		if (oz.torusKnotGeometry) {
 			g = oz.torusKnotGeometry;
@@ -748,7 +776,8 @@ zero.core.Thing = CT.Class({
 			scroll: null,
 			shift: null,
 			grippy: true,
-			frustumCulled: true
+			frustumCulled: true,
+			sphereSegs: core.config.ctzero.sphereSegs
 		});
 		if (opts.kind == "portal")
 			opts.state = "threshold";
