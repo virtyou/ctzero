@@ -12,9 +12,9 @@ zero.core.Fauna = CT.Class({
 			this.homeY + this.bobber[t % 30]);
 	},
 	direct: function(amount) {
-		var zcu = zero.core.util, pos = this.position(null, true);
-		if (zcu.outBound(this, this.within, pos)) {
-			this.look(zcu.randPos(true, pos.y, this.within));
+		var zcu = zero.core.util;
+		if (zcu.outBound(this, this.within)) {
+			this.look(zcu.randPos(true, this.homeY, this.within));
 			delete this.direction;
 		}
 		if (!this.direction)
