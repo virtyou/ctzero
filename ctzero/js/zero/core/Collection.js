@@ -87,7 +87,6 @@ zero.core.Collection = CT.Class({
 	},
 	init: function(opts) {
 		this.opts = CT.merge(opts, {
-			basicBound: true,
 			mode: "random", // |rows|cols
 		}, this.counts, this.opts);
 	}
