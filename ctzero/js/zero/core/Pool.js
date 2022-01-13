@@ -41,6 +41,8 @@ zero.core.Pool = CT.Class({
 		var oz = this.opts, s, side, py = this.position().y,
 			rf = this.getTop(), h = py - rf, p = -h / 2;
 		this.bounds.min.y = this.getTop(); // why doesn't this just happen w/ sides?
+		this._.setRadMid();
+		this._.setInnerBounds();
 		if (oz.sides) {
 			for (s in this.side) {
 				side = this.side[s];
