@@ -44,16 +44,16 @@ zero.core.util = {
 		});
 	},
 	outBound: function(thing, bounder, p) {
-		var rb = (bounder || zero.core.current.room).bounds,
+		var rb = (bounder || zero.core.current.room).innerBounds,
 			min = rb.min, max = rb.max;
-		p = p || thing.position(null, true);
+		p = p || thing.position();
 		return p.x < min.x || p.x > max.x || p.z < min.z || p.z > max.z;
 	},
 	randPos: function(objStyle, y, bounder) {
-		var r = bounder || zero.core.current.room, bpos;
+		var r = bounder || zero.core.current.room;
 		y = y || 0;
 		if (!r.ranges) {
-			var bz = r.bounds,
+			var bz = r.innerBounds,
 				xmin = bz.min.x, zmin = bz.min.z,
 				xmax = bz.max.x, zmax = bz.max.z;
 				xrange = xmax - xmin, zrange = zmax - zmin,
@@ -67,11 +67,6 @@ zero.core.util = {
 		}
 		var x = CT.data.random(r.ranges.xrange) - r.ranges.xhalf,
 			z = CT.data.random(r.ranges.zrange) - r.ranges.zhalf;
-		if (bounder) {
-			bpos = bounder.group.position;
-			x += bpos.x;
-			z += bpos.z;
-		}
 		return objStyle ? { x: x, y: y, z: z } : [x, y, z];
 	},
 	gear2bone: function(kind, side, sub, part) {
