@@ -233,14 +233,10 @@ zero.core.Thing = CT.Class({
 			oz = this.opts, atop;
 		this._.setBounds();
 		this.homeY = this.radii.y;
-		if (this.within)
-			this.homeY += this.within.mids.y;
-		else {
-			atop = r.getSurface(pos, this.radii);
-			this.homeY += atop ? atop.getTop(pos) : r.bounds.min.y;
-		}
+		atop = this.within || r.getSurface(pos, this.radii);
+		this.homeY += atop ? atop.getTop(pos) : r.bounds.min.y;
 		if (oz.flying || oz.swimming)
-			this.homeY += CT.data.random(this.within.radii.y);
+			this.homeY += CT.data.random(2 * (atop || r).radii.y);
 		if (oz.bob)
 			this.homeY += oz.bob * Math.PI;
 		this.adjust("position", "y", this.homeY);
