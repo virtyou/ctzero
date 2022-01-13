@@ -48,6 +48,8 @@ zero.base.fauna = {
 		segments: 3
 	},
 	centipede: {
+		body: "red",
+		mouth: "blue",
 		segments: 12,
 		legs: 2,
 		heft: 6,
