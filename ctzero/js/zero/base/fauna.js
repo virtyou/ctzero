@@ -18,8 +18,8 @@ zero.base.fauna = {
 		segments: 20,
 		scale: [1, 2, 3],
 		body: "green",
-		eye: "yellow"
-		//swimming?
+		eye: "yellow",
+		swimming: true
 	},
 	fish: {
 		wings: 1,
@@ -30,7 +30,8 @@ zero.base.fauna = {
 		limbScale: 0.1,
 		wingSmush: 5,
 		flapDim: "y",
-		scale: [1, 2, 4]
+		scale: [1, 2, 4],
+		swimming: true
 	},
 	spider: {
 		bob: 3,
