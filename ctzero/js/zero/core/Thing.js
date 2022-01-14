@@ -77,10 +77,10 @@ zero.core.Thing = CT.Class({
 				inners.max[dim] = bounds.max[dim] - p[dim];
 			});
 		},
-		setBounds: function() {
+		setBounds: function(bounder) {
 			var radii = this.radii = {}, mids = this.mids = {},
 				bounds = this.bounds = this.bounds || this.hardbounds || new THREE.Box3();
-			this.hardbounds || bounds.setFromObject(this.group);
+			this.hardbounds || bounds.setFromObject(bounder || this.group);
 			this._.setInnerBounds();
 			this._.setRadMid();
 		},
@@ -235,8 +235,14 @@ zero.core.Thing = CT.Class({
 		this.homeY = this.radii.y;
 		atop = this.within || r.getSurface(pos, this.radii);
 		this.homeY += atop ? atop.getTop(pos) : r.bounds.min.y;
-		if (oz.flying || oz.swimming)
+		if (oz.swimming)
 			this.homeY += CT.data.random(2 * (atop || r).radii.y);
+		if (oz.flying) {
+			if (this.within)
+				this.homeY -= CT.data.random(2 * atop.radii.y);
+			else
+				this.homeY += CT.data.random(r.radii.y);
+		}
 		if (oz.bob)
 			this.homeY += oz.bob * Math.PI;
 		this.adjust("position", "y", this.homeY);
