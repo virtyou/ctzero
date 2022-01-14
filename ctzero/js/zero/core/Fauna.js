@@ -272,8 +272,10 @@ zero.core.Fauna.Menagerie = CT.Class({
 			moth: 2
 		},
 		pool: {
-			eel: 1,
-			fish: 2
+			eel: 2,
+			fish: 4,
+			spider: 1,
+			centipede: 1
 		}
 	},
 	member: "Fauna",

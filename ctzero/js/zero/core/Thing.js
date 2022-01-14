@@ -62,13 +62,27 @@ zero.core.Thing = CT.Class({
 			for (dim of this._xyz)
 				this._.setd(dim, this.springs, this.positioners, pos);
 		},
-		setBounds: function() {
-			var radii = this.radii = {},
-				bounds = this.bounds = this.bounds || this.hardbounds || new THREE.Box3();
-			this.hardbounds || bounds.setFromObject(this.group);
+		setRadMid: function() {
+			var radii = this.radii, mids = this.mids, bounds = this.bounds;
 			["x", "y", "z"].forEach(function(dim) {
 				radii[dim] = (bounds.max[dim] - bounds.min[dim]) / 2;
+				mids[dim] = (bounds.max[dim] + bounds.min[dim]) / 2;
 			});
+		},
+		setInnerBounds: function() {
+			var p = this.position(), bounds = this.bounds,
+				inners = this.innerBounds = { min: {}, max: {} };
+			["x", "y", "z"].forEach(function(dim) {
+				inners.min[dim] = bounds.min[dim] - p[dim];
+				inners.max[dim] = bounds.max[dim] - p[dim];
+			});
+		},
+		setBounds: function(bounder) {
+			var radii = this.radii = {}, mids = this.mids = {},
+				bounds = this.bounds = this.bounds || this.hardbounds || new THREE.Box3();
+			this.hardbounds || bounds.setFromObject(bounder || this.group);
+			this._.setInnerBounds();
+			this._.setRadMid();
 		},
 		bounder: function(dim, i, min, upspring) {
 			var bz, bax = this.bindAxis,
@@ -219,14 +233,16 @@ zero.core.Thing = CT.Class({
 			oz = this.opts, atop;
 		this._.setBounds();
 		this.homeY = this.radii.y;
-		if (this.within)
-			this.homeY += this.within.group.position.y;
-		else {
-			atop = r.getSurface(pos, this.radii);
-			this.homeY += atop ? atop.getTop(pos) : r.bounds.min.y;
+		atop = this.within || r.getSurface(pos, this.radii);
+		this.homeY += atop ? atop.getTop(pos) : r.bounds.min.y;
+		if (oz.swimming)
+			this.homeY += CT.data.random(2 * (atop || r).radii.y);
+		if (oz.flying) {
+			if (this.within)
+				this.homeY -= CT.data.random(2 * atop.radii.y);
+			else
+				this.homeY += CT.data.random(r.radii.y);
 		}
-		if (oz.flying)
-			this.homeY += 10 + CT.data.random(30);
 		if (oz.bob)
 			this.homeY += oz.bob * Math.PI;
 		this.adjust("position", "y", this.homeY);

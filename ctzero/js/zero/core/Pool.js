@@ -3,6 +3,7 @@ zero.core.Pool = CT.Class({
 	tick: function(dts) {
 		if (!this.thring) return; // for dynamic attachment
 		var zcu = zero.core.util;
+		this.creatures && this.creatures.tick(dts); // for deep water (top not visible)
 		if (zcu.shouldSkip() || !zero.core.camera.visible(this)) return;
 		var rate = zcu.tickRate(), smap = this.smap, t = zcu.ticker, i,
 			geo = this.thring.geometry, vertices = geo.vertices, vl = vertices.length,
@@ -24,7 +25,6 @@ zero.core.Pool = CT.Class({
 			this.cam.updateCubeMap(mainCam.get("renderer"), mainCam.scene);
 		}
 		this.bubbles && this.bubbles.tick(dts);
-		this.creatures && this.creatures.tick(dts);
 		this.tickPos();
 	},
 	getTop: function() {
@@ -41,10 +41,12 @@ zero.core.Pool = CT.Class({
 		var oz = this.opts, s, side, py = this.position().y,
 			rf = this.getTop(), h = py - rf, p = -h / 2;
 		this.bounds.min.y = this.getTop(); // why doesn't this just happen w/ sides?
+		this._.setRadMid();
+		this._.setInnerBounds();
 		if (oz.sides) {
 			for (s in this.side) {
 				side = this.side[s];
-				side.adjust("scale", "y", h);
+				side.adjust("scale", "y", h); // seems broken .... [too low!]
 				side.adjust("position", "z", p);
 				side.material.color.r = 0.6; // meh...
 			}
