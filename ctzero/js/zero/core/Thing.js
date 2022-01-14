@@ -239,7 +239,7 @@ zero.core.Thing = CT.Class({
 			this.homeY += CT.data.random(2 * (atop || r).radii.y);
 		if (oz.flying) {
 			if (this.within)
-				this.homeY -= CT.data.random(2 * atop.radii.y);
+				this.homeY -= CT.data.random(atop.radii.y);
 			else
 				this.homeY += CT.data.random(r.radii.y);
 		}
@@ -409,7 +409,7 @@ zero.core.Thing = CT.Class({
 	},
 	look: function(pos) {
 //		this.group.lookAt(this.group.worldToLocal(pos)); // ????
-		this.group.lookAt(zero.core.util.vector(this.position(null, true), pos));
+		this.group.lookAt(zero.core.util.vector(this.position(), pos));
 	},
 	// position(), rotation(), scale(): getters _and_ setters
 	position: function(position, world) {
