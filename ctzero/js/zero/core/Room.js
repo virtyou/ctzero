@@ -172,8 +172,9 @@ zero.core.Room = CT.Class({
 				s._audio.volume = zero.core.util.close2u(s);
 	},
 	setBounds: function() {
-		this.bounds = this.bounds || new THREE.Box3();
-		this.bounds.setFromObject(this.getPlacer());
+		this._.setBounds(this.getPlacer());
+//		this.bounds = this.bounds || new THREE.Box3();
+//		this.bounds.setFromObject(this.getPlacer());
 //		if (this.floor0)
 //			this.bounds.min.y = this.floor0.position().y;
 		Object.values(zero.core.current.people).forEach(function(person) {
