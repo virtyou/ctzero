@@ -18,6 +18,10 @@ zero.core.util = {
 	randHue: function(family) {
 		var zcu = zero.core.util, cz = zcu._colors, i2, lz,
 			cstr = "0000", c1, c2, d = CT.data, r = d.random;
+		if (family == "gray") {
+			var n = r(40) + 40;
+			return "#" + n + "" + n + "" + n;
+		}
 		if (family == "black")
 			return "#" + (10 + r(20)) + "" + (10 + r(20)) + "" + (10 + r(20));
 		if (family == "yellow")

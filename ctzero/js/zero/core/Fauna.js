@@ -5,11 +5,11 @@ zero.core.Fauna = CT.Class({
 		this.direct(oz.speed * dts);
 		if (!zero.core.camera.visible(this.segment0)) return;
 		var t = zero.core.util.ticker + this.randOff,
-			t1 = t % 60, t2 = (t + 30) % 60;
+			t1 = t % oz.tickSegs, t2 = (t + this.t2Off) % oz.tickSegs;
 		oz.hairStyle && this.header[oz.hairStyle].tick();
 		this.segment0 && this.segment0.tick(this.ticker[t1], this.ticker[t2]);
 		this.bobber && this.adjust("position", "y",
-			this.homeY + this.bobber[t % 30]);
+			this.homeY + this.bobber[t % oz.bobSegs]);
 	},
 	direct: function(amount) {
 		var zcu = zero.core.util;
@@ -25,16 +25,16 @@ zero.core.Fauna = CT.Class({
 	preassemble: function() {
 		var oz = this.opts, pz = oz.parts, tbase,
 			i, soz, bmat = this.materials.body;
-		if (oz.head) {
+		if (oz.headScale) {
 			pz.push({
 				subclass: zero.core.Fauna.Head,
 				name: "header",
 				kind: "head",
 				animal: this,
-				matinstance: bmat,
+				matinstance: this.materials.head,
 				position: [0, oz.headY, 0],
 				sphereGeometry: oz.heft,
-				scale: [oz.head, oz.head, oz.head]
+				scale: [oz.headScale, oz.headScale, oz.headScale]
 			});
 		}
 		for (i = 0; i < oz.segments; i++) {
@@ -52,13 +52,13 @@ zero.core.Fauna = CT.Class({
 			pz.push(soz);
 			pz = soz.parts = [];
 		}
-		if (oz.tail) {
-			tbase = zero.base.body.tail[oz.tail];
+		if (oz.tailStyle) {
+			tbase = zero.base.body.tail[oz.tailStyle];
 			pz.push(CT.merge({
 				name: "wagger",
 				kind: "tail",
 				thing: "Tail",
-				matinstance: bmat,
+				matinstance: this.materials.tail,
 				position: [0, 0, -oz.tailZ]
 			}, tbase));
 		}
@@ -73,6 +73,9 @@ zero.core.Fauna = CT.Class({
 			if (oz[kind + "s"])
 				mats[kind] = randMat(oz[kind]);
 		});
+		["head", "tail", "leg", "ear"].forEach(function(kind) {
+			mats[kind] = oz[kind] ? randMat(oz[kind]) : mats.body;
+		});
 	},
 	init: function(opts) {
 		opts = this.opts = CT.merge(opts, zero.base.fauna[opts.kind], {
@@ -82,12 +85,18 @@ zero.core.Fauna = CT.Class({
 			wing: "yellow",
 			mouth: "red",
 			hair: "blue",
+			head: null, // defaults to body
+			tail: null, // defaults to body
+			leg: null, // defaults to body
+			ear: null, // defaults to body
 			speed: 20,
+			tickSegs: 60,
+			bobSegs: 30,
 			segments: 1,
 			wiggle: false,
-			tail: false,
 			bob: 0,
-			head: 1, // scale
+			beakness: 1,
+			headScale: 1, // scale
 			heft: 4, // body segment size
 			taper: 1, // segment scale multiplier
 			wings: 0, // per body segment
@@ -103,10 +112,11 @@ zero.core.Fauna = CT.Class({
 		if (opts.within)
 			this.within = opts.within;
 		this.buildMaterials();
+		this.t2Off = opts.tickSegs / 2;
 		this.randOff = CT.data.random(100);
-		this.ticker = zero.core.trig.segs(60, 0.5);
+		this.ticker = zero.core.trig.segs(opts.tickSegs, 0.5);
 		this.wiggler = opts.wiggle && zero.core.trig.segs(opts.wiggle, 0.05);
-		this.bobber = opts.bob && zero.core.trig.segs(30, opts.bob);
+		this.bobber = opts.bob && zero.core.trig.segs(opts.bobSegs, opts.bob);
 	}
 }, zero.core.Thing);
 
@@ -119,13 +129,15 @@ zero.core.Fauna.Segment = CT.Class({
 			wingz = this.wingz + t1;
 		anim.wiggler && this.adjust("rotation", "y",
 			anim.wiggler[(oz.index + zero.core.util.ticker) % aoz.wiggle]);
-		if (this.leg) for (lego in this.leg) {
-			leg = this.leg[lego];
-			leg.adjust("rotation", "z", ((index + leg.opts.index) % 2) ? legz1 : legz2);
-		}
 		if (this.wing)
 			for (wingo in this.wing)
 				this.wing[wingo].adjust("rotation", aoz.flapDim, wingz);
+		else if (this.leg) {
+			for (lego in this.leg) {
+				leg = this.leg[lego];
+				leg.adjust("rotation", "z", ((index + leg.opts.index) % 2) ? legz1 : legz2);
+			}
+		}
 		if (this.segment) {
 			for (seg in this.segment) // should only be one
 				this.segment[seg].tick(t1, t2);
@@ -169,9 +181,10 @@ zero.core.Fauna.Segment = CT.Class({
 zero.core.Fauna.Wing = CT.Class({
 	CLASSNAME: "zero.core.Fauna.Wing",
 	init: function(opts) {
+		var aoz = opts.animal.opts;
 		this.opts = CT.merge(opts, {
 			coneGeometry: 8,
-			geomult: opts.animal.opts.limbMult
+			geomult: aoz.wingMult || aoz.limbMult
 		}, this.opts);
 	}
 }, zero.core.Thing);
@@ -180,7 +193,7 @@ zero.core.Fauna.Leg = CT.Class({
 	CLASSNAME: "zero.core.Fauna.Leg",
 	preassemble: function() {
 		var oz = this.opts, pz = oz.parts, ani = oz.animal,
-			aoz = ani.opts, mat = ani.materials.body,
+			aoz = ani.opts, mat = ani.materials.leg,
 			i, size = aoz.heft / 4;
 		for (i = 0; i < 2; i++) {
 			soz = {
@@ -217,7 +230,7 @@ zero.core.Fauna.Head = CT.Class({
 		pz.push({
 			name: "mouth",
 			kind: "facial",
-			scale: [2, 1, 1],
+			scale: [2, 1, aoz.beakness],
 			sphereGeometry: 1,
 			position: [0, my, mz],
 			matinstance: animal.materials.mouth
@@ -231,7 +244,7 @@ zero.core.Fauna.Head = CT.Class({
 				coneGeometry: earSize,
 				position: [earX, h, 0],
 				rotation: [0, 0, i - 0.5],
-				matinstance: animal.materials.body
+				matinstance: animal.materials.ear
 			});
 			earX *= -1;
 		}
@@ -265,22 +278,27 @@ zero.core.Fauna.sets = {
 		centipede: 1
 	},
 	cavern: {
-		ant: 2,
+		ant: 1,
 		snake: 1,
-		spider: 3,
-		centipede: 2,
-		lizard: 4
+		spider: 1,
+		centipede: 1,
+		lizard: 1,
+		rat: 1,
+		bat: 1
 	},
 	field: {
 		snake: 1,
 		horse: 1,
+		bird: 1,
+		wasp: 1,
+		bee: 1,
 		cow: 2
 	}
 };
 zero.core.Fauna.setter = "menagerie";
 zero.core.Fauna.Menagerie = CT.Class({
 	CLASSNAME: "zero.core.Fauna.Menagerie",
-	kinds: ["horse", "moth", "snake", "spider", "ant", "centipede", "lizard", "cow", "eel", "fish"],
+	kinds: ["horse", "moth", "snake", "spider", "ant", "centipede", "lizard", "cow", "eel", "fish", "bee", "wasp", "rat", "bat", "bird"],
 	counts: {
 		ant: 1,
 		moth: 1,
