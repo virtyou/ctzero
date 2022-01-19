@@ -277,9 +277,6 @@ zero.core.Fauna.sets = {
 		spider: 1,
 		centipede: 1
 	},
-	bush: {
-		bee: 1
-	},
 	cavern: {
 		ant: 1,
 		snake: 1,
@@ -292,9 +289,10 @@ zero.core.Fauna.sets = {
 	field: {
 		snake: 1,
 		horse: 1,
+		bird: 1,
 		wasp: 1,
-		cow: 2,
-		bird: 1
+		bee: 1,
+		cow: 2
 	}
 };
 zero.core.Fauna.setter = "menagerie";
