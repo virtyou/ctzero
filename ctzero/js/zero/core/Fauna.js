@@ -280,11 +280,13 @@ zero.core.Fauna.sets = {
 		bee: 1
 	},
 	cavern: {
-		ant: 2,
+		ant: 1,
 		snake: 1,
-		spider: 3,
-		centipede: 2,
-		lizard: 4
+		spider: 1,
+		centipede: 1,
+		lizard: 1,
+		rat: 1,
+		bat: 1
 	},
 	field: {
 		snake: 1,
@@ -296,7 +298,7 @@ zero.core.Fauna.sets = {
 zero.core.Fauna.setter = "menagerie";
 zero.core.Fauna.Menagerie = CT.Class({
 	CLASSNAME: "zero.core.Fauna.Menagerie",
-	kinds: ["horse", "moth", "snake", "spider", "ant", "centipede", "lizard", "cow", "eel", "fish", "bee", "wasp"],
+	kinds: ["horse", "moth", "snake", "spider", "ant", "centipede", "lizard", "cow", "eel", "fish", "bee", "wasp", "rat", "bat"],
 	counts: {
 		ant: 1,
 		moth: 1,
