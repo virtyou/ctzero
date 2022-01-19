@@ -20,6 +20,8 @@ zero.core.Room = CT.Class({
 		if (this.swarm)
 			for (obj in this.swarm)
 				this.swarm[obj].tick();
+		if (this.menagerie)
+			this.menagerie.tick(dts);
 		this.jostle();
 	},
 	bump: function(b1, b2, moshy) {
@@ -387,6 +389,18 @@ zero.core.Room = CT.Class({
 			kind: "particles",
 			thing: "Particles",
 			bounder: this
+		});
+		opts.garden && opts.parts.push({
+			name: "garden",
+			kind: "natural",
+			collection: opts.garden,
+			subclass: zero.core.Flora.Garden
+		});
+		opts.menagerie && opts.parts.push({
+			name: "menagerie",
+			kind: "natural",
+			collection: opts.menagerie,
+			subclass: zero.core.Fauna.Menagerie
 		});
 		this._structural.forEach(function(cat) {
 			var base = opts[cat];
