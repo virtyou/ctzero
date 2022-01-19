@@ -199,6 +199,18 @@ F.enders = {
 	}
 };
 
+zero.core.Flora.sets = {
+	patch: {
+		flower: 10,
+		bush: 3
+	},
+	forest: {
+		tree: 4,
+		bush: 3,
+		flower: 2
+	}
+};
+zero.core.Flora.setter = "garden";
 zero.core.Flora.Garden = CT.Class({
 	CLASSNAME: "zero.core.Flora.Garden",
 	kinds: ["tree", "bush", "flower"],
@@ -207,5 +219,6 @@ zero.core.Flora.Garden = CT.Class({
 		bush: 4,
 		tree: 2
 	},
+	sets: zero.core.Flora.sets,
 	member: "Flora"
 }, zero.core.Collection);

@@ -254,6 +254,30 @@ zero.core.Fauna.Head = CT.Class({
 	}
 }, zero.core.Thing);
 
+zero.core.Fauna.sets = {
+	fire: {
+		moth: 2
+	},
+	pool: {
+		eel: 2,
+		fish: 4,
+		spider: 1,
+		centipede: 1
+	},
+	cavern: {
+		ant: 2,
+		snake: 1,
+		spider: 3,
+		centipede: 2,
+		lizard: 4
+	},
+	field: {
+		snake: 1,
+		horse: 1,
+		cow: 2
+	}
+};
+zero.core.Fauna.setter = "menagerie";
 zero.core.Fauna.Menagerie = CT.Class({
 	CLASSNAME: "zero.core.Fauna.Menagerie",
 	kinds: ["horse", "moth", "snake", "spider", "ant", "centipede", "lizard", "cow", "eel", "fish"],
@@ -267,20 +291,10 @@ zero.core.Fauna.Menagerie = CT.Class({
 		lizard: 1,
 		cow: 1
 	},
-	sets: {
-		fire: {
-			moth: 2
-		},
-		pool: {
-			eel: 2,
-			fish: 4,
-			spider: 1,
-			centipede: 1
-		}
-	},
+	sets: zero.core.Fauna.sets,
 	member: "Fauna",
 	tick: function(dts) {
-		if (this.awaitBound) return;
+		if (this.awaitBound || !this.isReady()) return;
 		var kind, name;
 		for (kind of this.kinds)
 			for (name in this[kind])
