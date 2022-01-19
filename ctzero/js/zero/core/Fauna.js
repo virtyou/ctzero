@@ -86,6 +86,7 @@ zero.core.Fauna = CT.Class({
 			mouth: "red",
 			hair: "blue",
 			head: null, // defaults to body
+			tail: null, // defaults to body
 			leg: null, // defaults to body
 			ear: null, // defaults to body
 			speed: 20,
@@ -93,7 +94,6 @@ zero.core.Fauna = CT.Class({
 			bobSegs: 30,
 			segments: 1,
 			wiggle: false,
-			tail: false,
 			bob: 0,
 			beakness: 1,
 			headScale: 1, // scale
