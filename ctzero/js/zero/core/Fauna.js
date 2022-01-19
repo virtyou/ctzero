@@ -95,6 +95,7 @@ zero.core.Fauna = CT.Class({
 			wiggle: false,
 			tail: false,
 			bob: 0,
+			beakness: 1,
 			headScale: 1, // scale
 			heft: 4, // body segment size
 			taper: 1, // segment scale multiplier
@@ -229,7 +230,7 @@ zero.core.Fauna.Head = CT.Class({
 		pz.push({
 			name: "mouth",
 			kind: "facial",
-			scale: [2, 1, 1],
+			scale: [2, 1, aoz.beakness],
 			sphereGeometry: 1,
 			position: [0, my, mz],
 			matinstance: animal.materials.mouth
@@ -292,13 +293,14 @@ zero.core.Fauna.sets = {
 		snake: 1,
 		horse: 1,
 		wasp: 1,
-		cow: 2
+		cow: 2,
+		bird: 1
 	}
 };
 zero.core.Fauna.setter = "menagerie";
 zero.core.Fauna.Menagerie = CT.Class({
 	CLASSNAME: "zero.core.Fauna.Menagerie",
-	kinds: ["horse", "moth", "snake", "spider", "ant", "centipede", "lizard", "cow", "eel", "fish", "bee", "wasp", "rat", "bat"],
+	kinds: ["horse", "moth", "snake", "spider", "ant", "centipede", "lizard", "cow", "eel", "fish", "bee", "wasp", "rat", "bat", "bird"],
 	counts: {
 		ant: 1,
 		moth: 1,

@@ -50,12 +50,22 @@ zero.base.fauna = {
 	},
 	bat: {
 		bob: 2,
+		heft: 6,
 		wings: 2,
+		earMult: 10,
 		body: "black",
-		eye: "red",
+		eye: "yellow",
 		wing: "black",
 		flying: true,
 		scale: [1, 1, 2]
+	},
+	bird: {
+		bob: 2,
+		wings: 2,
+		beakness: 3,
+		body: "blue",
+		wing: "blue",
+		flying: true
 	},
 	snake: {
 		body: "green",
