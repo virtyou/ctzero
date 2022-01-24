@@ -122,7 +122,7 @@ zero.core.Controls = CT.Class({
 			if (["floor", "obstacle", "wall", "ramp"].includes(target.opts.kind))
 				target.adjust("position", dir, amount, true); // but fix..
 			else
-				s.boost = amount;
+				s.boost = CT.key.down("SHIFT") ? amount * 2 : amount;
 		};
 	},
 	direct: function(speed) {
