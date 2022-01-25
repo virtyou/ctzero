@@ -293,12 +293,16 @@ zero.core.Fauna.sets = {
 		wasp: 1,
 		bee: 1,
 		cow: 2
+	},
+	town: {
+		cat: 1,
+		dog: 2
 	}
 };
 zero.core.Fauna.setter = "menagerie";
 zero.core.Fauna.Menagerie = CT.Class({
 	CLASSNAME: "zero.core.Fauna.Menagerie",
-	kinds: ["horse", "moth", "snake", "spider", "ant", "centipede", "lizard", "cow", "eel", "fish", "bee", "wasp", "rat", "bat", "bird"],
+	kinds: ["horse", "moth", "snake", "spider", "ant", "centipede", "lizard", "cow", "eel", "fish", "bee", "wasp", "rat", "bat", "bird", "cat", "dog"],
 	counts: {
 		ant: 1,
 		moth: 1,
