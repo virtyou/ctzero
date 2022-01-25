@@ -24,6 +24,8 @@ zero.core.util = {
 		}
 		if (family == "black")
 			return "#" + (10 + r(20)) + "" + (10 + r(20)) + "" + (10 + r(20));
+		if (family == "orange")
+			return "#ff" + (45 + r(50)) + "00";
 		if (family == "yellow")
 			return "#" + (80 + r(20)) + "" + (80 + r(20)) + "" + (10 + r(10));
 		if (family == "green") // eh........
