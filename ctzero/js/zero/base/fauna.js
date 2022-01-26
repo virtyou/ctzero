@@ -149,12 +149,9 @@ zero.base.fauna = {
 		heft: 8,
 		headY: 10,
 		speed: 30,
-//		wiggle: 60,
 		segments: 2,
-//		limbScale: 0.5,
 		legShift: true,
-//		tailStyle: "lizard", // replace with "cat"
-//		scale: [1, 1, 2]
+		tailStyle: "cat"
 	},
 	dog: {
 		eye: "brown",
@@ -163,12 +160,9 @@ zero.base.fauna = {
 		heft: 12,
 		headY: 10,
 		speed: 40,
-//		wiggle: 60,
 		segments: 2,
-//		limbScale: 0.5,
 		legShift: true,
-//		tailStyle: "lizard", // replace with "dog"
-//		scale: [1, 1, 2]
+		tailStyle: "dog"
 	},
 	horse: {
 		bob: 20,

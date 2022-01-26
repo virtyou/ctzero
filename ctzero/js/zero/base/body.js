@@ -157,7 +157,7 @@ zero.base.body.beard = {
 zero.base.body.tail = {
     horse: {
         strand: {
-            girth: 0.1,
+            girth: 0.2,
             taper: [1, 1, 1]
         }
     },
@@ -170,6 +170,29 @@ zero.base.body.tail = {
             wiggle: 60,
             nograv: true,
             flex: Math.PI / 16
+        }
+    },
+    cat: {
+        density: 0.1,
+        range: Math.PI / 16,
+        strand: {
+            girth: 6,
+            hard: true,
+            wiggle: 60,
+            nograv: true,
+            flex: Math.PI / 8
+        }
+    },
+    dog: {
+        density: 0.1,
+        range: Math.PI / 16,
+        strand: {
+            girth: 6,
+            length: 10,
+            hard: true,
+            wiggle: 60,
+            nograv: true,
+            flex: Math.PI / 8
         }
     }
 };
