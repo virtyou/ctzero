@@ -4,10 +4,13 @@ zero.core.Fauna = CT.Class({
 		var oz = this.opts;
 		this.direct(oz.speed * dts);
 		if (!zero.core.camera.visible(this.segment0)) return;
-		var t = zero.core.util.ticker + this.randOff,
-			t1 = t % oz.tickSegs, t2 = (t + this.t2Off) % oz.tickSegs;
+		var i, t = zero.core.util.ticker + this.randOff;
+		this.tickers[0] = (t + 3 * this.tOff) % oz.tickSegs;
+		this.tickers[1] = (t + this.tOff) % oz.tickSegs;
+		this.tickers[2] = t % oz.tickSegs;
+		this.tickers[3] = (t + 2 * this.tOff) % oz.tickSegs;
 		oz.hairStyle && this.header[oz.hairStyle].tick();
-		this.segment0 && this.segment0.tick(this.ticker[t1], this.ticker[t2]);
+		this.segment0 && this.segment0.tick();
 		this.bobber && this.adjust("position", "y",
 			this.homeY + this.bobber[t % oz.bobSegs]);
 	},
@@ -112,7 +115,8 @@ zero.core.Fauna = CT.Class({
 		if (opts.within)
 			this.within = opts.within;
 		this.buildMaterials();
-		this.t2Off = opts.tickSegs / 2;
+		this.tOff = opts.tickSegs / 4;
+		this.tickers = [];
 		this.randOff = CT.data.random(100);
 		this.ticker = zero.core.trig.segs(opts.tickSegs, 0.5);
 		this.wiggler = opts.wiggle && zero.core.trig.segs(opts.wiggle, 0.05);
@@ -122,11 +126,11 @@ zero.core.Fauna = CT.Class({
 
 zero.core.Fauna.Segment = CT.Class({
 	CLASSNAME: "zero.core.Fauna.Segment",
-	tick: function(t1, t2) {
+	tick: function() {
 		var seg, leg, lego, wing, wingo, oz = this.opts,
 			anim = oz.animal, aoz = anim.opts, index = oz.index,
-			legz1 = this.legz + t1, legz2 = this.legz + t2,
-			wingz = this.wingz + t1;
+			tz = anim.tickers, legz = this.legz, lindex = index * 2,
+			wingz = this.wingz + anim.ticker[tz[0]];
 		anim.wiggler && this.adjust("rotation", "y",
 			anim.wiggler[(oz.index + zero.core.util.ticker) % aoz.wiggle]);
 		if (this.wing)
@@ -135,12 +139,13 @@ zero.core.Fauna.Segment = CT.Class({
 		else if (this.leg) {
 			for (lego in this.leg) {
 				leg = this.leg[lego];
-				leg.adjust("rotation", "z", ((index + leg.opts.index) % 2) ? legz1 : legz2);
+				leg.adjust("rotation", "z", legz + anim.ticker[tz[lindex % 4]]);
+				lindex += 1;
 			}
 		}
 		if (this.segment) {
 			for (seg in this.segment) // should only be one
-				this.segment[seg].tick(t1, t2);
+				this.segment[seg].tick();
 		} else if (this.wagger)
 			this.wagger.tick();
 	},
