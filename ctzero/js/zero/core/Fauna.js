@@ -5,10 +5,8 @@ zero.core.Fauna = CT.Class({
 		this.direct(oz.speed * dts);
 		if (!zero.core.camera.visible(this.segment0)) return;
 		var i, t = zero.core.util.ticker + this.randOff;
-		this.tickers[0] = (t + 3 * this.tOff) % oz.tickSegs;
-		this.tickers[1] = (t + this.tOff) % oz.tickSegs;
-		this.tickers[2] = t % oz.tickSegs;
-		this.tickers[3] = (t + 2 * this.tOff) % oz.tickSegs;
+		for (i = 0; i < 4; i++)
+			this.tickers[i] = this.ticker[(t + this.tOffs[i]) % oz.tickSegs];
 		oz.hairStyle && this.header[oz.hairStyle].tick();
 		this.segment0 && this.segment0.tick();
 		this.bobber && this.adjust("position", "y",
@@ -115,8 +113,9 @@ zero.core.Fauna = CT.Class({
 		if (opts.within)
 			this.within = opts.within;
 		this.buildMaterials();
-		this.tOff = opts.tickSegs / 4;
 		this.tickers = [];
+		var toff = opts.tickSegs / 4;
+		this.tOffs = [3 * toff, toff, 0, 2 * toff];
 		this.randOff = CT.data.random(100);
 		this.ticker = zero.core.trig.segs(opts.tickSegs, 0.5);
 		this.wiggler = opts.wiggle && zero.core.trig.segs(opts.wiggle, 0.05);
@@ -130,7 +129,7 @@ zero.core.Fauna.Segment = CT.Class({
 		var seg, leg, lego, wing, wingo, oz = this.opts,
 			anim = oz.animal, aoz = anim.opts, index = oz.index,
 			tz = anim.tickers, legz = this.legz, lindex = index * 2,
-			wingz = this.wingz + anim.ticker[tz[0]];
+			wingz = this.wingz + tz[0];
 		anim.wiggler && this.adjust("rotation", "y",
 			anim.wiggler[(oz.index + zero.core.util.ticker) % aoz.wiggle]);
 		if (this.wing)
@@ -139,7 +138,7 @@ zero.core.Fauna.Segment = CT.Class({
 		else if (this.leg) {
 			for (lego in this.leg) {
 				leg = this.leg[lego];
-				leg.adjust("rotation", "z", legz + anim.ticker[tz[lindex % 4]]);
+				leg.adjust("rotation", "z", legz + tz[lindex % 4]);
 				lindex += 1;
 			}
 		}
