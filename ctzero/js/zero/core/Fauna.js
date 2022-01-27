@@ -234,7 +234,7 @@ zero.core.Fauna.Head = CT.Class({
 		var i, oz = this.opts, pz = oz.parts, animal = oz.animal,
 			aoz = animal.opts, placement = this.eyePlacement(),
 			h = aoz.heft, my = -h / 2, mz = Math.sqrt(h * h - my * my),
-			earSize = h / aoz.earFactor, earX = earSize;
+			earSize = h / aoz.earFactor, earX = earSize, hobj;
 		pz.push({
 			name: "mouth",
 			kind: "facial",
@@ -266,12 +266,18 @@ zero.core.Fauna.Head = CT.Class({
 				matinstance: animal.materials.eye
 			});
 		}
-		aoz.hairStyle && pz.push(CT.merge(zero.base.body.hair[aoz.hairStyle], {
-			name: aoz.hairStyle,
-			kind: "hair",
-			thing: "Hair",
-			matinstance: animal.materials.hair
-		}));
+		if (aoz.hairStyle) {
+			hobj = {
+				name: aoz.hairStyle,
+				kind: "hair",
+				thing: "Hair",
+				matinstance: animal.materials.hair
+			};
+			if (aoz.hairY)
+				hobj.position = [0, aoz.hairY, 4];
+			pz.push(CT.merge(hobj,
+				zero.base.body.hair[aoz.hairStyle]));
+		}
 	}
 }, zero.core.Thing);
 
@@ -309,7 +315,7 @@ zero.core.Fauna.sets = {
 	farm: {
 		pig: 2,
 		sheep: 1,
-//		chicken: 3,
+		chicken: 3,
 		bunny: 1
 	}
 };

@@ -239,5 +239,21 @@ zero.base.fauna = {
 		earMult: 16,
 		earFactor: 2,
 		tailStyle: "bunny"
+	},
+	chicken: {
+		body: "yellow",
+		eye: "black",
+		mouth: "red",
+		hair: "red",
+		bob: 8,
+		heft: 8,
+		wings: 2,
+		beakness: 3,
+		hairY: 4,
+		headY: 10,
+		headScale: 0.4,
+		limbScale: 0.4,
+		hairStyle: "mohawk",
+		tailStyle: "chicken"
 	}
 };

@@ -234,4 +234,16 @@ zero.base.body.tail = {
             flex: Math.PI / 8
         }
     },
+    chicken: {
+        range: Math.PI / 16,
+        coverage: [0.1, 1],
+        strand: {
+            segments: 2,
+            length: 10,
+            hard: true,
+            nograv: true,
+            curl: [1, 0],
+            flex: Math.PI / 8
+        }
+    }
 };
