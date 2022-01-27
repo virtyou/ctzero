@@ -180,7 +180,8 @@ zero.base.body.tail = {
             hard: true,
             wiggle: 60,
             nograv: true,
-            flex: Math.PI / 8
+            flex: Math.PI / 8,
+            taper: [0.9, 0.9, 0.9]
         }
     },
     dog: {
