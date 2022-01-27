@@ -194,5 +194,31 @@ zero.base.body.tail = {
             nograv: true,
             flex: Math.PI / 8
         }
+    },
+    sheep: {
+        density: 0.1,
+        range: Math.PI / 16,
+        strand: {
+            girth: 6,
+            segments: 3,
+            hard: false,
+            wiggle: 60,
+            nograv: false,
+            flex: Math.PI / 8
+        }
+    },
+    pig: {
+        density: 0.1,
+        range: Math.PI / 16,
+        strand: {
+            girth: 2,
+            segments: 10,
+            length: 2,
+            hard: true,
+            wiggle: 60,
+            curl: [1, 0],
+            nograv: true,
+            flex: Math.PI / 8
+        }
     }
 };

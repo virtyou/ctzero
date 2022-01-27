@@ -165,6 +165,7 @@ zero.base.fauna = {
 		tailStyle: "dog"
 	},
 	horse: {
+		body: "black",
 		bob: 20,
 		legs: 2,
 		heft: 20,
@@ -190,6 +191,39 @@ zero.base.fauna = {
 		speed: 40,
 		segments: 2,
 		tailStyle: "horse",
+		limbScale: 0.5,
+		legShift: true
+	},
+	sheep: {
+		body: "white",
+		tail: "black",
+		ear: "black",
+		eye: "black",
+		legs: 2,
+		heft: 16,
+		headScale: 0.5,
+		headY: -5,
+		tailZ: 15,
+		speed: 40,
+		segments: 2,
+		tailStyle: "sheep",
+		limbScale: 0.5,
+		legShift: true
+	},
+	pig: {
+		body: "pink",
+		eye: "black",
+		bob: 5,
+		legs: 2,
+		heft: 12,
+		headScale: 0.5,
+		headY: -5,
+		tailZ: 8,
+		tailX: 8,
+		tailXR: -1,
+		speed: 40,
+		segments: 2,
+		tailStyle: "pig",
 		limbScale: 0.5,
 		legShift: true
 	}
