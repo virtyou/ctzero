@@ -4,10 +4,11 @@ zero.core.Fauna = CT.Class({
 		var oz = this.opts;
 		this.direct(oz.speed * dts);
 		if (!zero.core.camera.visible(this.segment0)) return;
-		var t = zero.core.util.ticker + this.randOff,
-			t1 = t % oz.tickSegs, t2 = (t + this.t2Off) % oz.tickSegs;
+		var i, t = zero.core.util.ticker + this.randOff;
+		for (i = 0; i < 4; i++)
+			this.tickers[i] = this.ticker[(t + this.tOffs[i]) % oz.tickSegs];
 		oz.hairStyle && this.header[oz.hairStyle].tick();
-		this.segment0 && this.segment0.tick(this.ticker[t1], this.ticker[t2]);
+		this.segment0 && this.segment0.tick();
 		this.bobber && this.adjust("position", "y",
 			this.homeY + this.bobber[t % oz.bobSegs]);
 	},
@@ -59,7 +60,8 @@ zero.core.Fauna = CT.Class({
 				kind: "tail",
 				thing: "Tail",
 				matinstance: this.materials.tail,
-				position: [0, 0, -oz.tailZ]
+				position: [0, oz.tailX, -oz.tailZ],
+				rotation: [oz.tailXR, 0, 0]
 			}, tbase));
 		}
 	},
@@ -104,15 +106,20 @@ zero.core.Fauna = CT.Class({
 			eyes: 2,
 			headY: 0,
 			tailZ: 0,
+			tailX: 0,
+			tailXR: 0,
 			limbMult: 8,
 			limbScale: 1,
+			earFactor: 6,
 			wingSmush: 0.2,
 			flapDim: "z"
 		}, this.opts);
 		if (opts.within)
 			this.within = opts.within;
 		this.buildMaterials();
-		this.t2Off = opts.tickSegs / 2;
+		this.tickers = [];
+		var toff = opts.tickSegs / 4;
+		this.tOffs = [3 * toff, toff, 0, 2 * toff];
 		this.randOff = CT.data.random(100);
 		this.ticker = zero.core.trig.segs(opts.tickSegs, 0.5);
 		this.wiggler = opts.wiggle && zero.core.trig.segs(opts.wiggle, 0.05);
@@ -122,11 +129,11 @@ zero.core.Fauna = CT.Class({
 
 zero.core.Fauna.Segment = CT.Class({
 	CLASSNAME: "zero.core.Fauna.Segment",
-	tick: function(t1, t2) {
+	tick: function() {
 		var seg, leg, lego, wing, wingo, oz = this.opts,
 			anim = oz.animal, aoz = anim.opts, index = oz.index,
-			legz1 = this.legz + t1, legz2 = this.legz + t2,
-			wingz = this.wingz + t1;
+			tz = anim.tickers, legz = this.legz, lindex = index * 2,
+			wingz = this.wingz + tz[0];
 		anim.wiggler && this.adjust("rotation", "y",
 			anim.wiggler[(oz.index + zero.core.util.ticker) % aoz.wiggle]);
 		if (this.wing)
@@ -135,12 +142,13 @@ zero.core.Fauna.Segment = CT.Class({
 		else if (this.leg) {
 			for (lego in this.leg) {
 				leg = this.leg[lego];
-				leg.adjust("rotation", "z", ((index + leg.opts.index) % 2) ? legz1 : legz2);
+				leg.adjust("rotation", "z", legz + tz[lindex % 4]);
+				lindex += 1;
 			}
 		}
 		if (this.segment) {
 			for (seg in this.segment) // should only be one
-				this.segment[seg].tick(t1, t2);
+				this.segment[seg].tick();
 		} else if (this.wagger)
 			this.wagger.tick();
 	},
@@ -226,7 +234,7 @@ zero.core.Fauna.Head = CT.Class({
 		var i, oz = this.opts, pz = oz.parts, animal = oz.animal,
 			aoz = animal.opts, placement = this.eyePlacement(),
 			h = aoz.heft, my = -h / 2, mz = Math.sqrt(h * h - my * my),
-			earSize = h / 6, earX = earSize;
+			earSize = h / aoz.earFactor, earX = earSize, hobj;
 		pz.push({
 			name: "mouth",
 			kind: "facial",
@@ -258,12 +266,18 @@ zero.core.Fauna.Head = CT.Class({
 				matinstance: animal.materials.eye
 			});
 		}
-		aoz.hairStyle && pz.push(CT.merge(zero.base.body.hair[aoz.hairStyle], {
-			name: aoz.hairStyle,
-			kind: "hair",
-			thing: "Hair",
-			matinstance: animal.materials.hair
-		}));
+		if (aoz.hairStyle) {
+			hobj = {
+				name: aoz.hairStyle,
+				kind: "hair",
+				thing: "Hair",
+				matinstance: animal.materials.hair
+			};
+			if (aoz.hairY)
+				hobj.position = [0, aoz.hairY, 4];
+			pz.push(CT.merge(hobj,
+				zero.base.body.hair[aoz.hairStyle]));
+		}
 	}
 }, zero.core.Thing);
 
@@ -293,12 +307,22 @@ zero.core.Fauna.sets = {
 		wasp: 1,
 		bee: 1,
 		cow: 2
+	},
+	town: {
+		cat: 1,
+		dog: 2
+	},
+	farm: {
+		pig: 2,
+		sheep: 1,
+		chicken: 3,
+		bunny: 1
 	}
 };
 zero.core.Fauna.setter = "menagerie";
 zero.core.Fauna.Menagerie = CT.Class({
 	CLASSNAME: "zero.core.Fauna.Menagerie",
-	kinds: ["horse", "moth", "snake", "spider", "ant", "centipede", "lizard", "cow", "eel", "fish", "bee", "wasp", "rat", "bat", "bird"],
+	kinds: ["horse", "moth", "snake", "spider", "ant", "centipede", "lizard", "cow", "eel", "fish", "bee", "wasp", "rat", "bat", "bird", "cat", "dog", "pig", "sheep", "chicken", "bunny"],
 	counts: {
 		ant: 1,
 		moth: 1,

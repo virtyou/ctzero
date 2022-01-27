@@ -157,7 +157,7 @@ zero.base.body.beard = {
 zero.base.body.tail = {
     horse: {
         strand: {
-            girth: 0.1,
+            girth: 0.2,
             taper: [1, 1, 1]
         }
     },
@@ -170,6 +170,80 @@ zero.base.body.tail = {
             wiggle: 60,
             nograv: true,
             flex: Math.PI / 16
+        }
+    },
+    cat: {
+        density: 0.1,
+        range: Math.PI / 16,
+        strand: {
+            girth: 6,
+            hard: true,
+            wiggle: 60,
+            nograv: true,
+            flex: Math.PI / 8,
+            taper: [0.9, 0.9, 0.9]
+        }
+    },
+    dog: {
+        density: 0.1,
+        range: Math.PI / 16,
+        strand: {
+            girth: 6,
+            length: 10,
+            hard: true,
+            wiggle: 60,
+            nograv: true,
+            flex: Math.PI / 8
+        }
+    },
+    sheep: {
+        density: 0.1,
+        range: Math.PI / 16,
+        strand: {
+            girth: 6,
+            segments: 3,
+            hard: false,
+            wiggle: 60,
+            nograv: false,
+            flex: Math.PI / 8
+        }
+    },
+    pig: {
+        density: 0.1,
+        range: Math.PI / 16,
+        strand: {
+            girth: 2,
+            segments: 10,
+            length: 2,
+            hard: true,
+            wiggle: 60,
+            curl: [1, 0],
+            nograv: true,
+            flex: Math.PI / 8
+        }
+    },
+    bunny: {
+        density: 0.1,
+        range: Math.PI / 16,
+        strand: {
+            segments: 1,
+            length: 2,
+            hard: true,
+            wiggle: 60,
+            nograv: true,
+            flex: Math.PI / 8
+        }
+    },
+    chicken: {
+        range: Math.PI / 16,
+        coverage: [0.1, 1],
+        strand: {
+            segments: 2,
+            length: 10,
+            hard: true,
+            nograv: true,
+            curl: [1, 0],
+            flex: Math.PI / 8
         }
     }
 };
