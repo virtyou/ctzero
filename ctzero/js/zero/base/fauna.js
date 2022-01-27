@@ -150,6 +150,7 @@ zero.base.fauna = {
 		headY: 10,
 		speed: 30,
 		segments: 2,
+		earFactor: 2,
 		legShift: true,
 		tailStyle: "cat"
 	},
@@ -176,6 +177,7 @@ zero.base.fauna = {
 		taper: 0.8,
 		earMult: 4,
 		segments: 2,
+		earFactor: 3,
 		tailStyle: "horse",
 		legShift: true,
 		scale: [1, 2, 3],

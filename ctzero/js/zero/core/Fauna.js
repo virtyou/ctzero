@@ -110,6 +110,7 @@ zero.core.Fauna = CT.Class({
 			tailXR: 0,
 			limbMult: 8,
 			limbScale: 1,
+			earFactor: 6,
 			wingSmush: 0.2,
 			flapDim: "z"
 		}, this.opts);
@@ -233,7 +234,7 @@ zero.core.Fauna.Head = CT.Class({
 		var i, oz = this.opts, pz = oz.parts, animal = oz.animal,
 			aoz = animal.opts, placement = this.eyePlacement(),
 			h = aoz.heft, my = -h / 2, mz = Math.sqrt(h * h - my * my),
-			earSize = h / 6, earX = earSize;
+			earSize = h / aoz.earFactor, earX = earSize;
 		pz.push({
 			name: "mouth",
 			kind: "facial",
