@@ -228,5 +228,16 @@ zero.base.fauna = {
 		tailStyle: "pig",
 		limbScale: 0.5,
 		legShift: true
+	},
+	bunny: {
+		body: "white",
+		eye: "pink",
+		bob: 20,
+		heft: 8,
+		headY: 10,
+		headScale: 0.6,
+		earMult: 16,
+		earFactor: 2,
+		tailStyle: "bunny"
 	}
 };

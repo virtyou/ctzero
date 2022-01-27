@@ -310,7 +310,7 @@ zero.core.Fauna.sets = {
 		pig: 2,
 		sheep: 1,
 //		chicken: 3,
-//		bunny: 1
+		bunny: 1
 	}
 };
 zero.core.Fauna.setter = "menagerie";

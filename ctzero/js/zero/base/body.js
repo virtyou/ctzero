@@ -221,5 +221,17 @@ zero.base.body.tail = {
             nograv: true,
             flex: Math.PI / 8
         }
-    }
+    },
+    bunny: {
+        density: 0.1,
+        range: Math.PI / 16,
+        strand: {
+            segments: 1,
+            length: 2,
+            hard: true,
+            wiggle: 60,
+            nograv: true,
+            flex: Math.PI / 8
+        }
+    },
 };
