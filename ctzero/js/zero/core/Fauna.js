@@ -60,7 +60,8 @@ zero.core.Fauna = CT.Class({
 				kind: "tail",
 				thing: "Tail",
 				matinstance: this.materials.tail,
-				position: [0, 0, -oz.tailZ]
+				position: [0, oz.tailX, -oz.tailZ],
+				rotation: [oz.tailXR, 0, 0]
 			}, tbase));
 		}
 	},
@@ -105,6 +106,8 @@ zero.core.Fauna = CT.Class({
 			eyes: 2,
 			headY: 0,
 			tailZ: 0,
+			tailX: 0,
+			tailXR: 0,
 			limbMult: 8,
 			limbScale: 1,
 			wingSmush: 0.2,
@@ -301,12 +304,18 @@ zero.core.Fauna.sets = {
 	town: {
 		cat: 1,
 		dog: 2
+	},
+	farm: {
+		pig: 2,
+		sheep: 1,
+//		chicken: 3,
+//		bunny: 1
 	}
 };
 zero.core.Fauna.setter = "menagerie";
 zero.core.Fauna.Menagerie = CT.Class({
 	CLASSNAME: "zero.core.Fauna.Menagerie",
-	kinds: ["horse", "moth", "snake", "spider", "ant", "centipede", "lizard", "cow", "eel", "fish", "bee", "wasp", "rat", "bat", "bird", "cat", "dog"],
+	kinds: ["horse", "moth", "snake", "spider", "ant", "centipede", "lizard", "cow", "eel", "fish", "bee", "wasp", "rat", "bat", "bird", "cat", "dog", "pig", "sheep", "chicken", "bunny"],
 	counts: {
 		ant: 1,
 		moth: 1,
