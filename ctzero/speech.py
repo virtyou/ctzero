@@ -3,6 +3,7 @@ import os, string, json, time
 from cantools.util import read, write, cmd, output
 from cantools.web import log, post, read_file
 from cantools import config
+from model import Translation
 try:
     from string import letters
 except: # py38
@@ -13,6 +14,7 @@ LANG = {
     "mandarin": "zh-guoyu"
 }
 CMDS = {
+    "trans": 'gcloud alpha ml translate translate-text --content="%s" --source-language=%s --target-language=%s',
     "say": [
         'aws polly synthesize-speech --output-format mp3 --voice-id %s --text "%s" %s.mp3',
         'aws polly synthesize-speech --output-format json --voice-id %s --text "%s" --speech-mark-types=\'["viseme"]\' %s.json'
@@ -55,6 +57,15 @@ def baidu_token():
         log("acquiring baidu token")
         cmd(CMDS["baidu_token"]%(cfg.id, cfg.secret))
         load_token(now)
+
+def trans(words, sourceLang, targetLang):
+    t = Translation.query(Translation.words == words,
+        Translation.source == sourceLang, Translation.target == targetLang).get()
+    if not t:
+        res = output(CMDS["trans"]%(words, sourceLang, targetLang))
+        t = Translation(words=words, source=sourceLang, target=targetLang, result=res)
+        t.put()
+    return t.result
 
 def chat(question, identity=None, mood=None, options=None, name=None, asker=None):
     cfg = config.ctzero.chat
