@@ -2,7 +2,6 @@
 import os, string, json, time
 from cantools.util import read, write, cmd, output
 from cantools.web import log, post, read_file
-from cantools import config
 from model import Translation
 from .spcfg import *
 try:

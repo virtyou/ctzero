@@ -1,3 +1,5 @@
+from cantools import config
+
 LANG = {
     "english": "en-US",
     "mandarin": "zh-guoyu"
