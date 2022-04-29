@@ -31,7 +31,7 @@ def trans(words, sourceLang, targetLang):
     t = Translation.query(Translation.words == words,
         Translation.source == sourceLang, Translation.target == targetLang).get()
     if not t:
-        raw = output(CMDS["trans"]%(words, sourceLang, targetLang))
+        raw = output(CMDS["trans"]%(words, sourceLang, targetLang)).split(": ")[-1]
         res = json.loads(raw)["data"]["translations"][0]["translatedText"]
         t = Translation(words=words, source=sourceLang, target=targetLang, result=res)
         t.put()
