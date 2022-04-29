@@ -1,8 +1,8 @@
 from cantools.web import respond, succeed, cgi_get, local
-from ctzero.speech import chat, say, rec
+from ctzero.speech import chat, say, rec, trans
 
 def response():
-    action = cgi_get("action", choices=["say", "rec", "chat"])
+    action = cgi_get("action", choices=["say", "rec", "chat", "trans"])
     if action == "chat":
         res = local('response')
         addr = res and res.ip or "rando"
@@ -23,5 +23,7 @@ def response():
         succeed(say(language, voice, words, prosody))
     elif action == "rec":
         succeed(rec(language, cgi_get("data")))
+    elif action == "trans":
+        succeed(trans(cgi_get("words"), language, cgi_get("target")))
 
 respond(response, threaded=True)

@@ -1,6 +1,12 @@
 from cantools import db
 from ctuser.model import CTUser
 
+class Translation(db.TimeStampedBase):
+    words = db.String()
+    source = db.String()
+    target = db.String()
+    result = db.String()
+
 class Member(CTUser):
     cc = db.JSON() # carecoin {person,membership}
 
