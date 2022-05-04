@@ -86,6 +86,7 @@ zero.core.auto.Automaton = CT.Class({
 		});
 		this.reprogram();
 		opts.person.grippy = false;
+		opts.person.automaton = this;
 		this.reactivitate(opts.activities);
 		zero.core.util.join(opts.person, this.joined, true);
 	}
