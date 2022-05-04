@@ -55,6 +55,7 @@ zero.core.auto.Automaton = CT.Class({
 	},
 	joined: function(person) {
 		this.person = person;
+		person.automaton = this;
 		this.opts.wander && person.wander();
 		this.activities.length && this.play();
 		this.opts.onjoin && this.opts.onjoin(person);

@@ -128,6 +128,9 @@ zero.core.Person = CT.Class({
 					 pz[p].look(cube, true);
 		}
 	},
+	unlook: function() {
+		delete this.subject;
+	},
 	look: function(subject, orient) {
 		this.subject = subject;
 		orient && this.orient(subject);
