@@ -8,6 +8,9 @@ zero.core.Room = CT.Class({
 	_structural: ["obstacle", "floor", "wall", "ramp"],
 	_bumpers: ["wall", "obstacle"],
 	_surfaces: ["floor", "ramp"],
+	removables: function() {
+		return this.parts.concat(this.objects);
+	},
 	tick: function(dts, rdts) {
 		var obj;
 		for (obj of this.objects)

@@ -229,5 +229,10 @@ zero.core.Flora.Garden = CT.Class({
 		tree: 2
 	},
 	sets: zero.core.Flora.sets,
-	member: "Flora"
+	member: "Flora",
+	removables: false,
+	onremove: function() {
+		for (var part of this.parts)
+			part.critters && part.critters.remove();
+	}
 }, zero.core.Collection);

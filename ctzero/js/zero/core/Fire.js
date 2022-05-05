@@ -1,6 +1,7 @@
 zero.core.Fire = CT.Class({
 	CLASSNAME: "zero.core.Fire",
 	tickerz: ["flames", "sparks", "smoke", "glow", "moths"],
+	removables: false,
 	tick: function(dts) {
 		var zcu = zero.core.util, variety;
 		if (!this.isReady() || zcu.shouldSkip()) return;

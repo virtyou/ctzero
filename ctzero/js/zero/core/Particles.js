@@ -1,5 +1,6 @@
 zero.core.Particles = CT.Class({
 	CLASSNAME: "zero.core.Particles",
+	removables: false,
 	tick: function(dts) {
 		var p, oz = this.opts;
 		if (!this.isReady()) return;

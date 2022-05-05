@@ -583,8 +583,13 @@ zero.core.Thing = CT.Class({
 		if (mti)
 			mti[influence] = mti[influence] ? 0 : 1;
 	},
+	removables: function() {
+		return this.parts;
+	},
 	remove: function() {
-		var oz = this.opts;
+		var oz = this.opts, part,
+			remoz = this.removables && this.removables();
+		this.log("remove", oz.name);
 		this.removed = true;
 		(oz.anchor || oz.scene).remove(this.group);
 		this.unscroll();
@@ -593,6 +598,10 @@ zero.core.Thing = CT.Class({
 		this.unvsplay();
 		if (oz.key)
 			delete zero.core.Thing._things[oz.key];
+		if (remoz)
+			for (part of remoz)
+				part.remove();
+		this.onremove && this.onremove();
 		oz.onremove && oz.onremove();
 	},
 	detach: function(cname) {

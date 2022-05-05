@@ -341,6 +341,7 @@ zero.core.Fauna.Menagerie = CT.Class({
 	},
 	sets: zero.core.Fauna.sets,
 	member: "Fauna",
+	removables: false,
 	tick: function(dts) {
 		if (this.awaitBound || !this.isReady()) return;
 		var kind, name;
