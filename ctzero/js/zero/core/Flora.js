@@ -13,6 +13,15 @@ zero.core.Flora = CT.Class({
 				position: [0, -20, 0]
 			});
 		}
+		(oz.kind in zero.core.Fauna.sets) && pz.push({
+			within: this,
+			regTick: true,
+			name: "critters",
+			kind: "menagerie",
+			collection: oz.kind,
+			scale: oz.scale.map(s => 1 / s),
+			subclass: zero.core.Fauna.Menagerie
+		});
 	},
 	buildMaterials: function() {
 		var oz = this.opts, mats = this.materials = {};
