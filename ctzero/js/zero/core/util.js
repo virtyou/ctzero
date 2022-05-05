@@ -152,7 +152,7 @@ zero.core.util = {
 		var r = zero.core.current.room, you = zero.core.current.person,
 			diameter = r.bounds.min.distanceTo(r.bounds.max),
 			dist = thingo.position().distanceTo(you.body.position());
-		return 1 - dist / diameter;
+		return Math.max(0.001, 1 - dist / diameter); // <0 bounding error?
 	},
 	vector: function(p1, p2) { // p2 - p1
 		return {
