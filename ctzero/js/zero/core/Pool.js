@@ -28,7 +28,7 @@ zero.core.Pool = CT.Class({
 		this.tickPos();
 	},
 	getTop: function() {
-		return zero.core.current.room.bounds.min.y + 1;
+		return zero.core.current.room.getBounds().min.y + 1;
 //		return this.bounds.min.y;
 	},
 	getSurface: function() {
