@@ -69,7 +69,7 @@ zero.core.Collection = CT.Class({
 		for (i = 0; i < oz[kind]; i++) {
 			mopts = this._mem(kind, i);
 			if (!this.awaitBound) {
-				mopts.position = zero.core.util.randPos();
+				mopts.position = zero.core.util.randPos(false, null, this.within);
 				mopts.rotation = [0,
 					CT.data.random(Math.PI * 2, true), 0];
 			}
