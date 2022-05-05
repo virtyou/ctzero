@@ -1,4 +1,4 @@
-zero.core.Fauna = CT.Class({
+var F = zero.core.Fauna = CT.Class({
 	CLASSNAME: "zero.core.Fauna",
 	tick: function(dts) {
 		var oz = this.opts;
@@ -344,8 +344,23 @@ zero.core.Fauna.Menagerie = CT.Class({
 	},
 	onremove: function() {
 		this.opts.regTick && zero.core.current.room.unregTicker(this);
+		clearTimeout(this.yelper);
+		this.audio.remove();
+	},
+	yelp: function() {
+		var zcu = zero.core.util, crit = this[CT.data.choice(this.members)];
+		if (crit && crit.opts.kind in F.audio) {
+			this.audio.volume = zcu.close2u(crit) / 2;
+			this.audio.src = CT.data.choice(F.audio[crit.opts.kind]);
+			this.log("playing", crit.opts.kind, "at", this.audio.volume);
+			zcu.playMedia(this.audio);
+		}
+		this.yelper = setTimeout(this.yelp, 10000 + CT.data.random(10000));
 	},
 	init: function(opts) {
+		this.audio = CT.dom.audio();
+		document.body.appendChild(this.audio);
+		F.audio && this.yelp(); // set by ctone...
 		this.opts.regTick && zero.core.current.room.regTicker(this);
 	}
 }, zero.core.Collection);
