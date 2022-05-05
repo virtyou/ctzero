@@ -345,7 +345,7 @@ zero.core.util = {
 	},
 	playTrack: function(player, track) {
 		var zcc = zero.core.current, d, n;
-		player.src = track.item;
+		player.src = track.item || CT.data.choice(track.items);
 		zero.core.util.playMedia(player);
 		if (track.owners && track.owners.length) {
 			CT.cc.view({
