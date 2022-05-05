@@ -15,6 +15,7 @@ zero.core.Collection = CT.Class({
 			mem.position = pos;
 		if (this.within)
 			mem.within = this.within;
+		this.members.push(mem.name);
 		return mem;
 	},
 	_rower: function(kind, strip, isrow) {
@@ -95,5 +96,6 @@ zero.core.Collection = CT.Class({
 			: this.counts, this.opts);
 		if (opts.within)
 			this.within = opts.within;
+		this.members = [];
 	}
 }, zero.core.Thing);
