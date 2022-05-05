@@ -19,6 +19,7 @@ zero.core.Flora = CT.Class({
 			name: "critters",
 			kind: "menagerie",
 			collection: oz.kind,
+			scale: oz.scale.map(s => 1 / s),
 			subclass: zero.core.Fauna.Menagerie
 		});
 	},
