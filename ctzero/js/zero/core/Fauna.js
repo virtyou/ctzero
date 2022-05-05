@@ -286,7 +286,7 @@ zero.core.Fauna.sets = {
 		bee: 2
 	},
 	tree: {
-		bird: 2
+		bird: 1
 	},
 	fire: {
 		moth: 2
