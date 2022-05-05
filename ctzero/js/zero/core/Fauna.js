@@ -282,6 +282,12 @@ zero.core.Fauna.Head = CT.Class({
 }, zero.core.Thing);
 
 zero.core.Fauna.sets = {
+	bush: {
+		bee: 2
+	},
+	tree: {
+		bird: 2
+	},
 	fire: {
 		moth: 2
 	},
