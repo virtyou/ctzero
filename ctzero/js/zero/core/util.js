@@ -150,7 +150,7 @@ zero.core.util = {
 	},
 	close2u: function(thingo) {
 		var r = zero.core.current.room, you = zero.core.current.person,
-			diameter = r.bounds.min.distanceTo(r.bounds.max),
+			diameter = r.getBounds().min.distanceTo(r.bounds.max),
 			dist = thingo.position().distanceTo(you.body.position());
 		return Math.max(0.001, 1 - dist / diameter); // <0 bounding error?
 	},
