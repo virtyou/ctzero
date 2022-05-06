@@ -1,5 +1,6 @@
 zero.core.Swarm = CT.Class({
 	CLASSNAME: "zero.core.Swarm",
+	removables: false,
 	tick: function(dts) {
 		var zc = zero.core, zcu = zc.util, i, v, d;
 		if (!this.pool || (zcu.ticker % 5) || !zc.camera.visible(this.pool[0]))
