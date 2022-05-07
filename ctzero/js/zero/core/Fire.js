@@ -124,8 +124,8 @@ zero.core.Fire = CT.Class({
 		if (zero.core.Fire.audio) {
 			this._audio = CT.dom.audio();
 			this._audio.loop = true;
-			document.body.appendChild(this._audio);
 			this._audio.src = zero.core.Fire.audio.crackle[0];
+			document.body.appendChild(this._audio);
 			zero.core.util.playMedia(this._audio);
 		}
 	}

@@ -77,6 +77,9 @@ zero.core.Particles = CT.Class({
 		clearInterval(this.dripper);
 		delete this.dripper;
 	},
+	onremove: function() {
+		this._audio && this._audio.remove();
+	},
 	init: function(opts) {
 		this.opts = opts = CT.merge(opts, core.config.ctzero.env[opts.name], zero.base.particles[opts.name], {
 			count: 50,
@@ -87,5 +90,14 @@ zero.core.Particles = CT.Class({
 		}, this.opts);
 		if (opts.drip) // TODO: cancel interval at some point?
 			this.dripper = setInterval(this.release, 1000 / (opts.count * opts.dissolve || 1), 1);
+		var PA = zero.core.Particles.audio;
+		if (PA && PA[opts.name]) {
+			this._audio = CT.dom.audio();
+			this._audio.loop = true;
+			this._audio.volume = 0.1;
+			this._audio.src = PA[opts.name];
+			document.body.appendChild(this._audio);
+			zero.core.util.playMedia(this._audio);
+		}
 	}
 }, zero.core.Thing);
