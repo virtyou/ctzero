@@ -105,6 +105,13 @@ zero.core.Pool = CT.Class({
 			subclass: zero.core.Fauna.Menagerie
 		});
 	},
+	ambience: function(sound) { // within/without
+		var audio = this._audio;
+		if (!audio) return;
+		audio.src = CT.data.choice(zero.core.Pool.audio[sound]);
+		this.log("playing", sound);
+		zero.core.util.playMedia(audio, true);
+	},
 	init: function(opts) {
 		this.opts = opts = CT.merge(opts, {
 			state: "liquid",
@@ -142,5 +149,11 @@ zero.core.Pool = CT.Class({
 		zero.core.util.update(opts.camPos, cubeCam.position);
 		opts.material.envMap = this.cam.renderTarget;
 		this.smap = zero.core.trig.segs(60, opts.amplitude);
+		if (zero.core.Pool.audio) {
+			this._audio = CT.dom.audio();
+			this._audio.loop = true;
+			document.body.appendChild(this._audio);
+			this.ambience("without");
+		}
 	}
 }, zero.core.Thing);

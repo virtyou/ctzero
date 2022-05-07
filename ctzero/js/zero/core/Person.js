@@ -69,7 +69,7 @@ zero.core.Person = CT.Class({
 		if (!sfx) return;
 		sfx.src = CT.data.choice(zero.core.Person.audio[sound]);
 		this.log("playing", sound);
-		zero.core.util.playMedia(sfx);
+		zero.core.util.playMedia(sfx, true);
 	},
 	click: function() {
 		this.body.group.__click && this.body.group.__click();

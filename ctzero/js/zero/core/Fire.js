@@ -120,5 +120,12 @@ zero.core.Fire = CT.Class({
 		}, this.opts);
 		if (opts.light)
 			this.flicker = zero.core.trig.segs(60, 0.05);
+		if (zero.core.Fire.audio) {
+			this._audio = CT.dom.audio();
+			this._audio.loop = true;
+			document.body.appendChild(this._audio);
+			this._audio.src = zero.core.Fire.audio.crackle[0];
+			zero.core.util.playMedia(this._audio);
+		}
 	}
 }, zero.core.Thing);

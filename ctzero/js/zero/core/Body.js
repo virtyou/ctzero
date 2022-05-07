@@ -140,9 +140,13 @@ zero.core.Body = CT.Class({
 		if (within != this.within) {
 			this.log("within", within ? within.name : "nothing");
 			changed = true;
-			if ((within && within.opts.state == "liquid")
-				|| (this.within && this.within.opts.state == "liquid"))
-					this.person.sfx("splash");
+			var toLiq = within && within.opts.state == "liquid",
+				fromLiq = this.within && this.within.opts.state == "liquid";
+			if (toLiq || fromLiq) {
+				this.person.sfx("splash");
+				toLiq && within.ambience("within");
+				fromLiq && this.within.ambience("without");
+			}
 			this.within = within;
 		}
 		if (obj != this.upon) {
@@ -183,7 +187,7 @@ zero.core.Body = CT.Class({
 			gp.z = pz.slide.value;
 			this.setBob();
 			var zcc = zero.core.current;
-			(this == zcc.person) && zcc.room.setVolumes();
+			(this.person == zcc.person) && zcc.room.setVolumes();
 		}
 	},
 	tick: function(dts) {
