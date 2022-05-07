@@ -252,12 +252,11 @@ zero.core.Person = CT.Class({
 				sound = "splash";
 				(t % 10) || bod.bubbletrail.release(1);
 			} else if (within.opts.state == "plasma") {
-				sound = "wind";
 				bod.flying = true;
 				setTimeout(function() { bod.landing = true; }, 8000);
 			}
 		}
-		this.sfx(sound);
+		this.sfx(bod.flying ? "wind" : sound);
 	},
 	go: function(dur) {
 		var bod = this.body, within = bod.within,
