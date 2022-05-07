@@ -140,6 +140,9 @@ zero.core.Body = CT.Class({
 		if (within != this.within) {
 			this.log("within", within ? within.name : "nothing");
 			changed = true;
+			if ((within && within.opts.state == "liquid")
+				|| (this.within && this.within.opts.state == "liquid"))
+					this.person.sfx("splash");
 			this.within = within;
 		}
 		if (obj != this.upon) {
