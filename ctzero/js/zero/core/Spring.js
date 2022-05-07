@@ -33,8 +33,10 @@ zero.core.Spring = CT.Class({
 			if (this.acceleration && this.target != ot) { // floor...
 				if (this.target == this.bounds.min && this.acceleration < 0 ||
 					this.target == this.bounds.max && this.acceleration > 0) {
-					if (this.floory)
+					if (this.floory) {
 						this.floored = true;
+						this.parent && this.parent.person && this.parent.person.sfx("thud");
+					}
 					this.boost = 0;
 				}
 			}
