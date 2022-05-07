@@ -15,6 +15,7 @@ zero.core.Fire = CT.Class({
 		this.smoke && this.smoke.undrip();
 		this.sparks && this.sparks.undrip();
 		this.opts.regTick && zero.core.current.room.unregTicker(this);
+		this._audio && this._audio.remove();
 	},
 	assembled: function() {
 		this._.built();

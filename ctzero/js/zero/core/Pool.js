@@ -112,6 +112,9 @@ zero.core.Pool = CT.Class({
 		this.log("playing", sound);
 		zero.core.util.playMedia(audio, true);
 	},
+	onremove: function() {
+		this._audio && this._audio.remove();
+	},
 	init: function(opts) {
 		this.opts = opts = CT.merge(opts, {
 			state: "liquid",
