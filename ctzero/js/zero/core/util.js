@@ -333,12 +333,13 @@ zero.core.util = {
 			w.play();
 		wz.length = 0;
 	},
-	playMedia: function(player) {
+	playMedia: function(player, nowaiter) {
 		var zcu = zero.core.util;
 		if (!zcu.unwaiter)
 			zcu.unwaiter = CT.modal.modal("let's get started!",
 				zcu.playWaiters, null, true, true);
 		player.play().catch(function() {
+			if (nowaiter) return CT.log("skipping media playback!");
 			zcu.waiters.push(player);
 			zcu.unwaiter.show();
 		});
