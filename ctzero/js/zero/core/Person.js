@@ -1,6 +1,11 @@
 zero.core.Person = CT.Class({
 	CLASSNAME: "zero.core.Person",
 	_: {
+		initSFX: function() {
+			if (!zero.core.Person.audio) return;
+			this._.sfx = CT.dom.audio();
+			document.body.appendChild(this._.sfx);
+		},
 		doPlay: function(cb) {
 			var audio = this._.audio;
 			audio.play().then(cb)["catch"](function(error) {
@@ -58,6 +63,13 @@ zero.core.Person = CT.Class({
 			});
 			return resetz;
 		}
+	},
+	sfx: function(sound) {
+		var sfx = this._.sfx;
+		if (!sfx) return;
+		sfx.src = CT.data.choice(zero.core.Person.audio[sound]);
+		this.log("playing", sound);
+		zero.core.util.playMedia(sfx);
 	},
 	click: function() {
 		this.body.group.__click && this.body.group.__click();
@@ -232,12 +244,15 @@ zero.core.Person = CT.Class({
 		}, 500); // time for orientation...
 	},
 	jump: function() {
-		var bod = this.body, within = bod.within;
+		var bod = this.body, within = bod.within, t = zero.core.util.ticker;
 		this.gesture("jump");
 		if (within) {
-			if (within.opts.state == "liquid")
-				(zero.core.util.ticker % 10) || bod.bubbletrail.release(1);
-			else if (within.opts.state == "plasma") {
+			if (within.opts.state == "liquid") {
+				if (!t % 10) {
+					bod.bubbletrail.release(1);
+					(t % 60) || this.sfx("splash");
+				}
+			} else if (within.opts.state == "plasma") {
 				bod.flying = true;
 				setTimeout(function() { bod.landing = true; }, 8000);
 			}
@@ -245,10 +260,14 @@ zero.core.Person = CT.Class({
 	},
 	go: function(dur) {
 		var bod = this.body, within = bod.within,
-			dance = bod.flying ? "fly" : "walk";
+			dance = bod.flying ? "fly" : "walk",
+			t = zero.core.util.ticker;
 		if (within && within.opts.state == "liquid") {
 			dance = "swim";
-			(zero.core.util.ticker % 20) || bod.bubbletrail.release(1);
+			if (!(t % 20)) {
+				bod.bubbletrail.release(1);
+				(t % 60) || this.sfx("swim");
+			}
 		}
 		this.dance(dance, dur);
 	},
@@ -439,6 +458,7 @@ zero.core.Person = CT.Class({
 			pitch: "medium"
 		});
 		this._.initSpeech();
+		this._.initSFX();
 		zero.core.camera.register(this.name, this.watch);
 	}
 });
