@@ -244,19 +244,20 @@ zero.core.Person = CT.Class({
 		}, 500); // time for orientation...
 	},
 	jump: function() {
-		var bod = this.body, within = bod.within, t = zero.core.util.ticker;
+		var bod = this.body, within = bod.within,
+			t = zero.core.util.ticker, sound = "whoosh";
 		this.gesture("jump");
 		if (within) {
 			if (within.opts.state == "liquid") {
-				if (!t % 10) {
-					bod.bubbletrail.release(1);
-					(t % 60) || this.sfx("splash");
-				}
+				sound = "splash";
+				(t % 10) || bod.bubbletrail.release(1);
 			} else if (within.opts.state == "plasma") {
+				sound = "wind";
 				bod.flying = true;
 				setTimeout(function() { bod.landing = true; }, 8000);
 			}
 		}
+		this.sfx(sound);
 	},
 	go: function(dur) {
 		var bod = this.body, within = bod.within,
