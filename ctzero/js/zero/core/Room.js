@@ -29,6 +29,7 @@ zero.core.Room = CT.Class({
 	},
 	bump: function(b1, b2, moshy) {
 		var axis, s1, s2, v1, v2, vd, axes = ["weave", "slide"];
+		zero.core.current.person.sfx("thud");
 		for (axis of axes) {
 			s1 = b1.springs[axis];
 			s2 = b2.springs[axis];
