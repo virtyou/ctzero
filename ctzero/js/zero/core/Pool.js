@@ -106,14 +106,21 @@ zero.core.Pool = CT.Class({
 		});
 	},
 	ambience: function(sound) { // within/without
-		var audio = this._audio;
-		if (!audio) return;
-		audio.src = CT.data.choice(zero.core.Pool.audio[sound]);
+		if (!this._audio) return;
 		this.log("playing", sound);
-		zero.core.util.playMedia(audio);
+		this._curamb && this._curamb.pause();
+		this._curamb = this._audio[sound];
+		zero.core.util.playMedia(this._curamb);
+	},
+	setVolume: function() {
+		if (!this._audio) return;
+		var vol = zero.core.util.close2u(this) * 0.1;
+		for (var aud in this._audio)
+			this._audio[aud].volume = vol;
 	},
 	onremove: function() {
-		this._audio && this._audio.pause();
+		this._curamb && this._curamb.pause();
+		delete this._curamb;
 		delete this._audio;
 	},
 	init: function(opts) {
@@ -153,10 +160,13 @@ zero.core.Pool = CT.Class({
 		zero.core.util.update(opts.camPos, cubeCam.position);
 		opts.material.envMap = this.cam.renderTarget;
 		this.smap = zero.core.trig.segs(60, opts.amplitude);
-		if (zero.core.Pool.audio) {
-			this._audio = new Audio();
-			this._audio.loop = true;
-			this.ambience("without");
+		var PA = zero.core.Pool.audio;
+		if (PA) {
+			this._audio = {
+				within: zero.core.audio.ambience(PA.within, 0.1),
+				without: zero.core.audio.ambience(PA.without, 0.1, true)
+			};
+			this._curamb = this._audio.without;
 		}
 	}
 }, zero.core.Thing);

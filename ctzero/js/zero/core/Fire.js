@@ -2,6 +2,7 @@ zero.core.Fire = CT.Class({
 	CLASSNAME: "zero.core.Fire",
 	tickerz: ["flames", "sparks", "smoke", "glow", "moths"],
 	removables: false,
+	vmult: 0.1,
 	tick: function(dts) {
 		var zcu = zero.core.util, variety;
 		if (!this.isReady() || zcu.shouldSkip()) return;
@@ -122,11 +123,7 @@ zero.core.Fire = CT.Class({
 		}, this.opts);
 		if (opts.light)
 			this.flicker = zero.core.trig.segs(60, 0.05);
-		if (zero.core.Fire.audio) {
-			this._audio = new Audio();
-			this._audio.loop = true;
-			this._audio.src = zero.core.Fire.audio.crackle[0];
-			zero.core.util.playMedia(this._audio);
-		}
+		if (zero.core.Fire.audio)
+			this._audio = zero.core.audio.ambience(zero.core.Fire.audio.crackle[0], 0.1, true);
 	}
 }, zero.core.Thing);

@@ -1,10 +1,6 @@
 zero.core.Person = CT.Class({
 	CLASSNAME: "zero.core.Person",
 	_: {
-		initSFX: function() {
-			if (!zero.core.Person.audio) return;
-			this._.sfx = new Audio();
-		},
 		doPlay: function(cb) {
 			var audio = this._.audio;
 			audio.play().then(cb)["catch"](function(error) {
@@ -64,14 +60,12 @@ zero.core.Person = CT.Class({
 		}
 	},
 	sfx: function(sound) {
-		var sfx = this._.sfx;
-		if (!sfx) return;
-		var afiles = zero.core.Person.audio[sound];
+		var afiles = this._.sfx && this._.sfx[sound], vol = 1;
 		if (!afiles) return;
 		if (this != zero.core.current.person)
-			sfx.volume = zero.core.util.close2u(this.body);
-		this.log("playing", sound, "at", sfx.volume);
-		zero.core.util.sfx(sfx, CT.data.choice(afiles));
+			vol = zero.core.util.close2u(this.body);
+		this.log("playing", sound, "at", vol);
+		zero.core.audio.sfx(CT.data.choice(afiles), vol);
 	},
 	click: function() {
 		this.body.group.__click && this.body.group.__click();
@@ -458,7 +452,7 @@ zero.core.Person = CT.Class({
 			pitch: "medium"
 		});
 		this._.initSpeech();
-		this._.initSFX();
+		this._.sfx = zero.core.Person.audio;
 		zero.core.camera.register(this.name, this.watch);
 	}
 });

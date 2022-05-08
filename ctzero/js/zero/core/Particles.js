@@ -92,12 +92,7 @@ zero.core.Particles = CT.Class({
 		if (opts.drip) // TODO: cancel interval at some point?
 			this.dripper = setInterval(this.release, 1000 / (opts.count * opts.dissolve || 1), 1);
 		var PA = zero.core.Particles.audio;
-		if (PA && PA[opts.name]) {
-			this._audio = new Audio();
-			this._audio.loop = true;
-			this._audio.volume = 0.1;
-			this._audio.src = PA[opts.name];
-			zero.core.util.playMedia(this._audio);
-		}
+		if (PA && PA[opts.name])
+			this._audio = zero.core.audio.ambience(PA[opts.name], 0.1, true);
 	}
 }, zero.core.Thing);
