@@ -3,8 +3,7 @@ zero.core.Person = CT.Class({
 	_: {
 		initSFX: function() {
 			if (!zero.core.Person.audio) return;
-			this._.sfx = CT.dom.audio();
-			document.body.appendChild(this._.sfx);
+			this._.sfx = new Audio();
 		},
 		doPlay: function(cb) {
 			var audio = this._.audio;
@@ -67,11 +66,12 @@ zero.core.Person = CT.Class({
 	sfx: function(sound) {
 		var sfx = this._.sfx;
 		if (!sfx) return;
+		var afiles = zero.core.Person.audio[sound];
+		if (!afiles) return;
 		if (this != zero.core.current.person)
 			sfx.volume = zero.core.util.close2u(this.body);
-		sfx.src = CT.data.choice(zero.core.Person.audio[sound]);
 		this.log("playing", sound, "at", sfx.volume);
-		zero.core.util.playMedia(sfx, true);
+		zero.core.util.sfx(sfx, CT.data.choice(afiles));
 	},
 	click: function() {
 		this.body.group.__click && this.body.group.__click();
@@ -266,10 +266,7 @@ zero.core.Person = CT.Class({
 			t = zero.core.util.ticker;
 		if (within && within.opts.state == "liquid") {
 			dance = "swim";
-			if (!(t % 20)) {
-				bod.bubbletrail.release(1);
-				(t % 60) || this.sfx("swim");
-			}
+			(t % 20) || bod.bubbletrail.release(1);
 		}
 		this.dance(dance, dur);
 	},
@@ -327,6 +324,7 @@ zero.core.Person = CT.Class({
 		dance.step = (dance.step + 1) % dance.steps.length;
 		this.ungesture();
 		this.gesture(dance.steps[dance.step]);
+		CT.key.down("SPACE") || this.sfx(this.activeDance);
 		setTimeout(this._dance, (dance.interval || 1000) / this.mood.opts.energy);
 	},
 	dance: function(dname, duration) {
