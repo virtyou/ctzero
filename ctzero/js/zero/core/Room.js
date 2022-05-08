@@ -175,11 +175,11 @@ zero.core.Room = CT.Class({
 		if (this.speaker) {
 			for (var s of Object.values(this.speaker))
 				if (s.playing)
-					s._audio.volume = zero.core.util.close2u(s);
+					s.setVolume();
 		}
 		if (this.elemental)
 			for (var s of Object.values(this.elemental))
-				s._audio.volume = zero.core.util.close2u(s) * 0.2;
+				s.setVolume();
 	},
 	setBounds: function() {
 		this._.setBounds(this.getPlacer());
