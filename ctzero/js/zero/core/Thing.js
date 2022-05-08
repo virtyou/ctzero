@@ -139,6 +139,11 @@ zero.core.Thing = CT.Class({
 		};
 		pz[pname].unbounded = false;
 	},
+	vmult: 1,
+	setVolume: function() {
+		if (this._audio)
+			this._audio.volume = zero.core.util.close2u(this) * this.vmult;
+	},
 	setLevel: function(val) {
 		this.adjust("position", "y", val);
 		if (this.springs.y)
