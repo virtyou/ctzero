@@ -21,6 +21,7 @@ CT.require("zero.core.rec");
 CT.require("zero.core.phonemes");
 CT.require("zero.core.shaders");
 CT.require("zero.core.morphs");
+CT.require("zero.core.audio");
 CT.require("zero.core.auto");
 CT.require("zero.core.ar");
 
