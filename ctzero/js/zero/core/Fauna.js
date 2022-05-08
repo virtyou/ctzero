@@ -367,7 +367,7 @@ zero.core.Fauna.Menagerie = CT.Class({
 	init: function(opts) {
 		if (F.audio) { // set by ctone...
 			this._audio = new Audio();
-			this.yelp();
+			setTimeout(this.yelp, CT.data.random(10000));
 		}
 		this.opts.regTick && zero.core.current.room.regTicker(this);
 	}
