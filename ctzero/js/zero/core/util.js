@@ -344,6 +344,13 @@ zero.core.util = {
 			zcu.unwaiter.show();
 		});
 	},
+	sfx: function(player, fname) {
+		if (player.src.endsWith(fname)) // avoids redownloading file(?)
+			player.currentTime = 0;
+		else
+			player.src = fname;
+		player.paused && zero.core.util.playMedia(player, true);
+	},
 	playTrack: function(player, track) {
 		var zcc = zero.core.current, d, n;
 		player.src = track.item || CT.data.choice(track.items);
