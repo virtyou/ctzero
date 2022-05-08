@@ -351,7 +351,8 @@ zero.core.Fauna.Menagerie = CT.Class({
 	},
 	onremove: function() {
 		this.opts.regTick && zero.core.current.room.unregTicker(this);
-		this._audio && this._audio.remove();
+		this._audio && this._audio.pause();
+		delete this._audio;
 		clearTimeout(this.yelper);
 	},
 	yelp: function() {

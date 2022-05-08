@@ -78,7 +78,8 @@ zero.core.Particles = CT.Class({
 		delete this.dripper;
 	},
 	onremove: function() {
-		this._audio && this._audio.remove();
+		this._audio && this._audio.pause();
+		delete this._audio;
 	},
 	init: function(opts) {
 		this.opts = opts = CT.merge(opts, core.config.ctzero.env[opts.name], zero.base.particles[opts.name], {

@@ -113,7 +113,8 @@ zero.core.Pool = CT.Class({
 		zero.core.util.playMedia(audio);
 	},
 	onremove: function() {
-		this._audio && this._audio.remove();
+		this._audio && this._audio.pause();
+		delete this._audio;
 	},
 	init: function(opts) {
 		this.opts = opts = CT.merge(opts, {
