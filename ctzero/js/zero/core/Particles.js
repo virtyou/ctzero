@@ -92,11 +92,10 @@ zero.core.Particles = CT.Class({
 			this.dripper = setInterval(this.release, 1000 / (opts.count * opts.dissolve || 1), 1);
 		var PA = zero.core.Particles.audio;
 		if (PA && PA[opts.name]) {
-			this._audio = CT.dom.audio();
+			this._audio = new Audio();
 			this._audio.loop = true;
 			this._audio.volume = 0.1;
 			this._audio.src = PA[opts.name];
-			document.body.appendChild(this._audio);
 			zero.core.util.playMedia(this._audio);
 		}
 	}

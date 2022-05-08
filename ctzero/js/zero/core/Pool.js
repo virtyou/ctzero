@@ -110,7 +110,7 @@ zero.core.Pool = CT.Class({
 		if (!audio) return;
 		audio.src = CT.data.choice(zero.core.Pool.audio[sound]);
 		this.log("playing", sound);
-		zero.core.util.playMedia(audio, true);
+		zero.core.util.playMedia(audio);
 	},
 	onremove: function() {
 		this._audio && this._audio.remove();
@@ -153,9 +153,8 @@ zero.core.Pool = CT.Class({
 		opts.material.envMap = this.cam.renderTarget;
 		this.smap = zero.core.trig.segs(60, opts.amplitude);
 		if (zero.core.Pool.audio) {
-			this._audio = CT.dom.audio();
+			this._audio = new Audio();
 			this._audio.loop = true;
-			document.body.appendChild(this._audio);
 			this.ambience("without");
 		}
 	}

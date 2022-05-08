@@ -122,10 +122,9 @@ zero.core.Fire = CT.Class({
 		if (opts.light)
 			this.flicker = zero.core.trig.segs(60, 0.05);
 		if (zero.core.Fire.audio) {
-			this._audio = CT.dom.audio();
+			this._audio = new Audio();
 			this._audio.loop = true;
 			this._audio.src = zero.core.Fire.audio.crackle[0];
-			document.body.appendChild(this._audio);
 			zero.core.util.playMedia(this._audio);
 		}
 	}
