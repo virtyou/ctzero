@@ -358,12 +358,12 @@ zero.core.Fauna.Menagerie = CT.Class({
 		if (crit && crit.opts.kind in F.audio) {
 			vol = zcu.close2u(crit) / 2;
 			this.log("playing", crit.opts.kind, "at", vol);
-			zero.core.audio.sfx(CT.data.choice(F.audio[crit.opts.kind]), vol);
+			zero.core.audio.sfx(CT.data.choice(F.audio[crit.opts.kind]), vol, true);
 		}
 		this.yelper = setTimeout(this.yelp, 10000 + CT.data.random(10000));
 	},
 	init: function(opts) {
-		F.audio && setTimeout(this.yelp, CT.data.random(10000)); // set by ctone...
+		F.audio && setTimeout(this.yelp, 3000 + CT.data.random(10000)); // set by ctone...
 		this.opts.regTick && zero.core.current.room.regTicker(this);
 	}
 }, zero.core.Collection);
