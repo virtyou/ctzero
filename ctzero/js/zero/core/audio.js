@@ -2,13 +2,13 @@ zero.core.audio = {
 	_: {
 		auds: {},
 		blobz: {},
-		aud: function(sound) {
+		aud: function(sound, soft) {
 			var _ = zero.core.audio._, auds = _.auds,
 				aud = auds[sound];
-			if (aud)
-				aud.currentTime = 0;
-			else
+			if (!aud)
 				aud = auds[sound] = new Audio(sound);
+			else if (!soft)
+				aud.currentTime = 0;
 			return aud;
 		},
 		amb: function(sound, shouldPlay) {
@@ -30,8 +30,8 @@ zero.core.audio = {
 		aud.loop = true;
 		return aud;
 	},
-	sfx: function(sound, volume) {
-		var aud = zero.core.audio._.aud(sound);
+	sfx: function(sound, volume, soft) {
+		var aud = zero.core.audio._.aud(sound, soft);
 		aud.volume = volume || 1;
 		aud.paused && zero.core.util.playMedia(aud, true);
 	}
