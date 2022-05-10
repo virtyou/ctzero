@@ -1,5 +1,6 @@
 zero.core.Pool = CT.Class({
 	CLASSNAME: "zero.core.Pool",
+	vmult: 0.1,
 	tick: function(dts) {
 		if (!this.thring) return; // for dynamic attachment
 		var zcu = zero.core.util;
@@ -106,22 +107,16 @@ zero.core.Pool = CT.Class({
 		});
 	},
 	ambience: function(sound) { // within/without
-		if (!this._audio) return;
+		if (!this._audios) return;
 		this.log("playing", sound);
-		this._curamb && this._curamb.pause();
-		this._curamb = this._audio[sound];
-		zero.core.util.playMedia(this._curamb);
-	},
-	setVolume: function() {
-		if (!this._audio) return;
-		var vol = zero.core.util.close2u(this) * 0.1;
-		for (var aud in this._audio)
-			this._audio[aud].volume = vol;
+		this._audio && this._audio.pause();
+		this._audio = this._audios[sound];
+		zero.core.util.playMedia(this._audio);
 	},
 	onremove: function() {
-		this._curamb && this._curamb.pause();
-		delete this._curamb;
+		this._audio && this._audio.pause();
 		delete this._audio;
+		delete this._audios;
 	},
 	init: function(opts) {
 		this.opts = opts = CT.merge(opts, {
@@ -162,11 +157,11 @@ zero.core.Pool = CT.Class({
 		this.smap = zero.core.trig.segs(60, opts.amplitude);
 		var PA = zero.core.Pool.audio;
 		if (PA) {
-			this._audio = {
+			this._audios = {
 				within: zero.core.audio.ambience(PA.within, 0.1),
 				without: zero.core.audio.ambience(PA.without, 0.1, true)
 			};
-			this._curamb = this._audio.without;
+			this._audio = this._audios.without;
 		}
 	}
 }, zero.core.Thing);
