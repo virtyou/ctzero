@@ -9,7 +9,7 @@ zero.core.Fire = CT.Class({
 		if (!this.glow || zero.core.camera.visible(this.glow))
 			for (variety of this.tickerz)
 				this[variety] && this[variety].tick(dts);
-		this.light && this.light.setIntensity((this.flick ? 0.4 : 0.5) + this.flicker[zcu.ticker % 60]);
+		this.light && this.light.setIntensity((this.flick ? 0.4 : 0.5) + this.flicker[(this.foff + zcu.ticker) % 60]);
 		this.tickPos();
 	},
 	onremove: function() {
@@ -127,8 +127,10 @@ zero.core.Fire = CT.Class({
 			moths: true,
 			flicker: true
 		}, this.opts);
-		if (opts.light)
+		if (opts.light) {
 			this.flicker = zero.core.trig.segs(60, 0.05);
+			this.foff = CT.data.random(60);
+		}
 		if (zero.core.Fire.audio)
 			this._audio = zero.core.audio.ambience(zero.core.Fire.audio.crackle[0], 0.1, true);
 		if (opts.flicker)
