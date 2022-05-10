@@ -9,7 +9,7 @@ zero.core.Fire = CT.Class({
 		if (!this.glow || zero.core.camera.visible(this.glow))
 			for (variety of this.tickerz)
 				this[variety] && this[variety].tick(dts);
-		this.light && this.light.setIntensity(0.5 + this.flicker[zcu.ticker % 60]);
+		this.light && this.light.setIntensity((this.flick ? 0.4 : 0.5) + this.flicker[zcu.ticker % 60]);
 		this.tickPos();
 	},
 	onremove: function() {
@@ -17,6 +17,7 @@ zero.core.Fire = CT.Class({
 		this.sparks && this.sparks.undrip();
 		this.opts.regTick && zero.core.current.room.unregTicker(this);
 		this._audio && this._audio.pause();
+		clearTimeout(this.flickerer);
 		delete this._audio;
 	},
 	assembled: function() {
@@ -109,6 +110,10 @@ zero.core.Fire = CT.Class({
 			subclass: zero.core.Fauna.Menagerie
 		});
 	},
+	flickeroo: function() {
+		this.flick = !this.flick;
+		this.flickerer = setTimeout(this.flickeroo, 100 + CT.data.random(500));
+	},
 	init: function(opts) {
 		this.opts = opts = CT.merge(opts, {
 			state: "plasma",
@@ -119,11 +124,14 @@ zero.core.Fire = CT.Class({
 			heart: true,
 			glow: true,
 			light: true,
-			moths: true
+			moths: true,
+			flicker: true
 		}, this.opts);
 		if (opts.light)
 			this.flicker = zero.core.trig.segs(60, 0.05);
 		if (zero.core.Fire.audio)
 			this._audio = zero.core.audio.ambience(zero.core.Fire.audio.crackle[0], 0.1, true);
+		if (opts.flicker)
+			this.flickerer = setTimeout(this.flickeroo);
 	}
 }, zero.core.Thing);
