@@ -172,6 +172,13 @@ zero.core.Body = CT.Class({
 	energy: function() {
 		return this.person && this.person.energy;
 	},
+	grow: function(scale, additive) {
+		if (typeof scale == "number")
+			scale = [scale, scale, scale];
+		this.springs.width.target = scale[0];
+		this.springs.height.target = scale[1];
+		this.springs.depth.target = scale[2];
+	},
 	_tickGroup: function() {
 		for (var f in this.flippers)
 			this.group.rotation[f] = this.flippers[f].value;
