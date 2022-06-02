@@ -497,14 +497,18 @@ zero.core.Thing = CT.Class({
 		else
 			(thring || this.placer)[property][dimension] = value;
 	},
+	setCoords: function(vals, prop, additive, thring) {
+		var adjust = this.adjust;
+		if (typeof vals == "number")
+			vals = [vals, vals, vals];
+		zero.core.util.coords(vals, function(dim, val) {
+			adjust(prop, dim, val, additive, thring);
+		});
+	},
 	posRotScale: function(opts, thring, additive) {
-		var zcu = zero.core.util, adjust = this.adjust;
+		var setCoords = this.setCoords;
 		["position", "rotation", "scale"].forEach(function(prop) {
-			if (prop in opts) {
-				zcu.coords(opts[prop], function(dim, val) {
-					adjust(prop, dim, val, additive, thring);
-				});
-			}
+			(prop in opts) && setCoords(opts[prop], prop, additive, thring);
 		});
 	},
 	update: function(opts) {
