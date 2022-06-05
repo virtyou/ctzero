@@ -4,10 +4,13 @@ from cantools.util import read, write, cmd, output
 from cantools.web import log, post, read_file
 from model import Translation
 from .spcfg import *
+from string import digits
 try:
     from string import letters
 except: # py38
     from string import ascii_letters as letters
+
+goodchars = letters + digits
 
 def load_token(now):
     cfg = config.ctzero.asr
@@ -59,7 +62,7 @@ def say(language, voice, words, prosody):
     if language == "mandarin":
         voice = "Zhiyu"
     log("say -> %s [%s @ %s, %s] :: %s"%(language, voice, rate, pitch, words))
-    whash = "".join([c for c in words if c in letters])
+    whash = "".join([c for c in words if c in goodchars])
     if not whash or len(whash) > 200:
         whash = hash(words)
     fname = "%s%s%s%s"%(voice, rate, pitch, whash)
