@@ -59,6 +59,9 @@ zero.core.Person = CT.Class({
 			return resetz;
 		}
 	},
+	mutesfx: function() {
+		delete this._.sfx;
+	},
 	sfx: function(sound) {
 		var afiles = this._.sfx && this._.sfx[sound], vol = 1;
 		if (!afiles) return;
