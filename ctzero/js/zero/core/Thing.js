@@ -815,6 +815,14 @@ zero.core.Thing = CT.Class({
 			frustumCulled: true,
 			sphereSegs: core.config.ctzero.sphereSegs
 		});
+		if (opts.template) {
+			this.log("loading template:", opts.template);
+			var tobj = eval(opts.template);
+			if (tobj)
+				this.opts = opts = CT.merge(tobj, opts); // right order?
+			else
+				this.log("can't find template!");
+		}
 		if (opts.kind == "portal")
 			opts.state = "threshold";
 		if (CT.info.mobile)
