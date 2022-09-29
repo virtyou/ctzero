@@ -17,7 +17,15 @@ zero.base.clothes = {
 
 zero.base.clothes.head = { // hats
 	conical: {
-		coneGeometry: true
+		coneGeometry: true,
+		position: [0, 20, 0],
+		scale: [0.5, 0.5, 0.5]
+	},
+	donut: {
+		torusGeometry: true,
+		rotation: [1, 0, 0],
+		position: [0, 10, 0],
+		scale: [0.1, 0.1, 0.1]
 	}
 };
 
