@@ -709,6 +709,13 @@ zero.core.Thing = CT.Class({
 				g = 1;
 			oz.geometry = new THREE.SphereGeometry(g,
 				oz.sphereSegs, oz.sphereSegs);
+		}//const geometry = new THREE.TorusGeometry( 10, 3, 16, 100 );
+		if (oz.torusGeometry) {
+			g = oz.torusGeometry;
+//			if (g == true)
+//				g = [1, 1, 1, 1, 1];
+//			oz.geometry = new THREE.TorusGeometry(g[0], g[1], g[2], g[3]);
+			oz.geometry = new THREE.TorusGeometry();
 		}
 		if (oz.torusKnotGeometry) {
 			g = oz.torusKnotGeometry;
