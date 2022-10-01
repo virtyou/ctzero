@@ -26,6 +26,11 @@ zero.base.clothes.head = { // hats
 		rotation: [1, 0, 0],
 		position: [0, 10, 0],
 		scale: [0.1, 0.1, 0.1]
+	},
+	square: {
+		octahedronGeometry: true,
+		position: [0, 15, 0],
+		scale: [15, 15, 15]
 	}
 };
 
