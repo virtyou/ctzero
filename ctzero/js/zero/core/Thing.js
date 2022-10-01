@@ -717,6 +717,10 @@ zero.core.Thing = CT.Class({
 //			oz.geometry = new THREE.TorusGeometry(g[0], g[1], g[2], g[3]);
 			oz.geometry = new THREE.TorusGeometry();
 		}
+		if (oz.icosahedronGeometry)
+			oz.geometry = new THREE.IcosahedronGeometry();
+		if (oz.octahedronGeometry)
+			oz.geometry = new THREE.OctahedronGeometry();
 		if (oz.torusKnotGeometry) {
 			g = oz.torusKnotGeometry;
 			if (g == true)
