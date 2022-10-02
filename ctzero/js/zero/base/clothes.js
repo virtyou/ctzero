@@ -31,6 +31,19 @@ zero.base.clothes.head = { // hats
 		octahedronGeometry: true,
 		position: [0, 15, 0],
 		scale: [15, 15, 15]
+	},
+	stovepipe: {
+		circleGeometry: true,
+		rotation: [1, 0, 0],
+		position: [0, 10, 0],
+		scale: [0.4, 0.4, 0.4],
+		parts: [{
+			name: "pipe",
+			cylinderGeometry: true,
+			scale: [2, 2, 2],
+			rotation: [-2, 0, 0],
+			position: [0, 0, -20]
+		}]
 	}
 };
 
