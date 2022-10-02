@@ -44,6 +44,26 @@ zero.base.clothes.head = { // hats
 			rotation: [-2, 0, 0],
 			position: [0, 0, -20]
 		}]
+	},
+	tricorn: {
+		circleGeometry: true,
+		circleSegs: 3,
+		rotation: [1, 0, 0],
+		position: [0, 10, 0],
+		scale: [0.6, 0.6, 0.6],
+		parts: [{
+			name: "pipe",
+			sphereSegs: 6,
+			sphereGeometry: 10,
+			scale: [2, 2, 2],
+			position: [0, 0, -10]
+		}]
+	},
+	beret: {
+		sphereSegs: 3,
+		sphereGeometry: 10,
+		rotation: [0, 0, 2],
+		position: [0, 15, 0]
 	}
 };
 
