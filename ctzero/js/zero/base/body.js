@@ -101,6 +101,7 @@ zero.base.body.hair = {
         }
     },
     buzz: {
+        noTick: true,
         density: 20,
         strand: {
             length: 1,
@@ -143,7 +144,8 @@ zero.base.body.beard = {
         }
     },
     stubble: {
-        density: 5,
+        noTick: true,
+        density: 20,
         strand: {
             hard: true,
             length: 0.5,
