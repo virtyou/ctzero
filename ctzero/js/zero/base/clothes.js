@@ -3,15 +3,43 @@ zero.base.clothes = {
 	pelvis: {},
 	lumbar: {},
 	ribs: {},
-	neck: {},
+	neck: {
+		necklace: {
+			torusGeometry: true,
+			rotation: [2, 0, 0],
+			scale: [0.05, 0.05, 0.05]
+		}
+	},
 	clavicle: {},
-	shoulder: {},
+	shoulder: {
+		pad: {
+			sphereGeometry: true,
+			scale: [4, 4, 4]
+		},
+		spike: {
+			coneGeometry: true,
+			position: [0, 6, 0],
+			scale: [0.1, 0.3, 0.1]
+		}
+	},
 	elbow: {},
-	wrist: {},
+	wrist: {
+		bracelet: {
+			torusGeometry: true,
+			rotation: [1, 0, 0],
+			scale: [0.02, 0.02, 0.02]
+		}
+	},
 	finger: {},
 	hip: {},
 	knee: {},
-	ankle: {},
+	ankle: {
+		anklet: {
+			torusGeometry: true,
+			rotation: [1, 0, 0],
+			scale: [0.05, 0.05, 0.05]
+		}
+	},
 	toe: {}
 };
 
