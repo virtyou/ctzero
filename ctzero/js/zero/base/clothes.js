@@ -208,20 +208,3 @@ zero.base.clothes.procedurals = function(kind) {
 		};
 	});
 };
-
-/*
-box, sphere, torusKnot, cone, cylinder, plane
-Garment
- - flowy > Hair X Flower???
-   - Fabric/Cloth > Flap, Strip
-   - skirt, cape, cloak, shawl, hood
- - procedural
-   - hat
-     - conical [w/ veil/tassel]
-     - donut!
-     - crowns!!
-     - beret
-     - fedora
-     - tophat [honest abe]
-     - tri[etc]-corner hats
-*/
