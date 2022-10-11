@@ -81,8 +81,5 @@ zero.base.particles = {
 			color: 0x22ccff,
 			transparent: true
 		}
-	},
-	aura: {
-
 	}
 };

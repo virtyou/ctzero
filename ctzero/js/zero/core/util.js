@@ -94,7 +94,7 @@ zero.core.util = {
 			else if (bms) {
 				bone = sub ? bms[sub][part] : bms[part];
 				if (sub == "hand")
-					bone = bone[0];
+					bone = bone[2];
 			} else // aura...
 				bone = 0; // i guess
 		}
@@ -279,6 +279,7 @@ zero.core.util = {
 	},
 	_txz: {},
 	texture: function(path) {
+		path = path.item || path;
 		var txz = zero.core.util._txz, tx = new THREE.Texture();
 		if (core.config.ctzero.media.proxy && path.startsWith("http"))
 			path = "/_memcache?action=prox&p2=true&url=" + path;

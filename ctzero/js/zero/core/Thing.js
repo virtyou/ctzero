@@ -709,7 +709,18 @@ zero.core.Thing = CT.Class({
 				g = 1;
 			oz.geometry = new THREE.SphereGeometry(g,
 				oz.sphereSegs, oz.sphereSegs);
+		}//const geometry = new THREE.TorusGeometry( 10, 3, 16, 100 );
+		if (oz.torusGeometry) {
+			g = oz.torusGeometry;
+//			if (g == true)
+//				g = [1, 1, 1, 1, 1];
+//			oz.geometry = new THREE.TorusGeometry(g[0], g[1], g[2], g[3]);
+			oz.geometry = new THREE.TorusGeometry();
 		}
+		if (oz.icosahedronGeometry)
+			oz.geometry = new THREE.IcosahedronGeometry();
+		if (oz.octahedronGeometry)
+			oz.geometry = new THREE.OctahedronGeometry();
 		if (oz.torusKnotGeometry) {
 			g = oz.torusKnotGeometry;
 			if (g == true)
@@ -723,6 +734,10 @@ zero.core.Thing = CT.Class({
 		if (oz.cylinderGeometry) {
 			var cgs = (typeof oz.cylinderGeometry == "number") ? oz.cylinderGeometry : 10;
 			oz.geometry = new THREE.CylinderGeometry(cgs, cgs, cgs * (oz.geomult || 2));
+		}
+		if (oz.circleGeometry) {
+			var g = oz.circleGeometry;
+			oz.geometry = new THREE.CircleGeometry((typeof g == "number") && g, oz.circleSegs);
 		}
 		if (oz.planeGeometry) {
 			var g = oz.planeGeometry; // better way?
@@ -815,6 +830,14 @@ zero.core.Thing = CT.Class({
 			frustumCulled: true,
 			sphereSegs: core.config.ctzero.sphereSegs
 		});
+		if (opts.template) {
+			this.log("loading template:", opts.template);
+			var tobj = eval(opts.template);
+			if (tobj)
+				this.opts = opts = CT.merge(tobj, opts); // right order?
+			else
+				this.log("can't find template!");
+		}
 		if (opts.kind == "portal")
 			opts.state = "threshold";
 		if (CT.info.mobile)
