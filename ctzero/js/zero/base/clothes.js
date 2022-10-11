@@ -20,6 +20,25 @@ zero.base.clothes = {
 			coneGeometry: true,
 			position: [0, 6, 0],
 			scale: [0.1, 0.3, 0.1]
+		},
+		spikes: {
+			sphereGeometry: true,
+			scale: [4, 4, 4],
+			parts: [{
+				coneGeometry: true,
+				position: [0, 1, 0],
+				scale: [0.02, 0.06, 0.02]
+			}, {
+				coneGeometry: true,
+				position: [0, 0.5, 1],
+				rotation: [1, 0, 0],
+				scale: [0.02, 0.06, 0.02]
+			}, {
+				coneGeometry: true,
+				position: [0, 0.5, -1],
+				rotation: [-1, 0, 0],
+				scale: [0.02, 0.06, 0.02]
+			}]
 		}
 	},
 	elbow: {},
