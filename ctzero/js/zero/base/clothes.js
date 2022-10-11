@@ -1,5 +1,4 @@
 zero.base.clothes = {
-	aura: {},
 	pelvis: {},
 	lumbar: {},
 	ribs: {},
@@ -65,7 +64,29 @@ zero.base.clothes = {
 			scale: [0.05, 0.05, 0.05]
 		}
 	},
-	toe: {}
+	toe: {},
+	aura: { // flames, sparks, water
+		smoke: {
+			scale: [3, 3, 3],
+			parts: [{
+				name: "smoke",
+				kind: "aura",
+				thing: "Particles"
+			}]
+		},
+		bubble: {
+			scale: [80, 80, 80],
+			parts: [{
+				name: "bubble",
+				kind: "aura",
+				thing: "Bit",
+				material: {
+					opacity: 0.6,
+					transparent: true
+				}
+			}]
+		}
+	}
 };
 
 zero.base.clothes.head = { // hats
