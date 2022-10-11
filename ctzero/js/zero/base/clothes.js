@@ -65,8 +65,8 @@ zero.base.clothes = {
 		}
 	},
 	toe: {},
-	aura: { // flames, sparks, water
-		smoke: {
+	aura: {
+		dry: {
 			scale: [3, 3, 3],
 			parts: [{
 				name: "smoke",
@@ -74,16 +74,35 @@ zero.base.clothes = {
 				thing: "Particles"
 			}]
 		},
-		bubble: {
+		cold: {
 			scale: [80, 80, 80],
 			parts: [{
 				name: "bubble",
 				kind: "aura",
 				thing: "Bit",
+				sphereSegs: 4,
 				material: {
 					opacity: 0.6,
 					transparent: true
 				}
+			}]
+		},
+		wet: {
+			scale: [80, 80, 80],
+			parts: [{
+				name: "water",
+				kind: "aura",
+				thing: "Bit",
+				vstrip: "templates.one.vstrip.water"
+			}]
+		},
+		hot: {
+			scale: [80, 80, 80],
+			parts: [{
+				name: "sparks",
+				kind: "aura",
+				thing: "Bit",
+				vstrip: "templates.one.vstrip.sparks"
 			}]
 		}
 	}
