@@ -102,9 +102,9 @@ zero.base.body.hair = {
     },
     buzz: {
         noTick: true,
-        density: 20,
+        density: 30,
         strand: {
-            length: 1,
+            length: 2,
             girth: 0.1,
             segments: 1,
             flex: Math.PI / 32
