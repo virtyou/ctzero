@@ -120,6 +120,39 @@ zero.base.clothes.head = { // hats
 		position: [0, 10, 0],
 		scale: [0.1, 0.1, 0.1]
 	},
+	crown: {
+		parts: [{
+			name: "rim",
+			torusGeometry: true,
+			rotation: [-1.8, 0, 0],
+			position: [0, 10, 0],
+			scale: [0.08, 0.08, 0.08],
+		}, {
+			name: "spike1",
+			kind: "spike",
+			coneGeometry: true,
+			position: [0, 20, 8],
+			scale: [0.1, 0.5, 0.1]
+		}, {
+			name: "spike2",
+			kind: "spike",
+			coneGeometry: true,
+			position: [0, 20, -8],
+			scale: [0.1, 0.5, 0.1]
+		}, {
+			name: "spike3",
+			kind: "spike",
+			coneGeometry: true,
+			position: [8, 20, 0],
+			scale: [0.1, 0.5, 0.1]
+		}, {
+			name: "spike4",
+			kind: "spike",
+			coneGeometry: true,
+			position: [-8, 20, 0],
+			scale: [0.1, 0.5, 0.1]
+		}]
+	},
 	square: {
 		octahedronGeometry: true,
 		position: [0, 15, 0],
