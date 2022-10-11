@@ -94,7 +94,7 @@ zero.core.util = {
 			else if (bms) {
 				bone = sub ? bms[sub][part] : bms[part];
 				if (sub == "hand")
-					bone = bone[0];
+					bone = bone[2];
 			} else // aura...
 				bone = 0; // i guess
 		}

@@ -45,11 +45,17 @@ zero.base.clothes = {
 	wrist: {
 		bracelet: {
 			torusGeometry: true,
-			rotation: [1, 0, 0],
+			rotation: [-2, 0, 0],
 			scale: [0.02, 0.02, 0.02]
 		}
 	},
-	finger: {},
+	finger: {
+		ring: {
+			torusGeometry: true,
+			rotation: [-2, 0, 0],
+			scale: [0.008, 0.008, 0.008]
+		}
+	},
 	hip: {},
 	knee: {},
 	ankle: {
