@@ -11,7 +11,7 @@ zero.core.Custom = CT.Class({
 		// - call iterator() post-init
 		// - return object with tick() (bonus points: name, thrings[])
 		if (typeof this.opts.custom == "string") // from server
-			this.opts.custom = eval(this.opts.custom);
+			this.opts.custom = CT.module(this.opts.custom);
 		this.custom_rep = this.opts.custom({
 			scene: this.group,
 			iterator: function() {

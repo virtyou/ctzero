@@ -549,7 +549,7 @@ zero.core.Thing = CT.Class({
 	_vstrip: function(vs) {
 		var opts = this.opts, max = 16384, total;
 		if (typeof vs == "string")
-			vs = opts.vstrip = eval(vs); // better way?
+			vs = opts.vstrip = CT.module(vs);
 		vs.fwidth = vs.fwidth || 128;
 		vs.fheight = vs.fheight || 64;
 		opts.texture = vs.texture;
