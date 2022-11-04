@@ -18,15 +18,3 @@ zero.core.Garment = CT.Class({
 		}, this.opts);
 	}
 }, zero.core.Thing);
-
-zero.core.Garment.Cloth = CT.Class({
-	CLASSNAME: "zero.core.Garment.Cloth",
-	preassemble: function() {
-		
-	},
-	init: function(opts) {
-		this.opts = opts = CT.merge(opts, {
-
-		}, this.opts);
-	}
-}, zero.core.Thing);
