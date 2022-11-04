@@ -474,6 +474,7 @@ zero.core.util = {
 	},
 	init: function(onperson, onbuild) {
 		var cfg = core.config.ctzero;
+		zero.core.ammo.init();
 		zero.core.camera.init();
 		zero.core.util.ray = new THREE.Raycaster();
 		zero.core.util.downVec = new THREE.Vector3(0, -1, 0);
@@ -506,6 +507,7 @@ zero.core.util = {
 	    	zcc.people[p].tick(dts);
 	    for (t of zcu._tickers)
 	    	t(dts, rdts);
+	    zero.core.ammo.tick(dts);
 	    zero.core.camera.tick();
 	    zero.core.camera.render();
 	},
