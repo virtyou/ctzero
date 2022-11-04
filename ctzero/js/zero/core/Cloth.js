@@ -2,9 +2,10 @@ zero.core.Cloth = CT.Class({
 	CLASSNAME: "zero.core.Cloth",
 	tick: function(dts) {
 		var geo = this.thring.geometry,
-			attrs = geo.attributes,
-			pos = attrs.position,
-			positions = pos.array,
+//			attrs = geo.attributes,
+//			pos = attrs.position,
+//			positions = pos.array,
+			positions = geo.vertices,
 			numVerts = positions.length / 3,
 			nodes = this.softBody.get_m_nodes(),
 			ifloat = 0, node, nodePos;
@@ -16,7 +17,11 @@ zero.core.Cloth = CT.Class({
 			positions[ifloat++] = nodePos.z();
 		}
 		geo.computeVertexNormals();
-		pos.needsUpdate = attrs.normal.needsUpdate = true;
+		geo.verticesNeedUpdate = true;
+//		pos.needsUpdate = attrs.normal.needsUpdate = true;
+	},
+	onremove: function() {
+		zero.core.util.untick(this.tick);
 	},
 	postassemble: function() {
 		var oz = this.opts;
@@ -32,5 +37,6 @@ zero.core.Cloth = CT.Class({
 			rotation: [0, Math.PI * 0.5, 0],
 			planeGeometry: [opts.width, opts.height, opts.numSegsZ, opts.numSegsY]
 		}, this.opts);
+		setTimeout(() => zero.core.util.ontick(this.tick), 5000);
 	}
 }, zero.core.Thing);
