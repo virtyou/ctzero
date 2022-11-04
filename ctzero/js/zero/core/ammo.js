@@ -14,7 +14,7 @@ zero.core.ammo = {
 		if (!_.active) return; // TODO: turn off when all cloth leaves scene...
 		_.physicsWorld.stepSimulation(dts, 10); // correct dts scale?
 	},
-	softBody: function(cloth, anchor) {
+	softBody: function(cloth, anchor, anchorPoints) {
 		var _ = zero.core.ammo._, coz = cloth.opts,
 			width = coz.width, height = coz.height,
 			i, anx, pos = cloth.position(); // global?
@@ -35,15 +35,16 @@ zero.core.ammo = {
 		softBody.setActivationState(4);
 		if (anchor) { // reg anchor as rigid body?
 			const abod = anchor.thring.userData.physicsBody;
+			anchorPoints = anchorPoints || "ends";
 			anx = [];
-			if (anchor == "full")
+			if (anchorPoints == "full")
 				for (i = 0; i <= coz.numSegsZ; i++)
 					anx.push(i);
-			else if (anchor == "ends") {
+			else if (anchorPoints == "ends") {
 				anx.push(0);
 				anx.push(coz.numSegsZ);
 			} else
-				anx = anchor;
+				anx = anchorPoints;
 			anx.forEach(a => softBody.appendAnchor(a, abod, false, _.anchorInfluence));
 		}
 		return softBody;
