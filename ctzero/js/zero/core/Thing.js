@@ -741,7 +741,7 @@ zero.core.Thing = CT.Class({
 		}
 		if (oz.planeGeometry) {
 			var g = oz.planeGeometry; // better way?
-			oz.geometry = new THREE.PlaneGeometry(g[0] || 100, g[1] || 100);
+			oz.geometry = new THREE.PlaneGeometry(g[0] || 100, g[1] || 100, g[2], g[3]);
 		}
 		if (oz.geometry || oz.stripset) {
 			var meshname = (oz.shader ? "Shader"
