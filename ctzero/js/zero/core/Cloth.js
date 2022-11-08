@@ -17,7 +17,9 @@ zero.core.Cloth = CT.Class({
 			positions[ifloat++] = nodePos.z();
 		}
 		geo.computeVertexNormals();
+//		geo.computeFaceNormals();
 		geo.verticesNeedUpdate = true;
+		geo.normalsNeedUpdate = true;
 //		pos.needsUpdate = attrs.normal.needsUpdate = true;
 	},
 	onremove: function() {
@@ -25,15 +27,15 @@ zero.core.Cloth = CT.Class({
 	},
 	postassemble: function() {
 		var oz = this.opts;
-		this.softBody = zero.core.ammo.softBody(this, oz.anchor, oz.anchorPoints);
+		this.softBody = zero.core.ammo.softBody(this, oz.anchor || oz.scene, oz.anchorPoints);
 	},
 	init: function(opts) { // should translate geometry?
-		opts.width = opts.width || 4;
-		opts.height = opts.height || 3;
+		opts.width = opts.width || 16;
+		opts.height = opts.height || 12;
 		opts.numSegsZ = opts.width * 5;
 		opts.numSegsY = opts.height * 5;
 		this.opts = opts = CT.merge(opts, {
-			anchorPoints: "ends",
+			anchorPoints: "start",
 			rotation: [0, Math.PI * 0.5, 0],
 			planeGeometry: [opts.width, opts.height, opts.numSegsZ, opts.numSegsY]
 		}, this.opts);
