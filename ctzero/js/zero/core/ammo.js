@@ -34,7 +34,7 @@ zero.core.ammo = {
 		cloth.thring.userData.physicsBody = softBody;
 		softBody.setActivationState(4);
 		if (anchor) { // reg anchor as rigid body?
-			const abod = anchor.thring.userData.physicsBody;
+			const abod = anchor.userData.physicsBody;
 			anchorPoints = anchorPoints || "ends";
 			anx = [];
 			if (anchorPoints == "full")
@@ -43,7 +43,13 @@ zero.core.ammo = {
 			else if (anchorPoints == "ends") {
 				anx.push(0);
 				anx.push(coz.numSegsZ);
-			} else
+			} else if (anchorPoints == "start")
+				anx.push(0);
+			else if (anchorPoints == "end")
+				anx.push(coz.numSegsZ);
+			else if (anchorPoints == "mid")
+				anx.push(Math.floor(coz.numSegsZ / 2));
+			else
 				anx = anchorPoints;
 			anx.forEach(a => softBody.appendAnchor(a, abod, false, _.anchorInfluence));
 		}
