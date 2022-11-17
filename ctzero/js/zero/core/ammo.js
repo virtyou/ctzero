@@ -38,9 +38,11 @@ zero.core.ammo = {
 		k.getWorldQuaternion(_.quatter);
 		let ms = k.userData.physicsBody.getMotionState();
 		if (ms) {
+			_.aPositioner.setValue(_.positioner.x, _.positioner.y, _.positioner.z);
+			_.aQuatter.setValue(_.quatter.x, _.quatter.y, _.quatter.z, _.quatter.w);
 			_.transformer.setIdentity();
-			_.transformer.setOrigin(_.positioner);
-			_.transformer.setRotation(_.quatter);
+			_.transformer.setOrigin(_.aPositioner);
+			_.transformer.setRotation(_.aQuatter);
 			ms.setWorldTransform(_.transformer);
 		}
 	},
@@ -124,10 +126,10 @@ zero.core.ammo = {
 		_.physicsWorld.getWorldInfo().set_m_gravity(_.gravityVector);
 
 		_.transformer = new Ammo.btTransform();
-//		_.positioner = new Ammo.btVector3();
-//		_.quatter = new Ammo.btQuaternion();
 		_.positioner = new THREE.Vector3();
 		_.quatter = new THREE.Quaternion();
+		_.aPositioner = new Ammo.btVector3();
+		_.aQuatter = new Ammo.btQuaternion();
 		_.softBodyHelpers = new Ammo.btSoftBodyHelpers();
 	},
 	init: function() {
