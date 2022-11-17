@@ -84,7 +84,7 @@ zero.core.ammo = {
 		Ammo.castObject(softBody, Ammo.btCollisionObject).getCollisionShape().setMargin(_.margin * 3);
 		_.physicsWorld.addSoftBody(softBody, 1, -1);
 		cloth.thring.userData.physicsBody = softBody;
-		softBody.setActivationState(4);
+		softBody.setActivationState(_.STATE.DISABLE_DEACTIVATION);
 		_.softs.push(cloth);
 		if (anchor) {
 			zero.core.ammo.kinematic(anchor);
