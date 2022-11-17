@@ -30,7 +30,7 @@ zero.core.ammo = {
 			zero.core.ammo.tickKinematic(k, dts);
 		_.physicsWorld.stepSimulation(dts, 10); // correct dts scale?
 		for (s of _.softs)
-			_.softs.tick(dts);
+			s.tick(dts);
 	},
 	tickKinematic: function(k, dts) {
 		let _ = zero.core.ammo._;
@@ -50,7 +50,7 @@ zero.core.ammo = {
 		thring.getWorldPosition(_.positioner);
 		thring.getWorldQuaternion(_.quatter);
 		transform.setIdentity();
-		transform.setOrigin(new Ammo.btVector3(pos.x, pos.y, pos.z));
+		transform.setOrigin(new Ammo.btVector3(_.positioner.x, _.positioner.y, _.positioner.z));
 		transform.setRotation(new Ammo.btQuaternion(_.quatter.x, _.quatter.y, _.quatter.z, _.quatter.w));
 		let localInertia = new Ammo.btVector3(0, 0, 0),
 			motionState = new Ammo.btDefaultMotionState(transform),
@@ -68,7 +68,7 @@ zero.core.ammo = {
 	softBody: function(cloth, anchor, anchorPoints) {
 		let _ = zero.core.ammo._, coz = cloth.opts,
 			width = coz.width, height = coz.height,
-			i, anx, pos = cloth.position(); // global?
+			i, anx, pos = cloth.position(null, true);
 		const c00 = new Ammo.btVector3(pos.x, pos.y + height, pos.z);
 		const c01 = new Ammo.btVector3(pos.x, pos.y + height, pos.z - width);
 		const c10 = new Ammo.btVector3(pos.x, pos.y, pos.z);
@@ -85,7 +85,7 @@ zero.core.ammo = {
 		softBody.setActivationState(4);
 		_.softs.push(cloth);
 		if (anchor) {
-			_.kinematics.push(anchor);
+			zero.core.ammo.kinematic(anchor);
 			const abod = anchor.userData.physicsBody;
 			anchorPoints = anchorPoints || "ends";
 			anx = [];
@@ -124,8 +124,10 @@ zero.core.ammo = {
 		_.physicsWorld.getWorldInfo().set_m_gravity(_.gravityVector);
 
 		_.transformer = new Ammo.btTransform();
-		_.positioner = new Ammo.btVector3();
-		_.quatter = new Ammo.btQuaternion();
+//		_.positioner = new Ammo.btVector3();
+//		_.quatter = new Ammo.btQuaternion();
+		_.positioner = new THREE.Vector3();
+		_.quatter = new THREE.Quaternion();
 		_.softBodyHelpers = new Ammo.btSoftBodyHelpers();
 	},
 	init: function() {
