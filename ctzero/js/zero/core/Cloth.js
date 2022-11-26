@@ -23,7 +23,6 @@ zero.core.Cloth = CT.Class({
 //		pos.needsUpdate = attrs.normal.needsUpdate = true;
 	},
 	onremove: function() {
-//		zero.core.util.untick(this.tick);
 		zero.core.ammo.unSoft(this);
 		zero.core.ammo.unKinematic(this.opts.frame);
 	},
@@ -44,6 +43,5 @@ zero.core.Cloth = CT.Class({
 			rotation: [0, Math.PI * 0.5, 0],
 			planeGeometry: [opts.width, opts.height, opts.numSegsZ, opts.numSegsY]
 		}, this.opts);
-//		setTimeout(() => zero.core.util.ontick(this.tick), 5000);
 	}
 }, zero.core.Thing);
