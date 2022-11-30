@@ -6,6 +6,7 @@ CT.scriptImport("zero.lib.wasm.ammo");
 zero.core.ammo = {
 	_: {
 		softs: [],
+		rigids: [],
 		kinematics: [],
 		margin: 0.05,
 		anchorInfluence: 0.5,
@@ -15,22 +16,43 @@ zero.core.ammo = {
 		},
 		FLAGS: {
 			CF_KINEMATIC_OBJECT: 2
+		},
+		rigid: function(s, mass) {
+			let _ = zero.core.ammo._, transform = new Ammo.btTransform();
+			transform.setIdentity();
+			transform.setOrigin(new Ammo.btVector3(_.positioner.x, _.positioner.y, _.positioner.z));
+			transform.setRotation(new Ammo.btQuaternion(_.quatter.x, _.quatter.y, _.quatter.z, _.quatter.w));
+			let localInertia = new Ammo.btVector3(0, 0, 0),
+				motionState = new Ammo.btDefaultMotionState(transform),
+				colShape = new Ammo.btBoxShape(new Ammo.btVector3(s.x / 2, s.y / 2, s.z / 2)); // TODO: other shapes...
+			colShape.setMargin(_.margin);
+			colShape.calculateLocalInertia(mass, localInertia);
+			let rbInfo = new Ammo.btRigidBodyConstructionInfo(mass, motionState, colShape, localInertia),
+				body = new Ammo.btRigidBody(rbInfo);
+			body.setActivationState(_.STATE.DISABLE_DEACTIVATION);
+			_.physicsWorld.addRigidBody(body);
+			return body;
 		}
 	},
 	unSoft: function(s) {
 		CT.data.remove(zero.core.ammo._.softs, s);
 	},
+	unRigid: function(r) {
+		CT.data.remove(zero.core.ammo._.rigids, r);
+	},
 	unKinematic: function(k) {
 		CT.data.remove(zero.core.ammo._.kinematics, k);
 	},
 	tick: function(dts) {
-		let _ = zero.core.ammo._, k, s;
+		let _ = zero.core.ammo._, k, s, r;
 		if (!_.softs.length && !_.kinematics.length) return;
 		for (k of _.kinematics)
 			zero.core.ammo.tickKinematic(k, dts);
 		_.physicsWorld.stepSimulation(dts, 10); // correct dts scale?
 		for (s of _.softs)
 			s.tick(dts);
+		for (r of _.rigids)
+			zero.core.ammo.tickRigid(r, dts);
 	},
 	tickKinematic: function(k, dts) {
 		let _ = zero.core.ammo._;
@@ -46,25 +68,35 @@ zero.core.ammo = {
 			ms.setWorldTransform(_.transformer);
 		}
 	},
-	kinematic: function(thring) {
-		let _ = zero.core.ammo._, s = thring.scale, mass = 1,
-			transform = new Ammo.btTransform();
+	tickRigid: function(r, dts) {
+		let _ = zero.core.ammo._,
+			ms = r.userData.physicsBody.getMotionState();
+		if (ms) {
+			ms.getWorldTransform(_.transformer);
+			const p = _.transformer.getOrigin();
+			const q = _.transformer.getRotation();
+			r.position.set(p.x(), p.y(), p.z());
+			r.quaternion.set(q.x(), q.y(), q.z(), q.w());
+		}
+	},
+	rigid: function(s, p, q, mass, mat) { // creates thring
+		let _ = zero.core.ammo._, thring;
+		mat = mat || new THREE.MeshPhongMaterial( { color: 0x606060 } );
+		_.positioner.set(p.x, p.y, p.z);
+		_.quatter.set(q.x, q.y, q.z, q.w);
+		thring = new THREE.Mesh(new THREE.BoxGeometry(s.x, s.y, s.z, 1, 1, 1), mat);
+		thring.userData.physicsBody = _.rigid(s, mass);
+		zero.core.camera.scene.add(thring);
+		_.rigids.push(thring);
+		return thring;
+	},
+	kinematic: function(thring) { // adapts thring
+		let _ = zero.core.ammo._, body;
 		thring.getWorldPosition(_.positioner);
 		thring.getWorldQuaternion(_.quatter);
-		transform.setIdentity();
-		transform.setOrigin(new Ammo.btVector3(_.positioner.x, _.positioner.y, _.positioner.z));
-		transform.setRotation(new Ammo.btQuaternion(_.quatter.x, _.quatter.y, _.quatter.z, _.quatter.w));
-		let localInertia = new Ammo.btVector3(0, 0, 0),
-			motionState = new Ammo.btDefaultMotionState(transform),
-			colShape = new Ammo.btBoxShape(new Ammo.btVector3(s.x / 2, s.y / 2, s.z / 2)); // TODO: other shapes...
-		colShape.setMargin(_.margin);
-		colShape.calculateLocalInertia(mass, localInertia);
-		let rbInfo = new Ammo.btRigidBodyConstructionInfo(mass, motionState, colShape, localInertia),
-			body = new Ammo.btRigidBody(rbInfo);
-		body.setActivationState(_.STATE.DISABLE_DEACTIVATION);
+		body = _.rigid(thring.scale, 1); // FIX: thring.scale seems wrong......
 		body.setCollisionFlags(_.FLAGS.CF_KINEMATIC_OBJECT);
 		thring.userData.physicsBody = body;
-		_.physicsWorld.addRigidBody(body);
 		_.kinematics.push(thring);
 	},
 	softBody: function(cloth, anchor, anchorPoints) {
