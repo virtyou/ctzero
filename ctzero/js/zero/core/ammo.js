@@ -99,6 +99,11 @@ zero.core.ammo = {
 		thring.userData.physicsBody = body;
 		_.kinematics.push(thring);
 	},
+	hinge: function(r1, r2, p1, p2, axis) {
+		axis = axis || new Ammo.btVector3(0, 1, 0);
+		zero.core.ammo._.physicsWorld.addConstraint(new Ammo.btHingeConstraint(r1.userData.physicsBody,
+			r2.userData.physicsBody, p1, p2, axis, axis, true), true);
+	},
 	softBody: function(cloth, anchor, anchorPoints) {
 		let _ = zero.core.ammo._, coz = cloth.opts,
 			width = coz.width, height = coz.height,
@@ -119,7 +124,7 @@ zero.core.ammo = {
 		softBody.setActivationState(_.STATE.DISABLE_DEACTIVATION);
 		_.softs.push(cloth);
 		if (anchor) {
-			zero.core.ammo.kinematic(anchor);
+			anchor.userData.physicsBody || zero.core.ammo.kinematic(anchor);
 			const abod = anchor.userData.physicsBody;
 			anchorPoints = anchorPoints || "ends";
 			anx = [];
