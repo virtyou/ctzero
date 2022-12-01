@@ -17,6 +17,9 @@ zero.core.ammo = {
 		FLAGS: {
 			CF_KINEMATIC_OBJECT: 2
 		},
+		defQuat: {
+			x: 0, y: 0, z: 0, w: 1
+		},
 		rigid: function(s, mass) {
 			let ammo = zero.core.ammo, _ = ammo._, transform = new Ammo.btTransform();
 			transform.setIdentity();
@@ -29,7 +32,7 @@ zero.core.ammo = {
 			colShape.calculateLocalInertia(mass, localInertia);
 			let rbInfo = new Ammo.btRigidBodyConstructionInfo(mass, motionState, colShape, localInertia),
 				body = new Ammo.btRigidBody(rbInfo);
-			body.setActivationState(_.STATE.DISABLE_DEACTIVATION);
+			mass && body.setActivationState(_.STATE.DISABLE_DEACTIVATION);
 			_.physicsWorld.addRigidBody(body);
 			return body;
 		}
@@ -79,15 +82,16 @@ zero.core.ammo = {
 			r.quaternion.set(q.x(), q.y(), q.z(), q.w());
 		}
 	},
-	rigid: function(s, p, q, mass, mat) { // creates thring
+	rigid: function(mass, p, s, q, mat) { // creates thring
 		let _ = zero.core.ammo._, thring;
-		mat = mat || new THREE.MeshPhongMaterial( { color: 0x606060 } );
+		q = q || _.defQuat;
+		mat = mat || new THREE.MeshPhongMaterial( { color: 0xFFFFFF } );
 		_.positioner.set(p.x, p.y, p.z);
 		_.quatter.set(q.x, q.y, q.z, q.w);
 		thring = new THREE.Mesh(new THREE.BoxGeometry(s.x, s.y, s.z, 1, 1, 1), mat);
 		thring.userData.physicsBody = _.rigid(s, mass);
 		zero.core.camera.scene.add(thring);
-		_.rigids.push(thring);
+		mass && _.rigids.push(thring);
 		return thring;
 	},
 	kinematic: function(thring) { // adapts thring
@@ -172,8 +176,11 @@ zero.core.ammo = {
 		_.aPositioner = new Ammo.btVector3();
 		_.aQuatter = new Ammo.btQuaternion();
 		_.softBodyHelpers = new Ammo.btSoftBodyHelpers();
+		_.onload && _.onload();
 	},
-	init: function() {
-		Ammo().then(zero.core.ammo.load);
+	init: function(onload) {
+		let ammo = zero.core.ammo;
+		ammo._.onload = onload;
+		Ammo().then(ammo.load);
 	}
 };
