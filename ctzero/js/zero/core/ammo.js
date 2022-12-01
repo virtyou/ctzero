@@ -18,13 +18,13 @@ zero.core.ammo = {
 			CF_KINEMATIC_OBJECT: 2
 		},
 		rigid: function(s, mass) {
-			let _ = zero.core.ammo._, transform = new Ammo.btTransform();
+			let ammo = zero.core.ammo, _ = ammo._, transform = new Ammo.btTransform();
 			transform.setIdentity();
-			transform.setOrigin(new Ammo.btVector3(_.positioner.x, _.positioner.y, _.positioner.z));
+			transform.setOrigin(ammo.vector(_.positioner.x, _.positioner.y, _.positioner.z));
 			transform.setRotation(new Ammo.btQuaternion(_.quatter.x, _.quatter.y, _.quatter.z, _.quatter.w));
-			let localInertia = new Ammo.btVector3(0, 0, 0),
+			let localInertia = ammo.vector(0, 0, 0),
 				motionState = new Ammo.btDefaultMotionState(transform),
-				colShape = new Ammo.btBoxShape(new Ammo.btVector3(s.x / 2, s.y / 2, s.z / 2)); // TODO: other shapes...
+				colShape = new Ammo.btBoxShape(ammo.vector(s.x / 2, s.y / 2, s.z / 2)); // TODO: other shapes...
 			colShape.setMargin(_.margin);
 			colShape.calculateLocalInertia(mass, localInertia);
 			let rbInfo = new Ammo.btRigidBodyConstructionInfo(mass, motionState, colShape, localInertia),
@@ -100,18 +100,19 @@ zero.core.ammo = {
 		_.kinematics.push(thring);
 	},
 	hinge: function(r1, r2, p1, p2, axis) {
-		axis = axis || new Ammo.btVector3(0, 1, 0);
-		zero.core.ammo._.physicsWorld.addConstraint(new Ammo.btHingeConstraint(r1.userData.physicsBody,
+		let ammo = zero.core.ammo;
+		axis = axis || ammo.vector(0, 1, 0);
+		ammo._.physicsWorld.addConstraint(new Ammo.btHingeConstraint(r1.userData.physicsBody,
 			r2.userData.physicsBody, p1, p2, axis, axis, true), true);
 	},
 	softBody: function(cloth, anchor, anchorPoints) {
-		let _ = zero.core.ammo._, coz = cloth.opts,
+		let ammo = zero.core.ammo, _ = ammo._, coz = cloth.opts,
 			width = coz.width, height = coz.height,
 			i, anx, pos = cloth.position(null, true);
-		const c00 = new Ammo.btVector3(pos.x, pos.y + height, pos.z);
-		const c01 = new Ammo.btVector3(pos.x, pos.y + height, pos.z - width);
-		const c10 = new Ammo.btVector3(pos.x, pos.y, pos.z);
-		const c11 = new Ammo.btVector3(pos.x, pos.y, pos.z - width);
+		const c00 = ammo.vector(pos.x, pos.y + height, pos.z);
+		const c01 = ammo.vector(pos.x, pos.y + height, pos.z - width);
+		const c10 = ammo.vector(pos.x, pos.y, pos.z);
+		const c11 = ammo.vector(pos.x, pos.y, pos.z - width);
 		const softBody = _.softBodyHelpers.CreatePatch(_.physicsWorld.getWorldInfo(),
 			c00, c01, c10, c11, coz.numSegsZ + 1, coz.numSegsY + 1, 0, true);
 		const sbcfg = softBody.get_m_cfg();
@@ -124,7 +125,7 @@ zero.core.ammo = {
 		softBody.setActivationState(_.STATE.DISABLE_DEACTIVATION);
 		_.softs.push(cloth);
 		if (anchor) {
-			anchor.userData.physicsBody || zero.core.ammo.kinematic(anchor);
+			anchor.userData.physicsBody || ammo.kinematic(anchor);
 			const abod = anchor.userData.physicsBody;
 			anchorPoints = anchorPoints || "ends";
 			anx = [];
@@ -146,8 +147,11 @@ zero.core.ammo = {
 		}
 		return softBody;
 	},
+	vector: function(x, y, z) {
+		return new Ammo.btVector3(x, y, z);
+	},
 	load: function(AmmoLib) {
-		let _ = zero.core.ammo._;
+		let ammo = zero.core.ammo, _ = ammo._;
 		Ammo = AmmoLib;
 
 		_.collisionConfiguration = new Ammo.btSoftBodyRigidBodyCollisionConfiguration();
@@ -156,7 +160,7 @@ zero.core.ammo = {
 		_.solver = new Ammo.btSequentialImpulseConstraintSolver();
 		_.softBodySolver = new Ammo.btDefaultSoftBodySolver();
 
-		_.gravityVector = new Ammo.btVector3(0, _.gravityConstant, 0);
+		_.gravityVector = ammo.vector(0, _.gravityConstant, 0);
 		_.physicsWorld = new Ammo.btSoftRigidDynamicsWorld(_.dispatcher,
 			_.broadphase, _.solver, _.collisionConfiguration, _.softBodySolver);
 		_.physicsWorld.setGravity(_.gravityVector);
