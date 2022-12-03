@@ -104,10 +104,12 @@ zero.core.ammo = {
 		_.kinematics.push(thring);
 	},
 	hinge: function(r1, r2, p1, p2, axis) {
-		let ammo = zero.core.ammo;
+		let ammo = zero.core.ammo, hinge;
 		axis = axis || ammo.vector(0, 1, 0);
-		ammo._.physicsWorld.addConstraint(new Ammo.btHingeConstraint(r1.userData.physicsBody,
-			r2.userData.physicsBody, p1, p2, axis, axis, true), true);
+		hinge = new Ammo.btHingeConstraint(r1.userData.physicsBody,
+			r2.userData.physicsBody, p1, p2, axis, axis, true);
+		ammo._.physicsWorld.addConstraint(hinge, true);
+		return hinge;
 	},
 	softBody: function(cloth, anchor, anchorPoints) {
 		let ammo = zero.core.ammo, _ = ammo._, coz = cloth.opts,
