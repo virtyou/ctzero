@@ -46,6 +46,20 @@ zero.base.clothes = {
 			torusGeometry: true,
 			rotation: [-2, 0, 0],
 			scale: [0.02, 0.02, 0.02]
+		},
+		strip: {
+			torusGeometry: true,
+			rotation: [-2, 0, 0],
+			scale: [0.02, 0.02, 0.02],
+			parts: [{
+				thing: "Cloth",
+				name: "ribbon",
+				scale: [200, 200, 200],
+				material: {
+					color: 0xFFFFFF,
+					side: THREE.DoubleSide
+				}
+			}]
 		}
 	},
 	finger: {
@@ -112,7 +126,19 @@ zero.base.clothes.head = { // hats
 	conical: {
 		coneGeometry: true,
 		position: [0, 20, 0],
-		scale: [0.5, 0.5, 0.5]
+		scale: [0.5, 0.5, 0.5],
+		parts: [{
+			thing: "Cloth",
+			name: "tassel",
+			width: 1,
+			scale: [40, 40, 40],
+			material: {
+				opacity: 0.75,
+				color: 0xFFFFFF,
+				transparent: true,
+				side: THREE.DoubleSide
+			}
+		}]
 	},
 	donut: {
 		torusGeometry: true,
