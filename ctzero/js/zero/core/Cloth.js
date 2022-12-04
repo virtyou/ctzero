@@ -1,29 +1,7 @@
 zero.core.Cloth = CT.Class({
 	CLASSNAME: "zero.core.Cloth",
-	tick: function(dts) {
-		var geo = this.thring.geometry,
-//			attrs = geo.attributes,
-//			pos = attrs.position,
-//			positions = pos.array,
-			positions = geo.vertices,
-			numVerts = positions.length / 3,
-			nodes = this.softBody.get_m_nodes(),
-			ifloat = 0, node, nodePos;
-		for (let i = 0; i < numVerts; i++) {
-			node = nodes.at(i);
-			nodePos = node.get_m_x();
-			positions[ifloat++] = nodePos.x();
-			positions[ifloat++] = nodePos.y();
-			positions[ifloat++] = nodePos.z();
-		}
-		geo.computeVertexNormals();
-//		geo.computeFaceNormals();
-		geo.verticesNeedUpdate = true;
-		geo.normalsNeedUpdate = true;
-//		pos.needsUpdate = attrs.normal.needsUpdate = true;
-	},
 	onremove: function() {
-		zero.core.ammo.unSoft(this);
+		zero.core.ammo.unSoft(this.thring);
 		zero.core.ammo.unKinematic(this.opts.frame);
 	},
 	postassemble: function() {

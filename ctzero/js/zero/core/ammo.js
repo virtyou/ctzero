@@ -53,9 +53,31 @@ zero.core.ammo = {
 			zero.core.ammo.tickKinematic(k, dts);
 		_.physicsWorld.stepSimulation(dts, 10); // correct dts scale?
 		for (s of _.softs)
-			s.tick(dts);
+			zero.core.ammo.tickSoft(s, dts);
 		for (r of _.rigids)
 			zero.core.ammo.tickRigid(r, dts);
+	},
+	tickSoft: function(s, dts) {
+		var geo = s.geometry,
+//			attrs = geo.attributes,
+//			pos = attrs.position,
+//			positions = pos.array,
+			positions = geo.vertices,
+			numVerts = positions.length / 3,
+			nodes = s.userData.physicsBody.get_m_nodes(),
+			ifloat = 0, node, nodePos;
+		for (let i = 0; i < numVerts; i++) {
+			node = nodes.at(i);
+			nodePos = node.get_m_x();
+			positions[ifloat++] = nodePos.x();
+			positions[ifloat++] = nodePos.y();
+			positions[ifloat++] = nodePos.z();
+		}
+		geo.computeVertexNormals();
+//		geo.computeFaceNormals();
+		geo.verticesNeedUpdate = true;
+		geo.normalsNeedUpdate = true;
+//		pos.needsUpdate = attrs.normal.needsUpdate = true;
 	},
 	tickKinematic: function(k, dts) {
 		let _ = zero.core.ammo._;
@@ -129,7 +151,7 @@ zero.core.ammo = {
 		_.physicsWorld.addSoftBody(softBody, 1, -1);
 		cloth.thring.userData.physicsBody = softBody;
 		softBody.setActivationState(_.STATE.DISABLE_DEACTIVATION);
-		_.softs.push(cloth);
+		_.softs.push(cloth.thring);
 		if (anchor) {
 			anchor.userData.physicsBody || ammo.kinematic(anchor);
 			const abod = anchor.userData.physicsBody;
