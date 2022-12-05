@@ -56,7 +56,7 @@ THREE.JSONLoader = THREE.LegacyJSONLoader = ( function () {
 				}
 
 				var object = scope.parse( json, path );
-				onLoad( object.geometry, object.materials );
+				onLoad( object.geometry, object.materials, json );
 
 			}, onProgress, onError );
 
