@@ -7,7 +7,7 @@
 	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
 	typeof define === 'function' && define.amd ? define(['exports'], factory) :
 	(global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.THREE = {}));
-})(this, (function (exports) { 'use strict';
+})(window || this, (function (exports) { 'use strict';
 
 	const REVISION = '147';
 	const MOUSE = {
@@ -17523,7 +17523,7 @@
 
 		// frustum
 
-		const _frustum = new Frustum();
+		const _frustum = this.frustum = new Frustum();
 
 		// clipping
 
@@ -20119,10 +20119,11 @@
 			return new this.constructor(this.image).copy(this);
 		}
 		update() {
+			if (this.zeronode && this.zeronode.removed) return console.log("VideoTexture decommissioned");
 			const video = this.image;
 			const hasVideoFrameCallback = ('requestVideoFrameCallback' in video);
 			if (hasVideoFrameCallback === false && video.readyState >= video.HAVE_CURRENT_DATA) {
-				this.needsUpdate = true;
+				this.needsUpdate = this.zeronode ? zero.core.camera.visible(this.zeronode) : true;
 			}
 		}
 	}
