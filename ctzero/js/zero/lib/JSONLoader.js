@@ -798,6 +798,17 @@ THREE.JSONLoader = THREE.LegacyJSONLoader = ( function () {
 				geometry.computeFaceNormals();
 				geometry.computeBoundingSphere();
 
+
+
+				var bones = geometry.bones;
+				geometry = new THREE.BufferGeometry().fromGeometry(geometry);
+				if (bones && !geometry.bones) {
+					console.log("adding bones to BufferGeometry");
+					geometry.bones = bones;
+				}
+
+
+
 				if ( json.materials === undefined || json.materials.length === 0 ) {
 
 					return { geometry: geometry };
