@@ -100,6 +100,23 @@ zero.core.util = {
 		}
 		return bone;
 	},
+	bones2skeleton: function(bones, mesh) {
+		var bbones = bones.map(function(b) {
+			var bb = new THREE.Bone(), p = b.pos, r = b.rotq;
+			bb.name = b.name;
+			bb._parent = b.parent;
+			bb.position.set(p[0], p[1], p[2]);
+			bb.setRotationFromQuaternion(new THREE.Quaternion(r[0], r[1], r[2], r[3]));
+			return bb;
+		});
+		bbones.forEach(function(b) {
+			(bbones[b._parent] || mesh).add(b);
+			//b.parent = bbones[b.parent] || mesh;
+		});
+		var skeleton = new THREE.Skeleton(bbones);
+		mesh.bind(skeleton);
+		return skeleton;
+	},
 	// https://stackoverflow.com/questions/5623838/rgb-to-hex-and-hex-to-rgb#5624139
 	hex2rgb: function(hex) {
 		var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
