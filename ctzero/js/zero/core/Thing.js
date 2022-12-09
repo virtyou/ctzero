@@ -424,7 +424,7 @@ zero.core.Thing = CT.Class({
 			this.update({ position: position });
 		else {
 			if (world)
-				return this.placer.getWorldPosition();
+				return this.placer.getWorldPosition(zero.core.util._positioner);
 			return this.placer.position;
 		}
 	},
