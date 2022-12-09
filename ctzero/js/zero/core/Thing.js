@@ -484,6 +484,10 @@ zero.core.Thing = CT.Class({
 			delete this.thring;
 		}
 		this.thring = new THREE[oz.meshcat](geometry, this.material);
+		if (geometry.bones && geometry.bones.length && !this.thring.skeleton) {
+			this.log("creating skeleton");
+			this.thring.skeleton = zero.core.util.bones2skeleton(geometry.bones, this.thring);
+		}
 		this.thring.frustumCulled = oz.frustumCulled; // should probs usually be default (true)
 		this.setBone();
 		for (var m in this.opts.mti)
