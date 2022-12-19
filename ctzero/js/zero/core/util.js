@@ -10,6 +10,7 @@ zero.core.util = {
 	dperf: 0.016,
 	_tickers: [],
 	_positioner: new THREE.Vector3(),
+	_quatter: new THREE.Quaternion(),
 	rates: ["x-slow", "slow", "medium", "fast", "x-fast"],
 	pitches: ["x-low", "low", "medium", "high", "x-high"],
 	worns: [
