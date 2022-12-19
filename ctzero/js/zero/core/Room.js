@@ -373,7 +373,10 @@ zero.core.Room = CT.Class({
 		os && opts.parts.push(CT.merge({
 			name: "shelly",
 			kind: "shell",
-			geometry: d2g(os.dimensions)
+			geometry: d2g(os.dimensions),
+			material: {
+				side: THREE.BackSide
+			}
 		}, os));
 		opts.outside && opts.parts.push({
 			name: "sky",
