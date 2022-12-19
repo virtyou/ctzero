@@ -3,6 +3,7 @@ zero.core.version = "0.1.2";
 CT.require("zero.lib.three");
 CT.require("zero.lib.Projector");
 CT.require("zero.lib.TrackballControls");
+CT.require("zero.lib.BufferGeometryUtils");
 
 CT.require("zero.base.joints");
 CT.require("zero.base.springs");
