@@ -432,8 +432,12 @@ zero.core.Thing = CT.Class({
 		if (rotation)
 			this.update({ rotation: rotation });
 		else {
-			if (world)
-				return this.placer.getWorldRotation();
+			if (world) {
+				var q = zero.core.util._quatter, e = new THREE.Euler();
+				this.placer.getWorldQuaternion(q);
+				e.setFromQuaternion(q);
+				return e;
+			}
 			return this.placer.rotation;
 		}
 	},
