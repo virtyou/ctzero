@@ -22147,7 +22147,7 @@
 
 			// frustum
 
-			_frustum = new Frustum(),
+			_frustum = this.frustum = new Frustum(),
 
 			// clipping
 
@@ -26398,11 +26398,13 @@
 
 		update: function () {
 
+			if (this.zeronode && this.zeronode.removed) return console.log("VideoTexture decommissioned");
+
 			var video = this.image;
 
 			if ( video.readyState >= video.HAVE_CURRENT_DATA ) {
 
-				this.needsUpdate = true;
+				this.needsUpdate = this.zeronode ? zero.core.camera.visible(this.zeronode) : true;
 
 			}
 
