@@ -747,6 +747,10 @@ zero.core.Thing = CT.Class({
 			var g = oz.planeGeometry; // better way?
 			oz.geometry = new THREE.PlaneGeometry(g[0] || 100, g[1] || 100, g[2], g[3]);
 		}
+		if (oz.bufferGeometry) {
+			oz.geometry = (new THREE.BufferGeometry()).fromGeometry(oz.geometry);
+			oz.geometry = THREE.BufferGeometryUtils.mergeVertices(oz.geometry);
+		}
 		if (oz.geometry || oz.stripset) {
 			var meshname = (oz.shader ? "Shader"
 				: ("Mesh" + oz.matcat)) + "Material",
