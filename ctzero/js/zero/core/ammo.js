@@ -59,10 +59,9 @@ zero.core.ammo = {
 	},
 	tickSoft: function(s, dts) {
 		var geo = s.geometry,
-//			attrs = geo.attributes,
-//			pos = attrs.position,
-//			positions = pos.array,
-			positions = geo.vertices,
+			attrs = geo.attributes,
+			pos = attrs.position,
+			positions = pos.array,
 			numVerts = positions.length / 3,
 			nodes = s.userData.physicsBody.get_m_nodes(),
 			ifloat = 0, node, nodePos;
@@ -75,9 +74,7 @@ zero.core.ammo = {
 		}
 		geo.computeVertexNormals();
 //		geo.computeFaceNormals();
-		geo.verticesNeedUpdate = true;
-		geo.normalsNeedUpdate = true;
-//		pos.needsUpdate = attrs.normal.needsUpdate = true;
+		pos.needsUpdate = attrs.normal.needsUpdate = true;
 	},
 	tickKinematic: function(k, dts) {
 		let _ = zero.core.ammo._;
