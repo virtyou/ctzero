@@ -45,20 +45,17 @@ zero.base.clothes = {
 		bracelet: {
 			torusGeometry: true,
 			rotation: [-2, 0, 0],
-			scale: [0.02, 0.02, 0.02]
+			scale: [2, 2, 2]
 		},
 		strip: {
 			torusGeometry: true,
 			rotation: [-2, 0, 0],
-			scale: [0.02, 0.02, 0.02],
+			scale: [2, 2, 2],
 			parts: [{
 				thing: "Cloth",
 				name: "ribbon",
-				scale: [200, 200, 200],
-				material: {
-					color: 0xFFFFFF,
-					side: THREE.DoubleSide
-				}
+				height: 24,
+				width: 8
 			}]
 		}
 	},
