@@ -48,9 +48,8 @@ zero.base.clothes = {
 			scale: [2, 2, 2]
 		},
 		strip: {
-			torusGeometry: true,
+			torusGeometry: 3,
 			rotation: [-2, 0, 0],
-			scale: [2, 2, 2],
 			parts: [{
 				thing: "Cloth",
 				name: "ribbon",
@@ -127,14 +126,8 @@ zero.base.clothes.head = { // hats
 		parts: [{
 			thing: "Cloth",
 			name: "tassel",
-			width: 1,
-			scale: [40, 40, 40],
-			material: {
-				opacity: 0.75,
-				color: 0xFFFFFF,
-				transparent: true,
-				side: THREE.DoubleSide
-			}
+			height: 24,
+			width: 8
 		}]
 	},
 	donut: {
