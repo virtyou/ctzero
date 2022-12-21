@@ -718,8 +718,12 @@ zero.core.Thing = CT.Class({
 			g = oz.torusGeometry;
 //			if (g == true)
 //				g = [1, 1, 1, 1, 1];
-//			oz.geometry = new THREE.TorusGeometry(g[0], g[1], g[2], g[3]);
-			oz.geometry = new THREE.TorusGeometry();
+			if (typeof g == "number")
+				oz.geometry = new THREE.TorusGeometry(g);
+			else if (Array.isArray(g))
+				oz.geometry = new THREE.TorusGeometry(g[0], g[1], g[2], g[3]);
+			else
+				oz.geometry = new THREE.TorusGeometry();
 		}
 		if (oz.icosahedronGeometry)
 			oz.geometry = new THREE.IcosahedronGeometry();
