@@ -51,7 +51,7 @@ zero.core.ammo = {
 		if (!_.softs.length && !_.kinematics.length) return;
 		for (k of _.kinematics)
 			zero.core.ammo.tickKinematic(k, dts);
-		_.physicsWorld.stepSimulation(dts, 10); // correct dts scale?
+		_.physicsWorld.stepSimulation(zero.core.util.dt, 10);
 		for (s of _.softs)
 			zero.core.ammo.tickSoft(s, dts);
 		for (r of _.rigids)
