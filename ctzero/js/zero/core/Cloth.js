@@ -9,10 +9,11 @@ zero.core.Cloth = CT.Class({
 		this.softBody = zero.core.ammo.softBody(this, oz.frame, oz.anchorPoints);
 	},
 	init: function(opts) { // should translate geometry?
+		opts.dmult = opts.dmult || 1; // example has 5
 		opts.width = opts.width || 4;
 		opts.height = opts.height || 3;
-		opts.numSegsZ = opts.width * 5;
-		opts.numSegsY = opts.height * 5;
+		opts.numSegsZ = opts.width * opts.dmult;
+		opts.numSegsY = opts.height * opts.dmult;
 		// meh? (frame/scene below)
 		opts.frame = opts.scene;
 		opts.scene = zero.core.camera.scene;
