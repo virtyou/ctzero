@@ -491,7 +491,8 @@ zero.core.util = {
 	    var zcu = zero.core.util, zcc = zero.core.current, dts, rdts, p, t;
 	    requestAnimationFrame(zcu.animate);
 	    if (zcu.now) {
-	    	zcu.rdts = (now - zcu.now) / 1000;
+	    	zcu.dt = now - zcu.now;
+	    	zcu.rdts = zcu.dt / 1000;
 	        zcu.dts = Math.min(zcu.dmax, zcu.rdts);
 	        zcu.slow = zcu.dts > zcu.dslow;
 	    }
