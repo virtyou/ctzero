@@ -7,6 +7,14 @@ zero.base.clothes = {
 			torusGeometry: true,
 			rotation: [2, 0, 0],
 			scale: [0.05, 0.05, 0.05]
+		},
+		cape: {
+			parts: [{
+				thing: "Cloth",
+				name: "cape",
+				height: 40,
+				width: 18
+			}]
 		}
 	},
 	clavicle: {},
