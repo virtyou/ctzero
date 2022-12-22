@@ -19,7 +19,6 @@ zero.core.Cloth = CT.Class({
 		this.opts = opts = CT.merge(opts, {
 			anchorPoints: "ends",
 			bufferGeometry: true,
-//			rotation: [0, Math.PI * 0.5, 0],
 			planeGeometry: [opts.width, opts.height, opts.numSegsZ, opts.numSegsY],
 			material: {
 				side: THREE.DoubleSide

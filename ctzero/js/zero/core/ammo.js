@@ -117,7 +117,9 @@ zero.core.ammo = {
 		let _ = zero.core.ammo._, body;
 		thring.getWorldPosition(_.positioner);
 		thring.getWorldQuaternion(_.quatter);
+
 		body = _.rigid(thring.scale, 1); // FIX: thring.scale seems wrong......
+
 		body.setCollisionFlags(_.FLAGS.CF_KINEMATIC_OBJECT);
 		thring.userData.physicsBody = body;
 		_.kinematics.push(thring);
@@ -143,6 +145,9 @@ zero.core.ammo = {
 		const sbcfg = softBody.get_m_cfg();
 		sbcfg.set_viterations(10);
 		sbcfg.set_piterations(10);
+
+		sbcfg.set_kDP(0.01); // damping
+
 		softBody.setTotalMass(0.9, false);
 		Ammo.castObject(softBody, Ammo.btCollisionObject).getCollisionShape().setMargin(_.margin * 3);
 		_.physicsWorld.addSoftBody(softBody, 1, -1);
