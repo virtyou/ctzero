@@ -309,7 +309,7 @@ var camera = zero.core.camera = {
 		return zero.core.camera._.outerContainer;
 	},
 	_cam: function(w, h, _, cclass) {
-		var camcfg = core.config.ctzero.camera;
+		var cfg = core.config.ctzero, camcfg = cfg.camera;
 		_ = _ || camera._;
 		if (camcfg.ar) {
 			camcfg.opts.alpha = true;
@@ -318,6 +318,7 @@ var camera = zero.core.camera = {
 			_.camera = new THREE.PerspectiveCamera(camcfg.fov, w / h, 0.2, 10000000);
 		_.container = CT.dom.div(null, cclass || "abs all0");
 		_.renderer = new THREE.WebGLRenderer(camcfg.opts);
+		_.renderer.shadowMap.enabled = cfg.shadows;
 		_.renderer.setSize(w, h);
 		_.frustum = _.renderer.frustum;
 		_.container.appendChild(_.renderer.domElement);
