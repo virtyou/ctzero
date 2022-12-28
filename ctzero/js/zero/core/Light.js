@@ -14,11 +14,13 @@ zero.core.Light = CT.Class({
 			c.setRGB(color.r, color.g, color.b);
 	},
 	build: function() {
-		var oz = this.opts, v = oz.variety,
+		var oz = this.opts, v = oz.variety, cfg = core.config.ctzero,
 			constructor = v.charAt(0).toUpperCase() + v.slice(1) + "Light";
 		this.thring = this.placer = new THREE[constructor](oz.color, oz.intensity);
-		if (oz.variety != "ambient")
+		if (oz.variety != "ambient") {
+			this.thring.castShadow = cfg.shadows;
 			this.thring.position.set.apply(this.thring.position, oz.position);
+		}
 		(oz.scene || oz.anchor).add(this.thring);
 		this._.built();
 	},
