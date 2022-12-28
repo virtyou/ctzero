@@ -8,9 +8,12 @@ zero.core.ammo = {
 		softs: [],
 		rigids: [],
 		kinematics: [],
-		margin: 0.05,
-		anchorInfluence: 0.5,
-		gravityConstant: -9.8,
+		consts: {
+			margin: 0.05,
+			damping: 0.01,
+			anchorInfluence: 0.5,
+			gravityConstant: -9.8
+		},
 		STATE: {
 			DISABLE_DEACTIVATION: 4
 		},
@@ -28,7 +31,7 @@ zero.core.ammo = {
 			let localInertia = ammo.vector(0, 0, 0),
 				motionState = new Ammo.btDefaultMotionState(transform),
 				colShape = new Ammo.btBoxShape(ammo.vector(s.x / 2, s.y / 2, s.z / 2)); // TODO: other shapes...
-			colShape.setMargin(_.margin);
+			colShape.setMargin(_.consts.margin);
 			colShape.calculateLocalInertia(mass, localInertia);
 			let rbInfo = new Ammo.btRigidBodyConstructionInfo(mass, motionState, colShape, localInertia),
 				body = new Ammo.btRigidBody(rbInfo);
@@ -36,6 +39,9 @@ zero.core.ammo = {
 			_.physicsWorld.addRigidBody(body);
 			return body;
 		}
+	},
+	setConst: function(k, v) {
+		zero.core.ammo._.consts[k] = v;
 	},
 	unSoft: function(s) {
 		CT.data.remove(zero.core.ammo._.softs, s);
@@ -133,8 +139,8 @@ zero.core.ammo = {
 		return hinge;
 	},
 	softBody: function(cloth, anchor, anchorPoints) {
-		let ammo = zero.core.ammo, _ = ammo._, coz = cloth.opts,
-			width = coz.width, height = coz.height,
+		let ammo = zero.core.ammo, _ = ammo._, consts = _.consts,
+			coz = cloth.opts, width = coz.width, height = coz.height,
 			i, anx, pos = cloth.position(null, true);
 		const c00 = ammo.vector(pos.x, pos.y + height, pos.z);
 		const c01 = ammo.vector(pos.x, pos.y + height, pos.z - width);
@@ -146,10 +152,10 @@ zero.core.ammo = {
 		sbcfg.set_viterations(10);
 		sbcfg.set_piterations(10);
 
-		sbcfg.set_kDP(0.01); // damping
+		sbcfg.set_kDP(consts.damping);
 
 		softBody.setTotalMass(0.9, false);
-		Ammo.castObject(softBody, Ammo.btCollisionObject).getCollisionShape().setMargin(_.margin * 3);
+		Ammo.castObject(softBody, Ammo.btCollisionObject).getCollisionShape().setMargin(consts.margin * 3);
 		_.physicsWorld.addSoftBody(softBody, 1, -1);
 		cloth.thring.userData.physicsBody = softBody;
 		softBody.setActivationState(_.STATE.DISABLE_DEACTIVATION);
@@ -173,7 +179,7 @@ zero.core.ammo = {
 				anx.push(Math.floor(coz.numSegsZ / 2));
 			else
 				anx = anchorPoints;
-			anx.forEach(a => softBody.appendAnchor(a, abod, false, _.anchorInfluence));
+			anx.forEach(a => softBody.appendAnchor(a, abod, false, consts.anchorInfluence));
 		}
 		return softBody;
 	},
@@ -190,7 +196,7 @@ zero.core.ammo = {
 		_.solver = new Ammo.btSequentialImpulseConstraintSolver();
 		_.softBodySolver = new Ammo.btDefaultSoftBodySolver();
 
-		_.gravityVector = ammo.vector(0, _.gravityConstant, 0);
+		_.gravityVector = ammo.vector(0, _.consts.gravityConstant, 0);
 		_.physicsWorld = new Ammo.btSoftRigidDynamicsWorld(_.dispatcher,
 			_.broadphase, _.solver, _.collisionConfiguration, _.softBodySolver);
 		_.physicsWorld.setGravity(_.gravityVector);
