@@ -480,7 +480,7 @@ zero.core.Thing = CT.Class({
 		});
 	},
 	setGeometry: function(geometry, materials, json) {
-		var oz = this.opts, thiz = this;
+		var oz = this.opts, thiz = this, cfg = core.config.ctzero;
 		this.geojson = json;
 		if (this.thring) {
 			this.thring.geometry.dispose();
@@ -489,6 +489,8 @@ zero.core.Thing = CT.Class({
 		}
 		this.thring = new THREE[oz.meshcat](geometry, this.material);
 		this.thring.frustumCulled = oz.frustumCulled; // should probs usually be default (true)
+		this.thring.castShadow = cfg.shadows && oz.castShadow;
+		this.thring.receiveShadow = cfg.shadows && oz.receiveShadow;
 		this.setBone();
 		for (var m in this.opts.mti)
 			this.morphTargetInfluences(m, this.opts.mti[m]);
