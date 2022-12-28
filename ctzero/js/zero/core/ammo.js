@@ -24,11 +24,9 @@ zero.core.ammo = {
 			x: 0, y: 0, z: 0, w: 1
 		},
 		rigid: function(s, mass) {
-			let ammo = zero.core.ammo, _ = ammo._, transform = new Ammo.btTransform();
-			transform.setIdentity();
-			transform.setOrigin(ammo.vector(_.positioner.x, _.positioner.y, _.positioner.z));
-			transform.setRotation(new Ammo.btQuaternion(_.quatter.x, _.quatter.y, _.quatter.z, _.quatter.w));
-			let localInertia = ammo.vector(0, 0, 0),
+			const ammo = zero.core.ammo, _ = ammo._,
+				transform = ammo.transform(),
+				localInertia = ammo.vector(0, 0, 0),
 				motionState = new Ammo.btDefaultMotionState(transform),
 				colShape = new Ammo.btBoxShape(ammo.vector(s.x / 2, s.y / 2, s.z / 2)); // TODO: other shapes...
 			colShape.setMargin(_.consts.margin);
@@ -83,18 +81,9 @@ zero.core.ammo = {
 		pos.needsUpdate = attrs.normal.needsUpdate = true;
 	},
 	tickKinematic: function(k, dts) {
-		let _ = zero.core.ammo._;
-		k.getWorldPosition(_.positioner);
-		k.getWorldQuaternion(_.quatter);
-		let ms = k.userData.physicsBody.getMotionState();
-		if (ms) {
-			_.aPositioner.setValue(_.positioner.x, _.positioner.y, _.positioner.z);
-			_.aQuatter.setValue(_.quatter.x, _.quatter.y, _.quatter.z, _.quatter.w);
-			_.transformer.setIdentity();
-			_.transformer.setOrigin(_.aPositioner);
-			_.transformer.setRotation(_.aQuatter);
-			ms.setWorldTransform(_.transformer);
-		}
+		const ammo = zero.core.ammo, _ = ammo._,
+			ms = k.userData.physicsBody.getMotionState();
+		ms && ms.setWorldTransform(ammo.kinemaTrans(k));
 	},
 	tickRigid: function(r, dts) {
 		let _ = zero.core.ammo._,
@@ -185,6 +174,27 @@ zero.core.ammo = {
 	},
 	vector: function(x, y, z) {
 		return new Ammo.btVector3(x, y, z);
+	},
+	quat: function(x, y, z, w) {
+		return new Ammo.btQuaternion(x, y, z, w);
+	},
+	transform: function(transform, pos, quat) {
+		const ammo = zero.core.ammo, _ = ammo._;
+		transform = transform || new Ammo.btTransform();
+		pos = pos || ammo.vector(_.positioner.x, _.positioner.y, _.positioner.z);
+		quat = quat || ammo.quat(_.quatter.x, _.quatter.y, _.quatter.z, _.quatter.w);
+		transform.setIdentity();
+		transform.setOrigin(pos);
+		transform.setRotation(quat);
+		return transform;
+	},
+	kinemaTrans: function(k) {
+		const ammo = zero.core.ammo, _ = ammo._;
+		k.getWorldPosition(_.positioner);
+		k.getWorldQuaternion(_.quatter);
+		_.aPositioner.setValue(_.positioner.x, _.positioner.y, _.positioner.z);
+		_.aQuatter.setValue(_.quatter.x, _.quatter.y, _.quatter.z, _.quatter.w);
+		return ammo.transform(_.transformer, _.aPositioner, _.aQuatter);
 	},
 	load: function(AmmoLib) {
 		let ammo = zero.core.ammo, _ = ammo._;
