@@ -56,7 +56,7 @@ zero.core.ammo = {
 		let k, s, r;
 		for (k of _.kinematics)
 			ammo.tickKinematic(k, dts);
-		_.physicsWorld.stepSimulation(zero.core.util.dt, 10);
+		_.physicsWorld.stepSimulation(dts, 10);
 		for (s of _.softs)
 			ammo.tickSoft(s, dts);
 		for (r of _.rigids)
@@ -104,6 +104,10 @@ zero.core.ammo = {
 		_.positioner.set(p.x, p.y, p.z);
 		_.quatter.set(q.x, q.y, q.z, q.w);
 		const thring = new THREE.Mesh(new THREE.BoxGeometry(s.x, s.y, s.z, 1, 1, 1), mat);
+
+		thring.position.copy(p);
+		thring.quaternion.copy(q);
+
 		thring.userData.physicsBody = _.rigid(s, mass);
 		zero.core.camera.scene.add(thring);
 		mass && _.rigids.push(thring);
@@ -131,7 +135,8 @@ zero.core.ammo = {
 	softBody: function(cloth, anchor, anchorPoints) {
 		const ammo = zero.core.ammo, _ = ammo._, consts = _.consts,
 			coz = cloth.opts, width = coz.width, height = coz.height,
-			pos = cloth.position(null, true),
+//			pos = cloth.position(null, true),
+			pos = coz.displacement || cloth.position(null, true),
 			c00 = ammo.vector(pos.x, pos.y + height, pos.z),
 			c01 = ammo.vector(pos.x, pos.y + height, pos.z - width),
 			c10 = ammo.vector(pos.x, pos.y, pos.z),
