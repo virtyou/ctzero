@@ -16,6 +16,8 @@ zero.core.Cloth = CT.Class({
 		opts.numSegsY = opts.height * opts.dmult;
 		if (opts.repeatSegs)
 			opts.repeat = [opts.numSegsZ, opts.numSegsY];
+		if (!opts.displacement)
+			opts.displacement = { x: 0, y: -opts.height, z: 0 };
 		// meh? (frame/scene below)
 		opts.frame = opts.scene;
 		opts.scene = zero.core.camera.scene;
