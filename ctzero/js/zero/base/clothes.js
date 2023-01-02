@@ -129,13 +129,14 @@ zero.base.clothes = {
 zero.base.clothes.head = { // hats
 	conical: {
 		coneGeometry: true,
-		position: [0, 20, 0],
-		scale: [0.5, 0.5, 0.5],
+		position: [0, 30, 0],
+		scale: [0.5, 1, 0.5],
 		parts: [{
 			thing: "Cloth",
 			name: "tassel",
 			height: 24,
-			width: 8
+			width: 8,
+			displacement: { x: 0, y: 20, z: 0 }
 		}]
 	},
 	donut: {
