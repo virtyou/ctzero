@@ -62,7 +62,7 @@ zero.base.clothes = {
 				thing: "Cloth",
 				name: "ribbon",
 				height: 24,
-				width: 8
+				width: 6
 			}]
 		}
 	},
@@ -135,7 +135,7 @@ zero.base.clothes.head = { // hats
 			thing: "Cloth",
 			name: "tassel",
 			height: 24,
-			width: 8,
+			width: 4,
 			displacement: { x: 0, y: 20, z: 0 }
 		}]
 	},
