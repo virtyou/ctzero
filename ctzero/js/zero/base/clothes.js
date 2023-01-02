@@ -7,6 +7,14 @@ zero.base.clothes = {
 			torusGeometry: true,
 			rotation: [2, 0, 0],
 			scale: [0.05, 0.05, 0.05]
+		},
+		cape: {
+			parts: [{
+				thing: "Cloth",
+				name: "cape",
+				height: 40,
+				width: 18
+			}]
 		}
 	},
 	clavicle: {},
@@ -45,7 +53,17 @@ zero.base.clothes = {
 		bracelet: {
 			torusGeometry: true,
 			rotation: [-2, 0, 0],
-			scale: [0.02, 0.02, 0.02]
+			scale: [2, 2, 2]
+		},
+		strip: {
+			torusGeometry: 3,
+			rotation: [-2, 0, 0],
+			parts: [{
+				thing: "Cloth",
+				name: "ribbon",
+				height: 24,
+				width: 6
+			}]
 		}
 	},
 	finger: {
@@ -111,8 +129,15 @@ zero.base.clothes = {
 zero.base.clothes.head = { // hats
 	conical: {
 		coneGeometry: true,
-		position: [0, 20, 0],
-		scale: [0.5, 0.5, 0.5]
+		position: [0, 30, 0],
+		scale: [0.5, 1, 0.5],
+		parts: [{
+			thing: "Cloth",
+			name: "tassel",
+			height: 24,
+			width: 4,
+			displacement: { x: 0, y: 20, z: 0 }
+		}]
 	},
 	donut: {
 		torusGeometry: true,

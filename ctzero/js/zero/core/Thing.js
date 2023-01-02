@@ -480,7 +480,7 @@ zero.core.Thing = CT.Class({
 		});
 	},
 	setGeometry: function(geometry, materials, json) {
-		var oz = this.opts, thiz = this;
+		var oz = this.opts, thiz = this, cfg = core.config.ctzero;
 		this.geojson = json;
 		if (this.thring) {
 			this.thring.geometry.dispose();
@@ -489,6 +489,8 @@ zero.core.Thing = CT.Class({
 		}
 		this.thring = new THREE[oz.meshcat](geometry, this.material);
 		this.thring.frustumCulled = oz.frustumCulled; // should probs usually be default (true)
+		this.thring.castShadow = cfg.shadows && oz.castShadow;
+		this.thring.receiveShadow = cfg.shadows && oz.receiveShadow;
 		this.setBone();
 		for (var m in this.opts.mti)
 			this.morphTargetInfluences(m, this.opts.mti[m]);
@@ -718,8 +720,12 @@ zero.core.Thing = CT.Class({
 			g = oz.torusGeometry;
 //			if (g == true)
 //				g = [1, 1, 1, 1, 1];
-//			oz.geometry = new THREE.TorusGeometry(g[0], g[1], g[2], g[3]);
-			oz.geometry = new THREE.TorusGeometry();
+			if (typeof g == "number")
+				oz.geometry = new THREE.TorusGeometry(g);
+			else if (Array.isArray(g))
+				oz.geometry = new THREE.TorusGeometry(g[0], g[1], g[2], g[3]);
+			else
+				oz.geometry = new THREE.TorusGeometry();
 		}
 		if (oz.icosahedronGeometry)
 			oz.geometry = new THREE.IcosahedronGeometry();
@@ -745,7 +751,11 @@ zero.core.Thing = CT.Class({
 		}
 		if (oz.planeGeometry) {
 			var g = oz.planeGeometry; // better way?
-			oz.geometry = new THREE.PlaneGeometry(g[0] || 100, g[1] || 100);
+			oz.geometry = new THREE.PlaneGeometry(g[0] || 100, g[1] || 100, g[2], g[3]);
+		}
+		if (oz.bufferGeometry) {
+			oz.geometry = (new THREE.BufferGeometry()).fromGeometry(oz.geometry);
+			oz.geometry = THREE.BufferGeometryUtils.mergeVertices(oz.geometry);
 		}
 		if (oz.geometry || oz.stripset) {
 			var meshname = (oz.shader ? "Shader"

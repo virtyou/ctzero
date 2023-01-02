@@ -476,6 +476,7 @@ zero.core.util = {
 	},
 	init: function(onperson, onbuild) {
 		var cfg = core.config.ctzero;
+		zero.core.ammo.init();
 		zero.core.camera.init();
 		zero.core.util.ray = new THREE.Raycaster();
 		zero.core.util.downVec = new THREE.Vector3(0, -1, 0);
@@ -490,7 +491,8 @@ zero.core.util = {
 	    var zcu = zero.core.util, zcc = zero.core.current, dts, rdts, p, t;
 	    requestAnimationFrame(zcu.animate);
 	    if (zcu.now) {
-	    	zcu.rdts = (now - zcu.now) / 1000;
+	    	zcu.dt = now - zcu.now;
+	    	zcu.rdts = zcu.dt / 1000;
 	        zcu.dts = Math.min(zcu.dmax, zcu.rdts);
 	        zcu.slow = zcu.dts > zcu.dslow;
 	    }
@@ -508,6 +510,7 @@ zero.core.util = {
 	    	zcc.people[p].tick(dts);
 	    for (t of zcu._tickers)
 	    	t(dts, rdts);
+	    zero.core.ammo.tick(dts);
 	    zero.core.camera.tick();
 	    zero.core.camera.render();
 	},

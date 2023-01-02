@@ -3,6 +3,7 @@ zero.core.version = "0.1.2";
 CT.require("zero.lib.three");
 CT.require("zero.lib.Projector");
 CT.require("zero.lib.TrackballControls");
+CT.require("zero.lib.BufferGeometryUtils");
 
 CT.require("zero.base.joints");
 CT.require("zero.base.springs");
@@ -14,6 +15,7 @@ CT.require("zero.base.flora");
 CT.require("zero.base.fauna");
 CT.require("zero.base.clothes");
 
+CT.require("zero.core.ammo");
 CT.require("zero.core.util");
 CT.require("zero.core.trig");
 CT.require("zero.core.camera");
@@ -52,6 +54,7 @@ CT.require("zero.core.Strand");
 CT.require("zero.core.Hair");
 CT.require("zero.core.Beard");
 CT.require("zero.core.Tail");
+CT.require("zero.core.Cloth");
 CT.require("zero.core.Garment");
 
 CT.require("zero.core.Torso");
