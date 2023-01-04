@@ -415,8 +415,7 @@ zero.core.Thing = CT.Class({
 		zero.core.util.ontick(this._.shifter);
 	},
 	look: function(pos) {
-//		this.group.lookAt(this.group.worldToLocal(pos)); // ????
-		this.group.lookAt(zero.core.util.vector(this.position(null, true), pos));
+		this.group.lookAt(pos.x, pos.y, pos.z);
 	},
 	// position(), rotation(), scale(): getters _and_ setters
 	position: function(position, world) {
