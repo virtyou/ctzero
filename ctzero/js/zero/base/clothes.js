@@ -9,6 +9,14 @@ zero.base.clothes = {
 			scale: [0.05, 0.05, 0.05]
 		},
 		cape: {
+			boxGeometry: true,
+			scale: [20, 80, 14],
+			position: [0, 0, 2],
+			material: {
+				transparent: true,
+				opacity: 0,
+				color: "#ff0000"
+			},
 			parts: [{
 				thing: "Cloth",
 				name: "cape",
