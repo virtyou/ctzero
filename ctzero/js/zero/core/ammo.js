@@ -23,12 +23,20 @@ zero.core.ammo = {
 		defQuat: {
 			x: 0, y: 0, z: 0, w: 1
 		},
-		rigid: function(s, mass) {
+		shape: function(thring, s) {
+			const t = thring.geometry.type;
+			s = s || thring.scale;
+			if (t == "SphereGeometry")
+				return new Ammo.btSphereShape(thring.geometry.parameters.radius);
+			else // BoxGeometry (default)
+				return new Ammo.btBoxShape(zero.core.ammo.vector(s.x / 2, s.y / 2, s.z / 2));
+		},
+		rigid: function(thring, s, mass) {
 			const ammo = zero.core.ammo, _ = ammo._,
 				transform = ammo.transform(),
 				localInertia = ammo.vector(0, 0, 0),
 				motionState = new Ammo.btDefaultMotionState(transform),
-				colShape = new Ammo.btBoxShape(ammo.vector(s.x / 2, s.y / 2, s.z / 2)); // TODO: other shapes...
+				colShape = _.shape(thring, s);
 			colShape.setMargin(_.consts.margin);
 			colShape.calculateLocalInertia(mass, localInertia);
 			const rbInfo = new Ammo.btRigidBodyConstructionInfo(mass, motionState, colShape, localInertia),
@@ -108,7 +116,7 @@ zero.core.ammo = {
 		thring.position.copy(p);
 		thring.quaternion.copy(q);
 
-		thring.userData.physicsBody = _.rigid(s, mass);
+		thring.userData.physicsBody = _.rigid(thring, s, mass);
 		zero.core.camera.scene.add(thring);
 		mass && _.rigids.push(thring);
 		return thring;
@@ -118,7 +126,7 @@ zero.core.ammo = {
 		thring.getWorldPosition(_.positioner);
 		thring.getWorldQuaternion(_.quatter);
 
-		const body = _.rigid(thring.scale, 1); // FIX: thring.scale seems wrong......
+		const body = _.rigid(thring, null, 1); // FIX: thring.scale seems wrong......
 
 		body.setCollisionFlags(_.FLAGS.CF_KINEMATIC_OBJECT);
 		thring.userData.physicsBody = body;
