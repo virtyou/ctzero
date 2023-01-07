@@ -26,7 +26,7 @@ zero.base.clothes = {
 		spike: {
 			coneGeometry: true,
 			position: [0, 6, 0],
-			scale: [0.1, 0.3, 0.1]
+			scale: [2, 6, 2]
 		},
 		spikes: {
 			sphereGeometry: true,
@@ -34,17 +34,17 @@ zero.base.clothes = {
 			parts: [{
 				coneGeometry: true,
 				position: [0, 1, 0],
-				scale: [0.02, 0.06, 0.02]
+				scale: [0.1, 1.2, 0.1]
 			}, {
 				coneGeometry: true,
 				position: [0, 0.5, 1],
 				rotation: [1, 0, 0],
-				scale: [0.02, 0.06, 0.02]
+				scale: [0.1, 1.2, 0.1]
 			}, {
 				coneGeometry: true,
 				position: [0, 0.5, -1],
 				rotation: [-1, 0, 0],
-				scale: [0.02, 0.06, 0.02]
+				scale: [0.1, 1.2, 0.1]
 			}]
 		}
 	},
@@ -130,7 +130,7 @@ zero.base.clothes.head = { // hats
 	conical: {
 		coneGeometry: true,
 		position: [0, 30, 0],
-		scale: [0.5, 1, 0.5],
+		scale: [10, 20, 10],
 		parts: [{
 			thing: "Cloth",
 			name: "tassel",
@@ -157,25 +157,25 @@ zero.base.clothes.head = { // hats
 			kind: "spike",
 			coneGeometry: true,
 			position: [0, 20, 8],
-			scale: [0.1, 0.5, 0.1]
+			scale: [2, 10, 2]
 		}, {
 			name: "spike2",
 			kind: "spike",
 			coneGeometry: true,
 			position: [0, 20, -8],
-			scale: [0.1, 0.5, 0.1]
+			scale: [2, 10, 2]
 		}, {
 			name: "spike3",
 			kind: "spike",
 			coneGeometry: true,
 			position: [8, 20, 0],
-			scale: [0.1, 0.5, 0.1]
+			scale: [2, 10, 2]
 		}, {
 			name: "spike4",
 			kind: "spike",
 			coneGeometry: true,
 			position: [-8, 20, 0],
-			scale: [0.1, 0.5, 0.1]
+			scale: [2, 10, 2]
 		}]
 	},
 	square: {

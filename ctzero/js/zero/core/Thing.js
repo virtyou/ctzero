@@ -737,7 +737,7 @@ zero.core.Thing = CT.Class({
 			oz.geometry = new THREE.TorusKnotGeometry(g[0], g[1], g[2], g[3]);
 		}
 		if (oz.coneGeometry) {
-			var cgs = (typeof oz.coneGeometry == "number") ? oz.coneGeometry : 20;
+			var cgs = (typeof oz.coneGeometry == "number") ? oz.coneGeometry : 1;
 			oz.geometry = new THREE.ConeGeometry(cgs, cgs * (oz.geomult || 2));
 		}
 		if (oz.cylinderGeometry) {
