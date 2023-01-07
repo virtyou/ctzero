@@ -10,8 +10,8 @@ zero.base.clothes = {
 		},
 		cape: {
 			boxGeometry: true,
-			scale: [20, 80, 14],
-			position: [0, 0, 2],
+			scale: [20, 80, 18],
+			position: [0, 0, 4],
 			material: {
 				transparent: true,
 				opacity: 0,
