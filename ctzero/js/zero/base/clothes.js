@@ -186,7 +186,7 @@ zero.base.clothes.head = { // hats
 			scale: [2, 10, 2]
 		}]
 	},
-	square: {
+	octahedron: {
 		octahedronGeometry: true,
 		position: [0, 15, 0],
 		scale: [15, 15, 15]
