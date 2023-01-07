@@ -23,13 +23,24 @@ zero.core.ammo = {
 		defQuat: {
 			x: 0, y: 0, z: 0, w: 1
 		},
+		geometry2shape: {
+			BoxGeometry: "btBoxShape",
+			SphereGeometry: "btSphereShape",
+			CylinderGeometry: "btCylinderShape"
+		},
 		shape: function(thring, s) {
-			const t = thring.geometry.type;
+			const ammo = zero.core.ammo, _ = ammo._, geo = thring.geometry,
+				t = geo && geo.type, pars = geo && geo.parameters,
+				shaper = Ammo[_.geometry2shape[t] || "btBoxShape"];
 			s = s || thring.scale;
 			if (t == "SphereGeometry")
-				return new Ammo.btSphereShape(thring.geometry.parameters.radius);
-			else // BoxGeometry (default)
-				return new Ammo.btBoxShape(zero.core.ammo.vector(s.x / 2, s.y / 2, s.z / 2));
+				return new shaper(pars.radius);
+			if (t == "CylinderGeometry") {
+				let r = pars.radiusTop;
+				return new shaper(ammo.vector(r, pars.height / 2, r));
+			}
+			// BoxGeometry (default)
+			return new shaper(ammo.vector(s.x / 2, s.y / 2, s.z / 2));
 		},
 		rigid: function(thring, s, mass) {
 			const ammo = zero.core.ammo, _ = ammo._,
