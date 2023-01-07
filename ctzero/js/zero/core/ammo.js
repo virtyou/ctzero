@@ -25,6 +25,7 @@ zero.core.ammo = {
 		},
 		geometry2shape: {
 			BoxGeometry: "btBoxShape",
+			ConeGeometry: "btConeShape",
 			SphereGeometry: "btSphereShape",
 			CylinderGeometry: "btCylinderShape"
 		},
@@ -35,6 +36,8 @@ zero.core.ammo = {
 			s = s || thring.scale;
 			if (t == "SphereGeometry")
 				return new shaper(pars.radius);
+			if (t == "ConeGeometry")
+				return new shaper(pars.radius, pars.height);
 			if (t == "CylinderGeometry") {
 				let r = pars.radiusTop;
 				return new shaper(ammo.vector(r, pars.height / 2, r));
