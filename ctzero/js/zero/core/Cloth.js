@@ -18,8 +18,8 @@ zero.core.Cloth = CT.Class({
 			opts.repeat = [opts.numSegsZ, opts.numSegsY];
 		if (!opts.displacement)
 			opts.displacement = { x: 0, y: -opts.height, z: 0 };
-		// meh? (frame/scene below)
-		opts.frame = opts.scene;
+		if (!opts.frame)
+			opts.frame = opts.scene;
 		opts.scene = zero.core.camera.scene;
 		this.opts = opts = CT.merge(opts, {
 			matcat: "Lambert",
