@@ -146,6 +146,10 @@ zero.core.ammo = {
 		thring.userData.physicsBody = body;
 		_.kinematics.push(thring);
 	},
+	kineBody: function(thring) {
+		thring.userData.physicsBody || zero.core.ammo.kinematic(thring);
+		return thring.userData.physicsBody;
+	},
 	hinge: function(r1, r2, p1, p2, axis) {
 		const ammo = zero.core.ammo;
 		axis = axis || ammo.vector(0, 1, 0);
@@ -182,25 +186,29 @@ zero.core.ammo = {
 		softBody.setActivationState(_.STATE.DISABLE_DEACTIVATION);
 		_.softs.push(cloth.thring);
 		if (anchor) {
-			anchor.userData.physicsBody || ammo.kinematic(anchor);
-			const abod = anchor.userData.physicsBody,
-				anx = [];
-			anchorPoints = anchorPoints || "ends";
-			if (anchorPoints == "full")
-				for (let i = 0; i <= coz.numSegsZ; i++)
-					anx.push(i);
-			else if (anchorPoints == "ends") {
-				anx.push(0);
-				anx.push(coz.numSegsZ);
-			} else if (anchorPoints == "start")
-				anx.push(0);
-			else if (anchorPoints == "end")
-				anx.push(coz.numSegsZ);
-			else if (anchorPoints == "mid")
-				anx.push(Math.floor(coz.numSegsZ / 2));
-			else
-				anx = anchorPoints;
-			anx.forEach(a => softBody.appendAnchor(a, abod, false, consts.anchorInfluence));
+			if (Array.isArray(anchor)) {
+				const aseg = coz.numSegsZ / anchor.length;
+				anchor.forEach((a, i) => softBody.appendAnchor(aseg * i,
+					ammo.kineBody(coz.garment[a].thring), false, consts.anchorInfluence));
+			} else {
+				const abod = ammo.kineBody(anchor), anx = [];
+				anchorPoints = anchorPoints || "ends";
+				if (anchorPoints == "full")
+					for (let i = 0; i <= coz.numSegsZ; i++)
+						anx.push(i);
+				else if (anchorPoints == "ends") {
+					anx.push(0);
+					anx.push(coz.numSegsZ);
+				} else if (anchorPoints == "start")
+					anx.push(0);
+				else if (anchorPoints == "end")
+					anx.push(coz.numSegsZ);
+				else if (anchorPoints == "mid")
+					anx.push(Math.floor(coz.numSegsZ / 2));
+				else
+					anx = anchorPoints;
+				anx.forEach(a => softBody.appendAnchor(a, abod, false, consts.anchorInfluence));
+			}
 		}
 		return softBody;
 	},
