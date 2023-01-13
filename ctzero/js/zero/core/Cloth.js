@@ -1,6 +1,7 @@
 zero.core.Cloth = CT.Class({
 	CLASSNAME: "zero.core.Cloth",
 	onremove: function() {
+		delete this.opts.garment; // otherwise circular
 		zero.core.ammo.unSoft(this.thring);
 		zero.core.ammo.unKinematic(this.opts.frame);
 	},
