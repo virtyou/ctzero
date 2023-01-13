@@ -1,7 +1,23 @@
 zero.base.clothes = {
 	pelvis: {},
 	lumbar: {},
-	ribs: {},
+	ribs: {
+		apron: {
+			boxGeometry: true,
+			scale: [10, 30, 20],
+			position: [0, 0, -3],
+			material: {
+				transparent: true,
+				opacity: 0
+			},
+			parts: [{
+				thing: "Cloth",
+				name: "cloth",
+				height: 15,
+				width: 18
+			}]
+		}
+	},
 	neck: {
 		necklace: {
 			torusGeometry: true,
