@@ -2,9 +2,11 @@ zero.core.Garment = CT.Class({
 	CLASSNAME: "zero.core.Garment",
 	preassemble: function() {
 		var i, oz = this.opts, pz = oz.parts;
-		if (!oz.texture) return;
-		for (i = 0; i < pz.length; i++)
-			pz[i].texture = oz.texture;
+		for (i = 0; i < pz.length; i++) {
+			pz[i].garment = this;
+			if (oz.texture)
+				pz[i].texture = oz.texture;
+		}
 	},
 	setTexture: function(tx) {
 		var uobj = { texture: tx };
