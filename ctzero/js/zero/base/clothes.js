@@ -168,12 +168,22 @@ zero.base.clothes.head = { // hats
 		rotation: [1, 0, 0],
 		position: [0, 10, 0],
 		scale: [10, 10, 10],
+		rigids: ["sphere"],
 		parts: [{
+			name: "sphere",
+			sphereGeometry: 8,
+			position: [0, 0, 0.8],
+			scale: [0.1, 0.1, 0.1],
+			material: {
+				transparent: true,
+				opacity: 0
+			}
+		}, {
 			thing: "Cloth",
 			name: "veil",
 			height: 16,
 			width: 16,
-			displacement: { x: 0, y: 0, z: 20 },
+			displacement: { x: 0, y: 0, z: 10 },
 			material: {
 				transparent: true,
 				opacity: 0.5
