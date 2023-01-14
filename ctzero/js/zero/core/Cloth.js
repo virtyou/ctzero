@@ -6,7 +6,7 @@ zero.core.Cloth = CT.Class({
 		zero.core.ammo.unKinematic(this.opts.frame);
 	},
 	postassemble: function() {
-		var oz = this.opts;
+		const oz = this.opts;
 		this.softBody = zero.core.ammo.softBody(this, oz.frame, oz.anchorPoints);
 	},
 	init: function(opts) { // should translate geometry?
