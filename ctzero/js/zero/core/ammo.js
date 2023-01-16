@@ -58,6 +58,21 @@ zero.core.ammo = {
 			mass && body.setActivationState(_.STATE.DISABLE_DEACTIVATION);
 			_.physicsWorld.addRigidBody(body);
 			return body;
+		},
+		patch: function(cloth) {
+			const ammo = zero.core.ammo, _ = ammo._,
+				coz = cloth.opts, width = coz.width, height = coz.height,
+				pos = coz.displacement, hw = width / 2,
+				evenX = coz.flatZ ? pos.x : (pos.x - hw),
+				oddX = coz.flatZ ? pos.x : (pos.x + hw),
+				evenZ = coz.flatZ ? (pos.z - hw) : pos.z,
+				oddZ = coz.flatZ ? (pos.z + hw) : pos.z,
+				c00 = ammo.vector(evenX, pos.y + height, evenZ),
+				c01 = ammo.vector(oddX, pos.y + height, oddZ),
+				c10 = ammo.vector(evenX, pos.y, evenZ),
+				c11 = ammo.vector(oddX, pos.y, oddZ);
+			return _.softBodyHelpers.CreatePatch(_.physicsWorld.getWorldInfo(),
+					c00, c01, c10, c11, coz.numSegsZ + 1, coz.numSegsY + 1, 0, true);
 		}
 	},
 	setConst: function(k, v) {
@@ -160,18 +175,7 @@ zero.core.ammo = {
 	},
 	softBody: function(cloth, anchor, anchorPoints) {
 		const ammo = zero.core.ammo, _ = ammo._, consts = _.consts,
-			coz = cloth.opts, width = coz.width, height = coz.height,
-			pos = coz.displacement, hw = width / 2,
-			evenX = coz.flatZ ? pos.x : (pos.x - hw),
-			oddX = coz.flatZ ? pos.x : (pos.x + hw),
-			evenZ = coz.flatZ ? (pos.z - hw) : pos.z,
-			oddZ = coz.flatZ ? (pos.z + hw) : pos.z,
-			c00 = ammo.vector(evenX, pos.y + height, evenZ),
-			c01 = ammo.vector(oddX, pos.y + height, oddZ),
-			c10 = ammo.vector(evenX, pos.y, evenZ),
-			c11 = ammo.vector(oddX, pos.y, oddZ),
-			softBody = _.softBodyHelpers.CreatePatch(_.physicsWorld.getWorldInfo(),
-				c00, c01, c10, c11, coz.numSegsZ + 1, coz.numSegsY + 1, 0, true),
+			coz = cloth.opts, softBody = _.patch(cloth),
 			sbcfg = softBody.get_m_cfg();
 
 		sbcfg.set_viterations(10);
