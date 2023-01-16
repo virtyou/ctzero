@@ -4,8 +4,8 @@ zero.base.clothes = {
 	ribs: {
 		apron: {
 			boxGeometry: true,
-			scale: [10, 30, 20],
-			position: [0, 0, -3],
+			scale: [10, 30, 10],
+			position: [0, 0, 2.5],
 			material: {
 				transparent: true,
 				opacity: 0
@@ -14,7 +14,8 @@ zero.base.clothes = {
 				thing: "Cloth",
 				name: "cloth",
 				height: 15,
-				width: 18
+				width: 18,
+				displacement: { x: 0, y: -10, z: 6 }
 			}]
 		}
 	},
