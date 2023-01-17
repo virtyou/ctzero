@@ -40,6 +40,25 @@ zero.base.clothes = {
 				height: 40,
 				width: 18
 			}]
+		},
+		cloak: {
+			boxGeometry: true,
+			scale: [20, 40, 18],
+			position: [0, -20, 0],
+			material: {
+				transparent: true,
+				opacity: 0,
+				color: "#ff0000"
+			},
+			parts: [{
+				thing: "Cloth",
+				name: "cloak",
+				height: 80,
+				width: 80,
+				flatDim: "y",
+				anchorPoints: "none",
+				displacement: { x: 0, y: 40, z: 0 }
+			}]
 		}
 	},
 	clavicle: {},
