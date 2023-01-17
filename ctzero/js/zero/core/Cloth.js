@@ -5,9 +5,16 @@ zero.core.Cloth = CT.Class({
 		zero.core.ammo.unSoft(this.thring);
 		zero.core.ammo.unKinematic(this.opts.frame);
 	},
+	modsoft: function(tweaks) {
+		const sbcfg = this.softBody.get_m_cfg();
+		for (let pname in tweaks)
+			sbcfg["set_" + pname](tweaks[pname]);
+	},
 	postassemble: function() {
 		const oz = this.opts;
 		this.softBody = zero.core.ammo.softBody(this, oz.frame, oz.anchorPoints);
+		oz.tweaks && this.modsoft(oz.tweaks);
+		oz.postTweaks && setTImeout(() => this.modsoft(oz.postTweaks), 5000);
 	},
 	init: function(opts) { // should translate geometry?
 		opts.dmult = opts.dmult || 1; // example has 5
