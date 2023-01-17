@@ -23,6 +23,7 @@ zero.core.Cloth = CT.Class({
 			opts.frame = opts.scene;
 		opts.scene = zero.core.camera.scene;
 		this.opts = opts = CT.merge(opts, {
+			flatDim: "z",
 			matcat: "Lambert",
 			anchorPoints: "ends",
 			bufferGeometry: true,

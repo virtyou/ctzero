@@ -60,15 +60,30 @@ zero.core.ammo = {
 			return body;
 		},
 		patch: function(cloth) {
-			const ammo = zero.core.ammo, _ = ammo._,
-				coz = cloth.opts, width = coz.width, height = coz.height,
-				pos = coz.displacement, hw = width / 2,
-				evenX = coz.flatZ ? pos.x : (pos.x - hw),
-				oddX = coz.flatZ ? pos.x : (pos.x + hw),
-				evenZ = coz.flatZ ? (pos.z - hw) : pos.z,
-				oddZ = coz.flatZ ? (pos.z + hw) : pos.z,
-				c00 = ammo.vector(evenX, pos.y + height, evenZ),
-				c01 = ammo.vector(oddX, pos.y + height, oddZ),
+			const ammo = zero.core.ammo, _ = ammo._, coz = cloth.opts,
+				width = coz.width, height = coz.height,
+				pos = coz.displacement, fdim = coz.flatDim,
+				hw = width / 2, hh = height / 2, fy = fdim == "y",
+				y01 = fy ? pos.y : (pos.y + height);
+
+			let evenX, oddX, evenZ, oddZ;
+			evenX = oddX = pos.x;
+			evenZ = oddZ = pos.z;
+			if (fy) {
+				evenX -= hw;
+				oddX += hw;
+				evenZ += hh;
+				oddZ -= hh;
+			} else if (fdim == "x") {
+				evenZ += hw;
+				oddZ -= hw;
+			} else {
+				evenX -= hw;
+				oddX += hw;
+			}
+
+			const c00 = ammo.vector(evenX, y01, evenZ),
+				c01 = ammo.vector(oddX, y01, oddZ),
 				c10 = ammo.vector(evenX, pos.y, evenZ),
 				c11 = ammo.vector(oddX, pos.y, oddZ);
 			return _.softBodyHelpers.CreatePatch(_.physicsWorld.getWorldInfo(),
