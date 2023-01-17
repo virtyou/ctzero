@@ -62,9 +62,15 @@ zero.core.ammo = {
 		patch: function(cloth) {
 			const ammo = zero.core.ammo, _ = ammo._, coz = cloth.opts,
 				width = coz.width, height = coz.height,
-				pos = coz.displacement, fdim = coz.flatDim,
-				hw = width / 2, hh = height / 2, fy = fdim == "y",
-				y01 = fy ? pos.y : (pos.y + height);
+				pos = coz.displacement, winfo = _.physicsWorld.getWorldInfo();
+
+			if (coz.ellipsoid) // ellipsoid  is jank and seems broken....
+				return _.softBodyHelpers.CreateEllipsoid(winfo,
+					ammo.vector(pos.x, pos.y, pos.z),
+					ammo.vector(cloth.scale.x, cloth.scale.y, cloth.scale.z), 16);
+
+			const fdim = coz.flatDim, hw = width / 2, hh = height / 2,
+				fy = fdim == "y", y01 = fy ? pos.y : (pos.y + height);
 
 			let evenX, oddX, evenZ, oddZ;
 			evenX = oddX = pos.x;
@@ -83,10 +89,10 @@ zero.core.ammo = {
 			}
 
 			const c00 = ammo.vector(evenX, y01, evenZ),
-				c01 = ammo.vector(oddX, y01, oddZ),
-				c10 = ammo.vector(evenX, pos.y, evenZ),
+				c01 = ammo.vector(oddX, y01, evenZ),
+				c10 = ammo.vector(evenX, pos.y, oddZ),
 				c11 = ammo.vector(oddX, pos.y, oddZ);
-			return _.softBodyHelpers.CreatePatch(_.physicsWorld.getWorldInfo(),
+			return _.softBodyHelpers.CreatePatch(winfo,
 					c00, c01, c10, c11, coz.numSegsZ + 1, coz.numSegsY + 1, 0, true);
 		}
 	},
@@ -170,7 +176,7 @@ zero.core.ammo = {
 		thring.getWorldPosition(_.positioner);
 		thring.getWorldQuaternion(_.quatter);
 
-		const body = _.rigid(thring, null, 1); // FIX: thring.scale seems wrong......
+		const body = _.rigid(thring, null, 1);
 
 		body.setCollisionFlags(_.FLAGS.CF_KINEMATIC_OBJECT);
 		thring.userData.physicsBody = body;
@@ -205,15 +211,17 @@ zero.core.ammo = {
 		softBody.setActivationState(_.STATE.DISABLE_DEACTIVATION);
 		_.softs.push(cloth.thring);
 		if (anchor) {
+			const endPoint = coz.numSegzZ * coz.numSegzY;
 			if (Array.isArray(anchor)) {
-				const aseg = coz.numSegsZ / anchor.length;
+				const aseg = endPoint / anchor.length;
 				anchor.forEach((a, i) => softBody.appendAnchor(aseg * i,
 					ammo.kineBody(coz.garment[a].thring), false, consts.anchorInfluence));
 			} else {
-				const abod = ammo.kineBody(anchor), anx = [];
+				const abod = ammo.kineBody(anchor);
+				let i, anx = [];
 				anchorPoints = anchorPoints || "ends";
 				if (anchorPoints == "full")
-					for (let i = 0; i <= coz.numSegsZ; i++)
+					for (i = 0; i <= coz.numSegsZ; i++)
 						anx.push(i);
 				else if (anchorPoints == "ends") {
 					anx.push(0);
@@ -224,9 +232,18 @@ zero.core.ammo = {
 					anx.push(coz.numSegsZ);
 				else if (anchorPoints == "mid")
 					anx.push(Math.floor(coz.numSegsZ / 2));
+				else if (anchorPoints == "center")
+					anx.push(Math.floor(endPoint / 2));
+				else if (anchorPoints == "corners") {
+					anx.push(0);
+					anx.push(coz.numSegsZ);
+					anx.push(endPoint - coz.numSegsZ);
+					anx.push(endPoint);
+				}
 				else
 					anx = anchorPoints;
-				anx.forEach(a => softBody.appendAnchor(a, abod, false, consts.anchorInfluence));
+				if (anx != "none")
+					anx.forEach(a => softBody.appendAnchor(a, abod, false, consts.anchorInfluence));
 			}
 		}
 		return softBody;
