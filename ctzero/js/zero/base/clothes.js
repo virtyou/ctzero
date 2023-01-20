@@ -57,7 +57,7 @@ zero.base.clothes = {
 				width: 80,
 				flatDim: "y",
 				anchorPoints: "none",
-				displacement: { x: 0, y: 40, z: 0 }
+				displacement: { x: 0, y: 0, z: 0 }
 			}]
 		}
 	},
