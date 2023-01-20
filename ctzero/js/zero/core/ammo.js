@@ -61,10 +61,17 @@ zero.core.ammo = {
 			_.physicsWorld.addRigidBody(body);
 			return body;
 		},
-		patch: function(cloth) {
+		patch: function(cloth, anchor, anchorPoints) {
 			const ammo = zero.core.ammo, _ = ammo._, coz = cloth.opts,
 				width = coz.width, height = coz.height,
 				pos = coz.displacement, winfo = _.physicsWorld.getWorldInfo();
+
+			if (anchorPoints == "none") {
+				let offer = anchor.getWorldPosition(_.positioner);
+				["x", "y", "z"].forEach(function(d) {
+					pos[d] += offer[d];
+				});
+			}
 
 			if (coz.ellipsoid) // ellipsoid  is jank and seems broken....
 				return _.softBodyHelpers.CreateEllipsoid(winfo,
@@ -110,19 +117,19 @@ zero.core.ammo = {
 	unKinematic: function(k) {
 		CT.data.remove(zero.core.ammo._.kinematics, k);
 	},
-	tick: function(dts) {
+	tick: function(dt) {
 		const ammo = zero.core.ammo, _ = ammo._;
 		if (!_.softs.length && !_.kinematics.length) return;
 		let k, s, r;
 		for (k of _.kinematics)
-			ammo.tickKinematic(k, dts);
-		_.physicsWorld.stepSimulation(dts, 10);
+			ammo.tickKinematic(k);
+		_.physicsWorld.stepSimulation(dt, 10);
 		for (s of _.softs)
-			ammo.tickSoft(s, dts);
+			ammo.tickSoft(s);
 		for (r of _.rigids)
-			ammo.tickRigid(r, dts);
+			ammo.tickRigid(r);
 	},
-	tickSoft: function(s, dts) {
+	tickSoft: function(s) {
 		const geo = s.geometry,
 			attrs = geo.attributes,
 			pos = attrs.position,
@@ -141,12 +148,12 @@ zero.core.ammo = {
 //		geo.computeFaceNormals();
 		pos.needsUpdate = attrs.normal.needsUpdate = true;
 	},
-	tickKinematic: function(k, dts) {
+	tickKinematic: function(k) {
 		const ammo = zero.core.ammo, _ = ammo._,
 			ms = k.userData.physicsBody.getMotionState();
 		ms && ms.setWorldTransform(ammo.kinemaTrans(k));
 	},
-	tickRigid: function(r, dts) {
+	tickRigid: function(r) {
 		const _ = zero.core.ammo._,
 			ms = r.userData.physicsBody.getMotionState();
 		if (ms) {
@@ -198,7 +205,7 @@ zero.core.ammo = {
 	},
 	softBody: function(cloth, anchor, anchorPoints) {
 		const ammo = zero.core.ammo, _ = ammo._, consts = _.consts,
-			coz = cloth.opts, softBody = _.patch(cloth),
+			coz = cloth.opts, softBody = _.patch(cloth, anchor, anchorPoints),
 			sbcfg = softBody.get_m_cfg();
 
 		sbcfg.set_viterations(10);
