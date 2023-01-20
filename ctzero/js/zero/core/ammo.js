@@ -63,7 +63,7 @@ zero.core.ammo = {
 		},
 		patch: function(cloth) {
 			const ammo = zero.core.ammo, _ = ammo._, coz = cloth.opts,
-				width = coz.numSegsZ, height = coz.numSegsY,
+				width = coz.width, height = coz.height,
 				pos = coz.displacement, winfo = _.physicsWorld.getWorldInfo();
 
 			if (coz.ellipsoid) // ellipsoid  is jank and seems broken....
