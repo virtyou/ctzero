@@ -38,7 +38,8 @@ zero.base.clothes = {
 				thing: "Cloth",
 				name: "cape",
 				height: 40,
-				width: 18
+				width: 18,
+				displacement: { x: 0, y: -40, z: -6 }
 			}]
 		},
 		cloak: {
@@ -184,7 +185,7 @@ zero.base.clothes.head = { // hats
 			name: "tassel",
 			height: 24,
 			width: 4,
-			displacement: { x: 0, y: 20, z: 0 }
+			displacement: { x: 0, y: 0, z: 0 }
 		}]
 	},
 	donut: {
@@ -207,7 +208,7 @@ zero.base.clothes.head = { // hats
 			name: "veil",
 			height: 16,
 			width: 16,
-			displacement: { x: 0, y: 0, z: 10 },
+			displacement: { x: 0, y: -10, z: 10 },
 			material: {
 				transparent: true,
 				opacity: 0.5
