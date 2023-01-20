@@ -53,11 +53,15 @@ zero.base.clothes = {
 			parts: [{
 				thing: "Cloth",
 				name: "cloak",
-				height: 80,
-				width: 80,
+				height: 100,
+				width: 100,
+				segLen: 5,
 				flatDim: "y",
 				anchorPoints: "none",
-				displacement: { x: 0, y: 0, z: 0 }
+				displacement: { x: 0, y: 20, z: 0 },
+				tweaks: {
+					kDF: 1
+				}
 			}]
 		}
 	},
