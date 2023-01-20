@@ -15,7 +15,7 @@ zero.core.Cloth = CT.Class({
 		this.softBody = zero.core.ammo.softBody(this, oz.frame, oz.anchorPoints);
 		oz.tweaks && this.modsoft(oz.tweaks);
 		oz.postTweaks && setTimeout(() => this.modsoft(oz.postTweaks), 5000);
-		this.thring.material.transparent = oz.reallyTrans;
+		this.thring.material.transparent = oz.reallyTrans || false;
 	},
 	postassemble: function() {
 		core.config.ctzero.gravity ? setTimeout(this.setsoft, 500) : this.setsoft();
