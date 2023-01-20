@@ -45,7 +45,7 @@ zero.core.ammo = {
 			// BoxGeometry (default)
 			return new shaper(ammo.vector(s.x / 2, s.y / 2, s.z / 2));
 		},
-		rigid: function(thring, s, mass) {
+		rigid: function(thring, s, mass, friction) {
 			const ammo = zero.core.ammo, _ = ammo._,
 				transform = ammo.transform(),
 				localInertia = ammo.vector(0, 0, 0),
@@ -53,8 +53,10 @@ zero.core.ammo = {
 				colShape = _.shape(thring, s);
 			colShape.setMargin(_.consts.margin);
 			colShape.calculateLocalInertia(mass, localInertia);
-			const rbInfo = new Ammo.btRigidBodyConstructionInfo(mass, motionState, colShape, localInertia),
-				body = new Ammo.btRigidBody(rbInfo);
+			const rbInfo = new Ammo.btRigidBodyConstructionInfo(mass, motionState, colShape, localInertia);
+			if (friction)
+				rbInfo.m_friction = friction;
+			const body = new Ammo.btRigidBody(rbInfo);
 			mass && body.setActivationState(_.STATE.DISABLE_DEACTIVATION);
 			_.physicsWorld.addRigidBody(body);
 			return body;
@@ -155,7 +157,7 @@ zero.core.ammo = {
 			r.quaternion.set(q.x(), q.y(), q.z(), q.w());
 		}
 	},
-	rigid: function(mass, p, s, q, mat) { // creates thring
+	rigid: function(mass, p, s, q, mat, friction) { // creates thring
 		const _ = zero.core.ammo._;
 		q = q || _.defQuat;
 		mat = mat || new THREE.MeshPhongMaterial( { color: 0xFFFFFF } );
@@ -166,24 +168,24 @@ zero.core.ammo = {
 		thring.position.copy(p);
 		thring.quaternion.copy(q);
 
-		thring.userData.physicsBody = _.rigid(thring, s, mass);
+		thring.userData.physicsBody = _.rigid(thring, s, mass, friction);
 		zero.core.camera.scene.add(thring);
 		mass && _.rigids.push(thring);
 		return thring;
 	},
-	kinematic: function(thring) { // adapts thring
+	kinematic: function(thring, friction) { // adapts thring
 		const _ = zero.core.ammo._;
 		thring.getWorldPosition(_.positioner);
 		thring.getWorldQuaternion(_.quatter);
 
-		const body = _.rigid(thring, null, 1);
+		const body = _.rigid(thring, null, 1, friction);
 
 		body.setCollisionFlags(_.FLAGS.CF_KINEMATIC_OBJECT);
 		thring.userData.physicsBody = body;
 		_.kinematics.push(thring);
 	},
-	kineBody: function(thring) {
-		thring.userData.physicsBody || zero.core.ammo.kinematic(thring);
+	kineBody: function(thring, friction) {
+		thring.userData.physicsBody || zero.core.ammo.kinematic(thring, friction);
 		return thring.userData.physicsBody;
 	},
 	hinge: function(r1, r2, p1, p2, axis) {
