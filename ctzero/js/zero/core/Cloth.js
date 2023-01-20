@@ -15,7 +15,7 @@ zero.core.Cloth = CT.Class({
 		this.softBody = zero.core.ammo.softBody(this, oz.frame, oz.anchorPoints);
 		oz.tweaks && this.modsoft(oz.tweaks);
 		oz.postTweaks && setTimeout(() => this.modsoft(oz.postTweaks), 5000);
-		this.thring.material.transparent = false;
+		this.thring.material.transparent = oz.reallyTrans;
 	},
 	postassemble: function() {
 		core.config.ctzero.gravity ? setTimeout(this.setsoft, 500) : this.setsoft();
@@ -33,6 +33,7 @@ zero.core.Cloth = CT.Class({
 		if (!opts.frame)
 			opts.frame = opts.scene;
 		opts.scene = zero.core.camera.scene;
+		opts.reallyTrans = opts.material && opts.material.transparent;
 		this.opts = opts = CT.merge(opts, {
 			flatDim: "z",
 			matcat: "Lambert",
