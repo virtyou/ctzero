@@ -10,7 +10,7 @@ zero.core.Garment = CT.Class({
 			if (oz.texture)
 				p.texture = oz.texture;
 			if (rz.includes(p.name))
-				p.onbuild = (thing) => ammo.kineBody(thing.thring);
+				p.onbuild = (thing) => ammo.kineBody(thing.thring, thing.opts.friction);
 		}
 	},
 	setTexture: function(tx) {
