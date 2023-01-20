@@ -17,11 +17,11 @@ zero.core.Cloth = CT.Class({
 		oz.postTweaks && setTImeout(() => this.modsoft(oz.postTweaks), 5000);
 	},
 	init: function(opts) { // should translate geometry?
-		opts.dmult = opts.dmult || 1; // example has 5
+		opts.segLen = opts.segLen || 1;
 		opts.width = opts.width || 4;
 		opts.height = opts.height || 3;
-		opts.numSegsZ = opts.width * opts.dmult;
-		opts.numSegsY = opts.height * opts.dmult;
+		opts.numSegsZ = opts.width / opts.segLen;
+		opts.numSegsY = opts.height / opts.segLen;
 		if (opts.repeatSegs)
 			opts.repeat = [opts.numSegsZ, opts.numSegsY];
 		if (!opts.displacement)
