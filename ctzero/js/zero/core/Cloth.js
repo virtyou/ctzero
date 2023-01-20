@@ -10,11 +10,15 @@ zero.core.Cloth = CT.Class({
 		for (let pname in tweaks)
 			sbcfg["set_" + pname](tweaks[pname]);
 	},
-	postassemble: function() {
+	setsoft: function() {
 		const oz = this.opts;
 		this.softBody = zero.core.ammo.softBody(this, oz.frame, oz.anchorPoints);
 		oz.tweaks && this.modsoft(oz.tweaks);
-		oz.postTweaks && setTImeout(() => this.modsoft(oz.postTweaks), 5000);
+		oz.postTweaks && setTimeout(() => this.modsoft(oz.postTweaks), 5000);
+		this.thring.material.transparent = false;
+	},
+	postassemble: function() {
+		core.config.ctzero.gravity ? setTimeout(this.setsoft, 500) : this.setsoft();
 	},
 	init: function(opts) { // should translate geometry?
 		opts.segLen = opts.segLen || 1;
@@ -36,6 +40,8 @@ zero.core.Cloth = CT.Class({
 			bufferGeometry: true,
 			planeGeometry: [opts.width, opts.height, opts.numSegsZ, opts.numSegsY],
 			material: {
+				transparent: true,
+				opacity: 0,
 				side: THREE.DoubleSide
 			}
 		}, this.opts);
