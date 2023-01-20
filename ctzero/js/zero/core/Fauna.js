@@ -326,9 +326,11 @@ zero.core.Fauna.sets = {
 	}
 };
 zero.core.Fauna.setter = "menagerie";
+zero.core.Fauna.kinds = ["horse", "moth", "snake", "spider", "ant", "centipede", "lizard", "cow", "eel", "fish", "bee", "wasp", "rat", "bat", "bird", "cat", "dog", "pig", "sheep", "chicken", "bunny"];
 zero.core.Fauna.Menagerie = CT.Class({
 	CLASSNAME: "zero.core.Fauna.Menagerie",
-	kinds: ["horse", "moth", "snake", "spider", "ant", "centipede", "lizard", "cow", "eel", "fish", "bee", "wasp", "rat", "bat", "bird", "cat", "dog", "pig", "sheep", "chicken", "bunny"],
+	kinds: zero.core.Fauna.kinds,
+	sets: zero.core.Fauna.sets,
 	counts: {
 		ant: 1,
 		moth: 1,
@@ -339,7 +341,6 @@ zero.core.Fauna.Menagerie = CT.Class({
 		lizard: 1,
 		cow: 1
 	},
-	sets: zero.core.Fauna.sets,
 	member: "Fauna",
 	removables: false,
 	tick: function(dts) {

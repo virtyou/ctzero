@@ -220,15 +220,16 @@ zero.core.Flora.sets = {
 	}
 };
 zero.core.Flora.setter = "garden";
+zero.core.Flora.kinds = ["tree", "bush", "flower"];
 zero.core.Flora.Garden = CT.Class({
 	CLASSNAME: "zero.core.Flora.Garden",
-	kinds: ["tree", "bush", "flower"],
+	kinds: zero.core.Flora.kinds,
+	sets: zero.core.Flora.sets,
 	counts: {
 		flower: 10,
 		bush: 4,
 		tree: 2
 	},
-	sets: zero.core.Flora.sets,
 	member: "Flora",
 	removables: false,
 	onremove: function() {
