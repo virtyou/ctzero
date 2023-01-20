@@ -89,11 +89,18 @@ zero.core.Collection = CT.Class({
 		}
 		this.awaitBound && r.onbounded(this.boundize);
 	},
+	collect: function(collection) {
+		if (!Array.isArray(collection))
+			return collection ? this.sets[collection] : this.counts;
+		var col = {}, kind;
+		for (kind of collection)
+			col[kind] = 1;
+		return col;
+	},
 	init: function(opts) {
 		this.opts = CT.merge(opts, {
 			mode: "random", // |rows|cols
-		}, opts.collection ? this.sets[opts.collection]
-			: this.counts, this.opts);
+		}, this.collect(opts.collection), this.opts);
 		if (opts.within)
 			this.within = opts.within;
 		this.members = [];
