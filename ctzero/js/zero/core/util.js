@@ -510,7 +510,7 @@ zero.core.util = {
 	    	zcc.people[p].tick(dts);
 	    for (t of zcu._tickers)
 	    	t(dts, rdts);
-	    zero.core.ammo.tick(dts);
+	    zero.core.ammo.tick(zcu.dt);
 	    zero.core.camera.tick();
 	    zero.core.camera.render();
 	},
