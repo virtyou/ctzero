@@ -19,7 +19,7 @@ var F = zero.core.Fauna = CT.Class({
 			delete this.direction;
 		}
 		if (!this.direction)
-			this.direction = this.group.getWorldDirection();
+			this.direction = this.group.getWorldDirection(zcu._positioner);
 		this.adjust("position", "x", amount * this.direction.x, true);
 		this.adjust("position", "z", amount * this.direction.z, true);
 	},
