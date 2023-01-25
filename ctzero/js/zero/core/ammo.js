@@ -10,7 +10,7 @@ zero.core.ammo = {
 		kinematics: [],
 		consts: {
 			margin: 0.05,
-			damping: 0.01,
+			damping: 0,//.01,
 			anchorInfluence: 0.5,
 			gravityConstant: -9.8
 		},
@@ -209,7 +209,7 @@ zero.core.ammo = {
 		sbcfg.set_viterations(10);
 		sbcfg.set_piterations(10);
 
-		sbcfg.set_kDP(consts.damping);
+		consts.damping && sbcfg.set_kDP(consts.damping);
 
 		softBody.setTotalMass(0.9, false);
 		Ammo.castObject(softBody, Ammo.btCollisionObject).getCollisionShape().setMargin(consts.margin * 3);
