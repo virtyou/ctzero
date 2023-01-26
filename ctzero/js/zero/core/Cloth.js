@@ -21,9 +21,9 @@ zero.core.Cloth = CT.Class({
 		core.config.ctzero.gravity ? setTimeout(this.setsoft, 1000) : this.setsoft();
 	},
 	init: function(opts) { // should translate geometry?
-		opts.segLen = opts.segLen || 1;
-		opts.width = opts.width || 4;
-		opts.height = opts.height || 3;
+		opts.segLen = opts.segLen || 4;
+		opts.width = opts.width || 8;
+		opts.height = opts.height || 8;
 		opts.numSegsZ = opts.width / opts.segLen;
 		opts.numSegsY = opts.height / opts.segLen;
 		if (opts.repeatSegs)

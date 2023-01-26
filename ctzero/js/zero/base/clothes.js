@@ -13,8 +13,8 @@ zero.base.clothes = {
 			parts: [{
 				thing: "Cloth",
 				name: "cloth",
-				height: 15,
-				width: 18,
+				height: 16,
+				width: 20,
 				displacement: { x: 0, y: -10, z: 6 }
 			}]
 		}
@@ -38,8 +38,8 @@ zero.base.clothes = {
 				thing: "Cloth",
 				name: "cape",
 				height: 40,
-				width: 18,
-				displacement: { x: 0, y: -40, z: -6 }
+				width: 20,
+				displacement: { x: 0, y: -40, z: -10 }
 			}]
 		},
 		cloak: {
@@ -111,7 +111,7 @@ zero.base.clothes = {
 				thing: "Cloth",
 				name: "ribbon",
 				height: 24,
-				width: 6
+				width: 8
 			}]
 		}
 	},
