@@ -68,7 +68,8 @@ zero.core.util = {
 		var r = bounder || zero.core.current.room;
 		y = y || 0;
 		if (!r.ranges) {
-			var bz = r.innerBounds,
+			var p = r.position(null, true),
+				bz = r.innerBounds,
 				xmin = bz.min.x, zmin = bz.min.z,
 				xmax = bz.max.x, zmax = bz.max.z;
 				xrange = xmax - xmin, zrange = zmax - zmin,
@@ -77,11 +78,14 @@ zero.core.util = {
 				xrange: xrange,
 				zrange: zrange,
 				xhalf: xhalf,
-				zhalf: zhalf
+				zhalf: zhalf,
+				xoff: p.x,
+				zoff: p.z
 			};
 		}
-		var x = CT.data.random(r.ranges.xrange) - r.ranges.xhalf,
-			z = CT.data.random(r.ranges.zrange) - r.ranges.zhalf;
+		var rz = r.ranges,
+			x = CT.data.random(rz.xrange) - rz.xhalf + rz.xoff,
+			z = CT.data.random(rz.zrange) - rz.zhalf + rz.zoff;
 		return objStyle ? { x: x, y: y, z: z } : [x, y, z];
 	},
 	gear2bone: function(kind, side, sub, part) {
