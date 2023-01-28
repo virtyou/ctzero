@@ -12,14 +12,17 @@ var F = zero.core.Fauna = CT.Class({
 		this.bobber && this.adjust("position", "y",
 			this.homeY + this.bobber[t % oz.bobSegs]);
 	},
+	setDirection: function() {
+		if (!this.direction)
+			this.direction = new THREE.Vector3();
+		this.group.getWorldDirection(this.direction);
+	},
 	direct: function(amount) {
 		var zcu = zero.core.util;
-		if (zcu.outBound(this, this.within)) {
+		if (!this.direction || zcu.outBound(this, this.within)) {
 			this.look(zcu.randPos(true, this.homeY, this.within));
-			delete this.direction;
+			this.setDirection();
 		}
-		if (!this.direction)
-			this.direction = this.group.getWorldDirection(zcu._positioner);
 		this.adjust("position", "x", amount * this.direction.x, true);
 		this.adjust("position", "z", amount * this.direction.z, true);
 	},
