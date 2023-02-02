@@ -43,7 +43,7 @@ zero.core.Book = CT.Class({
 	},
 	read: function(onfinish) {
 		this.open();
-		CT.modal.iframe("https://archive.org/details/" + this.opts.code, onfinish || this.close);
+		CT.modal.iframe(zero.core.Book.baseurl + this.opts.code, onfinish || this.close);
 	},
 	open: function() {
 		this.cover1.adjust("rotation", "y", -1);
@@ -72,3 +72,5 @@ zero.core.Book = CT.Class({
 		}, this.opts);
 	}
 }, zero.core.Thing);
+
+zero.core.Book.baseurl = "https://archive.org/details/";
