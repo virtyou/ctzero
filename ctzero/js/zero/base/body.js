@@ -134,6 +134,17 @@ zero.base.body.hair = {
             damp: 1.1,
             veldamp: 1000
         }
+    },
+    tonsure: {
+        noTick: true,
+        density: 0,
+        repart: true,
+        parts: [{
+            torusGeometry: true,
+            scale: [5.75, 5.75, 5.75],
+            rotation: [1, 0, 0],
+            position: [0, 0, -2.5]
+        }]
     }
 };
 
