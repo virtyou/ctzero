@@ -18,6 +18,7 @@ zero.core.util = {
 		"aura", "pelvis", "lumbar", "ribs", "neck", "head", "finger",
 		"hip", "knee", "ankle", "toe", "clavicle", "shoulder", "elbow", "wrist"
 	].map(k => "worn_" + k),
+	colors: ["red", "green", "blue", "yellow", "brown", "orange", "pink", "gray", "white", "black"],
 	randHue: function(family) {
 		var zcu = zero.core.util, cz = zcu._colors, i2, lz,
 			cstr = "0000", c1, c2, d = CT.data, r = d.random;
