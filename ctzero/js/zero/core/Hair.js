@@ -61,6 +61,8 @@ zero.core.Hair = CT.Class({
 			offz: 0,
 			position: [0, 10, 4]
 		}, this.opts);
+		if (opts.repart)
+			opts.parts = zero.base.body.hair[opts.name].parts;
 		this.cur = 0;
 		this.isCustom = !opts.noTick; // for tick
 	}
