@@ -128,6 +128,7 @@ zero.core.ammo = {
 			ammo.tickRigid(r);
 	},
 	tickSoft: function(s) {
+		if (!zero.core.camera.visible(s)) return;
 		const geo = s.geometry,
 			attrs = geo.attributes,
 			pos = attrs.position,
