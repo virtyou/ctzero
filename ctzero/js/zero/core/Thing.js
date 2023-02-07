@@ -704,9 +704,9 @@ zero.core.Thing = CT.Class({
 		if (oz.boxGeometry) {
 			g = oz.boxGeometry; // better way?
 			if (g == true)
-				g = [1, 1, 1, 1, 1];
+				g = [1, 1, 1, 1, 1, 1];
 			oz.geometry = new THREE.BoxGeometry(g[0],
-				g[1], g[2], g[3], g[4]);
+				g[1], g[2], g[3], g[4], g[5]);
 		}
 		if (oz.sphereGeometry) {
 			g = oz.sphereGeometry;
