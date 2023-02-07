@@ -23,7 +23,7 @@ zero.base.clothes = {
 		necklace: {
 			torusGeometry: true,
 			rotation: [2, 0, 0],
-			scale: [0.05, 0.05, 0.05]
+			scale: [4, 4, 4]
 		},
 		cape: {
 			boxGeometry: true,
@@ -119,7 +119,7 @@ zero.base.clothes = {
 		ring: {
 			torusGeometry: true,
 			rotation: [-2, 0, 0],
-			scale: [0.008, 0.008, 0.008]
+			scale: [0.5, 0.5, 0.5]
 		}
 	},
 	hip: {},
@@ -128,7 +128,7 @@ zero.base.clothes = {
 		anklet: {
 			torusGeometry: true,
 			rotation: [1, 0, 0],
-			scale: [0.05, 0.05, 0.05]
+			scale: [3, 3, 3]
 		}
 	},
 	toe: {},
@@ -221,7 +221,7 @@ zero.base.clothes.head = { // hats
 			torusGeometry: true,
 			rotation: [-1.8, 0, 0],
 			position: [0, 10, 0],
-			scale: [0.08, 0.08, 0.08],
+			scale: [8, 8, 8]
 		}, {
 			name: "spike1",
 			kind: "spike",
