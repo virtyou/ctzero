@@ -718,7 +718,7 @@ zero.core.Thing = CT.Class({
 		if (oz.torusGeometry) {
 			g = oz.torusGeometry;
 			if (typeof g == "number")
-				oz.geometry = new THREE.TorusGeometry(g);
+				oz.geometry = new THREE.TorusGeometry(g, oz.torusTubeRadius);
 			else if (Array.isArray(g))
 				oz.geometry = new THREE.TorusGeometry(g[0], g[1], g[2], g[3]);
 			else
