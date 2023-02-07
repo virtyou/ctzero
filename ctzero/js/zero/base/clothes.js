@@ -25,6 +25,29 @@ zero.base.clothes = {
 			rotation: [2, 0, 0],
 			scale: [4, 4, 4]
 		},
+		necktie: {
+			boxGeometry: true,
+			scale: [15, 30, 10],
+			position: [0, -18, 5],
+			material: {
+				transparent: true,
+				opacity: 0,
+				color: "#ff0000"
+			},
+			parts: [{
+				name: "ring",
+				torusGeometry: true,
+				rotation: [1.8, 0, 0],
+				scale: [0.25, 0.3, 0.25],
+				position: [0, 0.6, -0.25]
+			}, {
+				thing: "Cloth",
+				name: "tie",
+				height: 28,
+				width: 4,
+				displacement: { x: 0, y: -12, z: 3 }
+			}]
+		},
 		cape: {
 			boxGeometry: true,
 			scale: [20, 80, 18],
