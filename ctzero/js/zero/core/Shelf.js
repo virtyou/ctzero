@@ -5,29 +5,33 @@ zero.core.Shelf = CT.Class({
 			w = oz.width, d = oz.depth, l = oz.legs,
 			wh = w / 2, dh = d / 2,
 			ll = l.length, lw = l.width;
+		let lfl = ll, llh;
+		if (l.full)
+			lfl += (oz.levels - 1) * oz.spacing;
+		llh = lfl / 2;
 		pz.push({
 			name: "leg1",
 			kind: "leg",
-			boxGeometry: [lw, ll, lw],
-			position: [wh, ll / 2, dh]
+			boxGeometry: [lw, lfl, lw],
+			position: [wh, llh, dh]
 		});
 		pz.push({
 			name: "leg2",
 			kind: "leg",
-			boxGeometry: [lw, ll, lw],
-			position: [wh, ll / 2, -dh]
+			boxGeometry: [lw, lfl, lw],
+			position: [wh, llh, -dh]
 		});
 		pz.push({
 			name: "leg3",
 			kind: "leg",
-			boxGeometry: [lw, ll, lw],
-			position: [-wh, ll / 2, dh]
+			boxGeometry: [lw, lfl, lw],
+			position: [-wh, llh, dh]
 		});
 		pz.push({
 			name: "leg4",
 			kind: "leg",
-			boxGeometry: [lw, ll, lw],
-			position: [-wh, ll / 2, -dh]
+			boxGeometry: [lw, lfl, lw],
+			position: [-wh, llh, -dh]
 		});
 		for (let i = 0; i < oz.levels; i++) {
 			pz.push({
@@ -51,10 +55,11 @@ zero.core.Shelf = CT.Class({
 			back: false,
 			sides: false,
 			items: [],
-			legs: {
+			legs: CT.merge(this.opts.legs, {
 				width: 4,
-				length: 100
-			}
+				length: 100,
+				full: true
+			})
 		}, this.opts);
 	}
 }, zero.core.Thing);
