@@ -218,6 +218,42 @@ zero.base.clothes = {
 };
 
 zero.base.clothes.head = { // hats
+	glasses: {
+		parts: [{
+			name: "left",
+			circleGeometry: true,
+			position: [-3, 5, 10],
+			scale: [2, 2, 2],
+			material: {
+				transparent: true,
+				opacity: 0.5
+			}
+		}, {
+			name: "right",
+			circleGeometry: true,
+			position: [3, 5, 10],
+			scale: [2, 2, 2],
+			material: {
+				transparent: true,
+				opacity: 0.5
+			}
+		}, {
+			name: "lear",
+			boxGeometry: true,
+			position: [-6, 6, 5],
+			scale: [0.2, 0.2, 10]
+		}, {
+			name: "rear",
+			boxGeometry: true,
+			position: [6, 6, 5],
+			scale: [0.2, 0.2, 10]
+		}, {
+			name: "front",
+			boxGeometry: true,
+			position: [0, 6, 10],
+			scale: [12, 0.2, 0.2]
+		}]
+	},
 	conical: {
 		coneGeometry: true,
 		position: [0, 30, 0],
