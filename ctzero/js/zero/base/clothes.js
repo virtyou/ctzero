@@ -25,6 +25,25 @@ zero.base.clothes = {
 			rotation: [2, 0, 0],
 			scale: [4, 4, 4]
 		},
+		bowtie: {
+			torusGeometry: true,
+			rotation: [2, 0, 0],
+			position: [0, 2, 2],
+			scale: [3.5, 3.5, 3.5],
+			parts: [{
+				name: "left",
+				coneGeometry: true,
+				scale: [0.5, 1, 1],
+				position: [0, 1, 0],
+				rotation: [0, 0, Math.PI / 2]
+			}, {
+				name: "right",
+				coneGeometry: true,
+				scale: [0.5, 1, 1],
+				position: [0, 1, 0],
+				rotation: [0, 0, -Math.PI / 2]
+			}]
+		},
 		necktie: {
 			boxGeometry: true,
 			scale: [15, 30, 10],
