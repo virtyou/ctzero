@@ -35,6 +35,7 @@ CT.require("zero.core.Ramp");
 CT.require("zero.core.Pool");
 CT.require("zero.core.Room");
 CT.require("zero.core.Book");
+CT.require("zero.core.Shelf");
 
 CT.require("zero.core.Bit");
 CT.require("zero.core.Particles");
