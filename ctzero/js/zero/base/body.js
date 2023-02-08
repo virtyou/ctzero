@@ -127,6 +127,16 @@ zero.base.body.hair = {
             taper: [0.7, 0.9, 1]
         }
     },
+    fomenko: {
+        density: 4,
+        strand: {
+            girth: 3,
+            length: 6,
+            segments: 2,
+            flex: Math.PI / 4,
+            taper: [0.7, 0.9, 1]
+        }
+    },
     gem: {
         position: [0, 10, 0],
         coverage: [0.1, 0.1],
@@ -136,6 +146,16 @@ zero.base.body.hair = {
             flex: Math.PI / 16,
             geokind: "sphereGeometry",
             sphereSegs: 3
+        }
+    },
+    jean: {
+        density: 4,
+        strand: {
+            girth: 3,
+            length: 6,
+            segments: 3,
+            flex: Math.PI / 4,
+            taper: [0.7, 0.9, 1]
         }
     },
     mohawk: {
