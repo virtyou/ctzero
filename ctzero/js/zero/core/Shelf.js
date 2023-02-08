@@ -5,6 +5,7 @@ zero.core.Shelf = CT.Class({
 			w = oz.width, d = oz.depth, l = oz.legs,
 			wh = w / 2, dh = d / 2, ll = l.length, lw = l.width,
 			sheight = (oz.levels - 1) * oz.spacing,
+			bheight = (oz.back == "tall") ? (sheight + oz.spacing) : sheight,
 			lfl = l.full ? (ll + sheight) : ll,
 			llh = lfl / 2;
 		pz.push({
@@ -35,8 +36,8 @@ zero.core.Shelf = CT.Class({
 			pz.push({
 				name: "back",
 				kind: "side",
-				boxGeometry: [w, sheight, 2],
-				position: [0, ll + sheight / 2, -dh]
+				boxGeometry: [w, bheight, 2],
+				position: [0, ll + bheight / 2, -dh]
 			});
 		}
 		if (oz.sides) {
@@ -72,7 +73,7 @@ zero.core.Shelf = CT.Class({
 			depth: 100,
 			spacing: 30,
 			thickness: 4,
-			back: false,
+			back: false, // |true|tall
 			sides: false,
 			items: [],
 			legs: CT.merge(this.opts.legs, {
@@ -92,3 +93,8 @@ zero.core.Bookshelf = CT.Class({
 		}, this.opts);
 	}
 }, zero.core.Shelf);
+
+zero.core.Shelf.setter = "display";
+zero.core.Shelf.Display = CT.Class({
+	CLASSNAME: "zero.core.Shelf.Display",
+}, zero.core.Collection);
