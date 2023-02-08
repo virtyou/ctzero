@@ -7,8 +7,7 @@ zero.core.Book = CT.Class({
 			pageMat = rmat(oz.pages);
 		pz.push({
 			name: "spine",
-			boxGeometry: true,
-			scale: [6, 16, 1],
+			boxGeometry: [6, 16, 1],
 			position: [0, 0, 7],
 			matinstance: coverMat
 		});
@@ -23,38 +22,33 @@ zero.core.Book = CT.Class({
 
 		pz.push({
 			name: "cover1",
-			boxGeometry: true,
-			scale: [1, 16, 12],
+			boxGeometry: [1, 16, 12],
 			position: [3, 0, 0],
-			matinstance: coverMat
-		});
-
-		pz.push({
-			name: "title",
-			thing: "Text",
-			text: oz.name.split(" ").join("\n"),
-			position: [4, 0, 0],
-			rotation: [0, Math.PI / 2, 0]
+			matinstance: coverMat,
+			parts: [{
+				name: "title",
+				thing: "Text",
+				text: oz.name.split(" ").join("\n"),
+				position: [0, 0, 0],
+				rotation: [0, Math.PI / 2, 0]
+			}]
 		});
 
 		pz.push({
 			name: "cover2",
-			boxGeometry: true,
-			scale: [1, 16, 12],
+			boxGeometry: [1, 16, 12],
 			position: [-3, 0, 0],
 			matinstance: coverMat
 		});
 		pz.push({
 			name: "pages1",
-			boxGeometry: true,
-			scale: [3, 16, 12],
+			boxGeometry: [3, 16, 12],
 			position: [1, 0, 0],
 			matinstance: pageMat
 		});
 		pz.push({
 			name: "pages2",
-			boxGeometry: true,
-			scale: [3, 16, 12],
+			boxGeometry: [3, 16, 12],
 			position: [-1, 0, 0],
 			matinstance: pageMat
 		});
