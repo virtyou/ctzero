@@ -12,6 +12,15 @@ zero.core.Book = CT.Class({
 			position: [0, 0, 7],
 			matinstance: coverMat
 		});
+
+		pz.push({
+			name: "author",
+			thing: "Text",
+			vertical: true,
+			text: oz.author,
+			position: [0, 0, 7]
+		});
+
 		pz.push({
 			name: "cover1",
 			boxGeometry: true,
@@ -19,6 +28,15 @@ zero.core.Book = CT.Class({
 			position: [3, 0, 0],
 			matinstance: coverMat
 		});
+
+		pz.push({
+			name: "title",
+			thing: "Text",
+			text: oz.name.split(" ").join("\n"),
+			position: [4, 0, 0],
+			rotation: [0, Math.PI / 2, 0]
+		});
+
 		pz.push({
 			name: "cover2",
 			boxGeometry: true,
@@ -68,7 +86,8 @@ zero.core.Book = CT.Class({
 		this.opts = opts = CT.merge(opts, {
 			code: "agesinchaos00veli",
 			cover: "red",
-			pages: "white"
+			pages: "white",
+			author: "author's name"
 		}, this.opts);
 	}
 }, zero.core.Thing);
