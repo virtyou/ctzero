@@ -64,23 +64,22 @@ zero.core.Shelf = CT.Class({
 		}
 	},
 	init: function(opts) {
-		this.opts = opts = CT.merge(opts, {
-
-			position: [0, -100, 0], // FOR TESTING!!!!
-
+		var bs = zero.base.carpentry[opts.kind];
+		opts.legs = CT.merge(this.opts.legs, bs.legs, {
+			width: 4,
+			length: 40,
+			full: true
+		});
+		this.opts = opts = CT.merge(opts, bs, {
+//			position: [0, -100, 0], // FOR TESTING!!!!
 			levels: 1,
-			width: 100,
-			depth: 100,
-			spacing: 30,
+			width: 40,
+			depth: 40,
+			spacing: 20,
 			thickness: 4,
 			back: false, // |true|tall
 			sides: false,
-			items: [],
-			legs: CT.merge(this.opts.legs, {
-				width: 4,
-				length: 100,
-				full: true
-			})
+			items: []
 		}, this.opts);
 	}
 }, zero.core.Thing);
