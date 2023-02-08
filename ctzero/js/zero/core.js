@@ -14,6 +14,7 @@ CT.require("zero.base.particles");
 CT.require("zero.base.flora");
 CT.require("zero.base.fauna");
 CT.require("zero.base.clothes");
+CT.require("zero.base.carpentry");
 
 CT.require("zero.core.ammo");
 CT.require("zero.core.util");
