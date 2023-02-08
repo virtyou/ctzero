@@ -9,16 +9,15 @@ zero.core.Book = CT.Class({
 			name: "spine",
 			kind: "cover",
 			boxGeometry: [6, 16, 1],
-			position: [0, 0, 7],
-			matinstance: coverMat
-		});
-
-		pz.push({
-			name: "author",
-			thing: "Text",
-			vertical: true,
-			text: oz.author,
-			position: [0, 0, 7]
+			position: [0, 0, 6],
+			matinstance: coverMat,
+			parts: [{
+				name: "author",
+				thing: "Text",
+				vertical: true,
+				text: oz.author,
+				position: [0, 0, 0]
+			}]
 		});
 
 		pz.push({
@@ -79,7 +78,7 @@ zero.core.Book = CT.Class({
 		this.back.adjust("position", "x", -3);
 		this.half1.adjust("position", "x", 1);
 		this.half2.adjust("position", "x", -1);
-		this.spine.adjust("position", "z", 7);
+		this.spine.adjust("position", "z", 6);
 	},
 	init: function(opts) {
 		this.opts = opts = CT.merge(opts, {
