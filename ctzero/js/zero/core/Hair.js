@@ -12,6 +12,7 @@ zero.core.Hair = CT.Class({
 				material.map = zero.core.util.texture(oz.texture);
 			mat = new THREE["Mesh" + oz.matcat + "Material"](material);
 		}
+		this.material = mat;
 		var space = r * 2 / oz.density,
 			pz = oz.parts, c = oz.coverage,
 			xr = r * c[0], zr = r * c[1],
