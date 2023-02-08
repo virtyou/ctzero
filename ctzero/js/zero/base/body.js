@@ -92,6 +92,17 @@ zero.base.body.hair = {
             taper: [0.8, 1.5, 1.2]
         }
     },
+    beehive: {
+        position: [0, 10, 0],
+        coverage: [0.1, 0.1],
+        strand: {
+            length: 16,
+            segments: 1,
+            flex: Math.PI / 16,
+            geokind: "sphereGeometry",
+            sphereSegs: 8
+        }
+    },
     braids: {
         strand: {
             length: 3,
@@ -116,6 +127,17 @@ zero.base.body.hair = {
             taper: [0.7, 0.9, 1]
         }
     },
+    gem: {
+        position: [0, 10, 0],
+        coverage: [0.1, 0.1],
+        strand: {
+            length: 16,
+            segments: 1,
+            flex: Math.PI / 16,
+            geokind: "sphereGeometry",
+            sphereSegs: 3
+        }
+    },
     mohawk: {
         coverage: [1, 0.2],
         strand: {
@@ -135,6 +157,15 @@ zero.base.body.hair = {
             veldamp: 1000
         }
     },
+    opera: {
+        coverage: [0.3, 0.3],
+        strand: {
+            length: 12,
+            segments: 3,
+            flex: Math.PI / 16,
+            geokind: "sphereGeometry"
+        }
+    },
     tonsure: {
         noTick: true,
         density: 0,
@@ -145,6 +176,13 @@ zero.base.body.hair = {
             rotation: [1, 0, 0],
             position: [0, 0, -2.5]
         }]
+    },
+    quacto: {
+        coverage: [0.2, 0.2],
+        strand: {
+            flex: Math.PI / 16,
+            geokind: "sphereGeometry"
+        }
     }
 };
 
