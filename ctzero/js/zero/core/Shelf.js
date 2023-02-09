@@ -64,7 +64,7 @@ zero.core.Shelf = CT.Class({
 		}
 	},
 	init: function(opts) {
-		var bs = zero.base.carpentry[opts.kind];
+		var bs = zero.base.carpentry[opts.variety];
 		opts.legs = CT.merge(this.opts.legs, bs.legs, {
 			width: 4,
 			length: 40,
