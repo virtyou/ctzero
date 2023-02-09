@@ -8,31 +8,32 @@ zero.core.Shelf = CT.Class({
 			bheight = (oz.back == "tall") ? (sheight + oz.spacing) : sheight,
 			lfl = l.full ? (ll + sheight) : ll,
 			llh = lfl / 2;
+		this.material = this.getMaterial();
 		pz.push({
 			name: "leg1",
 			kind: "leg",
-			texture: tx,
+			matinstance: this.material,
 			boxGeometry: [lw, lfl, lw],
 			position: [wh, llh, dh]
 		});
 		pz.push({
 			name: "leg2",
 			kind: "leg",
-			texture: tx,
+			matinstance: this.material,
 			boxGeometry: [lw, lfl, lw],
 			position: [wh, llh, -dh]
 		});
 		pz.push({
 			name: "leg3",
 			kind: "leg",
-			texture: tx,
+			matinstance: this.material,
 			boxGeometry: [lw, lfl, lw],
 			position: [-wh, llh, dh]
 		});
 		pz.push({
 			name: "leg4",
 			kind: "leg",
-			texture: tx,
+			matinstance: this.material,
 			boxGeometry: [lw, lfl, lw],
 			position: [-wh, llh, -dh]
 		});
@@ -40,7 +41,7 @@ zero.core.Shelf = CT.Class({
 			pz.push({
 				name: "back",
 				kind: "side",
-				texture: tx,
+				matinstance: this.material,
 				boxGeometry: [w, bheight, 2],
 				position: [0, ll + bheight / 2, -dh]
 			});
@@ -49,14 +50,14 @@ zero.core.Shelf = CT.Class({
 			pz.push({
 				name: "left",
 				kind: "side",
-				texture: tx,
+				matinstance: this.material,
 				boxGeometry: [2, sheight, d],
 				position: [-wh, ll + sheight / 2, 0]
 			});
 			pz.push({
 				name: "right",
 				kind: "side",
-				texture: tx,
+				matinstance: this.material,
 				boxGeometry: [2, sheight, d],
 				position: [wh, ll + sheight / 2, 0]
 			});
@@ -65,14 +66,11 @@ zero.core.Shelf = CT.Class({
 			pz.push({
 				name: "level" + i,
 				kind: "level",
-				texture: tx,
+				matinstance: this.material,
 				boxGeometry: [w, oz.thickness, d],
 				position: [0, ll + oz.spacing * i, 0]
 			});
 		}
-	},
-	setTexture: function(tx) {
-		this.parts.forEach(p => p.setTexture(tx));
 	},
 	init: function(opts) {
 		var bs = zero.base.carpentry[opts.variety];
