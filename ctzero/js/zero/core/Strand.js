@@ -2,8 +2,7 @@ zero.core.Strand = CT.Class({
 	CLASSNAME: "zero.core.Strand",
 	segment: function(index) {
 		var oz = this.opts, len = oz.length,
-			ypos = index ? len : oz.yoff;
-		return {
+			ypos = index ? len : oz.yoff, d = {
 			index: index,
 			thing: "Pendulum",
 			name: "seg" + index,
@@ -19,9 +18,15 @@ zero.core.Strand = CT.Class({
 			veldamp: oz.veldamp,
 			scale: oz.taper,
 			matinstance: oz.matinstance,
-			mass: oz.segments - index,
-			boxGeometry: [oz.girth, len, oz.girth]
+			mass: oz.segments - index
 		};
+		if (oz.geokind == "sphereGeometry") {
+			d.sphereGeometry = len;
+			if (oz.sphereSegs)
+				d.sphereSegs = oz.sphereSegs;
+		} else
+			d[oz.geokind] = [oz.girth, len, oz.girth];
+		return d;
 	},
 	preassemble: function() {
 		var i, seg, oz = this.opts, parts = oz.parts;
@@ -64,7 +69,8 @@ zero.core.Strand = CT.Class({
 			curl: [0, 0],
 			veldamp: 6000,
 			flex: Math.PI * 2 / 3,
-			taper: [0.8, 0.9, 0.8]
+			taper: [0.8, 0.9, 0.8],
+			geokind: "boxGeometry"
 		});
 		this.segs = [];
 	}

@@ -226,6 +226,7 @@ zero.base.clothes.head = { // hats
 			scale: [2, 2, 2],
 			material: {
 				transparent: true,
+				shininess: 100,
 				opacity: 0.5
 			}
 		}, {
@@ -235,6 +236,7 @@ zero.base.clothes.head = { // hats
 			scale: [2, 2, 2],
 			material: {
 				transparent: true,
+				shininess: 100,
 				opacity: 0.5
 			}
 		}, {

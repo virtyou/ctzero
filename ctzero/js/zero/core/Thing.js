@@ -566,6 +566,16 @@ zero.core.Thing = CT.Class({
 		}
 		opts.repeat = [vs.fwidth / vs.width, vs.fheight / vs.height];
 	},
+	getMaterial: function(mopts) {
+		var oz = this.opts, mat = this.material || oz.mainstance;
+		if (!mat) {
+			var material = CT.merge(mopts, oz.material);
+			if (oz.texture)
+				material.map = zero.core.util.texture(oz.texture);
+			mat = new THREE["Mesh" + oz.matcat + "Material"](material);
+		}
+		return mat;
+	},
 	setTexture: function(tx) {
 		this.update({ texture: tx });
 	},
@@ -704,9 +714,9 @@ zero.core.Thing = CT.Class({
 		if (oz.boxGeometry) {
 			g = oz.boxGeometry; // better way?
 			if (g == true)
-				g = [1, 1, 1, 1, 1];
+				g = [1, 1, 1, 1, 1, 1];
 			oz.geometry = new THREE.BoxGeometry(g[0],
-				g[1], g[2], g[3], g[4]);
+				g[1], g[2], g[3], g[4], g[5]);
 		}
 		if (oz.sphereGeometry) {
 			g = oz.sphereGeometry;

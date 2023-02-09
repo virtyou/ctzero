@@ -14,6 +14,7 @@ CT.require("zero.base.particles");
 CT.require("zero.base.flora");
 CT.require("zero.base.fauna");
 CT.require("zero.base.clothes");
+CT.require("zero.base.carpentry");
 
 CT.require("zero.core.ammo");
 CT.require("zero.core.util");
@@ -35,6 +36,7 @@ CT.require("zero.core.Ramp");
 CT.require("zero.core.Pool");
 CT.require("zero.core.Room");
 CT.require("zero.core.Book");
+CT.require("zero.core.Shelf");
 
 CT.require("zero.core.Bit");
 CT.require("zero.core.Particles");
