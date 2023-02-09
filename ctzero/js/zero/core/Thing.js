@@ -566,6 +566,16 @@ zero.core.Thing = CT.Class({
 		}
 		opts.repeat = [vs.fwidth / vs.width, vs.fheight / vs.height];
 	},
+	getMaterial: function(mopts) {
+		var oz = this.opts, mat = this.material || oz.mainstance;
+		if (!mat) {
+			var material = CT.merge(mopts, oz.material);
+			if (oz.texture)
+				material.map = zero.core.util.texture(oz.texture);
+			mat = new THREE["Mesh" + oz.matcat + "Material"](material);
+		}
+		return mat;
+	},
 	setTexture: function(tx) {
 		this.update({ texture: tx });
 	},
