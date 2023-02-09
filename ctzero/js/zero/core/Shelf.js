@@ -6,36 +6,39 @@ zero.core.Shelf = CT.Class({
 			wh = w / 2, dh = d / 2, ll = l.length, lw = l.width,
 			sheight = (oz.levels - 1) * oz.spacing,
 			bheight = (oz.back == "tall") ? (sheight + oz.spacing) : sheight,
-			lfl = l.full ? (ll + sheight) : ll,
-			llh = lfl / 2;
+			lfl = l.full ? (ll + sheight) : ll, llh = lfl / 2,
+			fullheight = bheight + ll, voff = fullheight / 2,
+			legy = llh - voff,
+			backy = ll + bheight / 2 - voff,
+			sidey = ll + sheight / 2 - voff;
 		this.material = this.getMaterial();
 		pz.push({
 			name: "leg1",
 			kind: "leg",
 			matinstance: this.material,
 			boxGeometry: [lw, lfl, lw],
-			position: [wh, llh, dh]
+			position: [wh, legy, dh]
 		});
 		pz.push({
 			name: "leg2",
 			kind: "leg",
 			matinstance: this.material,
 			boxGeometry: [lw, lfl, lw],
-			position: [wh, llh, -dh]
+			position: [wh, legy, -dh]
 		});
 		pz.push({
 			name: "leg3",
 			kind: "leg",
 			matinstance: this.material,
 			boxGeometry: [lw, lfl, lw],
-			position: [-wh, llh, dh]
+			position: [-wh, legy, dh]
 		});
 		pz.push({
 			name: "leg4",
 			kind: "leg",
 			matinstance: this.material,
 			boxGeometry: [lw, lfl, lw],
-			position: [-wh, llh, -dh]
+			position: [-wh, legy, -dh]
 		});
 		if (oz.back) {
 			pz.push({
@@ -43,7 +46,7 @@ zero.core.Shelf = CT.Class({
 				kind: "side",
 				matinstance: this.material,
 				boxGeometry: [w, bheight, 2],
-				position: [0, ll + bheight / 2, -dh]
+				position: [0, backy, -dh]
 			});
 		}
 		if (oz.sides) {
@@ -52,14 +55,14 @@ zero.core.Shelf = CT.Class({
 				kind: "side",
 				matinstance: this.material,
 				boxGeometry: [2, sheight, d],
-				position: [-wh, ll + sheight / 2, 0]
+				position: [-wh, sidey, 0]
 			});
 			pz.push({
 				name: "right",
 				kind: "side",
 				matinstance: this.material,
 				boxGeometry: [2, sheight, d],
-				position: [wh, ll + sheight / 2, 0]
+				position: [wh, sidey, 0]
 			});
 		}
 		for (let i = 0; i < oz.levels; i++) {
@@ -68,7 +71,7 @@ zero.core.Shelf = CT.Class({
 				kind: "level",
 				matinstance: this.material,
 				boxGeometry: [w, oz.thickness, d],
-				position: [0, ll + oz.spacing * i, 0]
+				position: [0, ll + oz.spacing * i - voff, 0]
 			});
 		}
 	},
