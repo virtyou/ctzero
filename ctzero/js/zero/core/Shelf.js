@@ -67,7 +67,7 @@ zero.core.Shelf = CT.Class({
 		}
 		for (let i = 0; i < oz.levels; i++) {
 			pz.push({
-				name: "level" + i,
+				name: "level" + (i + 1),
 				kind: "level",
 				matinstance: this.material,
 				boxGeometry: [w, oz.thickness, d],
@@ -78,6 +78,24 @@ zero.core.Shelf = CT.Class({
 			name: "looker",
 			position: [0, 50, 100]
 		});
+	},
+	postassemble: function() {
+		this.opts.items.forEach(this.placeItem);
+	},
+	placeItem: function(item, i) {
+		const oz = this.opts;
+		if (typeof i != "number") {
+			i = oz.items.length;
+			oz.items.push(item);
+		}
+		if (!item.position) {
+			const w = oz.width - 10, // TODO: configurize?
+				pos = i * 9, x = (pos % w) - w / 2,
+				lev = oz.levels - Math.floor(pos / w),
+				y = this["level" + lev].position().y + 8; // assume book....
+			item.position = [x, y, 0];
+		}
+		this.attach(item);
 	},
 	closeup: function() {
 		zero.core.camera.follow(this);
@@ -97,7 +115,8 @@ zero.core.Shelf = CT.Class({
 			spacing: 20,
 			thickness: 4,
 			back: false, // |true|tall
-			sides: false
+			sides: false,
+			items: []
 		}, this.opts);
 	}
 }, zero.core.Thing);
