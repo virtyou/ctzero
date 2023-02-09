@@ -74,6 +74,14 @@ zero.core.Shelf = CT.Class({
 				position: [0, ll + oz.spacing * i - voff, 0]
 			});
 		}
+		pz.push({
+			name: "looker",
+			position: [0, 50, 100]
+		});
+	},
+	closeup: function() {
+		zero.core.camera.follow(this);
+		zero.core.camera.move(this.looker.position(null, true));
 	},
 	init: function(opts) {
 		const bs = zero.base.carpentry[opts.variety];
