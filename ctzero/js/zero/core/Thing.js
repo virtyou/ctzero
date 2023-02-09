@@ -567,7 +567,7 @@ zero.core.Thing = CT.Class({
 		opts.repeat = [vs.fwidth / vs.width, vs.fheight / vs.height];
 	},
 	getMaterial: function(mopts) {
-		var oz = this.opts, mat = this.material || oz.mainstance;
+		var oz = this.opts, mat = this.material || oz.matinstance;
 		if (!mat) {
 			var material = CT.merge(mopts, oz.material);
 			if (oz.texture)
