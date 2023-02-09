@@ -97,6 +97,10 @@ zero.core.Shelf = CT.Class({
 		}
 		this.attach(item);
 	},
+	removeItem: function(item) {
+		CT.data.remove(this.opts.items, item);
+		this.detach(item.name);
+	},
 	closeup: function() {
 		zero.core.camera.follow(this);
 		zero.core.camera.move(this.looker.position(null, true));
