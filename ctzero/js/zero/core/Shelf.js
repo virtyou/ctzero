@@ -76,36 +76,20 @@ zero.core.Shelf = CT.Class({
 		}
 	},
 	init: function(opts) {
-		var bs = zero.base.carpentry[opts.variety];
+		const bs = zero.base.carpentry[opts.variety];
 		opts.legs = CT.merge(this.opts.legs, bs.legs, {
 			width: 4,
 			length: 40,
 			full: true
 		});
 		this.opts = opts = CT.merge(opts, bs, {
-//			position: [0, -100, 0], // FOR TESTING!!!!
 			levels: 1,
 			width: 40,
 			depth: 40,
 			spacing: 20,
 			thickness: 4,
 			back: false, // |true|tall
-			sides: false,
-			items: []
+			sides: false
 		}, this.opts);
 	}
 }, zero.core.Thing);
-
-zero.core.Bookshelf = CT.Class({
-	CLASSNAME: "zero.core.Bookshelf",
-	init: function(opts) {
-		this.opts = opts = CT.merge(opts, {
-			books: []
-		}, this.opts);
-	}
-}, zero.core.Shelf);
-
-zero.core.Shelf.setter = "display";
-zero.core.Shelf.Display = CT.Class({
-	CLASSNAME: "zero.core.Shelf.Display",
-}, zero.core.Collection);
