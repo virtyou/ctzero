@@ -1,19 +1,13 @@
 zero.core.Hair = CT.Class({
 	CLASSNAME: "zero.core.Hair",
 	preassemble: function() {
-		var oz = this.opts, r = oz.range, mat = oz.matinstance;
+		var oz = this.opts, r = oz.range;
 		if (!oz.density) {
 			this.count = 0;
 			return;
 		}
-		if (!mat) {
-			var material = CT.merge(oz.strand.material, oz.material);
-			if (oz.texture)
-				material.map = zero.core.util.texture(oz.texture);
-			mat = new THREE["Mesh" + oz.matcat + "Material"](material);
-		}
-		this.material = mat;
-		var space = r * 2 / oz.density,
+		var mat = this.material = this.getMaterial(oz.strand.material),
+			space = r * 2 / oz.density,
 			pz = oz.parts, c = oz.coverage,
 			xr = r * c[0], zr = r * c[1],
 			shift = oz.shift, i = 0, x, z,
