@@ -32,12 +32,6 @@ zero.core.Hair = CT.Class({
 		for (i = start; i < end; i++)
 			parts[i][func](a1, a2);
 	},
-	setColor: function(col) {
-		this._pass("setColor", col);
-	},
-	setTexture: function(tx) {
-		this._pass("setTexture", tx);
-	},
 	tickBatch: function() {
 		var zcu = zero.core.util, rate = zcu.tickRate(),
 			max = Math.min(this.count, this.cur + parseInt(this.count * rate));
