@@ -1,7 +1,7 @@
 zero.core.Book = CT.Class({
 	CLASSNAME: "zero.core.Book",
 	preassemble: function() {
-		var oz = this.opts, pz = oz.parts,
+		var oz = this.opts, pz = oz.parts = [], /// why is this necessary????
 			rmat = zero.core.util.randMat,
 			coverMat = rmat(oz.cover),
 			pageMat = rmat(oz.pages);

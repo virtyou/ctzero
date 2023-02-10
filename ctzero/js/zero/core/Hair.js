@@ -7,8 +7,8 @@ zero.core.Hair = CT.Class({
 			return;
 		}
 		var mat = this.material = this.getMaterial(oz.strand.material),
-			space = r * 2 / oz.density,
-			pz = oz.parts, c = oz.coverage,
+			space = r * 2 / oz.density, c = oz.coverage,
+			pz = oz.parts = [], /// why is this necessary?
 			xr = r * c[0], zr = r * c[1],
 			shift = oz.shift, i = 0, x, z,
 			offx = oz.offx, offz = oz.offz;

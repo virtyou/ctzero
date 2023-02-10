@@ -26,6 +26,7 @@ zero.core.Fire = CT.Class({
 	},
 	preassemble: function() {
 		var oz = this.opts, variety;
+		oz.parts = []; /// why is this necessary????
 		oz.flames && oz.parts.push({
 			name: "flames",
 			kind: "tentacles",
