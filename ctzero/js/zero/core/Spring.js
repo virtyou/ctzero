@@ -11,6 +11,8 @@ zero.core.Spring = CT.Class({
 		this.ebound && zccr && zccr.ebound(this, this.parent);
 	},
 	tick: function(dts, rdts) {
+		if (this.noslow && zero.core.util.slow)
+			return;
 		if (this.rdts)
 			dts = rdts;
 		if (this.shove) {
@@ -78,6 +80,7 @@ zero.core.Spring = CT.Class({
 			hard: false,
 			ebound: false,
 			breaks: false,
+			noslow: false,
 			floory: false,
 			floored: false,
 			acceleration: 0
@@ -92,6 +95,7 @@ zero.core.Spring = CT.Class({
 		this.parent = opts.parent;
 		this.ebound = opts.ebound;
 		this.breaks = opts.breaks;
+		this.noslow = opts.noslow;
 		this.bounds = opts.bounds;
 		this.target =  opts.target;
 		this.floory = opts.floory;
