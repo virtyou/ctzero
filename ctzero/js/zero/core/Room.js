@@ -306,7 +306,7 @@ zero.core.Room = CT.Class({
 		this._assembled.objects -= 1;
 		this.detach(obj.name);
 	},
-	clear: function(retain_lights) {
+	clear: function(retain_lights, unload) {
 		if (retain_lights) {
 			if (this.thring) {
 				this.group.remove(this.thring);
@@ -318,7 +318,7 @@ zero.core.Room = CT.Class({
 					group.remove(child);
 			});
 		} else
-			this.remove();
+			unload ? this.unload() : this.remove();
 	},
 	clearLights: function() {
 		var i, lz = this.lights, ln = lz.length;
@@ -337,6 +337,7 @@ zero.core.Room = CT.Class({
 		this.opts.objects.forEach(this.removeObject);
 	},
 	unload: function() {
+		this.log("UNLOADING!");
 		zero.core.auto.unload();
 		this.remove();
 	},
