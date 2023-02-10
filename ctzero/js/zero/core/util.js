@@ -494,8 +494,12 @@ zero.core.util = {
 			zero.core.util.frameCount(typeof cfg.framecount == "string" && cfg.framecount);
 	},
 	animate: function(now) {
-	    var zcu = zero.core.util, zcc = zero.core.current, dts, rdts, p, t;
-	    requestAnimationFrame(zcu.animate);
+	    var zcu = zero.core.util, zcc = zero.core.current, dts, rdts, p, t,
+	    	throttle = core.config.ctzero.throttle;
+	    if (throttle)
+	    	setTimeout(() => requestAnimationFrame(zcu.animate), throttle);
+	    else
+	    	requestAnimationFrame(zcu.animate);
 	    if (zcu.now) {
 	    	zcu.dt = now - zcu.now;
 	    	zcu.rdts = zcu.dt / 1000;
