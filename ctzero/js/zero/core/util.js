@@ -538,6 +538,10 @@ zero.core.util = {
 		return zero.core.util.slow && (hard || CT.data.random(rando || 20));
 	},
 	_cpcbz: [],
+	roomReady: function() {
+		var zcc = zero.core.current;
+		return zcc.room && zcc.room.isReady();
+	},
 	onCurPer: function(cb) {
 		if (zero.core.current.person)
 			cb(zero.core.current.person);
