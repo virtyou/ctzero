@@ -66,9 +66,9 @@ var camera = zero.core.camera = {
 	visible: function(obj) {
 		var thring = obj.thring || obj, t = zero.core.util.ticker, _ = camera._;
 		if (!thring) return;
-		if (!thring.frusted || thring.frusted + 30 < t) {
+		if (!thring.frusted || thring.frusted < t) {
 			thring.inFrustum = (_.frustum || _.left.frustum).intersectsObject(thring);
-			thring.frusted = t;
+			thring.frusted = t + 30;
 		}
 		return thring.inFrustum;
 	},
