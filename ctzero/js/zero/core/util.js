@@ -430,9 +430,9 @@ zero.core.util = {
 	background: function(src) {
 		zero.core.util.back(null, src);
 	},
-	room: function(robj, retain_lights) {
+	room: function(robj, retain_lights, nounload) {
 		if (zero.core.current.room)
-			zero.core.current.room.clear(!robj || retain_lights);
+			zero.core.current.room.clear(!robj || retain_lights, !nounload);
 		if (robj)
 			zero.core.current.room = new zero.core.Room(robj);
 		return zero.core.current.room;
