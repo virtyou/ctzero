@@ -252,7 +252,8 @@ zero.base.body.tail = {
             wiggle: 60,
             nograv: true,
             flex: Math.PI / 8,
-            taper: [0.9, 0.9, 0.9]
+            taper: [0.9, 0.9, 0.9],
+            geokind: "sphereGeometry"
         }
     },
     dog: {
