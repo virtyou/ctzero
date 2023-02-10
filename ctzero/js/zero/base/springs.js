@@ -71,15 +71,18 @@ zero.base.springs.body = function() {
 zero.base.springs.arm = {
     elbow: {
         k: 40,
-        damp: 10
+        damp: 10,
+        noslow: true
     },
     shoulder: {
         k: 20,
-        damp: 80
+        damp: 80,
+        noslow: true
     },
     clavicle: {
         k: 20,
-        damp: 40
+        damp: 40,
+        noslow: true
     }
 };
 
