@@ -57,6 +57,9 @@ zero.core.Book = CT.Class({
 			matinstance: pageMat
 		});
 	},
+	readbutt: function() {
+		return CT.dom.button("read", () => zero.core.current.person.get(this, this.read));
+	},
 	read: function(onfinish) {
 		this.open();
 		CT.modal.iframe(zero.core.Book.baseurl + this.opts.code, onfinish || this.close);
