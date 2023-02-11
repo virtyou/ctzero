@@ -672,7 +672,10 @@ zero.core.Thing = CT.Class({
 	},
 	assemble: function() {
 		if (this.parts) return; // for rebuild update()....
-		this.preassemble && this.preassemble();
+		if (this.preassemble) { // will manipulate parts[]....
+			this.opts.parts = zero.core.util.partsclone(this.opts.parts);
+			this.preassemble();
+		}
 		var thiz = this, oz = this.opts, i = 0,
 			group = this.getGroup(),
 			iterator = function() {
