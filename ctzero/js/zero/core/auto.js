@@ -6,13 +6,14 @@ zero.core.auto = {
 	unload: function() {
 		zero.core.current.room.automatons.forEach(a => a.pause());
 	},
-	init: function(autos) { // [{person(key),program{base,coefficient,randomize},activities[]}]
+	init: function(autos, cb) { // [{person(key),program{base,coefficient,randomize},activities[]}]
 		CT.db.multi(autos.map(a=>a.person), function(people) {
 			zero.core.current.room.automatons = people.map(function(p, i) {
 				return new zero.core.auto.Automaton(CT.merge({
 					person: p
 				}, autos[i]));
 			});
+			cb && cb();
 		}, "json");
 	}
 };
