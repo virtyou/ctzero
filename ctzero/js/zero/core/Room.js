@@ -213,8 +213,10 @@ zero.core.Room = CT.Class({
 			az.objects == this.objects.length &&
 			this._.assembled) {
 				this.setBounds();
-				this._.built();
-				this.opts.automatons.length && zero.core.auto.init(this.opts.automatons);
+				if (this.opts.automatons.length)
+					zero.core.auto.init(this.opts.automatons, this._.built);
+				else
+					this._.built();
 			}
 	},
 	it: function(kind, cb) {
