@@ -108,6 +108,14 @@ zero.core.util = {
 		}
 		return bone;
 	},
+	partsclone: function(parts) {
+		return parts.map(function(p) {
+			p = CT.merge(p);
+			if (p.parts)
+				p.parts = zero.core.util.partsclone(p.parts);
+			return p;
+		});
+	},
 	// https://stackoverflow.com/questions/5623838/rgb-to-hex-and-hex-to-rgb#5624139
 	hex2rgb: function(hex) {
 		var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
