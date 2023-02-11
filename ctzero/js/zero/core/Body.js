@@ -129,6 +129,9 @@ zero.core.Body = CT.Class({
 			delete this.gearmap[k];
 		}
 	},
+	onremove: function() {
+		this.ungear(); // anything else???
+	},
 	setBob: function() {
 		var r = zero.core.current.room;
 		if (!(r && r.isReady())) return;
