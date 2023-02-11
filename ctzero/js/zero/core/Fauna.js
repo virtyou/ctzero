@@ -367,7 +367,8 @@ zero.core.Fauna.Menagerie = CT.Class({
 		this.yelper = setTimeout(this.yelp, 10000 + CT.data.random(10000));
 	},
 	init: function(opts) {
-		F.audio && setTimeout(this.yelp, 3000 + CT.data.random(10000)); // set by ctone...
+		if (F.audio) // set by ctone...
+			this.yelper = setTimeout(this.yelp, 3000 + CT.data.random(10000));
 		this.opts.regTick && zero.core.current.room.regTicker(this);
 	}
 }, zero.core.Collection);
