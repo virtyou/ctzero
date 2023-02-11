@@ -101,6 +101,17 @@ zero.core.Shelf = CT.Class({
 		CT.data.remove(this.opts.items, item);
 		this.detach(item.name);
 	},
+	peruse: function() {
+		this.closeup();
+		CT.modal.choice({
+			prompt: "want to read a book?",
+			data: Object.keys(this.book),
+			cb: bookname => zero.core.current.person.get(this, this[bookname].read)
+		});
+	},
+	perusebutt: function() {
+		return CT.dom.button("peruse", this.peruse);
+	},
 	closeup: function() {
 		zero.core.camera.follow(this);
 		zero.core.camera.move(this.looker.position(null, true));
