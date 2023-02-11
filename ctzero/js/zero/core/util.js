@@ -111,6 +111,8 @@ zero.core.util = {
 	cloneparts: function(parts) {
 		return parts.map(function(p) {
 			p = CT.merge(p);
+			if (p.displacement)
+				p.displacement = CT.merge(p.displacement);
 			if (p.parts)
 				p.parts = zero.core.util.cloneparts(p.parts);
 			return p;
