@@ -108,11 +108,11 @@ zero.core.util = {
 		}
 		return bone;
 	},
-	partsclone: function(parts) {
+	cloneparts: function(parts) {
 		return parts.map(function(p) {
 			p = CT.merge(p);
 			if (p.parts)
-				p.parts = zero.core.util.partsclone(p.parts);
+				p.parts = zero.core.util.cloneparts(p.parts);
 			return p;
 		});
 	},
