@@ -215,7 +215,7 @@ zero.base.body.beard = {
     origen: {
         strand: {
             segments: 3,
-            taper: [1.1, 0.9, 1.1]
+            taper: [0.7, 0.7, 0.7]
         }
     },
     don: {
