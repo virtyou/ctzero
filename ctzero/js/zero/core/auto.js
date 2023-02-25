@@ -57,6 +57,9 @@ zero.core.auto.Automaton = CT.Class({
 	joined: function(person) {
 		this.person = person;
 		person.automaton = this;
+		var pbs = person.body.springs;
+		pbs.slide.k = pbs.weave.k = 4;
+		pbs.slide.damp = pbs.weave.damp = 20;
 		this.opts.wander && person.wander();
 		this.activities.length && this.play();
 		this.opts.onjoin && this.opts.onjoin(person);
