@@ -88,6 +88,11 @@ zero.core.auto.Automaton = CT.Class({
 		});
 		this.reprogram();
 		opts.person.grippy = false;
+		var waz = opts.activities[0], pb = opts.person.body, wapo;
+		if (!pb.position && waz && waz.action == "wander" && waz.value != "room") {
+			wapo = zero.core.current.room[waz.value].position();
+			pb.position = [wapo.x, wapo.y + 100, wapo.z]; // meh?
+		}
 		this.reactivitate(opts.activities);
 		zero.core.util.join(opts.person, this.joined, true);
 	}
