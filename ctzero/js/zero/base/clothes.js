@@ -334,30 +334,26 @@ zero.base.clothes.head = { // hats
 		scale: [15, 15, 15]
 	},
 	stovepipe: {
-		circleGeometry: true,
+		circleGeometry: 15,
 		rotation: [1, 0, 0],
 		position: [0, 10, 0],
-		scale: [0.4, 0.4, 0.4],
 		parts: [{
 			name: "pipe",
-			cylinderGeometry: true,
-			scale: [2, 2, 2],
+			cylinderGeometry: 7,
 			rotation: [-2, 0, 0],
-			position: [0, 0, -20]
+			position: [0, 0, -5]
 		}]
 	},
 	tricorn: {
-		circleGeometry: true,
+		circleGeometry: 20,
 		circleSegs: 3,
 		rotation: [1, 0, 0],
 		position: [0, 10, 0],
-		scale: [0.6, 0.6, 0.6],
 		parts: [{
 			name: "pipe",
 			sphereSegs: 6,
 			sphereGeometry: 10,
-			scale: [2, 2, 2],
-			position: [0, 0, -10]
+			position: [0, 0, -5]
 		}]
 	},
 	beret: {
@@ -365,6 +361,19 @@ zero.base.clothes.head = { // hats
 		sphereGeometry: 10,
 		rotation: [0, 0, 2],
 		position: [0, 15, 0]
+	},
+	don: {
+		circleGeometry: 15,
+		rotation: [1, 0, 0],
+		position: [0, 10, 0],
+		parts: [{
+			name: "dome",
+			sphereGeometry: 7,
+			position: [0, 1, 0],
+			material: { // side not working ... ???
+				side: THREE.DoubleSide
+			}
+		}]
 	}
 };
 
