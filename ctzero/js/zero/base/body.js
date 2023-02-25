@@ -212,6 +212,12 @@ zero.base.body.beard = {
             taper: [1.1, 0.9, 1.1]
         }
     },
+    origen: {
+        strand: {
+            segments: 3,
+            taper: [1.1, 0.9, 1.1]
+        }
+    },
     don: {
         density: 0.2,
         range: Math.PI / 16,
