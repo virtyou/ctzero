@@ -212,6 +212,16 @@ zero.base.body.beard = {
             taper: [1.1, 0.9, 1.1]
         }
     },
+    don: {
+        density: 0.2,
+        range: Math.PI / 16,
+        strand: {
+            girth: 7,
+            segments: 3,
+            taper: [0.7, 0.7, 0.7],
+            geokind: "sphereGeometry"
+        }
+    },
     stubble: {
         noTick: true,
         density: 20,
