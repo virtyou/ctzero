@@ -336,12 +336,14 @@ zero.core.Person = CT.Class({
 		this.ungesture();
 	},
 	gesture: function(gname) {
+		if (!this.body) return this.log("gesture() cancelled (no body)");
 		if (gname == "ungesture")
 			return this.ungesture();
 		this.activeGesture = gname;
 		this.body.move(this.opts.gestures[gname]);
 	},
 	ungesture: function(resetz, side, sub) {
+		if (!this.body) return this.log("ungesture() cancelled (no body)");
 		var gest = {}, neutral = this._.neutral;
 		if (!resetz) {
 			if (side || sub)
