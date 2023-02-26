@@ -196,6 +196,8 @@ zero.core.Thing = CT.Class({
 		var bz = this.bounds;
 		if (!bz) return false;
 		var check = function(dim) {
+			if (!radii)
+				return pos[dim] > bz.min[dim] && pos[dim] < bz.max[dim];
 			return (pos[dim] + radii[dim]) > bz.min[dim]
 				&& (pos[dim] - radii[dim]) < bz.max[dim];
 		};
@@ -416,6 +418,15 @@ zero.core.Thing = CT.Class({
 	},
 	look: function(pos) {
 		this.group.lookAt(pos.x, pos.y, pos.z);
+	},
+	safePos: function() {
+		if (this.placer)
+			return this.position();
+		var zpo = zero.core.util._positioner, p = this.opts.position;
+		this.xyz(function(dim, i) {
+			zpo[dim] = p[i];
+		});
+		return zpo;
 	},
 	// position(), rotation(), scale(): getters _and_ setters
 	position: function(position, world) {
