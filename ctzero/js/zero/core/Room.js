@@ -97,12 +97,14 @@ zero.core.Room = CT.Class({
 				amount *= -1;
 			person.body.setPositioners(port.position(), false, true);
 		}
+		sz[prop].ebound = false;
 		sz[prop].value += amount;
 		delete sz[prop].bounds;
 		bod.positioners[prop].unbounded = true;
 		bod.show();
+		bod.bindAxis(prop);
 		setTimeout(function() {
-			bod.bindAxis(prop);
+			sz[prop].ebound = true;
 			bod.setFriction(person == zero.core.current.person, true);
 		}, 2000);
 	},
