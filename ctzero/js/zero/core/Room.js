@@ -88,7 +88,7 @@ zero.core.Room = CT.Class({
 	},
 	inject: function(person, port) {
 		var bod = person.body, wall, prop = "bob",
-			sz = bod.springs, amount = -500; // revise -> should be axis diameter
+			sz = bod.springs, amount = -50; // revise -> should be axis diameter
 		bod.setFriction(false, true);
 		if (port) {
 			wall = port.opts.wall;
@@ -99,12 +99,16 @@ zero.core.Room = CT.Class({
 		}
 		sz[prop].ebound = false;
 		sz[prop].value += amount;
+		sz[prop].target += amount;
 		delete sz[prop].bounds;
 		bod.positioners[prop].unbounded = true;
 		bod.show();
-		bod.bindAxis(prop);
+		setTimeout(function() {
+			sz[prop].target -= 2 * amount;
+		}, 500);
 		setTimeout(function() {
 			sz[prop].ebound = true;
+			bod.bindAxis(prop);
 			bod.setFriction(person == zero.core.current.person, true);
 		}, 2000);
 	},
