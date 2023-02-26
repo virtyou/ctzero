@@ -366,13 +366,13 @@ zero.base.clothes.head = { // hats
 		circleGeometry: 15,
 		rotation: [1, 0, 0],
 		position: [0, 10, 0],
+		material: {
+			side: THREE.DoubleSide
+		},
 		parts: [{
 			name: "dome",
 			sphereGeometry: 7,
-			position: [0, 1, 0],
-			material: { // side not working ... ???
-				side: THREE.DoubleSide
-			}
+			position: [0, 1, 0]
 		}]
 	}
 };
