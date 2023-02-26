@@ -22,9 +22,15 @@ zero.core.auto.Automaton = CT.Class({
 	CLASSNAME: "zero.core.auto.Automaton",
 	_: {
 		index: -1,
+		defcount: 0,
 		onperson: [],
 		next: function() {
-			var _ = this._, alen = this.activities.length;
+			var _ = this._, alen = this.activities.length,
+				deferred = _.deferred;
+			if (deferred) {
+				delete _.deferred;
+				return deferred;
+			}
 			if (this.program.randomize)
 				_.index = CT.data.random(alen);
 			else
@@ -34,6 +40,14 @@ zero.core.auto.Automaton = CT.Class({
 	},
 	tick: function() {
 		var _ = this._, act = _.next();
+		if (!this.person.body) {
+			_.defcount += 1;
+			if (_.defcount > 3)
+				return this.log("tick() cancelled (deferred 3 times)");
+			_.deferred = act;
+			this.log("tick() postponed (no body)");
+			return this.play();
+		}
 		if (act.action == "dance") {
 			this.person.dance(act.value);
 			this.play();
