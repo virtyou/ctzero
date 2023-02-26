@@ -144,11 +144,11 @@ zero.core.Room = CT.Class({
 	getSolid: function(pos, radii, checkY) {
 		return this.getObject(pos, radii, checkY, "solid", "state");
 	},
-	getSurface: function(pos, radii) {
+	getSurface: function(pos, radii, topmost) {
 		var val, top, winner, test = function(obj) {
 			if (obj) {
 				val = obj.getTop(pos);
-				if (val <= pos.y) {
+				if (topmost || val <= pos.y) {
 					if (!top || val > top) {
 						top = val;
 						winner = obj;
@@ -167,6 +167,9 @@ zero.core.Room = CT.Class({
 		}
 		this.shelled && test(this);
 		return winner;
+	},
+	getPeak: function(pos, radii) {
+		return (this.getSurface(pos, radii, true) || this).getTop(pos);
 	},
 	ebound: function(spr, bod) {
 		if (!bod.group) return;

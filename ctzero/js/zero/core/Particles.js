@@ -45,7 +45,7 @@ zero.core.Particles = CT.Class({
 			lens = this._xyz.map((d, i) => (bz.max[d] - bz.min[d]) / oz.scale[i]),
 			halves = lens.map(v => v / 2);
 		for (p in this.particle)
-			this.particle[p].setLimits(lens, halves);
+			this.particle[p].setLimits(lens, halves, oz.scale);
 	},
 	preassemble: function() {
 		var i, size, oz = this.opts, pz = oz.parts,
@@ -69,6 +69,7 @@ zero.core.Particles = CT.Class({
 				acceleration: oz.acceleration,
 				scale: [size, size, size],
 				size: size,
+				topobound: oz.topobound,
 				manager: oz.name
 			});
 		}

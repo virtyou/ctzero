@@ -74,6 +74,7 @@ zero.base.particles = {
 		size: 2,
 		velocity: [0, -300, 0],
 		scale: [1, 4, 1],
+		topobound: true,
 		sharemat: true,
 		pmat: {
 			opacity: 0.6,
