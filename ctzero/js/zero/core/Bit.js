@@ -4,7 +4,7 @@ zero.core.Bit = CT.Class({
 		var oz = this.opts, dz = this._xyz, wobz = this.wobblers,
 			vel = this.velocity, acc = oz.acceleration, pos, i, d,
 			v, t = zero.core.util.ticker % 60, adjust = this.adjust,
-			lmi, lma, dmi, dma;
+			lmi, lma, dmi, dma, df, lf, lz = this.limits;
 		if (oz.grow || oz.pulse) {
 			if (oz.grow)
 				this._size += oz.grow * dts;
@@ -22,19 +22,21 @@ zero.core.Bit = CT.Class({
 				v += wobz[d][t];
 			v && adjust("position", d, v, true);
 		}
-		if (!this.limits) return;
+		if (!lz) return;
 		pos = this.position();
-		lmi = this.limits.min;
-		lma = this.limits.max;
+		lf = lz.full;
+		lmi = lz.min;
+		lma = lz.max;
 		for (i = 0; i < 3; i++) {
 			if (!vel[i]) continue;
 			d = dz[i];
+			df = lf[i];
 			dmi = lmi[i];
 			dma = lma[i];
 			if (pos[d] < dmi)
-				pos[d] = dma;
+				pos[d] += df;
 			else if (pos[d] > dma)
-				pos[d] = dmi;
+				pos[d] -= df;
 		}
 	},
 	setVelocity: function() {
@@ -42,7 +44,8 @@ zero.core.Bit = CT.Class({
 	},
 	setLimits: function(lens, halves, scale) {
 		this.limits = {
-			max: halves,
+			full: lens,
+			max: halves.slice(),
 			min: halves.map(v => -v)
 		};
 		this.position(lens.map((v, i) => Math.random() * v - halves[i]));
@@ -50,7 +53,7 @@ zero.core.Bit = CT.Class({
 			var peak = zero.core.current.room.getPeak(this.safePos(), this.radii),
 				diff = peak / scale[1] - this.limits.min[1];
 			this.limits.min[1] += diff;
-//			this.limits.max[1] += diff;
+			this.limits.max[1] += diff;
 		}
 	},
 	init: function(opts) {
