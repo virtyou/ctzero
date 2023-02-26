@@ -358,11 +358,13 @@ zero.core.Fauna.Menagerie = CT.Class({
 		clearTimeout(this.yelper);
 	},
 	yelp: function() {
-		var zcu = zero.core.util, crit = this[CT.data.choice(this.members)], vol;
-		if (crit && crit.opts.kind in F.audio) {
+		var zc = zero.core, zcu = zc.util, crit = this[CT.data.choice(this.members)], vol;
+		if (!zc.current.person)
+			this.log("yelp() skipped - no current person");
+		else if (crit && crit.opts.kind in F.audio) {
 			vol = zcu.close2u(crit) / 2;
 			this.log("playing", crit.opts.kind, "at", vol);
-			zero.core.audio.sfx(CT.data.choice(F.audio[crit.opts.kind]), vol, true);
+			zc.audio.sfx(CT.data.choice(F.audio[crit.opts.kind]), vol, true);
 		}
 		this.yelper = setTimeout(this.yelp, 10000 + CT.data.random(10000));
 	},
