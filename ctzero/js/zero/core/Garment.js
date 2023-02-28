@@ -4,6 +4,7 @@ zero.core.Garment = CT.Class({
 		const oz = this.opts, pz = oz.parts,
 			rz = oz.rigids, ammo = zero.core.ammo;
 		let i, p;
+		this.cloths = [];
 		for (i = 0; i < pz.length; i++) {
 			p = pz[i];
 			p.garment = this;
@@ -11,12 +12,19 @@ zero.core.Garment = CT.Class({
 				p.texture = oz.texture;
 			if (rz.includes(p.name))
 				p.onbuild = (thing) => ammo.kineBody(thing.thring, thing.opts.friction);
+			if (p.thing == "Cloth")
+				this.cloths.push(p.name);
 		}
 	},
 	setTexture: function(tx) {
 		const uobj = { texture: tx };
 		this.update(uobj);
 		this.parts.forEach(p => p.update(uobj));
+	},
+	fixBounds: function(p) {
+		for (let cloth of this.cloths)
+			zero.core.util.update(p, this[cloth].thring.geometry.boundingSphere.center);
+
 	},
 	init: function(opts) {
 		const bodpart = this.opts.bodpart = this.opts.kind.split("_").pop();
