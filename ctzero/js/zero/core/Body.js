@@ -86,6 +86,7 @@ zero.core.Body = CT.Class({
 		ropts.body && this._applyMod(ropts.body);
 		this.torso.move(ropts);
 		this.spine.move(ropts.spine);
+		this._moving = true;
 	},
 	resize: function(ropts) {
 		ropts.body && this._applyMod(ropts.body);
@@ -95,7 +96,7 @@ zero.core.Body = CT.Class({
 	},
 	equipper: function(g, held) { // if held, g is side.....
 		var az = this.torso.arms, bz = this.bones,
-			bm = this.bmap, gmap = this.gearmap;
+			bm = this.bmap, gmap = this.gearmap, gars = this.garments;
 		return function(gdata) {
 			if (!("bone" in gdata)) {
 				if (held)
@@ -108,6 +109,8 @@ zero.core.Body = CT.Class({
 				onbuild: held && az[g].hand.grasp,
 				onremove: held && az[g].hand.release
 			}));
+			if (gdata.thing == "Garment")
+				gars[gdata.name] = gmap[gdata.key];
 		};
 	},
 	gear: function(gear, held) {
@@ -126,10 +129,26 @@ zero.core.Body = CT.Class({
 		var k, kz = gkey ? [gkey] : Object.keys(this.gearmap);
 		for (k of kz) {
 			this.gearmap[k].remove();
+			if (this.gearmap[k].opts.thing == "Garment")
+				delete this.garments[k];
 			delete this.gearmap[k];
 		}
 	},
+	fixBounds: function() {
+		var gars = Object.values(this.garments);
+		if (!gars.length) return;
+		if (this._moving == false) { // neither true nor undefined
+			this._boundFixer = setTimeout(this.fixBounds, 2000);
+			return;
+		}
+		this._moving = false;
+		var g, p = this.position(null, true);
+		for (g of gars)
+			g.fixBounds(p);
+		this._boundFixer = setTimeout(this.fixBounds, 300);
+	},
 	onremove: function() {
+		clearTimeout(this._boundFixer);
 		this.ungear(); // anything else???
 	},
 	setBob: function() {
@@ -214,7 +233,9 @@ zero.core.Body = CT.Class({
 		this.opts = opts = CT.merge(this.opts, {
 			joints: zero.base.joints()
 		});
-		opts.frustumCulled = false; // TODO: figure out real problem and fix!!!
+//		opts.frustumCulled = false; // TODO: figure out real problem and fix!!!
 		this.gearmap = {};
+		this.garments = {};
+		this._boundFixer = setTimeout(this.fixBounds, 2000);
 	}
 }, zero.core.Thing);
