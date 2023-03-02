@@ -38,10 +38,17 @@ zero.core.Pool = CT.Class({
 	above: function(pos) {
 		return pos.y > this.getSurface();
 	},
+	checkBound: function(dim, spring) {
+		if (spring.bounds && spring.bounds.min > spring.bounds.max) {
+			this.log("unbounding", dim);
+			delete spring.bounds;
+		}
+	},
 	onbound: function() {
 		var oz = this.opts, s, side, py = this.position().y,
 			rf = this.getTop(), h = py - rf, p = -h / 2;
 		this.bounds.min.y = this.getTop(); // why doesn't this just happen w/ sides?
+		zero.core.util.coords(this.springs, this.checkBound);
 		this._.setRadMid();
 		this._.setInnerBounds();
 		if (oz.sides) {
