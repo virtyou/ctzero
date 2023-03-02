@@ -7,7 +7,7 @@ zero.core.Room = CT.Class({
 	_tickers: [],
 	_structural: ["obstacle", "floor", "wall", "ramp"],
 	_bumpers: ["wall", "obstacle"],
-	_surfaces: ["floor", "ramp"],
+	_surfaces: ["floor", "ramp", "obstacle", "wall"],
 	removables: function() {
 		return this.parts.concat(this.objects);
 	},
@@ -156,7 +156,6 @@ zero.core.Room = CT.Class({
 				}
 			}
 		}, i, k, flo, oz = this.opts;
-		test(this.getSolid(pos, radii));
 		for (k of this._surfaces) {
 			if (oz[k]) {
 				for (i = oz[k].parts.length - 1; i > -1; i--) {
