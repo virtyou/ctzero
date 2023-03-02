@@ -428,7 +428,7 @@ zero.core.Room = CT.Class({
 		this._structural.forEach(function(cat) {
 			var base = opts[cat];
 			if (base && base.parts && base.parts.length) {
-				var dz = base.dimensions,
+				var dz = base.dimensions, sdz,
 					tx = base.texture || opts.texture;
 					thing = "Thing";
 				if (cat == "floor")
@@ -436,13 +436,14 @@ zero.core.Room = CT.Class({
 				else if (cat == "ramp")
 					thing = "Ramp";
 				base.parts.forEach(function(side, i) {
+					sdz = side.dimensions || dz;
 					opts.parts.push(CT.merge(side, {
 						name: cat + i,
 						kind: cat,
 						thing: thing,
 						texture: tx,
 						material: base.material,
-						geometry: dz && d2g(dz)
+						geometry: sdz && d2g(sdz)
 					}));
 				});
 			}
