@@ -569,6 +569,8 @@ zero.core.Thing = CT.Class({
 		vs.fwidth = vs.fwidth || 128;
 		vs.fheight = vs.fheight || 64;
 		opts.texture = vs.texture;
+		if (!opts.material)
+			opts.material = {};
 		opts.material.transparent = true;
 		if (!vs.width) {
 			total = vs.fwidth * vs.frames;
