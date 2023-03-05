@@ -89,6 +89,15 @@ zero.core.util = {
 			z = CT.data.random(rz.zrange) - rz.zhalf + rz.zoff;
 		return objStyle ? { x: x, y: y, z: z } : [x, y, z];
 	},
+	posser: function(pos) {
+		var p = zero.core.util._positioner;
+		if (pos) {
+			p.x = pos.x;
+			p.y = pos.y;
+			p.z = pos.z;
+		}
+		return p;
+	},
 	gear2bone: function(kind, side, sub, part) {
 		var zcc = zero.core.current, bone, part,
 			p = zcc.person || Object.values(zcc.people)[0],
