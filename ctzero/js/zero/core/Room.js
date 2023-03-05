@@ -171,13 +171,17 @@ zero.core.Room = CT.Class({
 		return (this.getSurface(pos, radii, true) || this).getTop(pos);
 	},
 	ebound: function(spr, bod) {
-		if (!bod.group) return;
-		var bp = bod.group.position, p = {
-			x: bp.x, y: bp.y, z: bp.z
-		};
-		p[bod.positioner2axis(spr.name)] = spr.target;
-		if (bod.radii && this.getSolid(p, bod.radii, true))
-			spr.target = spr.value;
+		if (!bod.group || !bod.radii) return;
+		var p = zero.core.util.posser(bod.group.position),
+			sprax = bod.positioner2axis(spr.name);
+		p[sprax] = spr.target;
+		var solid = this.getSolid(p, bod.radii, true);
+		if (solid) {
+			if (!p.x && !p.z) // spawning (meh?)
+				spr.target = spr.value = solid.bounds.max[sprax] + 100;
+			else
+				spr.target = spr.value;
+		}
 	},
 	setVolumes: function() {
 		if (this.speaker) {
