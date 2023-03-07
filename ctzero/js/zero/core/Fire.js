@@ -61,9 +61,10 @@ zero.core.Fire = CT.Class({
 			kind: "shiner",
 			thing: "Bit",
 			coneGeometry: true,
-			position: [0, 20, 0],
+			position: [0, 10, 0],
+			scale: [10, 10, 10],
 			material: {
-				opacity: 0.6,
+//				opacity: 0.6,
 				color: 0xffff00,
 				transparent: true,
 				side: THREE.DoubleSide
@@ -73,10 +74,23 @@ zero.core.Fire = CT.Class({
 			name: "heart",
 			kind: "shiner",
 			thing: "Bit",
-			position: [0, 20, 0],
+			position: [0, 15, 0],
+			scale: [15, 15, 15],
+			material: {
+//				opacity: 0.5,
+				color: 0xffff00,
+				transparent: true,
+				side: THREE.DoubleSide
+			}
+		});
+		oz.flametips && oz.parts.push({
+			name: "flametips",
+			kind: "shiner",
+			thing: "Bit",
+			position: [0, 30, 0],
 			scale: [20, 20, 20],
 			material: {
-				opacity: 0.5,
+//				opacity: 0.5,
 				color: 0xffff00,
 				transparent: true,
 				side: THREE.DoubleSide
@@ -120,6 +134,7 @@ zero.core.Fire = CT.Class({
 			flames: true,
 			sparks: true,
 			smoke: true,
+			flametips: true,
 			shine: true,
 			heart: true,
 			glow: true,
