@@ -218,7 +218,7 @@ class Furnishing(db.TimeStampedBase):
         d["key"] = self.key.urlsafe()
         d["parent"] = self.parent.urlsafe()
         if self.material:
-            if "material" not in d:
+            if not d.get("material"):
                 d["material"] = {}
             d["material"].update(self.material)
         d["parts"] = [f.json() for f in Furnishing.query(Furnishing.parent == self.key).fetch()]
