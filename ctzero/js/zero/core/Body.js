@@ -5,6 +5,16 @@ zero.core.Body = CT.Class({
 	positioner2axis: function(pname) {
 		return ["x", "y", "z"][this._xyz.indexOf(pname)];
 	},
+	axis2positioner: function(axis) {
+		return this._xyz[["x", "y", "z"].indexOf(axis)];
+	},
+	wbs: function() {
+		var wbs = {}, springz = this.springs;
+		this._xyz.forEach(function(dim, i) {
+			wbs[dim] = springz[dim].target;
+		});
+		return wbs;
+	},
 	assembled: function() {
 		this.log("built body!");
 		this.head.body = this;
@@ -81,6 +91,19 @@ zero.core.Body = CT.Class({
 		for (var op in gopts)
 			for (var dim in gopts[op])
 				this.springs[dim].target = gopts[op][dim];
+	},
+	adjust: function(property, dimension, value, additive, thring) {
+		if (property == "position") {
+			var s = this.springs[this.axis2positioner(dimension)];
+			if (additive)
+				s.target += value;
+			else
+				s.target = value;
+			s.value = s.target;
+		} else if (additive)
+			(thring || this.placer)[property][dimension] += value;
+		else
+			(thring || this.placer)[property][dimension] = value;
 	},
 	move: function(ropts) {
 		ropts.body && this._applyMod(ropts.body);
