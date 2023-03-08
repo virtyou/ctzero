@@ -95,7 +95,7 @@ zero.core.auto.Automaton = CT.Class({
 	},
 	init: function(opts) {
 		this.opts = opts = CT.merge(opts, { // required: person{}
-			wander: true,
+			wander: false,
 			activities: [],
 			program: {
 				base: 5,
@@ -105,10 +105,15 @@ zero.core.auto.Automaton = CT.Class({
 		});
 		this.reprogram();
 		opts.person.grippy = false;
-		var waz = opts.activities[0], pb = opts.person.body, wapo;
-		if (!pb.position && waz && waz.action == "wander" && waz.value != "room") {
-			wapo = zero.core.current.room[waz.value].position();
-			pb.position = [wapo.x, wapo.y + 100, wapo.z]; // meh?
+		var az0 = opts.activities[0], pb = opts.person.body, wapo, amo;
+		if (!pb.position && az0) {
+			if (az0.action == "move") {
+				amo = az0.value;
+				pb.position = [amo.weave, amo.bob, amo.slide];
+			} else if (az0.action == "wander" && az0.value != "room") {
+				wapo = zero.core.current.room[az0.value].position();
+				pb.position = [wapo.x, wapo.y + 100, wapo.z]; // meh?
+			}
 		}
 		this.reactivitate(opts.activities);
 		zero.core.util.join(opts.person, this.joined, true);
