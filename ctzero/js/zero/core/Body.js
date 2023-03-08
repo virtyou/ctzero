@@ -259,6 +259,6 @@ zero.core.Body = CT.Class({
 //		opts.frustumCulled = false; // TODO: figure out real problem and fix!!!
 		this.gearmap = {};
 		this.garments = {};
-		this._boundFixer = setTimeout(this.fixBounds, 2000);
+		this._boundFixer = setTimeout(this.fixBounds, 4000);
 	}
 }, zero.core.Thing);
