@@ -3,10 +3,10 @@ zero.core.Body = CT.Class({
 	_xyz: ["weave", "bob", "slide"],
 	_yoff: true,
 	positioner2axis: function(pname) {
-		return ["x", "y", "z"][this._xyz.indexOf(pname)];
+		return zero.core.util._xyz[this._xyz.indexOf(pname)];
 	},
 	axis2positioner: function(axis) {
-		return this._xyz[["x", "y", "z"].indexOf(axis)];
+		return this._xyz[zero.core.util._xyz.indexOf(axis)];
 	},
 	wbs: function() {
 		var wbs = {}, springz = this.springs;
