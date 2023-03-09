@@ -390,12 +390,13 @@ zero.core.Person = CT.Class({
 		});
 		delete zero.core.current.people[this.name];
 	},
-	components: function() {
-		return [{
+	components: function(ownedOnly) {
+		var cz = [{
 			identifier: "Person: " + this.name,
 			owners: this.opts.owners
 		}].concat(this.opts.basepacks).concat(zero.core.util.components(this.body.opts,
 			this.name + "'s body"));
+		return ownedOnly ? cz.filter(comp => comp && comp.owners) : cz;
 	},
 	init: function(opts) {
 		this.log("init", opts.name);
