@@ -75,7 +75,7 @@ zero.core.auto.Automaton = CT.Class({
 		pbs.slide.k = pbs.weave.k = 4;
 		pbs.slide.damp = pbs.weave.damp = 20;
 		this.opts.wander && person.wander();
-		this.activities.length && this.play();
+		this.activities.length && this.tick();
 		this.opts.onjoin && this.opts.onjoin(person);
 		for (var cb of this._.onperson)
 			cb(this.person);
