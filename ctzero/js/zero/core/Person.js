@@ -97,26 +97,35 @@ zero.core.Person = CT.Class({
 	onsay: function(cb) {
 		this._.onsay = cb;
 	},
+	onsaid: function(cb) {
+		this._.onsaid = cb;
+	},
 	say: function(data, cb, watch) {
+		var _ = this._;
 		zero.core.rec.cancel();
 		watch && this.watch(false, true);
 		if (data.audio)
-			this._.playClip(this.brain.say_data(data, cb));
+			_.playClip(this.brain.say_data(data, cb));
 		else {
 			this.mood.tick();
-			this._.onsay && this._.onsay(data, this);
-			this.brain.say(data, cb, this._.playClip, this.prosody, this.voice);
+			_.onsay && _.onsay(data, this);
+			this.brain.say(data, function() {
+				cb && cb();
+				_.onsaid && _.onsaid(data, this);
+			}, _.playClip, this.prosody, this.voice);
 		}
 	},
-	respond: function(phrase, cb, watch) {
+	respond: function(phrase, cb, watch, nosaycb) {
 		var thaz = this, zcc = zero.core.current;
-//		if (watch) { // watch both ways....
-//			watch && this.watch(false, true);
-//			if (zcc.person && zcc.person != this)
-//				this.look(zcc.person.body, true);
-//		}
+		if (watch) { // watch both ways....
+			watch && this.watch(false, true);
+			if (zcc.person && zcc.person != this)
+				this.look(zcc.person.body, true);
+		}
+		nosaycb = nosaycb || this.opts.nosaycb;
 		this.brain.respond(phrase, function(words) {
-			words ? thaz.say(words, function() {
+			nosaycb && nosaycb(words);
+			(words && !nosaycb) ? thaz.say(words, function() {
 				thaz._.chain(cb);
 			}) : thaz._.chain(cb);
 		});
