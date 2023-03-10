@@ -7,7 +7,6 @@ zero.core.Room = CT.Class({
 	_tickers: [],
 	_structural: ["obstacle", "floor", "wall", "ramp"],
 	_bumpers: ["wall", "obstacle"],
-	_surfaces: ["floor", "ramp", "obstacle", "wall"],
 	removables: function() {
 		return this.parts.concat(this.objects);
 	},
@@ -141,8 +140,8 @@ zero.core.Room = CT.Class({
 		}
 		return this.within(pos, radii, checkY, kind, prop);
 	},
-	getSolid: function(pos, radii, checkY) {
-		return this.getObject(pos, radii, checkY, "solid", "state");
+	getSolid: function(pos, radii, checkY, objectsOnly) {
+		return this[objectsOnly ? "within" : "getObject"](pos, radii, checkY, "solid", "state");
 	},
 	getSurface: function(pos, radii, topmost) {
 		var val, top, winner, test = function(obj) {
@@ -156,7 +155,8 @@ zero.core.Room = CT.Class({
 				}
 			}
 		}, i, k, flo, oz = this.opts;
-		for (k of this._surfaces) {
+		test(this.getSolid(pos, radii, false, true));
+		for (k of this._structural) {
 			if (oz[k]) {
 				for (i = oz[k].parts.length - 1; i > -1; i--) {
 					flo = this[k + i];
