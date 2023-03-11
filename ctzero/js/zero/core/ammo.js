@@ -264,9 +264,12 @@ zero.core.ammo = {
 	},
 	transform: function(transform, pos, quat) {
 		const ammo = zero.core.ammo, _ = ammo._;
-		transform = transform || new Ammo.btTransform();
-		pos = pos || ammo.vector(_.positioner.x, _.positioner.y, _.positioner.z);
-		quat = quat || ammo.quat(_.quatter.x, _.quatter.y, _.quatter.z, _.quatter.w);
+		if (!transform || !pos || !quat) {
+			CT.log("ammo.transform() generating transform, pos, or quat - don't do this very often!");
+			transform = transform || new Ammo.btTransform();
+			pos = pos || ammo.vector(_.positioner.x, _.positioner.y, _.positioner.z);
+			quat = quat || ammo.quat(_.quatter.x, _.quatter.y, _.quatter.z, _.quatter.w);
+		}
 		transform.setIdentity();
 		transform.setOrigin(pos);
 		transform.setRotation(quat);
