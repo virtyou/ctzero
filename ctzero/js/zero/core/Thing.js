@@ -806,6 +806,10 @@ zero.core.Thing = CT.Class({
 					this.material.dispose();
 					delete this.material;
 				}
+				if (core.config.ctzero.alphaTest && meshopts.transparent && !meshopts.alphaTest) {
+					this.log("setting alphaTest");
+					meshopts.alphaTest = core.config.ctzero.alphaTest;
+				}
 				this.material = new THREE[meshname](meshopts);
 			}
 			if (oz.stripset)
