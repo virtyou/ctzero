@@ -4,6 +4,7 @@ zero.base.particles = {
 		variance: [1, 0, 1],
 		pmat: {
 			opacity: 0.3,
+			alphaTest: 0.3,
 			shininess: 150,
 			color: 0x22ccff,
 			transparent: true
@@ -17,6 +18,7 @@ zero.base.particles = {
 		dissolve: 0.5,
 		pmat: {
 			opacity: 0,
+			alphaTest: 0.1,
 			shininess: 150,
 			color: 0x22ccff,
 			transparent: true
@@ -33,6 +35,7 @@ zero.base.particles = {
 		drip: true,
 		pmat: {
 			opacity: 0,
+			alphaTest: 0.1,
 			shininess: 150,
 			color: 0xff2222,
 			transparent: true
@@ -48,6 +51,7 @@ zero.base.particles = {
 		drip: true,
 		pmat: {
 			opacity: 0,
+			alphaTest: 0.1,
 			color: 0x888888,
 			transparent: true,
 			side: THREE.BackSide
