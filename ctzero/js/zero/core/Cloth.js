@@ -39,6 +39,7 @@ zero.core.Cloth = CT.Class({
 			matcat: "Lambert",
 			anchorPoints: "ends",
 			bufferGeometry: true,
+			noAlphaTest: true,
 			planeGeometry: [opts.width, opts.height, opts.numSegsZ, opts.numSegsY],
 			material: {
 				transparent: true,
