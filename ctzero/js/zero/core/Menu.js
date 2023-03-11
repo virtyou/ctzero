@@ -25,6 +25,7 @@ zero.core.Menu = CT.Class({
 		opts.material = CT.merge(opts.material, {
 			transparent: true,
 			color: opts.color,
+			alphaTest: 0.2,
 			opacity: 0.2
 		});
 //		opts.position = [cpos.x, cpos.y, depth - opts.depth];
