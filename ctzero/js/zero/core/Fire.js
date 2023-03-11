@@ -104,6 +104,7 @@ zero.core.Fire = CT.Class({
 			size: 40,
 			material: {
 				opacity: 0.1,
+				alphaTest: 0.1,
 				color: 0xff0000,
 				transparent: true,
 				side: THREE.BackSide
