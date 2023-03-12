@@ -122,6 +122,7 @@ zero.core.Brain = CT.Class({
 			res.branches && Object.assign(trigz, res.branches);
 			if (res.chain)
 				this.chain = res.chain;
+			res.cb && res.cb(trigz);
 			return this.get_response(res.phrase);
 		}
 	},
