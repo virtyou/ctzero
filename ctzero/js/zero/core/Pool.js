@@ -23,7 +23,7 @@ zero.core.Pool = CT.Class({
 			this.cam.position.y = -campos.y - 80;
 			this.cam.position.z = campos.z;//+22;
 			this.cam.position.x = campos.x;
-			this.cam.updateCubeMap(mainCam.get("renderer"), mainCam.scene);
+			this.cam.update(mainCam.get("renderer"), mainCam.scene);
 		}
 		this.bubbles && this.bubbles.tick(dts);
 		this.tickPos();
@@ -160,7 +160,7 @@ zero.core.Pool = CT.Class({
 		var c = opts.cam,
 			cubeCam = this.cam = new THREE.CubeCamera(c[0], c[1], c[2]);
 		zero.core.util.update(opts.camPos, cubeCam.position);
-		opts.material.envMap = this.cam.renderTarget;
+		opts.material.envMap = this.cam.renderTarget.texture;
 		this.smap = zero.core.trig.segs(60, opts.amplitude);
 		var PA = zero.core.Pool.audio;
 		if (PA) {
