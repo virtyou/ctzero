@@ -202,9 +202,47 @@ zero.core.ammo = {
 		ammo._.physicsWorld.addConstraint(hinge, true);
 		return hinge;
 	},
+	anchor: function(cloth, anchor, anchorPoints, afriction) {
+		const ammo = zero.core.ammo, consts = ammo._.consts,
+			coz = cloth.opts, endPoint = coz.numSegzZ * coz.numSegzY,
+			softBody = cloth.thring.userData.physicsBody;;
+		if (Array.isArray(anchor)) {
+			const aseg = endPoint / anchor.length;
+			anchor.forEach((a, i) => softBody.appendAnchor(aseg * i,
+				ammo.kineBody(coz.garment[a].thring, afriction), false, consts.anchorInfluence));
+		} else {
+			const abod = ammo.kineBody(anchor, afriction);
+			let i, anx = [];
+			anchorPoints = anchorPoints || "ends";
+			if (anchorPoints == "full")
+				for (i = 0; i <= coz.numSegsZ; i++)
+					anx.push(i);
+			else if (anchorPoints == "ends") {
+				anx.push(0);
+				anx.push(coz.numSegsZ);
+			} else if (anchorPoints == "start")
+				anx.push(0);
+			else if (anchorPoints == "end")
+				anx.push(coz.numSegsZ);
+			else if (anchorPoints == "mid")
+				anx.push(Math.floor(coz.numSegsZ / 2));
+			else if (anchorPoints == "center")
+				anx.push(Math.floor(endPoint / 2));
+			else if (anchorPoints == "corners") {
+				anx.push(0);
+				anx.push(coz.numSegsZ);
+				anx.push(endPoint - coz.numSegsZ);
+				anx.push(endPoint);
+			}
+			else
+				anx = anchorPoints;
+			if (anx != "none")
+				anx.forEach(a => softBody.appendAnchor(a, abod, false, consts.anchorInfluence));
+		}
+	},
 	softBody: function(cloth, anchor, anchorPoints, afriction) {
 		const ammo = zero.core.ammo, _ = ammo._, consts = _.consts,
-			coz = cloth.opts, softBody = _.patch(cloth, anchor, anchorPoints),
+			softBody = _.patch(cloth, anchor, anchorPoints),
 			sbcfg = softBody.get_m_cfg();
 
 		sbcfg.set_viterations(10);
@@ -218,42 +256,7 @@ zero.core.ammo = {
 		cloth.thring.userData.physicsBody = softBody;
 		softBody.setActivationState(_.STATE.DISABLE_DEACTIVATION);
 		_.softs.push(cloth.thring);
-		if (anchor) {
-			const endPoint = coz.numSegzZ * coz.numSegzY;
-			if (Array.isArray(anchor)) {
-				const aseg = endPoint / anchor.length;
-				anchor.forEach((a, i) => softBody.appendAnchor(aseg * i,
-					ammo.kineBody(coz.garment[a].thring, afriction), false, consts.anchorInfluence));
-			} else {
-				const abod = ammo.kineBody(anchor, afriction);
-				let i, anx = [];
-				anchorPoints = anchorPoints || "ends";
-				if (anchorPoints == "full")
-					for (i = 0; i <= coz.numSegsZ; i++)
-						anx.push(i);
-				else if (anchorPoints == "ends") {
-					anx.push(0);
-					anx.push(coz.numSegsZ);
-				} else if (anchorPoints == "start")
-					anx.push(0);
-				else if (anchorPoints == "end")
-					anx.push(coz.numSegsZ);
-				else if (anchorPoints == "mid")
-					anx.push(Math.floor(coz.numSegsZ / 2));
-				else if (anchorPoints == "center")
-					anx.push(Math.floor(endPoint / 2));
-				else if (anchorPoints == "corners") {
-					anx.push(0);
-					anx.push(coz.numSegsZ);
-					anx.push(endPoint - coz.numSegsZ);
-					anx.push(endPoint);
-				}
-				else
-					anx = anchorPoints;
-				if (anx != "none")
-					anx.forEach(a => softBody.appendAnchor(a, abod, false, consts.anchorInfluence));
-			}
-		}
+		anchor && ammo.anchor(cloth, anchor, anchorPoints, afriction);
 		return softBody;
 	},
 	vector: function(x, y, z) {
