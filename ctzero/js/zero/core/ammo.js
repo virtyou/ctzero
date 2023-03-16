@@ -212,10 +212,9 @@ zero.core.ammo = {
 				ammo.kineBody(coz.garment[a].thring, afriction), false, consts.anchorInfluence));
 		} else {
 			const anx = [], abod = ammo.kineBody(anchor, afriction);
-			let i;
 			anchorPoints = anchorPoints || "ends";
 			if (anchorPoints == "full")
-				for (i = 0; i <= coz.numSegsZ; i++)
+				for (let i = 0; i <= coz.numSegsZ; i++)
 					anx.push(i);
 			else if (anchorPoints == "ends") {
 				anx.push(0);
