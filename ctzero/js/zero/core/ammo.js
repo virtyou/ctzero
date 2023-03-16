@@ -209,7 +209,8 @@ zero.core.ammo = {
 		if (Array.isArray(anchor)) {
 			const aseg = endPoint / anchor.length;
 			anchor.forEach((a, i) => softBody.appendAnchor(aseg * i,
-				ammo.kineBody(coz.garment[a].thring, afriction), false, consts.anchorInfluence));
+				ammo.kineBody(coz.garment[a] ? coz.garment[a].thring : a,
+					afriction), false, consts.anchorInfluence));
 		} else {
 			const abod = ammo.kineBody(anchor, afriction);
 			let i, anx = [];
