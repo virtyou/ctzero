@@ -93,13 +93,27 @@ zero.base.clothes = {
 				opacity: 0,
 				color: "#ff0000"
 			},
+			rigids: ["weight"],
 			parts: [{
+				name: "weight",
+				friction: 1000,
+				sphereGeometry: 0.5,
+				position: [0, 0.9, 0],
+//				boxGeometry: [1, 0.25, 1],
+//				position: [0, 0.63, 0],
+				material: {
+					transparent: true,
+					opacity: 0,
+					color: "#ff0000"
+				}
+			}, {
 				thing: "Cloth",
 				name: "cloak",
-				height: 100,
-				width: 100,
-				segLen: 5,
+				height: 120,
+				width: 120,
+				segLen: 8,
 				flatDim: "y",
+				anchorFriction: 2,
 				anchorPoints: "none",
 				displacement: { x: 0, y: 20, z: 0 },
 				tweaks: {
