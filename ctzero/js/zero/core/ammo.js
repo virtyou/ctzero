@@ -211,8 +211,8 @@ zero.core.ammo = {
 			anchor.forEach((a, i) => softBody.appendAnchor(aseg * i,
 				ammo.kineBody(coz.garment[a].thring, afriction), false, consts.anchorInfluence));
 		} else {
-			const abod = ammo.kineBody(anchor, afriction);
-			let i, anx = [];
+			const anx = [], abod = ammo.kineBody(anchor, afriction);
+			let i;
 			anchorPoints = anchorPoints || "ends";
 			if (anchorPoints == "full")
 				for (i = 0; i <= coz.numSegsZ; i++)
