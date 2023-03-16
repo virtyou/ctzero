@@ -68,7 +68,7 @@ zero.core.Person = CT.Class({
 		var curper = zero.core.current.person;
 		if (curper && this != curper)
 			vol = zero.core.util.close2u(this.body);
-		this.log("playing", sound, "at", vol);
+		this.opts.verbose && this.log("playing", sound, "at", vol);
 		zero.core.audio.sfx(CT.data.choice(afiles), vol);
 	},
 	click: function() {
@@ -417,6 +417,7 @@ zero.core.Person = CT.Class({
 			mods: {},
 			dances: {},
 			grippy: true,
+			verbose: false, // for audio log()s
 			gestures: {},
 			responses: {},
 			positioners: {},
