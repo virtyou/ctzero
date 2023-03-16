@@ -202,7 +202,7 @@ zero.core.ammo = {
 		ammo._.physicsWorld.addConstraint(hinge, true);
 		return hinge;
 	},
-	softBody: function(cloth, anchor, anchorPoints) {
+	softBody: function(cloth, anchor, anchorPoints, afriction) {
 		const ammo = zero.core.ammo, _ = ammo._, consts = _.consts,
 			coz = cloth.opts, softBody = _.patch(cloth, anchor, anchorPoints),
 			sbcfg = softBody.get_m_cfg();
@@ -223,9 +223,9 @@ zero.core.ammo = {
 			if (Array.isArray(anchor)) {
 				const aseg = endPoint / anchor.length;
 				anchor.forEach((a, i) => softBody.appendAnchor(aseg * i,
-					ammo.kineBody(coz.garment[a].thring), false, consts.anchorInfluence));
+					ammo.kineBody(coz.garment[a].thring, afriction), false, consts.anchorInfluence));
 			} else {
-				const abod = ammo.kineBody(anchor);
+				const abod = ammo.kineBody(anchor, afriction);
 				let i, anx = [];
 				anchorPoints = anchorPoints || "ends";
 				if (anchorPoints == "full")
