@@ -112,6 +112,7 @@ zero.base.clothes = {
 				segLen: 5,
 				flatDim: "y",
 				anchorPoints: "none",
+//				anchorFriction: 1,
 				displacement: { x: 0, y: 20, z: 0 },
 				tweaks: {
 					kDF: 1

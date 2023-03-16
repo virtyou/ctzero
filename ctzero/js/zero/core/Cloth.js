@@ -12,7 +12,7 @@ zero.core.Cloth = CT.Class({
 	},
 	setsoft: function() {
 		const oz = this.opts;
-		this.softBody = zero.core.ammo.softBody(this, oz.frame, oz.anchorPoints);
+		this.softBody = zero.core.ammo.softBody(this, oz.frame, oz.anchorPoints, oz.anchorFriction);
 		oz.tweaks && this.modsoft(oz.tweaks);
 		oz.postTweaks && setTimeout(() => this.modsoft(oz.postTweaks), 5000);
 		this.thring.material.transparent = oz.reallyTrans || false;
