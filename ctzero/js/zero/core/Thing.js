@@ -563,18 +563,19 @@ zero.core.Thing = CT.Class({
 		this.posRotScale(opts);
 	},
 	_vstrip: function(vs) {
-		var opts = this.opts, max = 16384, total;
+		var opts = this.opts, total;
 		if (typeof vs == "string")
 			vs = opts.vstrip = CT.module(vs);
-		vs.fwidth = vs.fwidth || 128;
-		vs.fheight = vs.fheight || 64;
+		vs.max = vs.max || (vs.halfsize ? 8192 : 16384);
+		vs.fwidth = vs.fwidth || (vs.halfsize ? 64 : 128);
+		vs.fheight = vs.fheight || (vs.halfsize ? 32 : 64);
 		opts.texture = vs.texture;
 		if (!opts.material)
 			opts.material = {};
 		opts.material.transparent = true;
 		if (!vs.width) {
 			total = vs.fwidth * vs.frames;
-			vs.width = Math.min(max, total);
+			vs.width = Math.min(vs.max, total);
 			vs.height = vs.fheight * Math.ceil(total / vs.width);
 		}
 		opts.repeat = [vs.fwidth / vs.width, vs.fheight / vs.height];
