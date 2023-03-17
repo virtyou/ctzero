@@ -16,6 +16,10 @@ zero.core.Garment = CT.Class({
 				this.cloths.push(p.name);
 		}
 	},
+	onremove: function() {
+		for (let r of this.opts.rigids)
+			zero.core.ammo.unKinematic(this[r].thring);
+	},
 	setTexture: function(tx) {
 		const uobj = { texture: tx };
 		this.update(uobj);
@@ -24,7 +28,6 @@ zero.core.Garment = CT.Class({
 	fixBounds: function(p) {
 		for (let cloth of this.cloths)
 			zero.core.util.update(p, this[cloth].thring.geometry.boundingSphere.center);
-
 	},
 	init: function(opts) {
 		const bodpart = this.opts.bodpart = this.opts.kind.split("_").pop();

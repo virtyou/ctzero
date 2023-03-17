@@ -107,12 +107,15 @@ zero.core.ammo = {
 		zero.core.ammo._.consts[k] = v;
 	},
 	unSoft: function(s) {
+//		zero.core.ammo._.Ammo.destroy(s.userData.physicsBody);
 		CT.data.remove(zero.core.ammo._.softs, s);
 	},
 	unRigid: function(r) {
+//		zero.core.ammo._.Ammo.destroy(r.userData.physicsBody);
 		CT.data.remove(zero.core.ammo._.rigids, r);
 	},
 	unKinematic: function(k) {
+//		zero.core.ammo._.Ammo.destroy(k.userData.physicsBody);
 		CT.data.remove(zero.core.ammo._.kinematics, k);
 	},
 	tick: function(dt) {
@@ -290,6 +293,7 @@ zero.core.ammo = {
 	load: function(AmmoLib) {
 		const ammo = zero.core.ammo, _ = ammo._;
 		Ammo = AmmoLib;
+//		_.Ammo = Ammo;
 
 		_.collisionConfiguration = new Ammo.btSoftBodyRigidBodyCollisionConfiguration();
 		_.dispatcher = new Ammo.btCollisionDispatcher(_.collisionConfiguration);
