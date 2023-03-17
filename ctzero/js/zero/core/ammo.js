@@ -107,16 +107,22 @@ zero.core.ammo = {
 		zero.core.ammo._.consts[k] = v;
 	},
 	unSoft: function(s) {
-//		zero.core.ammo._.Ammo.destroy(s.userData.physicsBody);
-		CT.data.remove(zero.core.ammo._.softs, s);
+		const _ = zero.core.ammo._;
+		_.physicsWorld.removeSoftBody(s);
+//		_.Ammo.destroy(s.userData.physicsBody);
+		CT.data.remove(_.softs, s);
 	},
 	unRigid: function(r) {
-//		zero.core.ammo._.Ammo.destroy(r.userData.physicsBody);
-		CT.data.remove(zero.core.ammo._.rigids, r);
+		const _ = zero.core.ammo._;
+		_.physicsWorld.removeRigidBody(r);
+//		_.Ammo.destroy(r.userData.physicsBody);
+		CT.data.remove(_.rigids, r);
 	},
 	unKinematic: function(k) {
-//		zero.core.ammo._.Ammo.destroy(k.userData.physicsBody);
-		CT.data.remove(zero.core.ammo._.kinematics, k);
+		const _ = zero.core.ammo._;
+		_.physicsWorld.removeRigidBody(k);
+//		_.Ammo.destroy(k.userData.physicsBody);
+		CT.data.remove(_.kinematics, k);
 	},
 	tick: function(dt) {
 		const ammo = zero.core.ammo, _ = ammo._;
