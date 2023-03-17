@@ -566,9 +566,10 @@ zero.core.Thing = CT.Class({
 		var opts = this.opts, total;
 		if (typeof vs == "string")
 			vs = opts.vstrip = CT.module(vs);
-		vs.max = vs.max || (vs.halfsize ? 8192 : 16384);
-		vs.fwidth = vs.fwidth || (vs.halfsize ? 64 : 128);
-		vs.fheight = vs.fheight || (vs.halfsize ? 32 : 64);
+		vs.downscale = vs.downscale || 1;
+		vs.max = vs.max || (16384 / vs.downscale);
+		vs.fwidth = vs.fwidth || (128 / vs.downscale);
+		vs.fheight = vs.fheight || (64 / vs.downscale);
 		opts.texture = vs.texture;
 		if (!opts.material)
 			opts.material = {};
