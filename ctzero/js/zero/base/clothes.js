@@ -87,7 +87,7 @@ zero.base.clothes = {
 		cloak: {
 			boxGeometry: true,
 			scale: [20, 40, 18],
-			position: [0, -20, 0],
+			position: [0, -15, 0],
 			material: {
 				transparent: true,
 				opacity: 0,
