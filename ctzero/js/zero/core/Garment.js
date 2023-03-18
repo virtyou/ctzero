@@ -26,6 +26,8 @@ zero.core.Garment = CT.Class({
 		this.parts.forEach(p => p.update(uobj));
 	},
 	fixBounds: function(p) {
+		if (!this.isReady())
+			return this.log("skipping fixBounds() - not ready");
 		for (let cloth of this.cloths)
 			zero.core.util.update(p, this[cloth].thring.geometry.boundingSphere.center);
 	},
