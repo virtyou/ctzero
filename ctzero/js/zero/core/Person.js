@@ -1,6 +1,7 @@
 zero.core.Person = CT.Class({
 	CLASSNAME: "zero.core.Person",
 	_: {
+		bouncer: 1,
 		doPlay: function(cb) {
 			var audio = this._.audio;
 			audio.play().then(cb)["catch"](function(error) {
@@ -252,6 +253,16 @@ zero.core.Person = CT.Class({
 			}, 500);
 		}, 500); // time for orientation...
 	},
+	bounce: function(amount) {
+		var _ = this._;
+		amount *= _.bouncer;
+		_.bouncer *= 6 / 5;
+		if (_.bouncer > 2) {
+			this.log("resetting bouncer");
+			_.bouncer = 1;
+		}
+		return amount;
+	},
 	jump: function() {
 		var bod = this.body, within = bod.within,
 			t = zero.core.util.ticker, sound = "whoosh";
@@ -271,6 +282,7 @@ zero.core.Person = CT.Class({
 		var bod = this.body, within = bod.within,
 			dance = bod.flying ? "fly" : "walk",
 			t = zero.core.util.ticker;
+		this._.bouncer = 1;
 		if (within && within.opts.state == "liquid") {
 			dance = "swim";
 			(t % 20) || bod.bubbletrail.release(1);
@@ -342,6 +354,7 @@ zero.core.Person = CT.Class({
 		duration && setTimeout(this.undance, duration);
 	},
 	undance: function() {
+		this._.bouncer = 1;
 		delete this.activeDance;
 		this.ungesture();
 	},

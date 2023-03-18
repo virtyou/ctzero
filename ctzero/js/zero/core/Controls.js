@@ -153,7 +153,7 @@ zero.core.Controls = CT.Class({
 			if (dir == "y") {
 				if (amount) {
 					if (spr.floored) {
-						spr.boost = amount;
+						spr.boost = target.bounce(amount);
 						spr.floored = false;
 					} else if (!spr.hard)
 						spr.boost = amount;
