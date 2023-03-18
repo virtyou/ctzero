@@ -112,7 +112,7 @@ zero.core.ammo = {
 			_.physicsWorld.removeSoftBody(pb);
 		else
 			_.physicsWorld.removeRigidBody(pb);
-		_.Ammo.destroy(pb);
+		Ammo.destroy(pb);
 		delete ud.physicsBody;
 		CT.data.remove(_[group], thring);
 	},
@@ -300,7 +300,7 @@ zero.core.ammo = {
 	load: function(AmmoLib) {
 		const ammo = zero.core.ammo, _ = ammo._;
 		Ammo = AmmoLib;
-		_.Ammo = Ammo;
+//		_.Ammo = Ammo;
 
 		_.collisionConfiguration = new Ammo.btSoftBodyRigidBodyCollisionConfiguration();
 		_.dispatcher = new Ammo.btCollisionDispatcher(_.collisionConfiguration);
