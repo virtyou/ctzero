@@ -106,23 +106,24 @@ zero.core.ammo = {
 	setConst: function(k, v) {
 		zero.core.ammo._.consts[k] = v;
 	},
+	unBody: function(thring, group) {
+		const _ = zero.core.ammo._, ud = thring.userData, pb = ud.physicsBody;
+		if (group == "softs")
+			_.physicsWorld.removeSoftBody(pb);
+		else
+			_.physicsWorld.removeRigidBody(pb);
+		_.Ammo.destroy(pb);
+		delete ud.physicsBody;
+		CT.data.remove(_[group], thring);
+	},
 	unSoft: function(s) {
-		const _ = zero.core.ammo._;
-		_.physicsWorld.removeSoftBody(s);
-//		_.Ammo.destroy(s.userData.physicsBody);
-		CT.data.remove(_.softs, s);
+		zero.core.ammo.unBody(s, "softs");
 	},
 	unRigid: function(r) {
-		const _ = zero.core.ammo._;
-		_.physicsWorld.removeRigidBody(r);
-//		_.Ammo.destroy(r.userData.physicsBody);
-		CT.data.remove(_.rigids, r);
+		zero.core.ammo.unBody(r, "rigids");
 	},
 	unKinematic: function(k) {
-		const _ = zero.core.ammo._;
-		_.physicsWorld.removeRigidBody(k);
-//		_.Ammo.destroy(k.userData.physicsBody);
-		CT.data.remove(_.kinematics, k);
+		zero.core.ammo.unBody(k, "kinematics");
 	},
 	tick: function(dt) {
 		const ammo = zero.core.ammo, _ = ammo._;
@@ -299,7 +300,7 @@ zero.core.ammo = {
 	load: function(AmmoLib) {
 		const ammo = zero.core.ammo, _ = ammo._;
 		Ammo = AmmoLib;
-//		_.Ammo = Ammo;
+		_.Ammo = Ammo;
 
 		_.collisionConfiguration = new Ammo.btSoftBodyRigidBodyCollisionConfiguration();
 		_.dispatcher = new Ammo.btCollisionDispatcher(_.collisionConfiguration);
