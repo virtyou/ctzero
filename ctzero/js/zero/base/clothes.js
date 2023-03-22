@@ -282,6 +282,32 @@ zero.base.clothes.head = { // hats
 			displacement: { x: 0, y: 0, z: 0 }
 		}]
 	},
+	veil: {
+		rigids: ["ball"],
+		parts: [{
+			name: "ball",
+			sphereGeometry: 8,
+			position: [0, 8.3, 2.3]
+		}, {
+			name: "backhold",
+			boxGeometry: true,
+			scale: [10, 1, 1],
+			position: [0, 30, -5],
+			material: {
+				transparent: true,
+				opacity: 0
+			}
+		}, {
+			name: "back",
+			thing: "Cloth",
+			flatDim: "y",
+//			segLen: 8,
+			width: 40,
+			height: 40,
+			frame: "backhold",
+			displacement: { x: 0, y: 0, z: 0 }
+		}]
+	},
 	donut: {
 		torusGeometry: true,
 		rotation: [1, 0, 0],
