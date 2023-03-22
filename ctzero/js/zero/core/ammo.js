@@ -231,6 +231,10 @@ zero.core.ammo = {
 			else if (anchorPoints == "ends") {
 				anx.push(0);
 				anx.push(coz.numSegsZ);
+			} else if (anchorPoints == "quarts") {
+				i = coz.numSegsZ / 4;
+				anx.push(i);
+				anx.push(coz.numSegsZ - i);
 			} else if (anchorPoints == "start")
 				anx.push(0);
 			else if (anchorPoints == "end")
