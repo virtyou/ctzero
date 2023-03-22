@@ -3,7 +3,7 @@ zero.core.Cloth = CT.Class({
 	onremove: function() {
 		delete this.opts.garment; // otherwise circular
 		zero.core.ammo.unSoft(this.thring);
-		zero.core.ammo.unKinematic(this.opts.frame);
+		zero.core.ammo.unKinematic(this.frame);
 	},
 	modsoft: function(tweaks) {
 		const sbcfg = this.softBody.get_m_cfg();
@@ -12,10 +12,10 @@ zero.core.Cloth = CT.Class({
 	},
 	setsoft: function() {
 		const oz = this.opts;
-		let frame = oz.frame;
-		if (typeof frame == "string")
-			frame = oz.garment[frame].thring;
-		this.softBody = zero.core.ammo.softBody(this, frame, oz.anchorPoints, oz.anchorFriction);
+		this.frame = oz.frame;
+		if (typeof this.frame == "string")
+			this.frame = oz.garment[this.frame].thring;
+		this.softBody = zero.core.ammo.softBody(this, this.frame, oz.anchorPoints, oz.anchorFriction);
 		oz.tweaks && this.modsoft(oz.tweaks);
 		oz.postTweaks && setTimeout(() => this.modsoft(oz.postTweaks), 5000);
 		this.thring.material.transparent = oz.reallyTrans || false;
