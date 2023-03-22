@@ -1,14 +1,14 @@
 zero.core.Garment = CT.Class({
 	CLASSNAME: "zero.core.Garment",
 	preassemble: function() {
-		const oz = this.opts, pz = oz.parts,
+		const oz = this.opts, pz = oz.parts, otz = oz.onlyTex,
 			rz = oz.rigids, ammo = zero.core.ammo;
 		let i, p;
 		this.cloths = [];
 		for (i = 0; i < pz.length; i++) {
 			p = pz[i];
 			p.garment = this;
-			if (oz.texture)
+			if (oz.texture && !otz || otz.includes(p.name))
 				p.texture = oz.texture;
 			if (rz.includes(p.name))
 				p.onbuild = (thing) => ammo.kineBody(thing.thring, thing.opts.friction);
@@ -21,9 +21,12 @@ zero.core.Garment = CT.Class({
 			zero.core.ammo.unKinematic(this[r].thring);
 	},
 	setTexture: function(tx) {
-		const uobj = { texture: tx };
+		const uobj = { texture: tx }, oz = this.opts;
 		this.update(uobj);
-		this.parts.forEach(p => p.update(uobj));
+		if (oz.onlyTex)
+			oz.onlyTex.forEach(p => this[p].update(uobj));
+		else
+			this.parts.forEach(p => p.update(uobj));
 	},
 	fixBounds: function(p) {
 		if (!this.isReady())

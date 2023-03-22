@@ -284,6 +284,7 @@ zero.base.clothes.head = { // hats
 	},
 	veil: {
 		rigids: ["ball"],
+		onlyTex: ["cloth"],
 		parts: [{
 			name: "ball",
 			sphereGeometry: 8,
