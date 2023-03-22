@@ -74,7 +74,7 @@ zero.base.particles = {
 		}
 	},
 	rain: {
-		count: 800,
+		count: 200,
 		size: 2,
 		velocity: [0, -300, 0],
 		scale: [1, 4, 1],
