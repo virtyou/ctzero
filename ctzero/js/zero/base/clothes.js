@@ -292,7 +292,7 @@ zero.base.clothes.head = { // hats
 			name: "backhold",
 			boxGeometry: true,
 			scale: [10, 1, 1],
-			position: [0, 30, -5],
+			position: [0, 10, -12],
 			material: {
 				transparent: true,
 				opacity: 0
@@ -302,9 +302,10 @@ zero.base.clothes.head = { // hats
 			thing: "Cloth",
 			flatDim: "y",
 //			segLen: 8,
-			width: 40,
+			width: 48,
 			height: 40,
 			frame: "backhold",
+			anchorPoints: "thirts",
 			displacement: { x: 0, y: 0, z: 0 }
 		}]
 	},
