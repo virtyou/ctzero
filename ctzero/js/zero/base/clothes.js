@@ -293,7 +293,7 @@ zero.base.clothes.head = { // hats
 			sphereGeometry: 6,
 			position: [0, -1, 3]
 		}, {
-			name: "backhold",
+			name: "hangspot",
 			boxGeometry: true,
 			scale: [10, 1, 1],
 			position: [0, 20, -14],
@@ -302,13 +302,13 @@ zero.base.clothes.head = { // hats
 				opacity: 0
 			}
 		}, {
-			name: "back",
+			name: "cloth",
 			thing: "Cloth",
 			flatDim: "y",
 //			segLen: 8,
 			width: 48,
 			height: 40,
-			frame: "backhold",
+			frame: "hangspot",
 			anchorPoints: "thirts",
 			displacement: { x: 0, y: 0, z: 0 }
 		}]
