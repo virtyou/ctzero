@@ -235,6 +235,10 @@ zero.core.ammo = {
 				i = coz.numSegsZ / 4;
 				anx.push(i);
 				anx.push(coz.numSegsZ - i);
+			} else if (anchorPoints == "thirts") {
+				i = coz.numSegsZ / 3;
+				anx.push(i);
+				anx.push(coz.numSegsZ - i);
 			} else if (anchorPoints == "start")
 				anx.push(0);
 			else if (anchorPoints == "end")
