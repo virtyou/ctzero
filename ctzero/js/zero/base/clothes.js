@@ -97,8 +97,8 @@ zero.base.clothes = {
 			parts: [{
 				name: "weight",
 				friction: 1000,
-				sphereGeometry: 0.5,
-				position: [0, 0.9, 0],
+				sphereGeometry: 0.25,
+				position: [0, 0.6, 0],
 //				boxGeometry: [1, 0.25, 1],
 //				position: [0, 0.63, 0],
 				material: {
