@@ -295,16 +295,16 @@ zero.base.clothes.head = { // hats
 			position: [0, -1, 3]
 		}, {
 			name: "fb1",
-			sphereGeometry: 6,
-			position: [5, 5, 11],
+			sphereGeometry: 5,
+			position: [6, 5, 11],
 			material: {
 				transparent: true,
 				opacity: 0
 			}
 		}, {
 			name: "fb2",
-			sphereGeometry: 6,
-			position: [-5, 5, 11],
+			sphereGeometry: 5,
+			position: [-6, 5, 11],
 			material: {
 				transparent: true,
 				opacity: 0
@@ -313,7 +313,7 @@ zero.base.clothes.head = { // hats
 			name: "hangspot",
 			boxGeometry: true,
 			scale: [10, 1, 1],
-			position: [0, 20, -14],
+			position: [0, 20, -17],
 			material: {
 				transparent: true,
 				opacity: 0
