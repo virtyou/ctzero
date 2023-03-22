@@ -262,7 +262,7 @@ zero.core.ammo = {
 	softBody: function(cloth, anchor, anchorPoints, afriction) {
 		const ammo = zero.core.ammo, _ = ammo._, consts = _.consts,
 			softBody = _.patch(cloth, anchor, anchorPoints),
-			sbcfg = softBody.get_m_cfg();
+			sbcfg = softBody.get_m_cfg(), m = cloth.opts.margin || consts.margin;
 
 		sbcfg.set_viterations(10);
 		sbcfg.set_piterations(10);
@@ -270,7 +270,7 @@ zero.core.ammo = {
 		consts.damping && sbcfg.set_kDP(consts.damping);
 
 		softBody.setTotalMass(0.9, false);
-		Ammo.castObject(softBody, Ammo.btCollisionObject).getCollisionShape().setMargin(consts.margin * 3);
+		Ammo.castObject(softBody, Ammo.btCollisionObject).getCollisionShape().setMargin(m * 3);
 		_.physicsWorld.addSoftBody(softBody, 1, -1);
 		cloth.thring.userData.physicsBody = softBody;
 		softBody.setActivationState(_.STATE.DISABLE_DEACTIVATION);
