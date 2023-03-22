@@ -81,6 +81,7 @@ zero.base.clothes = {
 				name: "cape",
 				height: 40,
 				width: 20,
+				segLen: 10,
 				displacement: { x: 0, y: -40, z: -10 }
 			}]
 		},
