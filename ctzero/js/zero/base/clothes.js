@@ -289,6 +289,10 @@ zero.base.clothes.head = { // hats
 			sphereGeometry: 8,
 			position: [0, 8.3, 2.3]
 		}, {
+			name: "wimple",
+			sphereGeometry: 6,
+			position: [0, -1, 3]
+		}, {
 			name: "backhold",
 			boxGeometry: true,
 			scale: [10, 1, 1],
