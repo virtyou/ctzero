@@ -21,7 +21,8 @@ zero.core.Cloth = CT.Class({
 		this.thring.material.transparent = oz.reallyTrans || false;
 	},
 	postassemble: function() {
-		core.config.ctzero.gravity ? setTimeout(this.setsoft, 1000) : this.setsoft();
+		setTimeout(this.setsoft, 500);
+//		core.config.ctzero.gravity ? setTimeout(this.setsoft, 1000) : this.setsoft();
 	},
 	init: function(opts) { // should translate geometry?
 		opts.segLen = opts.segLen || 4;
