@@ -86,7 +86,7 @@ zero.base.clothes = {
 		},
 		cloak: {
 			boxGeometry: true,
-			scale: [20, 40, 18],
+			scale: [22, 44, 22],
 			position: [0, -15, 0],
 			material: {
 				transparent: true,
@@ -283,7 +283,8 @@ zero.base.clothes.head = { // hats
 		}]
 	},
 	veil: {
-		rigids: ["ball"],
+		rigids: ["ball", "faceblocker"],
+//		rigids: ["ball"],
 		onlyTex: ["cloth"],
 		parts: [{
 			name: "ball",
@@ -293,6 +294,14 @@ zero.base.clothes.head = { // hats
 			name: "wimple",
 			sphereGeometry: 6,
 			position: [0, -1, 3]
+		}, {
+			name: "faceblocker",
+			sphereGeometry: 6,
+			position: [0, 6, 10],
+			material: {
+				transparent: true,
+				opacity: 0.5
+			}
 		}, {
 			name: "hangspot",
 			boxGeometry: true,
@@ -307,8 +316,9 @@ zero.base.clothes.head = { // hats
 			thing: "Cloth",
 			flatDim: "y",
 //			segLen: 8,
-			width: 48,
+			width: 56,
 			height: 40,
+			margin: 0.6,
 			frame: "hangspot",
 			anchorPoints: "thirts",
 			displacement: { x: 0, y: 0, z: 0 }
