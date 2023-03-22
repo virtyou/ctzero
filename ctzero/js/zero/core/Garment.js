@@ -8,7 +8,7 @@ zero.core.Garment = CT.Class({
 		for (i = 0; i < pz.length; i++) {
 			p = pz[i];
 			p.garment = this;
-			if (oz.texture && !otz || otz.includes(p.name))
+			if (oz.texture && (!otz || otz.includes(p.name)))
 				p.texture = oz.texture;
 			if (rz.includes(p.name))
 				p.onbuild = (thing) => ammo.kineBody(thing.thring, thing.opts.friction);
