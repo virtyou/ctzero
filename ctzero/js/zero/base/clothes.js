@@ -283,8 +283,7 @@ zero.base.clothes.head = { // hats
 		}]
 	},
 	veil: {
-		rigids: ["ball", "faceblocker"],
-//		rigids: ["ball"],
+		rigids: ["ball", "fb1", "fb2"],
 		onlyTex: ["cloth"],
 		parts: [{
 			name: "ball",
@@ -295,12 +294,20 @@ zero.base.clothes.head = { // hats
 			sphereGeometry: 6,
 			position: [0, -1, 3]
 		}, {
-			name: "faceblocker",
+			name: "fb1",
 			sphereGeometry: 6,
-			position: [0, 6, 10],
+			position: [5, 5, 11],
 			material: {
 				transparent: true,
-				opacity: 0.5
+				opacity: 0
+			}
+		}, {
+			name: "fb2",
+			sphereGeometry: 6,
+			position: [-5, 5, 11],
+			material: {
+				transparent: true,
+				opacity: 0
 			}
 		}, {
 			name: "hangspot",
