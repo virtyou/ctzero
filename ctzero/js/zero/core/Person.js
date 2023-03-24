@@ -312,7 +312,7 @@ zero.core.Person = CT.Class({
 		}, cb);
 	},
 	move: function(opts, cb, watch) {
-		var k, dur = 1000; // TODO: ACTUALLY CALC DUR!!!!
+		var k, dur = this.automaton ? 4000 : 1000; // TODO: ACTUALLY CALC DUR!!!!
 		for (var k in opts)
 			this.body.springs[k].target = opts[k];
 		watch && this.watch(false, true);
