@@ -66,8 +66,11 @@ class Asset(db.TimeStampedBase):
 
 def refineAssets():
     az = Asset.query(Asset.variety == "texture").all()
+    log("refineAssets() processing %s Asset records"%(len(az),))
     for a in az:
         a.refine()
+    log("processed %s Asset records"%(len(az),))
+    log("goodbye!")
 
 def assetize(ent, d):
     for item in ["texture", "stripset"]:
