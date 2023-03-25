@@ -37,7 +37,7 @@ class Asset(db.TimeStampedBase):
         log("%s %s"%(self.signature(), " ".join(msg)))
 
     def metize(self):
-        self.meta = media.imeta(self.item.path)
+        self.meta = media.imeta(self.item.path, True)
         return self.meta
 
     def refine(self):
@@ -63,6 +63,14 @@ class Asset(db.TimeStampedBase):
 
     def json(self):
         return self.data()
+
+def scanAssets():
+    az = Asset.query(Asset.variety == "texture").all()
+    log("scanAssets() processing %s Asset records"%(len(az),))
+    for a in az:
+        a.log(str(a.metize()))
+    log("scanned %s Asset records"%(len(az),))
+    log("goodbye!")
 
 def refineAssets():
     az = Asset.query(Asset.variety == "texture").all()
