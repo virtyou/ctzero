@@ -1,4 +1,5 @@
 from cantools import db
+from cantools.util import log, media
 from ctuser.model import CTUser
 
 class Translation(db.TimeStampedBase):
@@ -26,12 +27,58 @@ class Asset(db.TimeStampedBase):
     name = db.String()
     identifier = db.String()
     item = db.Binary(unique=True)
+    meta = db.JSON()
+
+    def signature(self):
+        return "Asset(%s[%s]%s:%s/%s)"%(self.name, self.identifier,
+            self.item.value, self.variety, self.kind)
+
+    def log(self, *msg):
+        log("%s %s"%(self.signature(), " ".join(msg)))
+
+    def metize(self):
+        self.meta = media.imeta(self.item.path, True)
+        return self.meta
+
+    def refine(self):
+        if self.variety == "stripset":
+            return self.log("refine skipping")
+        refined = False
+        meta = self.meta or self.metize()
+        if meta['format'] == "TIFF": # others? do gifs work (i forgot)
+            refined = True
+            self.log("jpgizing")
+            media.jpgize(self.item.path, "TIFF", True)
+        if not meta["p2"]:
+            refined = True
+            self.log("p2ing")
+            media.p2(self.item.path, True)
+        if refined:
+            self.metize()["original"] = meta
+            self.put()
+            self.log("refined", str(self.meta))
 
     def path(self):
         return self.item.urlsafe()
 
     def json(self):
         return self.data()
+
+def scanAssets():
+    az = Asset.query(Asset.variety == "texture").all()
+    log("scanAssets() processing %s Asset records"%(len(az),))
+    for a in az:
+        a.log(str(a.metize()))
+    log("scanned %s Asset records"%(len(az),))
+    log("goodbye!")
+
+def refineAssets():
+    az = Asset.query(Asset.variety == "texture").all()
+    log("refineAssets() processing %s Asset records"%(len(az),))
+    for a in az:
+        a.refine()
+    log("processed %s Asset records"%(len(az),))
+    log("goodbye!")
 
 def assetize(ent, d):
     for item in ["texture", "stripset"]:

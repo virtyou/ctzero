@@ -531,7 +531,7 @@ zero.core.Thing = CT.Class({
 		var zcu = zero.core.util, mat = this.material,
 			hasT = "texture" in opts || "video" in opts || "vstrip" in opts,
 			o, setter, full = hasT && !mat;
-		full || ["stripset", "geometry", "matcat", "meshcat"].forEach(function(item) {
+		full || ["stripset", "geometry", "planeGeometry", "matcat", "meshcat"].forEach(function(item) {
 			full = full || (item in opts);
 		});
 		this.opts = CT.merge(opts, this.opts);
