@@ -45,7 +45,7 @@ class Asset(db.TimeStampedBase):
             return self.log("refine skipping")
         refined = False
         meta = self.meta or self.metize()
-        if meta['format'] == "TIFF": # others? do gifs work (i forgot)
+        if meta['format'] in ["TIFF", "RIFF"]: # others? do gifs work (i forgot)
             refined = True
             self.log("jpgizing")
             media.jpgize(self.item.path, "TIFF", True)
