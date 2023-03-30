@@ -48,7 +48,7 @@ class Asset(db.TimeStampedBase):
         if meta['format'] in ["TIFF", "RIFF"]: # others? do gifs work (i forgot)
             refined = True
             self.log("jpgizing")
-            media.jpgize(self.item.path, "TIFF", True)
+            media.jpgize(self.item.path, meta['format'], True)
         if not meta["p2"]:
             refined = True
             self.log("p2ing")
