@@ -405,6 +405,7 @@ zero.core.Person = CT.Class({
 		this.body.ungear(gkey);
 	},
 	remove: function() {
+		if (this.body.removed) return this.log("already removed!");
 		var thaz = this;
 		this.body.remove();
 		["body", "brain", "energy", "vibe"].forEach(function(prop) {
