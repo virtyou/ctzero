@@ -256,6 +256,11 @@ zero.core.Body = CT.Class({
 		this.opts = opts = CT.merge(this.opts, {
 			joints: zero.base.joints()
 		});
+		var mat = opts.material;
+		if (mat && mat.opacity && !mat.alphaTest) {
+			this.log("setting alphaTest to opacity " + mat.opacity);
+			mat.alphaTest = mat.opacity;
+		}
 //		opts.frustumCulled = false; // TODO: figure out real problem and fix!!!
 		this.gearmap = {};
 		this.garments = {};
