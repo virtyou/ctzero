@@ -112,6 +112,7 @@ zero.core.Thing = CT.Class({
 				!(["poster", "screen", "stream", "portal", "body"].includes(this.opts.kind));
 		}
 	},
+	_PRS: ["position", "rotation", "scale"],
 	_xyz: ["x", "y", "z"],
 	xyz: function(cb) {
 		this._xyz.forEach(cb);
@@ -484,7 +485,7 @@ zero.core.Thing = CT.Class({
 	},
 	place: function() {
 		var oz = this.opts, p = this.getPlacer();
-		["position", "rotation", "scale"].forEach(function(prop) {
+		this._PRS.forEach(function(prop) {
 			var setter = p[prop];
 			setter.set.apply(setter, oz[prop]);
 		});
@@ -523,7 +524,7 @@ zero.core.Thing = CT.Class({
 	},
 	posRotScale: function(opts, thring, additive) {
 		var setCoords = this.setCoords;
-		["position", "rotation", "scale"].forEach(function(prop) {
+		this._PRS.forEach(function(prop) {
 			(prop in opts) && setCoords(opts[prop], prop, additive, thring);
 		});
 	},
