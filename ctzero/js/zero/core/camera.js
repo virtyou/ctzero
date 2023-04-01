@@ -158,6 +158,9 @@ var camera = zero.core.camera = {
 		camera._.perspective = person;
 		person && camera.follow(person.body[part || "lookAt"]);
 	},
+	_tickPerDim: function(dim, val, prop) {
+		camera.springs.position[dim][prop] = val;
+	},
 	_tickPerspective: function() {
 		var per = camera._.perspective,
 			cur = camera.current, prop, watcher;
@@ -165,7 +168,7 @@ var camera = zero.core.camera = {
 			prop = (cur == "pov") ? "value" : "target";
 			watcher = (cur == "polar") ? per.body.polar.watcher : per.body.watcher;
 			zero.core.util.coords(watcher.position(null, true),
-				function(dim, val) { camera.springs.position[dim][prop] = val; });
+				(dim, val) => camera._tickPerDim(dim, val, prop));
 		}
 	},
 	_tickSubject: function() {
