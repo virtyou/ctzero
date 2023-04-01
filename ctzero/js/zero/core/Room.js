@@ -242,7 +242,7 @@ zero.core.Room = CT.Class({
 		var cl = this.cameras.length;
 		if (typeof index != "number")
 			index = (cl + (this._cam + (down ? -1 : 1))) % cl;
-		this._cam = index;
+		this._cam = zero.core.camera.current = index;
 		zero.core.camera.perspective();
 		zero.core.camera.setSprings(20);
 		zero.core.camera.move(this.cameras[this._cam]);
