@@ -96,7 +96,7 @@ var camera = zero.core.camera = {
 		camera._.onchange = cb;
 	},
 	cut: function(down) {
-		camera.current = zero.core.current.room.cut(null, down === true);
+		zero.core.current.room.cut(null, down === true);
 		camera._.onchange && camera._.onchange();
 	},
 	angle: function(perspective, pname, lookPart) {
@@ -128,6 +128,12 @@ var camera = zero.core.camera = {
 				zcc.room.cut(parseInt(perspective));
 		}
 		_.onchange && _.onchange();
+	},
+	roomcam: function() {
+		return !(camera.current in camera._.lookers);
+	},
+	cutifroom: function(cam) {
+		camera.roomcam() && zero.core.current.room.cut(cam);
 	},
 	look: function(pos) {
 		var prop = (camera.current == "pov") ? "value" : "target";
