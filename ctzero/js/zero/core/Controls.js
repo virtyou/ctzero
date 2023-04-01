@@ -95,9 +95,19 @@ zero.core.Controls = CT.Class({
 			dy && _.look("DOWN", dy / 200);
 			dx && _.look("LEFT", dx / 400);
 		},
+		cawheel: function(pos, delta) {
+			if (camera.current == "polar") {
+				var watcher = zero.core.current.person.body.polar.watcher,
+					wp = watcher.position();
+				if (delta > 0 || wp.z > 20)
+					watcher.adjust("position", "z", delta / 10, true);
+			}
+		},
 		camouse: function() {
+			var node = CT.dom.id("vnode") || CT.dom.id("ctmain");
 			CT.require("CT.gesture", true);
-			CT.gesture.listen("drag", CT.dom.id("vnode") || CT.dom.id("ctmain"), this._.cadrag);
+			CT.gesture.listen("drag", node, this._.cadrag);
+			CT.gesture.listen("wheel", node, this._.cawheel);
 		}
 	},
 	setXLRMode: function(m) {
