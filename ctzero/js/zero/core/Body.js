@@ -224,6 +224,16 @@ zero.core.Body = CT.Class({
 		this.springs.height.target = scale[1];
 		this.springs.depth.target = scale[2];
 	},
+	getGroup: function() {
+		if (!this.group) {
+			this.group = new THREE.Object3D();
+			this.getPlacer().add(this.group);
+		}
+		return this.group;
+	},
+	outerGroup: function() {
+		return this.getPlacer();
+	},
 	_tickGroup: function() {
 		for (var f in this.flippers)
 			this.group.rotation[f] = this.flippers[f].value;
@@ -231,12 +241,12 @@ zero.core.Body = CT.Class({
 		this.group.scale.x = this.growers.width.value;
 		this.group.scale.y = this.growers.height.value;
 		this.group.scale.z = this.growers.depth.value;
-		var gp = this.group.position, pz = this.positioners;
-		gp.y = pz.bob.value;
-		this.moving = gp.x != pz.weave.value || gp.z != pz.slide.value;
+		var pp = this.placer.position, pz = this.positioners;
+		pp.y = pz.bob.value;
+		this.moving = pp.x != pz.weave.value || pp.z != pz.slide.value;
 		if (this.moving || (this.upon && this.upon.shifting("y"))) {
-			gp.x = pz.weave.value;
-			gp.z = pz.slide.value;
+			pp.x = pz.weave.value;
+			pp.z = pz.slide.value;
 			this.setBob();
 			var zcc = zero.core.current;
 			(this.person == zcc.person) && zero.core.util.roomReady() && zcc.room.setVolumes();
