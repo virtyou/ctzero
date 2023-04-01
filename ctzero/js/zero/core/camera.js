@@ -5,6 +5,7 @@ var camera = zero.core.camera = {
 		left: {},
 		right: {},
 		lookers: {
+			polar: true,
 			pov: {
 				y: 5,
 				z: 25
@@ -95,7 +96,7 @@ var camera = zero.core.camera = {
 		camera._.onchange = cb;
 	},
 	cut: function(down) {
-		camera.current = zero.core.current.room.cut(null, down === true);
+		zero.core.current.room.cut(null, down === true);
 		camera._.onchange && camera._.onchange();
 	},
 	angle: function(perspective, pname, lookPart) {
@@ -114,16 +115,25 @@ var camera = zero.core.camera = {
 			if (perspective in _.lookers) {
 				var person = zcc.people[pname] || zcc.person;
 				if (!person) return;
-				var per = _.lookers[perspective],
-					bl = person.body.watcher, dim;
+				var pol = perspective == "polar";
 				camera.setSprings(200);
-				camera.perspective(person, lookPart);
-				for (dim in per)
-					bl.adjust("position", dim, per[dim]);
+				camera.perspective(person, lookPart || (pol && "head"));
+				if (!pol) {
+					var per = _.lookers[perspective],
+						bl = person.body.watcher, dim;
+					for (dim in per)
+						bl.adjust("position", dim, per[dim]);
+				}
 			} else
 				zcc.room.cut(parseInt(perspective));
 		}
 		_.onchange && _.onchange();
+	},
+	roomcam: function() {
+		return !(camera.current in camera._.lookers);
+	},
+	cutifroom: function(cam) {
+		camera.roomcam() && zero.core.current.room.cut(cam);
 	},
 	look: function(pos) {
 		var prop = (camera.current == "pov") ? "value" : "target";
@@ -154,11 +164,17 @@ var camera = zero.core.camera = {
 		camera._.perspective = person;
 		person && camera.follow(person.body[part || "lookAt"]);
 	},
+	_tickPerDim: function(dim, val, prop) {
+		camera.springs.position[dim][prop] = val;
+	},
 	_tickPerspective: function() {
-		if (camera._.perspective) {
-			var prop = (camera.current == "pov") ? "value" : "target";
-			zero.core.util.coords(camera._.perspective.body.watcher.position(null, true),
-				function(dim, val) { camera.springs.position[dim][prop] = val; });
+		var per = camera._.perspective,
+			cur = camera.current, prop, watcher;
+		if (per) {
+			prop = (cur == "pov") ? "value" : "target";
+			watcher = (cur == "polar") ? per.body.polar.watcher : per.body.watcher;
+			zero.core.util.coords(watcher.position(null, true),
+				(dim, val) => camera._tickPerDim(dim, val, prop));
 		}
 	},
 	_tickSubject: function() {

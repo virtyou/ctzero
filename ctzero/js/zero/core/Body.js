@@ -54,23 +54,37 @@ zero.core.Body = CT.Class({
 		watcher: [0, 5, 15],
 		looker: [0, 5, 15],
 		lookAt: [0, 5, 60],
-		lookHigh: [0, 10, 60]
+		lookHigh: [0, 10, 60],
+		polar: [0, 40, 0]
 	},
 	_lcolors: {
 		watcher: 0xff0000,
 		looker: 0x0000ff
 	},
 	_looker: function(name) {
-		this.opts.parts.push({
+		var lopts = {
 			name: name,
-			bone: 4,
 			position: this._lookers[name],
 			boxGeometry: [1, 1, 5],
 			material: {
 			    color: this._lcolors[name] || 0x00ff00,
 			    visible: core.config.ctzero.helpers
 			}
-		});
+		};
+		if (name == "polar") {
+			lopts.anchor = this.getPlacer();
+			lopts.parts = [{
+				name: "watcher",
+				position: [0, 0, 150],
+				boxGeometry: [1, 1, 5],
+				material: {
+				    color: 0x00ff00,
+				    visible: core.config.ctzero.helpers
+				}
+			}];
+		} else
+			lopts.bone = 4;
+		this.opts.parts.push(lopts);
 	},
 	preassemble: function() {
 		Object.keys(this._lookers).forEach(this._looker);
@@ -224,6 +238,16 @@ zero.core.Body = CT.Class({
 		this.springs.height.target = scale[1];
 		this.springs.depth.target = scale[2];
 	},
+	getGroup: function() {
+		if (!this.group) {
+			this.group = new THREE.Object3D();
+			this.getPlacer().add(this.group);
+		}
+		return this.group;
+	},
+	outerGroup: function() {
+		return this.getPlacer();
+	},
 	_tickGroup: function() {
 		for (var f in this.flippers)
 			this.group.rotation[f] = this.flippers[f].value;
@@ -231,12 +255,12 @@ zero.core.Body = CT.Class({
 		this.group.scale.x = this.growers.width.value;
 		this.group.scale.y = this.growers.height.value;
 		this.group.scale.z = this.growers.depth.value;
-		var gp = this.group.position, pz = this.positioners;
-		gp.y = pz.bob.value;
-		this.moving = gp.x != pz.weave.value || gp.z != pz.slide.value;
+		var pp = this.placer.position, pz = this.positioners;
+		pp.y = pz.bob.value;
+		this.moving = pp.x != pz.weave.value || pp.z != pz.slide.value;
 		if (this.moving || (this.upon && this.upon.shifting("y"))) {
-			gp.x = pz.weave.value;
-			gp.z = pz.slide.value;
+			pp.x = pz.weave.value;
+			pp.z = pz.slide.value;
 			this.setBob();
 			var zcc = zero.core.current;
 			(this.person == zcc.person) && zero.core.util.roomReady() && zcc.room.setVolumes();

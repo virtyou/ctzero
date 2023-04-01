@@ -31,6 +31,12 @@ zero.core.Controls = CT.Class({
 				DOWN: ["nod", -0.5],
 				LEFT: ["shake", 0.5],
 				RIGHT: ["shake", -0.5]
+			},
+			polar: {
+				UP: ["x", -0.2, -1],
+				DOWN: ["x", 0.2, 1],
+				LEFT: ["y", -0.2],
+				RIGHT: ["y", 0.2]
 			}
 		},
 		dirs: ["w", "s", "a", "d"],
@@ -38,14 +44,26 @@ zero.core.Controls = CT.Class({
 		look: function(dir, mult) {
 			var _ = this._, cz = _.cams, mode,
 				per = camera.get("perspective"),
-				zcc = zero.core.current, rule, bs;
+				zcc = zero.core.current,
+				rule, rot, val, dim, lim, bs, bod;
 			if (per == zcc.person) {
-				mode = cz.pov;//[camera.current];
-//				if (camera.current == "pov") {
-				rule = mode[dir];
-				bs = zcc.person.body.springs;
-				bs[rule[0]].target += rule[1] * (mult || 1);
-//				} disabled behind zoom/shift for now ... better right?
+				if (camera.current == "polar") {
+					bod = zcc.person.body;
+					rot = bod.polar.rotation();
+					rule = cz.polar[dir]
+					dim = rule[0];
+					val = rule[1];
+					lim = rule[2];
+					if (!lim || (val < 0 && rot[dim] > lim) || (val > 0 && rot[dim] < lim))
+						bod.polar.adjust("rotation", dim, val * (mult || 1), true);
+				} else {
+					mode = cz.pov;//[camera.current];
+	//				if (camera.current == "pov") {
+					rule = mode[dir];
+					bs = zcc.person.body.springs;
+					bs[rule[0]].target += rule[1] * (mult || 1);
+	//				} disabled behind zoom/shift for now ... better right?
+				}
 			} else {
 				mode = per ? cz.interactive : cz.environmental;
 				rule = mode[dir];
@@ -77,9 +95,19 @@ zero.core.Controls = CT.Class({
 			dy && _.look("DOWN", dy / 200);
 			dx && _.look("LEFT", dx / 400);
 		},
+		cawheel: function(pos, delta) {
+			if (camera.current == "polar") {
+				var watcher = zero.core.current.person.body.polar.watcher,
+					wp = watcher.position();
+				if (delta > 0 || wp.z > 20)
+					watcher.adjust("position", "z", delta / 10, true);
+			}
+		},
 		camouse: function() {
+			var node = CT.dom.id("vnode") || CT.dom.id("ctmain");
 			CT.require("CT.gesture", true);
-			CT.gesture.listen("drag", CT.dom.id("vnode") || CT.dom.id("ctmain"), this._.cadrag);
+			CT.gesture.listen("drag", node, this._.cadrag);
+			CT.gesture.listen("wheel", node, this._.cawheel);
 		}
 	},
 	setXLRMode: function(m) {
