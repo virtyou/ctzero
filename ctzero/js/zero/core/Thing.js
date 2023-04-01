@@ -494,7 +494,7 @@ zero.core.Thing = CT.Class({
 		this.geojson = json;
 		if (this.thring) {
 			this.thring.geometry.dispose();
-			oz.scene.remove(this.thring);
+			this.thring.parent.remove(this.thring);
 			delete this.thring;
 		}
 		this.thring = new THREE[oz.meshcat](geometry, this.material);
@@ -630,7 +630,7 @@ zero.core.Thing = CT.Class({
 			remoz = this.removables && this.removables();
 		this.log("remove", oz.name);
 		this.removed = true;
-		(oz.anchor || oz.scene).remove(this.group);
+		(oz.anchor || oz.scene).remove(this.outerGroup());
 		this.unscroll();
 		this.unshift();
 		this.unvideo();
@@ -685,6 +685,9 @@ zero.core.Thing = CT.Class({
 		this.group = this.group || this.placer;
 		return this.group;
 	},
+	outerGroup: function() {
+		return this.getGroup();
+	},
 	assemble: function() {
 		if (this.parts) return; // for rebuild update()....
 		if (this.preassemble) { // will manipulate parts[]....
@@ -692,19 +695,19 @@ zero.core.Thing = CT.Class({
 			this.preassemble();
 		}
 		var thiz = this, oz = this.opts, i = 0,
-			group = this.getGroup(),
+			outer = this.outerGroup(),
 			iterator = function() {
 				i += 1;
 				if (i >= oz.parts.length) {
 					if (i == oz.parts.length)
-						(oz.anchor || oz.scene).add(group);
+						(oz.anchor || oz.scene).add(outer);
 					thiz._.assembled = true;
 					thiz.assembled();
 				}
 			};
 		if (oz.invisible)
 			this.hide();
-		this.thring && group.add(this.thring);
+		this.thring && this.getGroup().add(this.thring);
 		this.parts = oz.parts.map(function(p) {
 			return thiz.attach(p, iterator);
 		});
