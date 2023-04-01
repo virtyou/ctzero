@@ -54,23 +54,37 @@ zero.core.Body = CT.Class({
 		watcher: [0, 5, 15],
 		looker: [0, 5, 15],
 		lookAt: [0, 5, 60],
-		lookHigh: [0, 10, 60]
+		lookHigh: [0, 10, 60],
+		polar: [0, 40, 0]
 	},
 	_lcolors: {
 		watcher: 0xff0000,
 		looker: 0x0000ff
 	},
 	_looker: function(name) {
-		this.opts.parts.push({
+		var lopts = {
 			name: name,
-			bone: 4,
 			position: this._lookers[name],
 			boxGeometry: [1, 1, 5],
 			material: {
 			    color: this._lcolors[name] || 0x00ff00,
 			    visible: core.config.ctzero.helpers
 			}
-		});
+		};
+		if (name == "polar") {
+			lopts.anchor = this.getPlacer();
+			lopts.parts = [{
+				name: "watcher",
+				position: [0, 0, 150],
+				boxGeometry: [1, 1, 5],
+				material: {
+				    color: 0x00ff00,
+				    visible: core.config.ctzero.helpers
+				}
+			}];
+		} else
+			lopts.bone = 4;
+		this.opts.parts.push(lopts);
 	},
 	preassemble: function() {
 		Object.keys(this._lookers).forEach(this._looker);
