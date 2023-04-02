@@ -172,7 +172,7 @@ zero.core.Room = CT.Class({
 	},
 	ebound: function(spr, bod) {
 		if (!bod.group || !bod.radii) return;
-		var p = zero.core.util.posser(bod.group.position),
+		var p = zero.core.util.posser(bod.placer.position),
 			sprax = bod.positioner2axis(spr.name);
 		p[sprax] = spr.target;
 		var solid = this.getSolid(p, bod.radii, true);

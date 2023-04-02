@@ -191,7 +191,7 @@ zero.core.Body = CT.Class({
 	setBob: function() {
 		var r = zero.core.current.room;
 		if (!(r && r.isReady())) return;
-		var pos = this.group.position,
+		var pos = this.placer.position,
 			otop, bobber = this.springs.bob,
 			obj = r.getSurface(pos, this.radii),
 			within = r.within(pos, this.radii, true),

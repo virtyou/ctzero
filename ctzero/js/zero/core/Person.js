@@ -158,7 +158,7 @@ zero.core.Person = CT.Class({
 		orient && this.orient(subject);
 	},
 	orient: function(subject, spos) {
-		var pos = this.body.group.position;
+		var pos = this.body.placer.position;
 		spos = spos || subject.position();
 		this.orientation(Math.atan2(spos.x
 			- pos.x, spos.z - pos.z));
