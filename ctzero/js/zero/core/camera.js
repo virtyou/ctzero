@@ -160,6 +160,13 @@ var camera = zero.core.camera = {
 	shift: function(diff) {
 		camera.adjust("x", diff);
 	},
+	unPerNonCur: function() {
+		var _ = camera._;
+		if ((_.perspective != zero.core.current.person) || !_.subject || (_.subject.name != "head")) {
+			CT.log("camera.unPerNonCur() switching back to current person polar cam");
+			camera.angle("polar");
+		}
+	},
 	perspective: function(person, part) {
 		camera._.perspective = person;
 		person && camera.follow(person.body[part || "lookAt"]);
