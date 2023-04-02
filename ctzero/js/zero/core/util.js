@@ -9,7 +9,7 @@ zero.core.util = {
 	dslow: 0.022,
 	dperf: 0.016,
 	_tickers: [],
-	_xyz: ["x", "y", "z"],
+	xyz: ["x", "y", "z"],
 	_positioner: new THREE.Vector3(),
 	_quatter: new THREE.Quaternion(),
 	rates: ["x-slow", "slow", "medium", "fast", "x-fast"],
@@ -152,7 +152,7 @@ zero.core.util = {
 		return "#" + c2h(r) + c2h(g) + c2h(b);
 	},
 	coords: function(xyz, cb) {
-	    zero.core.util._xyz.forEach(function(dim, i) {
+	    zero.core.util.xyz.forEach(function(dim, i) {
 	        var val = xyz[dim] != undefined ? xyz[dim] : xyz[i];
 	        val != undefined && cb(dim, val);
 	    });

@@ -1,8 +1,7 @@
 zero.core.morphs = {
-	_xyz: ["x", "y", "z"],
 	deprecated: function(thing) { // basic example -- current tick() faster, even on ios
 		var geo = thing.thring.geometry, a, i, val, dim,
-			vert = geo.vertices[0], dims = zero.core.morphs._xyz,
+			vert = geo.vertices[0], dims = zero.core.util.xyz,
 			morphStack = thing.morphStack, base = thing.base;
 		for (i = 0; i < geo.vertices.length * 3; i++) {
 			val = base[i];
@@ -20,7 +19,7 @@ zero.core.morphs = {
 		if (thing.opts.shader)
 			return zero.core.shaders.tick(thing);
 		var geo = thing.thring.geometry, modz = {},
-			dimz = zero.core.morphs._xyz, a, i, val, stack, base = thing.base;
+			dimz = zero.core.util.xyz, a, i, val, stack, base = thing.base;
 		if (thing._upped) {
 			for (a = 0; a < thing._upped.length; a++) {
 				i = thing._upped[a];

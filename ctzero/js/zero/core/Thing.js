@@ -53,7 +53,7 @@ zero.core.Thing = CT.Class({
 		setFlippers: function() {
 			var pos = this.rotation(), dim;
 			this.flippers = {};
-			for (dim of ["x", "y", "z"])
+			for (dim of zero.core.util.xyz)
 				this._.setd(dim, this.springs, this.flippers, pos);
 		},
 		setPositioners: function() {
@@ -64,7 +64,7 @@ zero.core.Thing = CT.Class({
 		},
 		setRadMid: function() {
 			var radii = this.radii, mids = this.mids, bounds = this.bounds;
-			["x", "y", "z"].forEach(function(dim) {
+			zero.core.util.xyz.forEach(function(dim) {
 				radii[dim] = (bounds.max[dim] - bounds.min[dim]) / 2;
 				mids[dim] = (bounds.max[dim] + bounds.min[dim]) / 2;
 			});
@@ -72,7 +72,7 @@ zero.core.Thing = CT.Class({
 		setInnerBounds: function() {
 			var p = this.position(), bounds = this.bounds,
 				inners = this.innerBounds = { min: {}, max: {} };
-			["x", "y", "z"].forEach(function(dim) {
+			zero.core.util.xyz.forEach(function(dim) {
 				inners.min[dim] = bounds.min[dim] - p[dim];
 				inners.max[dim] = bounds.max[dim] - p[dim];
 			});
@@ -152,7 +152,7 @@ zero.core.Thing = CT.Class({
 	},
 	setPositioners: function(xyz, unbound, snap) {
 		var _xyz = this._xyz, sz = this.springs, s;
-		["x", "y", "z"].forEach(function(dim, i) {
+		zero.core.util.xyz.forEach(function(dim, i) {
 			s = sz[_xyz[i]];
 			s.target = xyz[dim];
 			if (unbound)
@@ -213,7 +213,7 @@ zero.core.Thing = CT.Class({
 		return this.bounds;
 	},
 	setBounds: function(rebound, nosnap) {
-		var xyz = ["x", "y", "z"], thaz = this;
+		var xyz = zero.core.util.xyz, thaz = this;
 		this._.nosnap = nosnap;
 		this.autoRot();
 		if (rebound)

@@ -309,7 +309,7 @@ var camera = zero.core.camera = {
 	setSprings: function(val, prop, which, axes) {
 		prop = prop || "k";
 		which = which || "position";
-		axes = axes || ["x", "y", "z"];
+		axes = axes || zero.core.util.xyz;
 		axes.forEach(function(dim) {
 			camera.springs[which][dim][prop] = val;
 		});

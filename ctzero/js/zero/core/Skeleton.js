@@ -1,6 +1,5 @@
 zero.core.Skeleton = CT.Class({
 	CLASSNAME: "zero.core.Skeleton",
-	dims: ["x", "y", "z"],
 	bmap: function() {
 		return this.opts.bonemap;
 	},
@@ -20,7 +19,7 @@ zero.core.Skeleton = CT.Class({
 	},
 	rotation: function(part) {
 		var r = {}, asp, asps = this.aspects;
-		this.dims.forEach(function(dim) {
+		zero.core.util.xyz.forEach(function(dim) {
 			asp = asps[part + "_" + dim];
 			if (asp)
 				r[dim] = asp.value;
@@ -58,7 +57,7 @@ zero.core.Skeleton = CT.Class({
 			w = 1.5 - (minors.indexOf(part) + mindims.indexOf(d)) / 8;
 			hspringz[ps] = w - Math.random() * 2 * w;
 		} else if (majors.includes(part)) {
-			w = 1.5 - Math.random() / (5 - (majors.indexOf(part) + this.dims.indexOf(d)));
+			w = 1.5 - Math.random() / (5 - (majors.indexOf(part) + zero.core.util.xyz.indexOf(d)));
 			aspringz["gesticulate_" + part] = this.shouldReverse(part, d) ? -w : w;
 		}
 		return {
