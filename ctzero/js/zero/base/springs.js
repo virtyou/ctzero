@@ -4,7 +4,7 @@ zero.base.springs.body = function() {
     return {
         theta: {
             k: 20,
-            damp: 5
+            damp: 5,
             bounds: {
                 min: -1,
                 max: 1
