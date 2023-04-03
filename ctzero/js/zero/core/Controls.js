@@ -48,13 +48,17 @@ zero.core.Controls = CT.Class({
 			var _ = this._, cz = _.cams, mode,
 				per = camera.get("perspective"),
 				zcc = zero.core.current,
-				rule, val, dim, bs, bod;
+				rule, val, dim, bs, bod, spr;
 			if (per == zcc.person) {
 				if (camera.current == "polar") {
 					bod = zcc.person.body;
 					rule = cz.polar[dir];
 					[dim, val] = rule;
-					bod.springs[_.dim2polar[dim]].boost = (start || mult) ? (val * (mult || 1)) : 0;
+					spr = bod.springs[_.dim2polar[dim]];
+					if (mult)
+						spr.target += mult * val;
+					else
+						spr.boost = start ? val : 0;
 				} else {
 					mode = cz.pov;//[camera.current];
 	//				if (camera.current == "pov") {
@@ -92,7 +96,7 @@ zero.core.Controls = CT.Class({
 		},
 		cadrag: function(direction, distance, dx, dy, pixelsPerSecond) {
 			var _ = this._;
-			dy && _.look("DOWN", dy / 200);
+			dy && _.look("UP", dy / 200);
 			dx && _.look("LEFT", dx / 400);
 		},
 		cawheel: function(pos, delta) {
