@@ -266,11 +266,19 @@ zero.core.Body = CT.Class({
 			(this.person == zcc.person) && zero.core.util.roomReady() && zcc.room.setVolumes();
 		}
 	},
+	_tickPolar: function() {
+		if (zero.core.camera.current != "polar")
+			return;
+		var pr = this.polar.group.rotation, sz = this.springs;
+		pr.x = sz.theta.value;
+		pr.y = sz.phi.value;
+	},
 	tick: function(dts) {
 		this.head.tick();
 		this.torso.tick();
 		this.spine.tick();
 		this._tickGroup();
+		this._tickPolar();
 		zero.core.morphs.tick(this);
 		var skeleton = this.thring.skeleton;
 		this._.customs.forEach(function(c) { c.tick(skeleton); });
