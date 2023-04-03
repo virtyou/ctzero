@@ -48,7 +48,7 @@ zero.core.Controls = CT.Class({
 			var _ = this._, cz = _.cams, mode,
 				per = camera.get("perspective"),
 				zcc = zero.core.current,
-				rule, rot, val, dim, lim, bs, bod;
+				rule, val, dim, bs, bod;
 			if (per == zcc.person) {
 				if (camera.current == "polar") {
 					bod = zcc.person.body;
