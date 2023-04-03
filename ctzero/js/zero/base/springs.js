@@ -2,6 +2,18 @@ zero.base.springs = {};
 zero.base.springs.body = function() {
     var cfg = core.config.ctzero;
     return {
+        theta: {
+            k: 20,
+            damp: 5
+            bounds: {
+                min: -1,
+                max: 1
+            }
+        },
+        phi: {
+            k: 20,
+            damp: 5
+        },
         bob: {
             k: 10,
             damp: 5,
