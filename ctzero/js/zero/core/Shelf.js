@@ -113,8 +113,10 @@ zero.core.Shelf = CT.Class({
 		return CT.dom.button("peruse", this.peruse);
 	},
 	closeup: function() {
-		zero.core.camera.follow(this);
-		zero.core.camera.move(this.looker.position(null, true));
+		var cam = zero.core.camera;
+		cam.perspective();
+		cam.follow(this);
+		cam.move(this.looker.position(null, true));
 	},
 	init: function(opts) {
 		const bs = zero.base.carpentry[opts.variety];
