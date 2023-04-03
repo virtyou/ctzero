@@ -3,10 +3,10 @@ zero.core.Body = CT.Class({
 	_xyz: ["weave", "bob", "slide"],
 	_yoff: true,
 	positioner2axis: function(pname) {
-		return zero.core.util._xyz[this._xyz.indexOf(pname)];
+		return zero.core.util.xyz[this._xyz.indexOf(pname)];
 	},
 	axis2positioner: function(axis) {
-		return this._xyz[zero.core.util._xyz.indexOf(axis)];
+		return this._xyz[zero.core.util.xyz.indexOf(axis)];
 	},
 	wbs: function() {
 		var wbs = {}, springz = this.springs;
@@ -266,11 +266,19 @@ zero.core.Body = CT.Class({
 			(this.person == zcc.person) && zero.core.util.roomReady() && zcc.room.setVolumes();
 		}
 	},
+	_tickPolar: function() {
+		if (zero.core.camera.current != "polar")
+			return;
+		var pr = this.polar.group.rotation, sz = this.springs;
+		pr.x = sz.theta.value;
+		pr.y = sz.phi.value;
+	},
 	tick: function(dts) {
 		this.head.tick();
 		this.torso.tick();
 		this.spine.tick();
 		this._tickGroup();
+		this._tickPolar();
 		zero.core.morphs.tick(this);
 		var skeleton = this.thring.skeleton;
 		this._.customs.forEach(function(c) { c.tick(skeleton); });

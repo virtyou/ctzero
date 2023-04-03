@@ -1,6 +1,5 @@
 zero.core.xr = { // https://01.org/blogs/darktears/2019/rendering-immersive-web-experiences-threejs-webxr
 	_: {
-		dims: ["x", "y", "z"],
 		things: ["grip", "targetRay"],
 		fings: [
 			["pointer"],
@@ -41,10 +40,11 @@ zero.core.xr = { // https://01.org/blogs/darktears/2019/rendering-immersive-web-
 			_.butters[butt](isPressed);
 		},
 		contrUp: function(frame, space) {
-			var _ = zero.core.xr._, gp, bz, ax, joying, i, v,
+			var zc = zero.core, _ = zc.xr._, gp, bz, ax, joying, i, v, xyz,
 				c, t, pose, thring, dim, tor, thumb, tp, tf, ab, bb, hand;
 			if (!_.controllers) return;
-			tor = zero.core.current.person.body.torso;
+			xyz = zc.util.xyz;
+			tor = zc.current.person.body.torso;
 			for (c of _.controllers) {
 				gp = c.gamepad;
 				bz = gp.buttons;
@@ -77,7 +77,7 @@ zero.core.xr = { // https://01.org/blogs/darktears/2019/rendering-immersive-web-
 					if (!thring || !pose) continue;
 					tp = thring.position;
 					tf = pose.transform;
-					for (dim of _.dims)
+					for (dim of xyz)
 						tp[dim] = 25 - 50 * tf.position[dim];
 					tp.y *= -1;
 					tp.y += 20;
