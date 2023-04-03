@@ -33,15 +33,18 @@ zero.core.Controls = CT.Class({
 				RIGHT: ["shake", -0.5]
 			},
 			polar: {
-				UP: ["x", -0.2, -1],
-				DOWN: ["x", 0.2, 1],
-				LEFT: ["y", -0.2],
-				RIGHT: ["y", 0.2]
+				UP: ["x", -1],
+				DOWN: ["x", 1],
+				LEFT: ["y", -1],
+				RIGHT: ["y", 1]
 			}
+		},
+		dim2polar: {
+			x: "theta", y: "phi"
 		},
 		dirs: ["w", "s", "a", "d"],
 		xlrmode: "walk", // walk|look|dance
-		look: function(dir, mult) {
+		look: function(dir, mult, start) {
 			var _ = this._, cz = _.cams, mode,
 				per = camera.get("perspective"),
 				zcc = zero.core.current,
@@ -49,13 +52,9 @@ zero.core.Controls = CT.Class({
 			if (per == zcc.person) {
 				if (camera.current == "polar") {
 					bod = zcc.person.body;
-					rot = bod.polar.rotation();
-					rule = cz.polar[dir]
-					dim = rule[0];
-					val = rule[1];
-					lim = rule[2];
-					if (!lim || (val < 0 && rot[dim] > lim) || (val > 0 && rot[dim] < lim))
-						bod.polar.adjust("rotation", dim, val * (mult || 1), true);
+					rule = cz.polar[dir];
+					[dim, val] = rule;
+					bod.springs[_.dim2polar[dim]].boost = (start || mult) ? (val * (mult || 1)) : 0;
 				} else {
 					mode = cz.pov;//[camera.current];
 	//				if (camera.current == "pov") {
@@ -71,7 +70,8 @@ zero.core.Controls = CT.Class({
 			}
 		},
 		cam: function(dir) {
-			CT.key.on(dir, () => this._.look(dir));
+			var look = this._.look;
+			CT.key.on(dir, () => look(dir), () => look(dir, null, true));
 		},
 		xlrometer: function() {
 			var _ = this._, mover = this.mover, acfg = core.config.ctzero.camera.xlro;
