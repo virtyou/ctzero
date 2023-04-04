@@ -567,12 +567,12 @@ zero.core.util = {
 		else
 			zero.core.util._cpcbz.push(cb);
 	},
-	setCurPer: function(person) {
+	setCurPer: function(person, skipcam) {
 		zero.core.current.person = person;
 		for (var cpcb of zero.core.util._cpcbz)
 			cpcb(person);
 		zero.core.util._cpcbz.length = 0;
-		zero.core.camera.angle("polar");
+		skipcam || zero.core.camera.angle("polar");
 	},
 	join: function(pobj, onready, nowatch, lookcam, current) {
 		var person = new zero.core.Person(CT.merge(pobj, {
