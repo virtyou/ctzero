@@ -121,6 +121,28 @@ zero.base.clothes = {
 					kDF: 1
 				}
 			}]
+		},
+		fznpak: {
+			fzreen: "fzreen",
+			parts: [{
+				name: "strap",
+				torusGeometry: [6, 2],
+				rotation: [2, 0, 0]
+			}, {
+				name: "ball",
+				sphereGeometry: 8,
+				position: [0, 0, -10]
+			}, {
+				name: "cone",
+				coneGeometry: true,
+				position: [0, 10, -10],
+				scale: [20, -10, 2]
+			}, {
+				name: "fzreen",
+				kind: "stream",
+				position: [0, 46, -10],
+				planeGeometry: [50, 50]
+			}]
 		}
 	},
 	clavicle: {},
