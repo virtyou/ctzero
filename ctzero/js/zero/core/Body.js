@@ -255,7 +255,7 @@ zero.core.Body = CT.Class({
 		});
 		return gz.fznstreamer;
 	},
-	setStreamer: function(chan, streamup) {
+	streamify: function(chan, streamup) {
 		var fznpak = this.fznpak(), fo = fznpak.opts;
 		fznpak.onReady(() => fznpak[fo.fzreen].update({ video: "fzn:" + chan }));
 		if (this.fznout)
@@ -264,6 +264,14 @@ zero.core.Body = CT.Class({
 			this.fznout = CT.stream.util.fzn.streamer(chan);
 			CT.dom.hide(this.fznout);
 			document.body.appendChild(this.fznout);
+		}
+	},
+	unstreamify: function() {
+		if (this.gearmap.fznstreamer)
+			this.ungear("fznstreamer");
+		if (this.fznout) {
+			this.fznout.remove();
+			delete this.fznout;
 		}
 	},
 	getGroup: function() {
