@@ -288,7 +288,7 @@ zero.core.Thing = CT.Class({
 		}
 	},
 	unvideo: function() {
-		if (this.opts.video && this.material.map)
+		if (this.opts.video && this.material && this.material.map)
 			this.material.map.vnode.remove();
 	},
 	unvsplay: function(clearOpts) {
@@ -665,7 +665,7 @@ zero.core.Thing = CT.Class({
 			path: this.path,
 			bones: this.bones || [],
 			bmap: this.bmap || {}
-		}), function(tng) {
+		}, this.opts.chweaks[child.name]), function(tng) {
 			tng.isCustom && customs.push(tng); // for tick()ing
 			iterator && iterator();
 		}, this.group);
@@ -869,6 +869,7 @@ zero.core.Thing = CT.Class({
 			aspects: {},
 			tickers: {},
 			morphs: {},
+			chweaks: {},
 			state: "solid",
 			iterator: null,
 			onbuild: null, // also supports: "onassemble", "onremove" ....
