@@ -25,6 +25,12 @@ zero.base.clothes = {
 			rotation: [2, 0, 0],
 			scale: [4, 4, 4]
 		},
+		frills: {
+			torusGeometry: [1, 0.6],
+			position: [0, 2, 0],
+			rotation: [2, 0, 0],
+			scale: [8, 8, 2]
+		},
 		bowtie: {
 			torusGeometry: true,
 			rotation: [2, 0, 0],
