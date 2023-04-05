@@ -293,6 +293,14 @@ zero.base.clothes.head = { // hats
 			scale: [12, 0.2, 0.2]
 		}]
 	},
+	clownnose: {
+		sphereGeometry: 2,
+		position: [0, 3, 12],
+		material: {
+			color: "#ff0000",
+			shininess: 100
+		}
+	},
 	conical: {
 		coneGeometry: true,
 		position: [0, 30, 0],
