@@ -259,7 +259,12 @@ zero.core.Body = CT.Class({
 		if (chan == this.fznchan) return;
 		if (!chan) return this.unstreamify();
 		var fznpak = this.fznpak(), fo = fznpak.opts;
-		fznpak.onReady(() => fznpak[fo.fzreen].update({ video: "fzn:" + chan }));
+		fznpak.onReady(function() {
+			fznpak[fo.fzreen].update({
+				vidMuted: !!streamup,
+				video: "fzn:" + chan
+			});
+		});
 		if (this.fznout)
 			this.fznout.remove();
 		if (streamup) {
