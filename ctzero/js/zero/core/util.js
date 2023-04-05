@@ -438,6 +438,7 @@ zero.core.util = {
 		}
 		vt = new THREE.VideoTexture(v);
 		v.loop = true;
+		v.muted = thing.opts.vidMuted;
 		vt.vnode = v;
 		vt.zeronode = thing;
 		vt.minFilter = vt.magFilter = THREE.NearestFilter; // for power of 2 warnings
