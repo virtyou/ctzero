@@ -881,7 +881,7 @@ zero.core.Thing = CT.Class({
 		});
 		if (opts.template) {
 			this.log("loading template:", opts.template);
-			var tobj = eval(opts.template);
+			var tobj = CT.module(opts.template);
 			if (tobj)
 				this.opts = opts = CT.merge(tobj, opts); // right order?
 			else
