@@ -263,7 +263,6 @@ zero.core.Body = CT.Class({
 			pref += "up:";
 		fznpak.onReady(function() {
 			fznpak[fo.fzreen].update({
-				vidMuted: !!streamup,
 				video: pref + chan
 			});
 		});
