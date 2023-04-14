@@ -418,17 +418,20 @@ zero.core.util = {
 	},
 	svids: {},
 	videoTexture: function(src, thing) {
-		var chan, v, vt, svids = zero.core.util.svids;
+		var chan, sup, v, vt, svids = zero.core.util.svids,
 			vclass = "w100p transparent notouch below";
 		if (src.startsWith("fzn:")) {
 			chan = src.slice(4);
+			if (chan.startsWith("up:")) {
+				sup = "direct";
+				chan = chan.slice(3);
+			}
 			if (!svids[chan]) {
 				CT.require("CT.stream", true); // just in case
 				svids[chan] = CT.stream.util.fzn.video(chan, vclass, function() {
 					CT.log("FZN Video Update");
 					thing.update({ video: src });
-				});
-				document.body.appendChild(svids[chan].node);
+				}, sup);
 			}
 			v = svids[chan].video;
 		} else {

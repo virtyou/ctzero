@@ -258,29 +258,19 @@ zero.core.Body = CT.Class({
 	streamify: function(chan, streamup) {
 		if (chan == this.fznchan) return;
 		if (!chan) return this.unstreamify();
-		var fznpak = this.fznpak(), fo = fznpak.opts;
+		var fznpak = this.fznpak(), fo = fznpak.opts, pref = "fzn:";
+		if (streamup)
+			pref += "up:";
 		fznpak.onReady(function() {
 			fznpak[fo.fzreen].update({
-				vidMuted: !!streamup,
-				video: "fzn:" + chan
+				video: pref + chan
 			});
 		});
-		if (this.fznout)
-			this.fznout.remove();
-		if (streamup) {
-			this.fznout = CT.stream.util.fzn.streamer(chan);
-			CT.dom.hide(this.fznout);
-			document.body.appendChild(this.fznout);
-		}
 		this.fznchan = chan;
 	},
 	unstreamify: function() {
 		if (this.gearmap.fznstreamer)
 			this.ungear("fznstreamer");
-		if (this.fznout) {
-			this.fznout.remove();
-			delete this.fznout;
-		}
 		delete this.fznchan;
 	},
 	getGroup: function() {
