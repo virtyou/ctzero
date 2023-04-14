@@ -423,7 +423,7 @@ zero.core.util = {
 		if (src.startsWith("fzn:")) {
 			chan = src.slice(4);
 			if (chan.startsWith("up:")) {
-				sup = true;
+				sup = "direct";
 				chan = chan.slice(3);
 			}
 			if (!svids[chan]) {
@@ -432,7 +432,6 @@ zero.core.util = {
 					CT.log("FZN Video Update");
 					thing.update({ video: src });
 				}, sup);
-				document.body.appendChild(svids[chan].node);
 			}
 			v = svids[chan].video;
 		} else {
