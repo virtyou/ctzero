@@ -64,12 +64,9 @@ zero.core.ammo = {
 		patch: function(cloth, anchor, anchorPoints) {
 			const ammo = zero.core.ammo, _ = ammo._, coz = cloth.opts,
 				width = coz.width, height = coz.height,
-				pos = coz.displacement, winfo = _.physicsWorld.getWorldInfo(),
-				offer = anchor.getWorldPosition(_.positioner);
-
-			zero.core.util.coords(offer, function(dim, val) {
-				pos[dim] += val;
-			});
+				winfo = _.physicsWorld.getWorldInfo(),
+				offer = anchor.getWorldPosition(_.positioner),
+				pos = zero.core.util.dimsum(coz.displacement, offer);
 
 			if (coz.ellipsoid) // ellipsoid  is jank and seems broken....
 				return _.softBodyHelpers.CreateEllipsoid(winfo,
