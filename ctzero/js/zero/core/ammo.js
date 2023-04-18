@@ -64,12 +64,9 @@ zero.core.ammo = {
 		patch: function(cloth, anchor, anchorPoints) {
 			const ammo = zero.core.ammo, _ = ammo._, coz = cloth.opts,
 				width = coz.width, height = coz.height,
-				pos = coz.displacement, winfo = _.physicsWorld.getWorldInfo(),
-				offer = anchor.getWorldPosition(_.positioner);
-
-			zero.core.util.coords(offer, function(dim, val) {
-				pos[dim] += val;
-			});
+				winfo = _.physicsWorld.getWorldInfo(),
+				offer = anchor.getWorldPosition(_.positioner),
+				pos = zero.core.util.dimsum(coz.displacement, offer);
 
 			if (coz.ellipsoid) // ellipsoid  is jank and seems broken....
 				return _.softBodyHelpers.CreateEllipsoid(winfo,
@@ -127,11 +124,16 @@ zero.core.ammo = {
 	},
 	tick: function(dt) {
 		const ammo = zero.core.ammo, _ = ammo._;
-		if (!_.softs.length && !_.kinematics.length) return;
+		if (_.paused || !(_.softs.length || _.rigids.length || _.kinematics.length)) return;
 		let k, s, r;
 		for (k of _.kinematics)
 			ammo.tickKinematic(k);
-		_.physicsWorld.stepSimulation(dt, 10);
+		try {
+			_.physicsWorld.stepSimulation(dt, 10);
+		} catch(e) {
+			CT.log("stepSimulation error: " + e);
+			return ammo.reset();
+		}
 		for (s of _.softs)
 			ammo.tickSoft(s);
 		for (r of _.rigids)
@@ -201,7 +203,10 @@ zero.core.ammo = {
 		_.kinematics.push(thring);
 	},
 	kineBody: function(thring, friction) {
-		thring.userData.physicsBody || zero.core.ammo.kinematic(thring, friction);
+		thring.userData.resetter = function() {
+			thring.userData.physicsBody || zero.core.ammo.kinematic(thring, friction);
+		};
+		thring.userData.resetter();
 		return thring.userData.physicsBody;
 	},
 	hinge: function(r1, r2, p1, p2, axis) {
@@ -261,7 +266,7 @@ zero.core.ammo = {
 	},
 	softBody: function(cloth, anchor, anchorPoints, afriction) {
 		const ammo = zero.core.ammo, _ = ammo._, consts = _.consts,
-			softBody = _.patch(cloth, anchor, anchorPoints),
+			softBody = _.patch(cloth, anchor, anchorPoints), udata = cloth.thring.userData,
 			sbcfg = softBody.get_m_cfg(), m = cloth.opts.margin || consts.margin;
 
 		sbcfg.set_viterations(10);
@@ -272,7 +277,8 @@ zero.core.ammo = {
 		softBody.setTotalMass(0.9, false);
 		Ammo.castObject(softBody, Ammo.btCollisionObject).getCollisionShape().setMargin(m * 3);
 		_.physicsWorld.addSoftBody(softBody, 1, -1);
-		cloth.thring.userData.physicsBody = softBody;
+		udata.physicsBody = softBody;
+		udata.resetter = cloth.resetter;
 		softBody.setActivationState(_.STATE.DISABLE_DEACTIVATION);
 		_.softs.push(cloth.thring);
 		anchor && ammo.anchor(cloth, anchor, anchorPoints, afriction);
@@ -330,9 +336,33 @@ zero.core.ammo = {
 		_.softBodyHelpers = new Ammo.btSoftBodyHelpers();
 		_.onload && _.onload();
 	},
+	unload: function() {
+		const ammo = zero.core.ammo, _ = ammo._, resetters = [],
+			kinds = ["softs", "rigids", "kinematics"];
+		let k, t;
+		for (k of kinds) {
+			CT.log("unloading " + _[k].length + " " + k);
+			for (t of _[k].slice()) { // avoids rm mid iteration
+				t.userData.resetter && resetters.push(t.userData.resetter);
+				ammo.unBody(t, k);
+			}
+		}
+		return resetters;
+	},
+	reset: function() {
+		const ammo = zero.core.ammo, _ = ammo._, resetters = ammo.unload();
+		_.paused = true;
+		ammo.init(function() {
+			CT.log("resetting " + resetters.length + " items");
+			resetters.forEach(r => r());
+			_.paused = false;
+		});
+	},
 	init: function(onload) {
-		const ammo = zero.core.ammo;
-		ammo._.onload = onload;
-		Ammo().then(ammo.load);
+		const ammo = zero.core.ammo, _ = ammo._;
+		_.onload = onload;
+		if (!_.AmmoLoader)
+			_.AmmoLoader = Ammo;
+		_.AmmoLoader().then(ammo.load);
 	}
 };

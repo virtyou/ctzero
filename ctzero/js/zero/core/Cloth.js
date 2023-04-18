@@ -10,15 +10,19 @@ zero.core.Cloth = CT.Class({
 		for (let pname in tweaks)
 			sbcfg["set_" + pname](tweaks[pname]);
 	},
+	resetter: function() {
+		const oz = this.opts;
+		this.softBody = zero.core.ammo.softBody(this, this.frame, oz.anchorPoints, oz.anchorFriction);
+		oz.tweaks && this.modsoft(oz.tweaks);
+		oz.postTweaks && setTimeout(() => this.modsoft(oz.postTweaks), 5000);
+		this.thring.material.transparent = oz.reallyTrans || false;
+	},
 	setsoft: function() {
 		const oz = this.opts;
 		this.frame = oz.frame;
 		if (typeof this.frame == "string")
 			this.frame = oz.garment[this.frame].thring;
-		this.softBody = zero.core.ammo.softBody(this, this.frame, oz.anchorPoints, oz.anchorFriction);
-		oz.tweaks && this.modsoft(oz.tweaks);
-		oz.postTweaks && setTimeout(() => this.modsoft(oz.postTweaks), 5000);
-		this.thring.material.transparent = oz.reallyTrans || false;
+		this.resetter();
 	},
 	postassemble: function() {
 		setTimeout(this.setsoft, 500);

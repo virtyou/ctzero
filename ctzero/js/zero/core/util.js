@@ -162,6 +162,15 @@ zero.core.util = {
 			xyzb[dim] = val;
 		});
 	},
+	dimsum: function() {
+		var coords, sum = { x: 0, y: 0, z: 0 };
+		for (coords of arguments) {
+			zero.core.util.coords(coords, function(dim, val) {
+				sum[dim] += val;
+			});
+		}
+		return sum;
+	},
 	touching: function(t1, t2, extra) {
 		var dist = zero.core.util.distance(t1.position(), t2.position()),
 			r1 = (t1.radii.x + t1.radii.y + t1.radii.z) / 3,
