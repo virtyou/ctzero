@@ -128,7 +128,12 @@ zero.core.ammo = {
 		let k, s, r;
 		for (k of _.kinematics)
 			ammo.tickKinematic(k);
-		_.physicsWorld.stepSimulation(dt, 10);
+		try {
+			_.physicsWorld.stepSimulation(dt, 10);
+		} catch(e) {
+			CT.log("stepSimulation error: " + e);
+			return ammo.reset();
+		}
 		for (s of _.softs)
 			ammo.tickSoft(s);
 		for (r of _.rigids)
