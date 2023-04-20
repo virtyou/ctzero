@@ -333,8 +333,8 @@ zero.core.Person = CT.Class({
 		else
 			return this.body.springs.orientation.target;
 	},
-	direction: function() {
-		return this.body.bones[0].getWorldDirection(zero.core.util._positioner);
+	direction: function(direction) {
+		return this.body[direction || "forward"].getDirection();
 	},
 	_dance: function() {
 		if (!this.body || !this.activeDance)

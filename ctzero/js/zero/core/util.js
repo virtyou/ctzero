@@ -152,10 +152,12 @@ zero.core.util = {
 		return "#" + c2h(r) + c2h(g) + c2h(b);
 	},
 	coords: function(xyz, cb) {
-	    zero.core.util.xyz.forEach(function(dim, i) {
-	        var val = xyz[dim] != undefined ? xyz[dim] : xyz[i];
-	        val != undefined && cb(dim, val);
-	    });
+		var i, dim, val, zz = zero.core.util.xyz;
+		for (i = 0; i < zz.length; i++) {
+			dim = zz[i];
+			val = xyz[dim] != undefined ? xyz[dim] : xyz[i];
+			val != undefined && cb(dim, val);
+		}
 	},
 	update: function(xyza, xyzb) {
 		zero.core.util.coords(xyza, function(dim, val) {
@@ -163,9 +165,10 @@ zero.core.util = {
 		});
 	},
 	dimsum: function() {
-		var coords, sum = { x: 0, y: 0, z: 0 };
-		for (coords of arguments) {
-			zero.core.util.coords(coords, function(dim, val) {
+		var i, coords, sum = arguments[0] || { x: 0, y: 0, z: 0 };
+		for (i = 1; i < arguments.length; i++) {
+			coords = arguments[i];
+			coords && zero.core.util.coords(coords, function(dim, val) {
 				sum[dim] += val;
 			});
 		}

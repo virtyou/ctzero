@@ -66,7 +66,7 @@ zero.core.ammo = {
 				width = coz.width, height = coz.height,
 				winfo = _.physicsWorld.getWorldInfo(),
 				offer = anchor.getWorldPosition(_.positioner),
-				pos = zero.core.util.dimsum(coz.displacement, offer);
+				pos = zero.core.util.dimsum(null, coz.displacement, offer);
 
 			if (coz.ellipsoid) // ellipsoid  is jank and seems broken....
 				return _.softBodyHelpers.CreateEllipsoid(winfo,
