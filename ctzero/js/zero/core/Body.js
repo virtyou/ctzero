@@ -64,7 +64,7 @@ zero.core.Body = CT.Class({
 	_directors: {
 		forward: [0, 0, 0],
 		left: [0, Math.PI / 2, 0],
-//		right: [0, -Math.PI / 2, 0]
+		right: [0, -Math.PI / 2, 0]
 	},
 	_looker: function(name) {
 		var lopts = {
