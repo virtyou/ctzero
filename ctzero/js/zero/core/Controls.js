@@ -45,7 +45,7 @@ zero.core.Controls = CT.Class({
 		flats: ["x", "z"],
 		structs: ["floor", "obstacle", "wall", "ramp"],
 		camdirs: ["UP", "DOWN", "LEFT", "RIGHT"],
-		dirs: ["w", "s", "a", "d", "q", "e"],
+		dirs: ["w", "s", "a", "d"],
 		xlrmode: "walk", // walk|look|dance
 		look: function(dir, mult, start) {
 			var _ = this._, cz = _.cams, mode,
@@ -115,6 +115,18 @@ zero.core.Controls = CT.Class({
 			CT.require("CT.gesture", true);
 			CT.gesture.listen("drag", node, this._.cadrag);
 			CT.gesture.listen("wheel", node, this._.cawheel);
+		},
+		dirvec: function() {
+			var _ = this._, dir = this.target.direction, downs = CT.key.downs(_.dirs);
+			if (!_.dv)
+				_.dv = new THREE.Vector3();
+			_.dv.x = _.dv.y = _.dv.z = 0;
+			downs.length && zero.core.util.dimsum(_.dv,
+				downs.includes("w") && dir("front"),
+				downs.includes("s") && dir("back"),
+				downs.includes("a") && dir("left"),
+				downs.includes("d") && dir("right"));
+			return _.dv;
 		}
 	},
 	setXLRMode: function(m) {
@@ -160,22 +172,15 @@ zero.core.Controls = CT.Class({
 				s.boost = CT.key.down("SHIFT") ? amount * 2 : amount;
 		};
 	},
-	direct: function(speed, dir) {
-		var springz = this.springs,
-			vec = this.target.direction(dir);
-		this._.flats.forEach(function(dim) {
-			springz[dim].boost = speed * vec[dim];
-		});
-	},
 	go: function() {
-		if (CT.key.down("w"))
-			this.direct(this._.speed.base * this.target.energy.k);
-		else if (CT.key.down("s"))
-			this.direct(-this._.speed.base * this.target.energy.k);
+		var _ = this._, springz = this.springs, vec = _.dirvec(),
+			dim, speed = _.speed.base * this.target.energy.k;
+		for (dim of _.flats)
+			springz[dim].boost = speed * vec[dim];
 	},
 	mover: function(fullAmount, dir) {
-		var target = this.target, spr = this.springs[dir], _ = this._, amount,
-			direct = this.direct, go = this.go, moveCb = _.moveCb;
+		var _ = this._, target = this.target, amount,
+			spr = this.springs[dir], go = this.go, moveCb = _.moveCb;
 		return function(mult) {
 			amount = mult ? fullAmount * mult : fullAmount;
 			if (amount) {
@@ -194,11 +199,11 @@ zero.core.Controls = CT.Class({
 						spr.boost = amount;
 				} else if (!spr.hard)
 					spr.boost = _.speed.descent;
-			} else if (dir == "orientation") {
-				spr.boost = amount;
+			} else {
+				if (dir == "orientation")
+					spr.boost = amount;
 				go();
-			} else
-				direct(amount * target.energy.k, dir);
+			}
 			moveCb && moveCb(target.name);
 		};
 	},
@@ -231,10 +236,10 @@ zero.core.Controls = CT.Class({
 			wall, gestures, dances, num = 0, runner = this.runner;
 		this.jump = mover(jspeed, "y");
 		this.unjump = mover(0, "y");
-		this.forward = mover(speed, "forward");
-		this.backward = mover(-speed, "forward");
+		this.forward = mover(speed, "front");
+		this.backward = mover(speed, "back");
 		this.leftStrafe = mover(speed, "left");
-		this.rightStrafe = mover(-speed, "left");
+		this.rightStrafe = mover(speed, "right");
 		this.stop = mover(0);
 		this.still = mover(0, "orientation");
 		this.left = mover(ospeed, "orientation");
