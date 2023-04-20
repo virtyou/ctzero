@@ -42,7 +42,10 @@ zero.core.Controls = CT.Class({
 		dim2polar: {
 			x: "theta", y: "phi"
 		},
-		dirs: ["w", "s", "a", "d"],
+		flats: ["x", "z"],
+		structs: ["floor", "obstacle", "wall", "ramp"],
+		camdirs: ["UP", "DOWN", "LEFT", "RIGHT"],
+		dirs: ["w", "s", "a", "d", "q", "e"],
 		xlrmode: "walk", // walk|look|dance
 		look: function(dir, mult, start) {
 			var _ = this._, cz = _.cams, mode,
@@ -119,7 +122,7 @@ zero.core.Controls = CT.Class({
 	},
 	setCams: function() {
 		var _ = this._, cfg = core.config.ctzero.camera;
-		["UP", "DOWN", "LEFT", "RIGHT"].forEach(_.cam);
+		_.camdirs.forEach(_.cam);
 		cfg.cardboard && _.xlrometer();
 		cfg.mouse && _.camouse();
 	},
@@ -133,7 +136,7 @@ zero.core.Controls = CT.Class({
 	placer: function(dir, amount, wallshift) {
 		var s = this.springs[dir], target = this.target,
 			wall = target.opts.wall, shifter = this.wallshift,
-			direct = this.direct, forward = wallshift == 1, nxtval;
+			forward = wallshift == 1, nxtval;
 		return function() {
 			if (wallshift) { // poster/portal
 				nxtval = s.value + amount;
@@ -151,7 +154,7 @@ zero.core.Controls = CT.Class({
 						return shifter(wallshift, s);
 				}
 			}
-			if (["floor", "obstacle", "wall", "ramp"].includes(target.opts.kind))
+			if (_.structs.includes(target.opts.kind))
 				target.adjust("position", dir, amount, true); // but fix..
 			else
 				s.boost = CT.key.down("SHIFT") ? amount * 2 : amount;
@@ -160,7 +163,7 @@ zero.core.Controls = CT.Class({
 	direct: function(speed, dir) {
 		var springz = this.springs,
 			vec = this.target.direction(dir);
-		["x", "z"].forEach(function(dim) {
+		this._.flats.forEach(function(dim) {
 			springz[dim].boost = speed * vec[dim];
 		});
 	},
