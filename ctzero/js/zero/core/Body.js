@@ -62,7 +62,8 @@ zero.core.Body = CT.Class({
 		looker: 0x0000ff
 	},
 	_directors: {
-		forward: [0, 0, 0],
+		front: [0, 0, 0],
+		back: [0, Math.PI, 0],
 		left: [0, Math.PI / 2, 0],
 		right: [0, -Math.PI / 2, 0]
 	},
