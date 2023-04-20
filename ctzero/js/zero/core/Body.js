@@ -61,6 +61,11 @@ zero.core.Body = CT.Class({
 		watcher: 0xff0000,
 		looker: 0x0000ff
 	},
+	_directors: {
+		forward: [0, 0, 0],
+		left: [0, Math.PI / 2, 0],
+		right: [0, -Math.PI / 2, 0]
+	},
 	_looker: function(name) {
 		var lopts = {
 			name: name,
@@ -87,8 +92,16 @@ zero.core.Body = CT.Class({
 		this.opts.parts.push(lopts);
 	},
 	preassemble: function() {
+		var pz = this.opts.parts, d;
 		Object.keys(this._lookers).forEach(this._looker);
-		this.opts.parts.push({
+		for (d in this._directors) {
+			pz.push({
+				name: d,
+				kind: "director",
+				rotation: this._directors[d]
+			});
+		}
+		pz.push({
 			name: "bubbletrail",
 			kind: "particles",
 			thing: "Particles"
