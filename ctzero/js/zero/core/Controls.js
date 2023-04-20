@@ -157,9 +157,9 @@ zero.core.Controls = CT.Class({
 				s.boost = CT.key.down("SHIFT") ? amount * 2 : amount;
 		};
 	},
-	direct: function(speed) {
+	direct: function(speed, dir) {
 		var springz = this.springs,
-			vec = this.target.direction();
+			vec = this.target.direction(dir);
 		["x", "z"].forEach(function(dim) {
 			springz[dim].boost = speed * vec[dim];
 		});
@@ -195,7 +195,7 @@ zero.core.Controls = CT.Class({
 				spr.boost = amount;
 				go();
 			} else
-				direct(amount * target.energy.k);
+				direct(amount * target.energy.k, dir);
 			moveCb && moveCb(target.name);
 		};
 	},
@@ -228,8 +228,10 @@ zero.core.Controls = CT.Class({
 			wall, gestures, dances, num = 0, runner = this.runner;
 		this.jump = mover(jspeed, "y");
 		this.unjump = mover(0, "y");
-		this.forward = mover(speed);
-		this.backward = mover(-speed);
+		this.forward = mover(speed, "forward");
+		this.backward = mover(-speed, "forward");
+		this.leftStrafe = mover(speed, "left");
+		this.rightStrafe = mover(speed, "right");
 		this.stop = mover(0);
 		this.still = mover(0, "orientation");
 		this.left = mover(ospeed, "orientation");
@@ -237,8 +239,10 @@ zero.core.Controls = CT.Class({
 		if (this.target.gesture) { // person
 			CT.key.on("w", this.stop, this.forward);
 			CT.key.on("s", this.stop, this.backward);
-			CT.key.on("a", this.still, this.left);
-			CT.key.on("d", this.still, this.right);
+			CT.key.on("a", this.stop, this.leftStrafe);
+			CT.key.on("d", this.stop, this.rightStrafe);
+			CT.key.on("q", this.still, this.left);
+			CT.key.on("e", this.still, this.right);
 			CT.key.on("SPACE", this.unjump, this.jump);
 			CT.key.on("SHIFT", runner(), runner(true));
 			gestures = Object.keys(this.target.opts.gestures);
