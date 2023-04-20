@@ -155,8 +155,8 @@ zero.core.util = {
 		var i, dim, val, zz = zero.core.util.xyz;
 		for (i = 0; i < zz.length; i++) {
 			dim = zz[i];
-	        val = xyz[dim] != undefined ? xyz[dim] : xyz[i];
-	        val != undefined && cb(dim, val);
+			val = xyz[dim] != undefined ? xyz[dim] : xyz[i];
+			val != undefined && cb(dim, val);
 		}
 	},
 	update: function(xyza, xyzb) {
