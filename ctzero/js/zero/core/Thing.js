@@ -483,6 +483,12 @@ zero.core.Thing = CT.Class({
 		this.placer = this.placer || new THREE.Object3D();
 		return this.placer;
 	},
+	getDirection: function() {
+		if (!this.direction)
+			this.direction = new THREE.Vector3();
+		this.group.getWorldDirection(this.direction);
+		return this.direction;
+	},
 	place: function() {
 		var oz = this.opts, p = this.getPlacer();
 		this._PRS.forEach(function(prop) {
