@@ -110,6 +110,12 @@ zero.core.Controls = CT.Class({
 					watcher.adjust("position", "z", delta / 10, true);
 			}
 		},
+		cazoomers: function() {
+			var _ = this._, zoomIn = () => _.cawheel(null, -100),
+				zoomOut = () => _.cawheel(null, 100);
+			CT.key.on("PERIOD", zoomIn, zoomIn);
+			CT.key.on("COMMA", zoomOut, zoomOut);
+		},
 		camouse: function() {
 			var node = CT.dom.id("vnode") || CT.dom.id("ctmain");
 			CT.require("CT.gesture", true);
@@ -134,6 +140,7 @@ zero.core.Controls = CT.Class({
 	},
 	setCams: function() {
 		var _ = this._, cfg = core.config.ctzero.camera;
+		_.cazoomers();
 		_.camdirs.forEach(_.cam);
 		cfg.cardboard && _.xlrometer();
 		cfg.mouse && _.camouse();
