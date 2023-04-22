@@ -179,9 +179,11 @@ zero.core.Controls = CT.Class({
 				s.boost = CT.key.down("SHIFT") ? amount * 2 : amount;
 		};
 	},
-	go: function() {
+	go: function(soft) {
 		var _ = this._, springz = this.springs, vec = _.dirvec(),
 			dim, speed = _.speed.base * this.target.energy.k;
+		if (soft && !CT.key.downs(_.dirs).length)
+			return;
 		for (dim of _.flats)
 			springz[dim].boost = speed * vec[dim];
 	},
@@ -233,7 +235,7 @@ zero.core.Controls = CT.Class({
 		return function() {
 			m.update({ energy: e });
 			en.damp = d;
-			setTimeout(go, 100); // wait for Mood.tick() to update energy k
+			setTimeout(() => go(true), 100); // wait for Mood.tick() to update energy k
 		};
 	},
 	setKeys: function() {
