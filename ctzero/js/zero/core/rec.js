@@ -97,7 +97,7 @@ var rec = zero.core.rec = {
 		else
 			rec._.language = lang;
 	},
-	local: function(cb) {
+	local: function(cb, onerror) {
 		rec.active = true;
 		var recognition = new webkitSpeechRecognition();
 		recognition.onresult = function(event) {
@@ -105,8 +105,16 @@ var rec = zero.core.rec = {
 			rec.toggleIndicator();
 			cb(event.results[0][0].transcript);
 		};
-		recognition.onerror = rec._.oops(cb);
+		recognition.onerror = onerror || rec._.oops(cb);
 		recognition.start();
+	},
+	testLocal: function() {
+		rec.local(function(words) {
+			CT.log("success: " + words);
+		}, function(err) {
+			CT.log("error: " + JSON.stringify(err));
+			rec.locErr = err;
+		});
 	},
 	onfail: function(cb) {
 		rec._.oops_cb = cb;
