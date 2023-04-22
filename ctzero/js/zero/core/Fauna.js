@@ -329,6 +329,13 @@ zero.core.Fauna.sets = {
 		bird: 2
 	}
 };
+zero.core.Fauna.hunters = {
+	dog: ["cat", "rat", "snake"],
+	cat: ["rat", "bird", "chicken", "bunny", "lizard"],
+	snake: ["cat", "rat", "bunny"],
+	lizard: ["spider"],
+	spider: ["ant"]
+};
 zero.core.Fauna.setter = "menagerie";
 zero.core.Fauna.kinds = ["horse", "moth", "snake", "spider", "ant", "centipede", "lizard", "cow", "eel", "fish", "bee", "wasp", "rat", "bat", "bird", "cat", "dog", "pig", "sheep", "chicken", "bunny"];
 zero.core.Fauna.Menagerie = CT.Class({
