@@ -31,6 +31,7 @@ zero.core.Fauna = CT.Class({
 		this.setBob(40);
 		setTimeout(function() {
 			delete thaz.bobber;
+			thaz.adjust("position", "y", thaz.homeY);
 		}, 500);
 	},
 	setBob: function(amp) {
