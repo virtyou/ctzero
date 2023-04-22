@@ -321,6 +321,12 @@ zero.core.Fauna.sets = {
 		sheep: 1,
 		chicken: 3,
 		bunny: 1
+	},
+	pets: {
+		dog: 1,
+		cat: 2,
+		rat: 3,
+		bird: 2
 	}
 };
 zero.core.Fauna.setter = "menagerie";
