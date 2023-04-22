@@ -12,12 +12,38 @@ zero.core.Fauna = CT.Class({
 		this.bobber && this.adjust("position", "y",
 			this.homeY + this.bobber[t % oz.bobSegs]);
 	},
+	hurry: function(hval) {
+		var thaz = this;
+		this.urgency = hval || 2;
+		setTimeout(function() {
+			delete thaz.urgency;
+		}, 1000);
+	},
+	scurry: function() {
+		delete this.direction;
+		this.hurry(20);
+	},
+	pounce: function(target) {
+		var thaz = this;
+		this.look(target.position());
+		this.getDirection();
+		this.hurry();
+		this.setBob(40);
+		setTimeout(function() {
+			delete thaz.bobber;
+		}, 500);
+	},
+	setBob: function(amp) {
+		this.bobber = zero.core.trig.segs(this.opts.bobSegs, amp);
+	},
 	direct: function(amount) {
 		var zcu = zero.core.util;
 		if (!this.direction || zcu.outBound(this, this.within)) {
 			this.look(zcu.randPos(true, this.homeY, this.within));
 			this.getDirection();
 		}
+		if (this.urgency)
+			amount *= this.urgency;
 		this.adjust("position", "x", amount * this.direction.x, true);
 		this.adjust("position", "z", amount * this.direction.z, true);
 	},
@@ -121,7 +147,7 @@ zero.core.Fauna = CT.Class({
 		this.randOff = CT.data.random(100);
 		this.ticker = zero.core.trig.segs(opts.tickSegs, 0.5);
 		this.wiggler = opts.wiggle && zero.core.trig.segs(opts.wiggle, 0.05);
-		this.bobber = opts.bob && zero.core.trig.segs(opts.bobSegs, opts.bob);
+		opts.bob && this.setBob(opts.bob);
 	}
 }, zero.core.Thing);
 
@@ -378,15 +404,18 @@ zero.core.Fauna.Menagerie = CT.Class({
 		}
 		this.yelper = setTimeout(this.yelp, 10000 + CT.data.random(10000));
 	},
+	pounce: function(hunter, prey) {
+		this.log("POUNCE!", hunter.name, prey.name);
+		hunter.pounce(prey);
+		prey.scurry();
+	},
 	sniff: function(hunterkind, preykind) {
-		var hunter, prey, h, p;
-		this.log("sniff()", hunterkind, preykind);
+		var hunter, prey, h, p, touching = zero.core.util.touching;
 		for (h in this[hunterkind]) {
 			hunter = this[h];
 			for (p in this[preykind]) {
 				prey = this[p];
-				if (zero.core.util.touching(hunter, prey, 100))
-					this.log("POUNCE!", hunterkind, preykind);
+				touching(hunter, prey, 100) && this.pounce(hunter, prey);
 			}
 		}
 	},
