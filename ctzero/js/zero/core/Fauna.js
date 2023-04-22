@@ -1,4 +1,4 @@
-var F = zero.core.Fauna = CT.Class({
+zero.core.Fauna = CT.Class({
 	CLASSNAME: "zero.core.Fauna",
 	tick: function(dts) {
 		var oz = this.opts;
@@ -364,21 +364,46 @@ zero.core.Fauna.Menagerie = CT.Class({
 	onremove: function() {
 		this.opts.regTick && zero.core.current.room.unregTicker(this);
 		clearTimeout(this.yelper);
+		clearInterval(this.hunter);
 	},
 	yelp: function() {
-		var zc = zero.core, zcu = zc.util, crit = this[CT.data.choice(this.members)], vol;
+		var zc = zero.core, zcu = zc.util, aud = zc.Fauna.audio,
+			crit = this[CT.data.choice(this.members)], vol;
 		if (!zc.current.person)
 			this.log("yelp() skipped - no current person");
-		else if (crit && crit.opts.kind in F.audio) {
+		else if (crit && crit.opts.kind in aud) {
 			vol = zcu.close2u(crit) / 2;
 			this.log("playing", crit.opts.kind, "at", vol);
-			zc.audio.sfx(CT.data.choice(F.audio[crit.opts.kind]), vol, true);
+			zc.audio.sfx(CT.data.choice(aud[crit.opts.kind]), vol, true);
 		}
 		this.yelper = setTimeout(this.yelp, 10000 + CT.data.random(10000));
 	},
+	sniff: function(hunterkind, preykind) {
+		var hunter, prey, h, p;
+		this.log("sniff()", hunterkind, preykind);
+		for (h in this[hunterkind]) {
+			hunter = this[h];
+			for (p in this[preykind]) {
+				prey = this[p];
+				if (zero.core.util.touching(hunter, prey, 100))
+					this.log("POUNCE!", hunterkind, preykind);
+			}
+		}
+	},
+	hunt: function() {
+		var hunter, prey, hunters = zero.core.Fauna.hunters;
+		for (hunter in hunters) {
+			if (this[hunter]) {
+				for (prey of hunters[hunter]) {
+					this[prey] && this.sniff(hunter, prey);
+				}
+			}
+		}
+	},
 	init: function(opts) {
-		if (F.audio) // set by ctone...
+		if (zero.core.Fauna.audio) // set by ctone...
 			this.yelper = setTimeout(this.yelp, 3000 + CT.data.random(10000));
+		this.hunter = setInterval(this.hunt, 1000);
 		this.opts.regTick && zero.core.current.room.regTicker(this);
 	}
 }, zero.core.Collection);
