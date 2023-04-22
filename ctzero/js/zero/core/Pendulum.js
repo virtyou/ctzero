@@ -18,7 +18,7 @@ zero.core.Pendulum = CT.Class({
 				this.adjust("rotation", dim, pend.value);
 			};
 		},
-		_soft: function(dts, vel, acc) {
+		_soft: function(dts, vel) {
 			var pendz = this.pends, oz = this.opts,
 				damp = oz.damp, vd = oz.veldamp,
 				rot = this.rotation(null, true), sa,
@@ -36,10 +36,8 @@ zero.core.Pendulum = CT.Class({
 		soft: function(dts) {
 			var pos = this.position(null, true);
 			if (this.pos) {
-				var loc = this.localize, velo = zero.core.util.velocity,
-					vel = velo(loc(this.pos), loc(pos), dts);
-				this.vel && this.ticks._soft(dts, vel, velo(this.vel, vel, dts));
-				this.vel = vel;
+				var loc = this.localize, velo = zero.core.util.velocity;
+				this.ticks._soft(dts, velo(loc(this.pos), loc(pos), dts, this.vel));
 			}
 			this.pos = pos;
 		}
@@ -69,5 +67,6 @@ zero.core.Pendulum = CT.Class({
 		}
 		this.gravvy = !this.opts.nograv;
 		this.accy = this.gravvy || !!this.wiggler;
+		this.vel = new THREE.Vector3();
 	}
 }, zero.core.Thing);
