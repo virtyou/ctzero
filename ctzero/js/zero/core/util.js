@@ -10,6 +10,7 @@ zero.core.util = {
 	dperf: 0.016,
 	_tickers: [],
 	xyz: ["x", "y", "z"],
+	_distance: new THREE.Vector3(),
 	_positioner: new THREE.Vector3(),
 	_quatter: new THREE.Quaternion(),
 	rates: ["x-slow", "slow", "medium", "fast", "x-fast"],
@@ -183,7 +184,7 @@ zero.core.util = {
 		return dist < buff;
 	},
 	distance: function(p1, p2) {
-		var vec = zero.core.util.vector(p1, p2),
+		var zcu = zero.core.util, vec = zcu.vector(p1, p2, zcu._distance),
 			xyzt = (vec.x * vec.x) + (vec.y * vec.y) + (vec.z * vec.z);
 		return Math.sqrt(xyzt);
 	},
@@ -193,12 +194,15 @@ zero.core.util = {
 			dist = thingo.position().distanceTo(you.body.position());
 		return Math.max(0.001, 1 - dist / diameter); // <0 bounding error?
 	},
-	vector: function(p1, p2) { // p2 - p1
-		return {
-			x: p2.x - p1.x,
-			y: p2.y - p1.y,
-			z: p2.z - p1.z
-		};
+	vector: function(p1, p2, vec) { // p2 - p1
+		if (!vec) {
+			CT.log("creating vec!");
+			vec = {};
+		}
+		vec.x = p2.x - p1.x;
+		vec.y = p2.y - p1.y;
+		vec.z = p2.z - p1.z;
+		return vec;
 	},
 	velocity: function(p1, p2, dt) {
 		var dim, vec = zero.core.util.vector(p1, p2);
