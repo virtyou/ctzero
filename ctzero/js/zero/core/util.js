@@ -204,8 +204,9 @@ zero.core.util = {
 		vec.z = p2.z - p1.z;
 		return vec;
 	},
-	velocity: function(p1, p2, dt) {
-		var dim, vec = zero.core.util.vector(p1, p2);
+	velocity: function(p1, p2, dt, vec) {
+		var dim;
+		vec = zero.core.util.vector(p1, p2, vec);
 		for (dim in vec)
 			vec[dim] = vec[dim] / dt;
 		return vec;
