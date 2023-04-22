@@ -1,4 +1,4 @@
-var F = zero.core.Fauna = CT.Class({
+zero.core.Fauna = CT.Class({
 	CLASSNAME: "zero.core.Fauna",
 	tick: function(dts) {
 		var oz = this.opts;
@@ -12,12 +12,39 @@ var F = zero.core.Fauna = CT.Class({
 		this.bobber && this.adjust("position", "y",
 			this.homeY + this.bobber[t % oz.bobSegs]);
 	},
+	hurry: function(hval) {
+		var thaz = this;
+		this.urgency = hval || 2;
+		setTimeout(function() {
+			delete thaz.urgency;
+		}, 1000);
+	},
+	scurry: function() {
+		delete this.direction;
+		this.hurry(20);
+	},
+	pounce: function(target) {
+		var thaz = this;
+		this.look(target.position());
+		this.getDirection();
+		this.hurry();
+		this.setBob(40);
+		setTimeout(function() {
+			delete thaz.bobber;
+			thaz.adjust("position", "y", thaz.homeY);
+		}, 500);
+	},
+	setBob: function(amp) {
+		this.bobber = zero.core.trig.segs(this.opts.bobSegs, amp);
+	},
 	direct: function(amount) {
 		var zcu = zero.core.util;
 		if (!this.direction || zcu.outBound(this, this.within)) {
 			this.look(zcu.randPos(true, this.homeY, this.within));
 			this.getDirection();
 		}
+		if (this.urgency)
+			amount *= this.urgency;
 		this.adjust("position", "x", amount * this.direction.x, true);
 		this.adjust("position", "z", amount * this.direction.z, true);
 	},
@@ -121,7 +148,7 @@ var F = zero.core.Fauna = CT.Class({
 		this.randOff = CT.data.random(100);
 		this.ticker = zero.core.trig.segs(opts.tickSegs, 0.5);
 		this.wiggler = opts.wiggle && zero.core.trig.segs(opts.wiggle, 0.05);
-		this.bobber = opts.bob && zero.core.trig.segs(opts.bobSegs, opts.bob);
+		opts.bob && this.setBob(opts.bob);
 	}
 }, zero.core.Thing);
 
@@ -321,7 +348,20 @@ zero.core.Fauna.sets = {
 		sheep: 1,
 		chicken: 3,
 		bunny: 1
+	},
+	pets: {
+		dog: 1,
+		cat: 2,
+		rat: 3,
+		bird: 2
 	}
+};
+zero.core.Fauna.hunters = {
+	dog: ["cat", "rat", "snake"],
+	cat: ["rat", "bird", "chicken", "bunny", "lizard"],
+	snake: ["cat", "rat", "bunny"],
+	lizard: ["spider"],
+	spider: ["ant"]
 };
 zero.core.Fauna.setter = "menagerie";
 zero.core.Fauna.kinds = ["horse", "moth", "snake", "spider", "ant", "centipede", "lizard", "cow", "eel", "fish", "bee", "wasp", "rat", "bat", "bird", "cat", "dog", "pig", "sheep", "chicken", "bunny"];
@@ -351,21 +391,50 @@ zero.core.Fauna.Menagerie = CT.Class({
 	onremove: function() {
 		this.opts.regTick && zero.core.current.room.unregTicker(this);
 		clearTimeout(this.yelper);
+		clearInterval(this.hunter);
 	},
 	yelp: function() {
-		var zc = zero.core, zcu = zc.util, crit = this[CT.data.choice(this.members)], vol;
+		var zc = zero.core, zcu = zc.util, aud = zc.Fauna.audio,
+			crit = this[CT.data.choice(this.members)], vol;
 		if (!zc.current.person)
 			this.log("yelp() skipped - no current person");
-		else if (crit && crit.opts.kind in F.audio) {
+		else if (crit && crit.opts.kind in aud) {
 			vol = zcu.close2u(crit) / 2;
 			this.log("playing", crit.opts.kind, "at", vol);
-			zc.audio.sfx(CT.data.choice(F.audio[crit.opts.kind]), vol, true);
+			zc.audio.sfx(CT.data.choice(aud[crit.opts.kind]), vol, true);
 		}
 		this.yelper = setTimeout(this.yelp, 10000 + CT.data.random(10000));
 	},
+	pounce: function(hunter, prey) {
+		this.log("POUNCE!", hunter.name, prey.name);
+		hunter.pounce(prey);
+		prey.scurry();
+	},
+	sniff: function(hunterkind, preykind) {
+		var hunter, prey, h, p, touching = zero.core.util.touching;
+		for (h in this[hunterkind]) {
+			hunter = this[h];
+			for (p in this[preykind]) {
+				prey = this[p];
+				if (touching(hunter, prey, 100))
+					return this.pounce(hunter, prey);
+			}
+		}
+	},
+	hunt: function() {
+		var hunter, prey, hunters = zero.core.Fauna.hunters;
+		for (hunter in hunters) {
+			if (this[hunter]) {
+				for (prey of hunters[hunter]) {
+					this[prey] && this.sniff(hunter, prey);
+				}
+			}
+		}
+	},
 	init: function(opts) {
-		if (F.audio) // set by ctone...
+		if (zero.core.Fauna.audio) // set by ctone...
 			this.yelper = setTimeout(this.yelp, 3000 + CT.data.random(10000));
+		this.hunter = setInterval(this.hunt, 2000);
 		this.opts.regTick && zero.core.current.room.regTicker(this);
 	}
 }, zero.core.Collection);
