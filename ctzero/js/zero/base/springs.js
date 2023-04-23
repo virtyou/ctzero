@@ -36,7 +36,7 @@ zero.base.springs.body = function() {
         },
 
         orientation: {
-            k: 20,
+            k: 40,
             damp: 20
         },
 
