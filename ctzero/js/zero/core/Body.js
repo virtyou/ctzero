@@ -37,7 +37,7 @@ zero.core.Body = CT.Class({
 	},
 	setFriction: function(grippy, vertical) {
 		var s = this.springs;
-		s.slide.hard = s.weave.hard = s.orientation.hard = grippy;
+		this.grippy = s.slide.hard = s.weave.hard = s.orientation.hard = grippy;
 		if (vertical) {
 			s.bob.hard = grippy;
 			s.bob.acceleration = grippy ? -1000 : 0;
