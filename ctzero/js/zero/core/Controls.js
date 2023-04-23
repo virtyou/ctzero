@@ -180,8 +180,9 @@ zero.core.Controls = CT.Class({
 		};
 	},
 	face: function(vec) {
-		var tar = this.target;
-		tar.orient(null, zero.core.util.dimsum(vec, tar.body.position()));
+		var tar = this.target, bod = tar.body, os = bod.springs.orientation;
+		os.hard = false;
+		tar.orient(null, zero.core.util.dimsum(vec, bod.position()));
 	},
 	go: function(soft) {
 		var _ = this._, springz = this.springs, vec = _.dirvec(),
@@ -193,7 +194,7 @@ zero.core.Controls = CT.Class({
 		camera.isPolar && this.face(vec);
 	},
 	mover: function(fullAmount, dir) {
-		var _ = this._, target = this.target, amount,
+		var _ = this._, target = this.target, amount, isor,
 			spr = this.springs[dir], go = this.go, moveCb = _.moveCb;
 		return function(mult) {
 			amount = mult ? fullAmount * mult : fullAmount;
@@ -214,9 +215,12 @@ zero.core.Controls = CT.Class({
 				} else if (!spr.hard)
 					spr.boost = _.speed.descent;
 			} else {
-				if (dir == "orientation")
+				isor = dir == "orientation";
+				if (isor) {
+					spr.hard = target.body.grippy;
 					spr.boost = amount;
-				go();
+				}
+				go(isor);
 			}
 			moveCb && moveCb(target.name);
 		};
