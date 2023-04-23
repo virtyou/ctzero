@@ -211,6 +211,24 @@ zero.core.util = {
 			vec[dim] = vec[dim] / dt;
 		return vec;
 	},
+	_directors: {
+		front: [0, 0, 0],
+		back: [0, Math.PI, 0],
+		left: [0, Math.PI / 2, 0],
+		right: [0, -Math.PI / 2, 0]
+	},
+	directorize: function(parts) {
+		var dirs = zero.core.util._directors;
+		parts = parts || [];
+		Object.keys(dirs).forEach(function(d) {
+			parts.push({
+				name: d,
+				kind: "director",
+				rotation: dirs[d]
+			});
+		});
+		return parts;
+	},
 	fit: function(thing, scale) {
 		var bz = thing.getBounds(), shortest = Math.min.apply(null,
 			Object.values(thing.radii)), ratio = (scale || 1) / shortest;

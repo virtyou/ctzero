@@ -334,7 +334,10 @@ zero.core.Person = CT.Class({
 			return this.body.springs.orientation.target;
 	},
 	direction: function(direction) {
-		return this.body[direction || "front"].getDirection();
+		var thing = this.body;
+		if (camera.isPolar)
+			thing = thing.polar.directors;
+		return thing[direction || "front"].getDirection();
 	},
 	_dance: function() {
 		if (!this.body || !this.activeDance)
