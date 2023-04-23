@@ -61,12 +61,6 @@ zero.core.Body = CT.Class({
 		watcher: 0xff0000,
 		looker: 0x0000ff
 	},
-	_directors: {
-		front: [0, 0, 0],
-		back: [0, Math.PI, 0],
-		left: [0, Math.PI / 2, 0],
-		right: [0, -Math.PI / 2, 0]
-	},
 	_looker: function(name) {
 		var lopts = {
 			name: name,
@@ -87,21 +81,18 @@ zero.core.Body = CT.Class({
 				    color: 0x00ff00,
 				    visible: core.config.ctzero.helpers
 				}
+			}, {
+				name: "directors",
+				rotation: [0, Math.PI, 0],
+				parts: zero.core.util.directorize()
 			}];
 		} else
 			lopts.bone = 4;
 		this.opts.parts.push(lopts);
 	},
 	preassemble: function() {
-		var pz = this.opts.parts, d;
+		var pz = zero.core.util.directorize(this.opts.parts);
 		Object.keys(this._lookers).forEach(this._looker);
-		for (d in this._directors) {
-			pz.push({
-				name: d,
-				kind: "director",
-				rotation: this._directors[d]
-			});
-		}
 		pz.push({
 			name: "bubbletrail",
 			kind: "particles",
