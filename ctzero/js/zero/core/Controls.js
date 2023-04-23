@@ -179,6 +179,10 @@ zero.core.Controls = CT.Class({
 				s.boost = CT.key.down("SHIFT") ? amount * 2 : amount;
 		};
 	},
+	face: function(vec) {
+		var tar = this.target;
+		tar.orient(null, zero.core.util.dimsum(vec, tar.body.position()));
+	},
 	go: function(soft) {
 		var _ = this._, springz = this.springs, vec = _.dirvec(),
 			dim, speed = _.speed.base * this.target.energy.k;
@@ -186,6 +190,7 @@ zero.core.Controls = CT.Class({
 			return;
 		for (dim of _.flats)
 			springz[dim].boost = speed * vec[dim];
+		camera.isPolar && this.face(vec);
 	},
 	mover: function(fullAmount, dir) {
 		var _ = this._, target = this.target, amount,
