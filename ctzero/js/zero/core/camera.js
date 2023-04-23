@@ -101,7 +101,8 @@ var camera = zero.core.camera = {
 	},
 	angle: function(perspective, pname, lookPart) {
 		console.log(perspective, pname, lookPart);
-		var zcc = zero.core.current, _ = camera._;
+		var zcc = zero.core.current, _ = camera._,
+			pol = camera.isPolar = perspective == "polar";
 		camera.current = perspective;
 		if (pname)
 			camera.current += " (" + pname + ")";
@@ -115,7 +116,6 @@ var camera = zero.core.camera = {
 			if (perspective in _.lookers) {
 				var person = zcc.people[pname] || zcc.person;
 				if (!person) return;
-				var pol = perspective == "polar";
 				camera.setSprings(200);
 				camera.perspective(person, lookPart || (pol && "head"));
 				if (!pol) {
