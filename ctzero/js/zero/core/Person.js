@@ -353,7 +353,7 @@ zero.core.Person = CT.Class({
 		this.ungesture();
 		this.gesture(dance.steps[dance.step]);
 		(this.isYou() && CT.key.down("SPACE")) || this.sfx(this.activeDance);
-		setTimeout(this._dance, (dance.interval || 1000) / this.mood.opts.energy);
+		this.dancer = setTimeout(this._dance, (dance.interval || 1000) / this.mood.opts.energy);
 	},
 	dance: function(dname, duration) {
 		if (this.activeDance == dname) return;
@@ -365,6 +365,10 @@ zero.core.Person = CT.Class({
 	undance: function() {
 		this._.bouncer = 1;
 		delete this.activeDance;
+		if (this.dancer) {
+			clearTimeout(this.dancer);
+			delete this.dancer;
+		}
 		this.ungesture();
 	},
 	gesture: function(gname) {
