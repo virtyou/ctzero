@@ -210,7 +210,8 @@ zero.core.Person = CT.Class({
 		var bod = this.body, vec, getd = this.direction,
 			go = this.go, undance = this.undance, orient = this.orient,
 			zcc = zero.core.current, ppl = zcc.people,
-			bso = bod.springs.orientation, bsohard = bso.hard;
+			bso = bod.springs.orientation, bsohard = bso.hard,
+			cam = camera.current, shouldBehind = this.isYou() && (cam != "behind");
 		if (typeof subject == "string") {
 			if (subject == "player") {
 				if (!zcc.person) return cb && cb();
@@ -220,6 +221,7 @@ zero.core.Person = CT.Class({
 			else
 				subject = zcc.room[subject];
 		}
+		shouldBehind && camera.angle("behind");
 		watch && this.watch(false, true);
 		bso.k = 200;
 		bso.hard = false;
@@ -243,6 +245,7 @@ zero.core.Person = CT.Class({
 				if (bod.removed || subject.removed)
 					clr();
 				else if (zero.core.util.touching(bod, subject, 40)) {
+					shouldBehind && camera.angle(cam);
 					clr();
 					undance();
 					cb && cb();
