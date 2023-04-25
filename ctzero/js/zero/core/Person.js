@@ -244,7 +244,7 @@ zero.core.Person = CT.Class({
 			}, chkr = setInterval(function() {
 				if (bod.removed || subject.removed)
 					clr();
-				else if (zero.core.util.touching(bod, subject, 40)) {
+				else if (zero.core.util.touching(bod, subject, 20)) {
 					shouldBehind && camera.angle(cam);
 					clr();
 					undance();
