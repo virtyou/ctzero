@@ -33,10 +33,10 @@ zero.core.Controls = CT.Class({
 				RIGHT: ["shake", -0.5]
 			},
 			polar: {
-				UP: ["x", -1],
-				DOWN: ["x", 1],
-				LEFT: ["y", -1],
-				RIGHT: ["y", 1]
+				UP: ["x", -1.5],
+				DOWN: ["x", 1.5],
+				LEFT: ["y", -1.5],
+				RIGHT: ["y", 1.5]
 			}
 		},
 		dim2polar: {

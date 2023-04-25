@@ -210,7 +210,8 @@ zero.core.Person = CT.Class({
 		var bod = this.body, vec, getd = this.direction,
 			go = this.go, undance = this.undance, orient = this.orient,
 			zcc = zero.core.current, ppl = zcc.people,
-			bso = bod.springs.orientation, bsohard = bso.hard;
+			bso = bod.springs.orientation, bsohard = bso.hard,
+			cam = camera.current, shouldBehind = this.isYou() && (cam != "behind");
 		if (typeof subject == "string") {
 			if (subject == "player") {
 				if (!zcc.person) return cb && cb();
@@ -220,6 +221,7 @@ zero.core.Person = CT.Class({
 			else
 				subject = zcc.room[subject];
 		}
+		shouldBehind && camera.angle("behind");
 		watch && this.watch(false, true);
 		bso.k = 200;
 		bso.hard = false;
@@ -242,7 +244,8 @@ zero.core.Person = CT.Class({
 			}, chkr = setInterval(function() {
 				if (bod.removed || subject.removed)
 					clr();
-				else if (zero.core.util.touching(bod, subject, 60)) {
+				else if (zero.core.util.touching(bod, subject, 20)) {
+					shouldBehind && camera.angle(cam);
 					clr();
 					undance();
 					cb && cb();
@@ -339,6 +342,9 @@ zero.core.Person = CT.Class({
 			thing = thing.polar.directors;
 		return thing[direction || "front"].getDirection();
 	},
+	isYou: function() {
+		return this == zero.core.current.person;
+	},
 	_dance: function() {
 		if (!this.body || !this.activeDance)
 			return;
@@ -346,8 +352,8 @@ zero.core.Person = CT.Class({
 		dance.step = (dance.step + 1) % dance.steps.length;
 		this.ungesture();
 		this.gesture(dance.steps[dance.step]);
-		CT.key.down("SPACE") || this.sfx(this.activeDance);
-		setTimeout(this._dance, (dance.interval || 1000) / this.mood.opts.energy);
+		(this.isYou() && CT.key.down("SPACE")) || this.sfx(this.activeDance);
+		this.dancer = setTimeout(this._dance, (dance.interval || 1000) / this.mood.opts.energy);
 	},
 	dance: function(dname, duration) {
 		if (this.activeDance == dname) return;
@@ -359,6 +365,10 @@ zero.core.Person = CT.Class({
 	undance: function() {
 		this._.bouncer = 1;
 		delete this.activeDance;
+		if (this.dancer) {
+			clearTimeout(this.dancer);
+			delete this.dancer;
+		}
 		this.ungesture();
 	},
 	gesture: function(gname) {
