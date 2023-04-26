@@ -163,9 +163,9 @@ zero.core.Person = CT.Class({
 		this.orientation(Math.atan2(spos.x
 			- pos.x, spos.z - pos.z));
 	},
-	touch: function(subject, cb, arm) {
+	touch: function(subject, cb, arm, approached) {
 		var bod = this.body, arms = bod.torso.arms, spy;
-		this.approach(subject, function() {
+		this.approach(approached || subject, function() {
 			spy = subject.group.getWorldPosition().y;
 			if (spy < bod.torso.legs.right.knee.getWorldPosition().y)
 				bod.springs.bow.target = Math.PI / 4;
