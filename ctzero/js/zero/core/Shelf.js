@@ -106,7 +106,8 @@ zero.core.Shelf = CT.Class({
 		CT.modal.choice({
 			prompt: "want to read a book?",
 			data: Object.keys(this.book),
-			cb: bookname => zero.core.current.person.get(this, this[bookname].read)
+			cb: bookname => zero.core.current.person.touch(this[bookname],
+				this[bookname].read, null, this)
 		});
 	},
 	perusebutt: function() {
