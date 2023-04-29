@@ -175,12 +175,16 @@ zero.core.util = {
 		}
 		return sum;
 	},
+	buff: function(t1, t2, extra) {
+		extra = extra || 0;
+		if (!t1.radii || !t2.radii) return extra;
+		var r1 = (t1.radii.x + t1.radii.y + t1.radii.z) / 3,
+			r2 = (t2.radii.x + t2.radii.y + t2.radii.z) / 3;
+		return r1 + r2 + extra;
+	},
 	touching: function(t1, t2, extra) {
-		var dist = zero.core.util.distance(t1.position(), t2.position()),
-			r1 = t1.radii ? ((t1.radii.x + t1.radii.y + t1.radii.z) / 3) : 0,
-			r2 = t2.radii ? ((t2.radii.x + t2.radii.y + t2.radii.z) / 3) : 0,
-			buff = r1 + r2;
-		if (extra) buff += extra;
+		var zcu = zero.core.util, buff = zcu.buff(t1, t2, extra),
+			dist = zcu.distance(t1.position(), t2.position());
 		return dist < buff;
 	},
 	distance: function(p1, p2) {
