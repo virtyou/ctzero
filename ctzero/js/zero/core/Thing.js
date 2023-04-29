@@ -715,9 +715,7 @@ zero.core.Thing = CT.Class({
 		if (oz.invisible)
 			this.hide();
 		this.thring && this.getGroup().add(this.thring);
-		this.parts = oz.parts.map(function(p) {
-			return thiz.attach(p, iterator);
-		});
+		this.parts = oz.parts.map(p => this.attach(p, iterator));
 		this.postassemble && this.postassemble();
 		if (!oz.parts.length) {
 			i -= 1;
