@@ -94,6 +94,10 @@ zero.core.Body = CT.Class({
 		var pz = zero.core.util.directorize(this.opts.parts);
 		Object.keys(this._lookers).forEach(this._looker);
 		pz.push({
+			name: "gotar",
+			anchor: camera.scene
+		});
+		pz.push({
 			name: "bubbletrail",
 			kind: "particles",
 			thing: "Particles"
