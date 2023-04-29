@@ -58,7 +58,7 @@ zero.core.Book = CT.Class({
 		});
 	},
 	readbutt: function() {
-		return CT.dom.button("read", () => zero.core.current.person.get(this, this.read));
+		return CT.dom.button("read", () => zero.core.current.person.touch(this, this.read));
 	},
 	read: function(onfinish) {
 		this.open();

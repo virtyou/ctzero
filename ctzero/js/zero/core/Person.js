@@ -92,7 +92,7 @@ zero.core.Person = CT.Class({
 	},
 	setFriction: function() { // roller skates, ice, etc
 		this.body.setFriction(this.grippy &&
-			zero.core.current.person == this &&
+//			zero.core.current.person == this &&
 			(this.body.upon || zero.core.current.room).grippy);
 	},
 	onsay: function(cb) {
@@ -206,8 +206,13 @@ zero.core.Person = CT.Class({
 	chase: function(subject, cb) {
 		this.approach(subject, cb, false, true);
 	},
+	propel: function(direction) {
+		var bs = this.body.springs, vec = this.direction(direction);
+		bs.weave.boost = 100 * vec.x;
+		bs.slide.boost = 100 * vec.z;
+	},
 	approach: function(subject, cb, watch, chase) {
-		var bod = this.body, vec, getd = this.direction,
+		var bod = this.body, vec, revec = this.propel,
 			go = this.go, undance = this.undance, orient = this.orient,
 			zcc = zero.core.current, ppl = zcc.people,
 			bso = bod.springs.orientation, bsohard = bso.hard,
@@ -228,11 +233,12 @@ zero.core.Person = CT.Class({
 //		this.look(subject, true);
 		orient(subject);
 		go();
-		var revec = function() {
-			vec = getd();
-			bod.springs.weave.boost = 100 * vec.x;
-			bod.springs.slide.boost = 100 * vec.z;
-		};
+
+		// TODO: if !chase, optimize as follows:
+		// CALC DISTANCE
+		// CALC DURATION
+		// SET BOOSTS
+
 		setTimeout(function() { // adapted from Controls.mover()... revise?
 			revec();
 			bso.k = 20;
@@ -301,26 +307,19 @@ zero.core.Person = CT.Class({
 	},
 	wander: function(where, cb) {
 		where = where || "room";
-		var r = zero.core.current.room, coords,
+		var r = zero.core.current.room, _ = this._, wantar = _.wantar = _.wantar || {},
 			bz = (where == "room") ? r.bounds : r[where].bounds,
 			min = bz.min, max = bz.max;
-		coords = {
-			x: min.x + CT.data.random(max.x - min.x, true),
-			z: min.z + CT.data.random(max.z - min.z, true)
-		};
-		this.orient(null, coords);
-		this.move({
-			weave: coords.x,
-			slide: coords.z
-		}, cb);
+		wantar.weave = (min.x + CT.data.random(max.x - min.x, true)) * 0.9;
+		wantar.slide = (min.z + CT.data.random(max.z - min.z, true)) * 0.9;
+		this.move(wantar, cb);
 	},
 	move: function(opts, cb, watch) {
-		var k, dur = this.automaton ? 4000 : 1000; // TODO: ACTUALLY CALC DUR!!!!
-		for (var k in opts)
-			this.body.springs[k].target = opts[k];
-		watch && this.watch(false, true);
-		this.go(dur);
-		cb && setTimeout(cb, dur);
+		var gotar = this.body.gotar, gtp = gotar.group.position;
+		gtp.x = opts.weave;
+		gtp.z = opts.slide;
+		gtp.y = opts.bob || this.body.placer.position.y;
+		this.approach(gotar, cb, watch);
 	},
 	snapshot: function() {
 		return {
@@ -338,7 +337,7 @@ zero.core.Person = CT.Class({
 	},
 	direction: function(direction) {
 		var thing = this.body;
-		if (camera.isPolar)
+		if (this.isYou() && camera.isPolar)
 			thing = thing.polar.directors;
 		return thing[direction || "front"].getDirection();
 	},

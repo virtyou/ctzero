@@ -108,7 +108,7 @@ zero.core.Room = CT.Class({
 		setTimeout(function() {
 			sz[prop].ebound = true;
 			bod.bindAxis(prop);
-			bod.setFriction(person == zero.core.current.person, true);
+			bod.setFriction(true, true);
 		}, 2000);
 	},
 	dynFloor: function(pos) {
