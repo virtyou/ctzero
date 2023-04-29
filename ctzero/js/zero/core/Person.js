@@ -206,8 +206,13 @@ zero.core.Person = CT.Class({
 	chase: function(subject, cb) {
 		this.approach(subject, cb, false, true);
 	},
+	propel: function(direction) {
+		var bs = this.body.springs, vec = this.direction(direction);
+		bs.weave.boost = 100 * vec.x;
+		bs.slide.boost = 100 * vec.z;
+	},
 	approach: function(subject, cb, watch, chase) {
-		var bod = this.body, vec, getd = this.direction,
+		var bod = this.body, vec, revec = this.propel,
 			go = this.go, undance = this.undance, orient = this.orient,
 			zcc = zero.core.current, ppl = zcc.people,
 			bso = bod.springs.orientation, bsohard = bso.hard,
@@ -228,11 +233,6 @@ zero.core.Person = CT.Class({
 //		this.look(subject, true);
 		orient(subject);
 		go();
-		var revec = function() {
-			vec = getd();
-			bod.springs.weave.boost = 100 * vec.x;
-			bod.springs.slide.boost = 100 * vec.z;
-		};
 
 		// TODO: if !chase, optimize as follows:
 		// CALC DISTANCE
