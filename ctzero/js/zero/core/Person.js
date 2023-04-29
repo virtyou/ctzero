@@ -307,21 +307,20 @@ zero.core.Person = CT.Class({
 	},
 	wander: function(where, cb) {
 		where = where || "room";
-		var r = zero.core.current.room, gotar = this.body.gotar, gtp = gotar.group.position,
+		var r = zero.core.current.room, _ = this._, wantar = _.wantar = _.wantar || {},
 			bz = (where == "room") ? r.bounds : r[where].bounds,
 			min = bz.min, max = bz.max;
-		gtp.x = (min.x + CT.data.random(max.x - min.x, true)) * 0.9;
-		gtp.z = (min.z + CT.data.random(max.z - min.z, true)) * 0.9;
-		gtp.y = this.body.placer.position.y;
-		this.approach(gotar, cb);
+		wantar.weave = (min.x + CT.data.random(max.x - min.x, true)) * 0.9;
+		wantar.slide = (min.z + CT.data.random(max.z - min.z, true)) * 0.9;
+		wantar.bob = this.body.placer.position.y;
+		this.move(wantar, cb);
 	},
 	move: function(opts, cb, watch) {
-		var k, bs = this.body.springs, dur = this.automaton ? 4000 : 1000; // TODO: ACTUALLY CALC DUR!!!!
-		for (k in opts)
-			bs[k].target = opts[k];
-		watch && this.watch(false, true);
-		this.go(dur);
-		cb && setTimeout(cb, dur);
+		var gotar = this.body.gotar, gtp = gotar.group.position;
+		gtp.x = opts.weave;
+		gtp.z = opts.slide;
+		gtp.y = opts.bob || this.body.placer.position.y;
+		this.approach(gotar, cb, watch);
 	},
 	snapshot: function() {
 		return {
