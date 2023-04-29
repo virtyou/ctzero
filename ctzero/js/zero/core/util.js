@@ -177,8 +177,8 @@ zero.core.util = {
 	},
 	touching: function(t1, t2, extra) {
 		var dist = zero.core.util.distance(t1.position(), t2.position()),
-			r1 = (t1.radii.x + t1.radii.y + t1.radii.z) / 3,
-			r2 = (t2.radii.x + t2.radii.y + t2.radii.z) / 3,
+			r1 = t1.radii ? ((t1.radii.x + t1.radii.y + t1.radii.z) / 3) : 0,
+			r2 = t2.radii ? ((t2.radii.x + t2.radii.y + t2.radii.z) / 3) : 0,
 			buff = r1 + r2;
 		if (extra) buff += extra;
 		return dist < buff;
