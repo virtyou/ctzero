@@ -72,8 +72,8 @@ zero.core.auto.Automaton = CT.Class({
 		this.person = person;
 		person.automaton = this;
 		var pbs = person.body.springs;
-		pbs.slide.k = pbs.weave.k = 4;
-		pbs.slide.damp = pbs.weave.damp = 20;
+//		pbs.slide.k = pbs.weave.k = 4;
+//		pbs.slide.damp = pbs.weave.damp = 20;
 		this.opts.wander && person.wander();
 		this.activities.length && this.tick();
 		this.opts.onjoin && this.opts.onjoin(person);
@@ -104,7 +104,7 @@ zero.core.auto.Automaton = CT.Class({
 			}
 		});
 		this.reprogram();
-		opts.person.grippy = false;
+//		opts.person.grippy = false;
 		var az0 = opts.activities[0], pb = opts.person.body, wapo, amo;
 		if (!pb.position && az0) {
 			if (az0.action == "move") {
