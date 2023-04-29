@@ -312,7 +312,6 @@ zero.core.Person = CT.Class({
 			min = bz.min, max = bz.max;
 		wantar.weave = (min.x + CT.data.random(max.x - min.x, true)) * 0.9;
 		wantar.slide = (min.z + CT.data.random(max.z - min.z, true)) * 0.9;
-		wantar.bob = this.body.placer.position.y;
 		this.move(wantar, cb);
 	},
 	move: function(opts, cb, watch) {
