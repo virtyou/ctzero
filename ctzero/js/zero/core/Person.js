@@ -92,7 +92,7 @@ zero.core.Person = CT.Class({
 	},
 	setFriction: function() { // roller skates, ice, etc
 		this.body.setFriction(this.grippy &&
-			zero.core.current.person == this &&
+//			zero.core.current.person == this &&
 			(this.body.upon || zero.core.current.room).grippy);
 	},
 	onsay: function(cb) {
@@ -233,6 +233,12 @@ zero.core.Person = CT.Class({
 			bod.springs.weave.boost = 100 * vec.x;
 			bod.springs.slide.boost = 100 * vec.z;
 		};
+
+		// TODO: if !chase, optimize as follows:
+		// CALC DISTANCE
+		// CALC DURATION
+		// SET BOOSTS
+
 		setTimeout(function() { // adapted from Controls.mover()... revise?
 			revec();
 			bso.k = 20;
@@ -301,23 +307,18 @@ zero.core.Person = CT.Class({
 	},
 	wander: function(where, cb) {
 		where = where || "room";
-		var r = zero.core.current.room, coords,
+		var r = zero.core.current.room, gotar = this.body.gotar, gtp = gotar.group.position,
 			bz = (where == "room") ? r.bounds : r[where].bounds,
 			min = bz.min, max = bz.max;
-		coords = {
-			x: min.x + CT.data.random(max.x - min.x, true),
-			z: min.z + CT.data.random(max.z - min.z, true)
-		};
-		this.orient(null, coords);
-		this.move({
-			weave: coords.x,
-			slide: coords.z
-		}, cb);
+		gtp.x = (min.x + CT.data.random(max.x - min.x, true)) * 0.9;
+		gtp.z = (min.z + CT.data.random(max.z - min.z, true)) * 0.9;
+		gtp.y = this.body.placer.position.y;
+		this.approach(gotar, cb);
 	},
 	move: function(opts, cb, watch) {
-		var k, dur = this.automaton ? 4000 : 1000; // TODO: ACTUALLY CALC DUR!!!!
-		for (var k in opts)
-			this.body.springs[k].target = opts[k];
+		var k, bs = this.body.springs, dur = this.automaton ? 4000 : 1000; // TODO: ACTUALLY CALC DUR!!!!
+		for (k in opts)
+			bs[k].target = opts[k];
 		watch && this.watch(false, true);
 		this.go(dur);
 		cb && setTimeout(cb, dur);
