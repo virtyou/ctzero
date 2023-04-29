@@ -338,7 +338,7 @@ zero.core.Person = CT.Class({
 	},
 	direction: function(direction) {
 		var thing = this.body;
-		if (camera.isPolar)
+		if (this.isYou() && camera.isPolar)
 			thing = thing.polar.directors;
 		return thing[direction || "front"].getDirection();
 	},
