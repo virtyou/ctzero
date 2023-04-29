@@ -242,7 +242,7 @@ zero.core.Person = CT.Class({
 		_.postchase = cb;
 		_.chased = subject;
 		_.prevcam = prevcam;
-		_.chaser = setInterval(chaser, 500);
+		_.chaser = setInterval(this.chaser, 500);
 	},
 	approach: function(subject, cb, watch, chase) {
 		var _ = this._, bod = this.body, zc = zero.core, dist,
