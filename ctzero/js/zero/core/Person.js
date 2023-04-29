@@ -212,6 +212,7 @@ zero.core.Person = CT.Class({
 		bs.slide.boost = 100 * vec.z;
 	},
 	stop: function() {
+		if (!this.body) return this.log("aborting stop() (no body)");
 		var bs = this.body.springs;
 		bs.weave.boost = bs.slide.boost = 0;
 		this.undance();
@@ -272,7 +273,7 @@ zero.core.Person = CT.Class({
 			chase ? pursue(subject, cb, shouldBehind && cam) : setTimeout(function() {
 				stop();
 				cb && cb();
-			}, zcu.distance(bod.position(), subject.position()) * 10);
+			}, (zcu.distance(bod.position(), subject.position()) - zcu.buff(bod, subject)) * 10);
 		}, 500); // time for orientation...
 	},
 	bounce: function(amount) {
