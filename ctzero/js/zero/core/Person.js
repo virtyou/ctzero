@@ -211,10 +211,43 @@ zero.core.Person = CT.Class({
 		bs.weave.boost = 100 * vec.x;
 		bs.slide.boost = 100 * vec.z;
 	},
+	stop: function() {
+		var bs = this.body.springs;
+		bs.weave.boost = bs.slide.boost = 0;
+		this.undance();
+	},
+	unchase: function() {
+		var _ = this._;
+		this.stop();
+		if (_.chaser) {
+			clearInterval(_.chaser);
+			delete _.chaser;
+		}
+	},
+	chaser: function() {
+		var _ = this._, cb = _.postchase;
+		if (this.body.removed || _.chased.removed)
+			this.unchase();
+		else if (zero.core.util.touching(this.body, _.chased, 20)) {
+			_.prevcam && camera.angle(_.prevcam);
+			this.unchase();
+			cb && cb();
+		} else {
+			this.orient(_.chased);
+			this.propel();
+		}
+	},
+	pursue: function(subject, cb, prevcam) {
+		var _ = this._;
+		_.postchase = cb;
+		_.chased = subject;
+		_.prevcam = prevcam;
+		_.chaser = setInterval(chaser, 500);
+	},
 	approach: function(subject, cb, watch, chase) {
-		var bod = this.body, vec, revec = this.propel,
-			go = this.go, undance = this.undance, orient = this.orient,
-			zcc = zero.core.current, ppl = zcc.people,
+		var _ = this._, bod = this.body, zc = zero.core, dist,
+			zcu = zc.util, zcc = zc.current, ppl = zcc.people,
+			propel = this.propel, pursue = this.pursue, stop = this.stop,
 			bso = bod.springs.orientation, bsohard = bso.hard,
 			cam = camera.current, shouldBehind = this.isYou() && (cam != "behind");
 		if (typeof subject == "string") {
@@ -230,36 +263,16 @@ zero.core.Person = CT.Class({
 		watch && this.watch(false, true);
 		bso.k = 200;
 		bso.hard = false;
-//		this.look(subject, true);
-		orient(subject);
-		go();
-
-		// TODO: if !chase, optimize as follows:
-		// CALC DISTANCE
-		// CALC DURATION
-		// SET BOOSTS
-
-		setTimeout(function() { // adapted from Controls.mover()... revise?
-			revec();
+		this.orient(subject);
+		this.go();
+		setTimeout(function() {
+			propel();
 			bso.k = 20;
 			bso.hard = bsohard;
-			var clr = function() {
-				bod.springs.weave.boost = 0;
-				bod.springs.slide.boost = 0;
-				clearInterval(chkr);
-			}, chkr = setInterval(function() {
-				if (bod.removed || subject.removed)
-					clr();
-				else if (zero.core.util.touching(bod, subject, 20)) {
-					shouldBehind && camera.angle(cam);
-					clr();
-					undance();
-					cb && cb();
-				} else if (chase) {
-					orient(subject);
-					revec();
-				}
-			}, 500);
+			chase ? pursue(subject, cb, shouldBehind && cam) : setTimeout(function() {
+				stop();
+				cb && cb();
+			}, zcu.distance(bod.position(), subject.position()) * 10);
 		}, 500); // time for orientation...
 	},
 	bounce: function(amount) {
