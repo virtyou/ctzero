@@ -74,13 +74,16 @@ zero.core.Body = CT.Class({
 		if (name == "polar") {
 			lopts.anchor = this.getPlacer();
 			lopts.parts = [{
-				name: "watcher",
-				position: [0, 0, 150],
-				boxGeometry: [1, 1, 5],
-				material: {
-				    color: 0x00ff00,
-				    visible: core.config.ctzero.helpers
-				}
+				name: "tilter",
+				parts: [{
+					name: "watcher",
+					position: [0, 0, 150],
+					boxGeometry: [1, 1, 5],
+					material: {
+					    color: 0x00ff00,
+					    visible: core.config.ctzero.helpers
+					}
+				}]
 			}, {
 				name: "directors",
 				rotation: [0, Math.PI, 0],
@@ -313,8 +316,9 @@ zero.core.Body = CT.Class({
 	_tickPolar: function() {
 		if (zero.core.camera.current != "polar")
 			return;
-		var pr = this.polar.group.rotation, sz = this.springs;
-		pr.x = sz.theta.value;
+		var sz = this.springs, pr = this.polar.group.rotation,
+			tr = this.polar.tilter.group.rotation;
+		tr.x = sz.theta.value;
 		pr.y = sz.phi.value;
 	},
 	tick: function(dts) {
