@@ -179,7 +179,7 @@ var camera = zero.core.camera = {
 			cur = camera.current, prop, watcher;
 		if (per) {
 			prop = (cur == "pov") ? "value" : "target";
-			watcher = (cur == "polar") ? per.body.polar.watcher : per.body.watcher;
+			watcher = (cur == "polar") ? per.body.polar.tilter.watcher : per.body.watcher;
 			zero.core.util.coords(watcher.position(null, true),
 				(dim, val) => camera._tickPerDim(dim, val, prop));
 		}
