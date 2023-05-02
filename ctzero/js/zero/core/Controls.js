@@ -104,7 +104,7 @@ zero.core.Controls = CT.Class({
 		},
 		cawheel: function(pos, delta) {
 			if (camera.current == "polar") {
-				var watcher = zero.core.current.person.body.polar.watcher,
+				var watcher = zero.core.current.person.body.polar.tilter.watcher,
 					wp = watcher.position();
 				if (delta > 0 || wp.z > 20)
 					watcher.adjust("position", "z", delta / 10, true);
