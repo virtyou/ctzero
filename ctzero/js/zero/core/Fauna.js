@@ -14,7 +14,7 @@ zero.core.Fauna = CT.Class({
 	},
 	hurry: function(hval) {
 		var thaz = this;
-		this.urgency = hval || 2;
+		this.urgency = hval || 6;
 		setTimeout(function() {
 			delete thaz.urgency;
 		}, 1000);
