@@ -90,9 +90,14 @@ zero.core.Collection = CT.Class({
 		this.awaitBound && r.onbounded(this.boundize);
 	},
 	collect: function(collection) {
-		if (!Array.isArray(collection))
-			return collection ? this.sets[collection] : this.counts;
-		var col = {}, kind;
+		if (!Array.isArray(collection)) {
+			if (this.sets[collection])
+				this.counts = this.sets[collection];
+			this.kinds = Object.keys(this.counts);
+			return this.counts;
+		}
+		this.kinds = collection;
+		var col = this.counts = {}, kind;
 		for (kind of collection)
 			col[kind] = 1;
 		return col;
