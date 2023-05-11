@@ -7,6 +7,7 @@ zero.core.Room = CT.Class({
 	_tickers: [],
 	_structural: ["obstacle", "floor", "wall", "ramp"],
 	_bumpers: ["wall", "obstacle"],
+	_moshAxes: ["slide", "weave"],
 	removables: function() {
 		return this.parts.concat(this.objects);
 	},
@@ -27,7 +28,7 @@ zero.core.Room = CT.Class({
 		this.jostle();
 	},
 	bump: function(b1, b2, moshy) {
-		var axis, s1, s2, v1, v2, vd, axes = ["weave", "slide"];
+		var axis, s1, s2, v1, v2, vd, axes = this._moshAxes;
 		zero.core.current.person.sfx("thud");
 		for (axis of axes) {
 			s1 = b1.springs[axis];
@@ -91,7 +92,7 @@ zero.core.Room = CT.Class({
 		bod.setFriction(false, true);
 		if (port) {
 			wall = port.opts.wall;
-			prop = ["slide", "weave"][wall % 2];
+			prop = this._moshAxes[wall % 2];
 			if (wall == 1 || wall == 2)
 				amount *= -1;
 			person.body.setPositioners(port.position(), false, true);
