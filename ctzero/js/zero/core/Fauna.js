@@ -356,6 +356,16 @@ zero.core.Fauna.sets = {
 		bird: 2
 	}
 };
+zero.core.Fauna.defaultSet = {
+	ant: 1,
+	moth: 1,
+	snake: 1,
+	spider: 1,
+	centipede: 1,
+	horse: 1,
+	lizard: 1,
+	cow: 1
+};
 zero.core.Fauna.hunters = {
 	dog: ["cat", "rat", "snake"],
 	cat: ["rat", "bird", "chicken", "bunny", "lizard"],
@@ -369,16 +379,7 @@ zero.core.Fauna.Menagerie = CT.Class({
 	CLASSNAME: "zero.core.Fauna.Menagerie",
 	kinds: zero.core.Fauna.kinds,
 	sets: zero.core.Fauna.sets,
-	counts: {
-		ant: 1,
-		moth: 1,
-		snake: 1,
-		spider: 1,
-		centipede: 1,
-		horse: 1,
-		lizard: 1,
-		cow: 1
-	},
+	counts: zero.core.Fauna.defaultSet,
 	member: "Fauna",
 	removables: false,
 	tick: function(dts) {
@@ -421,8 +422,24 @@ zero.core.Fauna.Menagerie = CT.Class({
 			}
 		}
 	},
+	monsterHunt: function() {
+		var zc = zero.core, touching = zc.util.touching, h,
+			hunter, monkind, playbod = zc.current.person.body;
+		for (monkind of this.monsters) {
+			if (this[monkind]) {
+				for (h in this[monkind]) {
+					hunter = this[h];
+					if (touching(hunter, playbod, 200)) {
+						hunter.pounce(playbod);
+						this.onmonsterpounce(hunter);
+					}
+				}
+			}
+		}
+	},
 	hunt: function() {
 		var hunter, prey, hunters = zero.core.Fauna.hunters;
+		this.monsters && this.monsterHunt();
 		for (hunter in hunters) {
 			if (this[hunter]) {
 				for (prey of hunters[hunter]) {
@@ -430,6 +447,10 @@ zero.core.Fauna.Menagerie = CT.Class({
 				}
 			}
 		}
+	},
+	huntPlayer: function(hunters, onpounce) {
+		this.monsters = hunters;
+		this.onmonsterpounce = onpounce;
 	},
 	init: function(opts) {
 		if (zero.core.Fauna.audio) // set by ctone...
