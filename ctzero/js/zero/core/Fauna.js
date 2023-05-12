@@ -37,6 +37,11 @@ zero.core.Fauna = CT.Class({
 	setBob: function(amp) {
 		this.bobber = zero.core.trig.segs(this.opts.bobSegs, amp);
 	},
+	randPos: function() {
+		var rp = zero.core.util.randPos(true, this.homeY, this.within);
+		this.adjust("position", "x", rp.x);
+		this.adjust("position", "z", rp.z);
+	},
 	direct: function(amount) {
 		var zcu = zero.core.util;
 		if (!this.direction || zcu.outBound(this, this.within)) {
@@ -420,6 +425,7 @@ zero.core.Fauna.Menagerie = CT.Class({
 				for (p in this[pk]) {
 					prey = this[p];
 					if (touching(pbod, prey, 50)) {
+						prey.randPos();
 						onsplat(prey);
 						sfx = "splat";
 					}
