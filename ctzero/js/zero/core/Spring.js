@@ -37,7 +37,7 @@ zero.core.Spring = CT.Class({
 					this.target == this.bounds.max && this.acceleration > 0) {
 					if (this.floory) {
 						this.floored = true;
-						this.parent && this.parent.person && this.parent.person.sfx("bump");
+						this.parent && this.parent.person && this.parent.person.land();
 					}
 					this.boost = 0;
 				}
