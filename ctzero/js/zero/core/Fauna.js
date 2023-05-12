@@ -439,20 +439,16 @@ zero.core.Fauna.Menagerie = CT.Class({
 			}
 		}
 	},
-	monsterHunt: function() {
-		var zc = zero.core, touching = zc.util.touching, h,
-			hunter, monkind, playbod = zc.current.person.body;
-		for (monkind of this.monsters) {
-			if (this[monkind]) {
-				for (h in this[monkind]) {
-					hunter = this[h];
-					if (touching(hunter, playbod, 200)) {
-						hunter.pounce(playbod);
-						this.onmonsterpounce(hunter);
-					}
-				}
-			}
+	monHunt: function(hunter) {
+		var zc = zero.core, playbod = zc.current.person.body;
+		if (zc.util.touching(hunter, playbod, 200)) {
+			hunter.pounce(playbod);
+			this.onmonsterpounce(hunter);
 		}
+	},
+	monsterHunt: function() {
+		for (var hunter of this.monsters)
+			this.each(hunter, this.monHunt);
 	},
 	hunt: function() {
 		var hunter, prey, hunters = zero.core.Fauna.hunters;
@@ -466,8 +462,17 @@ zero.core.Fauna.Menagerie = CT.Class({
 		}
 	},
 	huntPlayer: function(hunters, onpounce) {
+		var hunter, minimap = zero.core.current.minimap;
 		this.monsters = hunters;
 		this.onmonsterpounce = onpounce;
+		for (hunter of hunters)
+			this.each(hunter, minimap.monster);
+	},
+	each: function(kind, cb) {
+		var name;
+		if (this[kind])
+			for (name in this[kind])
+				cb(this[name]);
 	},
 	init: function(opts) {
 		if (zero.core.Fauna.audio) // set by ctone...
