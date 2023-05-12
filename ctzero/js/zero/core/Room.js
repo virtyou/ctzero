@@ -43,9 +43,10 @@ zero.core.Room = CT.Class({
 	jostle: function() {
 		var zcc = zero.core.current, pz = zcc.people, you = zcc.person;
 		if (!you) return;
-		var b = you.body, pos = b.position(), rz = b.radii, pname, pbod,
+		var b = you.body, rz = b.radii, pname, pbod,
 			moshy = b.upon && b.upon.opts.moshy || this.opts.moshy;
 		if (!moshy) return;
+		var pos = b.position();
 		for (pname in pz) {
 			pbod = pz[pname].body;
 			if ((pname == you.name) || (pbod.upon != b.upon)) continue;
