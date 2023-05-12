@@ -286,6 +286,14 @@ zero.core.Person = CT.Class({
 		}
 		return amount;
 	},
+	land: function() {
+		var _ = this._;
+		this.sfx("bump");
+		_.onland && _.onland();
+	},
+	onland: function(cb) {
+		this._.onland = cb;
+	},
 	jump: function() {
 		var bod = this.body, within = bod.within,
 			t = zero.core.util.ticker, sound = "whoosh";
