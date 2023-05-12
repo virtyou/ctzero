@@ -245,7 +245,7 @@ zero.core.Person = CT.Class({
 		_.prevcam = prevcam;
 		_.chaser = setInterval(this.chaser, 500);
 	},
-	approach: function(subject, cb, watch, chase) {
+	approach: function(subject, cb, watch, chase, dur) {
 		var _ = this._, bod = this.body, zc = zero.core, dist,
 			zcu = zc.util, zcc = zc.current, ppl = zcc.people,
 			propel = this.propel, pursue = this.pursue, stop = this.stop,
@@ -273,7 +273,8 @@ zero.core.Person = CT.Class({
 			chase ? pursue(subject, cb, shouldBehind && cam) : setTimeout(function() {
 				stop();
 				cb && cb();
-			}, (zcu.distance(bod.position(), subject.position()) - zcu.buff(bod, subject)) * 10);
+			}, dur || ((zcu.distance(bod.position(),
+				subject.position()) - zcu.buff(bod, subject)) * 10));
 		}, 500); // time for orientation...
 	},
 	bounce: function(amount) {
@@ -326,21 +327,21 @@ zero.core.Person = CT.Class({
 			cb && cb();
 		}, true);
 	},
-	wander: function(where, cb) {
+	wander: function(where, cb, dur) {
 		where = where || "room";
 		var r = zero.core.current.room, _ = this._, wantar = _.wantar = _.wantar || {},
 			bz = (where == "room") ? r.bounds : r[where].bounds,
 			min = bz.min, max = bz.max;
 		wantar.weave = (min.x + CT.data.random(max.x - min.x, true)) * 0.9;
 		wantar.slide = (min.z + CT.data.random(max.z - min.z, true)) * 0.9;
-		this.move(wantar, cb);
+		this.move(wantar, cb, false, dur);
 	},
-	move: function(opts, cb, watch) {
+	move: function(opts, cb, watch, dur) {
 		var gotar = this.body.gotar, gtp = gotar.group.position;
 		gtp.x = opts.weave;
 		gtp.z = opts.slide;
 		gtp.y = opts.bob || this.body.placer.position.y;
-		this.approach(gotar, cb, watch);
+		this.approach(gotar, cb, watch, false, dur);
 	},
 	snapshot: function() {
 		return {
