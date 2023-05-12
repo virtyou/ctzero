@@ -287,9 +287,8 @@ zero.core.Person = CT.Class({
 		return amount;
 	},
 	land: function() {
-		var _ = this._;
-		this.sfx("bump");
-		_.onland && _.onland();
+		var lander = this._.onland;
+		this.sfx(lander && lander() || "bump");
 	},
 	onland: function(cb) {
 		this._.onland = cb;
