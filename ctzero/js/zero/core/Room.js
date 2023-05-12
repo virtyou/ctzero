@@ -29,22 +29,26 @@ zero.core.Room = CT.Class({
 	},
 	bump: function(b1, b2, moshy) {
 		var axis, s1, s2, v1, v2, vd, axes = this._moshAxes;
+		moshy = moshy || this.moshiness(b1) || 20;
 		zero.core.current.person.sfx("thud");
 		for (axis of axes) {
 			s1 = b1.springs[axis];
 			s2 = b2.springs[axis];
 			v1 = s1.velocity || s1.boost;
-			v2 = s2.velocity;
+			v2 = s2.velocity || s2.boost;
 			vd = v2 - v1;
 			s1.shove = vd * moshy;
 			s2.shove = -vd * moshy;
 		}
 	},
+	moshiness: function(b) {
+		return b.upon && b.upon.opts.moshy || this.opts.moshy;
+	},
 	jostle: function() {
 		var zcc = zero.core.current, pz = zcc.people, you = zcc.person;
 		if (!you) return;
 		var b = you.body, rz = b.radii, pname, pbod,
-			moshy = b.upon && b.upon.opts.moshy || this.opts.moshy;
+			moshy = this.moshiness(b);
 		if (!moshy) return;
 		var pos = b.position();
 		for (pname in pz) {
