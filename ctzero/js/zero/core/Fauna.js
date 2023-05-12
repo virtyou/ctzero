@@ -12,12 +12,12 @@ zero.core.Fauna = CT.Class({
 		this.bobber && this.adjust("position", "y",
 			this.homeY + this.bobber[t % oz.bobSegs]);
 	},
-	hurry: function(hval) {
+	hurry: function(hval, hint) {
 		var thaz = this;
-		this.urgency = hval || 6;
+		this.urgency = hval || 8;
 		setTimeout(function() {
 			delete thaz.urgency;
-		}, 1000);
+		}, hint || 1000);
 	},
 	scurry: function() {
 		delete this.direction;
@@ -27,7 +27,7 @@ zero.core.Fauna = CT.Class({
 		var thaz = this;
 		this.look(target.position());
 		this.getDirection();
-		this.hurry();
+		this.hurry(null, 400);
 		this.setBob(40);
 		setTimeout(function() {
 			delete thaz.bobber;
