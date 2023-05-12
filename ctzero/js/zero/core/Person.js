@@ -207,9 +207,10 @@ zero.core.Person = CT.Class({
 		this.approach(subject, cb, false, true);
 	},
 	propel: function(direction) {
-		var bs = this.body.springs, vec = this.direction(direction);
-		bs.weave.boost = 100 * vec.x;
-		bs.slide.boost = 100 * vec.z;
+		var bs = this.body.springs, vec = this.direction(direction),
+			booster = this.zombified ? 200 : 100;
+		bs.weave.boost = booster * vec.x;
+		bs.slide.boost = booster * vec.z;
 	},
 	stop: function() {
 		if (!this.body) return this.log("aborting stop() (no body)");
@@ -245,7 +246,7 @@ zero.core.Person = CT.Class({
 		_.prevcam = prevcam;
 		_.chaser = setInterval(this.chaser, 500);
 	},
-	approach: function(subject, cb, watch, chase, dur) {
+	approach: function(subject, cb, watch, chase, dur, nobuff) {
 		var _ = this._, bod = this.body, zc = zero.core, dist,
 			zcu = zc.util, zcc = zc.current, ppl = zcc.people,
 			propel = this.propel, pursue = this.pursue, stop = this.stop,
@@ -270,11 +271,18 @@ zero.core.Person = CT.Class({
 			propel();
 			bso.k = 20;
 			bso.hard = bsohard;
-			chase ? pursue(subject, cb, shouldBehind && cam) : setTimeout(function() {
+			if (chase)
+				return pursue(subject, cb, shouldBehind && cam);
+			if (!dur) {
+				dist = zcu.distance(bod.position(), subject.position());
+				if (!nobuff)
+					dist -= zcu.buff(bod, subject);
+				dur = dist * 10;
+			}
+			setTimeout(function() {
 				stop();
 				cb && cb();
-			}, dur || ((zcu.distance(bod.position(),
-				subject.position()) - zcu.buff(bod, subject)) * 10));
+			}, dur);
 		}, 500); // time for orientation...
 	},
 	bounce: function(amount) {
