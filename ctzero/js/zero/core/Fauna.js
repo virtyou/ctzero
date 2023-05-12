@@ -440,13 +440,14 @@ zero.core.Fauna.Menagerie = CT.Class({
 		}
 	},
 	monHunt: function(hunter) {
-		var zc = zero.core, playbod = zc.current.person.body;
-		if (zc.util.touching(hunter, playbod, 200)) {
-			hunter.pounce(playbod);
+		var zc = zero.core, playerbod = zc.current.person.body;
+		if (zc.util.touching(hunter, playerbod, 200)) {
+			hunter.pounce(playerbod);
 			this.onmonsterpounce(hunter);
 		}
 	},
 	monsterHunt: function() {
+		if (zero.core.current.person.zombified) return;
 		for (var hunter of this.monsters)
 			this.each(hunter, this.monHunt);
 	},
