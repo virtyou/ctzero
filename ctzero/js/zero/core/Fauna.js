@@ -414,15 +414,19 @@ zero.core.Fauna.Menagerie = CT.Class({
 	splat: function(preykinds, onsplat) {
 		var pk, p, prey, zc = zero.core,
 			touching = zc.util.touching,
-			pbod = zc.current.person.body;
+			pbod = zc.current.person.body, sfx;
 		for (pk of preykinds) {
 			if (this[pk]) {
 				for (p in this[pk]) {
 					prey = this[p];
-					touching(pbod, prey, 50) && onsplat(prey);
+					if (touching(pbod, prey, 50)) {
+						onsplat(prey);
+						sfx = "splat";
+					}
 				}
 			}
 		}
+		return sfx;
 	},
 	sniff: function(hunterkind, preykind) {
 		var hunter, prey, h, p, touching = zero.core.util.touching;
