@@ -197,6 +197,7 @@ zero.core.Controls = CT.Class({
 		var _ = this._, target = this.target, amount, isor,
 			spr = this.springs[dir], go = this.go, moveCb = _.moveCb;
 		return function(mult) {
+			if (target.zombified) return;
 			amount = mult ? fullAmount * mult : fullAmount;
 			if (amount) {
 				if (dir == "y")
