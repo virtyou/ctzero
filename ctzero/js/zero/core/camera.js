@@ -4,6 +4,7 @@ var camera = zero.core.camera = {
 		profiles: {},
 		left: {},
 		right: {},
+		preferreds: ["polar", "behind"],
 		lookers: {
 			polar: true,
 			pov: {
@@ -101,9 +102,13 @@ var camera = zero.core.camera = {
 	},
 	angle: function(perspective, pname, lookPart) {
 		console.log(perspective, pname, lookPart);
+		if (perspective == "preferred")
+			perspective = camera.preferred || "polar";
 		var zcc = zero.core.current, _ = camera._,
 			pol = camera.isPolar = perspective == "polar";
 		camera.current = perspective;
+		if (_.preferreds.includes(perspective))
+			camera.preferred = perspective;
 		if (pname)
 			camera.current += " (" + pname + ")";
 		if (perspective == "cycle" || perspective == "stop cycling")
