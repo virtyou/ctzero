@@ -34,9 +34,10 @@ zero.core.click = {
         zero.core.click.target(thing).__click();
     },
     register: function(thing, cb) {
-        zero.core.click.init();
-        var target = zero.core.click.target(thing);
+        var c = zero.core.click;
+        c.init();
+        var target = c.target(thing);
         target.__click = cb;
-        zero.core.click.targets.push(target);
+        c.targets.includes(target) || c.targets.push(target);
     }
 };
