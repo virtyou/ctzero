@@ -24,6 +24,22 @@ zero.base.particles = {
 			transparent: true
 		}
 	},
+	splash: {
+		count: 40,
+		size: 1,
+		sizeVariance: 2,
+		velocity: [0, 200, 0],
+		acceleration: [0, -500, 0],
+		velVariance: [100, 0, 100],
+		floorbound: true,
+		sharemat: true,
+		pmat: {
+			opacity: 0,
+			shininess: 150,
+			color: 0x22ccff,
+			transparent: true
+		}
+	},
 	sparks: {
 		count: 20,
 		size: 1,
