@@ -15,11 +15,24 @@ zero.core.Particles = CT.Class({
 		for (p of this.active)
 			if (!dissolve || p.setOpacity(-dts * dissolve, true) > 0)
 				p.tick(dts);
-		while (dissolve && this.active.length && this.active[0].material.opacity < 0) {
+		while (this._staleTip()) {
 			retired = this.active.shift();
+			retired.material.opacity = 0;
 			retired.position([0, 0, 0]);
 			this.pool.push(retired);
 		}
+	},
+	_staleTip: function() {
+		return this.active.length && this._stale(this.active[0]);
+	},
+	_stale: function(act) {
+		return this._dissolved(act.material) || this._floored(act);
+	},
+	_dissolved: function(mat) {
+		return this.opts.dissolve && (mat.opacity < 0);
+	},
+	_floored: function(thing) {
+		return this.opts.floorbound && (thing.position().y < 0);
 	},
 	release: function(number) {
 		var activated, oz = this.opts;
@@ -49,7 +62,7 @@ zero.core.Particles = CT.Class({
 	},
 	preassemble: function() {
 		var i, size, oz = this.opts, pz = oz.parts,
-			matinst = oz.sharemat && new THREE["Mesh" + oz.matcat + "Material"](oz.pmat);
+			matinst = this.material = oz.sharemat && new THREE["Mesh" + oz.matcat + "Material"](oz.pmat);
 		for (i = 0; i < oz.count; i++) {
 			size = oz.size + oz.sizeVariance * Math.random();
 			pz.push({

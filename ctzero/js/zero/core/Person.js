@@ -302,6 +302,17 @@ zero.core.Person = CT.Class({
 	onland: function(cb) {
 		this._.onland = cb;
 	},
+	splash: function(color) {
+		var bs = this.body.splash, mat = bs.material;
+		if (!color && (mat.color != bs._origColor))
+			color = bs._origColor;
+		if (color) {
+			if (!bs._origColor)
+				bs._origColor = mat.color;
+			bs.setColor(color);
+		}
+		bs.release(20);
+	},
 	jump: function() {
 		var bod = this.body, within = bod.within,
 			t = zero.core.util.ticker, sound = "whoosh";
@@ -309,6 +320,7 @@ zero.core.Person = CT.Class({
 		if (within) {
 			if (within.opts.state == "liquid") {
 				sound = "splash";
+				this.splash();
 				(t % 10) || bod.bubbletrail.release(1);
 			} else if (within.opts.state == "plasma") {
 				bod.flying = true;

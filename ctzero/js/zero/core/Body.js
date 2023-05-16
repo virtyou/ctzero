@@ -105,6 +105,12 @@ zero.core.Body = CT.Class({
 			kind: "particles",
 			thing: "Particles"
 		});
+		pz.push({
+			name: "splash",
+			kind: "particles",
+			thing: "Particles",
+			position: [0, -100, 0]
+		});
 	},
 	boundOnRoom: function() {
 		var zcc = zero.core.current;
@@ -331,6 +337,7 @@ zero.core.Body = CT.Class({
 		var skeleton = this.thring.skeleton;
 		this._.customs.forEach(function(c) { c.tick(skeleton); });
 		this.bubbletrail.tick(dts);
+		this.splash.tick(dts);
 	},
 	init: function(opts) {
 		this.opts = opts = CT.merge(this.opts, {
