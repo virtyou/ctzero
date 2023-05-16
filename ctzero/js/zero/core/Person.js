@@ -303,8 +303,14 @@ zero.core.Person = CT.Class({
 		this._.onland = cb;
 	},
 	splash: function(color) {
-		var bs = this.body.splash;
-		color && bs.setColor(color);
+		var bs = this.body.splash, mat = bs.material;
+		if (!color && (mat.color != bs._origColor))
+			color = bs._origColor;
+		if (color) {
+			if (!bs._origColor)
+				bs._origColor = mat.color;
+			bs.setColor(color);
+		}
 		bs.release(20);
 	},
 	jump: function() {
