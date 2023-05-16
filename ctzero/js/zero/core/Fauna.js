@@ -24,23 +24,29 @@ zero.core.Fauna = CT.Class({
 		this.hurry(20);
 	},
 	pounce: function(target) {
-		var thaz = this;
 		this.look(target.position());
 		this.getDirection();
 		this.hurry(null, 400);
-		this.setBob(40);
-		setTimeout(function() {
-			delete thaz.bobber;
-			thaz.adjust("position", "y", thaz.homeY);
-		}, 500);
+		this.setBob(40, 500);
 	},
-	setBob: function(amp) {
+	unbob: function() {
+		delete this.bobber;
+		this.adjust("position", "y", this.homeY);
+	},
+	setBob: function(amp, unbobafter) {
 		this.bobber = zero.core.trig.segs(this.opts.bobSegs, amp);
+		unbobafter && setTimeout(this.unbob, unbobafter);
 	},
 	randPos: function() {
 		var rp = zero.core.util.randPos(true, this.homeY, this.within);
 		this.adjust("position", "x", rp.x);
 		this.adjust("position", "z", rp.z);
+	},
+	repos: function(pos, bobin) {
+		bobin && this.setBob(80, 500);
+		if (!pos) return this.randPos();
+		this.adjust("position", "x", pos.x);
+		this.adjust("position", "z", pos.z);
 	},
 	direct: function(amount) {
 		var zcu = zero.core.util;
@@ -416,16 +422,16 @@ zero.core.Fauna.Menagerie = CT.Class({
 		hunter.pounce(prey);
 		prey.scurry();
 	},
-	splat: function(preykinds, onsplat) {
-		var pk, p, prey, zc = zero.core,
-			touching = zc.util.touching,
-			pbod = zc.current.person.body, sfx;
+	splat: function(preykinds, onsplat, source) {
+		var zc = zero.core, touching = zc.util.touching,
+			zcc = zc.current, sb = source && zcc.people[source].body,
+			pbod = zcc.person.body, pk, p, prey, sfx;
 		for (pk of preykinds) {
 			if (this[pk]) {
 				for (p in this[pk]) {
 					prey = this[p];
 					if (touching(pbod, prey, 50)) {
-						prey.randPos();
+						prey.repos(sb && sb.position(), true);
 						onsplat(prey);
 						sfx = "splat";
 					}
