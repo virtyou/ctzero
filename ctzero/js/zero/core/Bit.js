@@ -12,6 +12,9 @@ zero.core.Bit = CT.Class({
 				this._size += this.pulser[t];
 			this.scale(this._size);
 		}
+		if (this.spin)
+			for (d in this.spin)
+				adjust("rotation", d, this.spin[d], true);
 		if (!vel) return;
 		for (i = 0; i < 3; i++) {
 			d = dz[i];
@@ -58,7 +61,7 @@ zero.core.Bit = CT.Class({
 	},
 	init: function(opts) {
 		var ename = opts.manager ? (opts.manager + "_bit") : opts.name;
-		this.opts = opts = CT.merge(opts, core.config.ctzero.env[ename], {
+		this.opts = opts = CT.merge(opts, core.config.ctzero.env[ename], opts.shape || {
 			sphereGeometry: true
 		}, this.opts);
 		var vel = opts.velocity, wobz = this.wobblers = {},
@@ -79,6 +82,13 @@ zero.core.Bit = CT.Class({
 			opts.position = opts.position.map(function(p, i) {
 				return p + Math.random() * 2 * pv[i] - pv[i];
 			});
+		}
+		if (opts.spin) {
+			this.spin = {
+				x: CT.data.random(0.5) - 0.25,
+				y: CT.data.random(0.5) - 0.25,
+				z: CT.data.random(0.5) - 0.25
+			};
 		}
 		this._size = opts.size || 1;
 		if (opts.pulse)

@@ -431,8 +431,8 @@ zero.core.Fauna.Menagerie = CT.Class({
 				for (p in this[pk]) {
 					prey = this[p];
 					if (touching(pbod, prey, 50)) {
-						prey.repos(sb && sb.position(), true);
 						onsplat(prey);
+						prey.repos(sb && sb.position(), true);
 						sfx = "splat";
 					}
 				}

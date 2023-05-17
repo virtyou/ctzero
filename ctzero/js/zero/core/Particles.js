@@ -1,6 +1,7 @@
 zero.core.Particles = CT.Class({
 	CLASSNAME: "zero.core.Particles",
 	removables: false,
+	_floor: 0,
 	tick: function(dts) {
 		var p, oz = this.opts;
 		if (!this.isReady()) return;
@@ -32,10 +33,10 @@ zero.core.Particles = CT.Class({
 		return this.opts.dissolve && (mat.opacity < 0);
 	},
 	_floored: function(thing) {
-		return this.opts.floorbound && (thing.position().y < 0);
+		return this.opts.floorbound && (thing.position().y < this._floor);
 	},
-	release: function(number) {
-		var activated, oz = this.opts;
+	release: function(number, pos) {
+		var activated, oz = this.opts, zcu = zero.core.util;
 		if (!this.active) {
 			this.active = [];
 			this.pool = Object.values(this.particle);
@@ -47,10 +48,13 @@ zero.core.Particles = CT.Class({
 				activated._size = oz.size + oz.sizeVariance * Math.random();
 				activated.scale(activated._size);
 			}
+			pos && activated.position(pos)
 			oz.acceleration && activated.setVelocity();
 			this.active.push(activated);
 			number -= 1;
 		}
+		if (pos && oz.floorbound && oz.refloor)
+			this._floor = pos.y;
 		//number && this.log("unable to release", number, "particles");
 	},
 	rebound: function() {
@@ -83,7 +87,8 @@ zero.core.Particles = CT.Class({
 				scale: [size, size, size],
 				size: size,
 				topobound: oz.topobound,
-				manager: oz.name
+				manager: oz.name,
+				shape: oz.bitshape
 			});
 		}
 	},
@@ -103,6 +108,11 @@ zero.core.Particles = CT.Class({
 			velocity: [0, 0, 0],
 			variance: [0, 0, 0]
 		}, this.opts);
+		if (opts.pcolor) {
+			if (!opts.pmat)
+				opts.pmat = {};
+			opts.pmat.color = opts.pcolor;
+		}
 		if (opts.drip) // TODO: cancel interval at some point?
 			this.dripper = setInterval(this.release, 1000 / (opts.count * opts.dissolve || 1), 1);
 		var PA = zero.core.Particles.audio;

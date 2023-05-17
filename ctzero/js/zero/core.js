@@ -45,6 +45,7 @@ CT.require("zero.core.Swarm");
 CT.require("zero.core.Collection");
 CT.require("zero.core.Flora");
 CT.require("zero.core.Fauna");
+CT.require("zero.core.Sploder");
 
 CT.require("zero.core.Skeleton");
 CT.require("zero.core.Spine");
