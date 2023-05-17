@@ -23,10 +23,18 @@ zero.core.Fauna = CT.Class({
 		delete this.direction;
 		this.hurry(20);
 	},
-	pounce: function(target) {
-		this.look(target.position());
+	pounce: function(target, perch) {
+		if (perch)
+			target = target.head;
+		this.look(target.position(null, perch));
 		this.getDirection();
-		this.hurry(null, 400);
+		this.hurry(perch && 16, 400);
+		perch || this.setBob(40, 500);
+		this.perching = target;
+	},
+	unperch: function() {
+		delete this.perch;
+		this.scurry();
 		this.setBob(40, 500);
 	},
 	unbob: function() {
@@ -49,15 +57,28 @@ zero.core.Fauna = CT.Class({
 		this.adjust("position", "z", pos.z);
 	},
 	direct: function(amount) {
-		var zcu = zero.core.util;
+		var zc = zero.core, zcu = zc.util, pp;
 		if (!this.direction || zcu.outBound(this, this.within)) {
 			this.look(zcu.randPos(true, this.homeY, this.within));
 			this.getDirection();
 		}
 		if (this.urgency)
 			amount *= this.urgency;
-		this.adjust("position", "x", amount * this.direction.x, true);
-		this.adjust("position", "z", amount * this.direction.z, true);
+		if (this.perch) {
+			pp = this.perch.position(null, true);
+			this.adjust("position", "x", pp.x);
+			this.adjust("position", "y", pp.y);
+			this.adjust("position", "z", pp.z);
+			zc.current.person.zombified || this.unperch();
+		} else {
+			this.adjust("position", "x", amount * this.direction.x, true);
+			this.adjust("position", "z", amount * this.direction.z, true);
+			if (this.perching) {
+				this.adjust("position", "y", amount * this.direction.y, true);
+				this.perch = this.perching;
+				delete this.perching;
+			}
+		}
 	},
 	preassemble: function() {
 		var oz = this.opts, pz = oz.parts, tbase,
@@ -453,10 +474,8 @@ zero.core.Fauna.Menagerie = CT.Class({
 	},
 	monHunt: function(hunter) {
 		var zc = zero.core, playerbod = zc.current.person.body;
-		if (zc.util.touching(hunter, playerbod, 200)) {
-			hunter.pounce(playerbod);
-			this.onmonsterpounce(hunter);
-		}
+		if (zc.util.touching(hunter, playerbod, 200))
+			hunter.pounce(playerbod, this.onmonsterpounce(hunter));
 	},
 	monsterHunt: function() {
 		if (zero.core.current.person.zombified) return;
