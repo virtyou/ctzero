@@ -61,6 +61,34 @@ zero.base.particles = {
 			transparent: true
 		}
 	},
+	bolts: {
+		count: 6,
+		size: 1,
+		sizeVariance: 2,
+		velocity: [0, 200, 0],
+		acceleration: [0, -500, 0],
+		velVariance: [100, 0, 100],
+		floorbound: true,
+		refloor: true,
+		sharemat: true,
+		bitshape: {
+			cylinderGeometry: true,
+			geomult: 5,
+			spin: true,
+			parts: [{
+				torusGeometry: 1,
+				torusTubeRadius: 1,
+				position: [0, 2, 0],
+				rotation: [Math.PI / 2, 0, 0]
+			}]
+		},
+		pmat: {
+			opacity: 0,
+			shininess: 150,
+			color: 0x457516,
+			transparent: true
+		}
+	},
 	sparks: {
 		count: 20,
 		size: 1,
