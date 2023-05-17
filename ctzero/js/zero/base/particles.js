@@ -40,6 +40,27 @@ zero.base.particles = {
 			transparent: true
 		}
 	},
+	nuts: {
+		count: 10,
+		size: 3,
+		sizeVariance: 2,
+		velocity: [0, 200, 0],
+		acceleration: [0, -500, 0],
+		velVariance: [100, 0, 100],
+		floorbound: true,
+		refloor: true,
+		sharemat: true,
+		bitshape: {
+			torusGeometry: true,
+			spin: true
+		},
+		pmat: {
+			opacity: 0,
+			shininess: 150,
+			color: 0x545761,
+			transparent: true
+		}
+	},
 	sparks: {
 		count: 20,
 		size: 1,
