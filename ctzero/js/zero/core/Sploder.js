@@ -1,6 +1,6 @@
 zero.core.Sploder = CT.Class({
 	CLASSNAME: "zero.core.Sploder",
-	varieties: ["bits", "smoke", "sparks"],
+	varieties: ["nuts", "smoke", "sparks"],
 	tick: function(dts) {
 		var v, vz = this.varieties;
 		for (v of vz)
@@ -32,8 +32,9 @@ zero.core.Sploder = CT.Class({
 	},
 	init: function(opts) {
 		this.opts = CT.merge(opts, {
-//			bits: 10,
 			smoke: 2,
+			nuts: 5,
+//			bolts: 10,
 			sparks: 10
 		}, this.opts);
 		zero.core.util.ontick(this.tick);
