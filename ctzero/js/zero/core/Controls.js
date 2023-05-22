@@ -45,6 +45,7 @@ zero.core.Controls = CT.Class({
 		flats: ["x", "z"],
 		structs: ["floor", "obstacle", "wall", "ramp"],
 		camdirs: ["UP", "DOWN", "LEFT", "RIGHT"],
+		cdalias: {"LEFT": "q", "RIGHT": "e", "UP": "r", "DOWN": "f"},
 		dirs: ["w", "s", "a", "d"],
 		xlrmode: "walk", // walk|look|dance
 		look: function(dir, mult, start) {
@@ -77,8 +78,10 @@ zero.core.Controls = CT.Class({
 			}
 		},
 		cam: function(dir) {
-			var look = this._.look;
-			CT.key.on(dir, () => look(dir), () => look(dir, null, true));
+			var _ = this._, ak = _.cdalias[dir], look = _.look,
+				up = () => look(dir), down = () => look(dir, null, true);
+			CT.key.on(dir, up, down);
+			CT.key.on(ak, up, down);
 		},
 		xlrometer: function() {
 			var _ = this._, mover = this.mover, acfg = core.config.ctzero.camera.xlro;
@@ -115,6 +118,8 @@ zero.core.Controls = CT.Class({
 				zoomOut = () => _.cawheel(null, 100);
 			CT.key.on("PERIOD", zoomIn, zoomIn);
 			CT.key.on("COMMA", zoomOut, zoomOut);
+			CT.key.on("t", zoomIn, zoomIn);
+			CT.key.on("g", zoomOut, zoomOut);
 		},
 		camouse: function() {
 			var node = CT.dom.id("vnode") || CT.dom.id("ctmain");
@@ -268,8 +273,8 @@ zero.core.Controls = CT.Class({
 			CT.key.on("s", this.stop, this.backward);
 			CT.key.on("a", this.stop, this.leftStrafe);
 			CT.key.on("d", this.stop, this.rightStrafe);
-			CT.key.on("q", this.still, this.left);
-			CT.key.on("e", this.still, this.right);
+			CT.key.on("z", this.still, this.left);
+			CT.key.on("c", this.still, this.right);
 			CT.key.on("SPACE", this.unjump, this.jump);
 			CT.key.on("SHIFT", runner(), runner(true));
 			gestures = Object.keys(this.target.opts.gestures);
@@ -303,6 +308,7 @@ zero.core.Controls = CT.Class({
 			CT.key.on("RIGHT", placer("x", 0), placer("x", speed));
 		}
 		CT.key.on("ENTER", this._.cb);
+		CT.key.on("x", this._.cb);
 	},
 	setSprings: function() {
 		var t = this.target;
