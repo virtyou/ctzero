@@ -29,8 +29,10 @@ zero.core.Fauna = CT.Class({
 		this.look(target.position(null, perch));
 		this.getDirection();
 		this.hurry(perch && 16, 400);
-		perch || this.setBob(40, 500);
-		this.perching = target;
+		if (perch)
+			this.perching = target;
+		else
+			this.setBob(40, 500);
 	},
 	unperch: function() {
 		delete this.perch;
