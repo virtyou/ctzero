@@ -237,7 +237,7 @@ zero.core.Thing = CT.Class({
 	},
 	basicBound: function() { // bare bones
 		var r = zero.core.current.room,
-			pos = this.group.position,
+			pos = this.placer.position,
 			oz = this.opts, atop;
 		this._.setBounds();
 		this.homeY = this.radii.y;
@@ -452,11 +452,12 @@ zero.core.Thing = CT.Class({
 			return this.placer.rotation;
 		}
 	},
-	scale: function(scale) {
+	scale: function(scale, rebound) {
 		if (scale) {
 			if (typeof scale == "number")
 				scale = [scale, scale, scale];
 			this.update({ scale: scale });
+			rebound && setTimeout(this.basicBound, 100);
 		}
 		else
 			return this.placer.scale;
