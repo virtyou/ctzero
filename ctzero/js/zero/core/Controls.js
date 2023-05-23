@@ -232,7 +232,7 @@ zero.core.Controls = CT.Class({
 		};
 	},
 	clear: function() {
-		CT.key.clear(); // also clear CT.gesture when that's added...
+		CT.key.clear(null, true); // also clear CT.gesture when that's added...
 	},
 	setNum: function(num, gesture, dance, stop) {
 		var target = this.target;
