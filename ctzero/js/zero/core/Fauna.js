@@ -445,16 +445,17 @@ zero.core.Fauna.Menagerie = CT.Class({
 		hunter.pounce(prey);
 		prey.scurry();
 	},
-	splat: function(preykinds, onsplat, source) {
+	splat: function(preykinds, onsplat, splatcfg) {
 		var zc = zero.core, touching = zc.util.touching,
-			zcc = zc.current, sb = source && zcc.people[source].body,
-			pbod = zcc.person.body, pk, p, prey, sfx;
+			zcc = zc.current, pbod = zcc.person.body,
+			source, sb, pk, p, prey, sfx;
 		for (pk of preykinds) {
 			if (this[pk]) {
+				source = splatcfg[pk].source;
+				sb = source && zcc.people[source].body;
 				for (p in this[pk]) {
 					prey = this[p];
-					if (touching(pbod, prey, 50)) {
-						onsplat(prey);
+					if (touching(pbod, prey, 50) && onsplat(prey)) {
 						prey.repos(sb && sb.position(), true);
 						sfx = "splat";
 					}
@@ -507,6 +508,14 @@ zero.core.Fauna.Menagerie = CT.Class({
 		if (this[kind])
 			for (name in this[kind])
 				cb(this[name]);
+	},
+	setProp: function(kinds, key, val) {
+		if (!Array.isArray(kinds))
+			kinds = [kinds];
+		var setit = function(creature) {
+			creature[key] = val;
+		};
+		kinds.forEach(kind => this.each(kind, setit));
 	},
 	init: function(opts) {
 		if (zero.core.Fauna.audio) // set by ctone...
