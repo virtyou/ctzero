@@ -458,7 +458,7 @@ zero.core.Thing = CT.Class({
 			if (typeof scale == "number")
 				scale = [scale, scale, scale];
 			this.update({ scale: scale });
-			rebound && setTimeout(this.basicBound, 100) && setTimeout(this.basicBound, 500);
+			rebound && setTimeout(this.basicBound, 100) && setTimeout(this.basicBound, 800);
 		}
 		else
 			return this.placer.scale;
