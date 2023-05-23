@@ -256,6 +256,7 @@ zero.core.Thing = CT.Class({
 		this.adjust("position", "y", this.homeY);
 		this.onbound && this.onbound(this);
 		this._.postboundz.forEach(f => f());
+		this.log("basicBound", "homeY", this.homeY);
 	},
 	onbounded: function(cb) {
 		if (this.bounds)
@@ -457,7 +458,7 @@ zero.core.Thing = CT.Class({
 			if (typeof scale == "number")
 				scale = [scale, scale, scale];
 			this.update({ scale: scale });
-			rebound && setTimeout(this.basicBound, 100);
+			rebound && setTimeout(this.basicBound, 100) && setTimeout(this.basicBound, 500);
 		}
 		else
 			return this.placer.scale;
