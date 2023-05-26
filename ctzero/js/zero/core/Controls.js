@@ -216,7 +216,7 @@ zero.core.Controls = CT.Class({
 					if (spr.floored) {
 						spr.boost = target.bounce(amount);
 						spr.floored = false;
-					} else if (!spr.hard)
+					} else if (target.body.flying || !spr.hard)
 						spr.boost = amount;
 				} else if (!spr.hard)
 					spr.boost = _.speed.descent;
