@@ -158,7 +158,7 @@ zero.core.Controls = CT.Class({
 		this.setKeys();
 	},
 	placer: function(dir, amount, wallshift) {
-		var s = this.springs[dir], target = this.target,
+		var _ = this._, s = this.springs[dir], target = this.target,
 			wall = target.opts.wall, shifter = this.wallshift,
 			forward = wallshift == 1, nxtval;
 		return function() {
