@@ -445,23 +445,27 @@ zero.core.Fauna.Menagerie = CT.Class({
 		hunter.pounce(prey);
 		prey.scurry();
 	},
-	splat: function(preykinds, onsplat, splatcfg) {
+	splat: function(preykinds, onsplat, splatcfg, nosplat) {
 		var zc = zero.core, touching = zc.util.touching,
 			zcc = zc.current, pbod = zcc.person.body,
-			source, sb, pk, p, prey, sfx;
+			source, sb, pk, p, prey, sfx, splatting;
 		for (pk of preykinds) {
 			if (this[pk]) {
 				source = splatcfg[pk].source;
 				sb = source && zcc.people[source].body;
 				for (p in this[pk]) {
 					prey = this[p];
-					if (touching(pbod, prey, 50) && onsplat(prey)) {
-						prey.repos(sb && sb.position(), true);
-						sfx = "splat";
+					if (touching(pbod, prey, 50)) {
+						splatting = true;
+						if (onsplat(prey)) {
+							prey.repos(sb && sb.position(), true);
+							sfx = "splat";
+						}
 					}
 				}
 			}
 		}
+		splatting || nosplat();
 		return sfx;
 	},
 	sniff: function(hunterkind, preykind) {
