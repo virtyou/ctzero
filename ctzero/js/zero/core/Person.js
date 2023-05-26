@@ -313,8 +313,14 @@ zero.core.Person = CT.Class({
 		}
 		bs.release(20);
 	},
+	shouldFly: function() {
+		this._.shouldFly = true;
+	},
+	stopFlying: function() {
+		this.body.landing = true;
+	},
 	jump: function() {
-		var bod = this.body, within = bod.within,
+		var _ = this._, bod = this.body, within = bod.within,
 			t = zero.core.util.ticker, sound = "whoosh";
 		this.gesture("jump");
 		if (within) {
@@ -322,10 +328,13 @@ zero.core.Person = CT.Class({
 				sound = "splash";
 				this.splash();
 				(t % 10) || bod.bubbletrail.release(1);
-			} else if (within.opts.state == "plasma") {
-				bod.flying = true;
-				setTimeout(function() { bod.landing = true; }, 8000);
-			}
+			} else if (within.opts.state == "plasma")
+				_.shouldFly = true;
+		}
+		if (_.shouldFly) {
+			bod.flying = true;
+			delete _.shouldFly;
+			setTimeout(this.stopFlying, 8000);
 		}
 		this.sfx(bod.flying ? "wind" : sound);
 	},
