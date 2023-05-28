@@ -522,6 +522,15 @@ zero.core.util = {
 		zero.core.camera.background(bgsrc);
 		zero.core.util.room(robj);
 	},
+	onperson: function(cb) {
+		var zc = zero.core;
+		if (zc.current.person)
+			cb();
+		else {
+			CT.log("waiting for person");
+			setTimeout(() => zc.util.onperson(cb), 500);
+		}
+	},
 	refresh: function(onready, onperson) {
 		var cfg = core.config.ctzero, people = zero.core.current.people = {},
 			room = zero.core.util.room(cfg.room), loadCount = 0, isLast;
