@@ -115,6 +115,7 @@ zero.core.Room = CT.Class({
 			sz[prop].ebound = true;
 			bod.bindAxis(prop);
 			bod.setFriction(true, true);
+			bod.setBounds();
 		}, 2000);
 	},
 	dynFloor: function(pos) {

@@ -228,7 +228,7 @@ zero.core.Person = CT.Class({
 	},
 	chaser: function() {
 		var _ = this._, cb = _.postchase;
-		if (this.body.removed || _.chased.removed)
+		if (!this.body || this.body.removed || _.chased.removed)
 			this.unchase();
 		else if (zero.core.util.touching(this.body, _.chased, 20)) {
 			_.prevcam && camera.angle(_.prevcam);
