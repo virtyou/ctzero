@@ -522,15 +522,6 @@ zero.core.util = {
 		zero.core.camera.background(bgsrc);
 		zero.core.util.room(robj);
 	},
-	onperson: function(cb) {
-		var zc = zero.core;
-		if (zc.current.person)
-			cb();
-		else {
-			CT.log("waiting for person");
-			setTimeout(() => zc.util.onperson(cb), 500);
-		}
-	},
 	refresh: function(onready, onperson) {
 		var cfg = core.config.ctzero, people = zero.core.current.people = {},
 			room = zero.core.util.room(cfg.room), loadCount = 0, isLast;
@@ -627,9 +618,12 @@ zero.core.util = {
 		skipcam || zero.core.camera.angle("polar");
 	},
 	join: function(pobj, onready, nowatch, lookcam, current) {
+		var zcc = zero.core.current;
+		if (current && zcc.inventory)
+			pobj.gear = zcc.inventory.gear;
 		var person = new zero.core.Person(CT.merge(pobj, {
 			onbuild: function() {
-				zero.core.current.people[pobj.name] = person;
+				zcc.people[pobj.name] = person;
 				nowatch || person.watch();
 				lookcam && person.look(zero.core.camera);
 				current && zero.core.util.setCurPer(person);
