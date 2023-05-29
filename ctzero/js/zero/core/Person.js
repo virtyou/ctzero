@@ -268,6 +268,8 @@ zero.core.Person = CT.Class({
 		this.orient(subject);
 		this.go();
 		setTimeout(function() {
+			if (bod.removed)
+				return CT.log("aborting approach - bod removed");
 			propel();
 			bso.k = 20;
 			bso.hard = bsohard;
