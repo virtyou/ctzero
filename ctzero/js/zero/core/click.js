@@ -33,6 +33,10 @@ zero.core.click = {
     trigger: function(thing) {
         zero.core.click.target(thing).__click();
     },
+    unregister: function(thing) {
+        var c = zero.core.click;
+        CT.data.remove(c.targets, c.target(thing));
+    },
     register: function(thing, cb) {
         var c = zero.core.click;
         c.init();
