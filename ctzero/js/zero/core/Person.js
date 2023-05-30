@@ -177,6 +177,10 @@ zero.core.Person = CT.Class({
 			}, 600);
 		});
 	},
+	held: function(side) {
+		var ikey = this.opts.gear.held[side];
+		return ikey && zero.core.Thing.get(ikey);
+	},
 	get: function(target, cb) {
 		var g = this.opts.gear, h = g.held = g.held || {},
 			gobj = {}, side = "right", bod = this.body,
