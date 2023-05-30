@@ -477,10 +477,29 @@ zero.base.clothes.head = { // hats
 	}
 };
 
+zero.base.clothes.held = {
+	torch: {
+		cylinderGeometry: true,
+		geomult: 60,
+		rotation: [Math.PI / 2, 0, 0],
+		position: [0, -8, 25],
+		material: {
+			color: "#cc5555"
+		},
+		parts: [{
+			thing: "Fire",
+			regTick: true,
+			faceUp: true,
+			position: [0, 30, 0],
+			scale: [0.5, 0.5, 0.5]
+		}]
+	}
+};
+
 zero.base.clothes.procedurals = function(kind) {
-	if (!kind.startsWith("worn_"))
-		return [];
-	var bpart = kind.slice(5),
+	if (kind != "held" && !kind.startsWith("worn_"))
+		return []; // TODO: move held somewhere else?
+	var bpart = kind.slice(5) || kind,
 		gz = zero.base.clothes[bpart],
 		tmod = "zero.base.clothes." + bpart + ".";
 	return Object.keys(gz).map(function(g) {
