@@ -140,6 +140,7 @@ zero.core.Body = CT.Class({
 	_thruster: {lumbar: {x: 0.2}, ribs: {x: 0.5}, neck: {x: -2}},
 	_unthruster: {lumbar: {x: 0}, ribs: {x: 0}, neck: {x: 0}},
 	thrust: function(side) {
+		this.person.sfx("whoosh");
 		this.torso.arms[side].thrust();
 		this.spine.setSprings(this._thruster);
 	},
