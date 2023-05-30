@@ -421,6 +421,9 @@ zero.core.Thing = CT.Class({
 	look: function(pos) {
 		this.group.lookAt(pos.x, pos.y, pos.z);
 	},
+	drop: function() {
+		this.adjust("position", "y", zero.core.current.room.getPeak(this.position()));
+	},
 	safePos: function() {
 		if (this.placer)
 			return this.position();
