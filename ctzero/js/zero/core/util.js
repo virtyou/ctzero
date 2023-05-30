@@ -10,6 +10,7 @@ zero.core.util = {
 	dperf: 0.016,
 	_tickers: [],
 	xyz: ["x", "y", "z"],
+	_glower: { r: 1, g: 0, b: 0 },
 	_distance: new THREE.Vector3(),
 	_positioner: new THREE.Vector3(),
 	_quatter: new THREE.Quaternion(),
@@ -54,6 +55,16 @@ zero.core.util = {
 			});
 		}
 		return d.choice(cz[family]);
+	},
+	glow: function(material, timeout) {
+		var zcu = zero.core.util;
+		if (!material.origColor)
+			material.origColor = material.color;
+		material.color = zcu._glower;
+		setTimeout(() => zcu.unglow(material), timeout || 1000);
+	},
+	unglow: function(material) {
+		material.color = material.origColor;
 	},
 	randMat: function(color) {
 		return new THREE.MeshPhongMaterial({
