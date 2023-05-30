@@ -177,9 +177,12 @@ zero.core.Person = CT.Class({
 			}, 600);
 		});
 	},
-	held: function(side) {
+	held: function(side, handFallback) {
 		var ikey = this.opts.gear.held[side];
-		return ikey && zero.core.Thing.get(ikey);
+		if (ikey)
+			return zero.core.Thing.get(ikey);
+		if (handFallback)
+			return this.body.torso.hands[side];
 	},
 	get: function(target, cb) {
 		var g = this.opts.gear, h = g.held = g.held || {},
