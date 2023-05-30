@@ -47,6 +47,17 @@ zero.core.Fauna = CT.Class({
 		this.bobber = zero.core.trig.segs(this.opts.bobSegs, amp);
 		unbobafter && setTimeout(this.unbob, unbobafter);
 	},
+	glow: function() {
+		zero.core.util.glow(this.materials.body);
+	},
+	yelp: function() {
+		var zc = zero.core, aud = zc.Fauna.audio, k = this.opts.kind, vol;
+		if (k in aud) {
+			vol = zc.util.close2u(this) / 2;
+			this.log(k, "yelping at", vol);
+			zc.audio.sfx(CT.data.choice(aud[k]), vol, true);
+		}
+	},
 	randPos: function() {
 		var rp = zero.core.util.randPos(true, this.homeY, this.within);
 		this.adjust("position", "x", rp.x);
@@ -429,15 +440,11 @@ zero.core.Fauna.Menagerie = CT.Class({
 		clearInterval(this.hunter);
 	},
 	yelp: function() {
-		var zc = zero.core, zcu = zc.util, aud = zc.Fauna.audio,
-			crit = this[CT.data.choice(this.members)], vol;
-		if (!zc.current.person)
+		var crit = this[CT.data.choice(this.members)];
+		if (!zero.core.current.person)
 			this.log("yelp() skipped - no current person");
-		else if (crit && crit.opts.kind in aud) {
-			vol = zcu.close2u(crit) / 2;
-			this.log("playing", crit.opts.kind, "at", vol);
-			zc.audio.sfx(CT.data.choice(aud[crit.opts.kind]), vol, true);
-		}
+		else if (crit)
+			crit.yelp();
 		this.yelper = setTimeout(this.yelp, 10000 + CT.data.random(10000));
 	},
 	pounce: function(hunter, prey) {
@@ -460,6 +467,9 @@ zero.core.Fauna.Menagerie = CT.Class({
 						if (onsplat(prey)) {
 							prey.repos(sb && sb.position(), true);
 							sfx = "splat";
+						} else {
+							prey.yelp();
+							prey.glow();
 						}
 					}
 				}
