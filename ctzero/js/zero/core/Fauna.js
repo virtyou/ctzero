@@ -23,6 +23,10 @@ zero.core.Fauna = CT.Class({
 		delete this.direction;
 		this.hurry(20);
 	},
+	knock: function(direction) {
+		this.direction = direction;
+		this.hurry(40);
+	},
 	pounce: function(target, perch) {
 		if (perch)
 			target = target.head;
@@ -452,31 +456,45 @@ zero.core.Fauna.Menagerie = CT.Class({
 		hunter.pounce(prey);
 		prey.scurry();
 	},
-	splat: function(preykinds, onsplat, splatcfg, nosplat) {
+	hit: function(striker, preykinds, hitter, cfg, onhit, nohit) {
 		var zc = zero.core, touching = zc.util.touching,
-			zcc = zc.current, pbod = zcc.person.body,
-			source, sb, pk, p, prey, sfx, splatting;
+			zcc = zc.current, source, sb, pk, p, prey, sfx, hitting;
 		for (pk of preykinds) {
 			if (this[pk]) {
-				source = splatcfg[pk].source;
+				source = cfg[pk].source;
 				sb = source && zcc.people[source].body;
 				for (p in this[pk]) {
 					prey = this[p];
-					if (touching(pbod, prey, 50)) {
-						splatting = true;
-						if (onsplat(prey)) {
+//					if (touching(striker, prey, 50, true, true)) {
+					if (touching(striker, prey, 50)) { // wtf?
+						hitting = true;
+						if (hitter(prey)) {
 							prey.repos(sb && sb.position(), true);
 							sfx = "splat";
 						} else {
 							prey.yelp();
 							prey.glow();
+							onhit && onhit(prey);
 						}
 					}
 				}
 			}
 		}
-		splatting || nosplat();
+		hitting || (nohit && nohit());
 		return sfx;
+	},
+	splat: function(preykinds, onsplat, splatcfg, nosplat) {
+		return this.hit(zero.core.current.person.body,
+			preykinds, onsplat, splatcfg, null, nosplat);
+	},
+	knocker: function(prey, knocker) {
+		this.log(prey.name, "knocked by", knocker.name);
+		prey.knock(zero.core.current.person.body.front.getDirection());
+	},
+	knock: function(preykinds, onknock, knockcfg, side) {
+		var knocker = zero.core.current.person.held(side, true);
+		return this.hit(knocker, preykinds, prey => onknock(prey, side),
+			knockcfg, prey => this.knocker(prey, knocker));
 	},
 	sniff: function(hunterkind, preykind) {
 		var hunter, prey, h, p, touching = zero.core.util.touching;
