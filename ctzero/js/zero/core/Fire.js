@@ -11,7 +11,7 @@ zero.core.Fire = CT.Class({
 				this[variety] && this[variety].tick(dts);
 		this.light && this.light.setIntensity((this.flick ? 0.4 : 0.5) + this.flicker[(this.foff + zcu.ticker) % 60]);
 		this.tickPos();
-		oz.faceUp && this.group.rotation.setFromQuaternion(oz.scene.getWorldQuaternion().inverse());
+		oz.faceUp && this.group.rotation.setFromQuaternion(oz.scene.getWorldQuaternion(zcu._quatter).inverse());
 	},
 	onremove: function() {
 		this.smoke && this.smoke.undrip();
