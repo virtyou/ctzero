@@ -4,13 +4,14 @@ zero.core.Fire = CT.Class({
 	removables: false,
 	vmult: 0.1,
 	tick: function(dts) {
-		var zcu = zero.core.util, variety;
+		var zcu = zero.core.util, oz = this.opts, variety;
 		if (!this.isReady() || zcu.shouldSkip()) return;
 		if (!this.glow || zero.core.camera.visible(this.glow))
 			for (variety of this.tickerz)
 				this[variety] && this[variety].tick(dts);
 		this.light && this.light.setIntensity((this.flick ? 0.4 : 0.5) + this.flicker[(this.foff + zcu.ticker) % 60]);
 		this.tickPos();
+		oz.faceUp && this.group.rotation.setFromQuaternion(oz.scene.getWorldQuaternion().inverse());
 	},
 	onremove: function() {
 		this.smoke && this.smoke.undrip();
