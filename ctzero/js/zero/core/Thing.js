@@ -445,7 +445,8 @@ zero.core.Thing = CT.Class({
 			this.update({ rotation: rotation });
 		else {
 			if (world) {
-				var q = zero.core.util._quatter, e = new THREE.Euler();
+				var q = zero.core.util._quatter,
+					e = this._.euler = this._.euler || new THREE.Euler();
 				this.placer.getWorldQuaternion(q);
 				e.setFromQuaternion(q);
 				return e;
