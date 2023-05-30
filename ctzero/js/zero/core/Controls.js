@@ -257,7 +257,7 @@ zero.core.Controls = CT.Class({
 		this.clear();
 		var placer = this.placer, mover = this.mover, sz = this._.speed,
 			speed = sz.base, ospeed = sz.orientation, jspeed = sz.jump,
-			wall, gestures, dances, num = 0, runner = this.runner;
+			wall, gestures, dances, num = 0, runner = this.runner, tbta, la, ra;
 		this.jump = mover(jspeed, "y");
 		this.unjump = mover(0, "y");
 		this.forward = mover(speed, "front");
@@ -269,6 +269,9 @@ zero.core.Controls = CT.Class({
 		this.left = mover(ospeed, "orientation");
 		this.right = mover(-ospeed, "orientation");
 		if (this.target.gesture) { // person
+			tbta = this.target.body.torso.arms;
+			la = tbta.left;
+			ra = tbta.right;
 			CT.key.on("w", this.stop, this.forward);
 			CT.key.on("s", this.stop, this.backward);
 			CT.key.on("a", this.stop, this.leftStrafe);
@@ -277,6 +280,8 @@ zero.core.Controls = CT.Class({
 			CT.key.on("c", this.still, this.right);
 			CT.key.on("SPACE", this.unjump, this.jump);
 			CT.key.on("SHIFT", runner(), runner(true));
+			CT.key.on("SEMICOLON", la.unthrust, la.thrust);
+			CT.key.on("QUOTE", ra.unthrust, ra.thrust);
 			gestures = Object.keys(this.target.opts.gestures);
 			dances = Object.keys(this.target.opts.dances);
 			this.setNum(0, null, null, true);
