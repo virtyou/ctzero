@@ -147,6 +147,10 @@ zero.core.Body = CT.Class({
 	unthrust: function(side) {
 		this.torso.arms[side].unthrust();
 		this.spine.setSprings(this._unthruster);
+		this._onthrust && this._onthrust(side);
+	},
+	onthrust: function(cb) {
+		this._onthrust = cb; // just one...
 	},
 	move: function(ropts) {
 		ropts.body && this._applyMod(ropts.body);
