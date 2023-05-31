@@ -178,7 +178,7 @@ zero.core.Person = CT.Class({
 		});
 	},
 	held: function(side, handFallback) {
-		var ikey = this.opts.gear.held[side];
+		var og = this.opts.gear, ikey = og.held && og.held[side];
 		if (ikey)
 			return zero.core.Thing.get(ikey);
 		if (handFallback)
@@ -205,8 +205,8 @@ zero.core.Person = CT.Class({
 				g.worn.spine[loc] = to.key;
 				gobj[loc] = to.key;
 			}
-			bod.gear(gobj, held);
 			zero.core.current.room.removeObject(target);
+			bod.gear(gobj, held);
 			cb && cb();
 		}, side);
 	},
