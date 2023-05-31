@@ -91,6 +91,23 @@ zero.base.particles = {
 	},
 	sparks: {
 		count: 20,
+		size: 0.5,
+		sizeVariance: 2,
+		velocity: [0, 40, 0],
+		acceleration: [0, -40, 0],
+		velVariance: [80, 0, 80],
+		dissolve: 0.25,
+		drip: true,
+		pmat: {
+			opacity: 0,
+			alphaTest: 0.1,
+			shininess: 150,
+			color: 0xff2222,
+			transparent: true
+		}
+	},
+	dust: {
+		count: 20,
 		size: 1,
 		sizeVariance: 2,
 		velocity: [0, 24, 0],
@@ -102,12 +119,13 @@ zero.base.particles = {
 			opacity: 0,
 			alphaTest: 0.1,
 			shininess: 150,
-			color: 0xff2222,
+			color: 0xffffff,
 			transparent: true
 		}
 	},
 	smoke: {
 		count: 4,
+		size: 10,
 		sizeVariance: 10,
 		velocity: [0, 8, 0],
 		velVariance: [4, 0, 4],
