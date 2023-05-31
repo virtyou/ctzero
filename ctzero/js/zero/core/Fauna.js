@@ -456,7 +456,7 @@ zero.core.Fauna.Menagerie = CT.Class({
 		hunter.pounce(prey);
 		prey.scurry();
 	},
-	hit: function(striker, preykinds, hitter, cfg, onhit, nohit) {
+	hit: function(striker, preykinds, hitter, cfg, nohit, onhit, isheld) {
 		var zc = zero.core, touching = zc.util.touching,
 			zcc = zc.current, source, sb, pk, p, prey, sfx, hitting;
 		for (pk of preykinds) {
@@ -465,8 +465,7 @@ zero.core.Fauna.Menagerie = CT.Class({
 				sb = source && zcc.people[source].body;
 				for (p in this[pk]) {
 					prey = this[p];
-//					if (touching(striker, prey, 50, true, true)) {
-					if (touching(striker, prey, 50)) { // wtf?
+					if (touching(striker, prey, 50, isheld, isheld)) {
 						hitting = true;
 						if (hitter(prey)) {
 							prey.repos(sb && sb.position(), true);
@@ -485,7 +484,7 @@ zero.core.Fauna.Menagerie = CT.Class({
 	},
 	splat: function(preykinds, onsplat, splatcfg, nosplat) {
 		return this.hit(zero.core.current.person.body,
-			preykinds, onsplat, splatcfg, null, nosplat);
+			preykinds, onsplat, splatcfg, nosplat);
 	},
 	knocker: function(prey, knocker) {
 		this.log(prey.name, "knocked by", knocker.name);
@@ -494,7 +493,7 @@ zero.core.Fauna.Menagerie = CT.Class({
 	knock: function(preykinds, onknock, knockcfg, side) {
 		var knocker = zero.core.current.person.held(side, true);
 		return this.hit(knocker, preykinds, prey => onknock(prey, side),
-			knockcfg, prey => this.knocker(prey, knocker));
+			knockcfg, null, prey => this.knocker(prey, knocker), true);
 	},
 	sniff: function(hunterkind, preykind) {
 		var hunter, prey, h, p, touching = zero.core.util.touching;
