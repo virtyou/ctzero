@@ -1,6 +1,7 @@
 zero.core.Hand = CT.Class({
 	CLASSNAME: "zero.core.Hand",
 	dims: ["x", "y", "z", "curl"],
+	radii: { x: 10, y: 10, z: 10 }, // HACKY :'(
 	majMin: function(digit) {
 		if (digit == "thumb")
 			return ["x", "z"];
@@ -59,6 +60,16 @@ zero.core.Hand = CT.Class({
 		zero.core.util.update(this.rotation(digit), this[digit][0].rotation);
 		for (knuckle = 1; knuckle < this[digit].length; knuckle++)
 			this[digit][knuckle].rotation[major] = cval;
+	},
+	position: function(ignoredPos, world) {
+		if (ignoredPos)
+			return this.log("position ignored");
+		var tar = this.middle[0];
+		if (!world)
+			return tar.position;
+		if (!this._positioner)
+			this._positioner = new THREE.Vector3();
+		return tar.getWorldPosition(this._positioner);
 	}
 }, zero.core.Skeleton);
 

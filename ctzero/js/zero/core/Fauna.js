@@ -23,6 +23,10 @@ zero.core.Fauna = CT.Class({
 		delete this.direction;
 		this.hurry(20);
 	},
+	knock: function(direction) {
+		this.direction = direction;
+		this.hurry(40);
+	},
 	pounce: function(target, perch) {
 		if (perch)
 			target = target.head;
@@ -46,6 +50,17 @@ zero.core.Fauna = CT.Class({
 	setBob: function(amp, unbobafter) {
 		this.bobber = zero.core.trig.segs(this.opts.bobSegs, amp);
 		unbobafter && setTimeout(this.unbob, unbobafter);
+	},
+	glow: function() {
+		zero.core.util.glow(this.materials.body);
+	},
+	yelp: function() {
+		var zc = zero.core, aud = zc.Fauna.audio, k = this.opts.kind, vol;
+		if (k in aud) {
+			vol = zc.util.close2u(this) / 2;
+			this.log(k, "yelping at", vol);
+			zc.audio.sfx(CT.data.choice(aud[k]), vol, true);
+		}
 	},
 	randPos: function() {
 		var rp = zero.core.util.randPos(true, this.homeY, this.within);
@@ -384,8 +399,8 @@ zero.core.Fauna.sets = {
 		bunny: 1
 	},
 	pets: {
-		dog: 1,
-		cat: 2,
+		dog: 2,
+		cat: 3,
 		rat: 3,
 		bird: 2
 	}
@@ -429,15 +444,11 @@ zero.core.Fauna.Menagerie = CT.Class({
 		clearInterval(this.hunter);
 	},
 	yelp: function() {
-		var zc = zero.core, zcu = zc.util, aud = zc.Fauna.audio,
-			crit = this[CT.data.choice(this.members)], vol;
-		if (!zc.current.person)
+		var crit = this[CT.data.choice(this.members)];
+		if (!zero.core.current.person)
 			this.log("yelp() skipped - no current person");
-		else if (crit && crit.opts.kind in aud) {
-			vol = zcu.close2u(crit) / 2;
-			this.log("playing", crit.opts.kind, "at", vol);
-			zc.audio.sfx(CT.data.choice(aud[crit.opts.kind]), vol, true);
-		}
+		else if (crit)
+			crit.yelp();
 		this.yelper = setTimeout(this.yelp, 10000 + CT.data.random(10000));
 	},
 	pounce: function(hunter, prey) {
@@ -445,28 +456,44 @@ zero.core.Fauna.Menagerie = CT.Class({
 		hunter.pounce(prey);
 		prey.scurry();
 	},
-	splat: function(preykinds, onsplat, splatcfg, nosplat) {
+	hit: function(striker, preykinds, hitter, cfg, nohit, onhit, isheld) {
 		var zc = zero.core, touching = zc.util.touching,
-			zcc = zc.current, pbod = zcc.person.body,
-			source, sb, pk, p, prey, sfx, splatting;
+			zcc = zc.current, source, sb, pk, p, prey, sfx, hitting;
 		for (pk of preykinds) {
 			if (this[pk]) {
-				source = splatcfg[pk].source;
+				source = cfg[pk].source;
 				sb = source && zcc.people[source].body;
 				for (p in this[pk]) {
 					prey = this[p];
-					if (touching(pbod, prey, 50)) {
-						splatting = true;
-						if (onsplat(prey)) {
+					if (touching(striker, prey, 50, isheld, isheld)) {
+						hitting = true;
+						if (hitter(prey)) {
 							prey.repos(sb && sb.position(), true);
 							sfx = "splat";
+						} else {
+							prey.yelp();
+							prey.glow();
+							onhit && onhit(prey);
 						}
 					}
 				}
 			}
 		}
-		splatting || nosplat();
+		hitting || (nohit && nohit());
 		return sfx;
+	},
+	splat: function(preykinds, onsplat, splatcfg, nosplat) {
+		return this.hit(zero.core.current.person.body,
+			preykinds, onsplat, splatcfg, nosplat);
+	},
+	knocker: function(prey, knocker) {
+		this.log(prey.name, "knocked by", knocker.name);
+		prey.knock(zero.core.current.person.body.front.getDirection());
+	},
+	knock: function(preykinds, onknock, knockcfg, side) {
+		var knocker = zero.core.current.person.held(side, true);
+		return this.hit(knocker, preykinds, prey => onknock(prey, side),
+			knockcfg, null, prey => this.knocker(prey, knocker), true);
 	},
 	sniff: function(hunterkind, preykind) {
 		var hunter, prey, h, p, touching = zero.core.util.touching;

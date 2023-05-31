@@ -10,6 +10,7 @@ zero.core.util = {
 	dperf: 0.016,
 	_tickers: [],
 	xyz: ["x", "y", "z"],
+	_glower: { r: 1, g: 0, b: 0 },
 	_distance: new THREE.Vector3(),
 	_positioner: new THREE.Vector3(),
 	_quatter: new THREE.Quaternion(),
@@ -54,6 +55,16 @@ zero.core.util = {
 			});
 		}
 		return d.choice(cz[family]);
+	},
+	glow: function(material, timeout) {
+		var zcu = zero.core.util;
+		if (!material.origColor)
+			material.origColor = material.color;
+		material.color = zcu._glower;
+		setTimeout(() => zcu.unglow(material), timeout || 1000);
+	},
+	unglow: function(material) {
+		material.color = material.origColor;
 	},
 	randMat: function(color) {
 		return new THREE.MeshPhongMaterial({
@@ -175,16 +186,20 @@ zero.core.util = {
 		}
 		return sum;
 	},
-	buff: function(t1, t2, extra) {
+	buff: function(t1, t2, extra, forceRadii) {
 		extra = extra || 0;
+		if (forceRadii) {
+			t1.radii || t1.getBounds();
+			t2.radii || t2.getBounds();
+		}
 		if (!t1.radii || !t2.radii) return extra;
 		var r1 = (t1.radii.x + t1.radii.y + t1.radii.z) / 3,
 			r2 = (t2.radii.x + t2.radii.y + t2.radii.z) / 3;
 		return r1 + r2 + extra;
 	},
-	touching: function(t1, t2, extra) {
-		var zcu = zero.core.util, buff = zcu.buff(t1, t2, extra),
-			dist = zcu.distance(t1.position(), t2.position());
+	touching: function(t1, t2, extra, forceRadii, glopo) {
+		var zcu = zero.core.util, buff = zcu.buff(t1, t2, extra, forceRadii),
+			dist = zcu.distance(t1.position(null, glopo), t2.position(null, glopo));
 		return dist < buff;
 	},
 	distance: function(p1, p2) {

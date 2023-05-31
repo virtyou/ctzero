@@ -177,6 +177,13 @@ zero.core.Person = CT.Class({
 			}, 600);
 		});
 	},
+	held: function(side, handFallback) {
+		var og = this.opts.gear, ikey = og.held && og.held[side];
+		if (ikey)
+			return zero.core.Thing.get(ikey);
+		if (handFallback)
+			return this.body.torso.hands[side];
+	},
 	get: function(target, cb) {
 		var g = this.opts.gear, h = g.held = g.held || {},
 			gobj = {}, side = "right", bod = this.body,
@@ -198,8 +205,8 @@ zero.core.Person = CT.Class({
 				g.worn.spine[loc] = to.key;
 				gobj[loc] = to.key;
 			}
-			bod.gear(gobj, held);
 			zero.core.current.room.removeObject(target);
+			bod.gear(gobj, held);
 			cb && cb();
 		}, side);
 	},
