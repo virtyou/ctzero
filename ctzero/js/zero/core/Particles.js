@@ -64,6 +64,16 @@ zero.core.Particles = CT.Class({
 		for (p in this.particle)
 			this.particle[p].setLimits(lens, halves, oz.scale);
 	},
+	getMat: function(index) {
+		var oz = this.opts;
+		if (this.material)
+			return this.material;
+		if (oz.sharemats) {
+			if (!this.materials)
+				this.materials = oz.sharemats.map(zero.core.util.randMat);
+			return this.materials[index % this.materials.length];
+		}
+	},
 	preassemble: function() {
 		var i, size, oz = this.opts, pz = oz.parts,
 			matinst = this.material = oz.sharemat && new THREE["Mesh" + oz.matcat + "Material"](oz.pmat);
@@ -77,7 +87,7 @@ zero.core.Particles = CT.Class({
 				grow: oz.grow,
 				pulse: oz.pulse,
 				material: oz.pmat,
-				matinstance: matinst,
+				matinstance: this.getMat(i),
 				bounder: oz.bounder,
 				stripset: oz.pstrip,
 				variance: oz.variance,
