@@ -1,6 +1,6 @@
 zero.core.Sploder = CT.Class({
 	CLASSNAME: "zero.core.Sploder",
-	varieties: ["nuts", "bolts", "smoke", "sparks"],
+	varieties: ["nuts", "bolts", "sparks", "smoke", "dust"],
 	tick: function(dts) {
 		var v, vz = this.varieties;
 		for (v of vz)
@@ -19,10 +19,6 @@ zero.core.Sploder = CT.Class({
 			kind: "particles",
 			thing: "Particles"
 		};
-		if (v == "sparks") // more like dust
-			pcfg.pcolor = 0xffffff;
-		else if (v == "smoke")
-			pcfg.size = 10;
 		return pcfg;
 	},
 	preassemble: function() {
@@ -34,6 +30,7 @@ zero.core.Sploder = CT.Class({
 		this.opts = CT.merge(opts, {
 			nuts: 5,
 			bolts: 3,
+			dust: 10,
 			smoke: 2,
 			sparks: 10
 		}, this.opts);
