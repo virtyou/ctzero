@@ -140,14 +140,13 @@ zero.core.Body = CT.Class({
 	_thruster: {lumbar: {x: 0.2}, ribs: {x: 0.5}, neck: {x: -2}},
 	_unthruster: {lumbar: {x: 0}, ribs: {x: 0}, neck: {x: 0}},
 	thrust: function(side) {
-		this.person.sfx("whoosh");
 		this.torso.arms[side].thrust();
 		this.spine.setSprings(this._thruster);
 	},
 	unthrust: function(side) {
 		this.torso.arms[side].unthrust();
 		this.spine.setSprings(this._unthruster);
-		this._onthrust && this._onthrust(side);
+		this.person.sfx(this._onthrust && this._onthrust(side) || "whoosh");
 	},
 	onthrust: function(cb) {
 		this._onthrust = cb; // just one...
