@@ -1,16 +1,23 @@
 zero.core.Sploder = CT.Class({
 	CLASSNAME: "zero.core.Sploder",
-	varieties: ["nuts", "bolts", "sparks", "smoke", "dust"],
+	splobits: ["nuts", "bolts", "sparks", "smoke", "dust"],
+	confetties: ["confetti"],
 	tick: function(dts) {
-		var v, vz = this.varieties;
-		for (v of vz)
+		for (var v of this.splobits)
 			this[v] && this[v].tick(dts);
+		this.confetti && this.confetti.tick(dts);
+	},
+	_bang: function(pos, varieties) {
+		var oz = this.opts, v;
+		pos = pos || zero.core.util.randPos(true);
+		for (v of varieties)
+			this[v] && this[v].release(oz[v], pos);
+	},
+	confettize: function(pos) {
+		this._bang(pos, this.confetties);
 	},
 	splode: function(pos) {
-		var v, vz = this.varieties, oz = this.opts;
-		pos = pos || zero.core.util.randPos(true);
-		for (v of vz)
-			this[v] && this[v].release(oz[v], pos);
+		this._bang(pos, this.splobits);
 	},
 	pcfg: function(v) {
 		var pcfg = {
@@ -22,9 +29,10 @@ zero.core.Sploder = CT.Class({
 		return pcfg;
 	},
 	preassemble: function() {
-		var v, vz = this.varieties, oz = this.opts, pz = oz.parts;
-		for (v of vz)
+		var v, oz = this.opts, pz = oz.parts;
+		for (v of this.splobits)
 			oz[v] && pz.push(this.pcfg(v));
+		oz.confetti && pz.push(this.pcfg("confetti"));
 	},
 	init: function(opts) {
 		this.opts = CT.merge(opts, {
@@ -32,7 +40,8 @@ zero.core.Sploder = CT.Class({
 			bolts: 3,
 			dust: 10,
 			smoke: 2,
-			sparks: 10
+			sparks: 10,
+			confetti: 30
 		}, this.opts);
 		zero.core.util.ontick(this.tick);
 	}
