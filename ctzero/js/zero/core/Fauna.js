@@ -23,9 +23,9 @@ zero.core.Fauna = CT.Class({
 		delete this.direction;
 		this.hurry(20);
 	},
-	knock: function(direction) {
+	knock: function(direction, hurdur) {
 		this.direction = direction;
-		this.hurry(40);
+		this.hurry(40, hurdur);
 	},
 	pounce: function(target, perch) {
 		if (perch)
