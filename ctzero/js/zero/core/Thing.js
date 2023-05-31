@@ -438,8 +438,11 @@ zero.core.Thing = CT.Class({
 		if (position)
 			this.update({ position: position });
 		else {
-			if (world)
-				return this.placer.getWorldPosition(zero.core.util._positioner);
+			if (world) {
+				if (!this._positioner)
+					this._positioner = new THREE.Vector3();
+				return this.placer.getWorldPosition(this._positioner);
+			}
 			return this.placer.position;
 		}
 	},
