@@ -89,6 +89,22 @@ zero.base.particles = {
 			transparent: true
 		}
 	},
+	confetti: {
+		count: 30,
+		size: 0.5,
+		sizeVariance: 2,
+		velocity: [0, 100, 0],
+		acceleration: [0, -50, 0],
+		velVariance: [100, 0, 100],
+		floorbound: true,
+		refloor: true,
+		sharemats: ["red", "white", "blue", "yellow", "green", "orange", "pink"],
+		pmat: {
+			opacity: 0,
+			shininess: 150,
+			transparent: true
+		}
+	},
 	sparks: {
 		count: 20,
 		size: 0.5,
