@@ -873,6 +873,14 @@ zero.core.Thing = CT.Class({
 	},
 	init: function(opts) {
 		this.min_opts = opts;
+		if (opts && opts.template) {
+			this.log("loading template:", opts.template);
+			var tobj = CT.module(opts.template);
+			if (tobj)
+				opts = CT.merge(opts, tobj); // right order?
+			else
+				this.log("can't find template!");
+		}
 		this.opts = opts = CT.merge(opts, {
 			path: null,
 			name: "Thing" + Math.floor(Math.random() * 1000),
@@ -910,14 +918,6 @@ zero.core.Thing = CT.Class({
 			frustumCulled: true,
 			sphereSegs: core.config.ctzero.sphereSegs
 		});
-		if (opts.template) {
-			this.log("loading template:", opts.template);
-			var tobj = CT.module(opts.template);
-			if (tobj)
-				this.opts = opts = CT.merge(tobj, opts); // right order?
-			else
-				this.log("can't find template!");
-		}
 		if (opts.kind == "portal")
 			opts.state = "threshold";
 		if (CT.info.mobile)
