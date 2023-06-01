@@ -11,9 +11,11 @@ zero.core.Fauna = CT.Class({
 		this.segment0 && this.segment0.tick();
 		this.bobber && this.adjust("position", "y",
 			this.homeY + this.bobber[t % oz.bobSegs]);
+		this.knocker && this.knocker(this);
 	},
 	unhurry: function() {
 		delete this.urgency;
+		delete this.knocker;
 	},
 	hurry: function(hval, hint) {
 		this.urgency = hval || 8;
@@ -23,10 +25,11 @@ zero.core.Fauna = CT.Class({
 		delete this.direction;
 		this.hurry(20);
 	},
-	knock: function(direction, hurdur) {
-		this.direction = direction;
-		this.hurry(40, hurdur);
+	knock: function(direction, knocker, hurdur) {
 		this.perch = this.stuck = false;
+		this.direction = direction;
+		this.knocker = knocker;
+		this.hurry(40, hurdur);
 	},
 	pounce: function(target, perch) {
 		if (perch)
