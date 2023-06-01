@@ -1,3 +1,5 @@
+var P2 = Math.PI / 2, P4 = P2 / 2, C4 = ["curve4", 3, 0.5, 3];
+
 zero.base.clothes = {
 	pelvis: {},
 	lumbar: {},
@@ -41,13 +43,13 @@ zero.base.clothes = {
 				coneGeometry: true,
 				scale: [0.5, 1, 1],
 				position: [0, 1, 0],
-				rotation: [0, 0, Math.PI / 2]
+				rotation: [0, 0, P2]
 			}, {
 				name: "right",
 				coneGeometry: true,
 				scale: [0.5, 1, 1],
 				position: [0, 1, 0],
-				rotation: [0, 0, -Math.PI / 2]
+				rotation: [0, 0, -P2]
 			}]
 		},
 		necktie: {
@@ -481,7 +483,7 @@ zero.base.clothes.held = {
 	torch: {
 		cylinderGeometry: true,
 		geomult: 60,
-		rotation: [Math.PI / 2, 0, 0],
+		rotation: [P2, 0, 0],
 		position: [0, -8, 25],
 		material: {
 			color: "#cc5555"
@@ -492,6 +494,36 @@ zero.base.clothes.held = {
 			faceUp: true,
 			position: [0, 30, 0],
 			scale: [0.5, 0.5, 0.5]
+		}]
+	},
+	"lacrosse stick": {
+		cylinderGeometry: 2,
+		geomult: 30,
+		rotation: [P2, 0, 0],
+		position: [0, -8, 25],
+		variety: "grabber",
+		material: {
+			color: "#0000ff"
+		},
+		parts: [{
+			name: "perch",
+			position: [0, 30, 0],
+			parts: [{
+				tubeGeometry: C4,
+				rotation: [0, -P2, 0]
+			}, {
+				tubeGeometry: C4,
+				rotation: [0, -P4, 0]
+			}, {
+				tubeGeometry: C4,
+				rotation: [0, 0, 0]
+			}, {
+				tubeGeometry: C4,
+				rotation: [0, P4, 0]
+			}, {
+				tubeGeometry: C4,
+				rotation: [0, P2, 0]
+			}]
 		}]
 	}
 };
