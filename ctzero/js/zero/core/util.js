@@ -252,6 +252,11 @@ zero.core.util = {
 		});
 		return parts;
 	},
+	charDir: function(name, side) {
+		var zcc = zero.core.current,
+			per = name ? zcc.people[name] : zcc.person;
+		return per.body[side || "front"].getDirection();
+	},
 	fit: function(thing, scale) {
 		var bz = thing.getBounds(), shortest = Math.min.apply(null,
 			Object.values(thing.radii)), ratio = (scale || 1) / shortest;
