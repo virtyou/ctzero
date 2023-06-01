@@ -942,8 +942,8 @@ zero.core.Thing = CT.Class({
 		setTimeout(function() {
 			thiz.opts.deferBuild || thiz.build();
 		}); // next post-init tick
-		if (opts.key)
-			zero.core.Thing._things[opts.key] = this;
+		if (opts.key || opts.fakeKey)
+			zero.core.Thing._things[opts.key || opts.fakeKey] = this;
 	}
 });
 zero.core.Thing._things = {};
