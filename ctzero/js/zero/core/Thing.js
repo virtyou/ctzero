@@ -740,8 +740,8 @@ zero.core.Thing = CT.Class({
 		}
 		map.offset.set.apply(map.offset, oz.offset);
 	},
-	build: function() {
-		var g, oz = this.opts, zcu = zero.core.util;
+	initGeo: function() {
+		var g, oz = this.opts;
 		if (oz.cubeGeometry) {
 			oz.boxGeometry = oz.cubeGeometry;
 			this.log("DEPRECATED: cubeGeometry - use boxGeometry!");
@@ -788,17 +788,21 @@ zero.core.Thing = CT.Class({
 			oz.geometry = new THREE.CylinderGeometry(cgs, cgs, cgs * (oz.geomult || 2));
 		}
 		if (oz.circleGeometry) {
-			var g = oz.circleGeometry;
+			g = oz.circleGeometry;
 			oz.geometry = new THREE.CircleGeometry((typeof g == "number") && g, oz.circleSegs);
 		}
 		if (oz.planeGeometry) {
-			var g = oz.planeGeometry; // better way?
+			g = oz.planeGeometry; // better way?
 			oz.geometry = new THREE.PlaneGeometry(g[0] || 100, g[1] || 100, g[2], g[3]);
 		}
 		if (oz.bufferGeometry) {
 			oz.geometry = (new THREE.BufferGeometry()).fromGeometry(oz.geometry);
 			oz.geometry = THREE.BufferGeometryUtils.mergeVertices(oz.geometry);
 		}
+	},
+	build: function() {
+		var oz = this.opts, zcu = zero.core.util;
+		this.initGeo();
 		if (oz.geometry || oz.stripset) {
 			var meshname = (oz.shader ? "Shader"
 				: ("Mesh" + oz.matcat)) + "Material",
