@@ -1,13 +1,20 @@
 zero.core.knocker = {
+	_: {
+		throw: function(grabber) { // other half of grabber...
+			grabber.sticker.knock(zero.core.util.charDir());
+			delete grabber.sticker;
+		}
+	},
 	strikers: {
 		hand: function(prey, knocker) {
-			prey.knock(zero.core.current.person.body.front.getDirection(), 300);
+			prey.knock(zero.core.util.charDir(), 300);
 		},
 		knocker: function(prey, knocker) {
-			prey.knock(zero.core.current.person.body.front.getDirection());
+			prey.knock(zero.core.util.charDir());
 		},
 		grabber: function(prey, grabber) {
-			// ???
+			grabber.sticker = prey;
+			prey.stick(grabber.perch);
 		}
 	},
 	log: function(msg) {
@@ -55,6 +62,8 @@ zero.core.knocker = {
 	},
 	knock: function(preykinds, onknock, knockcfg, side) {
 		var zc = zero.core, k = zc.knocker, striker = zc.current.person.held(side, true);
+		if (striker.sticker)
+			return k._.throw(striker);
 		return k.hit(striker, preykinds, prey => onknock(prey, side),
 			knockcfg, null, prey => k.strike(prey, striker), true);
 	}
