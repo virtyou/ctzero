@@ -497,8 +497,8 @@ zero.base.clothes.held = {
 		}]
 	},
 	"lacrosse stick": {
-		cylinderGeometry: 2,
-		geomult: 30,
+		cylinderGeometry: true,
+		geomult: 60,
 		rotation: [P2, 0, 0],
 		position: [0, -8, 25],
 		variety: "grabber",
