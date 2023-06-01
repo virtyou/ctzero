@@ -26,6 +26,7 @@ zero.core.Fauna = CT.Class({
 	knock: function(direction, hurdur) {
 		this.direction = direction;
 		this.hurry(40, hurdur);
+		this.perch = this.stuck = false;
 	},
 	pounce: function(target, perch) {
 		if (perch)
@@ -73,6 +74,10 @@ zero.core.Fauna = CT.Class({
 		this.adjust("position", "x", pos.x);
 		this.adjust("position", "z", pos.z);
 	},
+	stick: function(perch) {
+		this.stuck = true;
+		this.perch = perch;
+	},
 	direct: function(amount) {
 		var zc = zero.core, zcu = zc.util, pp;
 		if (!this.direction || zcu.outBound(this, this.within)) {
@@ -86,7 +91,7 @@ zero.core.Fauna = CT.Class({
 			this.adjust("position", "x", pp.x);
 			this.adjust("position", "y", pp.y);
 			this.adjust("position", "z", pp.z);
-			zc.current.person.zombified || this.unperch();
+			(this.stuck || zc.current.person.zombified) || this.unperch();
 		} else {
 			this.adjust("position", "x", amount * this.direction.x, true);
 			this.adjust("position", "z", amount * this.direction.z, true);
