@@ -740,7 +740,7 @@ zero.core.Thing = CT.Class({
 		}
 		map.offset.set.apply(map.offset, oz.offset);
 	},
-	build: function() {
+	initGeo: function() {
 		var g, oz = this.opts, zcu = zero.core.util;
 		if (oz.cubeGeometry) {
 			oz.boxGeometry = oz.cubeGeometry;
@@ -753,14 +753,14 @@ zero.core.Thing = CT.Class({
 			oz.geometry = new THREE.BoxGeometry(g[0],
 				g[1], g[2], g[3], g[4], g[5]);
 		}
-		if (oz.sphereGeometry) {
+		else if (oz.sphereGeometry) {
 			g = oz.sphereGeometry;
 			if (g == true)
 				g = 1;
 			oz.geometry = new THREE.SphereGeometry(g,
 				oz.sphereSegs, oz.sphereSegs);
 		}
-		if (oz.torusGeometry) {
+		else if (oz.torusGeometry) {
 			g = oz.torusGeometry;
 			if (typeof g == "number")
 				oz.geometry = new THREE.TorusGeometry(g, oz.torusTubeRadius);
@@ -769,36 +769,54 @@ zero.core.Thing = CT.Class({
 			else
 				oz.geometry = new THREE.TorusGeometry();
 		}
-		if (oz.icosahedronGeometry)
+		else if (oz.icosahedronGeometry)
 			oz.geometry = new THREE.IcosahedronGeometry();
-		if (oz.octahedronGeometry)
+		else if (oz.octahedronGeometry)
 			oz.geometry = new THREE.OctahedronGeometry();
-		if (oz.torusKnotGeometry) {
+		else if (oz.torusKnotGeometry) {
 			g = oz.torusKnotGeometry;
 			if (g == true)
 				g = [0.3, 0.1, 64, 16];
 			oz.geometry = new THREE.TorusKnotGeometry(g[0], g[1], g[2], g[3]);
 		}
-		if (oz.coneGeometry) {
-			var cgs = (typeof oz.coneGeometry == "number") ? oz.coneGeometry : 1;
-			oz.geometry = new THREE.ConeGeometry(cgs, cgs * (oz.geomult || 2));
+		else if (oz.coneGeometry) {
+			g = (typeof oz.coneGeometry == "number") ? oz.coneGeometry : 1;
+			oz.geometry = new THREE.ConeGeometry(g, g * (oz.geomult || 2));
 		}
-		if (oz.cylinderGeometry) {
-			var cgs = (typeof oz.cylinderGeometry == "number") ? oz.cylinderGeometry : 1;
-			oz.geometry = new THREE.CylinderGeometry(cgs, cgs, cgs * (oz.geomult || 2));
+		else if (oz.cylinderGeometry) {
+			g = (typeof oz.cylinderGeometry == "number") ? oz.cylinderGeometry : 1;
+			oz.geometry = new THREE.CylinderGeometry(g, g, g * (oz.geomult || 2));
 		}
-		if (oz.circleGeometry) {
-			var g = oz.circleGeometry;
+		else if (oz.circleGeometry) {
+			g = oz.circleGeometry;
 			oz.geometry = new THREE.CircleGeometry((typeof g == "number") && g, oz.circleSegs);
 		}
-		if (oz.planeGeometry) {
-			var g = oz.planeGeometry; // better way?
+		else if (oz.planeGeometry) {
+			g = oz.planeGeometry; // better way?
 			oz.geometry = new THREE.PlaneGeometry(g[0] || 100, g[1] || 100, g[2], g[3]);
+		}
+		else if (oz.tubeGeometry) {
+			g = oz.tubeGeometry;
+			if (g[0] == "curve4") {
+				var ts = oz.tubeSeg || 5;
+				g[0] = [
+					[0, 0, 0],
+					[0, ts, ts],
+					[0, ts * 2, ts],
+					[0, ts * 3, 0]
+				];
+			}
+			oz.geometry = new THREE.TubeGeometry(new THREE.SplineCurve3(g[0].map(zcu.vec)),
+				g[1], g[2], g[3], g[4]);
 		}
 		if (oz.bufferGeometry) {
 			oz.geometry = (new THREE.BufferGeometry()).fromGeometry(oz.geometry);
 			oz.geometry = THREE.BufferGeometryUtils.mergeVertices(oz.geometry);
 		}
+	},
+	build: function() {
+		var oz = this.opts, zcu = zero.core.util;
+		this.initGeo();
 		if (oz.geometry || oz.stripset) {
 			var meshname = (oz.shader ? "Shader"
 				: ("Mesh" + oz.matcat)) + "Material",
@@ -924,8 +942,8 @@ zero.core.Thing = CT.Class({
 		setTimeout(function() {
 			thiz.opts.deferBuild || thiz.build();
 		}); // next post-init tick
-		if (opts.key)
-			zero.core.Thing._things[opts.key] = this;
+		if (opts.key || opts.fakeKey)
+			zero.core.Thing._things[opts.key || opts.fakeKey] = this;
 	}
 });
 zero.core.Thing._things = {};

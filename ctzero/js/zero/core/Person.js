@@ -195,7 +195,7 @@ zero.core.Person = CT.Class({
 		}
 		this.touch(target, function() {
 			if (held)
-				gobj[side] = g.held[side] = to.key;
+				gobj[side] = g.held[side] = to.key || to.fakeKey;
 			else { // TODO: non-spine (body; left/right hand/arm/leg)
 				if (!g.worn)
 					g.worn = {};

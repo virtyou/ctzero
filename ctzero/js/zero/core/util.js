@@ -213,6 +213,10 @@ zero.core.util = {
 			dist = thingo.position().distanceTo(you.body.position());
 		return Math.max(0.001, 1 - dist / diameter); // <0 bounding error?
 	},
+	vec: function(xyz) {
+		CT.log("creating vec!");
+		return new THREE.Vector3(xyz[0], xyz[1], xyz[2]);
+	},
 	vector: function(p1, p2, vec) { // p2 - p1
 		if (!vec) {
 			CT.log("creating vec!");
@@ -247,6 +251,11 @@ zero.core.util = {
 			});
 		});
 		return parts;
+	},
+	charDir: function(name, side) {
+		var zcc = zero.core.current,
+			per = name ? zcc.people[name] : zcc.person;
+		return per.body[side || "front"].getDirection();
 	},
 	fit: function(thing, scale) {
 		var bz = thing.getBounds(), shortest = Math.min.apply(null,

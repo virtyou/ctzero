@@ -28,6 +28,7 @@ CT.require("zero.core.morphs");
 CT.require("zero.core.audio");
 CT.require("zero.core.auto");
 CT.require("zero.core.ar");
+CT.require("zero.core.knocker");
 
 CT.require("zero.core.Thing");
 CT.require("zero.core.Light");

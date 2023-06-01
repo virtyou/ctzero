@@ -2,11 +2,12 @@ zero.core.Hand = CT.Class({
 	CLASSNAME: "zero.core.Hand",
 	dims: ["x", "y", "z", "curl"],
 	radii: { x: 10, y: 10, z: 10 }, // HACKY :'(
+	_majmin: {
+		thumb: ["x", "z"],
+		other: ["z", "x"]
+	},
 	majMin: function(digit) {
-		if (digit == "thumb")
-			return ["x", "z"];
-		else
-			return ["z", "x"];
+		return this._majmin[digit] || this._majmin.other;
 	},
 	setPart: function(bmap, digit) {
 		var bones = this.opts.bones,
@@ -20,7 +21,7 @@ zero.core.Hand = CT.Class({
 		});
 	},
 	shouldReverse: function(part, dim) {
-		return part != "thumb" && (dim == "z" || dim == "curl");
+		return this.opts.side == "left" && part != "thumb" && (dim == "z" || dim == "curl");
 	},
 	curl: function(degree, thumbOnly, fingers) {
 		if (thumbOnly)
@@ -55,8 +56,8 @@ zero.core.Hand = CT.Class({
 		}
 	},
 	tickPart: function(digit) {
-		var major, minor, knuckle, cval = this.aspects[digit + "_curl"].value;
-		[major, minor] = this.majMin(digit);
+		var knuckle, cval = this.aspects[digit + "_curl"].value,
+			major = this.majMin(digit)[0];
 		zero.core.util.update(this.rotation(digit), this[digit][0].rotation);
 		for (knuckle = 1; knuckle < this[digit].length; knuckle++)
 			this[digit][knuckle].rotation[major] = cval;

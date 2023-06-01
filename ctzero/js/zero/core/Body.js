@@ -183,13 +183,16 @@ zero.core.Body = CT.Class({
 		};
 	},
 	gear: function(gear, held) {
-		var g, gval;
+		var g, gval, k, n;
 		for (g in gear) {
 			gval = gear[g];
 			if (gval) {
 				if (typeof gval == "object")
 					this.gear(gval, g == "held");
-				else
+				else if (gval.startsWith("procedural.")) {
+					[k, n] = gval.split(".").slice(1);
+					this.equipper(g, held)(zero.base.clothes.procedurals(k, true, true)[n]);
+				} else
 					CT.db.one(gval, this.equipper(g, held), "json");
 			}
 		}
