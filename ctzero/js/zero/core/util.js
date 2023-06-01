@@ -213,6 +213,11 @@ zero.core.util = {
 			dist = thingo.position().distanceTo(you.body.position());
 		return Math.max(0.001, 1 - dist / diameter); // <0 bounding error?
 	},
+	invert: function(vec) {
+		vec.x *= -1;
+		vec.y *= -1;
+		vec.z *= -1;
+	},
 	vec: function(xyz) {
 		CT.log("creating vec!");
 		return new THREE.Vector3(xyz[0], xyz[1], xyz[2]);
