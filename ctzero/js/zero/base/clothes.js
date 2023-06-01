@@ -528,18 +528,23 @@ zero.base.clothes.held = {
 	}
 };
 
-zero.base.clothes.procedurals = function(kind) {
-	if (kind != "held" && !kind.startsWith("worn_"))
-		return []; // TODO: move held somewhere else?
+zero.base.clothes.procedurals = function(kind, objStyle, fakeKeys) {
+	var isheld = kind == "held";
+	if (!isheld && !kind.startsWith("worn_"))
+		return objStyle ? {} : []; // TODO: move held somewhere else?
 	var bpart = kind.slice(5) || kind,
-		gz = zero.base.clothes[bpart],
-		tmod = "zero.base.clothes." + bpart + ".";
-	return Object.keys(gz).map(function(g) {
-		return {
-			name: g,
+		gz = zero.base.clothes[bpart], robj = {},
+		tmod = "zero.base.clothes." + bpart + ".",
+		thing = isheld ? "Thing" : "Garment";
+	Object.keys(gz).forEach(function(name) {
+		robj[name] = {
+			name: name,
 			kind: kind,
-			thing: "Garment",
-			template: tmod + g
+			thing: thing,
+			template: tmod + name
 		};
+		if (fakeKeys)
+			robj[name].fakeKey = "procedural." + kind + "." + name;
 	});
+	return objStyle ? robj : Object.values(robj);
 };
