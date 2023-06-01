@@ -1,16 +1,23 @@
 zero.core.knocker = {
 	_: {
 		throw: function(grabber) { // other half of grabber...
-			grabber.sticker.knock(zero.core.util.charDir());
+			var zc = zero.core;
+			grabber.sticker.knock(zc.util.charDir(), zc.knocker._.crash);
 			delete grabber.sticker;
+		},
+		crash: function(creature) { // source crash check
+			var zc = zero.core, pz = zc.current.people,
+				sb = creature.source && pz[creature.source].body;
+			sb && sb.oncrash && zc.util.touching(creature, sb) && sb.oncrash(creature);
 		}
 	},
 	strikers: {
 		hand: function(prey, knocker) {
-			prey.knock(zero.core.util.charDir(), 300);
+			prey.knock(zero.core.util.charDir(), null, 300);
 		},
 		knocker: function(prey, knocker) {
-			prey.knock(zero.core.util.charDir());
+			var zc = zero.core;
+			prey.knock(zc.util.charDir(), zc.knocker._.crash);
 		},
 		grabber: function(prey, grabber) {
 			grabber.sticker = prey;
