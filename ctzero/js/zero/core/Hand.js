@@ -21,7 +21,7 @@ zero.core.Hand = CT.Class({
 		});
 	},
 	shouldReverse: function(part, dim) {
-		return part != "thumb" && (dim == "z" || dim == "curl");
+		return this.opts.side == "left" && part != "thumb" && (dim == "z" || dim == "curl");
 	},
 	curl: function(degree, thumbOnly, fingers) {
 		if (thumbOnly)
