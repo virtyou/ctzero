@@ -8,7 +8,8 @@ zero.core.knocker = {
 		crash: function(creature) { // source crash check
 			var zc = zero.core, pz = zc.current.people,
 				sb = creature.source && pz[creature.source].body;
-			sb && sb.oncrash && zc.util.touching(creature, sb) && sb.oncrash(creature);
+			sb && sb.oncrash && zc.util.touching(creature,
+				sb, 0, false, false, true) && sb.oncrash(creature);
 		}
 	},
 	strikers: {
