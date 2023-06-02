@@ -15,6 +15,12 @@ zero.core.Body = CT.Class({
 		});
 		return wbs;
 	},
+	shove: function(direction, magnitude, multiplier) {
+		var sz = this.springs, p2a = this.positioner2axis,
+			amount = (magnitude || 1) * (multiplier || 1000), axis;
+		for (axis of this._xyz)
+			sz[axis].shove = direction[p2a(axis)] * amount;
+	},
 	assembled: function() {
 		this.log("built body!");
 		this.head.body = this;
