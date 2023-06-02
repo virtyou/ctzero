@@ -186,19 +186,25 @@ zero.core.util = {
 		}
 		return sum;
 	},
-	buff: function(t1, t2, extra, forceRadii) {
+	buff: function(t1, t2, extra, forceRadii, noY) {
+		var r1, r2;
 		extra = extra || 0;
 		if (forceRadii) {
 			t1.radii || t1.getBounds();
 			t2.radii || t2.getBounds();
 		}
 		if (!t1.radii || !t2.radii) return extra;
-		var r1 = (t1.radii.x + t1.radii.y + t1.radii.z) / 3,
+		if (noY) {
+			r1 = (t1.radii.x + t1.radii.z) / 2;
+			r2 = (t2.radii.x + t2.radii.z) / 2;
+		} else {
+			r1 = (t1.radii.x + t1.radii.y + t1.radii.z) / 3;
 			r2 = (t2.radii.x + t2.radii.y + t2.radii.z) / 3;
+		}
 		return r1 + r2 + extra;
 	},
-	touching: function(t1, t2, extra, forceRadii, glopo) {
-		var zcu = zero.core.util, buff = zcu.buff(t1, t2, extra, forceRadii),
+	touching: function(t1, t2, extra, forceRadii, glopo, noY) {
+		var zcu = zero.core.util, buff = zcu.buff(t1, t2, extra, forceRadii, noY),
 			dist = zcu.distance(t1.position(null, glopo), t2.position(null, glopo));
 		return dist < buff;
 	},
