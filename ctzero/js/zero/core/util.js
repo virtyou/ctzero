@@ -219,10 +219,13 @@ zero.core.util = {
 			dist = thingo.position().distanceTo(you.body.position());
 		return Math.max(0.001, 1 - dist / diameter); // <0 bounding error?
 	},
+	mult: function(vec, factor) {
+		vec.x *= factor;
+		vec.y *= factor;
+		vec.z *= factor;
+	},
 	invert: function(vec) {
-		vec.x *= -1;
-		vec.y *= -1;
-		vec.z *= -1;
+		zero.core.util.mult(vec, -1);
 	},
 	vec: function(xyz) {
 		CT.log("creating vec!");
