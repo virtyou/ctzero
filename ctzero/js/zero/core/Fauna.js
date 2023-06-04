@@ -509,6 +509,13 @@ zero.core.Fauna.Menagerie = CT.Class({
 			for (name in this[kind])
 				cb(this[name]);
 	},
+	near: function(kind, perbod) {
+		var name, touching = zero.core.util.touching;
+		if (!this[kind]) return;
+		for (name in this[kind])
+			if (touching(this[name], perbod, 100))
+				return this[name];
+	},
 	setProp: function(kinds, key, val) {
 		if (!Array.isArray(kinds))
 			kinds = [kinds];
