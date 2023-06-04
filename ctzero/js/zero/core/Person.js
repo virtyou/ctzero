@@ -163,9 +163,10 @@ zero.core.Person = CT.Class({
 		this.orientation(Math.atan2(spos.x
 			- pos.x, spos.z - pos.z));
 	},
-	touch: function(subject, cb, arm, approached) {
+	touch: function(subject, cb, arm, approached, handCb) {
 		var bod = this.body, arms = bod.torso.arms, spy;
-		this.approach(approached || subject, function() {
+		arm = arm || this.freeHand();
+		arm && this.approach(approached || subject, function() {
 			spy = subject.group.getWorldPosition().y;
 			if (spy < bod.torso.legs.right.knee.getWorldPosition().y)
 				bod.springs.bow.target = Math.PI / 4;
@@ -174,6 +175,7 @@ zero.core.Person = CT.Class({
 			setTimeout(function() {
 				arms[arm || "right"].point("shoulder", subject);
 				cb && setTimeout(cb, 600);
+				handCb && setTimeout(() => handCb(bod.torso.hands[arm], subject), 600);
 			}, 600);
 		});
 	},
@@ -184,18 +186,22 @@ zero.core.Person = CT.Class({
 		if (handFallback)
 			return this.body.torso.hands[side];
 	},
-	get: function(target, cb) {
-		var g = this.opts.gear, h = g.held = g.held || {},
-			gobj = {}, side = "right", bod = this.body,
-			to = target.opts, held = to.kind == "held", loc;
+	freeHand: function() {
+		var g = this.opts.gear, h = g.held = g.held || {};
 		if (h.right) {
 			if (h.left)
 				return this.say("i don't have any free hands");
-			side = "left";
+			return "left";
 		}
-		this.touch(target, function() {
+		return "right";
+	},
+	get: function(target, cb) {
+		var side = this.freeHand(), g = this.opts.gear,
+			h = g.held, gobj = {}, bod = this.body,
+			to = target.opts, held = to.kind == "held", loc;
+		side && this.touch(target, function() {
 			if (held)
-				gobj[side] = g.held[side] = to.key || to.fakeKey;
+				gobj[side] = h[side] = to.key || to.fakeKey;
 			else { // TODO: non-spine (body; left/right hand/arm/leg)
 				if (!g.worn)
 					g.worn = {};
