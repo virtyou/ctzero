@@ -26,7 +26,7 @@ zero.core.Fauna = CT.Class({
 		this.hurry(20);
 	},
 	knock: function(direction, knocker, hurdur) {
-		zero.core.util.update(direction, this.direction);
+		zero.core.util.update(direction, this.getDirection());
 		this.perch = this.stuck = false;
 		this.knocker = knocker;
 		this.hurry(40, hurdur);
