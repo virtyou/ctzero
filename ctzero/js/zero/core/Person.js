@@ -333,6 +333,7 @@ zero.core.Person = CT.Class({
 	},
 	stopFlying: function() {
 		this.body.landing = true;
+		this.dance("fall");
 	},
 	jump: function() {
 		var _ = this._, bod = this.body, within = bod.within,
