@@ -9,6 +9,8 @@ zero.core.Pool = CT.Class({
 		var rate = zcu.tickRate(), smap = this.smap, t = zcu.ticker, i,
 			geo = this.thring.geometry, vertices = geo.vertices, vl = vertices.length,
 			mainCam, campos, max = Math.min(vl, this.cur + vl * rate);
+		if (this.opts.lava)
+			t = parseInt(t / 4);
 		for (i = this.cur; i < max; i++)
 			vertices[i].z = smap[(t + i) % 60];
 		this.cur = i;
@@ -17,7 +19,7 @@ zero.core.Pool = CT.Class({
 		geo.computeFaceNormals();
 		geo.computeVertexNormals();
 		geo.verticesNeedUpdate = true;
-		if (!(t % 50)) {
+		if (!this.opts.lava && !(t % 50)) {
 			mainCam = zero.core.camera;
 			campos = mainCam.position();
 			this.cam.position.y = -campos.y - 80;
@@ -66,7 +68,7 @@ zero.core.Pool = CT.Class({
 	},
 	preassemble: function() {
 		var oz = this.opts, partz = oz.parts,
-			ph = Math.PI / 2, i,
+			ph = Math.PI / 2, i, bubopts,
 			xf = oz.plane[0], zf = oz.plane[1],
 			xh = xf / 2, zh = zf / 2, pg = function(x) {
 				return new THREE.PlaneGeometry(x, 1);
@@ -94,16 +96,21 @@ zero.core.Pool = CT.Class({
 					position: pz[i],
 					rotation: rz[i],
 					geometry: geos[i]
-				}, core.config.ctzero.env.water));
+				}, core.config.ctzero.env[oz.lava ? "lava": "water"]));
 			}
 		}
-		oz.bubbles && partz.push({
-			name: "bubbles",
-			kind: "particles",
-			thing: "Particles",
-			bounder: this,
-			rotation: [Math.PI / 2, 0, 0]
-		});
+		if (oz.bubbles) {
+			bubopts = {
+				bounder: this,
+				name: "bubbles",
+				kind: "particles",
+				thing: "Particles",
+				rotation: [Math.PI / 2, 0, 0]
+			};
+			if (oz.lava)
+				bubopts.pmatColor = 0xff0000;
+			partz.push(bubopts);
+		}
 		oz.creatures && partz.push({
 			within: this,
 			name: "creatures",
@@ -126,6 +133,14 @@ zero.core.Pool = CT.Class({
 		delete this._audios;
 	},
 	init: function(opts) {
+		if (opts.lava) {
+			opts = CT.merge(opts, {
+				amplitude: 8,
+				watermat: false,
+				plane: [800, 800, 8, 16],
+				vstrip: "templates.one.vstrip.inferno"
+			});
+		}
 		this.opts = opts = CT.merge(opts, {
 			state: "liquid",
 			grippy: false,
@@ -157,11 +172,12 @@ zero.core.Pool = CT.Class({
 				reflectivity: 0.87
 			});
 		}
+		this.smap = zero.core.trig.segs(60, opts.amplitude);
+		if (opts.lava) return;
 		var c = opts.cam,
 			cubeCam = this.cam = new THREE.CubeCamera(c[0], c[1], c[2]);
 		zero.core.util.update(opts.camPos, cubeCam.position);
 		opts.material.envMap = this.cam.renderTarget.texture;
-		this.smap = zero.core.trig.segs(60, opts.amplitude);
 		var PA = zero.core.Pool.audio;
 		if (PA) {
 			this._audios = {
