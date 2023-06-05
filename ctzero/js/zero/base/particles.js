@@ -2,6 +2,7 @@ zero.base.particles = {
 	bubbles: {
 		velocity: [0, 25, 0],
 		variance: [1, 0, 1],
+		sharemat: true,
 		pmat: {
 			opacity: 0.3,
 			alphaTest: 0.3,
