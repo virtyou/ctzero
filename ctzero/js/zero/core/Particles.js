@@ -75,8 +75,13 @@ zero.core.Particles = CT.Class({
 		}
 	},
 	preassemble: function() {
-		var i, size, oz = this.opts, pz = oz.parts,
-			matinst = this.material = oz.sharemat && new THREE["Mesh" + oz.matcat + "Material"](oz.pmat);
+		var i, size, oz = this.opts, pz = oz.parts, matinst;
+		if (oz.pmatColor) {
+			if (!oz.pmat)
+				oz.pmat = {};
+			oz.pmat.color = oz.pmatColor;
+		}
+		matinst = this.material = oz.sharemat && new THREE["Mesh" + oz.matcat + "Material"](oz.pmat);
 		for (i = 0; i < oz.count; i++) {
 			size = oz.size + oz.sizeVariance * Math.random();
 			pz.push({
