@@ -746,6 +746,11 @@ zero.core.Thing = CT.Class({
 			oz.boxGeometry = oz.cubeGeometry;
 			this.log("DEPRECATED: cubeGeometry - use boxGeometry!");
 		}
+		if (oz.halfCylinder) {
+			g = (typeof oz.halfCylinder == "number") ? oz.halfCylinder : 1;
+			oz.cylinderGeometry = [g, g, g * (oz.geomult || 2), oz.geoSegs,
+				oz.geoHeightSegs, oz.geoOpen, oz.geoThetaStart, Math.PI];
+		}
 		if (oz.boxGeometry) {
 			g = oz.boxGeometry; // better way?
 			if (g == true)
@@ -784,8 +789,15 @@ zero.core.Thing = CT.Class({
 			oz.geometry = new THREE.ConeGeometry(g, g * (oz.geomult || 2));
 		}
 		else if (oz.cylinderGeometry) {
-			g = (typeof oz.cylinderGeometry == "number") ? oz.cylinderGeometry : 1;
-			oz.geometry = new THREE.CylinderGeometry(g, g, g * (oz.geomult || 2));
+			g = oz.cylinderGeometry;
+			if (Array.isArray(g))
+				oz.geometry = new THREE.CylinderGeometry(g[0],
+					g[1], g[2], g[3], g[4], g[5], g[6], g[7]);
+			else {
+				g = (typeof g == "number") ? g : 1;
+				oz.geometry = new THREE.CylinderGeometry(g, g, g * (oz.geomult || 2),
+					oz.geoSegs, oz.geoHeightSegs, oz.geoOpen, oz.geoThetaStart, oz.geoThetaLength);
+			}
 		}
 		else if (oz.circleGeometry) {
 			g = oz.circleGeometry;
