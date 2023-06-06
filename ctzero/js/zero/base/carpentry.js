@@ -10,6 +10,19 @@ zero.base.carpentry = {
 			length: 0
 		}
 	},
+	chest: {
+		lid: true,
+		back: true,
+		front: true,
+		sides: "tall",
+		spacing: 40,
+		legs: {
+			length: 0
+		},
+		material: {
+			side: THREE.DoubleSide
+		}
+	},
 	desk: {
 		width: 50,
 		depth: 30,
