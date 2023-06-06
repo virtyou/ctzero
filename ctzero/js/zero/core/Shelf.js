@@ -1,13 +1,13 @@
 zero.core.Shelf = CT.Class({
 	CLASSNAME: "zero.core.Shelf",
-	initPart: function(name, kind, geo, pos, parts) {
+	initPart: function(name, kind, geo, pos, parts, geoprop) {
 		const popts = {
 			name: name,
 			kind: kind,
 			position: pos,
-			boxGeometry: geo,
 			matinstance: this.material
 		};
+		popts[geoprop || "boxGeometry"] = geo;
 		(parts || this.opts.parts).push(popts);
 		return popts;
 	},
@@ -33,6 +33,12 @@ zero.core.Shelf = CT.Class({
 	initLevels: function(voff) {
 		for (let i = 0; i < this.opts.levels; i++)
 			this.initLevel(i, voff);
+	},
+	initLid: function(voff) {
+		var oz = this.opts, s = oz.spacing, lz = oz.levels, ll = oz.legs.length,
+			popts = this.initPart("lid", "cover", oz.width / 2,
+				[0, ll + s * lz - voff, 0], null, "halfCylinder");
+		popts.rotation = [0, 0, Math.PI / 2];
 	},
 	setDrawer: function(popts) {
 		var oz = this.opts, t = oz.thickness, outer;
@@ -68,6 +74,7 @@ zero.core.Shelf = CT.Class({
 			this.initSide("right", [2, sheight, d], [wh, sidey, 0]);
 		}
 		this.initLevels(voff);
+		oz.lid && this.initLid(voff);
 		pz.push({
 			name: "looker",
 			position: [0, 50, 100]
@@ -98,9 +105,8 @@ zero.core.Shelf = CT.Class({
 		compartment._opened = true;
 		if (compartment.opts.isDrawer)
 			compartment.adjust("position", "z", this.opts.depth, true);
-		else { // lid
-
-		}
+		else // lid
+			compartment.adjust("rotation", "x", -Math.PI / 2);
 	},
 	close: function(compartment) {
 		compartment = this.getCompartment(compartment);
@@ -108,9 +114,8 @@ zero.core.Shelf = CT.Class({
 		compartment._opened = false;
 		if (compartment.opts.isDrawer)
 			compartment.adjust("position", "z", -this.opts.depth, true);
-		else { // lid
-
-		}
+		else // lid
+			compartment.adjust("rotation", "x", 0);
 	},
 	getCompartment: function(compartment) {
 		return this[compartment] || this.lid || (this.drawers[0] && this[this.drawers[0]]);
