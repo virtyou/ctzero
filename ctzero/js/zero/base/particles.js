@@ -168,6 +168,7 @@ zero.base.particles = {
 		scale: [200, 20, 400],
 		pmat: {
 			opacity: 1,
+			alphaTest: 0.1,
 			color: 0x999999,
 			transparent: true,
 			side: THREE.DoubleSide
