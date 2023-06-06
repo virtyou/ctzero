@@ -4,12 +4,14 @@ zero.core.Shelf = CT.Class({
 		const oz = this.opts, pz = oz.parts, tx = oz.texture,
 			w = oz.width, d = oz.depth, l = oz.legs,
 			wh = w / 2, dh = d / 2, ll = l.length, lw = l.width,
-			sheight = (oz.levels - 1) * oz.spacing,
+			sheight = oz.levels - ((oz.sides == "tall") ? 0 : 1) * oz.spacing,
 			bheight = (oz.back == "tall") ? (sheight + oz.spacing) : sheight,
+			fheight = (oz.front == "tall") ? (sheight + oz.spacing) : sheight,
 			lfl = l.full ? (ll + sheight) : ll, llh = lfl / 2,
 			fullheight = bheight + ll, voff = fullheight / 2,
 			legy = llh - voff,
 			backy = ll + bheight / 2 - voff,
+			fronty = ll + fheight / 2 - voff,
 			sidey = ll + sheight / 2 - voff;
 		this.material = this.getMaterial();
 		pz.push({
@@ -47,6 +49,15 @@ zero.core.Shelf = CT.Class({
 				matinstance: this.material,
 				boxGeometry: [w, bheight, 2],
 				position: [0, backy, -dh]
+			});
+		}
+		if (oz.front) {
+			pz.push({
+				name: "front",
+				kind: "side",
+				matinstance: this.material,
+				boxGeometry: [w, fheight, 2],
+				position: [0, fronty, dh]
 			});
 		}
 		if (oz.sides) {
