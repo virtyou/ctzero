@@ -1,10 +1,38 @@
 zero.core.Shelf = CT.Class({
 	CLASSNAME: "zero.core.Shelf",
+	initPart: function(name, kind, geo, pos) {
+		this.opts.parts.push({
+			name: name,
+			kind: kind,
+			matinstance: this.material,
+			boxGeometry: geo,
+			position: pos
+		});
+	},
+	initLegs: function(girth, height, x, y, z) {
+		for (let i = 0; i < 4; i++) {
+			this.initPart("leg" + i, "leg", [girth, height, girth], [x, y, z]);
+			if (i % 2)
+				x *= -1;
+			else
+				z *= -1;
+		}
+	},
+	initSide: function(name, geo, pos) {
+		this.initPart(name, "side", geo, pos);
+	},
+	initLevels: function(voff) {
+		const oz = this.opts, pz = oz.parts, s = oz.spacing,
+			w = oz.width, t = oz.thickness, d = oz.depth, ll = oz.legs.length;
+		for (let i = 0; i < oz.levels; i++)
+			this.initPart("level" + (i + 1), "level",
+				[w, t, d], [0, ll + s * i - voff, 0]);
+	},
 	preassemble: function() {
 		const oz = this.opts, pz = oz.parts, tx = oz.texture,
 			w = oz.width, d = oz.depth, l = oz.legs,
 			wh = w / 2, dh = d / 2, ll = l.length, lw = l.width,
-			sheight = oz.levels - ((oz.sides == "tall") ? 0 : 1) * oz.spacing,
+			sheight = (oz.levels - ((oz.sides == "tall") ? 0 : 1)) * oz.spacing,
 			bheight = (oz.back == "tall") ? (sheight + oz.spacing) : sheight,
 			fheight = (oz.front == "tall") ? (sheight + oz.spacing) : sheight,
 			lfl = l.full ? (ll + sheight) : ll, llh = lfl / 2,
@@ -14,77 +42,14 @@ zero.core.Shelf = CT.Class({
 			fronty = ll + fheight / 2 - voff,
 			sidey = ll + sheight / 2 - voff;
 		this.material = this.getMaterial();
-		pz.push({
-			name: "leg1",
-			kind: "leg",
-			matinstance: this.material,
-			boxGeometry: [lw, lfl, lw],
-			position: [wh, legy, dh]
-		});
-		pz.push({
-			name: "leg2",
-			kind: "leg",
-			matinstance: this.material,
-			boxGeometry: [lw, lfl, lw],
-			position: [wh, legy, -dh]
-		});
-		pz.push({
-			name: "leg3",
-			kind: "leg",
-			matinstance: this.material,
-			boxGeometry: [lw, lfl, lw],
-			position: [-wh, legy, dh]
-		});
-		pz.push({
-			name: "leg4",
-			kind: "leg",
-			matinstance: this.material,
-			boxGeometry: [lw, lfl, lw],
-			position: [-wh, legy, -dh]
-		});
-		if (oz.back) {
-			pz.push({
-				name: "back",
-				kind: "side",
-				matinstance: this.material,
-				boxGeometry: [w, bheight, 2],
-				position: [0, backy, -dh]
-			});
-		}
-		if (oz.front) {
-			pz.push({
-				name: "front",
-				kind: "side",
-				matinstance: this.material,
-				boxGeometry: [w, fheight, 2],
-				position: [0, fronty, dh]
-			});
-		}
+		this.initLegs(lw, lfl, wh, legy, dh);
+		oz.back && this.initSide("back", [w, bheight, 2], [0, backy, -dh]);
+		oz.front && this.initSide("front", [w, fheight, 2], [0, fronty, dh]);
 		if (oz.sides) {
-			pz.push({
-				name: "left",
-				kind: "side",
-				matinstance: this.material,
-				boxGeometry: [2, sheight, d],
-				position: [-wh, sidey, 0]
-			});
-			pz.push({
-				name: "right",
-				kind: "side",
-				matinstance: this.material,
-				boxGeometry: [2, sheight, d],
-				position: [wh, sidey, 0]
-			});
+			this.initSide("left", [2, sheight, d], [-wh, sidey, 0]);
+			this.initSide("right", [2, sheight, d], [wh, sidey, 0]);
 		}
-		for (let i = 0; i < oz.levels; i++) {
-			pz.push({
-				name: "level" + (i + 1),
-				kind: "level",
-				matinstance: this.material,
-				boxGeometry: [w, oz.thickness, d],
-				position: [0, ll + oz.spacing * i - voff, 0]
-			});
-		}
+		this.initLevels(voff);
 		pz.push({
 			name: "looker",
 			position: [0, 50, 100]
