@@ -2,7 +2,15 @@ zero.base.carpentry = {
 	table: {
 		// defaults
 	},
-	desk: {
+	box: {
+		back: true,
+		front: true,
+		sides: "tall",
+		legs: {
+			length: 0
+		}
+	},
+	desk: { // TODO: drawer
 		width: 50,
 		depth: 30,
 		levels: 2,
