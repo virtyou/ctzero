@@ -10,10 +10,11 @@ zero.base.carpentry = {
 			length: 0
 		}
 	},
-	desk: { // TODO: drawer
+	desk: {
 		width: 50,
 		depth: 30,
 		levels: 2,
+		drawers: 1,
 		spacing: 10,
 		thickness: 2,
 		back: "tall",
