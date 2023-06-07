@@ -86,6 +86,14 @@ zero.core.Shelf = CT.Class({
 	openable: function() {
 		return !!(this.drawers.length || this.lid);
 	},
+	openbutt: function() {
+		var open = this.open, close = this.close, b = CT.dom.button("open", function() {
+			b._opened = !b._opened;
+			b._opened ? open() : close();
+			b.innerHTML = b._opened ? "close" : "open";
+		});
+		return b;
+	},
 	opener: function() {
 		const options = this.drawers.slice();
 		this.lid && options.unshift("lid");
