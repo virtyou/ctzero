@@ -139,6 +139,14 @@ zero.core.util = {
 			return p;
 		});
 	},
+	same: function(a, b) {
+		if (!a || !b || Object.keys(a).length != Object.keys(b).length)
+			return false;
+		for (var k in a)
+			if (a[k] != b[k])
+				return false;
+		return true;
+	},
 	// https://stackoverflow.com/questions/5623838/rgb-to-hex-and-hex-to-rgb#5624139
 	hex2rgb: function(hex) {
 		var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
