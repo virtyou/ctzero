@@ -278,8 +278,10 @@ zero.core.Controls = CT.Class({
 			CT.key.on("c", this.still, this.right);
 			CT.key.on("SPACE", this.unjump, this.jump);
 			CT.key.on("SHIFT", runner(), runner(true));
-			CT.key.on("SEMICOLON", () => tb.unthrust("left"), () => tb.thrust("left"));
-			CT.key.on("QUOTE", () => tb.unthrust("right"), () => tb.thrust("right"));
+			CT.key.on("OPEN_BRACKET", () => tb.unthrust("left"), () => tb.thrust("left"));
+			CT.key.on("CLOSE_BRACKET", () => tb.unthrust("right"), () => tb.thrust("right"));
+			CT.key.on("SEMICOLON", () => tb.unkick("left"), () => tb.kick("left"));
+			CT.key.on("QUOTE", () => tb.unkick("right"), () => tb.kick("right"));
 			gestures = Object.keys(this.target.opts.gestures);
 			dances = Object.keys(this.target.opts.dances);
 			this.setNum(0, null, null, true);
