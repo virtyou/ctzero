@@ -144,6 +144,7 @@ zero.core.Body = CT.Class({
 		else
 			(thring || this.placer)[property][dimension] = value;
 	},
+	_kicker: {lumbar: {x: -0.2}, ribs: {x: -0.5}, neck: {x: 2}},
 	_thruster: {lumbar: {x: 0.2}, ribs: {x: 0.5}, neck: {x: -2}},
 	_unthruster: {lumbar: {x: 0}, ribs: {x: 0}, neck: {x: 0}},
 	thrust: function(side) {
@@ -157,6 +158,18 @@ zero.core.Body = CT.Class({
 	},
 	onthrust: function(cb) {
 		this._onthrust = cb; // just one...
+	},
+	kick: function(side) {
+		this.torso.legs[side].kick();
+		this.spine.setSprings(this._kicker);
+	},
+	unkick: function(side) {
+		this.torso.legs[side].unkick();
+		this.spine.setSprings(this._unthruster);
+		this.person.sfx(this._onkick && this._onkick(side) || "whoosh");
+	},
+	onkick: function(cb) {
+		this._onkick = cb; // just one...
 	},
 	move: function(ropts) {
 		ropts.body && this._applyMod(ropts.body);
