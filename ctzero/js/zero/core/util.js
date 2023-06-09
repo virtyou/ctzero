@@ -217,7 +217,7 @@ zero.core.util = {
 		return dist < buff;
 	},
 	distance: function(p1, p2) {
-		var zcu = zero.core.util, vec = zcu.vector(p1, p2, zcu._distance),
+		var vec = zero.core.util.vector(p1, p2, true),
 			xyzt = (vec.x * vec.x) + (vec.y * vec.y) + (vec.z * vec.z);
 		return Math.sqrt(xyzt);
 	},
@@ -243,7 +243,8 @@ zero.core.util = {
 		if (!vec) {
 			CT.log("creating vec!");
 			vec = {};
-		}
+		} else if (vec === true)
+			vec = zero.core.util._distance;
 		vec.x = p2.x - p1.x;
 		vec.y = p2.y - p1.y;
 		vec.z = p2.z - p1.z;
