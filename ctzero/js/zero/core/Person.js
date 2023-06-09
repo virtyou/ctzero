@@ -163,20 +163,26 @@ zero.core.Person = CT.Class({
 		this.orientation(Math.atan2(spos.x
 			- pos.x, spos.z - pos.z));
 	},
-	touch: function(subject, cb, arm, approached, handCb) {
-		var bod = this.body, arms = bod.torso.arms, spy;
+	touch: function(subject, cb, arm, approached, handCb, force) {
+		var zcu = zero.core.util, bod = this.body, bt = bod.torso, spy, contact = function() {
+			cb && cb();
+			handCb && handCb(bt.hands[arm], subject);
+		}, shove = function() {
+			bod.shove(zcu.vector(bt.hands[arm].position(null, true),
+				subject.position(), true), 1, 20);
+			setTimeout(contact, timeout);
+		}, timeout = force ? 150 : 600;
 		arm = arm || this.freeHand();
 		arm && this.approach(approached || subject, function() {
-			spy = subject.group.getWorldPosition().y;
-			if (spy < bod.torso.legs.right.knee.getWorldPosition().y)
+			spy = subject.position(null, true).y;
+			if (spy < bt.legs.right.knee.getWorldPosition(zcu._positioner).y)
 				bod.springs.bow.target = Math.PI / 4;
-			else if (spy < bod.spine.pelvis.getWorldPosition().y)
+			else if (spy < bod.spine.pelvis.getWorldPosition(zcu._positioner).y)
 				bod.springs.bow.target = Math.PI / 2;
 			setTimeout(function() {
-				arms[arm || "right"].point("shoulder", subject);
-				cb && setTimeout(cb, 600);
-				handCb && setTimeout(() => handCb(bod.torso.hands[arm], subject), 600);
-			}, 600);
+				bt.arms[arm].point("shoulder", subject);
+				setTimeout(force ? shove : contact, timeout);
+			}, timeout);
 		});
 	},
 	held: function(side, handFallback) {
