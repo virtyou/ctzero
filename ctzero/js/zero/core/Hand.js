@@ -63,8 +63,6 @@ zero.core.Hand = CT.Class({
 			this[digit][knuckle].rotation[major] = cval;
 	},
 	position: function(ignoredPos, world) {
-		if (ignoredPos)
-			return this.log("position ignored");
 		return zero.core.util.getPos(this.middle[0], world);
 	}
 }, zero.core.Skeleton);
