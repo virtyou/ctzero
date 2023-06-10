@@ -227,6 +227,13 @@ zero.core.util = {
 			dist = thingo.position().distanceTo(you.body.position());
 		return Math.max(0.001, 1 - dist / diameter); // <0 bounding error?
 	},
+	getPos: function(thring, world) { // for bones and such
+		if (!world)
+			return thring.position;
+		if (!thring._positioner)
+			thring._positioner = new THREE.Vector3();
+		return thring.getWorldPosition(thring._positioner);
+	},
 	mult: function(vec, factor) {
 		vec.x *= factor;
 		vec.y *= factor;
