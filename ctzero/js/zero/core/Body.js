@@ -159,9 +159,10 @@ zero.core.Body = CT.Class({
 	onthrust: function(cb) {
 		this._onthrust = cb; // just one...
 	},
-	kick: function(side) {
+	kick: function(side, unkickafter) {
 		this.torso.legs[side].kick();
 		this.spine.setSprings(this._kicker);
+		unkickafter && setTimeout(() => this.unkick(side), unkickafter);
 	},
 	unkick: function(side) {
 		this.torso.legs[side].unkick();
