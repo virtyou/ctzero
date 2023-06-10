@@ -65,12 +65,7 @@ zero.core.Hand = CT.Class({
 	position: function(ignoredPos, world) {
 		if (ignoredPos)
 			return this.log("position ignored");
-		var tar = this.middle[0];
-		if (!world)
-			return tar.position;
-		if (!this._positioner)
-			this._positioner = new THREE.Vector3();
-		return tar.getWorldPosition(this._positioner);
+		return zero.core.util.getPos(this.middle[0], world);
 	}
 }, zero.core.Skeleton);
 
