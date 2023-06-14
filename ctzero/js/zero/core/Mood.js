@@ -83,6 +83,9 @@ zero.core.Mood = CT.Class({
 		delete s.person;
 		return s;
 	},
+	reset: function(mvec, mult) {
+		this.opts[mvec] = (this.orig_opts[mvec] || 1) * (mult || 1);
+	},
 	init: function(opts) {
 		this.orig_opts = opts;
 		this.opts = opts = CT.merge(opts, zero.core.Mood.defaults);
