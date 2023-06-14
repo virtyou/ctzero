@@ -244,12 +244,9 @@ zero.core.Controls = CT.Class({
 		});
 	},
 	runner: function(running) {
-		var go = this.go, t = this.target, m = t.mood, en = t.energy,
-			oe = m.orig_opts.energy || 1, od = en.opts.damp,
-			e = running ? 2 * oe : oe, d = running ? 0.6 * od : od;
+		var t = this.target, go = this.go;
 		return function() {
-			m.update({ energy: e });
-			en.damp = d;
+			(running ? t.run : t.unrun)();
 			setTimeout(() => go(true), 100); // wait for Mood.tick() to update energy k
 		};
 	},

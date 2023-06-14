@@ -377,6 +377,15 @@ zero.core.Body = CT.Class({
 		this.bubbletrail.tick(dts);
 		this.splash.tick(dts);
 	},
+	wave: function(wname, segs, amp) {
+		if (wname != "breath") // TODO: add more...
+			return this.log(wname, "wave unimplemented");
+		if (this.panting) {
+			segs /= 2;
+			amp *= 2;
+		}
+		return zero.core.trig.seg(segs, amp);
+	},
 	init: function(opts) {
 		this.opts = opts = CT.merge(this.opts, {
 			joints: zero.base.joints()

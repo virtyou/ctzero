@@ -10,7 +10,7 @@ zero.core.trig = {
 		return angish < 0 ? -val : val;
 	},
 	sin60: function(index, amp, talt) { // full rotation per sec @ 60fps
-		return zero.core.trig.segs(60, amp)[((index || 0) + (talt || zero.core.util.ticker)) % 60];
+		return zero.core.trig.seg(60, amp, index, talt);
 	},
 	segs: function(segs, amp) {
 		var _ = zero.core.trig._, inc, i;
@@ -20,7 +20,7 @@ zero.core.trig = {
 			for (i = 0; i < segs; i++)
 				_.sin[segs].push(Math.sin(inc * i));
 		}
-		if (amp) {
+		if (amp && amp != 1) {
 			if (!_.amps[segs])
 				_.amps[segs] = {};
 			if (!_.amps[segs][amp])
@@ -28,5 +28,9 @@ zero.core.trig = {
 			return _.amps[segs][amp];
 		}
 		return _.sin[segs];
+	},
+	seg: function(segs, amp, index, talt) {
+		var zc = zero.core, i = (index || 0) + (talt || zc.util.ticker);
+		return zc.trig.segs(segs, amp)[i % segs];
 	}
 };

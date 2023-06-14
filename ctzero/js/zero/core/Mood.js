@@ -39,7 +39,8 @@ zero.core.Mood = CT.Class({
 		btickers.tilt.conditions.talking.no.k.base = 2 + 20*energy; // 40+50*energy;
 		//tickers.nod.conditions.talking.no.k.base = 2 + 20*energy;
 		//tickers.shake.conditions.talking.no.k.base = 2 + 20*energy,
-		energyMaster.k = 0.1 + 2 * energy;
+		energyMaster.set("k", 0.1 + 2 * energy);
+//		energyMaster.k = 0.1 + 2 * energy;
 //		energyMaster.damp = 0.1 + energyMaster.opts.damp / energy;
 		prosody.rate = zcu.rates[Math.floor(4*rate) % 5];
 		prosody.pitch = zcu.pitches[Math.floor(4*pitch) % 5];
@@ -81,6 +82,9 @@ zero.core.Mood = CT.Class({
 		var s = CT.merge(this.opts);
 		delete s.person;
 		return s;
+	},
+	reset: function(mvec, mult) {
+		this.opts[mvec] = (this.orig_opts[mvec] || 1) * (mult || 1);
 	},
 	init: function(opts) {
 		this.orig_opts = opts;

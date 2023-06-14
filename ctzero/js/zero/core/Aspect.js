@@ -1,25 +1,18 @@
 zero.core.Aspect = CT.Class({
 	CLASSNAME: "zero.core.Aspect",
 	tick: function() {
+		var parent = this.parent, bod = parent.body, head = bod && bod.head;
 		this.value = this.base;
 		for (var s in this.springs)
-			this.value += this.parent.springs[s].value * this.springs[s];
+			this.value += parent.springs[s].value * this.springs[s];
 		for (var a in this.aspects)
-			this.value += this.parent.aspects[a].value * this.aspects[a];
-		if (Object.keys(this.bsprings).length) {
-			var bod = this.parent.body;
-			if (bod) {
-				for (var s in this.bsprings)
-					this.value += bod.springs[s].value * this.bsprings[s];
-			}
-		}
-		if (Object.keys(this.hsprings).length) {
-			var head = this.parent.body.head;
-			if (head) {
-				for (var s in this.hsprings)
-					this.value += head.springs[s].value * this.hsprings[s];
-			}
-		}
+			this.value += parent.aspects[a].value * this.aspects[a];
+		for (var s in this.waves)
+			this.value += bod.wave(s, this.waves[s].segs, this.waves[s].amp);
+		for (var s in this.bsprings)
+			this.value += bod.springs[s].value * this.bsprings[s];
+		for (var s in this.hsprings)
+			this.value += head.springs[s].value * this.hsprings[s];
 		if (!this.unbounded)
 			this.value = Math.max(Math.min(this.value, this.max), this.min);
 	},
@@ -37,7 +30,8 @@ zero.core.Aspect = CT.Class({
 			aspects: {},
 			springs: {},
 			bsprings: {},
-			hsprings: {}
+			hsprings: {},
+			waves: {}
 		});
 		this.max = opts.max;
 		this.min = opts.min;
@@ -49,6 +43,7 @@ zero.core.Aspect = CT.Class({
 		this.bsprings = opts.bsprings;
 		this.hsprings = opts.hsprings;
 		this.unbounded = opts.unbounded;
+		this.waves = opts.waves;
 	}
 });
 

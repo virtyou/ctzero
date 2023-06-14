@@ -360,6 +360,16 @@ zero.core.Person = CT.Class({
 		}
 		this.sfx(bod.flying ? "wind" : sound);
 	},
+	run: function() {
+		this.running = true;
+		this.mood.reset("energy", 2);
+		this.energy.reset("damp", 0.6);
+	},
+	unrun: function() {
+		this.running = false;
+		this.mood.reset("energy");
+		this.energy.reset("damp");
+	},
 	go: function(dur) {
 		var bod = this.body, within = bod.within,
 			dance = bod.flying ? "fly" : "walk",
@@ -425,7 +435,8 @@ zero.core.Person = CT.Class({
 		this.ungesture();
 		this.gesture(dance.steps[dance.step]);
 		(this.isYou() && CT.key.down("SPACE")) || this.sfx(this.activeDance);
-		this.dancer = setTimeout(this._dance, (dance.interval || 1000) / this.mood.opts.energy);
+//		this.dancer = setTimeout(this._dance, (dance.interval || 1000) / this.mood.opts.energy);
+		this.dancer = setTimeout(this._dance, (dance.interval || 1000) * 2 / this.energy.k);
 	},
 	dance: function(dname, duration) {
 		if (this.activeDance == dname) return;
