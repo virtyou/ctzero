@@ -67,24 +67,21 @@ zero.core.Pool = CT.Class({
 		}
 	},
 	preassemble: function() {
-		var oz = this.opts, partz = oz.parts,
-			ph = Math.PI / 2, i, bubopts,
-			xf = oz.plane[0], zf = oz.plane[1],
-			xh = xf / 2, zh = zf / 2, pg = function(x) {
-				return new THREE.PlaneGeometry(x, 1);
-			}, geos = [
-				pg(xf), pg(zf), pg(xf), pg(zf)
-			], pz = [
-				[0, zh, 0],
-				[xh, 0, 0],
-				[0, -zh, 0],
-				[-xh, 0, 0]
-			], rz = [
-				[ph, 0, 0],
-				[ph, ph, 0],
-				[ph, 0, 0],
-				[ph, ph, 0]
-			], matty = CT.merge(oz.material);
+		var oz = this.opts, xf = oz.plane[0], pg = function(x) {
+			return new THREE.PlaneGeometry(x, 1);
+		}, zf = oz.plane[1], xh = xf / 2, zh = zf / 2, geos = [
+			pg(xf), pg(zf), pg(xf), pg(zf)
+		], ph = Math.PI / 2, i, bubopts, pz = [
+			[0, zh, 0],
+			[xh, 0, 0],
+			[0, -zh, 0],
+			[-xh, 0, 0]
+		], rz = [
+			[ph, 0, 0],
+			[ph, ph, 0],
+			[ph, 0, 0],
+			[ph, ph, 0]
+		], partz = oz.parts, matty = CT.merge(oz.material);
 		delete matty.envMap;
 		matty.side = THREE.DoubleSide;
 		if (oz.sides) {
