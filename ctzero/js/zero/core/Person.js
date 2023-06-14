@@ -360,6 +360,16 @@ zero.core.Person = CT.Class({
 		}
 		this.sfx(bod.flying ? "wind" : sound);
 	},
+	run: function() {
+		this.running = true;
+		this.mood.reset("energy", 2);
+		this.energy.reset("damp", 0.6);
+	},
+	unrun: function() {
+		this.running = false;
+		this.mood.reset("energy");
+		this.energy.reset("damp");
+	},
 	go: function(dur) {
 		var bod = this.body, within = bod.within,
 			dance = bod.flying ? "fly" : "walk",
