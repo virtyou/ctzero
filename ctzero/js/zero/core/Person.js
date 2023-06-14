@@ -425,7 +425,8 @@ zero.core.Person = CT.Class({
 		this.ungesture();
 		this.gesture(dance.steps[dance.step]);
 		(this.isYou() && CT.key.down("SPACE")) || this.sfx(this.activeDance);
-		this.dancer = setTimeout(this._dance, (dance.interval || 1000) / this.mood.opts.energy);
+//		this.dancer = setTimeout(this._dance, (dance.interval || 1000) / this.mood.opts.energy);
+		this.dancer = setTimeout(this._dance, (dance.interval || 1000) * 2 / this.energy.k);
 	},
 	dance: function(dname, duration) {
 		if (this.activeDance == dname) return;
