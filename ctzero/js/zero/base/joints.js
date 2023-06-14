@@ -33,6 +33,12 @@ zero.base.joints = function() {
             x: {
                 max: Math.PI / 2,
                 min: -0.5,
+                waves: {
+                    breath: {
+                        amp: 0.05,
+                        segs: 200
+                    }
+                },
                 bsprings: {
                     bow: 1,
 //                    nod: -0.5
@@ -72,6 +78,12 @@ zero.base.joints = function() {
             x: {
                 max: 0.5,
                 min: -0.5,
+                waves: {
+                    breath: {
+                        amp: 0.05,
+                        segs: 200
+                    }
+                },
                 bsprings: {
 //                    nod: 0.5
                     bow: 0.1
