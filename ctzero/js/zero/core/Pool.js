@@ -28,6 +28,7 @@ zero.core.Pool = CT.Class({
 			this.cam.update(mainCam.get("renderer"), mainCam.scene);
 		}
 		this.bubbles && this.bubbles.tick(dts);
+		this.glow && this.glow.setIntensity(0.6 + zero.core.trig.seg(300, 0.5));
 		this.tickPos();
 	},
 	getTop: function() {
@@ -65,6 +66,7 @@ zero.core.Pool = CT.Class({
 			this.bubbles.adjust("position", "z", p);
 			this.bubbles.rebound();
 		}
+		this.glow && this.glow.adjust("position", "y", this.radii.y);
 	},
 	preassemble: function() {
 		var oz = this.opts, xf = oz.plane[0], pg = function(x) {
@@ -116,6 +118,13 @@ zero.core.Pool = CT.Class({
 			rotation: [Math.PI / 2, 0, 0],
 			subclass: zero.core.Fauna.Menagerie
 		});
+		oz.lava && partz.push({
+			name: "glow",
+			thing: "Light",
+			kind: "lighting",
+			variety: "point",
+			color: 0xff0000
+		});
 	},
 	ambience: function(sound) { // within/without
 		if (!this._audios) return;
@@ -161,6 +170,8 @@ zero.core.Pool = CT.Class({
 			var p = opts.plane;
 			opts.geometry = new THREE.PlaneGeometry(p[0], p[1], p[2], p[3]);
 		}
+		this.smap = zero.core.trig.segs(60, opts.amplitude);
+		if (opts.lava) return this.log("skipping cam stuff for lava");
 		if (opts.watermat) {
 			opts.material = CT.merge(opts.material, {
 				transparent: true,
@@ -169,8 +180,6 @@ zero.core.Pool = CT.Class({
 				reflectivity: 0.87
 			});
 		}
-		this.smap = zero.core.trig.segs(60, opts.amplitude);
-		if (opts.lava) return;
 		var c = opts.cam,
 			cubeCam = this.cam = new THREE.CubeCamera(c[0], c[1], c[2]);
 		zero.core.util.update(opts.camPos, cubeCam.position);
