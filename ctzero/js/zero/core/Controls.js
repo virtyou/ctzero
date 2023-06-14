@@ -249,7 +249,7 @@ zero.core.Controls = CT.Class({
 			e = running ? 2 * oe : oe, d = running ? 0.6 * od : od;
 		return function() {
 			m.update({ energy: e });
-			en.damp = d;
+			en.set("damp", d);
 			setTimeout(() => go(true), 100); // wait for Mood.tick() to update energy k
 		};
 	},
