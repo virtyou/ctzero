@@ -8,7 +8,7 @@ zero.core.Aspect = CT.Class({
 		for (var a in this.aspects)
 			this.value += parent.aspects[a].value * this.aspects[a];
 		for (var s in this.waves)
-			this.value += bod.wave(s, this.waves[s]);
+			this.value += bod.wave(s, this.waves[s].segs, this.waves[s].amp);
 		for (var s in this.bsprings)
 			this.value += bod.springs[s].value * this.bsprings[s];
 		for (var s in this.hsprings)
