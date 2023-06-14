@@ -20,7 +20,7 @@ zero.core.trig = {
 			for (i = 0; i < segs; i++)
 				_.sin[segs].push(Math.sin(inc * i));
 		}
-		if (amp) {
+		if (amp && amp != 1) {
 			if (!_.amps[segs])
 				_.amps[segs] = {};
 			if (!_.amps[segs][amp])
