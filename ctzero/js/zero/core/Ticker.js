@@ -10,7 +10,7 @@ zero.core.Ticker = CT.Class({
 			if ((property == "target") && !this.opts.noTargetMult) {
 				var energy = this.parent.energy();
 				if (energy)
-					s[property] *= energy.targetMult;
+					s[property] *= energy.getMult("target");
 			}
 		}
 	},
@@ -26,7 +26,7 @@ zero.core.Ticker = CT.Class({
 		if (!this.opts.noReschedMult) {
 			var energy = this.parent.energy();
 			if (energy)
-				dur *= energy.reschedMult;
+				dur *= energy.getMult("resched");
 		}
 		this.stop();
 		this._timeout = setTimeout(this.tick, dur);
