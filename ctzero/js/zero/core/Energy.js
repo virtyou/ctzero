@@ -12,6 +12,9 @@ zero.core.Energy = CT.Class({
 	set: function(prop, val) {
 		this[prop] = val * this._.mults[prop];
 	},
+	reset: function(prop, mult) {
+		this.set(prop, this.opts[prop] * (mult || 1));
+	},
 	init: function(opts) {
 		this.opts = opts = CT.merge(opts, {
 			k: 1,
