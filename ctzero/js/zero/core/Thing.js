@@ -762,8 +762,8 @@ zero.core.Thing = CT.Class({
 			g = oz.sphereGeometry;
 			if (g == true)
 				g = 1;
-			oz.geometry = new THREE.SphereGeometry(g,
-				oz.sphereSegs, oz.sphereSegs);
+			oz.geometry = new THREE.SphereGeometry(g, oz.sphereSegs, oz.sphereSegs,
+				oz.geoPhiStart, oz.geoPhiLength, oz.geoThetaStart, oz.geoThetaLength);
 		}
 		else if (oz.torusGeometry) {
 			g = oz.torusGeometry;

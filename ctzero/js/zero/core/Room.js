@@ -5,8 +5,8 @@ zero.core.Room = CT.Class({
 		objects: 0
 	},
 	_tickers: [],
-	_structural: ["obstacle", "floor", "wall", "ramp"],
-	_bumpers: ["wall", "obstacle"],
+	_structural: ["obstacle", "floor", "wall", "ramp", "boulder"],
+	_bumpers: ["wall", "obstacle", "boulder"],
 	_moshAxes: ["slide", "weave"],
 	removables: function() {
 		return this.parts.concat(this.objects);
