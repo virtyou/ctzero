@@ -43,7 +43,7 @@ zero.core.Controls = CT.Class({
 			x: "theta", y: "phi"
 		},
 		flats: ["x", "z"],
-		structs: ["floor", "obstacle", "wall", "ramp"],
+		structs: ["floor", "obstacle", "wall", "ramp", "boulder"],
 		camdirs: ["UP", "DOWN", "LEFT", "RIGHT"],
 		cdalias: {"LEFT": "q", "RIGHT": "e", "UP": "r", "DOWN": "f"},
 		dirs: ["w", "s", "a", "d"],
