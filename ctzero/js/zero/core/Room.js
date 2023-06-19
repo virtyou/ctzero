@@ -5,8 +5,8 @@ zero.core.Room = CT.Class({
 		objects: 0
 	},
 	_tickers: [],
-	_structural: ["obstacle", "floor", "wall", "ramp", "boulder"],
-	_bumpers: ["wall", "obstacle", "boulder"],
+	_structural: ["obstacle", "floor", "wall", "ramp", "boulder", "stala"],
+	_bumpers: ["wall", "obstacle", "boulder", "stala"],
 	_moshAxes: ["slide", "weave"],
 	removables: function() {
 		return this.parts.concat(this.objects);
@@ -391,15 +391,20 @@ zero.core.Room = CT.Class({
 	preassemble: function() {
 		var opts = this.opts, d2g = function(dz) {
 			return new THREE.CubeGeometry(dz[0], dz[1], dz[2], dz[3], dz[4]); // ugh
-		}, os = opts.shell;
-		os && opts.parts.push(CT.merge({
-			name: "shelly",
-			kind: "shell",
-			geometry: d2g(os.dimensions),
-			material: {
-				side: THREE.BackSide
-			}
-		}, os));
+		}, os = opts.shell, oso;
+		if (os) {
+			oso = CT.merge({
+				name: "shelly",
+				kind: "shell",
+				geometry: d2g(os.dimensions),
+				material: {
+					side: THREE.BackSide
+				}
+			}, os);
+			if (opts.texture && !oso.texture)
+				oso.texture = opts.texture;
+			opts.parts.push(oso);
+		}
 		opts.outside && opts.parts.push({
 			name: "sky",
 			kind: "celestial",
