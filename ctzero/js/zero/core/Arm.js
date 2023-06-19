@@ -32,6 +32,7 @@ zero.core.Arm = CT.Class({
 		zero.core[this.variety].parts.forEach(this.tickPart);
 		this.hand.tick();
 	},
+	_upthruster: {shoulder: { x: -Math.PI }},
 	_unthruster: {clavicle: {y: 0}, shoulder: {x: 0, y: 0}, wrist: {x: 0}},
 	thrust: function() {
 		if (!this._thruster) {
@@ -44,6 +45,10 @@ zero.core.Arm = CT.Class({
 			};
 		}
 		this.setSprings(this._thruster);
+		this.thrusting = true;
+	},
+	upthrust: function() {
+		this.setSprings(this._upthruster);
 		this.thrusting = true;
 	},
 	unthrust: function() {
