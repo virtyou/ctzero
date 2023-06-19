@@ -186,7 +186,8 @@ zero.core.Body = CT.Class({
 	},
 	equipper: function(g, held) { // if held, g is side.....
 		var az = this.torso.arms, bz = this.bones,
-			bm = this.bmap, gmap = this.gearmap, gars = this.garments;
+			bm = this.bmap, gmap = this.gearmap,
+			gars = this.garments, itemz = this.items;
 		return function(gdata) {
 			if (!("bone" in gdata)) {
 				if (held)
@@ -201,6 +202,8 @@ zero.core.Body = CT.Class({
 			}));
 			if (gdata.thing == "Garment")
 				gars[gdata.name] = gmap[gdata.key];
+			else if (gdata.thing == "Item")
+				itemz[gdata.name] = gmap[gdata.key];
 		};
 	},
 	gear: function(gear, held) {
@@ -219,11 +222,15 @@ zero.core.Body = CT.Class({
 		}
 	},
 	ungear: function(gkey, side, sub) {
-		var k, kz = gkey ? [gkey] : Object.keys(this.gearmap);
+		var g, gt, k, kz = gkey ? [gkey] : Object.keys(this.gearmap);
 		for (k of kz) {
-			this.gearmap[k].remove();
-			if (this.gearmap[k].opts.thing == "Garment")
+			g = this.gearmap[k];
+			gt = g.opts.thing;
+			g.remove();
+			if (gt == "Garment")
 				delete this.garments[k];
+			else if (gt == "Item")
+				delete this.items[k];
 			delete this.gearmap[k];
 		}
 	},
@@ -398,6 +405,7 @@ zero.core.Body = CT.Class({
 //		opts.frustumCulled = false; // TODO: figure out real problem and fix!!!
 		this.gearmap = {};
 		this.garments = {};
+		this.items = {};
 		this._boundFixer = setTimeout(this.fixBounds, 5000);
 	}
 }, zero.core.Thing);
