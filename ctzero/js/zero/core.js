@@ -13,6 +13,7 @@ CT.require("zero.base.body");
 CT.require("zero.base.particles");
 CT.require("zero.base.flora");
 CT.require("zero.base.fauna");
+CT.require("zero.base.items");
 CT.require("zero.base.clothes");
 CT.require("zero.base.carpentry");
 
@@ -61,6 +62,7 @@ CT.require("zero.core.Beard");
 CT.require("zero.core.Tail");
 CT.require("zero.core.Cloth");
 CT.require("zero.core.Garment");
+CT.require("zero.core.Item");
 
 CT.require("zero.core.Torso");
 CT.require("zero.core.Head");
