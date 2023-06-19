@@ -151,6 +151,10 @@ zero.core.Body = CT.Class({
 		this.torso.arms[side].thrust();
 		this.spine.setSprings(this._thruster);
 	},
+	upthrust: function(side) {
+		this.torso.arms[side].upthrust();
+		this.spine.setSprings(this._kicker);
+	},
 	unthrust: function(side) {
 		this.torso.arms[side].unthrust();
 		this.spine.setSprings(this._unthruster);
@@ -186,8 +190,8 @@ zero.core.Body = CT.Class({
 	},
 	equipper: function(g, held) { // if held, g is side.....
 		var az = this.torso.arms, bz = this.bones,
-			bm = this.bmap, gmap = this.gearmap,
-			gars = this.garments, itemz = this.items;
+			bm = this.bmap, gmap = this.gearmap, gthing,
+			gars = this.garments, itemz = this.items, heldz = this.held;
 		return function(gdata) {
 			if (!("bone" in gdata)) {
 				if (held)
@@ -195,15 +199,15 @@ zero.core.Body = CT.Class({
 				else // side? sub? part?
 					gdata.bone = zero.core.util.gear2bone(gdata.kind);
 			}
-			gmap[gdata.key] = zero.core.util.thing(CT.merge(gdata, {
+			gthing = gmap[gdata.key] = zero.core.util.thing(CT.merge(gdata, {
 				bones: bz,
 				onbuild: held && az[g].hand.grasp,
 				onremove: held && az[g].hand.release
 			}));
 			if (gdata.thing == "Garment")
-				gars[gdata.name] = gmap[gdata.key];
+				gars[gdata.name] = gthing;
 			else if (gdata.thing == "Item")
-				itemz[gdata.name] = gmap[gdata.key];
+				heldz[g] = itemz[gdata.name] = gthing;
 		};
 	},
 	gear: function(gear, held) {
@@ -229,8 +233,10 @@ zero.core.Body = CT.Class({
 			g.remove();
 			if (gt == "Garment")
 				delete this.garments[k];
-			else if (gt == "Item")
+			else if (gt == "Item") {
 				delete this.items[k];
+				delete this.held[side];
+			}
 			delete this.gearmap[k];
 		}
 	},
@@ -406,6 +412,7 @@ zero.core.Body = CT.Class({
 		this.gearmap = {};
 		this.garments = {};
 		this.items = {};
+		this.held = {};
 		this._boundFixer = setTimeout(this.fixBounds, 5000);
 	}
 }, zero.core.Thing);
