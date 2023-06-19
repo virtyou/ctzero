@@ -1,8 +1,11 @@
 zero.core.Item = CT.Class({
 	CLASSNAME: "zero.core.Item",
+	varieties: ["knocker", "smasher", "flamer"],
 	init: function(opts) {
 		this.opts = opts = CT.merge(zero.base.items[this.opts.name], opts, {
-			// what else?
+			variety: "knocker"
 		}, this.opts);
+		for (var v of this.varieties)
+			this[v] = opts.variety == v;
 	}
 }, zero.core.Thing);
