@@ -110,6 +110,13 @@ zero.core.Thing = CT.Class({
 			if (!core.config.ctzero.gravity) return false;
 			return dim == "y" && this.vlower != "pool" && !this.opts.position[1] &&
 				!(["poster", "screen", "stream", "portal", "body"].includes(this.opts.kind));
+		},
+		checkOver: function(dim, pos, radii) {
+			var bz = this.bounds;
+			if (!radii)
+				return pos[dim] > bz.min[dim] && pos[dim] < bz.max[dim];
+			return (pos[dim] + radii[dim]) > bz.min[dim]
+				&& (pos[dim] - radii[dim]) < bz.max[dim];
 		}
 	},
 	_PRS: ["position", "rotation", "scale"],
@@ -195,15 +202,10 @@ zero.core.Thing = CT.Class({
 		}
 	},
 	overlaps: function(pos, radii, checkY) {
-		var bz = this.bounds;
+		var bz = this.bounds, check = this._.checkOver;
 		if (!bz) return false;
-		var check = function(dim) {
-			if (!radii)
-				return pos[dim] > bz.min[dim] && pos[dim] < bz.max[dim];
-			return (pos[dim] + radii[dim]) > bz.min[dim]
-				&& (pos[dim] - radii[dim]) < bz.max[dim];
-		};
-		return check("x") && check("z") && (!checkY || check("y"));
+		return check("x", pos, radii) && check("z", pos, radii)
+			&& (!checkY || check("y", pos, radii));
 	},
 	getTop: function() {
 		return this.bounds.max.y;
