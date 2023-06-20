@@ -505,6 +505,10 @@ zero.core.Thing = CT.Class({
 			setter.set.apply(setter, oz[prop]);
 		});
 	},
+	modMat: function(modelMat) {
+		this.material.map = modelMat.map;
+		this.material.opacity = modelMat.opacity;
+	},
 	setGeometry: function(geometry, materials, json) {
 		var oz = this.opts, thiz = this, cfg = core.config.ctzero;
 		this.geojson = json;
