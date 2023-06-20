@@ -65,7 +65,7 @@ zero.core.Bit = CT.Class({
 			sphereGeometry: true
 		}, this.opts);
 		if (opts.ranges) {
-			for (var r of opts.ranges) {
+			for (var r in opts.ranges) {
 				var ro = opts.ranges[r];
 				opts[r] = (ro.base || 0) + CT.data.random(ro.variance, ro.isFloat);
 			}
