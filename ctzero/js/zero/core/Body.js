@@ -144,9 +144,19 @@ zero.core.Body = CT.Class({
 		else
 			(thring || this.placer)[property][dimension] = value;
 	},
+	holding: function(side, variety) {
+		var item = this.held[side];
+		return (item && variety) ? item[variety] : item;
+	},
 	_kicker: {lumbar: {x: -0.2}, ribs: {x: -0.5}, neck: {x: 2}},
 	_thruster: {lumbar: {x: 0.2}, ribs: {x: 0.5}, neck: {x: -2}},
 	_unthruster: {lumbar: {x: 0}, ribs: {x: 0}, neck: {x: 0}},
+	swing: function(side) {
+		if (this.holding(side, "smasher") && !this.torso.arms[side].swinging)
+			this.upthrust(side);
+		else
+			this.thrust(side);
+	},
 	thrust: function(side) {
 		this.torso.arms[side].thrust();
 		this.spine.setSprings(this._thruster);
@@ -156,9 +166,11 @@ zero.core.Body = CT.Class({
 		this.spine.setSprings(this._kicker);
 	},
 	unthrust: function(side) {
-		this.torso.arms[side].unthrust();
+		var arm = this.torso.arms[side],
+			sfx = arm.thrusting && this._onthrust && this._onthrust(side);
+		arm.unthrust();
 		this.spine.setSprings(this._unthruster);
-		this.person.sfx(this._onthrust && this._onthrust(side) || "whoosh");
+		this.person.sfx(sfx || "whoosh");
 	},
 	onthrust: function(cb) {
 		this._onthrust = cb; // just one...
