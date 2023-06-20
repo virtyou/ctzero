@@ -113,6 +113,7 @@ zero.core.Thing = CT.Class({
 		}
 	},
 	_PRS: ["position", "rotation", "scale"],
+	_matModz: ["map", "color", "opacity"],
 	_xyz: ["x", "y", "z"],
 	xyz: function(cb) {
 		this._xyz.forEach(cb);
@@ -506,8 +507,8 @@ zero.core.Thing = CT.Class({
 		});
 	},
 	modMat: function(modelMat) {
-		this.material.map = modelMat.map;
-		this.material.opacity = modelMat.opacity;
+		for (var k of this._matModz)
+			this.material[k] = modelMat[k];
 	},
 	setGeometry: function(geometry, materials, json) {
 		var oz = this.opts, thiz = this, cfg = core.config.ctzero;
