@@ -1,12 +1,48 @@
 zero.core.Sploder = CT.Class({
 	CLASSNAME: "zero.core.Sploder",
 	splobits: ["nuts", "bolts", "sparks", "smoke", "dust"],
+	flameburst: ["sparks", "smoke", "dust"],
 	confetties: ["confetti"],
 	sharts: ["shards"],
+	degraders: {
+		melt: [],
+		burn: [],
+	},
+	tickers: {
+		melt: function(thing) {
+			var ts = thing.scale();
+			ts.y -= 0.01;
+			ts.x += 0.01;
+			ts.z += 0.01;
+			return ts.y > 0;
+		},
+		burn: function(thing) {
+			var tm = thing.material;
+			tm.opacity -= 0.01;
+			return tm.opacity > 0;
+		}
+	},
 	tick: function(dts) {
 		for (var v of this.splobits)
 			this[v] && this[v].tick(dts);
 		this.confetti && this.confetti.tick(dts);
+		this.degrade();
+	},
+	_degrade: function(variety) {
+		var i, t, ticker = this.tickers[variety],
+			things = this.degraders[variety];
+		for (i = things.length - 1; i > -1; i--) {
+			t = things[i];
+			if (!ticker(t)) {
+				CT.data.remove(things, t);
+				this.log(t.name, "degraded");
+				zero.core.current.room.removeObject(t);
+			}
+		}
+	},
+	degrade: function() {
+		for (var d in this.degraders)
+			this._degrade(d);
 	},
 	_bang: function(pos, varieties) {
 		var oz = this.opts, v;
@@ -23,6 +59,14 @@ zero.core.Sploder = CT.Class({
 	shart: function(thing) {
 		this.shards.modMat(thing.material);
 		this._bang(thing.position(), this.sharts);
+		zero.core.current.room.removeObject(thing);
+	},
+	melt: function(thing) {
+		CT.data.append(this.degraders.melt, thing);
+	},
+	burn: function(thing) { // TODO: flames!
+		this._bang(thing.position(), this.flameburst);
+		CT.data.append(this.degraders.burn, thing);
 	},
 	pcfg: function(v) {
 		return {
