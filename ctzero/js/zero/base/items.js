@@ -2,6 +2,7 @@ var P2 = Math.PI / 2, P4 = P2 / 2, C4 = ["curve4", 3, 0.5, 3];
 
 zero.base.items = {
 	torch: {
+		variety: "flamer",
 		cylinderGeometry: true,
 		geomult: 60,
 		rotation: [P2, 0, 0],
