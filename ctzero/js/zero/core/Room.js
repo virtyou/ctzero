@@ -7,6 +7,11 @@ zero.core.Room = CT.Class({
 	_tickers: [],
 	_structural: ["obstacle", "floor", "wall", "ramp", "boulder", "stala"],
 	_bumpers: ["wall", "obstacle", "boulder", "stala"],
+	_interactives: {
+		brittle: ["boulder", "stala"],
+		frozen: ["boulder", "stala"],
+		flammable: ["wall"]
+	},
 	_moshAxes: ["slide", "weave"],
 	removables: function() {
 		return this.parts.concat(this.objects);
@@ -135,6 +140,25 @@ zero.core.Room = CT.Class({
 			if (obj.opts[prop] == kind && obj.overlaps(pos, radii, checkY))
 				return obj;
 		}
+	},
+	getInteractive: function(overlapper, feature) {
+		var k, t, brit, ovp = overlapper.position(), ovr = overlapper.radii;
+		for (k of this._interatives[feature]) {
+			for (t in this[k]) {
+				brit = this[k][t];
+				if (brit.opts[feature] && brit.overlaps(ovp, ovr, true))
+					return brit;
+			}
+		}
+	},
+	getBrittle: function(overlapper) {
+		return this.getInteractive(overlapper, "brittle");
+	},
+	getFrozen: function(overlapper) {
+		return this.getInteractive(overlapper, "frozen");
+	},
+	getFlammable: function(overlapper) {
+		return this.getInteractive(overlapper, "flammable");
 	},
 	getObject: function(pos, radii, checkY, kind, prop) {
 		var k, o, obj, obst;
