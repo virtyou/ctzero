@@ -2,6 +2,7 @@ zero.core.Sploder = CT.Class({
 	CLASSNAME: "zero.core.Sploder",
 	splobits: ["nuts", "bolts", "sparks", "smoke", "dust"],
 	confetties: ["confetti"],
+	sharts: ["shards"],
 	tick: function(dts) {
 		for (var v of this.splobits)
 			this[v] && this[v].tick(dts);
@@ -19,20 +20,24 @@ zero.core.Sploder = CT.Class({
 	splode: function(pos) {
 		this._bang(pos, this.splobits);
 	},
+	shart: function(thing) {
+		this.shards.modMat(thing.material);
+		this._bang(thing.position(), this.sharts);
+	},
 	pcfg: function(v) {
-		var pcfg = {
+		return {
 			name: v,
 			drip: false,
 			kind: "particles",
 			thing: "Particles"
 		};
-		return pcfg;
 	},
 	preassemble: function() {
 		var v, oz = this.opts, pz = oz.parts;
 		for (v of this.splobits)
 			oz[v] && pz.push(this.pcfg(v));
 		oz.confetti && pz.push(this.pcfg("confetti"));
+		oz.shards && pz.push(this.pcfg("shards"));
 	},
 	init: function(opts) {
 		this.opts = CT.merge(opts, {
@@ -41,6 +46,7 @@ zero.core.Sploder = CT.Class({
 			dust: 10,
 			smoke: 2,
 			sparks: 10,
+			shards: 10,
 			confetti: 30
 		}, this.opts);
 		zero.core.util.ontick(this.tick);
