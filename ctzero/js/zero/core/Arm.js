@@ -4,7 +4,7 @@ zero.core.Arm = CT.Class({
 		return this.opts.bonemap.arm;
 	},
 	move: function(opts) {
-		if (this.thrusting) return;
+		if (this.thrusting || this.swinging) return;
 		this.setSprings(opts.arm);
 		this.hand.move(opts.hand);
 	},
@@ -49,11 +49,11 @@ zero.core.Arm = CT.Class({
 	},
 	upthrust: function() {
 		this.setSprings(this._upthruster);
-		this.thrusting = true;
+		this.swinging = true;
 	},
 	unthrust: function() {
 		this.setSprings(this._unthruster);
-		this.thrusting = false;
+		this.swinging = this.thrusting = false;
 	},
 	poseRange: {
 		position: {
