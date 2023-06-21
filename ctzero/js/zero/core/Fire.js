@@ -31,6 +31,7 @@ zero.core.Fire = CT.Class({
 	},
 	assembled: function() {
 		this._.built();
+		this.quenched && this.hide();
 		this.opts.regTick && zero.core.current.room.regTicker(this);
 	},
 	preassemble: function() {
