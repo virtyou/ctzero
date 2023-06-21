@@ -152,13 +152,16 @@ zero.core.Body = CT.Class({
 	_thruster: {lumbar: {x: 0.2}, ribs: {x: 0.5}, neck: {x: -2}},
 	_unthruster: {lumbar: {x: 0}, ribs: {x: 0}, neck: {x: 0}},
 	swing: function(side) {
-		if (this.holding(side, "smasher") && !this.torso.arms[side].swinging)
-			this.upthrust(side);
-		else
-			this.thrust(side);
+		if (!this.holding(side, "smasher"))
+			return this.thrust(side);
+		this[this.torso.arms[side].swinging ? "downthrust" : "upthrust"](side);
 	},
 	thrust: function(side) {
 		this.torso.arms[side].thrust();
+		this.spine.setSprings(this._thruster);
+	},
+	downthrust: function(side) {
+		this.torso.arms[side].downthrust();
 		this.spine.setSprings(this._thruster);
 	},
 	upthrust: function(side) {
@@ -167,7 +170,7 @@ zero.core.Body = CT.Class({
 	},
 	unthrust: function(side) {
 		var arm = this.torso.arms[side],
-			sfx = arm.thrusting && this._onthrust && this._onthrust(side);
+			sfx = this._onthrust && this._onthrust(side);
 		arm.unthrust();
 		this.spine.setSprings(this._unthruster);
 		this.person.sfx(sfx || "whoosh");
