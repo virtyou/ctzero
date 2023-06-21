@@ -7,6 +7,11 @@ zero.core.Room = CT.Class({
 	_tickers: [],
 	_structural: ["obstacle", "floor", "wall", "ramp", "boulder", "stala"],
 	_bumpers: ["wall", "obstacle", "boulder", "stala"],
+	_interactives: {
+		brittle: ["boulder", "stala"],
+		frozen: ["boulder", "stala"],
+		flammable: ["wall"]
+	},
 	_moshAxes: ["slide", "weave"],
 	removables: function() {
 		return this.parts.concat(this.objects);
@@ -136,6 +141,25 @@ zero.core.Room = CT.Class({
 				return obj;
 		}
 	},
+	getInteractive: function(overlapper, feature) {
+		var k, t, brit, ovp = overlapper.position(null, true), ovr = overlapper.radii;
+		for (k of this._interactives[feature]) {
+			for (t in this[k]) {
+				brit = this[k][t];
+				if (brit.opts[feature] && brit.overlaps(ovp, ovr, true))
+					return brit;
+			}
+		}
+	},
+	getBrittle: function(overlapper) {
+		return this.getInteractive(overlapper, "brittle");
+	},
+	getFrozen: function(overlapper) {
+		return this.getInteractive(overlapper, "frozen");
+	},
+	getFlammable: function(overlapper) {
+		return this.getInteractive(overlapper, "flammable");
+	},
 	getObject: function(pos, radii, checkY, kind, prop) {
 		var k, o, obj, obst;
 		for (k of this._bumpers) {
@@ -161,12 +185,12 @@ zero.core.Room = CT.Class({
 					}
 				}
 			}
-		}, i, k, flo, oz = this.opts;
+		}, n, k, flo;
 		test(this.getSolid(pos, radii, false, true));
 		for (k of this._structural) {
-			if (oz[k]) {
-				for (i = oz[k].parts.length - 1; i > -1; i--) {
-					flo = this[k + i];
+			if (this[k]) {
+				for (n in this[k]) {
+					flo = this[n];
 					flo.overlaps(pos, radii) && test(flo);
 				}
 			}

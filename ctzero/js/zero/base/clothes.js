@@ -1,4 +1,4 @@
-var P2 = Math.PI / 2, P4 = P2 / 2, C4 = ["curve4", 3, 0.5, 3];
+var P2 = Math.PI / 2;
 
 zero.base.clothes = {
 	pelvis: {},
@@ -479,63 +479,19 @@ zero.base.clothes.head = { // hats
 	}
 };
 
-zero.base.clothes.held = {
-	torch: {
-		cylinderGeometry: true,
-		geomult: 60,
-		rotation: [P2, 0, 0],
-		position: [0, -8, 25],
-		material: {
-			color: "#cc5555"
-		},
-		parts: [{
-			thing: "Fire",
-			regTick: true,
-			faceUp: true,
-			position: [0, 30, 0],
-			scale: [0.5, 0.5, 0.5]
-		}]
-	},
-	"lacrosse stick": {
-		cylinderGeometry: true,
-		geomult: 60,
-		rotation: [P2, 0, 0],
-		position: [0, -8, 25],
-		variety: "grabber",
-		material: {
-			color: "#0000ff"
-		},
-		parts: [{
-			name: "perch",
-			position: [0, 30, 0],
-			parts: [{
-				tubeGeometry: C4,
-				rotation: [0, -P2, 0]
-			}, {
-				tubeGeometry: C4,
-				rotation: [0, -P4, 0]
-			}, {
-				tubeGeometry: C4,
-				rotation: [0, 0, 0]
-			}, {
-				tubeGeometry: C4,
-				rotation: [0, P4, 0]
-			}, {
-				tubeGeometry: C4,
-				rotation: [0, P2, 0]
-			}]
-		}]
-	}
-};
+zero.base.clothes.held = zero.base.items; // for backwards compatibility
 
 zero.base.clothes.procedurals = function(kind, objStyle, fakeKeys) {
 	var isheld = kind == "held";
 	if (!isheld && !kind.startsWith("worn_"))
 		return objStyle ? {} : []; // TODO: move held somewhere else?
-	var bpart = kind.slice(5) || kind,
-		gz = zero.base.clothes[bpart], robj = {},
-		tmod = "zero.base.clothes." + bpart + ".",
-		thing = isheld ? "Thing" : "Garment";
+	var zb = zero.base, bpart = kind.slice(5) || kind,
+		gz = isheld ? zb.items : zb.clothes[bpart], robj = {},
+		tmod = "zero.base.", thing = isheld ? "Item" : "Garment";
+	if (isheld)
+		tmod += "clothes." + bpart + ".";
+	else
+		tmod += "items.";
 	Object.keys(gz).forEach(function(name) {
 		robj[name] = {
 			name: name,

@@ -41,6 +41,37 @@ zero.base.particles = {
 			transparent: true
 		}
 	},
+	shards: {
+		count: 10,
+		size: 3,
+//		sizeVariance: 2,
+		velocity: [0, 200, 0],
+		acceleration: [0, -500, 0],
+		velVariance: [100, 0, 100],
+		floorbound: true,
+		refloor: true,
+		sharemat: true,
+		bitshape: {
+			sphereGeometry: true,
+			spin: true,
+			ranges: {
+				sphereSegs: {
+					base: 3,
+					variance: 5
+				},
+				geoThetaLength: {
+					isFloat: true,
+					variance: Math.PI / 2
+				}
+			}
+		},
+		pmat: {
+			opacity: 0,
+//			color: 0x545761,
+			transparent: true,
+			side: THREE.DoubleSide
+		}
+	},
 	nuts: {
 		count: 10,
 		size: 3,
@@ -154,7 +185,7 @@ zero.base.particles = {
 			alphaTest: 0.1,
 			color: 0x888888,
 			transparent: true,
-			side: THREE.BackSide
+			side: THREE.DoubleSide
 		}
 	},
 	fog: {

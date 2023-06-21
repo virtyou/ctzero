@@ -460,7 +460,7 @@ zero.core.Fauna.Menagerie = CT.Class({
 		this.yelper = setTimeout(this.yelp, 10000 + CT.data.random(10000));
 	},
 	pounce: function(hunter, prey) {
-		this.log("POUNCE!", hunter.name, prey.name);
+		this.silent || this.log("POUNCE!", hunter.name, prey.name);
 		hunter.pounce(prey);
 		prey.scurry();
 	},
@@ -525,6 +525,10 @@ zero.core.Fauna.Menagerie = CT.Class({
 		kinds.forEach(kind => this.each(kind, setit));
 	},
 	init: function(opts) {
+		this.opts = opts = CT.merge(opts, {
+			silent: true
+		}, this.opts);
+		this.silent = opts.silent;
 		if (zero.core.Fauna.audio) // set by ctone...
 			this.yelper = setTimeout(this.yelp, 3000 + CT.data.random(10000));
 		this.hunter = setInterval(this.hunt, 3000);

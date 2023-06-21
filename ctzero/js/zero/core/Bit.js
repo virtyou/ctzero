@@ -64,6 +64,12 @@ zero.core.Bit = CT.Class({
 		this.opts = opts = CT.merge(opts, core.config.ctzero.env[ename], opts.shape || {
 			sphereGeometry: true
 		}, this.opts);
+		if (opts.ranges) {
+			for (var r in opts.ranges) {
+				var ro = opts.ranges[r];
+				opts[r] = (ro.base || 0) + CT.data.random(ro.variance, ro.isFloat);
+			}
+		}
 		var vel = opts.velocity, wobz = this.wobblers = {},
 			vri, vv = opts.velVariance, pv = opts.posVariance;
 		opts.variance && this._xyz.forEach(function(d, i) {
@@ -85,9 +91,9 @@ zero.core.Bit = CT.Class({
 		}
 		if (opts.spin) {
 			this.spin = {
-				x: CT.data.random(0.5) - 0.25,
-				y: CT.data.random(0.5) - 0.25,
-				z: CT.data.random(0.5) - 0.25
+				x: CT.data.random(0.25) - 0.125,
+				y: CT.data.random(0.25) - 0.125,
+				z: CT.data.random(0.25) - 0.125
 			};
 		}
 		this._size = opts.size || 1;

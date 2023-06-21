@@ -144,17 +144,36 @@ zero.core.Body = CT.Class({
 		else
 			(thring || this.placer)[property][dimension] = value;
 	},
+	holding: function(side, variety) {
+		var item = this.held[side];
+		return (item && variety) ? item[variety] : item;
+	},
 	_kicker: {lumbar: {x: -0.2}, ribs: {x: -0.5}, neck: {x: 2}},
 	_thruster: {lumbar: {x: 0.2}, ribs: {x: 0.5}, neck: {x: -2}},
 	_unthruster: {lumbar: {x: 0}, ribs: {x: 0}, neck: {x: 0}},
+	swing: function(side) {
+		if (!this.holding(side, "smasher"))
+			return this.thrust(side);
+		this[this.torso.arms[side].swinging ? "downthrust" : "upthrust"](side);
+	},
 	thrust: function(side) {
 		this.torso.arms[side].thrust();
 		this.spine.setSprings(this._thruster);
 	},
+	downthrust: function(side) {
+		this.torso.arms[side].downthrust();
+		this.spine.setSprings(this._thruster);
+	},
+	upthrust: function(side) {
+		this.torso.arms[side].upthrust();
+		this.spine.setSprings(this._kicker);
+	},
 	unthrust: function(side) {
-		this.torso.arms[side].unthrust();
+		var arm = this.torso.arms[side],
+			sfx = this._onthrust && this._onthrust(side);
+		arm.unthrust();
 		this.spine.setSprings(this._unthruster);
-		this.person.sfx(this._onthrust && this._onthrust(side) || "whoosh");
+		this.person.sfx(sfx || "whoosh");
 	},
 	onthrust: function(cb) {
 		this._onthrust = cb; // just one...
@@ -186,7 +205,8 @@ zero.core.Body = CT.Class({
 	},
 	equipper: function(g, held) { // if held, g is side.....
 		var az = this.torso.arms, bz = this.bones,
-			bm = this.bmap, gmap = this.gearmap, gars = this.garments;
+			bm = this.bmap, gmap = this.gearmap, gthing,
+			gars = this.garments, itemz = this.items, heldz = this.held;
 		return function(gdata) {
 			if (!("bone" in gdata)) {
 				if (held)
@@ -194,13 +214,15 @@ zero.core.Body = CT.Class({
 				else // side? sub? part?
 					gdata.bone = zero.core.util.gear2bone(gdata.kind);
 			}
-			gmap[gdata.key] = zero.core.util.thing(CT.merge(gdata, {
+			gthing = gmap[gdata.key] = zero.core.util.thing(CT.merge(gdata, {
 				bones: bz,
 				onbuild: held && az[g].hand.grasp,
 				onremove: held && az[g].hand.release
 			}));
 			if (gdata.thing == "Garment")
-				gars[gdata.name] = gmap[gdata.key];
+				gars[gdata.name] = gthing;
+			else if (gdata.thing == "Item")
+				heldz[g] = itemz[gdata.name] = gthing;
 		};
 	},
 	gear: function(gear, held) {
@@ -219,11 +241,17 @@ zero.core.Body = CT.Class({
 		}
 	},
 	ungear: function(gkey, side, sub) {
-		var k, kz = gkey ? [gkey] : Object.keys(this.gearmap);
+		var g, gt, k, kz = gkey ? [gkey] : Object.keys(this.gearmap);
 		for (k of kz) {
-			this.gearmap[k].remove();
-			if (this.gearmap[k].opts.thing == "Garment")
+			g = this.gearmap[k];
+			gt = g.opts.thing;
+			g.remove();
+			if (gt == "Garment")
 				delete this.garments[k];
+			else if (gt == "Item") {
+				delete this.items[k];
+				delete this.held[side];
+			}
 			delete this.gearmap[k];
 		}
 	},
@@ -398,6 +426,8 @@ zero.core.Body = CT.Class({
 //		opts.frustumCulled = false; // TODO: figure out real problem and fix!!!
 		this.gearmap = {};
 		this.garments = {};
+		this.items = {};
+		this.held = {};
 		this._boundFixer = setTimeout(this.fixBounds, 5000);
 	}
 }, zero.core.Thing);
