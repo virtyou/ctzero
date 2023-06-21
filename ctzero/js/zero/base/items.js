@@ -12,10 +12,18 @@ zero.base.items = {
 		},
 		parts: [{
 			thing: "Fire",
+			name: "fire",
 			regTick: true,
 			faceUp: true,
 			position: [0, 30, 0],
 			scale: [0.5, 0.5, 0.5]
+		}, {
+			name: "head",
+			cylinderGeometry: 3,
+			position: [0, 30, 0],
+			material: {
+				color: "#36454f"
+			}
 		}]
 	},
 	mallet: {
