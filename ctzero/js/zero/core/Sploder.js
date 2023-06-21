@@ -26,6 +26,7 @@ zero.core.Sploder = CT.Class({
 		for (var v of this.splobits)
 			this[v] && this[v].tick(dts);
 		this.confetti && this.confetti.tick(dts);
+		this.shards && this.shards.tick(dts);
 		this.degrade();
 	},
 	_degrade: function(variety) {
