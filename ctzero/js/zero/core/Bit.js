@@ -91,9 +91,9 @@ zero.core.Bit = CT.Class({
 		}
 		if (opts.spin) {
 			this.spin = {
-				x: CT.data.random(0.5) - 0.25,
-				y: CT.data.random(0.5) - 0.25,
-				z: CT.data.random(0.5) - 0.25
+				x: CT.data.random(0.25) - 0.125,
+				y: CT.data.random(0.25) - 0.125,
+				z: CT.data.random(0.25) - 0.125
 			};
 		}
 		this._size = opts.size || 1;
