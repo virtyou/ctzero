@@ -22,6 +22,7 @@ zero.core.Item = CT.Class({
 	ignite: function() {
 		var other = zero.core.current.room.within(this.position(null, true),
 			this.radii, true, "plasma", "state"), f = this.fire;
+		if (!other) return;
 		if (f.quenched) // ignite self
 			other.quenched || f.ignite();
 		else // ignite others
