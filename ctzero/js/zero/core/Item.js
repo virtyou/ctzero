@@ -27,6 +27,14 @@ zero.core.Item = CT.Class({
 		else // ignite others
 			other.quenched && other.ignite();
 	},
+	touch: function() {
+		this.smasher && this.smash();
+		if (this.flamer) {
+			this.melt();
+			this.burn();
+			this.ignite();
+		}
+	},
 	init: function(opts) {
 		this.opts = opts = CT.merge(zero.base.items[this.opts.name], opts, {
 			variety: "knocker"

@@ -92,12 +92,7 @@ zero.core.knocker = {
 		var zc = zero.core, k = zc.knocker, striker = zc.current.person.held(side, true);
 		if (striker.sticker)
 			return k._.throw(striker);
-		striker.smasher && striker.smash();
-		if (striker.flamer) {
-			striker.melt();
-			striker.burn();
-			striker.ignite();
-		}
+		striker.touch();
 		return k.hit(striker, preykinds, prey => onknock(prey, side),
 			knockcfg, null, prey => k.strike(prey, striker), true);
 	}
