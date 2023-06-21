@@ -96,6 +96,7 @@ zero.core.knocker = {
 		if (striker.flamer) {
 			striker.melt();
 			striker.burn();
+			striker.ignite();
 		}
 		return k.hit(striker, preykinds, prey => onknock(prey, side),
 			knockcfg, null, prey => k.strike(prey, striker), true);
