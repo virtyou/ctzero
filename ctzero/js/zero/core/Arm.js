@@ -50,7 +50,7 @@ zero.core.Arm = CT.Class({
 	},
 	downthrust: function() {
 		this.setSprings(this._downthruster);
-		this.swinging = true;
+		this.thrusting = true;
 	},
 	upthrust: function() {
 		this.setSprings(this._upthruster);
