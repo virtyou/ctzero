@@ -178,7 +178,7 @@ zero.base.particles = {
 		velocity: [0, 8, 0],
 		velVariance: [4, 0, 4],
 		dissolve: 0.1,
-		grow: 0.05,
+		grow: 0.2,
 		drip: true,
 		pmat: {
 			opacity: 0,
