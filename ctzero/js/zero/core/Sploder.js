@@ -13,7 +13,8 @@ zero.core.Sploder = CT.Class({
 			var ts = thing.scale();
 			ts.y -= 0.01;
 			ts.x += 0.01;
-			ts.z += 0.01;
+			ts.z += 0.01; // TODO: calc pos shift...
+			thing.adjust("position", "y", -1, true);
 			return ts.y > 0;
 		},
 		burn: function(thing) {
