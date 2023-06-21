@@ -19,7 +19,7 @@ zero.core.Particles = CT.Class({
 		while (this._staleTip()) {
 			retired = this.active.shift();
 			retired.material.opacity = 0;
-			retired.position([0, 0, 0]);
+			retired.resetPosition();
 			this.pool.push(retired);
 		}
 	},
@@ -98,6 +98,7 @@ zero.core.Particles = CT.Class({
 				variance: oz.variance,
 				velocity: oz.velocity,
 				velVariance: oz.velVariance,
+				posVariance: oz.posVariance,
 				acceleration: oz.acceleration,
 				scale: [size, size, size],
 				size: size,
