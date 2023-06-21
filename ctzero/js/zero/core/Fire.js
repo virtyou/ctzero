@@ -5,7 +5,7 @@ zero.core.Fire = CT.Class({
 	vmult: 0.1,
 	tick: function(dts) {
 		var zcu = zero.core.util, oz = this.opts, variety;
-		if (!this.isReady() || zcu.shouldSkip()) return;
+		if (this.quenched || !this.isReady() || zcu.shouldSkip()) return;
 		if (!this.glow || zero.core.camera.visible(this.glow))
 			for (variety of this.tickerz)
 				this[variety] && this[variety].tick(dts);
@@ -20,6 +20,14 @@ zero.core.Fire = CT.Class({
 		this._audio && this._audio.pause();
 		clearTimeout(this.flickerer);
 		delete this._audio;
+	},
+	ignite: function() {
+		this.quenched = false;
+		this.show();
+	},
+	quench: function() {
+		this.quenched = true;
+		this.hide();
 	},
 	assembled: function() {
 		this._.built();
