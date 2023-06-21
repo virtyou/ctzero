@@ -4,11 +4,11 @@ zero.core.Sploder = CT.Class({
 	flameburst: ["sparks", "smoke", "dust"],
 	confetties: ["confetti"],
 	sharts: ["shards"],
-	degraders: {
+	degrading: {
 		melt: [],
 		burn: [],
 	},
-	tickers: {
+	degraders: {
 		melt: function(thing) {
 			var ts = thing.scale();
 			ts.y -= 0.01;
@@ -34,8 +34,8 @@ zero.core.Sploder = CT.Class({
 		this.degrade();
 	},
 	_degrade: function(variety) {
-		var i, t, ticker = this.tickers[variety],
-			things = this.degraders[variety];
+		var i, t, ticker = this.degraders[variety],
+			things = this.degrading[variety];
 		for (i = things.length - 1; i > -1; i--) {
 			t = things[i];
 			if (!ticker(t)) {
@@ -46,7 +46,7 @@ zero.core.Sploder = CT.Class({
 		}
 	},
 	degrade: function() {
-		for (var d in this.degraders)
+		for (var d in this.degrading)
 			this._degrade(d);
 	},
 	_bang: function(pos, varieties) {
@@ -67,13 +67,13 @@ zero.core.Sploder = CT.Class({
 		zero.core.current.room.removeObject(thing);
 	},
 	melt: function(thing) {
-		CT.data.append(this.degraders.melt, thing);
+		CT.data.append(this.degrading.melt, thing);
 	},
 	burn: function(thing) {
 		var pos = thing.position();
 		this.ignite(pos);
 		this._bang(pos, this.flameburst);
-		CT.data.append(this.degraders.burn, thing);
+		CT.data.append(this.degrading.burn, thing);
 	},
 	ignite: function(pos) {
 		if (!this.fire) return;
