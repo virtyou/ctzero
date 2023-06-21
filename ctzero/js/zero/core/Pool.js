@@ -29,6 +29,7 @@ zero.core.Pool = CT.Class({
 		}
 		this.bubbles && this.bubbles.tick(dts);
 		this.smoke && this.smoke.tick(dts);
+		this.fog && this.fog.tick(dts);
 		this.glow && this.glow.setIntensity(0.6 + zero.core.trig.seg(300, 0.5));
 		this.tickPos();
 	},
@@ -119,25 +120,30 @@ zero.core.Pool = CT.Class({
 			rotation: [Math.PI / 2, 0, 0],
 			subclass: zero.core.Fauna.Menagerie
 		});
-		if (oz.lava) { // TODO: steam, smoke
-			partz.push({
-				name: "glow",
-				thing: "Light",
-				kind: "lighting",
-				variety: "point",
-				color: 0xff0000
-			});
-			partz.push({
-				name: "smoke",
-				kind: "particles",
-				thing: "Particles",
-				size: 30,
-				count: 8,
-				velVariance: [10, 2, 10],
-				posVariance: [200, 0, 200],
-				rotation: [Math.PI / 2, 0, 0]
-			});
-		}
+		oz.glow && partz.push({
+			name: "glow",
+			thing: "Light",
+			kind: "lighting",
+			variety: "point",
+			color: oz.glow
+		});
+		oz.smoke && partz.push({
+			name: "smoke",
+			kind: "particles",
+			thing: "Particles",
+			size: 30,
+			count: 8,
+			velVariance: [10, 2, 10],
+			posVariance: [200, 0, 200],
+			rotation: [Math.PI / 2, 0, 0]
+		});
+		oz.fog && partz.push({
+			name: "fog",
+			kind: "particles",
+			thing: "Particles",
+			count: 3,
+			rotation: [Math.PI / 2, 0, 0]
+		});
 	},
 	ambience: function(sound) { // within/without
 		if (!this._audios) return;
@@ -155,7 +161,10 @@ zero.core.Pool = CT.Class({
 		if (opts.lava) {
 			opts = CT.merge(opts, {
 				amplitude: 8,
+				fog: true,
+				smoke: true,
 				watermat: false,
+				glow: 0xff0000,
 				plane: [800, 800, 8, 16],
 				vstrip: "templates.one.vstrip.inferno"
 			});
@@ -169,6 +178,9 @@ zero.core.Pool = CT.Class({
 			bubbles: true,
 			watermat: true,
 			creatures: true,
+			fog: false,
+			smoke: false,
+			glow: false,
 			plane: [800, 800, 22, 44],
 			cam: [1, 1000000, 512],
 			camPos: {
