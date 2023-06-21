@@ -17,6 +17,7 @@ zero.core.Thing = CT.Class({
 			this.opts.scroll && this.scroll();
 			this.opts.shift && this.shift();
 			this.opts.vstrip && this.vsplay();
+			this.opts.frozen && this.freeze();
 			if (this.opts.thringopts)
 				this.posRotScale(this.opts.thringopts, this.thring);
 			if (this.opts.autoplay)
@@ -120,7 +121,7 @@ zero.core.Thing = CT.Class({
 		}
 	},
 	_PRS: ["position", "rotation", "scale"],
-	_matModz: ["map", "color", "opacity"],
+	_matModz: ["map", "color", "shininess", "opacity", "transparent"],
 	_xyz: ["x", "y", "z"],
 	xyz: function(cb) {
 		this._xyz.forEach(cb);
@@ -266,6 +267,13 @@ zero.core.Thing = CT.Class({
 			cb();
 		else
 			this._.postboundz.push(cb);
+	},
+	freeze: function() {
+		var mat = this.material;
+		mat.color.r = mat.color.g = 0.5;
+		mat.shininess = 300;
+		mat.opacity = 0.6;
+		mat.transparent = true;
 	},
 	playSong: function(song, onPlaySong) {
 		if (!this._audio) {
