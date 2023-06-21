@@ -61,7 +61,7 @@ zero.base.particles = {
 				},
 				geoThetaLength: {
 					isFloat: true,
-					variance: 2 * Math.PI
+					variance: Math.PI / 2
 				}
 			}
 		},
