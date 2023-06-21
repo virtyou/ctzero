@@ -161,8 +161,11 @@ zero.core.Body = CT.Class({
 		this.spine.setSprings(this._thruster);
 	},
 	downthrust: function(side) {
-		this.torso.arms[side].downthrust();
+		var arm = this.torso.arms[side];
+		if (arm.thrusting) return;
+		arm.downthrust();
 		this.spine.setSprings(this._thruster);
+		setTimeout(() => this.unthrust(side), 400);
 	},
 	upthrust: function(side) {
 		this.torso.arms[side].upthrust();
