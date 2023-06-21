@@ -150,8 +150,10 @@ zero.core.Fire = CT.Class({
 			glow: true,
 			light: true,
 			moths: true,
-			flicker: true
+			flicker: true,
+			quenched: false
 		}, this.opts);
+		this.quenched = opts.quenched;
 		if (opts.light) {
 			this.flicker = zero.core.trig.segs(60, 0.05);
 			this.foff = CT.data.random(60);
