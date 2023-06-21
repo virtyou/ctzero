@@ -59,6 +59,17 @@ zero.core.Bit = CT.Class({
 			this.limits.max[1] += diff;
 		}
 	},
+	resetPosition: function(base, skipUpdate) {
+		var pv = this.opts.posVariance;
+		base = base || [0, 0, 0];
+		if (pv) {
+			base = base.map(function(p, i) {
+				return p + Math.random() * 2 * pv[i] - pv[i];
+			});
+		}
+		skipUpdate || this.position(base);
+		return base;
+	},
 	init: function(opts) {
 		var ename = opts.manager ? (opts.manager + "_bit") : opts.name;
 		this.opts = opts = CT.merge(opts, core.config.ctzero.env[ename], opts.shape || {
@@ -84,11 +95,8 @@ zero.core.Bit = CT.Class({
 		} else if (vel && !opts.acceleration && !Object.keys(wobz).length)
 			if (!vel[0] && !vel[1] && !vel[2])
 				opts.velocity = null;
-		if (pv) {
-			opts.position = opts.position.map(function(p, i) {
-				return p + Math.random() * 2 * pv[i] - pv[i];
-			});
-		}
+		if (pv)
+			opts.position = this.resetPosition(opts.position, true);
 		if (opts.spin) {
 			this.spin = {
 				x: CT.data.random(0.25) - 0.125,
