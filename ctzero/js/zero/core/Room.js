@@ -142,7 +142,7 @@ zero.core.Room = CT.Class({
 		}
 	},
 	getInteractive: function(overlapper, feature) {
-		var k, t, brit, ovp = overlapper.position(), ovr = overlapper.radii;
+		var k, t, brit, ovp = overlapper.position(null, true), ovr = overlapper.radii;
 		for (k of this._interactives[feature]) {
 			for (t in this[k]) {
 				brit = this[k][t];
@@ -185,12 +185,12 @@ zero.core.Room = CT.Class({
 					}
 				}
 			}
-		}, i, k, flo, oz = this.opts;
+		}, n, k, flo;
 		test(this.getSolid(pos, radii, false, true));
 		for (k of this._structural) {
-			if (oz[k]) {
-				for (i = oz[k].parts.length - 1; i > -1; i--) {
-					flo = this[k + i];
+			if (this[k]) {
+				for (n in this[k]) {
+					flo = this[n];
 					flo.overlaps(pos, radii) && test(flo);
 				}
 			}
