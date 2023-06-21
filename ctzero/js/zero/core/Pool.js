@@ -28,6 +28,7 @@ zero.core.Pool = CT.Class({
 			this.cam.update(mainCam.get("renderer"), mainCam.scene);
 		}
 		this.bubbles && this.bubbles.tick(dts);
+		this.smoke && this.smoke.tick(dts);
 		this.glow && this.glow.setIntensity(0.6 + zero.core.trig.seg(300, 0.5));
 		this.tickPos();
 	},
@@ -118,13 +119,25 @@ zero.core.Pool = CT.Class({
 			rotation: [Math.PI / 2, 0, 0],
 			subclass: zero.core.Fauna.Menagerie
 		});
-		oz.lava && partz.push({
-			name: "glow",
-			thing: "Light",
-			kind: "lighting",
-			variety: "point",
-			color: 0xff0000
-		});
+		if (oz.lava) { // TODO: steam, smoke
+			partz.push({
+				name: "glow",
+				thing: "Light",
+				kind: "lighting",
+				variety: "point",
+				color: 0xff0000
+			});
+			partz.push({
+				name: "smoke",
+				kind: "particles",
+				thing: "Particles",
+				size: 30,
+				count: 8,
+				velVariance: [10, 2, 10],
+				posVariance: [200, 0, 200],
+				rotation: [Math.PI / 2, 0, 0]
+			});
+		}
 	},
 	ambience: function(sound) { // within/without
 		if (!this._audios) return;
