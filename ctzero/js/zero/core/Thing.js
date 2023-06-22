@@ -160,14 +160,17 @@ zero.core.Thing = CT.Class({
 			this.springs.y.target = val;
 	},
 	setPositioners: function(xyz, unbound, snap) {
-		var _xyz = this._xyz, sz = this.springs, s;
+		var _xyz = this._xyz, sz = this.springs, s, p = this.position();
 		zero.core.util.xyz.forEach(function(dim, i) {
 			s = sz[_xyz[i]];
-			s.target = xyz[dim];
+			if (s) {
+				s.target = xyz[dim];
+				if (snap)
+					s.value = s.target;
+			} else
+				p[dim] = xyz[dim];
 			if (unbound)
 				delete s.bounds;
-			if (snap)
-				s.value = s.target;
 		});
 	},
 	tickPos: function() {
