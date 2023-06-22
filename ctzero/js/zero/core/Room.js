@@ -142,11 +142,11 @@ zero.core.Room = CT.Class({
 		}
 	},
 	getInteractive: function(overlapper, feature) {
-		var k, t, brit, ovp = overlapper.position(null, true), ovr = overlapper.radii;
+		var k, t, brit, touching = zero.core.util.touching;
 		for (k of this._interactives[feature]) {
 			for (t in this[k]) {
 				brit = this[k][t];
-				if (brit.opts[feature] && brit.overlaps(ovp, ovr, true))
+				if (brit.opts[feature] && touching(overlapper, brit, 50, false, true))
 					return brit;
 			}
 		}
