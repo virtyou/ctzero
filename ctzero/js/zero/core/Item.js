@@ -14,10 +14,27 @@ zero.core.Item = CT.Class({
 		this._wreck(zero.core.current.room.getBrittle(this), "shart");
 	},
 	melt: function() {
-		this._wreck(zero.core.current.room.getFrozen(this), "melt");
+		this.fire.quenched || this._wreck(zero.core.current.room.getFrozen(this), "melt");
 	},
 	burn: function() {
-		this._wreck(zero.core.current.room.getFlammable(this), "burn");
+		this.fire.quenched || this._wreck(zero.core.current.room.getFlammable(this), "burn");
+	},
+	ignite: function() {
+		var other = zero.core.current.room.within(this.position(null, true),
+			this.radii, true, "plasma", "state"), f = this.fire;
+		if (!other) return;
+		if (f.quenched) // ignite self
+			other.quenched || f.ignite();
+		else // ignite others
+			other.quenched && other.ignite();
+	},
+	touch: function() {
+		this.smasher && this.smash();
+		if (this.flamer) {
+			this.melt();
+			this.burn();
+			this.ignite();
+		}
 	},
 	init: function(opts) {
 		this.opts = opts = CT.merge(zero.base.items[this.opts.name], opts, {

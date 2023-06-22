@@ -4,22 +4,26 @@ zero.core.Sploder = CT.Class({
 	flameburst: ["sparks", "smoke", "dust"],
 	confetties: ["confetti"],
 	sharts: ["shards"],
-	degraders: {
+	degrading: {
 		melt: [],
 		burn: [],
 	},
-	tickers: {
+	degraders: {
 		melt: function(thing) {
 			var ts = thing.scale();
 			ts.y -= 0.01;
 			ts.x += 0.01;
-			ts.z += 0.01;
+			ts.z += 0.01; // TODO: calc pos shift...
+			thing.adjust("position", "y", -1, true);
 			return ts.y > 0;
 		},
 		burn: function(thing) {
-			var tm = thing.material;
+			var tm = thing.material, burning;
 			tm.opacity -= 0.01;
-			return tm.opacity > 0;
+			burning = tm.opacity > 0;
+			if (this.fire && !burning)
+				this.fire.quench();
+			return burning;
 		}
 	},
 	tick: function(dts) {
@@ -27,11 +31,12 @@ zero.core.Sploder = CT.Class({
 			this[v] && this[v].tick(dts);
 		this.confetti && this.confetti.tick(dts);
 		this.shards && this.shards.tick(dts);
+		this.fire && this.fire.tick(dts);
 		this.degrade();
 	},
 	_degrade: function(variety) {
-		var i, t, ticker = this.tickers[variety],
-			things = this.degraders[variety];
+		var i, t, ticker = this.degraders[variety],
+			things = this.degrading[variety];
 		for (i = things.length - 1; i > -1; i--) {
 			t = things[i];
 			if (!ticker(t)) {
@@ -42,7 +47,7 @@ zero.core.Sploder = CT.Class({
 		}
 	},
 	degrade: function() {
-		for (var d in this.degraders)
+		for (var d in this.degrading)
 			this._degrade(d);
 	},
 	_bang: function(pos, varieties) {
@@ -63,11 +68,18 @@ zero.core.Sploder = CT.Class({
 		zero.core.current.room.removeObject(thing);
 	},
 	melt: function(thing) {
-		CT.data.append(this.degraders.melt, thing);
+		CT.data.append(this.degrading.melt, thing);
 	},
-	burn: function(thing) { // TODO: flames!
-		this._bang(thing.position(), this.flameburst);
-		CT.data.append(this.degraders.burn, thing);
+	burn: function(thing) {
+		var pos = thing.position();
+		this.ignite(pos);
+		this._bang(pos, this.flameburst);
+		CT.data.append(this.degrading.burn, thing);
+	},
+	ignite: function(pos) {
+		if (!this.fire) return;
+		this.fire.setPositioners(pos, false, true);
+		this.fire.ignite();
 	},
 	pcfg: function(v) {
 		return {
@@ -83,6 +95,11 @@ zero.core.Sploder = CT.Class({
 			oz[v] && pz.push(this.pcfg(v));
 		oz.confetti && pz.push(this.pcfg("confetti"));
 		oz.shards && pz.push(this.pcfg("shards"));
+		oz.fire && pz.push({
+			name: "fire",
+			thing: "Fire",
+			quenched: true
+		});
 	},
 	init: function(opts) {
 		this.opts = CT.merge(opts, {
@@ -92,7 +109,8 @@ zero.core.Sploder = CT.Class({
 			smoke: 2,
 			sparks: 10,
 			shards: 10,
-			confetti: 30
+			confetti: 30,
+			fire: true
 		}, this.opts);
 		zero.core.util.ontick(this.tick);
 	}

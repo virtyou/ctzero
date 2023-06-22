@@ -25,6 +25,19 @@ zero.core.Fauna = CT.Class({
 		delete this.direction;
 		this.hurry(20);
 	},
+	smash: function() {
+		this.smashed = true;
+		this._origsy = this.scale().y;
+		this.adjust("scale", "y", 0.1);
+		this.adjust("position", "y", -this.radii.y, true);
+		setTimeout(this.unsmash, 2000);
+	},
+	unsmash: function() {
+		this.smashed = false;
+		this.unbob();
+		if (this.scale().y == 0.1)
+			this.adjust("scale", "y", this._origsy);
+	},
 	knock: function(direction, knocker, hurdur) {
 		zero.core.util.update(direction, this.getDirection());
 		this.perch = this.stuck = false;
@@ -477,7 +490,7 @@ zero.core.Fauna.Menagerie = CT.Class({
 	},
 	monHunt: function(hunter) {
 		var zc = zero.core, playerbod = zc.current.person.body;
-		if (zc.util.touching(hunter, playerbod, 150))
+		if (!hunter.smashed && zc.util.touching(hunter, playerbod, 150))
 			hunter.pounce(playerbod, this.onmonsterpounce(hunter));
 	},
 	monsterHunt: function() {

@@ -10,10 +10,6 @@ zero.core.knocker = {
 				sb = creature.source && pz[creature.source].body;
 			sb && sb.oncrash && zc.util.touching(creature,
 				sb, 0, false, false, true) && sb.oncrash(creature);
-		},
-		unsmash: function(creature) {
-			if (creature._origsy && creature.scale().y == 0.1)
-				creature.adjust("scale", "y", creature._origsy);
 		}
 	},
 	strikers: {
@@ -28,9 +24,7 @@ zero.core.knocker = {
 			prey.knock(zc.util.charDir(), zc.knocker._.crash);
 		},
 		smasher: function(prey, smasher) {
-			prey._origsy = prey.scale.y;
-			prey.adjust("scale", "y", 0.1);
-			setTimeout(() => zero.core.knocker._.unsmash(prey), 2000);
+			prey.smash();
 		},
 		grabber: function(prey, grabber) {
 			grabber.sticker = prey;
@@ -92,11 +86,7 @@ zero.core.knocker = {
 		var zc = zero.core, k = zc.knocker, striker = zc.current.person.held(side, true);
 		if (striker.sticker)
 			return k._.throw(striker);
-		striker.smasher && striker.smash();
-		if (striker.flamer) {
-			striker.melt();
-			striker.burn();
-		}
+		striker.touch();
 		return k.hit(striker, preykinds, prey => onknock(prey, side),
 			knockcfg, null, prey => k.strike(prey, striker), true);
 	}

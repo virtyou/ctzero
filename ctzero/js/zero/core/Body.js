@@ -161,8 +161,11 @@ zero.core.Body = CT.Class({
 		this.spine.setSprings(this._thruster);
 	},
 	downthrust: function(side) {
-		this.torso.arms[side].downthrust();
+		var arm = this.torso.arms[side];
+		if (arm.thrusting) return;
+		arm.downthrust();
 		this.spine.setSprings(this._thruster);
+		setTimeout(() => this.unthrust(side), 400);
 	},
 	upthrust: function(side) {
 		this.torso.arms[side].upthrust();
@@ -214,6 +217,8 @@ zero.core.Body = CT.Class({
 				else // side? sub? part?
 					gdata.bone = zero.core.util.gear2bone(gdata.kind);
 			}
+			if (!gdata.thing)
+				gdata.thing = held ? "Item" : "Garment";
 			gthing = gmap[gdata.key] = zero.core.util.thing(CT.merge(gdata, {
 				bones: bz,
 				onbuild: held && az[g].hand.grasp,
