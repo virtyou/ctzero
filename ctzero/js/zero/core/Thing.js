@@ -79,9 +79,24 @@ zero.core.Thing = CT.Class({
 			});
 		},
 		setBounds: function(bounder) {
-			var radii = this.radii = {}, mids = this.mids = {},
+			var radii = this.radii = {}, mids = this.mids = {}, bmin, bmax, s, p, pz, rx, rz,
 				bounds = this.bounds = this.bounds || this.hardbounds || new THREE.Box3();
-			this.hardbounds || bounds.setFromObject(bounder || this.group);
+			if (this.topDown) {
+				pz = this.thring.geometry.parameters;
+				bmin = bounds.min;
+				bmax = bounds.max;
+				s = this.scale();
+				p = this.position();
+				rx = pz.width * s.x;
+				rz = pz.height * s.z;
+				bmax.x = p.x + rx;
+				bmin.x = p.x - rx;
+				bmax.z = p.z + rz;
+				bmin.z = p.z - rz;
+				bmax.y = p.y;
+				bmin.y = zero.core.current.room.bounds.min.y;
+			} else if (!this.hardbounds)
+				bounds.setFromObject(bounder || this.group);
 			this._.setInnerBounds();
 			this._.setRadMid();
 		},
