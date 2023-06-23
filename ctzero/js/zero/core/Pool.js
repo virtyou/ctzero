@@ -89,6 +89,7 @@ zero.core.Pool = CT.Class({
 		delete matty.envMap;
 		matty.side = THREE.DoubleSide;
 		if (oz.sides) {
+			this.topDown = true;
 			for (i = 0; i < 4; i++) {
 				partz.push(CT.merge({
 					name: "side" + i,
