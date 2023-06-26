@@ -341,9 +341,9 @@ zero.core.Person = CT.Class({
 		this.body.landing = true;
 		this.dance("fall");
 	},
-	jump: function() {
-		var _ = this._, bod = this.body, within = bod.within,
-			t = zero.core.util.ticker, sound = "whoosh";
+	jump: function(amount) {
+		var _ = this._, t = zero.core.util.ticker, bod = this.body,
+			within = bod.within, sound = "whoosh", spr = bod.springs.bob;
 		this.gesture("jump");
 		if (within) {
 			if (within.opts.state == "liquid") {
@@ -359,6 +359,14 @@ zero.core.Person = CT.Class({
 			setTimeout(this.stopFlying, 8000);
 		}
 		this.sfx(bod.flying ? "wind" : sound);
+		if (spr.floored) {
+			spr.boost = this.bounce(amount);
+			spr.floored = false;
+		} else if (bod.flying || !spr.hard)
+			spr.boost = amount;
+	},
+	unjump: function() {
+		this.body.springs.bob.boost = -50;
 	},
 	run: function() {
 		this.running = true;
