@@ -157,11 +157,12 @@ zero.core.Person = CT.Class({
 		this.subject = subject;
 		orient && this.orient(subject);
 	},
-	orient: function(subject, spos) {
+	orient: function(subject, spos, doafter) {
 		var pos = this.body.placer.position;
 		spos = spos || subject.position();
 		this.orientation(Math.atan2(spos.x
 			- pos.x, spos.z - pos.z));
+		doafter && setTimeout(doafter, 500);
 	},
 	touch: function(subject, cb, arm, approached, handCb, force) {
 		var zcu = zero.core.util, bod = this.body, bt = bod.torso, spy, contact = function() {
@@ -341,7 +342,12 @@ zero.core.Person = CT.Class({
 		this.body.landing = true;
 		this.dance("fall");
 	},
-	jump: function(amount) {
+	leap: function(target, onland, amount, forwardAmount) {
+		onland && this.onland(onland);
+		this.orient(target, null,
+			() => this.jump(amount || 800, forwardAmount || 20));
+	},
+	jump: function(amount, forward) {
 		var _ = this._, t = zero.core.util.ticker, bod = this.body,
 			within = bod.within, sound = "whoosh", spr = bod.springs.bob;
 		this.gesture("jump");
@@ -364,6 +370,7 @@ zero.core.Person = CT.Class({
 			spr.floored = false;
 		} else if (bod.flying || !spr.hard)
 			spr.boost = amount;
+		forward && bod.shove(this.direction(), forward);
 	},
 	unjump: function() {
 		this.body.springs.bob.boost = -50;
@@ -421,7 +428,7 @@ zero.core.Person = CT.Class({
 		}
 	},
 	orientation: function(o) {
-		if (o)
+		if (!isNaN(o))
 			this.body.springs.orientation.target = o;
 		else
 			return this.body.springs.orientation.target;
