@@ -345,7 +345,7 @@ zero.core.Person = CT.Class({
 	leap: function(target, onland, amount, forwardAmount) {
 		onland && this.onland(onland);
 		this.orient(target, null,
-			() => this.jump(amount || 800, forwardAmount || 20));
+			() => this.jump(amount || 800, forwardAmount || 1));
 	},
 	jump: function(amount, forward) {
 		var _ = this._, t = zero.core.util.ticker, bod = this.body,
@@ -370,7 +370,7 @@ zero.core.Person = CT.Class({
 			spr.floored = false;
 		} else if (bod.flying || !spr.hard)
 			spr.boost = amount;
-		forward && bod.shove(this.direction(), forward);
+		forward && bod.shove(this.direction(), forward, null, false, "boost");
 	},
 	unjump: function() {
 		this.body.springs.bob.boost = -50;
