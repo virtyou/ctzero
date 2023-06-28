@@ -174,12 +174,13 @@ zero.core.Thing = CT.Class({
 		if (this.springs.y)
 			this.springs.y.target = val;
 	},
-	setPos: function(pos, additive) {
+	setPos: function(pos, additive, mult) {
+		mult = mult || 1;
 		if (additive && !pos)
 			pos = this.direction || this.getDirection();
-		this.adjust("position", "x", pos.x, additive);
-		this.adjust("position", "y", pos.y, additive);
-		this.adjust("position", "z", pos.z, additive);
+		this.adjust("position", "x", pos.x * mult, additive);
+		this.adjust("position", "y", pos.y * mult, additive);
+		this.adjust("position", "z", pos.z * mult, additive);
 	},
 	setPositioners: function(xyz, unbound, snap) {
 		var _xyz = this._xyz, sz = this.springs, s, p = this.position();
