@@ -220,7 +220,7 @@ zero.core.Body = CT.Class({
 			}
 			if (!gdata.thing)
 				gdata.thing = held ? "Item" : "Garment";
-			gthing = gmap[gdata.key] = zero.core.util.thing(CT.merge(gdata, {
+			gthing = gmap[gdata.key || gdata.fakeKey] = zero.core.util.thing(CT.merge(gdata, {
 				bones: bz,
 				onbuild: held && az[g].hand.grasp,
 				onremove: held && az[g].hand.release
