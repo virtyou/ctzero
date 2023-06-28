@@ -21,8 +21,10 @@ zero.core.Sploder = CT.Class({
 			var tm = thing.material, burning;
 			tm.opacity -= 0.01;
 			burning = tm.opacity > 0;
-			if (this.fire && !burning)
+			if (this.fire && !burning) {
 				this.fire.quench();
+				this._bang(thing.position(), this.flameburst);
+			}
 			return burning;
 		}
 	},
@@ -71,9 +73,7 @@ zero.core.Sploder = CT.Class({
 		CT.data.append(this.degrading.melt, thing);
 	},
 	burn: function(thing) {
-		var pos = thing.position();
-		this.ignite(pos);
-		this._bang(pos, this.flameburst);
+		this.ignite(thing.position());
 		CT.data.append(this.degrading.burn, thing);
 	},
 	ignite: function(pos) {
