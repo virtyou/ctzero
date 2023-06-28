@@ -514,6 +514,11 @@ zero.core.Person = CT.Class({
 		zero.core.util.mergeBit(resetz, gest, 1);
 		this.body.resize(gest);
 	},
+	setAura: function(aname) {
+		this.curAura && this.ungear(this.curAura);
+		this.curAura = "procedural.worn_aura." + aname;
+		this.gear({ worn: { aura: this.curAura } });
+	},
 	gear: function(gear) {
 		this.body.gear(gear);
 	},
