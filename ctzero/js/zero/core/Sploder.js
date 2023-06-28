@@ -64,10 +64,10 @@ zero.core.Sploder = CT.Class({
 	splode: function(pos, variety) {
 		this._bang(pos, this[variety || "splobits"]);
 	},
-	shart: function(thing) {
+	shart: function(thing, noremove) {
 		this.shards.modMat(thing.material);
 		this._bang(thing.position(), this.sharts);
-		zero.core.current.room.removeObject(thing);
+		noremove || zero.core.current.room.removeObject(thing);
 	},
 	melt: function(thing) {
 		CT.data.append(this.degrading.melt, thing);
