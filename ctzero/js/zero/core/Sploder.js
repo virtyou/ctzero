@@ -61,8 +61,8 @@ zero.core.Sploder = CT.Class({
 	confettize: function(pos) {
 		this._bang(pos, this.confetties);
 	},
-	splode: function(pos) {
-		this._bang(pos, this.splobits);
+	splode: function(pos, variety) {
+		this._bang(pos, this[variety || "splobits"]);
 	},
 	shart: function(thing) {
 		this.shards.modMat(thing.material);
