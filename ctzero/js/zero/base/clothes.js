@@ -234,11 +234,8 @@ zero.base.clothes = {
 				name: "bubble",
 				kind: "aura",
 				thing: "Bit",
-				sphereSegs: 4,
-				material: {
-					opacity: 0.6,
-					transparent: true
-				}
+				frozen: true,
+				sphereSegs: 4
 			}]
 		},
 		wet: {

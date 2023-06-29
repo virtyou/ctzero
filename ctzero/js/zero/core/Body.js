@@ -15,12 +15,13 @@ zero.core.Body = CT.Class({
 		});
 		return wbs;
 	},
-	shove: function(direction, magnitude, multiplier, bobToo) {
+	shove: function(direction, magnitude, multiplier, bobToo, prop) {
 		var sz = this.springs, p2a = this.positioner2axis,
 			amount = (magnitude || 1) * (multiplier || 1000), axis;
+		prop = prop || "shove";
 		for (axis of this._xyz)
 			if (bobToo || (axis != "bob"))
-				sz[axis].shove = direction[p2a(axis)] * amount;
+				sz[axis][prop] = direction[p2a(axis)] * amount;
 	},
 	assembled: function() {
 		this.log("built body!");
@@ -219,7 +220,7 @@ zero.core.Body = CT.Class({
 			}
 			if (!gdata.thing)
 				gdata.thing = held ? "Item" : "Garment";
-			gthing = gmap[gdata.key] = zero.core.util.thing(CT.merge(gdata, {
+			gthing = gmap[gdata.key || gdata.fakeKey] = zero.core.util.thing(CT.merge(gdata, {
 				bones: bz,
 				onbuild: held && az[g].hand.grasp,
 				onremove: held && az[g].hand.release

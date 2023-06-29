@@ -4,7 +4,6 @@ zero.core.Controls = CT.Class({
 		speed: {
 			base: 100,
 			jump: 500,
-			descent: -50,
 			orientation: 5
 		},
 		cams: {
@@ -206,28 +205,20 @@ zero.core.Controls = CT.Class({
 			amount = mult ? fullAmount * mult : fullAmount;
 			if (amount) {
 				if (dir == "y")
-					target.jump();
+					target.jump(amount);
 				else
 					target.go();
 			} else if (!CT.key.downs(_.dirs).length)
 				target.undance();
-			if (dir == "y") {
-				if (amount) {
-					if (spr.floored) {
-						spr.boost = target.bounce(amount);
-						spr.floored = false;
-					} else if (target.body.flying || !spr.hard)
-						spr.boost = amount;
-				} else if (!spr.hard)
-					spr.boost = _.speed.descent;
-			} else {
+			if (dir != "y") {
 				isor = dir == "orientation";
 				if (isor) {
 					spr.hard = target.body.grippy;
 					spr.boost = amount;
 				}
 				go(isor);
-			}
+			} else if (!amount && !spr.hard)
+				target.unjump();
 			moveCb && moveCb(target.name);
 		};
 	},

@@ -157,11 +157,12 @@ zero.core.Person = CT.Class({
 		this.subject = subject;
 		orient && this.orient(subject);
 	},
-	orient: function(subject, spos) {
+	orient: function(subject, spos, doafter) {
 		var pos = this.body.placer.position;
 		spos = spos || subject.position();
 		this.orientation(Math.atan2(spos.x
 			- pos.x, spos.z - pos.z));
+		doafter && setTimeout(doafter, 500);
 	},
 	touch: function(subject, cb, arm, approached, handCb, force) {
 		var zcu = zero.core.util, bod = this.body, bt = bod.torso, spy, contact = function() {
@@ -339,11 +340,21 @@ zero.core.Person = CT.Class({
 	},
 	stopFlying: function() {
 		this.body.landing = true;
+		this.body.flying = false;
 		this.dance("fall");
 	},
-	jump: function() {
-		var _ = this._, bod = this.body, within = bod.within,
-			t = zero.core.util.ticker, sound = "whoosh";
+	doLeap: function(shouldFly, amount, forwardAmount) {
+		shouldFly && this.shouldFly();
+		this.jump(amount, forwardAmount);
+	},
+	leap: function(target, onland, shouldFly, amount, forwardAmount) {
+		onland && this.onland(onland);
+		this.orient(target, null, // look then leap...
+			() => this.doLeap(shouldFly, amount || 800, forwardAmount || 1));
+	},
+	jump: function(amount, forward) {
+		var _ = this._, t = zero.core.util.ticker, bod = this.body,
+			within = bod.within, sound = "whoosh", spr = bod.springs.bob;
 		this.gesture("jump");
 		if (within) {
 			if (within.opts.state == "liquid") {
@@ -359,6 +370,15 @@ zero.core.Person = CT.Class({
 			setTimeout(this.stopFlying, 8000);
 		}
 		this.sfx(bod.flying ? "wind" : sound);
+		if (spr.floored) {
+			spr.boost = this.bounce(amount);
+			spr.floored = false;
+		} else if (bod.flying || !spr.hard)
+			spr.boost = amount;
+		forward && bod.shove(this.direction(), forward, null, false, "boost");
+	},
+	unjump: function() {
+		this.body.springs.bob.boost = -50;
 	},
 	run: function() {
 		this.running = true;
@@ -413,7 +433,7 @@ zero.core.Person = CT.Class({
 		}
 	},
 	orientation: function(o) {
-		if (o)
+		if (!isNaN(o))
 			this.body.springs.orientation.target = o;
 		else
 			return this.body.springs.orientation.target;
@@ -493,6 +513,11 @@ zero.core.Person = CT.Class({
 		}
 		zero.core.util.mergeBit(resetz, gest, 1);
 		this.body.resize(gest);
+	},
+	setAura: function(aname) {
+		this.curAura && this.ungear(this.curAura);
+		this.curAura = "procedural.worn_aura." + aname;
+		this.gear({ worn: { aura: this.curAura } });
 	},
 	gear: function(gear) {
 		this.body.gear(gear);

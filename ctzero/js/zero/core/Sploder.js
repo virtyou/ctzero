@@ -21,8 +21,10 @@ zero.core.Sploder = CT.Class({
 			var tm = thing.material, burning;
 			tm.opacity -= 0.01;
 			burning = tm.opacity > 0;
-			if (this.fire && !burning)
+			if (this.fire && !burning) {
 				this.fire.quench();
+				this._bang(thing.position(), this.flameburst);
+			}
 			return burning;
 		}
 	},
@@ -59,21 +61,19 @@ zero.core.Sploder = CT.Class({
 	confettize: function(pos) {
 		this._bang(pos, this.confetties);
 	},
-	splode: function(pos) {
-		this._bang(pos, this.splobits);
+	splode: function(pos, variety) {
+		this._bang(pos, this[variety || "splobits"]);
 	},
-	shart: function(thing) {
+	shart: function(thing, noremove) {
 		this.shards.modMat(thing.material);
 		this._bang(thing.position(), this.sharts);
-		zero.core.current.room.removeObject(thing);
+		noremove || zero.core.current.room.removeObject(thing);
 	},
 	melt: function(thing) {
 		CT.data.append(this.degrading.melt, thing);
 	},
 	burn: function(thing) {
-		var pos = thing.position();
-		this.ignite(pos);
-		this._bang(pos, this.flameburst);
+		this.ignite(thing.position());
 		CT.data.append(this.degrading.burn, thing);
 	},
 	ignite: function(pos) {

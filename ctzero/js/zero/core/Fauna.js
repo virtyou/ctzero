@@ -103,10 +103,7 @@ zero.core.Fauna = CT.Class({
 		if (this.urgency)
 			amount *= this.urgency;
 		if (this.perch) {
-			pp = this.perch.position(null, true);
-			this.adjust("position", "x", pp.x);
-			this.adjust("position", "y", pp.y);
-			this.adjust("position", "z", pp.z);
+			this.setPos(this.perch.position(null, true));
 			(this.stuck || zc.current.person.zombified) || this.unperch();
 		} else {
 			this.adjust("position", "x", amount * this.direction.x, true);
