@@ -546,6 +546,13 @@ zero.core.util = {
 	background: function(src) {
 		zero.core.util.back(null, src);
 	},
+	getArea: function(cb) {
+		CT.modal.choice({
+			prompt: "please select an area",
+			data: ["room"].concat(Object.keys(zero.core.current.room.floor)),
+			cb: cb
+		});
+	},
 	room: function(robj, retain_lights, nounload) {
 		if (zero.core.current.room)
 			zero.core.current.room.clear(!robj || retain_lights, !nounload);
