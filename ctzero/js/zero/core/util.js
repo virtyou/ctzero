@@ -242,6 +242,9 @@ zero.core.util = {
 	invert: function(vec) {
 		zero.core.util.mult(vec, -1);
 	},
+	d2g: function(dz) {
+		return new THREE.CubeGeometry(dz[0], dz[1], dz[2], dz[3], dz[4]); // ugh
+	},
 	vec: function(xyz) {
 		CT.log("creating vec!");
 		return new THREE.Vector3(xyz[0], xyz[1], xyz[2]);
