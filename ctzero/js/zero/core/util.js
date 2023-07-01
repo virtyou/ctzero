@@ -549,10 +549,15 @@ zero.core.util = {
 	background: function(src) {
 		zero.core.util.back(null, src);
 	},
-	getArea: function(cb) {
+	getArea: function(cb, filtmap) {
+		var areas = ["room"].concat(Object.keys(zero.core.current.room.floor));
+		if (filtmap)
+			areas = areas.filter(a => !(a in filtmap));
+		if (!areas.length)
+			return alert("no unoccupied areas!");
 		CT.modal.choice({
 			prompt: "please select an area",
-			data: ["room"].concat(Object.keys(zero.core.current.room.floor)),
+			data: areas,
 			cb: cb
 		});
 	},
