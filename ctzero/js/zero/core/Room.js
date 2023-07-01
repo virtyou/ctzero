@@ -415,27 +415,10 @@ zero.core.Room = CT.Class({
 		});
 	},
 	buildNatural: function(variety) { // flora or fauna...
-		var opts = this.opts, pz = opts.parts, cap = CT.parse.capitalize,
-			base = zero.core[cap(variety)], setter = base[cap(base.setter)],
-			s, sopts, omap = opts[base.setter];
-		if (!omap) return;
-		if (typeof omap == "string" || Array.isArray(omap)) {
-			this.log("changing", variety, "from", omap, "to object");
-			omap = opts[base.setter] = {
-				room: omap
-			};
-		}
-		for (s in omap) {
-			sopts = {
-				name: s + "_" + base.setter,
-				kind: base.setter,
-				collection: omap[s],
-				subclass: setter
-			};
-			if (s != "room")
-				sopts.within = s;
-			pz.push(sopts);
-		}
+		var pz = this.opts.parts, s,
+			zcn = zero.core.natural, omap = zcn.omap(variety);
+		for (s in omap)
+			pz.push(zcn.setter(variety, s, omap[s]));
 	},
 	buildStruct: function(cat) {
 		var opts = this.opts, base = opts[cat];
