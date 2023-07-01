@@ -10,6 +10,32 @@ zero.core.knocker = {
 				sb = creature.source && pz[creature.source].body;
 			sb && sb.oncrash && zc.util.touching(creature,
 				sb, 0, false, false, true) && sb.oncrash(creature);
+		},
+		hit: function(men, striker, preykinds, hitter, cfg, nohit, onhit, isheld, glopo) {
+			var zc = zero.core, touching = zc.util.touching, zcc = zc.current,
+				source, sb, pk, p, prey, sfx, hitting;
+			for (pk of preykinds) {
+				if (men[pk]) {
+					source = cfg[pk].source;
+					sb = source && zcc.people[source].body;
+					for (p in men[pk]) {
+						prey = men[p];
+						if (touching(striker, prey, 50, isheld, isheld || glopo)) {
+							hitting = true;
+							if (hitter(prey)) {
+								prey.repos(sb && sb.position(), true);
+								sfx = "splat";
+							} else {
+								prey.yelp();
+								prey.glow();
+								onhit && onhit(prey);
+							}
+						}
+					}
+				}
+			}
+			hitting || (nohit && nohit());
+			return sfx;
 		}
 	},
 	strikers: {
@@ -35,29 +61,12 @@ zero.core.knocker = {
 		CT.log("knocker: " + msg);
 	},
 	hit: function(striker, preykinds, hitter, cfg, nohit, onhit, isheld, glopo) {
-		var zc = zero.core, touching = zc.util.touching, zcc = zc.current,
-			men = zcc.room.menagerie, source, sb, pk, p, prey, sfx, hitting;
-		for (pk of preykinds) {
-			if (men[pk]) {
-				source = cfg[pk].source;
-				sb = source && zcc.people[source].body;
-				for (p in men[pk]) {
-					prey = men[p];
-					if (touching(striker, prey, 50, isheld, isheld || glopo)) {
-						hitting = true;
-						if (hitter(prey)) {
-							prey.repos(sb && sb.position(), true);
-							sfx = "splat";
-						} else {
-							prey.yelp();
-							prey.glow();
-							onhit && onhit(prey);
-						}
-					}
-				}
-			}
-		}
-		hitting || (nohit && nohit());
+		var zc = zero.core, _ = zc.knocker._, sfx,
+			men, menz = zc.current.room.menagerie;
+		// TODO: within/upon filtering... (don't check more than one!)
+		for (men in menz)
+			sfx = sfx || _.hit(menz[men], striker, preykinds, hitter,
+				cfg, nohit, onhit, isheld, glopo);
 		return sfx;
 	},
 	splat: function(preykinds, onsplat, splatcfg, nosplat) {
