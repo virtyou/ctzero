@@ -10,32 +10,6 @@ zero.core.knocker = {
 				sb = creature.source && pz[creature.source].body;
 			sb && sb.oncrash && zc.util.touching(creature,
 				sb, 0, false, false, true) && sb.oncrash(creature);
-		},
-		hit: function(men, striker, preykinds, hitter, cfg, nohit, onhit, isheld, glopo) {
-			var zc = zero.core, touching = zc.util.touching, zcc = zc.current,
-				source, sb, pk, p, prey, sfx, hitting;
-			for (pk of preykinds) {
-				if (men[pk]) {
-					source = cfg[pk].source;
-					sb = source && zcc.people[source].body;
-					for (p in men[pk]) {
-						prey = men[p];
-						if (touching(striker, prey, 50, isheld, isheld || glopo)) {
-							hitting = true;
-							if (hitter(prey)) {
-								prey.repos(sb && sb.position(), true);
-								sfx = "splat";
-							} else {
-								prey.yelp();
-								prey.glow();
-								onhit && onhit(prey);
-							}
-						}
-					}
-				}
-			}
-			hitting || (nohit && nohit());
-			return sfx;
 		}
 	},
 	strikers: {
@@ -60,15 +34,32 @@ zero.core.knocker = {
 	log: function(msg) {
 		CT.log("knocker: " + msg);
 	},
-	hit: function(striker, preykinds, hitter, cfg, nohit, onhit, isheld, glopo) {
-		var zc = zero.core, _ = zc.knocker._, sfx,
-			men, menz = zc.current.room.menagerie;
-		// TODO: within/upon filtering... (don't check more than one!)
-		for (men in menz)
-			sfx = sfx || _.hit(menz[men], striker, preykinds, hitter,
-				cfg, nohit, onhit, isheld, glopo);
+	hit: function(men, striker, preykinds, hitter, cfg, nohit, onhit, isheld, glopo) {
+		var zc = zero.core, touching = zc.util.touching, zcc = zc.current,
+			source, sb, pk, p, prey, sfx, hitting;
+		for (pk of preykinds) {
+			if (men[pk]) {
+				source = cfg[pk].source;
+				sb = source && zcc.people[source].body;
+				for (p in men[pk]) {
+					prey = men[p];
+					if (touching(striker, prey, 50, isheld, isheld || glopo)) {
+						hitting = true;
+						if (hitter(prey)) {
+							prey.repos(sb && sb.position(), true);
+							sfx = "splat";
+						} else {
+							prey.yelp();
+							prey.glow();
+							onhit && onhit(prey);
+						}
+					}
+				}
+			}
+		}
+		hitting || (nohit && nohit());
 		return sfx;
-	},
+	}
 	splat: function(preykinds, onsplat, splatcfg, nosplat) {
 		return zero.core.knocker.hit(zero.core.current.person.body,
 			preykinds, onsplat, splatcfg, nosplat);
@@ -86,17 +77,17 @@ zero.core.knocker = {
 		k.log(prey.name + " struck by " + sname + " (" + stype + ")");
 		k.strikers[stype](prey, striker);
 	},
-	kick: function(preykinds, onknock, knockcfg, side) {
+	kick: function(men, preykinds, onknock, knockcfg, side) {
 		var zc = zero.core, k = zc.knocker, striker = zc.current.person.body.torso.legs[side].foot;
-		return zc.knocker.hit(striker, preykinds, prey => onknock(prey, side),
+		return zc.knocker.hit(men, striker, preykinds, prey => onknock(prey, side),
 			knockcfg, null, prey => k.strike(prey, striker), false, true);
 	},
-	knock: function(preykinds, onknock, knockcfg, side) {
+	knock: function(men, preykinds, onknock, knockcfg, side) {
 		var zc = zero.core, k = zc.knocker, striker = zc.current.person.held(side, true);
 		if (striker.sticker)
 			return k._.throw(striker);
 		striker.touch && striker.touch();
-		return k.hit(striker, preykinds, prey => onknock(prey, side),
+		return k.hit(men, striker, preykinds, prey => onknock(prey, side),
 			knockcfg, null, prey => k.strike(prey, striker), true);
 	}
 };
