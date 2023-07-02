@@ -59,9 +59,9 @@ zero.core.knocker = {
 		}
 		hitting || (nohit && nohit());
 		return sfx;
-	}
-	splat: function(preykinds, onsplat, splatcfg, nosplat) {
-		return zero.core.knocker.hit(zero.core.current.person.body,
+	},
+	splat: function(men, preykinds, onsplat, splatcfg, nosplat) {
+		return zero.core.knocker.hit(men, zero.core.current.person.body,
 			preykinds, onsplat, splatcfg, nosplat);
 	},
 	strike: function(prey, striker) {
