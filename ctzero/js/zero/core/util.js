@@ -669,9 +669,20 @@ zero.core.util = {
 		return zero.core.util.slow && (hard || CT.data.random(rando || 20));
 	},
 	_cpcbz: [],
+	_crcbz: [],
 	roomReady: function() {
 		var zcc = zero.core.current;
 		return zcc.room && zcc.room.isReady();
+	},
+	onRoomReady: function(cb) {
+		var zcu = zero.core.util;
+		zcu.roomReady() ? cb() : zcu._crcbz.push(cb);
+	},
+	procRoomCbs: function() {
+		var cb, zcu = zero.core.util;
+		for (cb of zcu._crcbz)
+			cb();
+		zcu._crcbz.length = 0;
 	},
 	onCurPer: function(cb) {
 		if (zero.core.current.person)
