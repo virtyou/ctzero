@@ -458,6 +458,12 @@ zero.core.Room = CT.Class({
 			if (opts.texture && !oso.texture)
 				oso.texture = opts.texture;
 			opts.parts.push(oso);
+			var hbmin = {}, hbmax = {};
+			this.hardbounds = { min: hbmin, max: hbmax };
+			this.xyz(function(dim, i) {
+				hbmin[dim] = hbmax[dim] = os.dimensions[i] / 2;
+				hbmin[dim] *= -1;
+			});
 		}
 		opts.outside && opts.parts.push({
 			name: "sky",
