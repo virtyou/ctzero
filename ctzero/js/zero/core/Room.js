@@ -458,8 +458,9 @@ zero.core.Room = CT.Class({
 			if (opts.texture && !oso.texture)
 				oso.texture = opts.texture;
 			opts.parts.push(oso);
-			var hbmin = {}, hbmax = {};
-			this.hardbounds = { min: hbmin, max: hbmax };
+			this.hardbounds = new THREE.Box3();
+			var hbmin = this.hardbounds.min,
+				hbmax = this.hardbounds.max;
 			this.xyz(function(dim, i) {
 				hbmin[dim] = hbmax[dim] = os.dimensions[i] / 2;
 				hbmin[dim] *= -1;
