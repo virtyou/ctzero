@@ -550,7 +550,10 @@ zero.core.util = {
 		zero.core.util.back(null, src);
 	},
 	getArea: function(cb, filtmap) {
-		var areas = ["room"].concat(Object.keys(zero.core.current.room.floor));
+		var a, areas = ["room"], r = zero.core.current.room;
+		for (a of ["floor", "obstacle"])
+			if (r[a])
+				areas = areas.concat(Object.keys(r[a]));
 		if (filtmap)
 			areas = areas.filter(a => !(a in filtmap));
 		if (!areas.length)
