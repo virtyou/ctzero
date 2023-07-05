@@ -985,7 +985,7 @@ zero.core.Thing = CT.Class({
 			opts.state = "threshold";
 		if (CT.info.mobile)
 			opts.matcat = "Basic";
-		this.variety = this.CLASSNAME.split(".")[2];
+		this.variety = this.CLASSNAME.split(".").pop();
 		var vl = this.vlower = this.variety.toLowerCase(); // should these be automated by CT.Class?
 		this.setName(opts);
 		this.pull = opts.pull;
