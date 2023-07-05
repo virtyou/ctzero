@@ -17,12 +17,17 @@ zero.core.natural = {
 			r = zc.current.room, omap = nat.omap(variety, opts),
 			base = cz.base, setter = cz.setter,
 			sname = base.setter, mname = area + "_" + sname;
-		var upnat = function(natset) {
+		var label = function(natset) {
+			return (natset && natset.count) ? [
+				CT.dom.div("x" + natset.count, "right yellow"),
+				natset.collection
+			] : natset;
+		}, upnat = function(natset) {
 			natset && r.attach(nat.setter(variety, area, natset));
-			CT.dom.setContent(sel, natset);
+			CT.dom.setContent(sel, label(natset));
 			omap[area] = natset;
 			onup(sname);
-		}, sel = CT.dom.link(omap[area] || "none", function() {
+		}, sel = CT.dom.link(label(omap[area]) || "none", function() {
 			nat.group(variety, function(natset) {
 				if (r[mname])
 					r.detach(mname);
@@ -30,7 +35,23 @@ zero.core.natural = {
 					CT.modal.choice({
 						style: "multiple-choice",
 						data: base.kinds,
-						cb: upnat
+						cb: function(collection) {
+							CT.modal.prompt({
+								prompt: "how many of each creature?",
+								style: "number",
+								min: 1,
+								max: 10,
+								step: 1,
+								initial: 2,
+								classname: "w200p",
+								cb: function(num) {
+									upnat({
+										count: num,
+										collection: collection
+									});
+								}
+							});
+						}
 					});
 				} else
 					upnat((natset != "none") ? natset : null);
@@ -81,6 +102,10 @@ zero.core.natural = {
 		};
 		if (area != "room")
 			sopts.within = area;
+		if (collection.count) {
+			sopts.count = collection.count;
+			sopts.collection = collection.collection;
+		}
 		return sopts;
 	}
 };
