@@ -242,6 +242,9 @@ zero.core.util = {
 	invert: function(vec) {
 		zero.core.util.mult(vec, -1);
 	},
+	d2g: function(dz) {
+		return new THREE.CubeGeometry(dz[0], dz[1], dz[2], dz[3], dz[4]); // ugh
+	},
 	vec: function(xyz) {
 		CT.log("creating vec!");
 		return new THREE.Vector3(xyz[0], xyz[1], xyz[2]);
@@ -546,6 +549,21 @@ zero.core.util = {
 	background: function(src) {
 		zero.core.util.back(null, src);
 	},
+	getArea: function(cb, filtmap) {
+		var a, areas = ["room"], r = zero.core.current.room;
+		for (a of ["floor", "obstacle"])
+			if (r[a])
+				areas = areas.concat(Object.keys(r[a]));
+		if (filtmap)
+			areas = areas.filter(a => !(a in filtmap));
+		if (!areas.length)
+			return alert("no unoccupied areas!");
+		CT.modal.choice({
+			prompt: "please select an area",
+			data: areas,
+			cb: cb
+		});
+	},
 	room: function(robj, retain_lights, nounload) {
 		if (zero.core.current.room)
 			zero.core.current.room.clear(!robj || retain_lights, !nounload);
@@ -654,9 +672,20 @@ zero.core.util = {
 		return zero.core.util.slow && (hard || CT.data.random(rando || 20));
 	},
 	_cpcbz: [],
+	_crcbz: [],
 	roomReady: function() {
 		var zcc = zero.core.current;
 		return zcc.room && zcc.room.isReady();
+	},
+	onRoomReady: function(cb) {
+		var zcu = zero.core.util;
+		zcu.roomReady() ? cb() : zcu._crcbz.push(cb);
+	},
+	procRoomCbs: function() {
+		var cb, zcu = zero.core.util;
+		for (cb of zcu._crcbz)
+			cb();
+		zcu._crcbz.length = 0;
 	},
 	onCurPer: function(cb) {
 		if (zero.core.current.person)

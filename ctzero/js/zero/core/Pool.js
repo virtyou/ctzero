@@ -165,6 +165,7 @@ zero.core.Pool = CT.Class({
 				fog: true,
 				smoke: true,
 				watermat: false,
+				creatures: false,
 				glow: 0xff0000,
 				plane: [800, 800, 8, 16],
 				vstrip: "templates.one.vstrip.inferno"

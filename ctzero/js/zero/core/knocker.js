@@ -34,9 +34,9 @@ zero.core.knocker = {
 	log: function(msg) {
 		CT.log("knocker: " + msg);
 	},
-	hit: function(striker, preykinds, hitter, cfg, nohit, onhit, isheld, glopo) {
+	hit: function(men, striker, preykinds, hitter, cfg, nohit, onhit, isheld, glopo) {
 		var zc = zero.core, touching = zc.util.touching, zcc = zc.current,
-			men = zcc.room.menagerie, source, sb, pk, p, prey, sfx, hitting;
+			source, sb, pk, p, prey, sfx, hitting;
 		for (pk of preykinds) {
 			if (men[pk]) {
 				source = cfg[pk].source;
@@ -60,8 +60,8 @@ zero.core.knocker = {
 		hitting || (nohit && nohit());
 		return sfx;
 	},
-	splat: function(preykinds, onsplat, splatcfg, nosplat) {
-		return zero.core.knocker.hit(zero.core.current.person.body,
+	splat: function(men, preykinds, onsplat, splatcfg, nosplat) {
+		return zero.core.knocker.hit(men, zero.core.current.person.body,
 			preykinds, onsplat, splatcfg, nosplat);
 	},
 	strike: function(prey, striker) {
@@ -77,17 +77,17 @@ zero.core.knocker = {
 		k.log(prey.name + " struck by " + sname + " (" + stype + ")");
 		k.strikers[stype](prey, striker);
 	},
-	kick: function(preykinds, onknock, knockcfg, side) {
+	kick: function(men, preykinds, onknock, knockcfg, side) {
 		var zc = zero.core, k = zc.knocker, striker = zc.current.person.body.torso.legs[side].foot;
-		return zc.knocker.hit(striker, preykinds, prey => onknock(prey, side),
+		return zc.knocker.hit(men, striker, preykinds, prey => onknock(prey, side),
 			knockcfg, null, prey => k.strike(prey, striker), false, true);
 	},
-	knock: function(preykinds, onknock, knockcfg, side) {
+	knock: function(men, preykinds, onknock, knockcfg, side) {
 		var zc = zero.core, k = zc.knocker, striker = zc.current.person.held(side, true);
 		if (striker.sticker)
 			return k._.throw(striker);
 		striker.touch && striker.touch();
-		return k.hit(striker, preykinds, prey => onknock(prey, side),
+		return k.hit(men, striker, preykinds, prey => onknock(prey, side),
 			knockcfg, null, prey => k.strike(prey, striker), true);
 	}
 };

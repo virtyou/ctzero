@@ -4,6 +4,7 @@ zero.core.Thing = CT.Class({
 		customs: [], // stored here, only tick()ed in Thing subclasses that implement tick()
 		ready: false,
 		readycbs: [],
+		preboundz: [],
 		postboundz: [],
 		built: function() {
 			var thiz = this, _ = this._, cb;
@@ -243,6 +244,7 @@ zero.core.Thing = CT.Class({
 		return this.bounds;
 	},
 	setBounds: function(rebound, nosnap) {
+		this._.preboundz.forEach(f => f());
 		var xyz = zero.core.util.xyz, thaz = this;
 		this._.nosnap = nosnap;
 		this.autoRot();
@@ -269,6 +271,7 @@ zero.core.Thing = CT.Class({
 		var r = zero.core.current.room,
 			pos = this.placer.position,
 			oz = this.opts, atop;
+		this._.preboundz.forEach(f => f());
 		this._.setBounds();
 		this.homeY = this.radii.y;
 		atop = this.within || r.getSurface(pos, this.radii);
@@ -293,6 +296,13 @@ zero.core.Thing = CT.Class({
 			cb();
 		else
 			this._.postboundz.push(cb);
+	},
+	beforebound: function(cb) {
+		if (this.bounds) {
+			this.log("beforebound: already bounded! (calling cb())");
+			cb();
+		} else
+			this._.preboundz.push(cb);
 	},
 	freeze: function() {
 		var mat = this.material;

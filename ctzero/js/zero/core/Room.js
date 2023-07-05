@@ -17,7 +17,7 @@ zero.core.Room = CT.Class({
 		return this.parts.concat(this.objects);
 	},
 	tick: function(dts, rdts) {
-		var obj;
+		var obj, men;
 		for (obj of this.objects)
 			obj.tick && obj.tick(dts, rdts);
 		for (obj of this._tickers)
@@ -29,7 +29,8 @@ zero.core.Room = CT.Class({
 			for (obj in this.swarm)
 				this.swarm[obj].tick();
 		if (this.menagerie)
-			this.menagerie.tick(dts);
+			for (men in this.menagerie)
+				this.menagerie[men].tick(dts);
 		this.jostle();
 	},
 	bump: function(b1, b2, moshy) {
@@ -225,6 +226,7 @@ zero.core.Room = CT.Class({
 				s.setVolume();
 	},
 	setBounds: function() {
+		this._.preboundz.forEach(f => f());
 		this._.setBounds(this.getPlacer());
 //		this.bounds = this.bounds || new THREE.Box3();
 //		this.bounds.setFromObject(this.getPlacer());
@@ -412,10 +414,38 @@ zero.core.Room = CT.Class({
 			thaz[ename].rebound();
 		});
 	},
+	buildNatural: function(variety) { // flora or fauna...
+		var pz = this.opts.parts, s,
+			zcn = zero.core.natural, omap = zcn.omap(variety);
+		for (s in omap)
+			pz.push(zcn.setter(variety, s, omap[s]));
+	},
+	buildStruct: function(cat) {
+		var opts = this.opts, base = opts[cat];
+		if (!base || !base.parts || !base.parts.length)
+			return;
+		var dz = base.dimensions, sdz,
+			tx = base.texture || opts.texture;
+			thing = "Thing", d2g = zero.core.util.d2g;
+		if (cat == "floor")
+			thing = "Floor";
+		else if (cat == "ramp")
+			thing = "Ramp";
+		base.parts.forEach(function(side, i) {
+			sdz = side.dimensions || dz;
+			opts.parts.push(CT.merge(side, {
+				name: cat + i,
+				kind: cat,
+				thing: thing,
+				texture: tx,
+				material: base.material,
+				geometry: sdz && d2g(sdz)
+			}));
+		});
+	},
 	preassemble: function() {
-		var opts = this.opts, d2g = function(dz) {
-			return new THREE.CubeGeometry(dz[0], dz[1], dz[2], dz[3], dz[4]); // ugh
-		}, os = opts.shell, oso;
+		var opts = this.opts, os = opts.shell, oso,
+			d2g = zero.core.util.d2g;
 		if (os) {
 			oso = CT.merge({
 				name: "shelly",
@@ -428,6 +458,13 @@ zero.core.Room = CT.Class({
 			if (opts.texture && !oso.texture)
 				oso.texture = opts.texture;
 			opts.parts.push(oso);
+			this.hardbounds = new THREE.Box3();
+			var hbmin = this.hardbounds.min,
+				hbmax = this.hardbounds.max;
+			this.xyz(function(dim, i) {
+				hbmin[dim] = hbmax[dim] = os.dimensions[i] / 2;
+				hbmin[dim] *= -1;
+			});
 		}
 		opts.outside && opts.parts.push({
 			name: "sky",
@@ -452,41 +489,8 @@ zero.core.Room = CT.Class({
 			thing: "Particles",
 			bounder: this
 		});
-		opts.garden && opts.parts.push({
-			name: "garden",
-			kind: "natural",
-			collection: opts.garden,
-			subclass: zero.core.Flora.Garden
-		});
-		opts.menagerie && opts.parts.push({
-			name: "menagerie",
-			kind: "natural",
-			collection: opts.menagerie,
-			subclass: zero.core.Fauna.Menagerie
-		});
-		this._structural.forEach(function(cat) {
-			var base = opts[cat];
-			if (base && base.parts && base.parts.length) {
-				var dz = base.dimensions, sdz,
-					tx = base.texture || opts.texture;
-					thing = "Thing";
-				if (cat == "floor")
-					thing = "Floor";
-				else if (cat == "ramp")
-					thing = "Ramp";
-				base.parts.forEach(function(side, i) {
-					sdz = side.dimensions || dz;
-					opts.parts.push(CT.merge(side, {
-						name: cat + i,
-						kind: cat,
-						thing: thing,
-						texture: tx,
-						material: base.material,
-						geometry: sdz && d2g(sdz)
-					}));
-				});
-			}
-		});
+		this._structural.forEach(this.buildStruct);
+		["flora", "fauna"].forEach(this.buildNatural);
 	},
 	components: function() {
 		var o, cz = [{
@@ -517,6 +521,7 @@ zero.core.Room = CT.Class({
 		this.objects = [];
 		this.cameras = [];
 		this.automatons = [];
+		this.onReady(zero.core.util.procRoomCbs);
 		zero.core.util.onCurPer(() => this.setFriction(opts.grippy));
 	}
 }, zero.core.Thing);

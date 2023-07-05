@@ -97,17 +97,25 @@ zero.core.Collection = CT.Class({
 			return this.counts;
 		}
 		this.kinds = collection;
-		var col = this.counts = {}, kind;
+		var col = this.counts = {}, kind, count = this.opts.count;
 		for (kind of collection)
-			col[kind] = 1;
+			col[kind] = count;
 		return col;
 	},
 	init: function(opts) {
 		this.opts = CT.merge(opts, {
 			mode: "random", // |rows|cols
+			count: 1 // fallback count
 		}, this.collect(opts.collection), this.opts);
-		if (opts.within)
-			this.within = opts.within;
+		if (opts.within) {
+			if (typeof opts.within == "string") {
+				this.log("grabbing within from room...");
+				this.within = zero.core.current.room[opts.within];
+				if (!this.within)
+					this.log("CAN'T FIND WITHIN!");
+			} else
+				this.within = opts.within;
+		}
 		this.members = [];
 	}
 }, zero.core.Thing);
