@@ -985,7 +985,8 @@ zero.core.Thing = CT.Class({
 			opts.state = "threshold";
 		if (CT.info.mobile)
 			opts.matcat = "Basic";
-		this.variety = this.CLASSNAME.split(".").pop();
+		var cnparts = this.CLASSNAME.split(".");
+		this.variety = cnparts.pop();
 		var vl = this.vlower = this.variety.toLowerCase(); // should these be automated by CT.Class?
 		this.setName(opts);
 		this.pull = opts.pull;
@@ -997,7 +998,7 @@ zero.core.Thing = CT.Class({
 		var thiz = this, iz, name;
 		["spring", "aspect", "ticker"].forEach(function(influence) {
 			iz = influence + "s", influences = thiz[iz] = {};
-			if (vl in zero.base[iz])
+			if (cnparts.length == 2 && vl in zero.base[iz]) // excludes Fauna.Head...
 				opts[iz] = zero.base[iz][vl]();
 			for (name in opts[iz])
 				thiz[iz][name] = zero.core[influence + "Controller"].add(opts[iz][name], name, thiz);
