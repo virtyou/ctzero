@@ -794,7 +794,7 @@ zero.core.Thing = CT.Class({
 		map.offset.set.apply(map.offset, oz.offset);
 	},
 	initGeo: function() {
-		var g, oz = this.opts, zcu = zero.core.util;
+		var g, oz = this.opts, zc = zero.core, zcu = zc.util;
 		if (oz.cubeGeometry) {
 			oz.boxGeometry = oz.cubeGeometry;
 			this.log("DEPRECATED: cubeGeometry - use boxGeometry!");
@@ -862,6 +862,7 @@ zero.core.Thing = CT.Class({
 		}
 		else if (oz.tubeGeometry) {
 			g = oz.tubeGeometry;
+			var curve;
 			if (g[0] == "curve4") {
 				var ts = oz.tubeSeg || 5;
 				g[0] = [
@@ -870,9 +871,11 @@ zero.core.Thing = CT.Class({
 					[0, ts * 2, ts],
 					[0, ts * 3, 0]
 				];
-			}
-			oz.geometry = new THREE.TubeGeometry(new THREE.SplineCurve3(g[0].map(zcu.vec)),
-				g[1], g[2], g[3], g[4]);
+			} else if (g[0] == "spring")
+				curve = zc.trig.curve(oz.springRadius || 10,
+					oz.springVert || 50, oz.springReps || 5);
+			curve = curve || new THREE.SplineCurve3(g[0].map(zcu.vec));
+			oz.geometry = new THREE.TubeGeometry(curve, g[1], g[2], g[3], g[4]);
 		}
 		if (oz.bufferGeometry) {
 			oz.geometry = (new THREE.BufferGeometry()).fromGeometry(oz.geometry);
