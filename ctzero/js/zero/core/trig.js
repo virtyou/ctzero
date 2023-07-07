@@ -1,7 +1,32 @@
+class SpringCurve extends THREE.Curve {
+	constructor(radius, vertSeg, reps) {
+		super();
+		this.reps = reps || 1;
+		this.radius = radius || 1
+		this.vertSeg = vertSeg || 1;
+	}
+	getPoint(t, optionalTarget = new THREE.Vector3()) {
+		const fullrot = 2 * Math.PI, v = (fullrot * t * this.reps) % fullrot;
+		return optionalTarget.set(Math.sin(v) * this.radius,
+			this.vertSeg * t, Math.cos(v) * this.radius);
+	}
+}
+
 zero.core.trig = {
 	_: {
 		sin: {},
-		amps: {}
+		amps: {},
+		curves: {}
+	},
+	curve: function(radius, vertSeg, reps) {
+		var cz = zero.core.trig._.curves;
+		if (!(radius in cz))
+			cz[radius] = {};
+		if (!(vertSeg in cz[radius]))
+			cz[radius][vertSeg] = {};
+		if (!(reps in cz[radius][vertSeg]))
+			cz[radius][vertSeg][reps] = new SpringCurve(radius, vertSeg, reps);
+		return cz[radius][vertSeg][reps];
 	},
 	sin: function(angle, amp) { // 628
 		var segs = zero.core.trig.segs(628, amp),
