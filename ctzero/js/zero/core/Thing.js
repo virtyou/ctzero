@@ -727,11 +727,13 @@ zero.core.Thing = CT.Class({
 		}
 	},
 	attach: function(child, iterator, oneOff) {
-		var customs = this._.customs, thing = zero.core.util.thing(CT.merge(child, {
+		var oz = this.opts, customs = this._.customs, chopts = {
 			path: this.path,
 			bones: this.bones || [],
-			bmap: this.bmap || {}
-		}, this.opts.chweaks[child.name]), function(tng) {
+			bmap: this.bmap || {},
+			sharedmat: oz.sharedmat,
+			matinstance: oz.sharedmat && this.getMaterial()
+		}, thing = zero.core.util.thing(CT.merge(child, chopts, oz.chweaks[child.name]), function(tng) {
 			tng.isCustom && customs.push(tng); // for tick()ing
 			iterator && iterator();
 		}, this.group);
@@ -792,7 +794,7 @@ zero.core.Thing = CT.Class({
 		map.offset.set.apply(map.offset, oz.offset);
 	},
 	initGeo: function() {
-		var g, oz = this.opts, zcu = zero.core.util;
+		var g, oz = this.opts, zc = zero.core, zcu = zc.util;
 		if (oz.cubeGeometry) {
 			oz.boxGeometry = oz.cubeGeometry;
 			this.log("DEPRECATED: cubeGeometry - use boxGeometry!");
@@ -860,6 +862,7 @@ zero.core.Thing = CT.Class({
 		}
 		else if (oz.tubeGeometry) {
 			g = oz.tubeGeometry;
+			var curve;
 			if (g[0] == "curve4") {
 				var ts = oz.tubeSeg || 5;
 				g[0] = [
@@ -868,9 +871,11 @@ zero.core.Thing = CT.Class({
 					[0, ts * 2, ts],
 					[0, ts * 3, 0]
 				];
-			}
-			oz.geometry = new THREE.TubeGeometry(new THREE.SplineCurve3(g[0].map(zcu.vec)),
-				g[1], g[2], g[3], g[4]);
+			} else if (g[0] == "spring")
+				curve = zc.trig.curve(oz.springRadius || 10,
+					oz.springVert || 50, oz.springReps || 5);
+			curve = curve || new THREE.SplineCurve3(g[0].map(zcu.vec));
+			oz.geometry = new THREE.TubeGeometry(curve, g[1], g[2], g[3], g[4]);
 		}
 		if (oz.bufferGeometry) {
 			oz.geometry = (new THREE.BufferGeometry()).fromGeometry(oz.geometry);
@@ -985,7 +990,8 @@ zero.core.Thing = CT.Class({
 			opts.state = "threshold";
 		if (CT.info.mobile)
 			opts.matcat = "Basic";
-		this.variety = this.CLASSNAME.split(".")[2];
+		var cnparts = this.CLASSNAME.split(".");
+		this.variety = cnparts.pop();
 		var vl = this.vlower = this.variety.toLowerCase(); // should these be automated by CT.Class?
 		this.setName(opts);
 		this.pull = opts.pull;
@@ -997,7 +1003,7 @@ zero.core.Thing = CT.Class({
 		var thiz = this, iz, name;
 		["spring", "aspect", "ticker"].forEach(function(influence) {
 			iz = influence + "s", influences = thiz[iz] = {};
-			if (vl in zero.base[iz])
+			if (cnparts.length == 2 && vl in zero.base[iz]) // excludes Fauna.Head...
 				opts[iz] = zero.base[iz][vl]();
 			for (name in opts[iz])
 				thiz[iz][name] = zero.core[influence + "Controller"].add(opts[iz][name], name, thiz);
