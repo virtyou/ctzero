@@ -345,12 +345,12 @@ zero.core.Person = CT.Class({
 	},
 	doLeap: function(shouldFly, amount, forwardAmount) {
 		shouldFly && this.shouldFly();
-		this.jump(amount, forwardAmount);
+		this.jump(amount || 800, forwardAmount);
 	},
 	leap: function(target, onland, shouldFly, amount, forwardAmount) {
 		onland && this.onland(onland);
 		this.orient(target, null, // look then leap...
-			() => this.doLeap(shouldFly, amount || 800, forwardAmount || 1));
+			() => this.doLeap(shouldFly, amount, forwardAmount || 1));
 	},
 	jump: function(amount, forward) {
 		var _ = this._, t = zero.core.util.ticker, bod = this.body,
