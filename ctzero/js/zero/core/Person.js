@@ -219,7 +219,7 @@ zero.core.Person = CT.Class({
 				gobj[loc] = to.key;
 			}
 			zero.core.current.room.removeObject(target);
-			bod.gear(gobj, held);
+			target.isConsumable ? target.consume() : bod.gear(gobj, held);
 			cb && cb();
 		}, side);
 	},
