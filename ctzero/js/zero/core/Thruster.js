@@ -9,9 +9,6 @@ zero.core.Thruster = CT.Class({
 			unthrust: {lumbar: {x: 0}, ribs: {x: 0}, neck: {x: 0}}
 		},
 		arms: {
-			downthrust: {shoulder: {x: 0}, elbow: {x: 0}, wrist: {x: 0.5}},
-			upthrust: {shoulder: {x: -Math.PI}, elbow: {x: 0}, wrist: {x: 0}},
-			unthrust: {clavicle: {y: 0}, shoulder: {x: 0, y: 0}, wrist: {x: 0}},
 			thrust: {
 				left: {
 					clavicle: {y: -0.5},
@@ -25,7 +22,11 @@ zero.core.Thruster = CT.Class({
 					wrist: {x: 1},
 					elbow: {x: 0}
 				}
-			}
+			},
+			unthrust: {clavicle: {y: 0}, shoulder: {x: 0, y: 0}, wrist: {x: 0}},
+			down: {shoulder: {x: 0}, elbow: {x: 0}, wrist: {x: 0.5}},
+			up: {shoulder: {x: -Math.PI}, elbow: {x: 0}, wrist: {x: 0}},
+			back: {shoulder: {x: -Math.PI}, elbow: {x: -Math.PI}, wrist: {x: 0}}
 		},
 		legs: {
 			kick: {hip: {x: -2}},
@@ -44,7 +45,7 @@ zero.core.Thruster = CT.Class({
 			}
 			else {
 				part.pause();
-				flags[(move == "upthrust") ? "swinging" : "thrusting"] = true;
+				flags[(move == "up") ? "swinging" : "thrusting"] = true;
 			}
 		}
 		part.setSprings(thrust.both ? CT.merge(thrust.both, thrust[side]) : thrust);
@@ -60,18 +61,26 @@ zero.core.Thruster = CT.Class({
 	},
 	downthrust: function(side) {
 		if (this.flags[side].thrusting) return;
-		this.set("downthrust", "arms", side);
+		this.set("down", "arms", side);
 		this.set("thrust");
 		setTimeout(() => this.unthrust(side), 400);
 	},
 	upthrust: function(side) {
-		this.set("upthrust", "arms", side);
+		this.set("up", "arms", side);
 		this.set("kick");
 	},
 	unthrust: function(side) {
 		this.set("unthrust", "arms", side);
 		this.set("unthrust");
 		this.sfx(this.on.thrust && this.on.thrust(side) || "whoosh");
+	},
+	backthrust: function(side) {
+		this.set("back", "arms", side);
+		this.set("kick");
+	},
+	unbackthrust: function(side) {
+		this.set("unthrust", "arms", side);
+		this.set("unthrust");
 	},
 	kick: function(side, unkickafter) {
 		this.set("kick", "legs", side);
