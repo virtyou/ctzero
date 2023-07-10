@@ -32,9 +32,6 @@ zero.core.Arm = CT.Class({
 		zero.core[this.variety].parts.forEach(this.tickPart);
 		this.hand.tick();
 	},
-	_downthruster: {shoulder: {x: 0}, elbow: {x: 0}, wrist: {x: 0.5}},
-	_upthruster: {shoulder: {x: -Math.PI}, elbow: {x: 0}, wrist: {x: 0}},
-	_unthruster: {clavicle: {y: 0}, shoulder: {x: 0, y: 0}, wrist: {x: 0}},
 	thrust: function() {
 		if (!this._thruster) {
 			var isleft = this.opts.side == "left";

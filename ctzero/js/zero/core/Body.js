@@ -149,52 +149,6 @@ zero.core.Body = CT.Class({
 		var item = this.held[side];
 		return (item && variety) ? item[variety] : item;
 	},
-	_kicker: {lumbar: {x: -0.2}, ribs: {x: -0.5}, neck: {x: 2}},
-	_thruster: {lumbar: {x: 0.2}, ribs: {x: 0.5}, neck: {x: -2}},
-	_unthruster: {lumbar: {x: 0}, ribs: {x: 0}, neck: {x: 0}},
-	swing: function(side) {
-		if (!this.holding(side, "smasher"))
-			return this.thrust(side);
-		this[this.torso.arms[side].swinging ? "downthrust" : "upthrust"](side);
-	},
-	thrust: function(side) {
-		this.torso.arms[side].thrust();
-		this.spine.setSprings(this._thruster);
-	},
-	downthrust: function(side) {
-		var arm = this.torso.arms[side];
-		if (arm.thrusting) return;
-		arm.downthrust();
-		this.spine.setSprings(this._thruster);
-		setTimeout(() => this.unthrust(side), 400);
-	},
-	upthrust: function(side) {
-		this.torso.arms[side].upthrust();
-		this.spine.setSprings(this._kicker);
-	},
-	unthrust: function(side) {
-		var arm = this.torso.arms[side],
-			sfx = this._onthrust && this._onthrust(side);
-		arm.unthrust();
-		this.spine.setSprings(this._unthruster);
-		this.person.sfx(sfx || "whoosh");
-	},
-	onthrust: function(cb) {
-		this._onthrust = cb; // just one...
-	},
-	kick: function(side, unkickafter) {
-		this.torso.legs[side].kick();
-		this.spine.setSprings(this._kicker);
-		unkickafter && setTimeout(() => this.unkick(side), unkickafter);
-	},
-	unkick: function(side) {
-		this.torso.legs[side].unkick();
-		this.spine.setSprings(this._unthruster);
-		this.person.sfx(this._onkick && this._onkick(side) || "whoosh");
-	},
-	onkick: function(cb) {
-		this._onkick = cb; // just one...
-	},
 	move: function(ropts) {
 		ropts.body && this._applyMod(ropts.body);
 		this.torso.move(ropts);

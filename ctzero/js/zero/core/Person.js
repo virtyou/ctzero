@@ -576,6 +576,7 @@ zero.core.Person = CT.Class({
 			onbuild: function(bod) {
 				thiz.head = bod.head;
 				bod.person = thiz.head.person = thiz;
+				thiz.thruster = new zero.core.Thruster({ body: bod });
 				if (zero.core.current.room)
 					thiz.setFriction();
 				if (opts.mods.default)

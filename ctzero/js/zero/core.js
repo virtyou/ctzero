@@ -55,6 +55,7 @@ CT.require("zero.core.Spine");
 CT.require("zero.core.Hand");
 CT.require("zero.core.Arm");
 CT.require("zero.core.Leg");
+CT.require("zero.core.Thruster");
 
 CT.require("zero.core.Pendulum");
 CT.require("zero.core.Strand");
