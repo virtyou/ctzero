@@ -69,11 +69,9 @@ zero.core.Thruster = CT.Class({
 		this.set("kick");
 	},
 	unthrust: function(side) {
-		var arm = this.torso.arms[side],
-			sfx = this.on.thrust && this.on.thrust(side);
-		arm.unthrust();
+		this.set("unthrust", "arms", side);
 		this.set("unthrust");
-		this.sfx(sfx || "whoosh");
+		this.sfx(this.on.thrust && this.on.thrust(side) || "whoosh");
 	},
 	kick: function(side, unkickafter) {
 		this.set("kick", "legs", side);
