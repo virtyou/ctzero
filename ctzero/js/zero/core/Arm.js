@@ -3,8 +3,14 @@ zero.core.Arm = CT.Class({
 	bmap: function() {
 		return this.opts.bonemap.arm;
 	},
+	pause: function() {
+		this._paused = true;
+	},
+	unpause: function() {
+		this._paused = false;
+	},
 	move: function(opts) {
-		if (this.thrusting || this.swinging) return;
+		if (this._paused) return;
 		this.setSprings(opts.arm);
 		this.hand.move(opts.hand);
 	},
@@ -31,31 +37,6 @@ zero.core.Arm = CT.Class({
 	tick: function() {
 		zero.core[this.variety].parts.forEach(this.tickPart);
 		this.hand.tick();
-	},
-	thrust: function() {
-		if (!this._thruster) {
-			var isleft = this.opts.side == "left";
-			this._thruster = {
-				wrist: {x: 1},
-				elbow: {x: 0},
-				clavicle: {y: isleft && -0.5 || 0.5},
-				shoulder: {x: -2, y: isleft && -0.5 || 0.5}
-			};
-		}
-		this.setSprings(this._thruster);
-		this.thrusting = true;
-	},
-	downthrust: function() {
-		this.setSprings(this._downthruster);
-		this.thrusting = true;
-	},
-	upthrust: function() {
-		this.setSprings(this._upthruster);
-		this.swinging = true;
-	},
-	unthrust: function() {
-		this.setSprings(this._unthruster);
-		this.swinging = this.thrusting = false;
 	},
 	poseRange: {
 		position: {

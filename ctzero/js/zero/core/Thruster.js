@@ -1,6 +1,7 @@
 zero.core.Thruster = CT.Class({
 	CLASSNAME: "zero.core.Thruster",
 	on: {},
+	flags: { left: {}, right: {} },
 	thrusters: {
 		spine: {
 			kick: {lumbar: {x: -0.2}, ribs: {x: -0.5}, neck: {x: 2}},
@@ -10,35 +11,61 @@ zero.core.Thruster = CT.Class({
 		arms: {
 			downthrust: {shoulder: {x: 0}, elbow: {x: 0}, wrist: {x: 0.5}},
 			upthrust: {shoulder: {x: -Math.PI}, elbow: {x: 0}, wrist: {x: 0}},
-			unthrust: {clavicle: {y: 0}, shoulder: {x: 0, y: 0}, wrist: {x: 0}}
+			unthrust: {clavicle: {y: 0}, shoulder: {x: 0, y: 0}, wrist: {x: 0}},
+			thrust: {
+				left: {
+					clavicle: {y: -0.5},
+					shoulder: {x: -2, y: -0.5}
+				},
+				right: {
+					clavicle: {y: 0.5},
+					shoulder: {x: -2, y: 0.5}
+				},
+				both: {
+					wrist: {x: 1},
+					elbow: {x: 0}
+				}
+			}
 		},
 		legs: {
-
+			kick: {hip: {x: -2}},
+			unkick: {hip: {x: 0}}
 		}
 	},
-	set: function(move, part, side) {
-		part = part || "spine";
-		(this[part] || this.torso[part][side]).setSprings(this.thrusters[part][move]);
+	set: function(move, partname, side) {
+		partname = partname || "spine";
+		var thrust = this.thrusters[partname][move], flags;
+		part = this[partname] || this.torso[partname][side];
+		if (partname == "arms") {
+			flags = this.flags[side];
+			if (move == "unthrust") {
+				part.unpause();
+				flags.thrusting = flags.swinging = false;
+			}
+			else {
+				part.pause();
+				flags[(move == "upthrust") ? "swinging" : "thrusting"] = true;
+			}
+		}
+		part.setSprings(thrust.both ? CT.merge(thrust.both, thrust[side]) : thrust);
 	},
 	swing: function(side) {
 		if (!this.body.holding(side, "smasher"))
 			return this.thrust(side);
-		this[this.torso.arms[side].swinging ? "downthrust" : "upthrust"](side);
+		this[this.flags[side].swinging ? "downthrust" : "upthrust"](side);
 	},
 	thrust: function(side) {
 		this.set("thrust", "arms", side);
-		this.torso.arms[side].thrust();
 		this.set("thrust");
 	},
 	downthrust: function(side) {
-		var arm = this.torso.arms[side];
-		if (arm.thrusting) return;
-		arm.downthrust();
+		if (this.flags[side].thrusting) return;
+		this.set("downthrust", "arms", side);
 		this.set("thrust");
 		setTimeout(() => this.unthrust(side), 400);
 	},
 	upthrust: function(side) {
-		this.torso.arms[side].upthrust();
+		this.set("upthrust", "arms", side);
 		this.set("kick");
 	},
 	unthrust: function(side) {
@@ -46,17 +73,17 @@ zero.core.Thruster = CT.Class({
 			sfx = this.on.thrust && this.on.thrust(side);
 		arm.unthrust();
 		this.set("unthrust");
-		this.person.sfx(sfx || "whoosh");
+		this.sfx(sfx || "whoosh");
 	},
 	kick: function(side, unkickafter) {
-		this.torso.legs[side].kick();
+		this.set("kick", "legs", side);
 		this.set("kick");
 		unkickafter && setTimeout(() => this.unkick(side), unkickafter);
 	},
 	unkick: function(side) {
-		this.torso.legs[side].unkick();
+		this.set("unkick", "legs", side);
 		this.set("unthrust");
-		this.person.sfx(this.on.kick && this.on.kick(side) || "whoosh");
+		this.sfx(this.on.kick && this.on.kick(side) || "whoosh");
 	},
 	onthrust: function(cb) {
 		this.on.thrust = cb; // just one...
@@ -71,6 +98,6 @@ zero.core.Thruster = CT.Class({
 		this.body = opts.body;
 		this.torso = this.body.torso;
 		this.spine = this.body.spine;
-		this.person = this.body.person;
+		this.sfx = this.body.person.sfx;
 	}
 });
