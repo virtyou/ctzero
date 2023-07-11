@@ -37,7 +37,7 @@ zero.core.Item = CT.Class({
 		}
 	},
 	init: function(opts) {
-		this.opts = opts = CT.merge(zero.base.items[this.opts.name], opts, {
+		this.opts = opts = CT.merge(opts, zero.base.items[this.opts.name], {
 			variety: "knocker"
 		}, this.opts);
 		for (var v of this.varieties)
