@@ -205,18 +205,19 @@ zero.core.Person = CT.Class({
 	get: function(target, cb) {
 		var side = this.freeHand(), g = this.opts.gear,
 			h = g.held, gobj = {}, bod = this.body,
-			to = target.opts, held = to.kind == "held", loc;
+			to = target.opts, key = to.key || to.fakeKey,
+			held = to.kind == "held", loc;
 		side && this.touch(target, function() {
 			if (held)
-				gobj[side] = h[side] = to.key || to.fakeKey;
+				gobj[side] = h[side] = key;
 			else { // TODO: non-spine (body; left/right hand/arm/leg)
 				if (!g.worn)
 					g.worn = {};
 				if (!g.worn.spine)
 					g.worn.spine = {};
 				loc = to.kind.split("_").pop();
-				g.worn.spine[loc] = to.key;
-				gobj[loc] = to.key;
+				g.worn.spine[loc] = key;
+				gobj[loc] = key;
 			}
 			zero.core.current.room.removeObject(target);
 			target.isConsumable ? target.consume() : bod.gear(gobj, held);
@@ -523,7 +524,36 @@ zero.core.Person = CT.Class({
 		this.body.gear(gear);
 	},
 	ungear: function(gkey, side, sub) {
-		this.body.ungear(gkey);
+		this.body.ungear(gkey, side); // sub? side where?
+	},
+	hold: function(key, side) {
+		var gobj = this.opts.gear,
+			hobj = gobj.held = gobj.held || {};
+		hobj[side] = key;
+		this.gear(gobj);
+	},
+	unhold: function(side) {
+		var hobj = this.opts.gear.held;
+		this.ungear(hobj[side], side);
+		delete hobj[side];
+	},
+	holster: function(key, area, side) {
+		this.opts.bag[area][side] = key;
+		this.body.bag(key, area, side);
+	},
+	unholster: function(area, side) {
+		delete this.opts.bag[area][side];
+		this.body.unbag(area, side);
+	},
+	bag: function(bopts) {
+		var area, side;
+		for (area in bopts)
+			for (side in bopts[area])
+				this.body.bag(bopts[area][side], area, side);
+	},
+	bagged: function(area, side, keyOnly) {
+		var bag = (keyOnly ? this.opts.bag : this.body.bagged)[area];
+		return side ? bag[side] : bag;
 	},
 	remove: function() {
 		if (this.body.removed) return this.log("already removed!");
@@ -584,6 +614,7 @@ zero.core.Person = CT.Class({
 				for (var p in opts.positioners)
 					bod.springs[p].target = bod.springs[p].value = opts.positioners[p];
 				opts.gear && thiz.gear(opts.gear);
+				opts.bag && thiz.bag(opts.bag);
 				opts.onbuild && opts.onbuild(thiz);
 			}
 		}));

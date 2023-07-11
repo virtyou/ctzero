@@ -161,15 +161,24 @@ zero.core.Body = CT.Class({
 		this.spine.resize(ropts.spine);
 		setTimeout(this.setBounds, 1200, true);
 	},
-	equipper: function(g, held) { // if held, g is side.....
-		var az = this.torso.arms, bz = this.bones,
-			bm = this.bmap, gmap = this.gearmap, gthing,
-			gars = this.garments, itemz = this.items, heldz = this.held;
+	equipper: function(g, held, bagger) { // if held or bagger, g is side.....
+		var az = this.torso.arms, bz = this.bones, bm = this.bmap,
+			gmap = this.gearmap, gars = this.garments, gthing, xpos,
+			itemz = this.items, heldz = this.held, bagged = this.bagged;
 		return function(gdata) {
 			if (!("bone" in gdata)) {
 				if (held)
 					gdata.bone = bm[g].arm.wrist; // ad-hoc held item
-				else // side? sub? part?
+				else if (bagger) {
+					if (bagger == "back") {
+						xpos = 30;
+						gdata.bone = bm[g].arm.clavicle;
+					} else { // hip
+						gdata.bone = bm.pelvis;
+						xpos = 50;
+					}
+					gdata.position = [(g == "left") ? xpos : -xpos, 0, -30];
+				} else // side? sub? part?
 					gdata.bone = zero.core.util.gear2bone(gdata.kind);
 			}
 			if (!gdata.thing)
@@ -179,28 +188,30 @@ zero.core.Body = CT.Class({
 				onbuild: held && az[g].hand.grasp,
 				onremove: held && az[g].hand.release
 			}));
-			if (gdata.thing == "Garment")
+			if (bagger)
+				bagged[bagger][g] = gthing;
+			else if (gdata.thing == "Garment")
 				gars[gdata.name] = gthing;
 			else if (gdata.thing == "Item")
 				heldz[g] = itemz[gdata.name] = gthing;
 		};
 	},
-	gear: function(gear, held) {
+	gear: function(gear, held, bagger) {
 		var g, gval, k, n;
 		for (g in gear) {
 			gval = gear[g];
 			if (gval) {
 				if (typeof gval == "object")
-					this.gear(gval, g == "held");
+					this.gear(gval, g == "held", bagger);
 				else if (gval.startsWith("procedural.")) {
 					[k, n] = gval.split(".").slice(1);
-					this.equipper(g, held)(zero.base.clothes.procedurals(k, true, true)[n]);
+					this.equipper(g, held, bagger)(zero.base.clothes.procedurals(k, true, true)[n]);
 				} else
-					CT.db.one(gval, this.equipper(g, held), "json");
+					CT.db.one(gval, this.equipper(g, held, bagger), "json");
 			}
 		}
 	},
-	ungear: function(gkey, side, sub) {
+	ungear: function(gkey, side, sub) { // sub? side where?
 		var g, gt, k, kz = gkey ? [gkey] : Object.keys(this.gearmap);
 		for (k of kz) {
 			g = this.gearmap[k];
@@ -214,6 +225,15 @@ zero.core.Body = CT.Class({
 			}
 			delete this.gearmap[k];
 		}
+	},
+	bag: function(key, area, side) {
+		var gopts = {};
+		gopts[side] = key;
+		this.gear(gopts, false, area);
+	},
+	unbag: function(area, side) {
+		this.bagged[area][side].remove();
+		delete this.bagged[area][side];
 	},
 	fixBounds: function() {
 		var gars = Object.values(this.garments);
@@ -388,6 +408,7 @@ zero.core.Body = CT.Class({
 		this.garments = {};
 		this.items = {};
 		this.held = {};
+		this.bagged = { back: {}, hip: {} };
 		this._boundFixer = setTimeout(this.fixBounds, 5000);
 	}
 }, zero.core.Thing);
