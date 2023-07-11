@@ -52,12 +52,11 @@ zero.core.Thruster = CT.Class({
 		part.setSprings(thrust.both ? CT.merge(thrust.both, thrust[side]) : thrust);
 		if (partname == "spine") return;
 		flags = this.flags[side];
-		move = altmove || move;
 		if (move.startsWith("un")) {
-			if (move == "unthrust") {
-				part.unpause();
+			part.unpause();
+			if (move == "unthrust")
 				flags.thrusting = flags.swinging = false;
-			}
+			move = altmove || move;
 			this.sfx(this.ons[move] && this.ons[move](side) || "whoosh");
 		} else {
 			part.pause();
