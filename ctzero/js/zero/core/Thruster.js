@@ -23,7 +23,7 @@ zero.core.Thruster = CT.Class({
 					elbow: {x: 0}
 				}
 			},
-			unthrust: {clavicle: {y: 0}, shoulder: {x: 0, y: 0}, wrist: {x: 0}},
+			unthrust: {clavicle: {y: 0}, shoulder: {x: 0, y: 0, z: 0}, elbow: {x: 0}, wrist: {x: 0}},
 			down: {shoulder: {x: 0}, elbow: {x: 0}, wrist: {x: 0.5}},
 			up: {shoulder: {x: -Math.PI}, elbow: {x: 0}, wrist: {x: 0}},
 			back: {shoulder: {x: -Math.PI}, elbow: {x: -Math.PI}, wrist: {x: 0}},
@@ -86,7 +86,7 @@ zero.core.Thruster = CT.Class({
 		this.set("unthrust");
 		this.sfx(this.on.thrust && this.on.thrust(side) || "whoosh");
 	},
-	backthrust: function(side) {
+	back: function(side) {
 		this.set("back", "arms", side);
 	},
 	hip: function(side) {
