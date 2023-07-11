@@ -258,6 +258,7 @@ zero.core.Controls = CT.Class({
 		this.left = mover(ospeed, "orientation");
 		this.right = mover(-ospeed, "orientation");
 		this.holster = side => tt[CT.key.down("SHIFT") ? "back" : "hip"](side);
+		this.unholster = side => tt[CT.key.down("SHIFT") ? "unback" : "unhip"](side);
 		if (tt) { // person
 			CT.key.on("w", this.stop, this.forward);
 			CT.key.on("s", this.stop, this.backward);
@@ -267,8 +268,8 @@ zero.core.Controls = CT.Class({
 			CT.key.on("c", this.still, this.right);
 			CT.key.on("SPACE", this.unjump, this.jump);
 			CT.key.on("SHIFT", runner(), runner(true));
-			CT.key.on("DASH", () => tt.unthrust("left"), () => this.holster("left"));
-			CT.key.on("EQUALS", () => tt.unthrust("right"), () => this.holster("right"));
+			CT.key.on("DASH", () => this.unholster("left"), () => this.holster("left"));
+			CT.key.on("EQUALS", () => this.unholster("right"), () => this.holster("right"));
 			CT.key.on("OPEN_BRACKET", () => tt.unthrust("left"), () => tt.swing("left"));
 			CT.key.on("CLOSE_BRACKET", () => tt.unthrust("right"), () => tt.swing("right"));
 			CT.key.on("SEMICOLON", () => tt.unkick("left"), () => tt.kick("left"));
