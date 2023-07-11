@@ -26,7 +26,19 @@ zero.core.Thruster = CT.Class({
 			unthrust: {clavicle: {y: 0}, shoulder: {x: 0, y: 0}, wrist: {x: 0}},
 			down: {shoulder: {x: 0}, elbow: {x: 0}, wrist: {x: 0.5}},
 			up: {shoulder: {x: -Math.PI}, elbow: {x: 0}, wrist: {x: 0}},
-			back: {shoulder: {x: -Math.PI}, elbow: {x: -Math.PI}, wrist: {x: 0}}
+			back: {shoulder: {x: -Math.PI}, elbow: {x: -Math.PI}, wrist: {x: 0}},
+			hip: {
+				left: {
+					shoulder: {x: 1, y: -0.5, z: -0.5}
+				},
+				right: {
+					shoulder: {x: 1, y: 0.5, z: 0.5}
+				},
+				both: {
+					elbow: {x: -Math.PI},
+					wrist: {x: 0}
+				}
+			}
 		},
 		legs: {
 			kick: {hip: {x: -2}},
@@ -76,11 +88,9 @@ zero.core.Thruster = CT.Class({
 	},
 	backthrust: function(side) {
 		this.set("back", "arms", side);
-		this.set("kick");
 	},
-	unbackthrust: function(side) {
-		this.set("unthrust", "arms", side);
-		this.set("unthrust");
+	hip: function(side) {
+		this.set("hip", "arms", side);
 	},
 	kick: function(side, unkickafter) {
 		this.set("kick", "legs", side);
