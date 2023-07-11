@@ -162,28 +162,25 @@ zero.core.Body = CT.Class({
 		setTimeout(this.setBounds, 1200, true);
 	},
 	equipper: function(g, held, bagger) { // if held or bagger, g is side.....
-		var az = this.torso.arms, bz = this.bones, bm = this.bmap,
-			gmap = this.gearmap, gars = this.garments, gthing, xpos,
+		var az = this.torso.arms, bz = this.bones, bm = this.bmap, xpos = 5,
+			gmap = this.gearmap, gars = this.garments, gthing, propts,
 			itemz = this.items, heldz = this.held, bagged = this.bagged;
 		return function(gdata) {
 			if (!("bone" in gdata)) {
-				if (held)
+				if (bagger) {
+					propts = {
+						rotation: [-Math.PI * 7 / 8, 0, 0],
+						position: [(g == "left") ? xpos : -xpos, -20, -10],
+						bone: (bagger == "back") ? bm[g].arm.shoulder : bm[g].leg.hip
+					};
+				} else if (held)
 					gdata.bone = bm[g].arm.wrist; // ad-hoc held item
-				else if (bagger) {
-					if (bagger == "back") {
-						xpos = 30;
-						gdata.bone = bm[g].arm.clavicle;
-					} else { // hip
-						gdata.bone = bm.pelvis;
-						xpos = 50;
-					}
-					gdata.position = [(g == "left") ? xpos : -xpos, 0, -30];
-				} else // side? sub? part?
+				else // side? sub? part?
 					gdata.bone = zero.core.util.gear2bone(gdata.kind);
 			}
 			if (!gdata.thing)
 				gdata.thing = held ? "Item" : "Garment";
-			gthing = gmap[gdata.key || gdata.fakeKey] = zero.core.util.thing(CT.merge(gdata, {
+			gthing = gmap[gdata.key || gdata.fakeKey] = zero.core.util.thing(CT.merge(propts, gdata, {
 				bones: bz,
 				onbuild: held && az[g].hand.grasp,
 				onremove: held && az[g].hand.release
