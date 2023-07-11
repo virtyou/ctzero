@@ -4,7 +4,7 @@ zero.core.Arm = CT.Class({
 		return this.opts.bonemap.arm;
 	},
 	move: function(opts) {
-		if (this.thrusting || this.swinging) return;
+		if (this._paused) return;
 		this.setSprings(opts.arm);
 		this.hand.move(opts.hand);
 	},
@@ -31,34 +31,6 @@ zero.core.Arm = CT.Class({
 	tick: function() {
 		zero.core[this.variety].parts.forEach(this.tickPart);
 		this.hand.tick();
-	},
-	_downthruster: {shoulder: {x: 0}, elbow: {x: 0}, wrist: {x: 0.5}},
-	_upthruster: {shoulder: {x: -Math.PI}, elbow: {x: 0}, wrist: {x: 0}},
-	_unthruster: {clavicle: {y: 0}, shoulder: {x: 0, y: 0}, wrist: {x: 0}},
-	thrust: function() {
-		if (!this._thruster) {
-			var isleft = this.opts.side == "left";
-			this._thruster = {
-				wrist: {x: 1},
-				elbow: {x: 0},
-				clavicle: {y: isleft && -0.5 || 0.5},
-				shoulder: {x: -2, y: isleft && -0.5 || 0.5}
-			};
-		}
-		this.setSprings(this._thruster);
-		this.thrusting = true;
-	},
-	downthrust: function() {
-		this.setSprings(this._downthruster);
-		this.thrusting = true;
-	},
-	upthrust: function() {
-		this.setSprings(this._upthruster);
-		this.swinging = true;
-	},
-	unthrust: function() {
-		this.setSprings(this._unthruster);
-		this.swinging = this.thrusting = false;
 	},
 	poseRange: {
 		position: {

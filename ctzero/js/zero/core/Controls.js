@@ -245,7 +245,8 @@ zero.core.Controls = CT.Class({
 		this.clear();
 		var placer = this.placer, mover = this.mover, sz = this._.speed,
 			speed = sz.base, ospeed = sz.orientation, jspeed = sz.jump,
-			wall, gestures, dances, num = 0, runner = this.runner, tb;
+			wall, gestures, dances, num = 0, runner = this.runner, tt;
+		tt = this.target.thruster;
 		this.jump = mover(jspeed, "y");
 		this.unjump = mover(0, "y");
 		this.forward = mover(speed, "front");
@@ -256,8 +257,9 @@ zero.core.Controls = CT.Class({
 		this.still = mover(0, "orientation");
 		this.left = mover(ospeed, "orientation");
 		this.right = mover(-ospeed, "orientation");
-		if (this.target.gesture) { // person
-			tb = this.target.body;
+		this.holster = side => tt[CT.key.down("SHIFT") ? "back" : "hip"](side);
+		this.unholster = side => tt[CT.key.down("SHIFT") ? "unback" : "unhip"](side);
+		if (tt) { // person
 			CT.key.on("w", this.stop, this.forward);
 			CT.key.on("s", this.stop, this.backward);
 			CT.key.on("a", this.stop, this.leftStrafe);
@@ -266,10 +268,12 @@ zero.core.Controls = CT.Class({
 			CT.key.on("c", this.still, this.right);
 			CT.key.on("SPACE", this.unjump, this.jump);
 			CT.key.on("SHIFT", runner(), runner(true));
-			CT.key.on("OPEN_BRACKET", () => tb.unthrust("left"), () => tb.swing("left"));
-			CT.key.on("CLOSE_BRACKET", () => tb.unthrust("right"), () => tb.swing("right"));
-			CT.key.on("SEMICOLON", () => tb.unkick("left"), () => tb.kick("left"));
-			CT.key.on("QUOTE", () => tb.unkick("right"), () => tb.kick("right"));
+			CT.key.on("DASH", () => this.unholster("left"), () => this.holster("left"));
+			CT.key.on("EQUALS", () => this.unholster("right"), () => this.holster("right"));
+			CT.key.on("OPEN_BRACKET", () => tt.unthrust("left"), () => tt.swing("left"));
+			CT.key.on("CLOSE_BRACKET", () => tt.unthrust("right"), () => tt.swing("right"));
+			CT.key.on("SEMICOLON", () => tt.unkick("left"), () => tt.kick("left"));
+			CT.key.on("QUOTE", () => tt.unkick("right"), () => tt.kick("right"));
 			gestures = Object.keys(this.target.opts.gestures);
 			dances = Object.keys(this.target.opts.dances);
 			this.setNum(0, null, null, true);
