@@ -702,8 +702,10 @@ zero.core.util = {
 	},
 	join: function(pobj, onready, nowatch, lookcam, current) {
 		var zcc = zero.core.current;
-		if (current && zcc.inventory)
+		if (current && zcc.inventory) {
 			pobj.gear = zcc.inventory.gear;
+			pobj.bag = zcc.inventory.bag;
+		}
 		var person = new zero.core.Person(CT.merge(pobj, {
 			onbuild: function() {
 				zcc.people[pobj.name] = person;
