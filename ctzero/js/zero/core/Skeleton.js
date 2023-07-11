@@ -129,8 +129,14 @@ zero.core.Skeleton = CT.Class({
 			});
 		}
 	},
+	pause: function() {
+		this._paused = true;
+	},
+	unpause: function() {
+		this._paused = false;
+	},
 	move: function(opts) {
-		this.setSprings(opts);
+		this._paused || this.setSprings(opts);
 	},
 	resize: function(opts) {
 		this.setScales(opts);

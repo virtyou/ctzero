@@ -3,12 +3,6 @@ zero.core.Arm = CT.Class({
 	bmap: function() {
 		return this.opts.bonemap.arm;
 	},
-	pause: function() {
-		this._paused = true;
-	},
-	unpause: function() {
-		this._paused = false;
-	},
 	move: function(opts) {
 		if (this._paused) return;
 		this.setSprings(opts.arm);
