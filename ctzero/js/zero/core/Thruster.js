@@ -1,6 +1,6 @@
 zero.core.Thruster = CT.Class({
 	CLASSNAME: "zero.core.Thruster",
-	on: {},
+	ons: {},
 	flags: { left: {}, right: {} },
 	thrusters: {
 		spine: {
@@ -45,22 +45,24 @@ zero.core.Thruster = CT.Class({
 			unkick: {hip: {x: 0}}
 		}
 	},
-	set: function(move, partname, side) {
+	set: function(move, partname, side, altmove) {
 		partname = partname || "spine";
-		var thrust = this.thrusters[partname][move], flags;
+		var thrust = this.thrusters[partname][move], flags, unun;
 		part = this[partname] || this.torso[partname][side];
-		if (partname == "arms") {
-			flags = this.flags[side];
+		part.setSprings(thrust.both ? CT.merge(thrust.both, thrust[side]) : thrust);
+		if (partname == "spine") return;
+		flags = this.flags[side];
+		move = altmove || move;
+		if (move.startsWith("un")) {
 			if (move == "unthrust") {
 				part.unpause();
 				flags.thrusting = flags.swinging = false;
 			}
-			else {
-				part.pause();
-				flags[(move == "up") ? "swinging" : "thrusting"] = true;
-			}
+			this.sfx(this.ons[move] && this.ons[move](side) || "whoosh");
+		} else {
+			part.pause();
+			flags[(move == "up") ? "swinging" : "thrusting"] = true;
 		}
-		part.setSprings(thrust.both ? CT.merge(thrust.both, thrust[side]) : thrust);
 	},
 	swing: function(side) {
 		if (!this.body.holding(side, "smasher"))
@@ -84,13 +86,18 @@ zero.core.Thruster = CT.Class({
 	unthrust: function(side) {
 		this.set("unthrust", "arms", side);
 		this.set("unthrust");
-		this.sfx(this.on.thrust && this.on.thrust(side) || "whoosh");
 	},
 	back: function(side) {
 		this.set("back", "arms", side);
 	},
+	unback: function(side) {
+		this.set("unthrust", "arms", side, "unback");
+	},
 	hip: function(side) {
 		this.set("hip", "arms", side);
+	},
+	unhip: function(side) {
+		this.set("unthrust", "arms", side, "unhip");
 	},
 	kick: function(side, unkickafter) {
 		this.set("kick", "legs", side);
@@ -100,13 +107,9 @@ zero.core.Thruster = CT.Class({
 	unkick: function(side) {
 		this.set("unkick", "legs", side);
 		this.set("unthrust");
-		this.sfx(this.on.kick && this.on.kick(side) || "whoosh");
 	},
-	onthrust: function(cb) {
-		this.on.thrust = cb; // just one...
-	},
-	onkick: function(cb) {
-		this.on.kick = cb; // just one...
+	on: function(move, cb) {
+		this.ons[move] = cb; // just one
 	},
 	init: function(opts) {
 		this.opts = opts = CT.merge(opts, {
