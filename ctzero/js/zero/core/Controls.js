@@ -246,6 +246,7 @@ zero.core.Controls = CT.Class({
 		var placer = this.placer, mover = this.mover, sz = this._.speed,
 			speed = sz.base, ospeed = sz.orientation, jspeed = sz.jump,
 			wall, gestures, dances, num = 0, runner = this.runner, tt;
+		tt = this.target.thruster;
 		this.jump = mover(jspeed, "y");
 		this.unjump = mover(0, "y");
 		this.forward = mover(speed, "front");
@@ -256,7 +257,7 @@ zero.core.Controls = CT.Class({
 		this.still = mover(0, "orientation");
 		this.left = mover(ospeed, "orientation");
 		this.right = mover(-ospeed, "orientation");
-		tt = this.target.thruster;
+		this.holster = side => tt[CT.key.down("SHIFT") ? "back" : "hip"](side);
 		if (tt) { // person
 			CT.key.on("w", this.stop, this.forward);
 			CT.key.on("s", this.stop, this.backward);
@@ -266,6 +267,8 @@ zero.core.Controls = CT.Class({
 			CT.key.on("c", this.still, this.right);
 			CT.key.on("SPACE", this.unjump, this.jump);
 			CT.key.on("SHIFT", runner(), runner(true));
+			CT.key.on("DASH", () => tt.unthrust("left"), () => this.holster("left"));
+			CT.key.on("EQUALS", () => tt.unthrust("right"), () => this.holster("right"));
 			CT.key.on("OPEN_BRACKET", () => tt.unthrust("left"), () => tt.swing("left"));
 			CT.key.on("CLOSE_BRACKET", () => tt.unthrust("right"), () => tt.swing("right"));
 			CT.key.on("SEMICOLON", () => tt.unkick("left"), () => tt.kick("left"));
