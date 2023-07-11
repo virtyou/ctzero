@@ -496,6 +496,8 @@ zero.base.clothes.procedurals = function(kind, objStyle, fakeKeys) {
 			thing: thing,
 			template: tmod + name
 		};
+		if (isheld)
+			robj[name].variety = gz[name].variety || "knocker";
 		if (fakeKeys)
 			robj[name].fakeKey = "procedural." + kind + "." + name;
 	});
