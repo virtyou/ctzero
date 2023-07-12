@@ -29,6 +29,12 @@ zero.core.Fire = CT.Class({
 		this.quenched = true;
 		this.hide();
 	},
+	getBounder: function() {
+		for (var part of ["flametips", "heart", "shine"])
+			if (this[part])
+				return this[part].group;
+		return this.group;
+	},
 	assembled: function() {
 		this._.built();
 		this.quenched && this.hide();
@@ -128,7 +134,7 @@ zero.core.Fire = CT.Class({
 			color: 0xffaaaa
 		});
 		oz.moths && oz.parts.push({
-			within: this,
+			within: oz.glow && "glow" || this,
 			name: "moths",
 			kind: "menagerie",
 			collection: "fire",
