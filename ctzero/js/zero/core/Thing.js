@@ -97,7 +97,7 @@ zero.core.Thing = CT.Class({
 				bmax.y = p.y;
 				bmin.y = zero.core.current.room.bounds.min.y;
 			} else if (!this.hardbounds)
-				bounds.setFromObject(bounder || this.group);
+				bounds.setFromObject(bounder || this.getBounder());
 			this._.setInnerBounds();
 			this._.setRadMid();
 		},
@@ -156,6 +156,9 @@ zero.core.Thing = CT.Class({
 	},
 	hide: function() {
 		this.group.visible = false;
+	},
+	getBounder: function() {
+		return this.group;
 	},
 	bindAxis: function(pname) {
 		var pz = this.positioners;
