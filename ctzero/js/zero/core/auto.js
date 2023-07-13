@@ -105,14 +105,15 @@ zero.core.auto.Automaton = CT.Class({
 		});
 		this.reprogram();
 //		opts.person.grippy = false;
-		var az0 = opts.activities[0], pb = opts.person.body, wapo, amo;
+		var az0 = opts.activities[0], pb = opts.person.body, wapo, amo, plat;
 		if (!pb.position && az0) {
 			if (az0.action == "move") {
 				amo = az0.value;
 				pb.position = [amo.weave, amo.bob, amo.slide];
 			} else if (az0.action == "wander" && az0.value != "room") {
-				wapo = zero.core.current.room[az0.value].position();
-				pb.position = [wapo.x, wapo.y + 100, wapo.z]; // meh?
+				plat = zero.core.current.room[az0.value];
+				wapo = plat.position();
+				pb.position = [wapo.x, plat.getTop() + 100, wapo.z]; // meh?
 			}
 		}
 		this.reactivitate(opts.activities);
