@@ -66,7 +66,8 @@ var camera = zero.core.camera = {
 			_.controls.handleResize();
 	},
 	visible: function(obj) {
-		var thring = obj.thring || obj, t = zero.core.util.ticker, _ = camera._;
+		var thring = obj.thring || (obj.vizbit && obj.vizbit()) || obj,
+			t = zero.core.util.ticker, _ = camera._;
 		if (!thring) return;
 		if (!thring.frusted || thring.frusted < t) {
 			thring.inFrustum = (_.frustum || _.left.frustum).intersectsObject(thring);

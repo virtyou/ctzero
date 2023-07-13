@@ -41,6 +41,9 @@ zero.core.Hair = CT.Class({
 	tick: function() {
 		zero.core.util.shouldSkip(false, 120) || this.tickBatch();
 	},
+	vizbit: function() {
+		return this.strand0.seg0.thring;
+	},
 	init: function(opts) {
 		this.opts = opts = CT.merge(opts, {
 			density: 6,
@@ -54,5 +57,6 @@ zero.core.Hair = CT.Class({
 			opts.parts = zero.base.body.hair[opts.name].parts;
 		this.cur = 0;
 		this.isCustom = !opts.noTick; // for tick
+		this.frustBit = this.parent;
 	}
 }, zero.core.Thing);
