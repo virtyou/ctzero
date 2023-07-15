@@ -134,7 +134,7 @@ zero.core.Fire = CT.Class({
 			color: 0xffaaaa
 		});
 		oz.moths && oz.parts.push({
-			within: oz.glow && "glow" || this,
+			within: this,
 			name: "moths",
 			kind: "menagerie",
 			collection: "fire",
