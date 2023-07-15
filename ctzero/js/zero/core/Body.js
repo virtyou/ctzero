@@ -163,20 +163,18 @@ zero.core.Body = CT.Class({
 	},
 	equipper: function(g, held, bagger) { // if held or bagger, g is side.....
 		var az = this.torso.arms, bz = this.bones, bm = this.bmap, xpos = 5,
-			gmap = this.gearmap, gars = this.garments, gthing, propts,
+			gmap = this.gearmap, gars = this.garments, gthing, propts = {},
 			itemz = this.items, heldz = this.held, bagged = this.bagged;
 		return function(gdata) {
 			if (!("bone" in gdata)) {
 				if (bagger) {
-					propts = {
-						rotation: [-Math.PI * 7 / 8, 0, 0],
-						position: [(g == "left") ? xpos : -xpos, -20, -10],
-						bone: (bagger == "back") ? bm[g].arm.shoulder : bm[g].leg.hip
-					};
+					propts.rotation = [-Math.PI * 7 / 8, 0, 0];
+					propts.position = [(g == "left") ? xpos : -xpos, -20, -10];
+					propts.bone = (bagger == "back") ? bm[g].arm.shoulder : bm[g].leg.hip;
 				} else if (held)
-					gdata.bone = bm[g].arm.wrist; // ad-hoc held item
+					propts.bone = bm[g].arm.wrist; // ad-hoc held item
 				else // side? sub? part?
-					gdata.bone = zero.core.util.gear2bone(gdata.kind);
+					propts.bone = zero.core.util.gear2bone(gdata.kind);
 			}
 			if (!gdata.thing)
 				gdata.thing = held ? "Item" : "Garment";
@@ -217,7 +215,7 @@ zero.core.Body = CT.Class({
 			if (gt == "Garment")
 				delete this.garments[k];
 			else if (gt == "Item") {
-				delete this.items[k];
+				delete this.items[g.name];
 				delete this.held[side];
 			}
 			delete this.gearmap[k];
