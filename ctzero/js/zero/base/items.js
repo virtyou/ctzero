@@ -15,6 +15,7 @@ zero.base.items = {
 			name: "fire",
 			regTick: true,
 			faceUp: true,
+			quenched: true,
 			position: [0, 30, 0],
 			scale: [0.5, 0.5, 0.5]
 		}, {
