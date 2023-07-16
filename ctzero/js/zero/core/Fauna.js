@@ -390,9 +390,9 @@ zero.core.Fauna.sets = {
 		centipede: 1
 	},
 	cavern: {
-		ant: 1,
+		ant: 4,
 		snake: 1,
-		spider: 1,
+		spider: 10,
 		centipede: 1,
 		lizard: 1,
 		rat: 1,
@@ -436,7 +436,7 @@ zero.core.Fauna.defaultSet = {
 zero.core.Fauna.hunters = {
 	dog: ["cat", "rat", "snake"],
 	cat: ["rat", "bird", "chicken", "bunny", "lizard"],
-	snake: ["cat", "rat", "bunny"],
+	snake: ["cat", "rat", "bunny", "spider"],
 	lizard: ["spider"],
 	spider: ["ant"]
 };
