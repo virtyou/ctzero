@@ -77,11 +77,11 @@ zero.core.Collection = CT.Class({
 		}
 	},
 	preassemble: function() {
-		var r = this.within || zero.core.current.room;
-		this.awaitBound = !r.bounds;
-		if (this.opts.mode == "rows")
+		var oz = this.opts, r = this.within || zero.core.current.room;
+		this.awaitBound = !(r.bounds || (oz.forceBound && r.getBounds()));
+		if (oz.mode == "rows")
 			this.kinds.forEach(this.row);
-		else if (this.opts.mode == "cols")
+		else if (oz.mode == "cols")
 			this.kinds.forEach(this.col);
 		else {
 			this.kinds.forEach(this.random);
@@ -109,8 +109,8 @@ zero.core.Collection = CT.Class({
 		}, this.collect(opts.collection), this.opts);
 		if (opts.within) {
 			if (typeof opts.within == "string") {
-				this.log("grabbing within from room...");
-				this.within = zero.core.current.room[opts.within];
+				this.log("grabbing within...");
+				this.within = (opts.withiner || zero.core.current.room)[opts.within];
 				if (!this.within)
 					this.log("CAN'T FIND WITHIN!");
 			} else
