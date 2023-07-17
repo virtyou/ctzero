@@ -38,6 +38,7 @@ zero.core.Fire = CT.Class({
 	assembled: function() {
 		this._.built();
 		this.quenched && this.hide();
+		this.opts.glow && setTimeout(this.glow.setBounds, 200);
 		this.opts.regTick && zero.core.current.room.regTicker(this);
 	},
 	preassemble: function() {
@@ -134,7 +135,8 @@ zero.core.Fire = CT.Class({
 			color: 0xffaaaa
 		});
 		oz.moths && oz.parts.push({
-			within: this,
+			within: oz.glow && "glow" || this,
+			withiner: oz.glow && this,
 			name: "moths",
 			kind: "menagerie",
 			collection: "fire",
