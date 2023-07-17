@@ -842,7 +842,8 @@ zero.core.Thing = CT.Class({
 		}
 		else if (oz.coneGeometry) {
 			g = (typeof oz.coneGeometry == "number") ? oz.coneGeometry : 1;
-			oz.geometry = new THREE.ConeGeometry(g, g * (oz.geomult || 2));
+			oz.geometry = new THREE.ConeGeometry(g, g * (oz.geomult || 2), oz.geoRadialSegs,
+				oz.geoHeightSegs, oz.geoOpen, oz.geoThetaStart, oz.geoThetaLength);
 		}
 		else if (oz.cylinderGeometry) {
 			g = oz.cylinderGeometry;
