@@ -358,6 +358,14 @@ zero.core.Thing = CT.Class({
 		this.unvsplay();
 		this._.vsplayer = function() {
 			if (!zero.core.camera.visible(thaz)) return;
+			if (!mat.map) {
+				thaz.log("creating vstrip texture on the fly!");
+				if (typeof vs == "string") {
+					thaz._vstrip(vs);
+					vs = thaz.opts.vstrip;
+				}
+				zcu.uptex(thaz);
+			}
 			t = (zcu.ticker + randoff) % vs.frames;
 			mat.map.offset.x = ((t % max) * vs.fwidth) / vs.width;
 			mat.map.offset.y = (vs.height - vs.fheight * (1 + Math.floor(t / max))) / vs.height;
@@ -599,8 +607,7 @@ zero.core.Thing = CT.Class({
 	},
 	update: function(opts) {
 		var zcu = zero.core.util, mat = this.material,
-			hasT = "texture" in opts || "video" in opts || "vstrip" in opts,
-			o, setter, full = hasT && !mat;
+			full = !mat && ("texture" in opts || "video" in opts || "vstrip" in opts);
 		full || ["stripset", "geometry", "planeGeometry", "matcat", "meshcat"].forEach(function(item) {
 			full = full || (item in opts);
 		});
@@ -612,24 +619,7 @@ zero.core.Thing = CT.Class({
 			opts = this.opts; // for material stuff below
 			this.vsplay();
 		}
-		if (mat) {
-			if (hasT)
-				mat.map = (opts.texture && zcu.texture(opts.texture))
-					|| (opts.video && zcu.videoTexture(opts.video.item || opts.video, this));
-			(opts.repeat || opts.offset) && this.repOff();
-			if (opts.material)
-				for (var p in opts.material)
-					mat[p] = opts.material[p];
-			if (mat.map) {
-				if (mat.map.image.complete)
-					mat.needsUpdate = true;
-				else {
-					mat.map.image.onload = function() {
-						mat.needsUpdate = true;
-					};
-				}
-			}
-		}
+		mat && zcu.uptex(this, opts);
 		this.posRotScale(opts);
 	},
 	_vstrip: function(vs) {
