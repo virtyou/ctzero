@@ -81,6 +81,20 @@ zero.core.Sploder = CT.Class({
 		this.fire.setPositioners(pos, false, true);
 		this.fire.ignite();
 	},
+	glow: function(thing) {
+		var tr = thing.rotation();
+		thing.attach({
+			name: "glow",
+			coneGeometry: true,
+			geoOpen: true,
+			scale: [50, 50, 50],
+			rotation: [Math.PI - tr.x, -tr.y, -tr.z],
+			vstrip: "templates.one.vstrip.glow",
+			material: {
+				side: THREE.DoubleSide
+			}
+		});
+	},
 	pcfg: function(v) {
 		return {
 			name: v,
