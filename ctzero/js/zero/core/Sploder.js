@@ -91,6 +91,7 @@ zero.core.Sploder = CT.Class({
 			rotation: [Math.PI - tr.x, -tr.y, -tr.z],
 			vstrip: "templates.one.vstrip.glow",
 			material: {
+				opacity: 0.6,
 				side: THREE.DoubleSide
 			}
 		});
