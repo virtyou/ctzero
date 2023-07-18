@@ -412,6 +412,33 @@ zero.core.util = {
 		tx.needsUpdate = true;
 		return tx;
 	},
+	texUpOnLoad: function(mat) {
+		if (mat.map) {
+			if (mat.map.image.complete)
+				mat.needsUpdate = true;
+			else {
+				mat.map.image.onload = function() {
+					mat.needsUpdate = true;
+				};
+			}
+		}
+	},
+	setTexture: function(thing) {
+		var opts = thing.opts, zcu = zero.core.util;
+		thing.material.map = (opts.texture && zcu.texture(opts.texture))
+			|| (opts.video && zcu.videoTexture(opts.video.item || opts.video, thing));
+	},
+	uptex: function(thing, opts) {
+		var zcu = zero.core.util, mat = thing.material, p;
+		opts = opts || thing.opts;
+		if ("texture" in opts || "video" in opts)
+			zcu.setTexture(thing);
+		(opts.repeat || opts.offset) && thing.repOff();
+		if (opts.material)
+			for (p in opts.material)
+				mat[p] = opts.material[p];
+		zcu.texUpOnLoad(mat)
+	},
 	components: function(part, parent) {
 		var pref, ipref, oz, compz = [];
 		for (pref of ["", "texture_", "stripset_"]) {
