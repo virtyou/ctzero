@@ -29,16 +29,16 @@ zero.core.Fire = CT.Class({
 		this.quenched = true;
 		this.hide();
 	},
-	getBounder: function() {
+/*	getBounder: function() {
 		for (var part of ["flametips", "heart", "shine"])
 			if (this[part])
 				return this[part].group;
 		return this.group;
-	},
+	},*/
 	assembled: function() {
 		this._.built();
 		this.quenched && this.hide();
-		this.opts.glow && setTimeout(this.glow.setBounds, 200);
+		this.opts.glow && this.glow.setBounds();
 		this.opts.regTick && zero.core.current.room.regTicker(this);
 	},
 	preassemble: function() {
@@ -119,6 +119,7 @@ zero.core.Fire = CT.Class({
 			thing: "Bit",
 			pulse: 0.2,
 			size: 40,
+			sizeBound: true,
 			material: {
 				opacity: 0.1,
 				alphaTest: 0.1,
