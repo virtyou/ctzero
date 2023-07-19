@@ -66,10 +66,10 @@ zero.core.util = {
 	unglow: function(material) {
 		material.color = material.origColor;
 	},
-	randMat: function(color) {
-		return new THREE.MeshPhongMaterial({
+	randMat: function(color, mcfg) {
+		return new THREE.MeshPhongMaterial(CT.merge({
 			color: zero.core.util.randHue(color)
-		});
+		}, mcfg));
 	},
 	outBound: function(thing, bounder, p) {
 		var rb = (bounder || zero.core.current.room).innerBounds,
