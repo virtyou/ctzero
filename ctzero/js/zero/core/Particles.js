@@ -70,7 +70,7 @@ zero.core.Particles = CT.Class({
 			return this.material;
 		if (oz.sharemats) {
 			if (!this.materials)
-				this.materials = oz.sharemats.map(zero.core.util.randMat);
+				this.materials = oz.sharemats.map(c => zero.core.util.randMat(c, oz.pmat));
 			return this.materials[index % this.materials.length];
 		}
 	},

@@ -75,6 +75,9 @@ zero.core.Bit = CT.Class({
 		this.opts = opts = CT.merge(opts, core.config.ctzero.env[ename], opts.shape || {
 			sphereGeometry: true
 		}, this.opts);
+		if (opts.sharemat && opts.matinstance && opts.parts)
+			for (var p of opts.parts)
+				p.matinstance = opts.matinstance;
 		if (opts.ranges) {
 			for (var r in opts.ranges) {
 				var ro = opts.ranges[r];

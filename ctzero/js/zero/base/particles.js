@@ -107,6 +107,7 @@ zero.base.particles = {
 			cylinderGeometry: true,
 			geomult: 5,
 			spin: true,
+			sharemat: true,
 			parts: [{
 				torusGeometry: 1,
 				torusTubeRadius: 1,
