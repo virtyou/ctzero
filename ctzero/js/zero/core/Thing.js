@@ -72,11 +72,16 @@ zero.core.Thing = CT.Class({
 			});
 		},
 		setInnerBounds: function() {
-			var p = this.position(), bounds = this.bounds,
-				inners = this.innerBounds = { min: {}, max: {} };
+			var oz = this.opts, p = this.position(), inners = this.innerBounds = {
+				min: {}, max: {}
+			}, bounds = this.bounds, sizeShift = oz.sizeBound && oz.size;
 			zero.core.util.xyz.forEach(function(dim) {
 				inners.min[dim] = bounds.min[dim] - p[dim];
 				inners.max[dim] = bounds.max[dim] - p[dim];
+				if (sizeShift) {
+					inners.min[dim] -= sizeShift;
+					inners.max[dim] += sizeShift;
+				}
 			});
 		},
 		setBounds: function(bounder) {
