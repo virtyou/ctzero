@@ -290,12 +290,14 @@ zero.core.Body = CT.Class({
 	energy: function() {
 		return this.person && this.person.energy;
 	},
-	grow: function(scale, additive) {
+	grow: function(scale, additive, rebound) {
 		if (typeof scale == "number")
 			scale = [scale, scale, scale];
 		this.springs.width.target = scale[0];
 		this.springs.height.target = scale[1];
-		this.springs.depth.target = scale[2];
+		this.springs.depth.target = scale[2]; // rebound overdoing it?
+		rebound && setTimeout(this.basicBound, 500) && setTimeout(this.basicBound, 1000)
+			&& setTimeout(this.basicBound, 2000) && setTimeout(this.basicBound, 4000);
 	},
 	fznpak: function() {
 		var g, gz = this.gearmap;
