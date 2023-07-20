@@ -36,10 +36,11 @@ zero.core.Fire = CT.Class({
 		return this.group;
 	},*/
 	assembled: function() {
+		var r = zero.core.current.room;
 		this._.built();
 		this.quenched && this.hide();
-		this.opts.glow && setTimeout(this.glow.setBounds, 2000);
-		this.opts.regTick && zero.core.current.room.regTicker(this);
+		this.opts.glow && r.onbounded(this.glow.setBounds);
+		this.opts.regTick && r.regTicker(this);
 	},
 	preassemble: function() {
 		var oz = this.opts, variety;
