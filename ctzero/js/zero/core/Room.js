@@ -344,8 +344,10 @@ zero.core.Room = CT.Class({
 		return part;
 	},
 	removeObject: function(obj) {
-		this.log("removing object");
 		var thing;
+		if (obj.removed)
+			return this.log("already removed", obj.name);
+		this.log("removing object", obj.name);
 		for (var i = 0; i < this.objects.length; i++)
 			if (this.objects[i].name == obj.name)
 				thing = this.objects[i];
