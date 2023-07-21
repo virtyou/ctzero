@@ -71,9 +71,9 @@ zero.core.util = {
 			color: zero.core.util.randHue(color)
 		}, mcfg));
 	},
-	outBound: function(thing, bounder, p) {
-		var rb = (bounder || zero.core.current.room).innerBounds,
-			min = rb.min, max = rb.max;
+	outBound: function(thing, bounder, p, inner) {
+		var rb = (bounder || zero.core.current.room)[inner ?
+			"innerBounds" : "bounds"], min = rb.min, max = rb.max;
 		p = p || thing.position();
 		return p.x < min.x || p.x > max.x || p.z < min.z || p.z > max.z;
 	},
