@@ -76,12 +76,12 @@ zero.core.Thing = CT.Class({
 				min: {}, max: {}
 			}, bounds = this.bounds, sizeShift = oz.sizeBound && oz.size;
 			zero.core.util.xyz.forEach(function(dim) {
+				if (sizeShift) {
+					bounds.min[dim] -= sizeShift;
+					bounds.max[dim] += sizeShift;
+				}
 				inners.min[dim] = bounds.min[dim] - p[dim];
 				inners.max[dim] = bounds.max[dim] - p[dim];
-				if (sizeShift) {
-					inners.min[dim] -= sizeShift;
-					inners.max[dim] += sizeShift;
-				}
 			});
 		},
 		setBounds: function(bounder) {
