@@ -5,6 +5,7 @@ zero.core.Item = CT.Class({
 		if (!thing) return;
 		var zcc = zero.core.current, sploder = zcc.sploder;
 		this.log(variety, thing.name);
+		CT.event.emit(variety, thing.name);
 		if (sploder)
 			sploder[variety](thing);
 		else
