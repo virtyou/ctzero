@@ -616,6 +616,7 @@ zero.core.Person = CT.Class({
 				opts.gear && thiz.gear(opts.gear);
 				opts.bag && thiz.bag(opts.bag);
 				opts.onbuild && opts.onbuild(thiz);
+				cfg.gravity && bod.setBob();
 			}
 		}));
 		this.brain = new zero.core.Brain({
