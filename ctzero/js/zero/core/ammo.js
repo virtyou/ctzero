@@ -220,7 +220,7 @@ zero.core.ammo = {
 	anchor: function(cloth, anchor, anchorPoints, afriction) {
 		const ammo = zero.core.ammo, consts = ammo._.consts,
 			coz = cloth.opts, endPoint = coz.numSegzZ * coz.numSegzY,
-			softBody = cloth.thring.userData.physicsBody;;
+			softBody = cloth.thring.userData.physicsBody;
 		if (Array.isArray(anchor)) {
 			const aseg = endPoint / anchor.length;
 			anchor.forEach((a, i) => softBody.appendAnchor(aseg * i,
