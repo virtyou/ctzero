@@ -142,15 +142,22 @@ zero.core.Room = CT.Class({
 				return obj;
 		}
 	},
-	getInteractive: function(overlapper, feature) {
-		var k, t, brit, touching = zero.core.util.touching;
+	getFeaturing: function(feature) {
+		var k, t, item, featurings = [];
 		for (k of this._interactives[feature]) {
 			for (t in this[k]) {
-				brit = this[k][t];
-				if (brit.opts[feature] && touching(overlapper, brit, 50, false, true))
-					return brit;
+				item = this[k][t];
+				if (item.opts[feature])
+					featurings.push(item);
 			}
 		}
+		return featurings;
+	},
+	getInteractive: function(overlapper, feature) {
+		var item, touching = zero.core.util.touching;
+		for (item of this.getFeaturing(feature))
+			if (touching(overlapper, item, 50, false, true))
+				return item;
 	},
 	getBrittle: function(overlapper) {
 		return this.getInteractive(overlapper, "brittle");
