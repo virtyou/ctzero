@@ -128,10 +128,11 @@ zero.core.Thing = CT.Class({
 			if (this._.shouldMin(pname, dim))
 				sz[pname].target = pz[pname].min;
 		},
+		nomins: ["poster", "screen", "stream", "portal", "body"],
 		shouldMin: function(pname, dim) { // fix multifloor-zone portals!
 			if (!core.config.ctzero.gravity) return false;
 			return dim == "y" && this.vlower != "pool" && !this.opts.position[1] &&
-				!(["poster", "screen", "stream", "portal", "body"].includes(this.opts.kind));
+				!(this._.nomins.includes(this.opts.kind));
 		},
 		checkOver: function(dim, pos, radii) {
 			var bz = this.bounds;
