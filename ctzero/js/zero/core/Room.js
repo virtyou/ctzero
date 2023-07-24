@@ -240,7 +240,8 @@ zero.core.Room = CT.Class({
 //		if (this.floor0)
 //			this.bounds.min.y = this.floor0.position().y;
 		Object.values(zero.core.current.people).forEach(function(person) {
-			person.body.group && person.body.setBounds();
+			var pb = person.body;
+			pb.onReady(pb.setBounds);
 		});
 		this.objects.forEach(furn => furn.setBounds());
 		for (var kind of this._structural) {
