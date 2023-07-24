@@ -245,7 +245,8 @@ zero.core.Controls = CT.Class({
 		this.clear();
 		var placer = this.placer, mover = this.mover, sz = this._.speed,
 			speed = sz.base, ospeed = sz.orientation, jspeed = sz.jump,
-			wall, gestures, dances, num = 0, runner = this.runner, tt;
+			wall, gestures, dances, num = 0, runner = this.runner, tt,
+			cam = zero.core.camera;
 		tt = this.target.thruster;
 		this.jump = mover(jspeed, "y");
 		this.unjump = mover(0, "y");
@@ -274,6 +275,8 @@ zero.core.Controls = CT.Class({
 			CT.key.on("CLOSE_BRACKET", () => tt.unthrust("right"), () => tt.swing("right"));
 			CT.key.on("SEMICOLON", () => tt.unkick("left"), () => tt.kick("left"));
 			CT.key.on("QUOTE", () => tt.unkick("right"), () => tt.kick("right"));
+			CT.key.on("p", () => cam.angle("polar"));
+			CT.key.on("b", () => cam.angle("behind"));
 			gestures = Object.keys(this.target.opts.gestures);
 			dances = Object.keys(this.target.opts.dances);
 			this.setNum(0, null, null, true);
