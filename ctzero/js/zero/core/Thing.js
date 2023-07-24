@@ -254,11 +254,13 @@ zero.core.Thing = CT.Class({
 			this._.setBounds();
 		return this.bounds;
 	},
-	setBounds: function(rebound, nosnap) {
+	setBounds: function(rebound, nosnap, toeOff) {
 		this._.preboundz.forEach(f => f());
 		var xyz = zero.core.util.xyz, thaz = this;
 		this._.nosnap = nosnap;
 		this.autoRot();
+		if (toeOff)
+			delete this._toeOffset;
 		if (rebound)
 			delete this.radii;
 		if (!this.radii)
@@ -278,11 +280,13 @@ zero.core.Thing = CT.Class({
 		this.onbound && this.onbound(this);
 		this._.postboundz.forEach(f => f());
 	},
-	basicBound: function() { // bare bones
+	basicBound: function(toeOff) { // bare bones
 		var r = zero.core.current.room,
 			pos = this.placer.position,
 			oz = this.opts, atop;
 		this._.preboundz.forEach(f => f());
+		if (toeOff)
+			delete this._toeOffset;
 		this._.setBounds();
 		this.homeY = this.radii.y;
 		atop = this.within || r.getSurface(pos, this.radii);
