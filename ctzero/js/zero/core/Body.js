@@ -158,7 +158,11 @@ zero.core.Body = CT.Class({
 		ropts.body && this._applyMod(ropts.body);
 		this.torso.resize(ropts);
 		this.spine.resize(ropts.spine);
-		setTimeout(this.setBounds, 1200, true);
+		setTimeout(this.boundAndBob, 1000);
+	},
+	boundAndBob: function() {
+		this.basicBound(true);
+		this.setBob(true);
 	},
 	equipper: function(g, held, bagger) { // if held or bagger, g is side.....
 		var az = this.torso.arms, bz = this.bones, bm = this.bmap, xpos = 5,
@@ -246,7 +250,7 @@ zero.core.Body = CT.Class({
 		clearTimeout(this._boundFixer);
 		this.ungear(); // anything else???
 	},
-	setBob: function() {
+	setBob: function(rebob) {
 		var r = zero.core.current.room;
 		if (!(r && r.isReady())) return;
 		var pos = this.placer.position,
@@ -274,8 +278,8 @@ zero.core.Body = CT.Class({
 			for (var ps of ["weave", "bob", "slide"])
 				this.springs[ps].pull = obj && obj.pull && obj.pull[ps];
 			this._.bounder("y", 1, obj && obj.getTop(pos));
-		} else if (obj && (obj.shelled || obj.vlower == "ramp" || obj.shifting("y"))) {
-			otop = obj.getTop(pos);
+		} else if (rebob || (obj && (obj.shelled || obj.vlower == "ramp" || obj.shifting("y")))) {
+			otop = (obj || r).getTop(pos);
 			bobber.floored = otop >= bobber.value - 100;
 			this._.bounder("y", 1, otop, true);
 		}
@@ -290,13 +294,14 @@ zero.core.Body = CT.Class({
 		return this.person && this.person.energy;
 	},
 	grow: function(scale, additive, rebound) {
+		var bb = this.boundAndBob;
 		if (typeof scale == "number")
 			scale = [scale, scale, scale];
 		this.springs.width.target = scale[0];
 		this.springs.height.target = scale[1];
 		this.springs.depth.target = scale[2]; // rebound overdoing it?
-		rebound && setTimeout(this.basicBound, 500) && setTimeout(this.basicBound, 1000)
-			&& setTimeout(this.basicBound, 2000) && setTimeout(this.basicBound, 4000);
+		rebound && setTimeout(bb, 500) && setTimeout(bb, 1000)
+			&& setTimeout(bb, 2000) && setTimeout(bb, 4000);
 	},
 	fznpak: function() {
 		var g, gz = this.gearmap;
