@@ -118,9 +118,11 @@ zero.core.Thing = CT.Class({
 				pz[pname].min = (typeof min == "number" ? min : bz.min[dim]) + rz[dim];
 			}
 			if (this._yoff && dim == "y") {
-				var offer = -this.bones[0].position.y;
-				pz[pname].max += offer;
-				pz[pname].min += offer;
+				var lz = this.torso.legs, offer = this._toeOffset = Math.max(this._toeOffset || 0,
+					lz.left.foot.offset(), lz.right.foot.offset()), diff = offer - rz[dim];
+//				var offer = -this.bones[0].position.y;
+				pz[pname].max += diff;
+				pz[pname].min += diff;
 			}
 			this._.nosnap ? setTimeout(bax, 2000, pname) : bax(pname);
 			if (upspring)
