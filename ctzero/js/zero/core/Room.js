@@ -70,7 +70,7 @@ zero.core.Room = CT.Class({
 	unregTicker: function(ticker) {
 		CT.data.remove(this._tickers, ticker);
 	},
-	eject: function(person, port) {
+	eject: function(person, port, remove) {
 		var bod = person.body, wall = port && port.opts.wall,
 			sz = bod.springs, pz = bod.positioners, dist = 500; // revise
 		person.body.setFriction(false, true);
@@ -95,7 +95,7 @@ zero.core.Room = CT.Class({
 			sz.bob.target -= dist;
 			pz.bob.min -= dist;
 		}
-		setTimeout(bod.hide, 500);
+		setTimeout(bod[remove ? "remove" : "hide"], 500);
 	},
 	inject: function(person, port) {
 		var bod = person.body, wall, prop = "bob",
