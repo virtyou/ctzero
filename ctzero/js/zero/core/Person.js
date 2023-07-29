@@ -252,7 +252,6 @@ zero.core.Person = CT.Class({
 		if (!this.body || this.body.removed || _.chased.removed)
 			this.unchase();
 		else if (zero.core.util.touching(this.body, _.chased, 20)) {
-			_.prevcam && camera.angle(_.prevcam);
 			this.unchase();
 			cb && cb();
 		} else {
@@ -260,19 +259,17 @@ zero.core.Person = CT.Class({
 			this.propel();
 		}
 	},
-	pursue: function(subject, cb, prevcam) {
+	pursue: function(subject, cb) {
 		var _ = this._;
 		_.postchase = cb;
 		_.chased = subject;
-		_.prevcam = prevcam;
 		_.chaser = setInterval(this.chaser, 500);
 	},
 	approach: function(subject, cb, watch, chase, dur, nobuff) {
 		var _ = this._, bod = this.body, zc = zero.core, dist,
 			zcu = zc.util, zcc = zc.current, ppl = zcc.people,
 			propel = this.propel, pursue = this.pursue, stop = this.stop,
-			bso = bod.springs.orientation, bsohard = bso.hard,
-			cam = camera.current, shouldBehind = this.isYou() && (cam != "behind");
+			bso = bod.springs.orientation, bsohard = bso.hard;
 		if (typeof subject == "string") {
 			if (subject == "player") {
 				if (!zcc.person) return cb && cb();
@@ -282,7 +279,7 @@ zero.core.Person = CT.Class({
 			else
 				subject = zcc.room[subject];
 		}
-		shouldBehind && camera.angle("behind");
+		this.isYou() && camera.angle("preferred");
 		watch && this.watch(false, true);
 		bso.k = 200;
 		bso.hard = false;
@@ -295,7 +292,7 @@ zero.core.Person = CT.Class({
 			bso.k = 20;
 			bso.hard = bsohard;
 			if (chase)
-				return pursue(subject, cb, shouldBehind && cam);
+				return pursue(subject, cb);
 			if (!dur) {
 				dist = zcu.distance(bod.position(), subject.position());
 				if (!nobuff)
