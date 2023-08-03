@@ -407,7 +407,7 @@ zero.core.Person = CT.Class({
 		}, true);
 	},
 	wander: function(where, cb, dur) {
-		where = where || "room";
+		this.lastWhere = where = where || "room";
 		var r = zero.core.current.room, _ = this._, wantar = _.wantar = _.wantar || {},
 			bz = (where == "room") ? r.bounds : r[where].bounds,
 			min = bz.min, max = bz.max;
