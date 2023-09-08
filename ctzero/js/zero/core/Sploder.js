@@ -45,6 +45,8 @@ zero.core.Sploder = CT.Class({
 				CT.data.remove(things, t);
 				this.log(t.name, "degraded");
 				zero.core.current.room.removeObject(t);
+				t._degaud.pause();
+				this.tada();
 			}
 		}
 	},
@@ -58,6 +60,9 @@ zero.core.Sploder = CT.Class({
 		for (v of varieties)
 			this[v] && this[v].release(oz[v], pos);
 	},
+	tada: function() {
+		zero.core.audio.sfx(this.auds.tada);
+	},
 	confettize: function(pos) {
 		this._bang(pos, this.confetties);
 	},
@@ -65,14 +70,18 @@ zero.core.Sploder = CT.Class({
 		this._bang(pos, this[variety || "splobits"]);
 	},
 	shart: function(thing, noremove) {
+		zero.core.audio.sfx(this.auds.smash);
 		this.shards.modMat(thing.material);
 		this._bang(thing.position(), this.sharts);
 		noremove || zero.core.current.room.removeObject(thing);
+		setTimeout(this.tada, 1000);
 	},
 	melt: function(thing) {
+		thing._degaud = zero.core.audio.sfx(this.auds.melt);
 		CT.data.append(this.degrading.melt, thing);
 	},
 	burn: function(thing) {
+		thing._degaud = zero.core.audio.sfx(this.auds.burn);
 		this.ignite(thing.position());
 		CT.data.append(this.degrading.burn, thing);
 	},
@@ -127,6 +136,13 @@ zero.core.Sploder = CT.Class({
 			confetti: 30,
 			fire: true
 		}, this.opts);
+		var zc = zero.core, ua = zc.audio.ux.audio;
+		this.auds = {
+			tada: ua.tada[0],
+			smash: ua.smash[0],
+			melt: zc.Pool.audio.within[0],
+			burn: zc.Fire.audio.crackle[0]
+		};
 		zero.core.util.ontick(this.tick);
 	}
 }, zero.core.Thing);
