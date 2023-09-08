@@ -34,6 +34,7 @@ zero.core.audio = {
 		var aud = zero.core.audio._.aud(sound, soft);
 		aud.volume = volume || 1;
 		aud.paused && zero.core.util.playMedia(aud, true);
+		return aud;
 	},
 	ux: function(sound) {
 		var uxa = zero.core.audio.ux.audio; // templates.one.audio assigns audio{}
