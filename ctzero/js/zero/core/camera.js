@@ -174,7 +174,7 @@ var camera = zero.core.camera = {
 		}
 	},
 	caretOn: function() {
-		camera._.looker.caret.show();
+		core.config.ctzero.camera.caret && camera._.looker.caret.show();
 	},
 	caretOff: function() {
 		camera._.looker.caret.hide();
@@ -414,6 +414,7 @@ var camera = zero.core.camera = {
 			},
 			parts: [{
 				name: "caret",
+				invisible: true,
 				coneGeometry: true,
 				scale: [4, 4, 4],
 				position: [0, 20, 0],
