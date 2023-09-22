@@ -63,8 +63,9 @@ zero.core.Sploder = CT.Class({
 	tada: function() {
 		zero.core.audio.sfx(this.auds.tada);
 	},
-	confettize: function(pos) {
+	confettize: function(pos, tada) {
 		this._bang(pos, this.confetties);
+		tada && this.tada();
 	},
 	splode: function(pos, variety) {
 		this._bang(pos, this[variety || "splobits"]);
