@@ -138,11 +138,12 @@ zero.core.Person = CT.Class({
 		this.body.tick(dts);
 	},
 	watch: function(nofollow, noroom) {
-		var cube = this.body.looker;
+		var cam = zero.core.camera, cube = this.body.looker;
+		cam.toggleCaret(!this.isYou());
 		if (nofollow)
-			zero.core.camera.look(cube.position());
+			cam.look(cube.position());
 		else
-			zero.core.camera.follow(cube);
+			cam.follow(cube);
 		if (!noroom) {
 			var pz = zero.core.current.people;
 			for (var p in pz)
@@ -511,6 +512,18 @@ zero.core.Person = CT.Class({
 		}
 		zero.core.util.mergeBit(resetz, gest, 1);
 		this.body.resize(gest);
+	},
+	select: function() {
+		this.body.attach({
+			name: "selector",
+			torusGeometry: 20,
+			torusTubeRadius: 3,
+			position: [0, -80, 0],
+			rotation: [Math.PI / 2, 0, 0],
+			material: {
+				color: 0xffdf00
+			}
+		});
 	},
 	setAura: function(aname) {
 		this.curAura && this.ungear(this.curAura);

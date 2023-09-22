@@ -173,8 +173,18 @@ var camera = zero.core.camera = {
 			camera.angle("polar");
 		}
 	},
+	caretOn: function() {
+		core.config.ctzero.camera.caret && camera._.looker.caret.show();
+	},
+	caretOff: function() {
+		camera._.looker.caret.hide();
+	},
+	toggleCaret: function(isOn) {
+		camera[isOn ? "caretOn" : "caretOff"]();
+	},
 	perspective: function(person, part) {
 		camera._.perspective = person;
+		camera.toggleCaret(!person || !person.isYou());
 		person && camera.follow(person.body[part || "lookAt"]);
 	},
 	_tickPerDim: function(dim, val, prop) {
@@ -401,7 +411,18 @@ var camera = zero.core.camera = {
 			material: {
 				color: 0x00ff00,
 				visible: config.helpers
-			}
+			},
+			parts: [{
+				name: "caret",
+				invisible: true,
+				coneGeometry: true,
+				scale: [4, 4, 4],
+				position: [0, 20, 0],
+				rotation: [Math.PI, 0, 0],
+				material: {
+					color: 0x00ff00
+				}
+			}]
 		});
 
 		if (controls)

@@ -91,19 +91,25 @@ zero.core.Sploder = CT.Class({
 		this.fire.ignite();
 	},
 	glow: function(thing) {
-		var tr = thing.rotation();
-		thing.attach({
+		var glopts = {
 			name: "glow",
 			coneGeometry: true,
 			geoOpen: true,
 			scale: [50, 50, 50],
-			rotation: [Math.PI - tr.x, -tr.y, -tr.z],
 			vstrip: "templates.one.vstrip.glow",
 			material: {
 				opacity: 0.6,
 				side: THREE.DoubleSide
 			}
-		});
+		}, tr;
+		if (thing.body) { // person
+			thing = thing.body;
+			glopts.position = [0, -100, 0];
+			glopts.material.color = "#0096FF";
+		}
+		tr = thing.rotation();
+		glopts.rotation = [Math.PI - tr.x, -tr.y, -tr.z];
+		thing.attach(glopts);
 	},
 	pcfg: function(v) {
 		return {
