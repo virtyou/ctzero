@@ -513,6 +513,18 @@ zero.core.Person = CT.Class({
 		zero.core.util.mergeBit(resetz, gest, 1);
 		this.body.resize(gest);
 	},
+	select: function() {
+		this.body.attach({
+			name: "selector",
+			torusGeometry: 20,
+			torusTubeRadius: 3,
+			position: [0, -80, 0],
+			rotation: [Math.PI / 2, 0, 0],
+			material: {
+				color: 0xffdf00
+			}
+		});
+	},
 	setAura: function(aname) {
 		this.curAura && this.ungear(this.curAura);
 		this.curAura = "procedural.worn_aura." + aname;
