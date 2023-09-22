@@ -138,11 +138,12 @@ zero.core.Person = CT.Class({
 		this.body.tick(dts);
 	},
 	watch: function(nofollow, noroom) {
-		var cube = this.body.looker;
+		var cam = zero.core.camera, cube = this.body.looker;
+		cam.toggleCaret(!this.isYou());
 		if (nofollow)
-			zero.core.camera.look(cube.position());
+			cam.look(cube.position());
 		else
-			zero.core.camera.follow(cube);
+			cam.follow(cube);
 		if (!noroom) {
 			var pz = zero.core.current.people;
 			for (var p in pz)
