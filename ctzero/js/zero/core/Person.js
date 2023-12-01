@@ -525,10 +525,16 @@ zero.core.Person = CT.Class({
 			}
 		});
 	},
-	setAura: function(aname) {
+	unAura: function() {
+		if (!this.curAura) return;
+		this.ungear(this.curAura);
+		delete this.curAura;
+	},
+	setAura: function(aname, timeout) {
 		this.curAura && this.ungear(this.curAura);
 		this.curAura = "procedural.worn_aura." + aname;
 		this.gear({ worn: { aura: this.curAura } });
+		timeout && setTimeout(this.unAura, timeout);
 	},
 	gear: function(gear) {
 		this.body.gear(gear);
