@@ -241,6 +241,14 @@ zero.core.Controls = CT.Class({
 			setTimeout(() => go(true), 100); // wait for Mood.tick() to update energy k
 		};
 	},
+	toggleChat: function() {
+		var chinput = CT.dom.className("chat")[0].getElementsByTagName("input")[0];
+		chinput._active = !chinput._active;
+		chinput._active ? chinput.focus() : chinput.blur();
+	},
+	setChat: function() {
+		CT.dom.className("chat")[0] && CT.key.on("CTRL", this.toggleChat);
+	},
 	setKeys: function() {
 		this.clear();
 		var placer = this.placer, mover = this.mover, sz = this._.speed,
@@ -261,6 +269,7 @@ zero.core.Controls = CT.Class({
 		this.holster = side => tt[CT.key.down("SHIFT") ? "back" : "hip"](side);
 		this.unholster = side => tt[CT.key.down("SHIFT") ? "unback" : "unhip"](side);
 		if (tt) { // person
+			this.setChat();
 			CT.key.on("w", this.stop, this.forward);
 			CT.key.on("s", this.stop, this.backward);
 			CT.key.on("a", this.stop, this.leftStrafe);
