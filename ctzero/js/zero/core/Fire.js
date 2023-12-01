@@ -22,10 +22,12 @@ zero.core.Fire = CT.Class({
 		delete this._audio;
 	},
 	ignite: function() {
+		this._audio.volume = 0.1;
 		this.quenched = false;
 		this.show();
 	},
 	quench: function() {
+		this._audio.volume = 0;
 		this.quenched = true;
 		this.hide();
 	},
@@ -38,7 +40,7 @@ zero.core.Fire = CT.Class({
 	assembled: function() {
 		var r = zero.core.current.room;
 		this._.built();
-		this.quenched && this.hide();
+		this.quenched && this.quench();
 		this.opts.glow && r.onbounded(this.glow.setBounds);
 		this.opts.regTick && r.regTicker(this);
 	},
