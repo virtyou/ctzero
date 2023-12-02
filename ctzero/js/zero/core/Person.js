@@ -341,6 +341,7 @@ zero.core.Person = CT.Class({
 		this.body.landing = true;
 		this.body.flying = false;
 		this.dance("fall", 1000);
+		setTimeout(() => this.gesture("upright"), 1200);
 	},
 	doLeap: function(shouldFly, amount, forwardAmount) {
 		shouldFly && this.shouldFly();
