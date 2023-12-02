@@ -241,10 +241,17 @@ zero.core.Controls = CT.Class({
 			setTimeout(() => go(true), 100); // wait for Mood.tick() to update energy k
 		};
 	},
+	chinput: function() {
+		return CT.dom.className("chat")[0].getElementsByTagName("input")[0];
+	},
+	activeChat: function() {
+		return this.chinput()._active;
+	},
 	toggleChat: function() {
-		var chinput = CT.dom.className("chat")[0].getElementsByTagName("input")[0];
+		var chinput = this.chinput();
 		chinput._active = !chinput._active;
 		chinput._active ? chinput.focus() : chinput.blur();
+		chinput._active || zero.core.camera.angle("preferred");
 	},
 	setChat: function() {
 		CT.dom.className("chat")[0] && CT.key.on("CTRL", this.toggleChat);
