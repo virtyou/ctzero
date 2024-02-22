@@ -37,7 +37,8 @@ zero.core.Garment = CT.Class({
 	init: function(opts) {
 		const bodpart = this.opts.bodpart = this.opts.kind.split("_").pop();
 		this.opts = opts = CT.merge(zero.base.clothes[bodpart][this.opts.name], opts, {
-			rigids: []
+			rigids: [],
+			castShadow: bodpart == "head"
 		}, this.opts);
 	}
 }, zero.core.Thing);
