@@ -397,6 +397,7 @@ zero.core.Body = CT.Class({
 	},
 	init: function(opts) {
 		this.opts = opts = CT.merge(this.opts, {
+			castShadow: true,
 			joints: zero.base.joints()
 		});
 		var mat = opts.material;

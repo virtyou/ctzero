@@ -67,8 +67,11 @@ zero.core.Head = CT.Class({
 		for (var c of this._.customs)
 			c.tick(skeleton);
 	},
-	init: function() {
+	init: function(opts) {
 		var p, zc = zero.core;
+		this.opts = opts = CT.merge(this.opts, opts, {
+			castShadow: true
+		});
 		for (p in zc.phonemes.forms)
 			this.springs[p] = zc.springController.add(zc.phonemes.forms[p], p, this);
 //		this.opts.frustumCulled = false; // TODO: figure out real problem and fix!!!
