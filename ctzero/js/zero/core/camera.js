@@ -347,6 +347,9 @@ var camera = zero.core.camera = {
 	container: function() {
 		return zero.core.camera._.outerContainer;
 	},
+	setShadows: function(shouldShad) {
+		camera.get("renderer").shadowMap.enabled = shouldShad && core.config.ctzero.shadows;
+	},
 	_cam: function(w, h, _, cclass) {
 		var cfg = core.config.ctzero, camcfg = cfg.camera;
 		_ = _ || camera._;
