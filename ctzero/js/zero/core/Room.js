@@ -511,6 +511,10 @@ zero.core.Room = CT.Class({
 			cz = cz.concat(zero.core.util.components(o, ppref));
 		return cz;
 	},
+	setShadows: function(shouldShad) {
+		this.opts.receiveShadow = shouldShad;
+		camera.setShadows(shouldShad);
+	},
 	init: function(opts) {
 		var eopts = opts.environment && CT.require("environments." + opts.environment, true);
 		this.opts = opts = CT.merge({
@@ -521,11 +525,9 @@ zero.core.Room = CT.Class({
 			cameras: [],
 			automatons: [],
 			skyscale: 10000,
-			receiveShadow: false
+			shadows: false
 		});
-
-		camera.setShadows(opts.receiveShadow);
-
+		this.setShadows(opts.shadows);
 		this.shelled = !!opts.stripset;
 		if (opts.outside && !this.shelled) {
 			opts.material.transparent = true;
