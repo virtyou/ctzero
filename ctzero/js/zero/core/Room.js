@@ -520,7 +520,8 @@ zero.core.Room = CT.Class({
 			objects: [], // regular Things
 			cameras: [],
 			automatons: [],
-			skyscale: 10000
+			skyscale: 10000,
+			receiveShadow: true
 		});
 		this.shelled = !!opts.stripset;
 		if (opts.outside && !this.shelled) {
