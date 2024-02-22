@@ -521,8 +521,11 @@ zero.core.Room = CT.Class({
 			cameras: [],
 			automatons: [],
 			skyscale: 10000,
-			receiveShadow: true
+			receiveShadow: false
 		});
+
+		camera.setShadows(opts.receiveShadow);
+
 		this.shelled = !!opts.stripset;
 		if (opts.outside && !this.shelled) {
 			opts.material.transparent = true;
