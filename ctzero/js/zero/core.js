@@ -31,6 +31,7 @@ CT.require("zero.core.auto");
 CT.require("zero.core.ar");
 CT.require("zero.core.knocker");
 CT.require("zero.core.natural");
+CT.require("zero.core.gamepads");
 
 CT.require("zero.core.Thing");
 CT.require("zero.core.Light");
