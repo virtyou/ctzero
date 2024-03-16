@@ -38,6 +38,11 @@ zero.core.gamepads = {
 		window.addEventListener("gamepadconnected", _.connected);
 		window.addEventListener("gamepaddisconnected", _.disconnected);
 	},
+	on: function(button, unpressed, pressed, untouched, touched, value) {
+		const pads = this._.pads;
+		for (let index of pads) // TODO: distinguish between controllers...
+			pads[index].on(button, unpressed, pressed, untouched, touched, value);
+	},
 	init: function(opts) {
 		const zcg = zero.core.gamepads, _ = zcg._;
 		zcg.log = CT.log.getLogger("gamepads");
@@ -49,6 +54,7 @@ zero.core.gamepads = {
 zero.core.gamepads.GamePad = CT.Class({
 	CLASSNAME: "zero.core.gamepads.GamePad",
 	_: {
+		cbs: {},
 		buttons: [],
 		axes: [0, 0, 0, 0],
 		bprops: ["pressed", "touched", "value"],
@@ -59,10 +65,12 @@ zero.core.gamepads.GamePad = CT.Class({
 				if (butt[prop] != cur[prop]) {
 					if (prop == "value")
 						opts[prop](i, butt[prop]);
-					else if (butt[prop])
+					else {
+						if (!butt[prop])
+							prop = "un" + prop;
 						opts[prop](i);
-					else
-						opts["un" + prop](i);
+					}
+					_.cbs[i] && _.cbs[i][prop] && _.cbs[i][prop](butt[prop]);
 				}
 		},
 		upaxes: function(axes) {
@@ -71,6 +79,21 @@ zero.core.gamepads.GamePad = CT.Class({
 				if (axes[i] != curax[i])
 					return this.opts.axes(axes);
 		}
+	},
+	on: function(button, unpressed, pressed, untouched, touched, value) {
+		const _ = this._;
+		if (!_.cbs[button])
+			_.cbs[button] = {};
+		if (unpressed)
+			_.cbs[button].unpressed = unpressed;
+		if (pressed)
+			_.cbs[button].pressed = pressed;
+		if (untouched)
+			_.cbs[button].untouched = untouched;
+		if (touched)
+			_.cbs[button].touched = touched;
+		if (value)
+			_.cbs[button].value = value;
 	},
 	update: function(gamepad) {
 		const _ = this._;
