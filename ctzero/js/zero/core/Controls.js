@@ -117,8 +117,8 @@ zero.core.Controls = CT.Class({
 				zoomOut = () => _.cawheel(null, 100);
 			CT.key.on("PERIOD", zoomIn, zoomIn);
 			CT.key.on("COMMA", zoomOut, zoomOut);
-			CT.key.on("t", zoomIn, zoomIn);
-			CT.key.on("g", zoomOut, zoomOut);
+			this.on("t", 1, zoomIn, zoomIn);
+			this.on("g", 3, zoomOut, zoomOut);
 		},
 		camouse: function() {
 			var node = CT.dom.id("vnode") || CT.dom.id("ctmain");
