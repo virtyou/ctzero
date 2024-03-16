@@ -284,10 +284,10 @@ zero.core.Controls = CT.Class({
 		this.unholster = side => tt[this.shifted() ? "unback" : "unhip"](side);
 		if (tt) { // person
 			this.setChat();
-			CT.key.on("w", this.stop, this.forward);
-			CT.key.on("s", this.stop, this.backward);
-			CT.key.on("a", this.stop, this.leftStrafe);
-			CT.key.on("d", this.stop, this.rightStrafe);
+			this.on("w", 12, this.stop, this.forward);
+			this.on("s", 13, this.stop, this.backward);
+			this.on("a", 14, this.stop, this.leftStrafe);
+			this.on("d", 15, this.stop, this.rightStrafe);
 			CT.key.on("z", this.still, this.left);
 			CT.key.on("c", this.still, this.right);
 			this.on("SPACE", 0, this.unjump, this.jump);
@@ -300,6 +300,7 @@ zero.core.Controls = CT.Class({
 			this.on("QUOTE", 7, () => tt.unkick("right"), () => tt.kick("right"));
 			CT.key.on("p", () => cam.angle("polar"));
 			CT.key.on("b", () => cam.angle("behind"));
+			zero.core.gamepads.on(8, cam.toggle);
 			gestures = Object.keys(this.target.opts.gestures);
 			dances = Object.keys(this.target.opts.dances);
 			this.setNum(0, null, null, true);
