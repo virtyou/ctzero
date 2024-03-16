@@ -44,14 +44,26 @@ zero.core.gamepads = {
 			return pads[index].pressed(button);
 	},
 	on: function(button, unpressed, pressed, untouched, touched, value) {
-		const pads = this._.pads;
-		for (let index in pads) // TODO: distinguish between controllers...
-			pads[index].on(button, unpressed, pressed, untouched, touched, value);
+		const cbs = zero.core.gamepads._.opts.cbs;
+		if (!cbs[button]) // shared cbs{} (for now...)
+			cbs[button] = {};
+		if (unpressed)
+			cbs[button].unpressed = unpressed;
+		if (pressed)
+			cbs[button].pressed = pressed;
+		if (untouched)
+			cbs[button].untouched = untouched;
+		if (touched)
+			cbs[button].touched = touched;
+		if (value)
+			cbs[button].value = value;
 	},
 	init: function(opts) {
 		const zcg = zero.core.gamepads, _ = zcg._;
 		zcg.log = CT.log.getLogger("gamepads");
-		_.opts = opts;
+		_.opts = CT.merge(opts, {
+			cbs: {}
+		});
 		zcg.listen();
 	}
 };
@@ -65,7 +77,8 @@ zero.core.gamepads.GamePad = CT.Class({
 		bprops: ["pressed", "touched", "value"],
 		default: { pressed: false, touched: false, value: 0 },
 		upbutt: function(i, butt) {
-			const _ = this._, opts = this.opts, cur = _.buttons[i] || _.default;
+			const _ = this._, opts = this.opts, cbs = opts.cbs,
+				cur = _.buttons[i] || _.default;
 			for (let prop of _.bprops)
 				if (butt[prop] != cur[prop]) {
 					if (prop == "value")
@@ -75,7 +88,7 @@ zero.core.gamepads.GamePad = CT.Class({
 							prop = "un" + prop;
 						opts[prop](i);
 					}
-					_.cbs[i] && _.cbs[i][prop] && _.cbs[i][prop](butt[prop]);
+					cbs[i] && cbs[i][prop] && cbs[i][prop](butt[prop]);
 				}
 		},
 		upaxes: function(axes) {
@@ -84,21 +97,6 @@ zero.core.gamepads.GamePad = CT.Class({
 				if (axes[i] != curax[i])
 					return this.opts.axes(axes);
 		}
-	},
-	on: function(button, unpressed, pressed, untouched, touched, value) {
-		const _ = this._;
-		if (!_.cbs[button])
-			_.cbs[button] = {};
-		if (unpressed)
-			_.cbs[button].unpressed = unpressed;
-		if (pressed)
-			_.cbs[button].pressed = pressed;
-		if (untouched)
-			_.cbs[button].untouched = untouched;
-		if (touched)
-			_.cbs[button].touched = touched;
-		if (value)
-			_.cbs[button].value = value;
 	},
 	pressed: function(button) {
 		const bz = this._.buttons;
