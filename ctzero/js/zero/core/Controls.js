@@ -159,7 +159,7 @@ zero.core.Controls = CT.Class({
 	placer: function(dir, amount, wallshift) {
 		var _ = this._, s = this.springs[dir], target = this.target,
 			wall = target.opts.wall, shifter = this.wallshift,
-			forward = wallshift == 1, nxtval;
+			forward = wallshift == 1, nxtval, shifted = this.shifted;
 		return function() {
 			if (wallshift) { // poster/portal
 				nxtval = s.value + amount;
@@ -180,7 +180,7 @@ zero.core.Controls = CT.Class({
 			if (_.structs.includes(target.opts.kind))
 				target.adjust("position", dir, amount, true); // but fix..
 			else
-				s.boost = CT.key.down("SHIFT") ? amount * 2 : amount;
+				s.boost = shifted() ? amount * 2 : amount;
 		};
 	},
 	face: function(vec) {
@@ -226,9 +226,9 @@ zero.core.Controls = CT.Class({
 		CT.key.clear(null, true); // also clear CT.gesture when that's added...
 	},
 	setNum: function(num, gesture, dance, stop) {
-		var target = this.target;
+		var target = this.target, shifted = this.shifted;
 		CT.key.on(num.toString(), function() {
-			if (CT.key.down("SHIFT"))
+			if (shifted())
 				stop ? target.undance() : (dance && target.dance(dance));
 			else
 				stop ? target.ungesture() : (gesture && target.gesture(gesture));
@@ -256,6 +256,13 @@ zero.core.Controls = CT.Class({
 	setChat: function() {
 		CT.dom.className("chat")[0] && CT.key.on("CTRL", this.toggleChat);
 	},
+	on: function(key, button, up, down) {
+		CT.key.on(key, up, down);
+		zero.core.gamepads.on(button, up, down);
+	},
+	shifted: function() {
+		return CT.key.down("SHIFT") || zero.core.gamepads.pressed(10);
+	},
 	setKeys: function() {
 		this.clear();
 		var placer = this.placer, mover = this.mover, sz = this._.speed,
@@ -273,8 +280,8 @@ zero.core.Controls = CT.Class({
 		this.still = mover(0, "orientation");
 		this.left = mover(ospeed, "orientation");
 		this.right = mover(-ospeed, "orientation");
-		this.holster = side => tt[CT.key.down("SHIFT") ? "back" : "hip"](side);
-		this.unholster = side => tt[CT.key.down("SHIFT") ? "unback" : "unhip"](side);
+		this.holster = side => tt[this.shifted() ? "back" : "hip"](side);
+		this.unholster = side => tt[this.shifted() ? "unback" : "unhip"](side);
 		if (tt) { // person
 			this.setChat();
 			CT.key.on("w", this.stop, this.forward);
@@ -283,14 +290,14 @@ zero.core.Controls = CT.Class({
 			CT.key.on("d", this.stop, this.rightStrafe);
 			CT.key.on("z", this.still, this.left);
 			CT.key.on("c", this.still, this.right);
-			CT.key.on("SPACE", this.unjump, this.jump);
-			CT.key.on("SHIFT", runner(), runner(true));
+			this.on("SPACE", 0, this.unjump, this.jump);
+			this.on("SHIFT", 10, runner(), runner(true));
 			CT.key.on("DASH", () => this.unholster("left"), () => this.holster("left"));
 			CT.key.on("EQUALS", () => this.unholster("right"), () => this.holster("right"));
-			CT.key.on("OPEN_BRACKET", () => tt.unthrust("left"), () => tt.swing("left"));
-			CT.key.on("CLOSE_BRACKET", () => tt.unthrust("right"), () => tt.swing("right"));
-			CT.key.on("SEMICOLON", () => tt.unkick("left"), () => tt.kick("left"));
-			CT.key.on("QUOTE", () => tt.unkick("right"), () => tt.kick("right"));
+			this.on("OPEN_BRACKET", 4, () => tt.unthrust("left"), () => tt.swing("left"));
+			this.on("CLOSE_BRACKET", 5, () => tt.unthrust("right"), () => tt.swing("right"));
+			this.on("SEMICOLON", 6, () => tt.unkick("left"), () => tt.kick("left"));
+			this.on("QUOTE", 7, () => tt.unkick("right"), () => tt.kick("right"));
 			CT.key.on("p", () => cam.angle("polar"));
 			CT.key.on("b", () => cam.angle("behind"));
 			gestures = Object.keys(this.target.opts.gestures);
@@ -324,7 +331,7 @@ zero.core.Controls = CT.Class({
 			CT.key.on("RIGHT", placer("x", 0), placer("x", speed));
 		}
 		CT.key.on("ENTER", this._.cb);
-		CT.key.on("x", this._.cb);
+		this.on("x", 2, this._.cb);
 	},
 	setSprings: function() {
 		var t = this.target;
