@@ -1,18 +1,18 @@
 zero.core.gamepads = {
 	_: {
-		pads: [],
+		pads: {},
 		interval: 200,
 		connected: function(event) {
 			const zcg = zero.core.gamepads, _ = zcg._;
 			zcg.log("pad connected");
-			_.pads.length || _.start();
-			_.pads.push(event.gamepad.index);
+			Object.keys(_.pads).length || _.start();
+			_.pads[event.gamepad.index] = new zcg.GamePad(_.opts);
 		},
 		disconnected: function(event) {
 			const zcg = zero.core.gamepads, _ = zcg._;
 			zcg.log("pad disconnected");
-			CT.data.remove(_.pads, event.gamepad.index);
-			_.pads.length || _.stop();
+			delete _.pads[event.gamepad.index];
+			Object.keys(_.pads).length || _.stop();
 		},
 		start: function() {
 			const zcg = zero.core.gamepads, _ = zcg._;
@@ -25,28 +25,14 @@ zero.core.gamepads = {
 			zcg.log("ticker stopped");
 		}
 	},
-	update: function(gamepad) {
-		const zcg = zero.core.gamepads, _ = zcg._;
-		let i, butt;
-		_.opts.axes && _.opts.axes(gamepad.axes);
-		for (i = 0; i < gamepad.buttons.length; i++) {
-			butt = gamepad.buttons[i];
-			if (butt.pressed)
-				_.opts.pressed(i);
-			else if (butt.touched) // don't fire both...
-				_.opts.touched(i);
-			if (butt.value)
-				_.opts.value(i, butt.value);
-		}
-	},
 	tick: function() {
-		const zcg = zero.core.gamepads;
+		const _ = zero.core.gamepads._;
 		for (let gp of navigator.getGamepads())
-			gp && zcg.update(gp);
+			gp && _.pads[gp.index].update(gp);
 	},
 	listen: function() {
 		const zcg = zero.core.gamepads, _ = zcg._;
-		if (_.listening) return CT.log("already listening");
+		if (_.listening) return zcg.log("already listening");
 		_.listening = true;
 		zcg.log("listening");
 		window.addEventListener("gamepadconnected", _.connected);
@@ -55,11 +41,32 @@ zero.core.gamepads = {
 	init: function(opts) {
 		const zcg = zero.core.gamepads, _ = zcg._;
 		zcg.log = CT.log.getLogger("gamepads");
-		_.opts = CT.merge(opts, {
-			value: zcg.log,
-			pressed: zcg.log,
-			touched: zcg.log
-		});
+		_.opts = opts;
 		zcg.listen();
 	}
 };
+
+zero.core.gamepads.GamePad = CT.Class({
+	CLASSNAME: "zero.core.gamepads.GamePad",
+	update: function(gamepad) {
+		const opts = this.opts;
+		let i, butt;
+		opts.axes && opts.axes(gamepad.axes);
+		for (i = 0; i < gamepad.buttons.length; i++) {
+			butt = gamepad.buttons[i];
+			if (butt.pressed)
+				opts.pressed(i);
+			else if (butt.touched) // don't fire both...
+				opts.touched(i);
+			if (butt.value)
+				opts.value(i, butt.value);
+		}
+	},
+	init: function(opts) {
+		this.opts = CT.merge(opts, {
+			value: this.log,
+			pressed: this.log,
+			touched: this.log
+		});
+	}
+});
