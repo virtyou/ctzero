@@ -48,25 +48,45 @@ zero.core.gamepads = {
 
 zero.core.gamepads.GamePad = CT.Class({
 	CLASSNAME: "zero.core.gamepads.GamePad",
-	update: function(gamepad) {
-		const opts = this.opts;
-		let i, butt;
-		opts.axes && opts.axes(gamepad.axes);
-		for (i = 0; i < gamepad.buttons.length; i++) {
-			butt = gamepad.buttons[i];
-			if (butt.pressed)
-				opts.pressed(i);
-			else if (butt.touched) // don't fire both...
-				opts.touched(i);
-			if (butt.value)
-				opts.value(i, butt.value);
+	_: {
+		buttons: [],
+		axes: [0, 0, 0, 0],
+		bprops: ["pressed", "touched", "value"],
+		default: { pressed: false, touched: false, value: 0 },
+		upbutt: function(i, butt) {
+			const _ = this._, opts = this.opts, cur = _.buttons[i] || _.default;
+			for (let prop of _.bprops)
+				if (butt[prop] != cur[prop]) {
+					if (prop == "value")
+						opts[prop](i, butt[prop]);
+					else if (butt[prop])
+						opts[prop](i);
+					else
+						opts["un" + prop](i);
+				}
+		},
+		upaxes: function(axes) {
+			const curax = this._.axes;
+			for (let i = 0; i < axes.length; i++)
+				if (axes[i] != curax[i])
+					return this.opts.axes(axes);
 		}
+	},
+	update: function(gamepad) {
+		const _ = this._;
+		this.opts.axes && _.upaxes(gamepad.axes);
+		for (let i = 0; i < gamepad.buttons.length; i++)
+			_.upbutt(i, gamepad.buttons[i]);
+		_.buttons = gamepad.buttons;
+		_.axes = gamepad.axes;
 	},
 	init: function(opts) {
 		this.opts = CT.merge(opts, {
 			value: this.log,
 			pressed: this.log,
-			touched: this.log
+			touched: this.log,
+			unpressed: this.log,
+			untouched: this.log
 		});
 	}
 });
