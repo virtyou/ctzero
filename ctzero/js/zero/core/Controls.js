@@ -223,7 +223,7 @@ zero.core.Controls = CT.Class({
 		};
 	},
 	clear: function() {
-		CT.key.clear(null, true); // also clear CT.gesture when that's added...
+		CT.key.clear(null, true); // also clear CT.gesture and zero.core.gamepads
 	},
 	setNum: function(num, gesture, dance, stop) {
 		var target = this.target, shifted = this.shifted;
@@ -263,6 +263,18 @@ zero.core.Controls = CT.Class({
 	shifted: function() {
 		return CT.key.down("SHIFT") || zero.core.gamepads.pressed(10);
 	},
+	upAxes: function(axes) {
+		var _ = this._;
+		_.look("UP", axes[3]);
+		_.look("LEFT", axes[2]);
+	},
+	initGamepads: function() {
+		if (this._gamepadsReady) return;
+		this._gamepadsReady = true;
+		zero.core.gamepads.init({
+			axes: this.upAxes
+		});
+	},
 	setKeys: function() {
 		this.clear();
 		var placer = this.placer, mover = this.mover, sz = this._.speed,
@@ -284,6 +296,7 @@ zero.core.Controls = CT.Class({
 		this.unholster = side => tt[this.shifted() ? "unback" : "unhip"](side);
 		if (tt) { // person
 			this.setChat();
+			this.initGamepads();
 			this.on("w", 12, this.stop, this.forward);
 			this.on("s", 13, this.stop, this.backward);
 			this.on("a", 14, this.stop, this.leftStrafe);
