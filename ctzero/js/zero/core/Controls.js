@@ -264,9 +264,18 @@ zero.core.Controls = CT.Class({
 		return CT.key.down("SHIFT") || zero.core.gamepads.pressed(10);
 	},
 	upAxes: function(axes) {
-		var _ = this._;
+		var _ = this._, x = axes[0], y = axes[1];
 		_.look("UP", axes[3]);
 		_.look("LEFT", axes[2]);
+		if (x < 0)
+			this.rightStrafe(-x);
+		else if (x > 0)
+			this.leftStrafe(x);
+		if (y < 0)
+			this.forward(-y);
+		else if (x > 0)
+			this.backward(y);
+		!x && !y && this.stop();
 	},
 	initGamepads: function() {
 		if (this._gamepadsReady) return;
@@ -299,10 +308,10 @@ zero.core.Controls = CT.Class({
 			this.initGamepads();
 			this.on("w", 12, this.stop, this.forward);
 			this.on("s", 13, this.stop, this.backward);
-			this.on("a", 14, this.stop, this.leftStrafe);
-			this.on("d", 15, this.stop, this.rightStrafe);
-			CT.key.on("z", this.still, this.left);
-			CT.key.on("c", this.still, this.right);
+			CT.key.on("a", this.stop, this.leftStrafe);
+			CT.key.on("d", this.stop, this.rightStrafe);
+			this.on("z", 14, this.still, this.left);
+			this.on("c", 15, this.still, this.right);
 			this.on("SPACE", 0, this.unjump, this.jump);
 			this.on("SHIFT", 10, runner(), runner(true));
 			CT.key.on("DASH", () => this.unholster("left"), () => this.holster("left"));
