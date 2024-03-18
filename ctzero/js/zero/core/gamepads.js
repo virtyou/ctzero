@@ -38,15 +38,23 @@ zero.core.gamepads = {
 		window.addEventListener("gamepadconnected", _.connected);
 		window.addEventListener("gamepaddisconnected", _.disconnected);
 	},
-	downs: function(butts, prop) {
-		const cbs = zero.core.gamepads._.opts.cbs;
-		prop = prop || "pressed";
-		return butts.filter(b => cbs[b] && cbs[b][prop]);
+	downs: function(butts, fprop) {
+		return butts.filter(zero.core.gamepads[fprop || "pressed"]);
 	},
 	pressed: function(button) {
-		const pads = this._.pads;
+		return zero.core.gamepads.butt(button, "pressed");
+	},
+	touched: function(button) {
+		return zero.core.gamepads.butt(button, "touched");
+	},
+	value: function(button) {
+		return zero.core.gamepads.butt(button, "value");
+	},
+	butt: function(button, prop) {
+		const pads = zero.core.gamepads._.pads;
+		prop = prop || "pressed";
 		for (let index in pads) // TODO: distinguish between controllers...
-			return pads[index].pressed(button);
+			return pads[index][prop](button);
 	},
 	clear: function() {
 		const opts = zero.core.gamepads._.opts;
