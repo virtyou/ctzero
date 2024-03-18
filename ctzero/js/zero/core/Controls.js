@@ -128,6 +128,32 @@ zero.core.Controls = CT.Class({
 			CT.gesture.listen("drag", node, this._.cadrag);
 			CT.gesture.listen("wheel", node, this._.cawheel);
 		},
+		movers: {
+			forward: {
+				key: "w",
+				button: 12,
+				axis: "drive"
+			},
+			backward: {
+				key: "s",
+				button: 13,
+				axis: "drive"
+			},
+			left: {
+				key: "a",
+				axis: "strafe"
+			},
+			right: {
+				key: "d",
+				axis: "strafe"
+			}
+		},
+		moving: function(dir) {
+			var _ = this._, dopts = _.movers[dir];
+			if (dopts.button && zero.core.gamepads.pressed(dopts.button))
+				return true;
+			return CT.key.down(dopts.key) || _.gpdir[dopts.axis] == dir;
+		},
 		dirvec: function() {
 			var _ = this._, drive = _.gpdir.drive, strafe = _.gpdir.strafe,
 				dir = this.target.direction, downs = CT.key.downs(_.dirs),
@@ -136,10 +162,10 @@ zero.core.Controls = CT.Class({
 				_.dv = new THREE.Vector3();
 			_.dv.x = _.dv.y = _.dv.z = 0;
 			this.going() && zero.core.util.dimsum(_.dv,
-				(downs.includes("w") || gpdowns.includes(12) || (drive == "forward")) && dir("front"),
-				(downs.includes("s") || gpdowns.includes(13) || (drive == "backward")) && dir("back"),
-				(downs.includes("a") || (strafe == "left")) && dir("left"),
-				(downs.includes("d") || (strafe == "right")) && dir("right"));
+				_.moving("forward") && dir("front"),
+				_.moving("backward") && dir("back"),
+				_.moving("left") && dir("left"),
+				_.moving("right") && dir("right"));
 			return _.dv;
 		}
 	},
