@@ -82,10 +82,15 @@ zero.core.gamepads.GamePad = CT.Class({
 	CLASSNAME: "zero.core.gamepads.GamePad",
 	_: {
 		cbs: {},
+		sigfig: 10,
 		buttons: [],
 		axes: [0, 0, 0, 0],
 		bprops: ["pressed", "touched", "value"],
 		default: { pressed: false, touched: false, value: 0 },
+		round: function(n) {
+			var sigfig = this._.sigfig;
+			return parseInt(n * sigfig) / sigfig;
+		},
 		upbutt: function(i, butt) {
 			const _ = this._, opts = this.opts, cbs = opts.cbs,
 				cur = _.buttons[i] || _.default;
@@ -113,12 +118,12 @@ zero.core.gamepads.GamePad = CT.Class({
 		return bz[button] && bz[button].pressed;
 	},
 	update: function(gamepad) {
-		const _ = this._;
-		this.opts.axes && _.upaxes(gamepad.axes);
+		const _ = this._, axes = gamepad.axes.map(_.round);
+		this.opts.axes && _.upaxes(axes);
 		for (let i = 0; i < gamepad.buttons.length; i++)
 			_.upbutt(i, gamepad.buttons[i]);
 		_.buttons = gamepad.buttons;
-		_.axes = gamepad.axes;
+		_.axes = axes;
 	},
 	init: function(opts) {
 		this.opts = CT.merge(opts, {
