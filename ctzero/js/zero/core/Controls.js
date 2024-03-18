@@ -115,8 +115,8 @@ zero.core.Controls = CT.Class({
 			}
 		},
 		cazoomers: function() {
-			var _ = this._, zoomIn = () => _.cawheel(null, -100),
-				zoomOut = () => _.cawheel(null, 100);
+			var _ = this._, zoomIn = () => _.cawheel(null, -300),
+				zoomOut = () => _.cawheel(null, 300);
 			CT.key.on("PERIOD", zoomIn, zoomIn);
 			CT.key.on("COMMA", zoomOut, zoomOut);
 			this.on("t", 1, zoomIn, zoomIn);
