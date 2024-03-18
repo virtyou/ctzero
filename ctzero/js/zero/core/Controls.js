@@ -327,13 +327,35 @@ zero.core.Controls = CT.Class({
 			axes: this.upAxes
 		});
 	},
+	setNav: function() {
+		this.on("w", 12, this.stop, this.forward);
+		this.on("s", 13, this.stop, this.backward);
+		CT.key.on("a", this.stop, this.leftStrafe);
+		CT.key.on("d", this.stop, this.rightStrafe);
+		this.on("z", 14, this.still, this.left);
+		this.on("c", 15, this.still, this.right);
+		this.on("SPACE", 0, this.unjump, this.jump);
+		this.on("SHIFT", 10, this.runner(), this.runner(true));
+	},
+	setLimbs: function() {
+		var tt = this.target.thruster, gp = zero.core.gamepads;
+		CT.key.on("DASH", () => this.unholster("left"), () => this.holster("left"));
+		CT.key.on("EQUALS", () => this.unholster("right"), () => this.holster("right"));
+		CT.key.on("OPEN_BRACKET", () => tt.unthrust("left"), () => tt.swing("left"));
+		gp.on(4, () => this.gpunarm("left"), () => this.gparm("left"));
+		CT.key.on("CLOSE_BRACKET", () => tt.unthrust("right"), () => tt.swing("right"));
+		gp.on(5, () => this.gpunarm("right"), () => this.gparm("right"));
+		CT.key.on("SEMICOLON", () => tt.unkick("left"), () => tt.kick("left"));
+		gp.on(6, () => this.gpunleg("left"), () => this.gpleg("left"));
+		CT.key.on("QUOTE", () => tt.unkick("right"), () => tt.kick("right"));
+		gp.on(7, () => this.gpunleg("right"), () => this.gpleg("right"));
+	},
 	setKeys: function() {
 		this.clear();
 		var placer = this.placer, mover = this.mover, sz = this._.speed,
 			speed = sz.base, ospeed = sz.orientation, jspeed = sz.jump,
-			wall, gestures, dances, num = 0, runner = this.runner, tt,
-			cam = zero.core.camera;
-		tt = this.target.thruster;
+			wall, gestures, dances, num = 0, cam = zero.core.camera,
+			tt = this.target.thruster;
 		this.jump = mover(jspeed, "y");
 		this.unjump = mover(0, "y");
 		this.forward = mover(speed, "front");
@@ -346,23 +368,15 @@ zero.core.Controls = CT.Class({
 		this.right = mover(-ospeed, "orientation");
 		this.holster = side => tt[this.shifted() ? "back" : "hip"](side);
 		this.unholster = side => tt[this.shifted() ? "unback" : "unhip"](side);
+		this.gparm = side => tt[this.shifted() ? "back" : "swing"](side);
+		this.gpunarm = side => tt[this.shifted() ? "unback" : "unthrust"](side);
+		this.gpleg = side => tt[this.shifted() ? "hip" : "kick"](side);
+		this.gpunleg = side => tt[this.shifted() ? "unhip" : "unkick"](side);
 		if (tt) { // person
-			this.setChat();
 			this.initGamepads();
-			this.on("w", 12, this.stop, this.forward);
-			this.on("s", 13, this.stop, this.backward);
-			CT.key.on("a", this.stop, this.leftStrafe);
-			CT.key.on("d", this.stop, this.rightStrafe);
-			this.on("z", 14, this.still, this.left);
-			this.on("c", 15, this.still, this.right);
-			this.on("SPACE", 0, this.unjump, this.jump);
-			this.on("SHIFT", 10, runner(), runner(true));
-			CT.key.on("DASH", () => this.unholster("left"), () => this.holster("left"));
-			CT.key.on("EQUALS", () => this.unholster("right"), () => this.holster("right"));
-			this.on("OPEN_BRACKET", 4, () => tt.unthrust("left"), () => tt.swing("left"));
-			this.on("CLOSE_BRACKET", 5, () => tt.unthrust("right"), () => tt.swing("right"));
-			this.on("SEMICOLON", 6, () => tt.unkick("left"), () => tt.kick("left"));
-			this.on("QUOTE", 7, () => tt.unkick("right"), () => tt.kick("right"));
+			this.setNav();
+			this.setChat();
+			this.setLimbs();
 			CT.key.on("p", () => cam.angle("polar"));
 			CT.key.on("b", () => cam.angle("behind"));
 			zero.core.gamepads.on(8, cam.toggle);
