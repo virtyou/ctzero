@@ -222,8 +222,9 @@ zero.core.Controls = CT.Class({
 			moveCb && moveCb(target.name);
 		};
 	},
-	clear: function() {
-		CT.key.clear(null, true); // also clear CT.gesture and zero.core.gamepads
+	clear: function() { // TODO: clear CT.gesture
+		CT.key.clear(null, true);
+		zero.core.gamepads.clear();
 	},
 	setNum: function(num, gesture, dance, stop) {
 		var target = this.target, shifted = this.shifted;

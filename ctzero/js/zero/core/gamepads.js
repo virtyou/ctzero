@@ -43,6 +43,12 @@ zero.core.gamepads = {
 		for (let index in pads) // TODO: distinguish between controllers...
 			return pads[index].pressed(button);
 	},
+	clear: function() {
+		const opts = zero.core.gamepads._.opts;
+		if (!opts) return;
+		for (let butt in opts.cbs)
+			delete opts.cbs[butt];
+	},
 	on: function(button, unpressed, pressed, untouched, touched, value) {
 		const cbs = zero.core.gamepads._.opts.cbs;
 		if (!cbs[button]) // shared cbs{} (for now...)
