@@ -155,9 +155,7 @@ zero.core.Controls = CT.Class({
 			return CT.key.down(dopts.key) || _.gpdir[dopts.axis] == dir;
 		},
 		dirvec: function() {
-			var _ = this._, drive = _.gpdir.drive, strafe = _.gpdir.strafe,
-				dir = this.target.direction, downs = CT.key.downs(_.dirs),
-				gpdowns = zero.core.gamepads.downs(_.gpdirs);
+			var _ = this._, dir = this.target.direction;
 			if (!_.dv)
 				_.dv = new THREE.Vector3();
 			_.dv.x = _.dv.y = _.dv.z = 0;
