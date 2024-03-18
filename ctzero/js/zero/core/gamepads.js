@@ -38,9 +38,10 @@ zero.core.gamepads = {
 		window.addEventListener("gamepadconnected", _.connected);
 		window.addEventListener("gamepaddisconnected", _.disconnected);
 	},
-	downs: function(butts) {
+	downs: function(butts, prop) {
 		const cbs = zero.core.gamepads._.opts.cbs;
-		return butts.filter(b => cbs[b] && cbs[b].pressed);
+		prop = prop || "pressed";
+		return butts.filter(b => cbs[b] && cbs[b][prop]);
 	},
 	pressed: function(button) {
 		const pads = this._.pads;
