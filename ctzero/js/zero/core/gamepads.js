@@ -38,6 +38,10 @@ zero.core.gamepads = {
 		window.addEventListener("gamepadconnected", _.connected);
 		window.addEventListener("gamepaddisconnected", _.disconnected);
 	},
+	downs: function(butts) {
+		const cbs = zero.core.gamepads._.opts.cbs;
+		return butts.filter(b => cbs[b] && cbs[b].pressed);
+	},
 	pressed: function(button) {
 		const pads = this._.pads;
 		for (let index in pads) // TODO: distinguish between controllers...
