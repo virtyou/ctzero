@@ -266,8 +266,8 @@ zero.core.Controls = CT.Class({
 	},
 	upAxes: function(axes) {
 		var _ = this._, x = axes[0], y = axes[1];
-		_.look("UP", axes[3]);
-		_.look("LEFT", axes[2]);
+		_.look("DOWN", axes[3]);
+		_.look("RIGHT", axes[2]);
 		if (x < 0)
 			this.rightStrafe(-x);
 		else if (x > 0)
