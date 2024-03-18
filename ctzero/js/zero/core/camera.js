@@ -101,6 +101,12 @@ var camera = zero.core.camera = {
 		zero.core.current.room.cut(null, down === true);
 		camera._.onchange && camera._.onchange();
 	},
+	toggle: function() {
+		if (camera.current == "polar")
+			camera.angle("behind");
+		else
+			camera.angle("polar");
+	},
 	angle: function(perspective, pname, lookPart) {
 		console.log(perspective, pname, lookPart);
 		if (perspective == "preferred")

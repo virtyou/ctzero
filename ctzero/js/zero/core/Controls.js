@@ -46,6 +46,8 @@ zero.core.Controls = CT.Class({
 		camdirs: ["UP", "DOWN", "LEFT", "RIGHT"],
 		cdalias: {"LEFT": "q", "RIGHT": "e", "UP": "r", "DOWN": "f"},
 		dirs: ["w", "s", "a", "d"],
+		gpdirs: [12, 13, 14, 15],
+		gpdir: {},
 		xlrmode: "walk", // walk|look|dance
 		look: function(dir, mult, start) {
 			var _ = this._, cz = _.cams, mode,
@@ -113,12 +115,12 @@ zero.core.Controls = CT.Class({
 			}
 		},
 		cazoomers: function() {
-			var _ = this._, zoomIn = () => _.cawheel(null, -100),
-				zoomOut = () => _.cawheel(null, 100);
+			var _ = this._, zoomIn = () => _.cawheel(null, -300),
+				zoomOut = () => _.cawheel(null, 300);
 			CT.key.on("PERIOD", zoomIn, zoomIn);
 			CT.key.on("COMMA", zoomOut, zoomOut);
-			CT.key.on("t", zoomIn, zoomIn);
-			CT.key.on("g", zoomOut, zoomOut);
+			this.on("t", 1, zoomIn, zoomIn);
+			this.on("g", 3, zoomOut, zoomOut);
 		},
 		camouse: function() {
 			var node = CT.dom.id("vnode") || CT.dom.id("ctmain");
@@ -126,16 +128,42 @@ zero.core.Controls = CT.Class({
 			CT.gesture.listen("drag", node, this._.cadrag);
 			CT.gesture.listen("wheel", node, this._.cawheel);
 		},
+		movers: {
+			forward: {
+				key: "w",
+				button: 12,
+				axis: "drive"
+			},
+			backward: {
+				key: "s",
+				button: 13,
+				axis: "drive"
+			},
+			left: {
+				key: "a",
+				axis: "strafe"
+			},
+			right: {
+				key: "d",
+				axis: "strafe"
+			}
+		},
+		moving: function(dir) {
+			var _ = this._, dopts = _.movers[dir];
+			if (dopts.button && zero.core.gamepads.pressed(dopts.button))
+				return true;
+			return CT.key.down(dopts.key) || _.gpdir[dopts.axis] == dir;
+		},
 		dirvec: function() {
-			var _ = this._, dir = this.target.direction, downs = CT.key.downs(_.dirs);
+			var _ = this._, dir = this.target.direction;
 			if (!_.dv)
 				_.dv = new THREE.Vector3();
 			_.dv.x = _.dv.y = _.dv.z = 0;
-			downs.length && zero.core.util.dimsum(_.dv,
-				downs.includes("w") && dir("front"),
-				downs.includes("s") && dir("back"),
-				downs.includes("a") && dir("left"),
-				downs.includes("d") && dir("right"));
+			this.going() && zero.core.util.dimsum(_.dv,
+				_.moving("forward") && dir("front"),
+				_.moving("backward") && dir("back"),
+				_.moving("left") && dir("left"),
+				_.moving("right") && dir("right"));
 			return _.dv;
 		}
 	},
@@ -159,7 +187,7 @@ zero.core.Controls = CT.Class({
 	placer: function(dir, amount, wallshift) {
 		var _ = this._, s = this.springs[dir], target = this.target,
 			wall = target.opts.wall, shifter = this.wallshift,
-			forward = wallshift == 1, nxtval;
+			forward = wallshift == 1, nxtval, shifted = this.shifted;
 		return function() {
 			if (wallshift) { // poster/portal
 				nxtval = s.value + amount;
@@ -180,7 +208,7 @@ zero.core.Controls = CT.Class({
 			if (_.structs.includes(target.opts.kind))
 				target.adjust("position", dir, amount, true); // but fix..
 			else
-				s.boost = CT.key.down("SHIFT") ? amount * 2 : amount;
+				s.boost = shifted() ? amount * 2 : amount;
 		};
 	},
 	face: function(vec) {
@@ -188,18 +216,23 @@ zero.core.Controls = CT.Class({
 		os.hard = false;
 		tar.orient(null, zero.core.util.dimsum(vec, bod.position()));
 	},
+	going: function() {
+		const _ = this._;
+		return this.gpgoing || CT.key.downs(_.dirs).length
+			|| zero.core.gamepads.downs(_.gpdirs).length;
+	},
 	go: function(soft) {
 		var _ = this._, springz = this.springs, vec = _.dirvec(),
 			dim, speed = _.speed.base * this.target.energy.k;
-		if (soft && !CT.key.downs(_.dirs).length)
+		if (soft && !this.going())
 			return;
 		for (dim of _.flats)
 			springz[dim].boost = speed * vec[dim];
 		camera.isPolar && this.face(vec);
 	},
 	mover: function(fullAmount, dir) {
-		var _ = this._, target = this.target, amount, isor,
-			spr = this.springs[dir], go = this.go, moveCb = _.moveCb;
+		var _ = this._, target = this.target, going = this.going, amount,
+			spr = this.springs[dir], go = this.go, moveCb = _.moveCb, isor;
 		return function(mult) {
 			if (target.zombified) return;
 			amount = mult ? fullAmount * mult : fullAmount;
@@ -208,7 +241,7 @@ zero.core.Controls = CT.Class({
 					target.jump(amount);
 				else
 					target.go();
-			} else if (!CT.key.downs(_.dirs).length)
+			} else if (!going())
 				target.undance();
 			if (dir != "y") {
 				isor = dir == "orientation";
@@ -222,13 +255,14 @@ zero.core.Controls = CT.Class({
 			moveCb && moveCb(target.name);
 		};
 	},
-	clear: function() {
-		CT.key.clear(null, true); // also clear CT.gesture when that's added...
+	clear: function() { // TODO: clear CT.gesture
+		CT.key.clear(null, true);
+		zero.core.gamepads.clear();
 	},
 	setNum: function(num, gesture, dance, stop) {
-		var target = this.target;
+		var target = this.target, shifted = this.shifted;
 		CT.key.on(num.toString(), function() {
-			if (CT.key.down("SHIFT"))
+			if (shifted())
 				stop ? target.undance() : (dance && target.dance(dance));
 			else
 				stop ? target.ungesture() : (gesture && target.gesture(gesture));
@@ -256,13 +290,72 @@ zero.core.Controls = CT.Class({
 	setChat: function() {
 		CT.dom.className("chat")[0] && CT.key.on("CTRL", this.toggleChat);
 	},
+	on: function(key, button, up, down) {
+		CT.key.on(key, up, down);
+		zero.core.gamepads.on(button, up, down);
+	},
+	shifted: function() {
+		return CT.key.down("SHIFT") || zero.core.gamepads.pressed(10);
+	},
+	upAxes: function(axes) {
+		var _ = this._, gpd = _.gpdir, x = axes[0], y = axes[1];
+		_.look("DOWN", axes[3]);
+		_.look("RIGHT", axes[2]);
+		if (x > 0) {
+			gpd.strafe = "right";
+			this.rightStrafe(x);
+		} else if (x < 0) {
+			gpd.strafe = "left";
+			this.leftStrafe(-x);
+		} else
+			gpd.strafe = false;
+		if (y < 0) {
+			gpd.drive = "forward";
+			this.forward(-y);
+		} else if (y > 0) {
+			gpd.drive = "backward";
+			this.backward(y);
+		} else
+			gpd.drive = false;
+		this.gpgoing = x || y;
+		this.gpgoing || this.stop();
+	},
+	initGamepads: function() {
+		if (this._gamepadsReady) return;
+		this._gamepadsReady = true;
+		zero.core.gamepads.init({
+			axes: this.upAxes
+		});
+	},
+	setNav: function() {
+		this.on("w", 12, this.stop, this.forward);
+		this.on("s", 13, this.stop, this.backward);
+		CT.key.on("a", this.stop, this.leftStrafe);
+		CT.key.on("d", this.stop, this.rightStrafe);
+		this.on("z", 14, this.still, this.left);
+		this.on("c", 15, this.still, this.right);
+		this.on("SPACE", 0, this.unjump, this.jump);
+		this.on("SHIFT", 10, this.runner(), this.runner(true));
+	},
+	setLimbs: function() {
+		var tt = this.target.thruster, gp = zero.core.gamepads;
+		CT.key.on("DASH", () => this.unholster("left"), () => this.holster("left"));
+		CT.key.on("EQUALS", () => this.unholster("right"), () => this.holster("right"));
+		CT.key.on("OPEN_BRACKET", () => tt.unthrust("left"), () => tt.swing("left"));
+		gp.on(4, () => this.gpunarm("left"), () => this.gparm("left"));
+		CT.key.on("CLOSE_BRACKET", () => tt.unthrust("right"), () => tt.swing("right"));
+		gp.on(5, () => this.gpunarm("right"), () => this.gparm("right"));
+		CT.key.on("SEMICOLON", () => tt.unkick("left"), () => tt.kick("left"));
+		gp.on(6, () => this.gpunleg("left"), () => this.gpleg("left"));
+		CT.key.on("QUOTE", () => tt.unkick("right"), () => tt.kick("right"));
+		gp.on(7, () => this.gpunleg("right"), () => this.gpleg("right"));
+	},
 	setKeys: function() {
 		this.clear();
 		var placer = this.placer, mover = this.mover, sz = this._.speed,
 			speed = sz.base, ospeed = sz.orientation, jspeed = sz.jump,
-			wall, gestures, dances, num = 0, runner = this.runner, tt,
-			cam = zero.core.camera;
-		tt = this.target.thruster;
+			wall, gestures, dances, num = 0, cam = zero.core.camera,
+			tt = this.target.thruster;
 		this.jump = mover(jspeed, "y");
 		this.unjump = mover(0, "y");
 		this.forward = mover(speed, "front");
@@ -273,26 +366,20 @@ zero.core.Controls = CT.Class({
 		this.still = mover(0, "orientation");
 		this.left = mover(ospeed, "orientation");
 		this.right = mover(-ospeed, "orientation");
-		this.holster = side => tt[CT.key.down("SHIFT") ? "back" : "hip"](side);
-		this.unholster = side => tt[CT.key.down("SHIFT") ? "unback" : "unhip"](side);
+		this.holster = side => tt[this.shifted() ? "back" : "hip"](side);
+		this.unholster = side => tt[this.shifted() ? "unback" : "unhip"](side);
+		this.gparm = side => tt[this.shifted() ? "back" : "swing"](side);
+		this.gpunarm = side => tt[this.shifted() ? "unback" : "unthrust"](side);
+		this.gpleg = side => tt[this.shifted() ? "hip" : "kick"](side);
+		this.gpunleg = side => tt[this.shifted() ? "unhip" : "unkick"](side);
 		if (tt) { // person
+			this.initGamepads();
+			this.setNav();
 			this.setChat();
-			CT.key.on("w", this.stop, this.forward);
-			CT.key.on("s", this.stop, this.backward);
-			CT.key.on("a", this.stop, this.leftStrafe);
-			CT.key.on("d", this.stop, this.rightStrafe);
-			CT.key.on("z", this.still, this.left);
-			CT.key.on("c", this.still, this.right);
-			CT.key.on("SPACE", this.unjump, this.jump);
-			CT.key.on("SHIFT", runner(), runner(true));
-			CT.key.on("DASH", () => this.unholster("left"), () => this.holster("left"));
-			CT.key.on("EQUALS", () => this.unholster("right"), () => this.holster("right"));
-			CT.key.on("OPEN_BRACKET", () => tt.unthrust("left"), () => tt.swing("left"));
-			CT.key.on("CLOSE_BRACKET", () => tt.unthrust("right"), () => tt.swing("right"));
-			CT.key.on("SEMICOLON", () => tt.unkick("left"), () => tt.kick("left"));
-			CT.key.on("QUOTE", () => tt.unkick("right"), () => tt.kick("right"));
+			this.setLimbs();
 			CT.key.on("p", () => cam.angle("polar"));
 			CT.key.on("b", () => cam.angle("behind"));
+			zero.core.gamepads.on(8, cam.toggle);
 			gestures = Object.keys(this.target.opts.gestures);
 			dances = Object.keys(this.target.opts.dances);
 			this.setNum(0, null, null, true);
@@ -324,7 +411,7 @@ zero.core.Controls = CT.Class({
 			CT.key.on("RIGHT", placer("x", 0), placer("x", speed));
 		}
 		CT.key.on("ENTER", this._.cb);
-		CT.key.on("x", this._.cb);
+		this.on("x", 2, this._.cb);
 	},
 	setSprings: function() {
 		var t = this.target;
