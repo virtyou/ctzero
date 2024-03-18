@@ -207,7 +207,7 @@ zero.core.Controls = CT.Class({
 		camera.isPolar && this.face(vec);
 	},
 	mover: function(fullAmount, dir) {
-		var _ = this._, target = this.target, amount, going = this.going,
+		var _ = this._, target = this.target, going = this.going, amount,
 			spr = this.springs[dir], go = this.go, moveCb = _.moveCb, isor;
 		return function(mult) {
 			if (target.zombified) return;
