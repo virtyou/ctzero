@@ -326,6 +326,7 @@ zero.core.Body = CT.Class({
 		var fznpak = this.fznpak(), fo = fznpak.opts, pref = "fzn:";
 		if (streamup)
 			pref += "up:";
+		fznpak.onremove = CT.stream.util.stop;
 		fznpak.onReady(function() {
 			fznpak[fo.fzreen].update({
 				video: pref + chan
