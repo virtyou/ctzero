@@ -758,9 +758,11 @@ zero.core.Thing = CT.Class({
 			path: this.path,
 			bones: this.bones || [],
 			bmap: this.bmap || {},
-			sharedmat: oz.sharedmat,
-			matinstance: oz.sharedmat && this.getMaterial()
-		}, thing = zero.core.util.thing(CT.merge(child, chopts, oz.chweaks[child.name]), function(tng) {
+			sharedmat: oz.sharedmat
+		};
+		if (oz.sharedmat)
+			chopts.matinstance = this.getMaterial();
+		var thing = zero.core.util.thing(CT.merge(child, chopts, oz.chweaks[child.name]), function(tng) {
 			tng.isCustom && customs.push(tng); // for tick()ing
 			iterator && iterator();
 		}, this.group);
