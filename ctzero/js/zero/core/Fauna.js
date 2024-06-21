@@ -207,7 +207,7 @@ zero.core.Fauna = CT.Class({
 			flapDim: "z"
 		}, this.opts);
 		if (opts.loader == "FBXLoader") {
-			opts.headscale = opts.segments = 0;
+			opts.segments = opts.headScale = 0;
 			opts.onbuild = () => this.animate(0);
 		}
 		if (opts.within)
