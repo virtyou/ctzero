@@ -579,6 +579,20 @@ zero.core.Thing = CT.Class({
 		for (var k of this._matModz)
 			this.material[k] = modelMat[k];
 	},
+	animate: function(animindex) {
+		var mixer = this._.mixer, anim = this.thring.animations[animindex];
+		if (!mixer)
+			return this.log("no mixer!");
+		if (!anim)
+			return this.log("bad animation index:", animindex);
+		mixer.clipAction(anim).play();
+	},
+	animix: function(dts) {
+		this._.mixer.update(dts);
+	},
+	unimix: function() {
+		zero.core.util.untick(this.animix);
+	},
 	setGeometry: function(geometry, materials, json) {
 		var oz = this.opts, thiz = this, cfg = core.config.ctzero;
 		this.geojson = json;
@@ -587,7 +601,14 @@ zero.core.Thing = CT.Class({
 			this.thring.parent.remove(this.thring);
 			delete this.thring;
 		}
-		this.thring = new THREE[oz.meshcat](geometry, this.material);
+		if (oz.loader == "FBXLoader") {
+			this.thring = geometry;
+			if (this.thring.animations.length) {
+				this._.mixer = new THREE.AnimationMixer(this.thring);
+				zero.core.util.ontick(this.animix);
+			}
+		} else
+			this.thring = new THREE[oz.meshcat](geometry, this.material);
 		this.thring.frustumCulled = oz.frustumCulled; // should probs usually be default (true)
 		this.thring.castShadow = cfg.shadows && oz.castShadow;
 		this.thring.receiveShadow = cfg.shadows && oz.receiveShadow;
@@ -707,6 +728,7 @@ zero.core.Thing = CT.Class({
 		this.unshift();
 		this.unvideo();
 		this.unvsplay();
+		this.unimix();
 		if (oz.key)
 			delete zero.core.Thing._things[oz.key];
 		if (remoz)
@@ -736,9 +758,11 @@ zero.core.Thing = CT.Class({
 			path: this.path,
 			bones: this.bones || [],
 			bmap: this.bmap || {},
-			sharedmat: oz.sharedmat,
-			matinstance: oz.sharedmat && this.getMaterial()
-		}, thing = zero.core.util.thing(CT.merge(child, chopts, oz.chweaks[child.name]), function(tng) {
+			sharedmat: oz.sharedmat
+		};
+		if (oz.sharedmat)
+			chopts.matinstance = this.getMaterial();
+		var thing = zero.core.util.thing(CT.merge(child, chopts, oz.chweaks[child.name]), function(tng) {
 			tng.isCustom && customs.push(tng); // for tick()ing
 			iterator && iterator();
 		}, this.group);
@@ -925,7 +949,7 @@ zero.core.Thing = CT.Class({
 				this.material = new THREE[meshname](meshopts);
 			}
 			if (oz.stripset)
-				(new THREE[oz.loader]()).load(oz.stripset, this.setGeometry);
+				zcu.load(oz.loader, oz.stripset, this.setGeometry);
 			else
 				this.setGeometry(oz.geometry);
 		} else {

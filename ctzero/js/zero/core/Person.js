@@ -67,7 +67,7 @@ zero.core.Person = CT.Class({
 		var afiles = this._.sfx && this._.sfx[sound], vol = 1;
 		if (!afiles) return;
 		var curper = zero.core.current.person;
-		if (curper && this != curper)
+		if (curper && this.body && this != curper)
 			vol = zero.core.util.close2u(this.body);
 		this.opts.verbose && this.log("playing", sound, "at", vol);
 		zero.core.audio.sfx(CT.data.choice(afiles), vol);
