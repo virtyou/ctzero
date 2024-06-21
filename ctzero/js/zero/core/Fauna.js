@@ -483,6 +483,8 @@ zero.core.Fauna.Menagerie = CT.Class({
 		var hunter, prey, h, p, touching = zero.core.util.touching;
 		for (h in this[hunterkind]) {
 			hunter = this[h];
+			if (!hunter.isReady())
+				continue;
 			for (p in this[preykind]) {
 				prey = this[p];
 				if (touching(hunter, prey, 200))
