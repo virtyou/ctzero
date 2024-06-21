@@ -925,7 +925,7 @@ zero.core.Thing = CT.Class({
 				this.material = new THREE[meshname](meshopts);
 			}
 			if (oz.stripset)
-				(new THREE[oz.loader]()).load(oz.stripset, this.setGeometry);
+				zcu.load(oz.loader, oz.stripset, this.setGeometry);
 			else
 				this.setGeometry(oz.geometry);
 		} else {
