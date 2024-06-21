@@ -400,6 +400,12 @@ zero.core.util = {
 			e.stopPropagation();
 		});
 	},
+	_loaders: {},
+	load: function(kind, stripset, cb) {
+		var lz = zero.core.util._loaders,
+			loader = lz[kind] = lz[kind] || new THREE[kind]();
+		loader.load(stripset, cb);
+	},
 	_txz: {},
 	texture: function(path) {
 		path = path.item || path;
