@@ -3,7 +3,7 @@ zero.core.Fauna = CT.Class({
 	tick: function(dts) {
 		var oz = this.opts;
 		this.direct(oz.speed * dts);
-		if (!zero.core.camera.visible(this.segment0)) return;
+		if (this.segment0 && !zero.core.camera.visible(this.segment0)) return;
 		var i, t = zero.core.util.ticker + this.randOff;
 		for (i = 0; i < 4; i++)
 			this.tickers[i] = this.ticker[(t + this.tOffs[i]) % oz.tickSegs];
@@ -206,6 +206,10 @@ zero.core.Fauna = CT.Class({
 			wingSmush: 0.2,
 			flapDim: "z"
 		}, this.opts);
+		if (opts.loader == "FBXLoader") {
+			opts.headscale = opts.segments = 0;
+			opts.onbuild = () => this.animate(0);
+		}
 		if (opts.within)
 			this.within = opts.within;
 		this.buildMaterials();
