@@ -587,7 +587,10 @@ zero.core.Thing = CT.Class({
 			this.thring.parent.remove(this.thring);
 			delete this.thring;
 		}
-		this.thring = new THREE[oz.meshcat](geometry, this.material);
+		if (oz.loader == "FBXLoader")
+			this.thring = geometry;
+		else
+			this.thring = new THREE[oz.meshcat](geometry, this.material);
 		this.thring.frustumCulled = oz.frustumCulled; // should probs usually be default (true)
 		this.thring.castShadow = cfg.shadows && oz.castShadow;
 		this.thring.receiveShadow = cfg.shadows && oz.receiveShadow;
