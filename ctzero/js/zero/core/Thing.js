@@ -489,7 +489,15 @@ zero.core.Thing = CT.Class({
 		zero.core.util.ontick(this._.shifter);
 	},
 	look: function(pos) {
-		this.group.lookAt(pos.x, pos.y, pos.z);
+		if (this.opts.backwards)
+			this.lookAway(pos);
+		else
+			this.group.lookAt(pos.x, pos.y, pos.z);
+	},
+	lookAway: function(pos) { // https://www.mrspeaker.net/2013/03/06/opposite-of-lookat/
+		var g = this.group, v = new THREE.Vector3();
+		v.subVectors(g.position, pos).add(g.position);
+		g.lookAt(v);
 	},
 	drop: function() {
 		this.adjust("position", "y", zero.core.current.room.getPeak(this.position()));
@@ -566,6 +574,11 @@ zero.core.Thing = CT.Class({
 		if (!this.direction)
 			this.direction = new THREE.Vector3();
 		this.group.getWorldDirection(this.direction);
+		if (this.opts.backwards) {
+			this.direction.x *= -1;
+			this.direction.y *= -1;
+			this.direction.z *= -1;
+		}
 		return this.direction;
 	},
 	place: function() {
@@ -613,6 +626,8 @@ zero.core.Thing = CT.Class({
 			this.thring = geometry;
 			if (this.thring.animations.length) {
 				this._.mixer = new THREE.AnimationMixer(this.thring);
+				if (oz.backwards)
+					this._.mixer.timeScale = -1;
 				zero.core.util.ontick(this.animix);
 			}
 		} else
