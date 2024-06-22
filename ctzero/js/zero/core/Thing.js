@@ -587,8 +587,16 @@ zero.core.Thing = CT.Class({
 			return this.log("bad animation index:", animindex);
 		mixer.clipAction(anim).play();
 	},
+	anivis: function() {
+		if (!this._anivis) {
+			for (var kid of this.thring.children)
+				if (kid.type == "SkinnedMesh")
+					this._anivis = kid;
+		}
+		return zero.core.camera.visible(this._anivis);
+	},
 	animix: function(dts) {
-		this._.mixer.update(dts);
+		this.anivis() && this._.mixer.update(dts);
 	},
 	unimix: function() {
 		zero.core.util.untick(this.animix);
