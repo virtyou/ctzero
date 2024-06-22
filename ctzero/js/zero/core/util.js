@@ -400,11 +400,11 @@ zero.core.util = {
 			e.stopPropagation();
 		});
 	},
-	_loaders: {},
 	load: function(kind, stripset, cb) {
-		var lz = zero.core.util._loaders,
-			loader = lz[kind] = lz[kind] || new THREE[kind]();
-		loader.load(stripset, cb);
+		var zcu = zero.core.util;
+		if (!zcu._loader)
+			zcu._loader = new zcu.Loader();
+		zcu._loader.load(kind, stripset, cb);
 	},
 	_txz: {},
 	texture: function(path) {
@@ -767,6 +767,51 @@ zero.core.util = {
 		return zcu._counter;
 	}
 };
+
+zero.core.util.Loader = CT.Class({
+	CLASSNAME: "zero.core.util.Loader",
+	share: function(kind) {
+		return false;//kind == "FBXLoader";
+	},
+	loader: function(kind) {
+		if (!this.loaders[kind])
+			this.loaders[kind] = new THREE[kind]();
+		return this.loaders[kind];
+	},
+	load: function(kind, stripset, cb) {
+		if (!this.share(kind))
+			return this.loader(kind).load(stripset, cb);
+		this.log("load", stripset);
+		if (this.mods[stripset])
+			return this.clone(stripset, cb);
+		if (!this.cbs[stripset]) {
+			this.cbs[stripset] = [];
+			this.loader(kind).load(stripset, mod => this.loaded(stripset, mod));
+		}
+		this.cbs[stripset].push(cb);
+	},
+	loaded: function(stripset, mod) {
+		this.log("loaded", stripset);
+		this.mods[stripset] = mod;
+		this.cb(stripset);
+	},
+	cb: function(stripset) {
+		var cb, cbs = this.cbs[stripset];
+		this.log("passing to", cbs.length, "cbs");
+		for (cb of cbs)
+			this.clone(stripset, cb);
+	},
+	clone: function(stripset, cb) {
+		this.log("cloning", stripset);
+		cb(this.mods[stripset].clone(true)); // not working :(
+//		cb(THREE.SkeletonUtils.clone(this.mods[stripset]));
+	},
+	init: function() {
+		this.cbs = {};
+		this.mods = {};
+		this.loaders = {};
+	}
+});
 
 zero.core.util.FrameCounter = CT.Class({
 	CLASSNAME: "zero.core.util.FrameCounter",
