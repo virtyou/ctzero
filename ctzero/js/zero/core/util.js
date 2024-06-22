@@ -212,6 +212,8 @@ zero.core.util = {
 		return r1 + r2 + extra;
 	},
 	touching: function(t1, t2, extra, forceRadii, glopo, noY) {
+		if (!t1.isReady() || !t2.isReady())
+			return;
 		var zcu = zero.core.util, buff = zcu.buff(t1, t2, extra, forceRadii, noY),
 			dist = zcu.distance(t1.position(null, glopo), t2.position(null, glopo));
 		return dist < buff;
