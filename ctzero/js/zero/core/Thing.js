@@ -626,8 +626,8 @@ zero.core.Thing = CT.Class({
 			this.thring = geometry;
 			if (this.thring.animations.length) {
 				this._.mixer = new THREE.AnimationMixer(this.thring);
-				if (oz.backwards)
-					this._.mixer.timeScale = -1;
+				if (oz.timeScale)
+					this._.mixer.timeScale = oz.timeScale;
 				zero.core.util.ontick(this.animix);
 			}
 		} else
