@@ -210,7 +210,7 @@ zero.core.Fauna = CT.Class({
 			opts.speed *= 2;
 			opts.segments = opts.headScale = 0;
 			opts.anims = CT.merge(opts.anims, { walk: 0 });
-			opts.onbuild = () => this.animate(opts.anims.walk);
+			opts.onassemble = () => this.animate(opts.anims.walk);
 		}
 		if (opts.within)
 			this.within = opts.within;
