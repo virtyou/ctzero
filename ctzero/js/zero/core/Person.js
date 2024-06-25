@@ -1,6 +1,7 @@
 zero.core.Person = CT.Class({
 	CLASSNAME: "zero.core.Person",
 	_: {
+		step: -1,
 		bouncer: 1,
 		doPlay: function(cb) {
 			var audio = this._.audio;
@@ -452,18 +453,16 @@ zero.core.Person = CT.Class({
 	_dance: function() {
 		if (!this.body || !this.activeDance)
 			return;
-		var dance = this.opts.dances[this.activeDance];
-		dance.step = (dance.step + 1) % dance.steps.length;
+		var _ = this._, dance = this.opts.dances[this.activeDance];
+		_.step = (_.step + 1) % dance.steps.length;
 		this.ungesture();
-		this.gesture(dance.steps[dance.step]);
+		this.gesture(dance.steps[_.step]);
 		(this.isYou() && CT.key.down("SPACE")) || this.sfx(this.activeDance);
-//		this.dancer = setTimeout(this._dance, (dance.interval || 1000) / this.mood.opts.energy);
 		this.dancer = setTimeout(this._dance, (dance.interval || 1000) * 2 / this.energy.k);
 	},
 	dance: function(dname, duration) {
 		if (this.activeDance == dname) return;
 		this.activeDance = dname;
-		this.opts.dances[dname].step = -1;
 		this._dance();
 		duration && setTimeout(this.undance, duration);
 	},
