@@ -592,12 +592,13 @@ zero.core.Thing = CT.Class({
 		for (var k of this._matModz)
 			this.material[k] = modelMat[k];
 	},
-	animate: function(animindex) {
+	animate: function(animindex, blend) {
 		var mixer = this._.mixer, anim = this.thring.animations[animindex];
 		if (!mixer)
 			return this.log("no mixer!");
 		if (!anim)
 			return this.log("bad animation index:", animindex);
+		blend || mixer.stopAllAction();
 		mixer.clipAction(anim).play();
 	},
 	anivis: function() {
