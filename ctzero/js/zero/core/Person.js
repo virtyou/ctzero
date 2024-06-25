@@ -34,6 +34,8 @@ zero.core.Person = CT.Class({
 			document.body.appendChild(this._.audio);
 		},
 		chain: function(cb) {
+			if (!this.brain)
+				return this.log("can't chain - brainless!");
 			var chain = this.brain.chain;
 			if (chain) {
 				delete this.brain.chain;

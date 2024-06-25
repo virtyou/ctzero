@@ -471,7 +471,7 @@ zero.core.Fauna.Menagerie = CT.Class({
 		var crit = this[CT.data.choice(this.members)];
 		if (!zero.core.current.person)
 			this.log("yelp() skipped - no current person");
-		else if (crit)
+		else if (crit && crit.isReady())
 			crit.yelp();
 		this.yelper = setTimeout(this.yelp, 10000 + CT.data.random(10000));
 	},

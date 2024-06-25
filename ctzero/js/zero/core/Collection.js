@@ -43,13 +43,17 @@ zero.core.Collection = CT.Class({
 	col: function(kind, index) {
 		this._rower(kind, index);
 	},
+	boundone: function(mem) {
+		mem.basicBound();
+		mem.look(zero.core.util.randPos(true,
+			mem.position(null, true).y, this.within));
+	},
 	boundize: function() {
-		var kind, name, mem, zcu = zero.core.util;
+		var kind, name, mem;
 		for (kind of this.kinds) {
 			for (name in this[kind]) {
 				mem = this[kind][name];
-				mem.basicBound();
-				mem.look(zcu.randPos(true, mem.position(null, true).y, this.within));
+				mem.onReady(() => this.boundone(mem));
 			}
 		}
 		delete this.awaitBound;
