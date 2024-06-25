@@ -3,6 +3,9 @@ zero.core.Leg = CT.Class({
 	foot: {
 		name: "foot",
 		radii: { x: 10, y: 10, z: 10 }, // HACKY :'(
+		isReady: function() {
+			return this.isReady();
+		},
 		position: function(ignoredPos, world) {
 			return zero.core.util.getPos(this.toe, world);
 		},
