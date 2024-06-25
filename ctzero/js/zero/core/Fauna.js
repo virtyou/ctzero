@@ -38,13 +38,22 @@ zero.core.Fauna = CT.Class({
 		if (this.scale().y == 0.1)
 			this.adjust("scale", "y", this._origsy);
 	},
+	anim: function(name) {
+		var az = this.opts.anims;
+		if (!az || !(name in az))
+			return;
+		this.animate(az[name]);
+		setTimeout(() => this.animate(az.walk), 2000);
+	},
 	knock: function(direction, knocker, hurdur) {
+		this.anim("hurt");
 		zero.core.util.update(direction, this.getDirection());
 		this.perch = this.stuck = false;
 		this.knocker = knocker;
 		this.hurry(40, hurdur);
 	},
 	pounce: function(target, perch) {
+		this.anim("attack");
 		if (perch)
 			target = target.head;
 		this.look(target.position(null, perch));
