@@ -85,6 +85,9 @@ zero.core.Skeleton = CT.Class({
 		});
 		this.aspects[sname] = zero.core.aspectController.add(rz, sname, this);
 	},
+	isReady: function() {
+		return this.body && this.body.isReady();
+	},
 	setBody: function(bod) {
 		this.body = bod;
 	},
