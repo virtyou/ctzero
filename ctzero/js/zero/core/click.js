@@ -7,10 +7,9 @@ zero.core.click = {
         var mouse = {}, cam = zero.core.camera.get(),
             can = document.getElementsByTagName("canvas")[0],
             offset = CT.align.offset(can), vector, ray, intersects, i;
-        can.parentNode.addEventListener(CT.info.mobile
-            ? 'touchstart' : 'mousedown', function(e) {
-            mouse.x = ((e.clientX - offset.left) / can.clientWidth) * 2 - 1;
-            mouse.y = -((e.clientY - offset.top) / can.clientHeight) * 2 + 1;
+        CT.gesture.listen("tap", CT.dom.id("vnode") || CT.dom.id("ctmain"), function(tapCount, pos) {
+            mouse.x = ((pos.x - offset.left) / can.clientWidth) * 2 - 1;
+            mouse.y = -((pos.y - offset.top) / can.clientHeight) * 2 + 1;
 
             vector = new THREE.Vector3(mouse.x, mouse.y, 0.5);
             vector.unproject(cam);

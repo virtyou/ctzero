@@ -1,5 +1,6 @@
-CT.require("CT.gesture");
 // probs move elsewhere
+CT.require("CT.gesture");
+CT.gesture.setThreshold("tap", "maxCount", 1);
 
 zero.core.Controls = CT.Class({
 	CLASSNAME: "zero.core.Controls",
