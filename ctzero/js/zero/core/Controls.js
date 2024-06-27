@@ -1,3 +1,6 @@
+CT.require("CT.gesture");
+// probs move elsewhere
+
 zero.core.Controls = CT.Class({
 	CLASSNAME: "zero.core.Controls",
 	_: { // configurize
@@ -114,17 +117,25 @@ zero.core.Controls = CT.Class({
 					watcher.adjust("position", "z", delta / 10, true);
 			}
 		},
+		capinch: function(diff, inner, outer) {
+			if (diff > 0.2)
+				inner();
+			else if (diff < -0.2)
+				outer();
+		},
 		cazoomers: function() {
 			var _ = this._, zoomIn = () => _.cawheel(null, -300),
 				zoomOut = () => _.cawheel(null, 300);
-			CT.key.on("PERIOD", zoomIn, zoomIn);
-			CT.key.on("COMMA", zoomOut, zoomOut);
 			this.on("t", 1, zoomIn, zoomIn);
 			this.on("g", 3, zoomOut, zoomOut);
+			CT.key.on("PERIOD", zoomIn, zoomIn);
+			CT.key.on("COMMA", zoomOut, zoomOut);
+			CT.gesture.listen("pinch", CT.dom.id("vnode") || CT.dom.id("ctmain"),
+				(d, m) => _.capinch(d - 1, () => _.cawheel(null, -30),
+					() => _.cawheel(null, 30)));
 		},
 		camouse: function() {
 			var node = CT.dom.id("vnode") || CT.dom.id("ctmain");
-			CT.require("CT.gesture", true);
 			CT.gesture.listen("drag", node, this._.cadrag);
 			CT.gesture.listen("wheel", node, this._.cawheel);
 		},
