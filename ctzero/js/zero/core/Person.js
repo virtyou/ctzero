@@ -273,7 +273,7 @@ zero.core.Person = CT.Class({
 		var _ = this._, bod = this.body, zc = zero.core, dist,
 			zcu = zc.util, zcc = zc.current, ppl = zcc.people,
 			propel = this.propel, pursue = this.pursue, stop = this.stop,
-			bso = bod.springs.orientation, bsohard = bso.hard;
+			bso = bod.springs.orientation, bsohard = bso.hard, isYou = this.isYou();
 		if (typeof subject == "string") {
 			if (subject == "player") {
 				if (!zcc.person) return cb && cb();
@@ -283,7 +283,7 @@ zero.core.Person = CT.Class({
 			else
 				subject = zcc.room[subject];
 		}
-		this.isYou() && camera.angle("preferred");
+		isYou && camera.angle("behind", null, null, true);
 		watch && this.watch(false, true);
 		bso.k = 200;
 		bso.hard = false;
@@ -305,6 +305,7 @@ zero.core.Person = CT.Class({
 			}
 			setTimeout(function() {
 				stop();
+				isYou && camera.angle("preferred");
 				cb && cb();
 			}, dur);
 		}, 500); // time for orientation...
