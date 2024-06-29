@@ -172,6 +172,7 @@ zero.core.Person = CT.Class({
 		var zcu = zero.core.util, bod = this.body, bt = bod.torso, spy, contact = function() {
 			cb && cb();
 			handCb && handCb(bt.hands[arm], subject);
+			bod.springs.bow.target = 0;
 		}, shove = function() {
 			bod.shove(zcu.vector(bt.hands[arm].position(null, true),
 				subject.position(), true));
