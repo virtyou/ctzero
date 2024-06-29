@@ -520,7 +520,7 @@ zero.core.util = {
 				owners: track.owners
 			});
 		} else if (zcc.adventure) { // vu only! ;)
-			[d, n] = name.split(": ");
+			[d, n] = track.name.split(": ");
 			zcc.adventure.menus.attribution("hearing",
 				n, "audio (" + track.kind + ")", d);
 		}
