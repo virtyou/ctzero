@@ -174,9 +174,9 @@ zero.core.Person = CT.Class({
 			handCb && handCb(bt.hands[arm], subject);
 		}, shove = function() {
 			bod.shove(zcu.vector(bt.hands[arm].position(null, true),
-				subject.position(), true), 1, 20);
+				subject.position(), true));
 			setTimeout(contact, timeout);
-		}, timeout = force ? 150 : 600;
+		}, timeout = force ? 150 : 300;
 		arm = arm || this.freeHand();
 		arm && this.approach(approached || subject, function() {
 			spy = subject.position(null, true).y;
