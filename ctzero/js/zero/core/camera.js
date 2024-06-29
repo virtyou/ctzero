@@ -107,14 +107,14 @@ var camera = zero.core.camera = {
 		else
 			camera.angle("polar");
 	},
-	angle: function(perspective, pname, lookPart) {
+	angle: function(perspective, pname, lookPart, noPref) {
 		console.log(perspective, pname, lookPart);
 		if (perspective == "preferred")
 			perspective = camera.preferred || "polar";
 		var zcc = zero.core.current, _ = camera._,
 			pol = camera.isPolar = perspective == "polar";
 		camera.current = perspective;
-		if (_.preferreds.includes(perspective))
+		if (!noPref && _.preferreds.includes(perspective))
 			camera.preferred = perspective;
 		if (pname)
 			camera.current += " (" + pname + ")";
