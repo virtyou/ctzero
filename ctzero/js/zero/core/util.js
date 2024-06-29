@@ -489,7 +489,7 @@ zero.core.util = {
 	playWaiters: function() {
 		var w, wz = zero.core.util.waiters;
 		for (w of wz)
-			w.play();
+			w.play().catch(CT.log);
 		wz.length = 0;
 	},
 	playMedia: function(player, nowaiter) {
