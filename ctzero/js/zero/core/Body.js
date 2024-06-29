@@ -158,7 +158,7 @@ zero.core.Body = CT.Class({
 		ropts.body && this._applyMod(ropts.body);
 		this.torso.resize(ropts);
 		this.spine.resize(ropts.spine);
-		setTimeout(this.boundAndBob, 1000);
+		zero.core.util.onRoomReady(this.boundAndBob);
 	},
 	boundAndBob: function() {
 		this.basicBound(true);
