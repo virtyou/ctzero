@@ -48,14 +48,14 @@ zero.core.Collection = CT.Class({
 		mem.look(zero.core.util.randPos(true,
 			mem.position(null, true).y, this.within));
 	},
+	boundsoon: function(mem) {
+		mem.onReady(() => this.boundone(mem));
+	},
 	boundize: function() {
-		var kind, name, mem;
-		for (kind of this.kinds) {
-			for (name in this[kind]) {
-				mem = this[kind][name];
-				mem.onReady(() => this.boundone(mem));
-			}
-		}
+		var kind, name;
+		for (kind of this.kinds)
+			for (name in this[kind])
+				this.boundsoon(this[kind][name]);
 		delete this.awaitBound;
 	},
 	randomize: function() {
