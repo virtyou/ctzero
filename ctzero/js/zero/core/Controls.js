@@ -296,6 +296,7 @@ zero.core.Controls = CT.Class({
 	toggleChat: function() {
 		var chinput = this.chinput();
 		chinput._active = !chinput._active;
+		CT.key.setActive(chinput._active && ["CTRL"]);
 		chinput._active ? chinput.focus() : chinput.blur();
 		chinput._active || zero.core.camera.angle("preferred");
 	},
