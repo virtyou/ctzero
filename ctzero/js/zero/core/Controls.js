@@ -310,6 +310,23 @@ zero.core.Controls = CT.Class({
 	shifted: function() {
 		return CT.key.down("SHIFT") || zero.core.gamepads.pressed(10);
 	},
+	drop: function() {
+		var p = this.target, zcc = zero.core.current, drop = function(side) {
+			p.unhold(side);
+			iopts = ((side == "left") ? left : right).opts;
+			zcc.dropper && zcc.dropper(p.body.position(),
+				iopts.kind, iopts.variety, iopts.name);
+		}, iopts, left = p.held("left"), right = p.held("right");
+		if (!left && !right)
+			return this.log("you're not holding anything");
+		if (!(left && right))
+			return drop(left ? "left" : "right");
+		CT.dom.choice({
+			prompt: "drop what?",
+			data: [left.name, right.name],
+			cb: sel => drop((sel == left.name) ? "left" : "right")
+		});
+	},
 	upAxes: function(axes) {
 		var _ = this._, gpd = _.gpdir, x = axes[0], y = axes[1];
 		_.look("DOWN", axes[3]);
@@ -390,6 +407,7 @@ zero.core.Controls = CT.Class({
 			this.setNav();
 			this.setChat();
 			this.setLimbs();
+			CT.key.on("BACKSPACE", this.drop);
 			CT.key.on("p", () => cam.angle("polar"));
 			CT.key.on("b", () => cam.angle("behind"));
 			zero.core.gamepads.on(8, cam.toggle);
