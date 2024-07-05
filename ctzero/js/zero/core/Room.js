@@ -153,10 +153,12 @@ zero.core.Room = CT.Class({
 		}
 		return featurings;
 	},
-	getPerson: function(thing, peeps) {
-		var name, person, zc = zero.core, touching = zc.util.touching;
-		peeps = peeps || zc.current.people;
+	getPerson: function(thing, allowed) {
+		var name, person, zc = zero.core,
+			peeps = zc.current.people, touching = zc.util.touching;
 		for (name in peeps) {
+			if (allowed && !allowed[name])
+				continue;
 			person = peeps[name];
 			if (touching(thing, person.body, 50, false, true))
 				return person;
