@@ -230,6 +230,7 @@ zero.core.Person = CT.Class({
 		}, side);
 	},
 	chase: function(subject, cb) {
+		this.run();
 		this.approach(subject, cb, false, true);
 	},
 	propel: function(direction) {
@@ -246,6 +247,7 @@ zero.core.Person = CT.Class({
 	},
 	unchase: function() {
 		var _ = this._;
+		this.unrun();
 		this.stop();
 		if (_.chaser) {
 			clearInterval(_.chaser);
