@@ -153,6 +153,17 @@ zero.core.Room = CT.Class({
 		}
 		return featurings;
 	},
+	getPerson: function(thing, allowed) {
+		var name, person, zc = zero.core,
+			peeps = zc.current.people, touching = zc.util.touching;
+		for (name in peeps) {
+			if (allowed && !allowed[name])
+				continue;
+			person = peeps[name];
+			if (touching(thing, person.body, 50, false, true))
+				return person;
+		}
+	},
 	getInteractive: function(overlapper, feature) {
 		var item, touching = zero.core.util.touching;
 		for (item of this.getFeaturing(feature))

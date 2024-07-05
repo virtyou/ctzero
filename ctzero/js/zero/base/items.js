@@ -1,6 +1,23 @@
 var P2 = Math.PI / 2, P4 = P2 / 2, C4 = ["curve4", 3, 0.5, 3];
 
 zero.base.items = {
+	kingsfoil: {
+		variety: "quest",
+		parts: [{
+			thing: "Flora",
+			kind: "flower",
+			basicBound: false
+		}]
+	},
+	"dragon's tail": {
+		variety: "quest",
+		parts: [CT.merge({
+			thing: "Tail",
+			material: {
+				color: "#111111"
+			}
+		}, zero.base.body.tail.lizard)]
+	},
 	torch: {
 		variety: "flamer",
 		cylinderGeometry: true,
