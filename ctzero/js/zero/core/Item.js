@@ -36,6 +36,11 @@ zero.core.Item = CT.Class({
 			this.unhold();
 			recipient.hold(this.opts.key || this.opts.fakeKey,
 				recipient.freeHand());
+			this.log("you gave", this.name, "to", recipient.name);
+			CT.event.emit("receive", {
+				actor: recipient.name,
+				item: this.name
+			});
 		}
 	},
 	unhold: function() { // assuming holder is player...
