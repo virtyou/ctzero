@@ -5,7 +5,8 @@ zero.base.items = {
 		variety: "quest",
 		parts: [{
 			thing: "Flora",
-			kind: "flower"
+			kind: "flower",
+			basicBound: false
 		}]
 	},
 	"dragon's tail": {
