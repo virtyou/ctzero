@@ -393,6 +393,7 @@ zero.core.Person = CT.Class({
 		this.energy.reset("damp", 0.6);
 	},
 	unrun: function() {
+		if (!this.body) return this.log("aborting unrun() (no body)");
 		this.running = false;
 		this.mood.reset("energy");
 		this.energy.reset("damp");
