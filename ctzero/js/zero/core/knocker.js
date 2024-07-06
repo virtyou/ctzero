@@ -74,6 +74,8 @@ zero.core.knocker = {
 			sname = striker.opts.side;
 		} else
 			stype = striker.opts.variety || "knocker";
+		if (stype == "quest")
+			stype = "hand";
 		k.log(prey.name + " struck by " + sname + " (" + stype + ")");
 		k.strikers[stype](prey, striker);
 	},
