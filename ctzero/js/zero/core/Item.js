@@ -11,6 +11,9 @@ zero.core.Item = CT.Class({
 		else
 			zcc.room.removeObject(thing);
 	},
+	_key: function() {
+		return this.opts.key || this.opts.fakeKey;
+	},
 	smash: function() {
 		this._wreck(zero.core.current.room.getBrittle(this), "shart");
 	},
@@ -34,8 +37,7 @@ zero.core.Item = CT.Class({
 			recipient = receiver && receiver(this);
 		if (recipient) {
 			this.unhold();
-			recipient.hold(this.opts.key || this.opts.fakeKey,
-				recipient.freeHand());
+			recipient.hold(this._key(), recipient.freeHand());
 			this.log("you gave", this.name, "to", recipient.name);
 			CT.event.emit("receive", {
 				actor: recipient.name,
@@ -47,12 +49,11 @@ zero.core.Item = CT.Class({
 		zero.core.current.person.unhold(this.hand());
 	},
 	hand: function() { // assuming holder is player...
-		var side, held, player = zero.core.current.person;
-		for (side in ["left", "right"]) {
-			held = player.held(side);
-			if (held == this)
+		var side, key = this._key(),
+			held = zero.core.current.person.opts.gear.held;
+		for (side in held)
+			if (held[side] == key)
 				return side;
-		}
 	},
 	touch: function() {
 		this.quest && this.give();
