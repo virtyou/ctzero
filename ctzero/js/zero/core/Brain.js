@@ -1,6 +1,11 @@
 zero.core.Brain = CT.Class({
 	CLASSNAME: "zero.core.Brain",
 	_: {
+		said: [],
+		fromList: function(resps) {
+			var unsaid = resps.filter(r => !this._.said.includes(r));
+			return CT.data.choice(unsaid.length ? unsaid : resps);
+		},
 		tsort: function(which) {
 			var tz = Object.keys(which);
 			tz.sort(function(a, b) { return b.length - a.length; });
@@ -60,7 +65,7 @@ zero.core.Brain = CT.Class({
 		if (typeof res == "function")
 			return res(this.person);
 		else if (Array.isArray(res))
-			return this.get_response(CT.data.choice(res));
+			return this.get_response(this._.fromList(res));
 		else if (typeof res == "object") {
 			// these (audio, background, image, etc) look like {key,name,variety,item}
 
@@ -126,6 +131,11 @@ zero.core.Brain = CT.Class({
 			return this.get_response(res.phrase);
 		}
 	},
+	choose_response: function(rdata) {
+		var resp = this.get_response(rdata);
+		this._.said.push(resp);
+		return resp;
+	},
 	respond: function(phrase, cb) {
 		var respz = this.person.opts.responses,
 			lphrase = phrase.toLowerCase(),
@@ -137,14 +147,14 @@ zero.core.Brain = CT.Class({
 			for (i = 0; i < tsorted.length; i++) {
 				trig = tsorted[i];
 				if (lphrase.indexOf(trig) != -1)
-					return cb(this.get_response(set[trig]));
+					return cb(this.choose_response(set[trig]));
 			}
 		}
 		if (phrase == "resolve" && this.person.onresolved)
 			return cb(this.person.onresolved());
 		var defresp = this.triggers["*"] || respz["*"];
 		if (defresp) // default response object
-			return cb(this.get_response(defresp));
+			return cb(this.choose_response(defresp));
 		if (core.config.ctzero.brain.noChat) return;
 		var chopts = {
 			action: "chat",
