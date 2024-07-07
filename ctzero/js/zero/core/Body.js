@@ -280,7 +280,7 @@ zero.core.Body = CT.Class({
 			this._.bounder("y", 1, obj && obj.getTop(pos));
 		} else if (rebob || (obj && (obj.shelled || obj.vlower == "ramp" || obj.shifting("y")))) {
 			otop = (obj || r).getTop(pos);
-			bobber.floored = otop >= bobber.value - 50;
+			bobber.floored = otop >= bobber.value - this.radii.y;
 			this._.bounder("y", 1, otop, true);
 		}
 		if (this.landing) {
