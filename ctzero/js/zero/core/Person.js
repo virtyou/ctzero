@@ -350,6 +350,22 @@ zero.core.Person = CT.Class({
 		this.dance("fall", 1000);
 		setTimeout(() => this.gesture("upright"), 1600);
 	},
+	stand: function() {
+		if (!this.body.lying) return;
+		this.body.lying = false;
+		this.gesture("upright");
+		setTimeout(this.body.boundAndBob, 1000);
+	},
+	lie: function(target) {
+		var bod = this.body, gest = this.gesture, tp = target.position();
+		this.approach(target, function() {
+			gest("lie");
+			bod.lying = true;
+			bod.adjust("position", "x", tp.x);
+			bod.adjust("position", "z", tp.z);
+			setTimeout(bod.boundAndBob, 1000);
+		});
+	},
 	doLeap: function(shouldFly, amount, forwardAmount) {
 		shouldFly && this.shouldFly();
 		this.jump(amount || 800, forwardAmount);
@@ -407,6 +423,7 @@ zero.core.Person = CT.Class({
 			dance = "swim";
 			(t % 20) || bod.bubbletrail.release(1);
 		}
+		this.stand();
 		this.dance(dance, dur);
 	},
 	leave: function(portal, cb) {
