@@ -160,6 +160,38 @@ zero.core.Body = CT.Class({
 		this.spine.resize(ropts.spine);
 		zero.core.util.onRoomReady(this.boundAndBob);
 	},
+	_rads: {},
+	_bounds: {},
+	radSwap: function(posture) {
+		var rz = this._rads, bz = this._bounds, ob,
+			pz = this.group.position, vec = zero.core.util.vec;
+		if (!rz.stand) {
+			rz.stand = rz.sit = CT.merge(this.radii);
+			ob = bz.stand = bz.sit = this.bounds;
+			rz.lie = {
+				x: rz.stand.x,
+				y: rz.stand.z,
+				z: rz.stand.y
+			}
+			bz.lie = {
+				min: vec([ob.min.x, ob.min.z, ob.min.y]),
+				max: vec([ob.max.x, ob.max.z, ob.max.y])
+			};
+		}
+		this._yoff = posture == "stand";
+		if (this._yoff)
+			pz.y = pz.z = 0;
+		else if (posture == "sit")
+			pz.y = -2 * this._yoffset;
+		else {
+			pz.z = -this._yoffset;
+			pz.y = 20; // lol find a real fix
+		}
+		this.bounds = bz[posture];
+		this.radii = rz[posture];
+		this.setHomeY();
+		this.setBob(true);
+	},
 	boundAndBob: function() {
 		this.basicBound(true);
 		this.setBob(true);

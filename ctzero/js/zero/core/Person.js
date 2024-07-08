@@ -350,6 +350,36 @@ zero.core.Person = CT.Class({
 		this.dance("fall", 1000);
 		setTimeout(() => this.gesture("upright"), 1600);
 	},
+	stand: function() {
+		var bod = this.body;
+		if (!(bod.lying || bod.sitting)) return;
+		this.gesture("upright");
+		bod.radSwap("stand");
+		bod.lying && bod.adjust("position", "y", bod.radii.z, true);
+		bod.lying = bod.sitting = false;
+	},
+	lie: function(target) {
+		var bod = this.body, gest = this.gesture, tp = target.position();
+		this.approach(target, function() {
+			gest("lie");
+			bod.lying = true;
+			bod.adjust("position", "x", tp.x);
+			bod.adjust("position", "z", tp.z);
+			bod.radSwap("lie");
+		});
+	},
+	sit: function(target) {
+		var bod = this.body, gest = this.gesture, tp = target.position(), vec;
+		this.approach(target, function() {
+			gest("sit");
+			bod.sitting = true;
+			vec = zero.core.util.vector(bod.position(), target.position(), true);
+			bod.springs.orientation.target += Math.PI;
+			bod.adjust("position", "x", vec.x * 2 / 3, true);
+			bod.adjust("position", "z", vec.z * 2 / 3, true);
+			bod.radSwap("sit");
+		});
+	},
 	doLeap: function(shouldFly, amount, forwardAmount) {
 		shouldFly && this.shouldFly();
 		this.jump(amount || 800, forwardAmount);
@@ -407,6 +437,7 @@ zero.core.Person = CT.Class({
 			dance = "swim";
 			(t % 20) || bod.bubbletrail.release(1);
 		}
+		this.stand();
 		this.dance(dance, dur);
 	},
 	leave: function(portal, cb) {
