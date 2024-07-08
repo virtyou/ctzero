@@ -354,7 +354,8 @@ zero.core.Person = CT.Class({
 		if (!this.body.lying) return;
 		this.body.lying = false;
 		this.gesture("upright");
-		setTimeout(this.body.boundAndBob, 1000);
+		this.body.radSwap("stand");
+		this.body.adjust("position", "y", this.body.radii.z, true);
 	},
 	lie: function(target) {
 		var bod = this.body, gest = this.gesture, tp = target.position();
@@ -363,7 +364,7 @@ zero.core.Person = CT.Class({
 			bod.lying = true;
 			bod.adjust("position", "x", tp.x);
 			bod.adjust("position", "z", tp.z);
-			setTimeout(bod.boundAndBob, 1000);
+			bod.radSwap("lie");
 		});
 	},
 	doLeap: function(shouldFly, amount, forwardAmount) {
