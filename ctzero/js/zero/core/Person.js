@@ -351,11 +351,12 @@ zero.core.Person = CT.Class({
 		setTimeout(() => this.gesture("upright"), 1600);
 	},
 	stand: function() {
-		if (!this.body.lying) return;
-		this.body.lying = false;
+		var bod = this.body;
+		if (!(bod.lying || bod.sitting)) return;
 		this.gesture("upright");
-		this.body.radSwap("stand");
-		this.body.adjust("position", "y", this.body.radii.z, true);
+		bod.radSwap("stand");
+		bod.lying && bod.adjust("position", "y", bod.radii.z, true);
+		bod.lying = bod.sitting = false;
 	},
 	lie: function(target) {
 		var bod = this.body, gest = this.gesture, tp = target.position();
@@ -365,6 +366,18 @@ zero.core.Person = CT.Class({
 			bod.adjust("position", "x", tp.x);
 			bod.adjust("position", "z", tp.z);
 			bod.radSwap("lie");
+		});
+	},
+	sit: function(target) {
+		var bod = this.body, gest = this.gesture, tp = target.position(), vec;
+		this.approach(target, function() {
+			gest("sit");
+			bod.sitting = true;
+			vec = zero.core.util.vector(bod.position(), target.position(), true);
+			bod.springs.orientation.target += Math.PI;
+			bod.adjust("position", "x", vec.x * 2 / 3, true);
+			bod.adjust("position", "z", vec.z * 2 / 3, true);
+			bod.radSwap("sit");
 		});
 	},
 	doLeap: function(shouldFly, amount, forwardAmount) {
