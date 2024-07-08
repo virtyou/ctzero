@@ -119,7 +119,7 @@ zero.core.Thing = CT.Class({
 			}
 			if (this._yoff && dim == "y") {
 				var lz = this.torso.legs, offer = this._toeOffset = Math.max(this._toeOffset || 0,
-					lz.left.foot.offset(), lz.right.foot.offset()), diff = offer - rz[dim];
+					lz.left.foot.offset(), lz.right.foot.offset()), diff = this._yoffset = offer - rz[dim];
 //				var offer = -this.bones[0].position.y;
 				pz[pname].max += diff;
 				pz[pname].min += diff;
@@ -280,14 +280,10 @@ zero.core.Thing = CT.Class({
 		this.onbound && this.onbound(this);
 		this._.postboundz.forEach(f => f());
 	},
-	basicBound: function(toeOff) { // bare bones
+	setHomeY: function() {
 		var r = zero.core.current.room,
 			pos = this.placer.position,
 			oz = this.opts, atop;
-		this._.preboundz.forEach(f => f());
-		if (toeOff)
-			delete this._toeOffset;
-		this._.setBounds();
 		this.homeY = this.radii.y;
 		atop = this.within || r.getSurface(pos, this.radii);
 		this.homeY += atop ? atop.getTop(pos) : r.bounds.min.y;
@@ -302,6 +298,13 @@ zero.core.Thing = CT.Class({
 		if (oz.bob)
 			this.homeY += oz.bob * Math.PI;
 		this.adjust("position", "y", this.homeY);
+	},
+	basicBound: function(toeOff) { // bare bones
+		this._.preboundz.forEach(f => f());
+		if (toeOff)
+			delete this._toeOffset;
+		this._.setBounds();
+		this.setHomeY();
 		this.onbound && this.onbound(this);
 		this._.postboundz.forEach(f => f());
 		this.log("basicBound", "homeY", this.homeY);
