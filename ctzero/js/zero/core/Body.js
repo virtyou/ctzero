@@ -166,8 +166,8 @@ zero.core.Body = CT.Class({
 		var rz = this._rads, bz = this._bounds, ob,
 			pz = this.group.position, vec = zero.core.util.vec;
 		if (!rz.stand) {
-			rz.stand = CT.merge(this.radii);
-			ob = bz.stand = this.bounds;
+			rz.stand = rz.sit = CT.merge(this.radii);
+			ob = bz.stand = bz.sit = this.bounds;
 			rz.lie = {
 				x: rz.stand.x,
 				y: rz.stand.z,
@@ -181,6 +181,8 @@ zero.core.Body = CT.Class({
 		this._yoff = posture == "stand";
 		if (this._yoff)
 			pz.y = pz.z = 0;
+		else if (posture == "sit")
+			pz.y = -2 * this._yoffset;
 		else {
 			pz.z = -this._yoffset;
 			pz.y = 20; // lol find a real fix
