@@ -380,15 +380,17 @@ zero.core.Person = CT.Class({
 			this.body.radSwap(variety);
 		},
 		recline: function(target, variety, instant) {
+			if (typeof target == "string")
+				target = zero.core.current.room[target];
 			var recliner = () => this.recliners.rest(target, variety);
 			instant ? recliner() : this.approach(target, recliner);
 		}
 	},
-	lie: function(target, instant) {
-		this.recliners.recline(target, "lie", instant);
+	lie: function(bed) {
+		this.recliners.recline(bed, "lie");
 	},
-	sit: function(target, instant) { // NB must be close
-		this.recliners.recline(target, "sit", instant);
+	sit: function(chair) {
+		this.recliners.recline(chair, "sit");
 	},
 	doLeap: function(shouldFly, amount, forwardAmount) {
 		shouldFly && this.shouldFly();
