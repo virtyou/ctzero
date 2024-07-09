@@ -358,27 +358,37 @@ zero.core.Person = CT.Class({
 		bod.lying && bod.adjust("position", "y", bod.radii.z, true);
 		bod.lying = bod.sitting = false;
 	},
-	lie: function(target) {
-		var bod = this.body, gest = this.gesture, tp = target.position();
-		this.approach(target, function() {
-			gest("lie");
+	recliners: {
+		lie: function(target) {
+			var bod = this.body, tp = target.position();
 			bod.lying = true;
 			bod.adjust("position", "x", tp.x);
 			bod.adjust("position", "z", tp.z);
-			bod.radSwap("lie");
-		});
-	},
-	sit: function(target) {
-		var bod = this.body, gest = this.gesture, tp = target.position(), vec;
-		this.approach(target, function() {
-			gest("sit");
+		},
+		sit: function(target) {
+			var bod = this.body, tp = target.position(),
+				vec = zero.core.util.vector(bod.position(), tp, true);
 			bod.sitting = true;
-			vec = zero.core.util.vector(bod.position(), target.position(), true);
 			bod.springs.orientation.target += Math.PI;
 			bod.adjust("position", "x", vec.x * 2 / 3, true);
 			bod.adjust("position", "z", vec.z * 2 / 3, true);
-			bod.radSwap("sit");
-		});
+		},
+		rest: function(target, variety) {
+			variety = variety || "lie";
+			this.gesture(variety);
+			this.recliners[variety](target);
+			this.body.radSwap(variety);
+		},
+		recline: function(target, variety, instant) {
+			var recliner = () => this.recliners.rest(target, variety);
+			instant ? recliner() : this.approach(target, recliner);
+		}
+	},
+	lie: function(target, instant) {
+		this.recliners.recline(target, "lie", instant);
+	},
+	sit: function(target, instant) { // NB must be close
+		this.recliners.recline(target, "sit", instant);
 	},
 	doLeap: function(shouldFly, amount, forwardAmount) {
 		shouldFly && this.shouldFly();
