@@ -373,24 +373,25 @@ zero.core.Person = CT.Class({
 			bod.adjust("position", "x", vec.x * 2 / 3, true);
 			bod.adjust("position", "z", vec.z * 2 / 3, true);
 		},
-		rest: function(target, variety) {
+		rest: function(target, variety, cb) {
 			variety = variety || "lie";
 			this.gesture(variety);
 			this.recliners[variety](target);
 			this.body.radSwap(variety);
+			cb && setTimeout(cb, 1000);
 		},
-		recline: function(target, variety, instant) {
+		recline: function(target, variety, cb, instant) {
 			if (typeof target == "string")
 				target = zero.core.current.room[target];
-			var recliner = () => this.recliners.rest(target, variety);
+			var recliner = () => this.recliners.rest(target, variety, cb);
 			instant ? recliner() : this.approach(target, recliner);
 		}
 	},
-	lie: function(bed) {
-		this.recliners.recline(bed, "lie");
+	lie: function(bed, cb) {
+		this.recliners.recline(bed, "lie", cb);
 	},
-	sit: function(chair) {
-		this.recliners.recline(chair, "sit");
+	sit: function(chair, cb) {
+		this.recliners.recline(chair, "sit", cb);
 	},
 	doLeap: function(shouldFly, amount, forwardAmount) {
 		shouldFly && this.shouldFly();
