@@ -384,7 +384,7 @@ zero.core.Person = CT.Class({
 			if (typeof target == "string")
 				target = zero.core.current.room[target];
 			var recliner = () => this.recliners.rest(target, variety, cb);
-			instant ? recliner() : this.approach(target, recliner);
+			this.body.onReady(() => instant ? recliner() : this.approach(target, recliner));
 		}
 	},
 	lie: function(bed, cb) {
