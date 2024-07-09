@@ -173,10 +173,8 @@ zero.core.Body = CT.Class({
 				y: rz.stand.z,
 				z: rz.stand.y
 			}
-			bz.lie = {
-				min: vec([ob.min.x, ob.min.z, ob.min.y]),
-				max: vec([ob.max.x, ob.max.z, ob.max.y])
-			};
+			bz.lie = new THREE.Box3(vec([ob.min.x, ob.min.z, ob.min.y]),
+				vec([ob.max.x, ob.max.z, ob.max.y]));
 		}
 		this._yoff = posture == "stand";
 		if (this._yoff)
