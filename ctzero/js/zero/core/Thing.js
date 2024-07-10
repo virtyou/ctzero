@@ -997,7 +997,7 @@ zero.core.Thing = CT.Class({
 		this.path = opts.path ? (opts.path + "." + opts.name) : opts.name;
 	},
 	init: function(opts) {
-		this.min_opts = opts;
+		this.min_opts = opts, zc = zero.core, zcc = zc.current;
 		if (opts && opts.template) {
 			this.log("loading template:", opts.template);
 			var tobj = CT.module(opts.template);
@@ -1009,7 +1009,7 @@ zero.core.Thing = CT.Class({
 		this.opts = opts = CT.merge(opts, {
 			path: null,
 			name: "Thing" + Math.floor(Math.random() * 1000),
-			scene: zero.core.camera.scene,
+			scene: zc.camera.scene,
 			parts: [],
 			bones: [],
 			texture: "",
@@ -1063,13 +1063,14 @@ zero.core.Thing = CT.Class({
 			if (cnparts.length == 2 && vl in zero.base[iz]) // excludes Fauna.Head...
 				opts[iz] = zero.base[iz][vl]();
 			for (name in opts[iz])
-				thiz[iz][name] = zero.core[influence + "Controller"].add(opts[iz][name], name, thiz);
+				thiz[iz][name] = zc[influence + "Controller"].add(opts[iz][name], name, thiz);
 		});
 		setTimeout(function() {
+			thiz.opts.credit && zcc.creditor && zcc.creditor(opts.name, thiz.opts.credit);
 			thiz.opts.deferBuild || thiz.build();
 		}); // next post-init tick
 		if (opts.key || opts.fakeKey)
-			zero.core.Thing._things[opts.key || opts.fakeKey] = this;
+			zc.Thing._things[opts.key || opts.fakeKey] = this;
 	}
 });
 zero.core.Thing._things = {};
