@@ -254,7 +254,7 @@ zero.core.Room = CT.Class({
 			var pb = person.body;
 			pb.onReady(pb.setBounds);
 		});
-		this.objects.forEach(furn => furn.setBounds());
+		this.objects.forEach(furn => furn.onReady(furn.setBounds));
 		for (var kind of this._structural) {
 			if (this[kind])
 				for (var item in this[kind])
