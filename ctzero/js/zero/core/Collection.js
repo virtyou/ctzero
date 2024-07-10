@@ -44,35 +44,39 @@ zero.core.Collection = CT.Class({
 		this._rower(kind, index);
 	},
 	boundone: function(mem) {
+		this.log("boundone()", mem.name);
 		mem.basicBound();
-		mem.look(zero.core.util.randPos(true,
-			mem.position(null, true).y, this.within));
+		mem.look(zero.core.util.randPos(true, mem.homeY, this.within));
+		(this.opts.mode == "random") && this.randone(mem);
 	},
 	boundsoon: function(mem) {
 		mem.onReady(() => this.boundone(mem));
 	},
 	boundize: function() {
+		this.log("boundize()");
 		var kind, name;
 		for (kind of this.kinds)
 			for (name in this[kind])
 				this.boundsoon(this[kind][name]);
-		delete this.awaitBound;
+	},
+	randone: function(mem) {
+		mem.update({
+			position: zero.core.util.randPos(true, mem.homeY, this.within)
+		});
 	},
 	randomize: function() {
+		this.log("randomize()");
 		var kind, name, zcu = zero.core.util;
-		for (kind of this.kinds) {
-			for (name in this[kind]) {
-				this[kind][name].update({
-					position: zcu.randPos(true, null, this.within)
-				});
-			}
-		}
+		for (kind of this.kinds)
+			for (name in this[kind])
+				this.randone(this[kind][name]);
 	},
 	random: function(kind) {
-		var i, oz = this.opts, pz = oz.parts, mopts;
+		var i, oz = this.opts, pz = oz.parts, mopts,
+			hasBounds = (this.within || zero.core.current.room).bounds;
 		for (i = 0; i < oz[kind]; i++) {
 			mopts = this._mem(kind, i);
-			if (!this.awaitBound) {
+			if (hasBounds) {
 				mopts.position = zero.core.util.randPos(false, null, this.within);
 				mopts.rotation = [0,
 					CT.data.random(Math.PI * 2, true), 0];
@@ -81,17 +85,14 @@ zero.core.Collection = CT.Class({
 		}
 	},
 	preassemble: function() {
-		var oz = this.opts, r = this.within || zero.core.current.room;
-		this.awaitBound = !(r.bounds || (oz.forceBound && r.getBounds()));
+		var oz = this.opts;
 		if (oz.mode == "rows")
 			this.kinds.forEach(this.row);
 		else if (oz.mode == "cols")
 			this.kinds.forEach(this.col);
-		else {
+		else
 			this.kinds.forEach(this.random);
-			this.awaitBound && r.onbounded(this.randomize);
-		}
-		this.awaitBound && r.onbounded(this.boundize);
+		(this.within || zero.core.current.room).onbounded(this.boundize);
 	},
 	collect: function(collection) {
 		if (!Array.isArray(collection)) {

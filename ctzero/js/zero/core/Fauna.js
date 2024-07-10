@@ -465,7 +465,7 @@ zero.core.Fauna.Menagerie = CT.Class({
 	member: "Fauna",
 	removables: false,
 	tick: function(dts) {
-		if (this.awaitBound || !this.isReady()) return;
+		if (!this.isReady()) return;
 		var kind, name;
 		for (kind of this.kinds)
 			for (name in this[kind])
