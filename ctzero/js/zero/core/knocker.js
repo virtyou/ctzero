@@ -36,11 +36,12 @@ zero.core.knocker = {
 	},
 	hit: function(men, striker, preykinds, hitter, cfg, nohit, onhit, isheld, glopo) {
 		var zc = zero.core, touching = zc.util.touching, zcc = zc.current,
-			source, sb, pk, p, prey, sfx, hitting;
+			source, sp, sb, pk, p, prey, sfx, hitting;
 		for (pk of preykinds) {
 			if (men[pk]) {
 				source = cfg[pk].source;
-				sb = source && zcc.people[source].body;
+				sp = source && zcc.people[source];
+				sb = sp && sp.body;
 				for (p in men[pk]) {
 					prey = men[p];
 					if (touching(striker, prey, 50, isheld, isheld || glopo)) {
