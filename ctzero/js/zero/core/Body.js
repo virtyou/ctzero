@@ -191,6 +191,8 @@ zero.core.Body = CT.Class({
 		this.setBob(true);
 	},
 	boundAndBob: function() {
+		if (this.removed)
+			return this.log("boundAndBob() aborting - already removed");
 		this.basicBound(true);
 		this.setBob(true);
 	},
