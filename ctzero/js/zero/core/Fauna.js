@@ -2,6 +2,8 @@ zero.core.Fauna = CT.Class({
 	CLASSNAME: "zero.core.Fauna",
 	tick: function(dts) {
 		var oz = this.opts;
+		if (this.homeY == undefined)
+			return this.log("tick() waiting for homeY");
 		this.direct(oz.speed * dts);
 		if (this.segment0 && !zero.core.camera.visible(this.segment0)) return;
 		var i, t = zero.core.util.ticker + this.randOff;
