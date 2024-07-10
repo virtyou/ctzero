@@ -51,10 +51,10 @@ zero.core.Room = CT.Class({
 		return b.upon && b.upon.opts.moshy || this.opts.moshy;
 	},
 	jostle: function() {
-		var zcc = zero.core.current, pz = zcc.people, you = zcc.person;
-		if (!you) return;
-		var b = you.body, rz = b.radii, pname, pbod,
-			moshy = this.moshiness(b);
+		var zcc = zero.core.current, pz = zcc.people, you = zcc.person,
+			b = you && you.body, rz = b && b.radii, pname, pbod, moshy;
+		if (!b) return this.log("jostle() aborting - no body");
+		moshy = this.moshiness(b);
 		if (!moshy) return;
 		var pos = b.position();
 		for (pname in pz) {
