@@ -345,6 +345,8 @@ zero.core.Person = CT.Class({
 		this._.shouldFly = true;
 	},
 	stopFlying: function() {
+		if (!this.body)
+			return this.log("stopFlying() aborted - no body");
 		this.body.landing = true;
 		this.body.flying = false;
 		this.dance("fall", 1000);
