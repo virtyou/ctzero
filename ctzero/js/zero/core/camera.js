@@ -4,7 +4,7 @@ var camera = zero.core.camera = {
 		profiles: {},
 		left: {},
 		right: {},
-		preferreds: ["polar", "behind"],
+		preferreds: ["polar", "behind", "pov"],
 		lookers: {
 			polar: true,
 			pov: {
