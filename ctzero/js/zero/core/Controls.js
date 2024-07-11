@@ -409,6 +409,7 @@ zero.core.Controls = CT.Class({
 			this.setChat();
 			this.setLimbs();
 			CT.key.on("BACKSPACE", this.drop);
+			CT.key.on("v", () => cam.angle("pov"));
 			CT.key.on("p", () => cam.angle("polar"));
 			CT.key.on("b", () => cam.angle("behind"));
 			zero.core.gamepads.on(8, cam.toggle);
