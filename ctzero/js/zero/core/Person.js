@@ -98,6 +98,9 @@ zero.core.Person = CT.Class({
 //			zero.core.current.person == this &&
 			(this.body.upon || zero.core.current.room).grippy);
 	},
+	upon: function() {
+		return this.body.upon ? this.body.upon.name : "bottom";
+	},
 	onsay: function(cb) {
 		this._.onsay = cb;
 	},
