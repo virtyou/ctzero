@@ -2,6 +2,7 @@ zero.core.Body = CT.Class({
 	CLASSNAME: "zero.core.Body",
 	_xyz: ["weave", "bob", "slide"],
 	_yoff: true,
+	obstructed: {},
 	positioner2axis: function(pname) {
 		return zero.core.util.xyz[this._xyz.indexOf(pname)];
 	},
