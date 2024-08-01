@@ -6,6 +6,7 @@ zero.core.Room = CT.Class({
 	},
 	_tickers: [],
 	_structural: ["obstacle", "floor", "wall", "ramp", "boulder", "stala"],
+	_surfaces: ["obstacle", "floor", "ramp", "boulder", "stala"],
 	_bumpers: ["wall", "obstacle", "boulder", "stala"],
 	_interactives: {
 		brittle: ["boulder", "stala"],
@@ -53,7 +54,7 @@ zero.core.Room = CT.Class({
 	jostle: function() {
 		var zcc = zero.core.current, pz = zcc.people, you = zcc.person,
 			b = you && you.body, rz = b && b.radii, pname, pbod, moshy;
-		if (!b) return this.log("jostle() aborting - no body");
+		if (!b) return;// this.log("jostle() aborting - no body");
 		moshy = this.moshiness(b);
 		if (!moshy) return;
 		var pos = b.position();
@@ -193,6 +194,16 @@ zero.core.Room = CT.Class({
 	getSolid: function(pos, radii, checkY, objectsOnly) {
 		return this[objectsOnly ? "within" : "getObject"](pos, radii, checkY, "solid", "state");
 	},
+	surfaces: function() {
+		var k, n, sz = [];
+		for (k of this._surfaces) {
+			if (this[k]) {
+				for (n in this[k])
+					sz.push(this[n]);
+			}
+		}
+		return sz;
+	},
 	getSurface: function(pos, radii, topmost) {
 		var val, top, winner, test = function(obj) {
 			if (obj) {
@@ -204,16 +215,10 @@ zero.core.Room = CT.Class({
 					}
 				}
 			}
-		}, n, k, flo;
+		}, flo, surfaces = this.surfaces();
 		test(this.getSolid(pos, radii, false, true));
-		for (k of this._structural) {
-			if (this[k]) {
-				for (n in this[k]) {
-					flo = this[n];
-					flo.overlaps(pos, radii) && test(flo);
-				}
-			}
-		}
+		for (flo of surfaces)
+			flo.overlaps(pos, radii) && test(flo);
 		this.shelled && test(this);
 		return winner;
 	},
