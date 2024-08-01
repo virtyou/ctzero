@@ -258,13 +258,15 @@ zero.core.Person = CT.Class({
 		}
 	},
 	chaser: function() {
-		var _ = this._, cb = _.postchase;
-		if (!this.body || this.body.removed || _.chased.removed)
+		var _ = this._, cb = _.postchase, b = this.body, ob = b && b.obstructed;
+		if (!b || b.removed || _.chased.removed)
 			this.unchase();
-		else if (zero.core.util.touching(this.body, _.chased, 20)) {
+		else if (zero.core.util.touching(b, _.chased, 20)) {
 			this.unchase();
 			cb && cb();
-		} else {
+		} else if (ob.weave || ob.slide)
+			this.doLeap();
+		else {
 			this.orient(_.chased);
 			this.propel();
 		}
