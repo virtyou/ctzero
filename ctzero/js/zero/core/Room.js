@@ -194,12 +194,12 @@ zero.core.Room = CT.Class({
 	getSolid: function(pos, radii, checkY, objectsOnly) {
 		return this[objectsOnly ? "within" : "getObject"](pos, radii, checkY, "solid", "state");
 	},
-	surfaces: function() {
+	surfaces: function(nameOnly) {
 		var k, n, sz = [];
 		for (k of this._surfaces) {
 			if (this[k]) {
 				for (n in this[k])
-					sz.push(this[n]);
+					sz.push(nameOnly ? n : this[n]);
 			}
 		}
 		return sz;
