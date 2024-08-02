@@ -248,6 +248,12 @@ zero.core.Person = CT.Class({
 		bs.weave.boost = bs.slide.boost = 0;
 		this.undance();
 	},
+	obstruction: function(property) {
+		var b = this.body, obs = b && b.obstructed,
+			ob = obs.weave || obs.slide;
+		if (ob)
+			return property ? ob[property] : ob;
+	},
 	unchase: function() {
 		var _ = this._;
 		this.unrun();
@@ -258,13 +264,13 @@ zero.core.Person = CT.Class({
 		}
 	},
 	chaser: function() {
-		var _ = this._, cb = _.postchase, b = this.body, ob = b && b.obstructed;
+		var _ = this._, cb = _.postchase, b = this.body;
 		if (!b || b.removed || _.chased.removed)
 			this.unchase();
 		else if (zero.core.util.touching(b, _.chased, 20)) {
 			this.unchase();
 			cb && cb();
-		} else if (ob.weave || ob.slide)
+		} else if (this.obstruction())
 			this.doLeap();
 		else {
 			this.orient(_.chased);
@@ -448,15 +454,36 @@ zero.core.Person = CT.Class({
 		this.mood.reset("energy");
 		this.energy.reset("damp");
 	},
+	setClimbing: function() {
+		var bod = this.body, climbing = this.obstruction("climby"),
+			spr = bod.springs.bob, changed = bod.climbing != climbing,
+			cam = zero.core.camera;
+		if (!changed) return;
+		bod.climbing = climbing;
+		if (climbing) {
+			spr.floored = false;
+			spr.acceleration = 0;
+			cam.angle("behind", null, null, true);
+		} else {
+			spr.acceleration = -1000;
+			cam.angle("preferred");
+		}
+	},
 	go: function(dur) {
 		var bod = this.body, within = bod.within,
-			dance = bod.flying ? "fly" : "walk",
-			t = zero.core.util.ticker;
+			dance = "walk", t = zero.core.util.ticker;
+		bod.crawling = CT.key.capslocked;
+		this.setClimbing();
 		this._.bouncer = 1;
 		if (within && within.opts.state == "liquid") {
 			dance = "swim";
 			(t % 20) || bod.bubbletrail.release(1);
-		}
+		} else if (bod.flying)
+			dance = "fly";
+		else if (bod.crawling)
+			dance = "crawl";
+		else if (bod.climbing)
+			dance = "climb";
 		this.stand();
 		this.dance(dance, dur);
 	},

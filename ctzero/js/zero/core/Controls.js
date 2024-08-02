@@ -242,25 +242,27 @@ zero.core.Controls = CT.Class({
 			springz[dim].boost = speed * vec[dim];
 		camera.isPolar && this.face(vec);
 	},
-	mover: function(fullAmount, dir) {
-		var _ = this._, target = this.target, going = this.going, amount,
-			spr = this.springs[dir], go = this.go, moveCb = _.moveCb, isor;
+	mover: function(fullAmount, dir, smoothy) {
+		var _ = this._, target = this.target, going = this.going,
+			spr = this.springs[dir], go = this.go, moveCb = _.moveCb,
+			amount, isor, isy = dir == "y";
 		return function(mult) {
 			if (target.zombified) return;
 			amount = mult ? fullAmount * mult : fullAmount;
 			if (amount) {
-				if (dir == "y")
+				if (isy && !smoothy)
 					target.jump(amount);
 				else
 					target.go();
 			} else if (!going())
 				target.undance();
-			if (dir != "y") {
+			if (smoothy || !isy) {
 				isor = dir == "orientation";
 				if (isor) {
 					spr.hard = target.body.grippy;
 					spr.boost = amount;
-				}
+				} else if (isy)
+					spr.boost = amount;
 				go(isor);
 			} else if (!amount && !spr.hard)
 				target.unjump();
@@ -358,9 +360,15 @@ zero.core.Controls = CT.Class({
 			axes: this.upAxes
 		});
 	},
+	up: function() {
+		this.target.body.climbing ? this.ascend() : this.forward();
+	},
+	down: function() {
+		this.target.body.climbing ? this.descend() : this.backward();
+	},
 	setNav: function() {
-		this.on("w", 12, this.stop, this.forward);
-		this.on("s", 13, this.stop, this.backward);
+		this.on("w", 12, this.stop, this.up);
+		this.on("s", 13, this.stop, this.down);
 		CT.key.on("a", this.stop, this.leftStrafe);
 		CT.key.on("d", this.stop, this.rightStrafe);
 		this.on("z", 14, this.still, this.left);
@@ -387,12 +395,14 @@ zero.core.Controls = CT.Class({
 			speed = sz.base, ospeed = sz.orientation, jspeed = sz.jump,
 			wall, gestures, dances, num = 0, cam = zero.core.camera,
 			tt = this.target.thruster;
-		this.jump = mover(jspeed, "y");
 		this.unjump = mover(0, "y");
+		this.jump = mover(jspeed, "y");
 		this.forward = mover(speed, "front");
 		this.backward = mover(speed, "back");
 		this.leftStrafe = mover(speed, "left");
 		this.rightStrafe = mover(speed, "right");
+		this.descend = mover(-speed, "y", true);
+		this.ascend = mover(speed, "y", true);
 		this.stop = mover(0);
 		this.still = mover(0, "orientation");
 		this.left = mover(ospeed, "orientation");

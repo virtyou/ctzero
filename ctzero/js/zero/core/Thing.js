@@ -1040,6 +1040,7 @@ zero.core.Thing = CT.Class({
 			scroll: null,
 			shift: null,
 			grippy: true,
+			climby: false,
 			frustumCulled: true,
 			sphereSegs: core.config.ctzero.sphereSegs
 		});
@@ -1053,6 +1054,7 @@ zero.core.Thing = CT.Class({
 		this.setName(opts);
 		this.pull = opts.pull;
 		this.grippy = opts.grippy;
+		this.climby = opts.climby;
 		if ("bone" in opts)
 			opts.anchor = opts.bones[opts.bone];
 		if (opts.onbound)
