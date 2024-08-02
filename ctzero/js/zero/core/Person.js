@@ -456,14 +456,18 @@ zero.core.Person = CT.Class({
 	},
 	setClimbing: function() {
 		var bod = this.body, climbing = this.obstruction("climby"),
-			spr = bod.springs.bob, changed = bod.climbing != climbing;
+			spr = bod.springs.bob, changed = bod.climbing != climbing,
+			cam = zero.core.camera;
 		if (!changed) return;
 		bod.climbing = climbing;
 		if (climbing) {
 			spr.floored = false;
 			spr.acceleration = 0;
-		} else
+			cam.angle("behind", null, null, true);
+		} else {
 			spr.acceleration = -1000;
+			cam.angle("preferred");
+		}
 	},
 	go: function(dur) {
 		var bod = this.body, within = bod.within,
