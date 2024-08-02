@@ -450,13 +450,18 @@ zero.core.Person = CT.Class({
 	},
 	go: function(dur) {
 		var bod = this.body, within = bod.within,
-			dance = bod.flying ? "fly" : "walk",
-			t = zero.core.util.ticker;
+			dance = "walk", t = zero.core.util.ticker;
+		bod.crawling = CT.key.capslocked;
 		this._.bouncer = 1;
 		if (within && within.opts.state == "liquid") {
 			dance = "swim";
 			(t % 20) || bod.bubbletrail.release(1);
-		}
+		} else if (bod.flying)
+			dance = "fly";
+		else if (bod.crawling)
+			dance = "crawl";
+		else if (bod.climbing)
+			dance = "climb";
 		this.stand();
 		this.dance(dance, dur);
 	},
