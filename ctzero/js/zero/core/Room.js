@@ -231,7 +231,7 @@ zero.core.Room = CT.Class({
 			sprax = bod.positioner2axis(spr.name);
 		p[sprax] = spr.target;
 		var solid = this.getSolid(p, bod.radii, true);
-		bod.obstructed[spr.name] = !!solid;
+		bod.obstructed[spr.name] = solid;
 		if (solid) {
 			if (!p.x && !p.z) // spawning (meh?)
 				spr.target = spr.value = solid.bounds.max[sprax] + 100;
