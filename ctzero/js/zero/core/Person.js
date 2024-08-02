@@ -454,11 +454,22 @@ zero.core.Person = CT.Class({
 		this.mood.reset("energy");
 		this.energy.reset("damp");
 	},
+	setClimbing: function() {
+		var bod = this.body, climbing = this.obstruction("climby"),
+			spr = bod.springs.bob, changed = bod.climbing != climbing;
+		if (!changed) return;
+		bod.climbing = climbing;
+		if (climbing) {
+			spr.floored = false;
+			spr.acceleration = 0;
+		} else
+			spr.acceleration = -1000;
+	},
 	go: function(dur) {
 		var bod = this.body, within = bod.within,
 			dance = "walk", t = zero.core.util.ticker;
-		bod.climbing = this.obstruction("climby");
 		bod.crawling = CT.key.capslocked;
+		this.setClimbing();
 		this._.bouncer = 1;
 		if (within && within.opts.state == "liquid") {
 			dance = "swim";
