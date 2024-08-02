@@ -240,7 +240,7 @@ zero.core.Controls = CT.Class({
 			return;
 		for (dim of _.flats)
 			springz[dim].boost = speed * vec[dim];
-		camera.isPolar && !this.target.body.climbing && this.face(vec);
+		camera.isPolar && this.face(vec);
 	},
 	mover: function(fullAmount, dir, smoothy) {
 		var _ = this._, target = this.target, going = this.going,
