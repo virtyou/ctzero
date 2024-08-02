@@ -248,6 +248,12 @@ zero.core.Person = CT.Class({
 		bs.weave.boost = bs.slide.boost = 0;
 		this.undance();
 	},
+	obstruction: function(property) {
+		var b = this.body, obs = b && b.obstructed,
+			ob = obs.weave || obs.slide;
+		if (ob)
+			return property ? ob[property] : ob;
+	},
 	unchase: function() {
 		var _ = this._;
 		this.unrun();
@@ -258,13 +264,13 @@ zero.core.Person = CT.Class({
 		}
 	},
 	chaser: function() {
-		var _ = this._, cb = _.postchase, b = this.body, ob = b && b.obstructed;
+		var _ = this._, cb = _.postchase, b = this.body;
 		if (!b || b.removed || _.chased.removed)
 			this.unchase();
 		else if (zero.core.util.touching(b, _.chased, 20)) {
 			this.unchase();
 			cb && cb();
-		} else if (ob.weave || ob.slide)
+		} else if (this.obstruction())
 			this.doLeap();
 		else {
 			this.orient(_.chased);
@@ -451,6 +457,7 @@ zero.core.Person = CT.Class({
 	go: function(dur) {
 		var bod = this.body, within = bod.within,
 			dance = "walk", t = zero.core.util.ticker;
+		bod.climbing = this.obstruction("climby");
 		bod.crawling = CT.key.capslocked;
 		this._.bouncer = 1;
 		if (within && within.opts.state == "liquid") {
