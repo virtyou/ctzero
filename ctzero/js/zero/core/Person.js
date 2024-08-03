@@ -456,9 +456,8 @@ zero.core.Person = CT.Class({
 	},
 	setClimbing: function() {
 		var bod = this.body, climbing = this.obstruction("climby"),
-			spr = bod.springs.bob, changed = bod.climbing != climbing,
-			cam = zero.core.camera;
-		if (!changed) return;
+			spr = bod.springs.bob, cam = zero.core.camera;
+		if (bod.climbing == climbing) return;
 		bod.climbing = climbing;
 		if (climbing) {
 			spr.floored = false;
@@ -469,10 +468,19 @@ zero.core.Person = CT.Class({
 			cam.angle("preferred");
 		}
 	},
+	setCrawling: function() {
+		var bod = this.body, crawling = CT.key.capslocked;
+		if (bod.crawling == crawling) return;
+		bod.crawling = crawling;
+		if (crawling)
+			bod.radSwap("crouch");
+		else
+			bod.radSwap("stand");
+	},
 	go: function(dur) {
 		var bod = this.body, within = bod.within,
 			dance = "walk", t = zero.core.util.ticker;
-		bod.crawling = CT.key.capslocked;
+		this.setCrawling();
 		this.setClimbing();
 		this._.bouncer = 1;
 		if (within && within.opts.state == "liquid") {
