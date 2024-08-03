@@ -164,7 +164,7 @@ zero.core.Body = CT.Class({
 	_rads: {},
 	_bounds: {},
 	radSwap: function(posture) {
-		var rz = this._rads, bz = this._bounds, ob,
+		var rz = this._rads, bz = this._bounds, ob, w, w2, h,
 			pz = this.group.position, vec = zero.core.util.vec;
 		if (!rz.stand) {
 			rz.stand = rz.sit = CT.merge(this.radii);
@@ -176,20 +176,32 @@ zero.core.Body = CT.Class({
 			}
 			bz.lie = new THREE.Box3(vec([ob.min.x, ob.min.z, ob.min.y]),
 				vec([ob.max.x, ob.max.z, ob.max.y]));
+			w = 10;
+			h = 100;
+			w2 = 2 * w
+			rz.crouch = {
+				x: rz.stand.x + w2,
+				y: rz.stand.y - h,
+				z: rz.stand.z + w2
+			};
+			bz.crouch = new THREE.Box3(vec([ob.min.x - w, ob.min.y, ob.min.z - w]),
+				vec([ob.max.x + w, ob.max.y - h, ob.max.z + w]));
 		}
 		this._yoff = posture == "stand";
 		if (this._yoff)
 			pz.y = pz.z = 0;
 		else if (posture == "sit")
 			pz.y = -2 * this._yoffset;
-		else {
+		else if (posture == "lie") {
 			pz.z = -this._yoffset;
 			pz.y = 20; // lol find a real fix
 		}
 		this.bounds = bz[posture];
 		this.radii = rz[posture];
-		this.setHomeY();
-		this.setBob(true);
+		if (posture != "crouch") {
+			this.setHomeY();
+			this.setBob(true);
+		}
 	},
 	boundAndBob: function() {
 		if (this.removed)
