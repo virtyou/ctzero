@@ -466,7 +466,9 @@ zero.core.Room = CT.Class({
 				thing: thing,
 				texture: tx,
 				material: base.material,
-				geometry: sdz && d2g(sdz)
+				geometry: sdz && d2g(sdz),
+//				castShadow: opts.shadows,
+				receiveShadow: opts.shadows
 			}));
 		});
 	},
@@ -477,6 +479,7 @@ zero.core.Room = CT.Class({
 			oso = CT.merge({
 				name: "shelly",
 				kind: "shell",
+				receiveShadow: opts.shadows,
 				geometry: d2g(os.dimensions),
 				material: {
 					side: THREE.BackSide
