@@ -187,8 +187,10 @@ zero.core.Body = CT.Class({
 			bz.crouch = new THREE.Box3(vec([ob.min.x - w, ob.min.y, ob.min.z - w]),
 				vec([ob.max.x + w, ob.max.y - h, ob.max.z + w]));
 		}
-		this._yoff = posture == "stand";
-		if (this._yoff)
+		var isStand = posture == "stand",
+			isCrouch = posture == "crouch";
+		this._yoff = isStand || isCrouch;
+		if (isStand)
 			pz.y = pz.z = 0;
 		else if (posture == "sit")
 			pz.y = -2 * this._yoffset;
@@ -198,10 +200,8 @@ zero.core.Body = CT.Class({
 		}
 		this.bounds = bz[posture];
 		this.radii = rz[posture];
-		if (posture != "crouch") {
-			this.setHomeY();
-			this.setBob(true);
-		}
+		this.setHomeY();
+		this.setBob(true);
 	},
 	boundAndBob: function() {
 		if (this.removed)
