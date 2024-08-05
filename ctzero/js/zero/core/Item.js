@@ -65,7 +65,7 @@ zero.core.Item = CT.Class({
 		}
 	},
 	init: function(opts) {
-		this.opts = opts = CT.merge(opts, zero.base.items[this.opts.name], {
+		this.opts = opts = CT.merge(zero.base.items[this.opts.name], opts, {
 			castShadow: true,
 			variety: "knocker"
 		}, this.opts);
