@@ -201,6 +201,14 @@ zero.core.Person = CT.Class({
 		if (handFallback)
 			return this.body.torso.hands[side];
 	},
+	holding: function(name, asitem) {
+		var side, item;
+		for (side of ["left", "right"]) {
+			item = this.held(side);
+			if (item && item.name == name)
+				return asitem ? item : side;
+		}
+	},
 	freeHand: function() {
 		var g = this.opts.gear, h = g.held = g.held || {};
 		if (h.right) {
@@ -323,6 +331,50 @@ zero.core.Person = CT.Class({
 				cb && cb();
 			}, dur);
 		}, 500); // time for orientation...
+	},
+	lighters: {
+		phrases: {
+			nofire: ["i don't see anything to light the torch", "where's the fire?", "i don't see a fire"],
+			notorch: ["i don't see a torch", "i'd need a torch", "i need a torch to light that"],
+			failed: ["dag nab it", "must be wet", "why won't this light", "almost got it"]
+		},
+		getTorch: function(cb) {
+			var torch = zero.core.current.room.torch;
+			if (!torch)
+				return this.say(CT.data.choice(this.lighters.phrases.notorch));
+			this.get(torch, cb);
+		},
+		lightTorch: function(cb) {
+			var lightable = zero.core.current.room.getFire(true), lz = this.lighters;
+			if (!lightable)
+				return this.say(CT.data.choice(lz.phrases.nofire));
+			this.approach(lightable, () => lz.tryLight(this.holding("torch", true).fire, cb));
+		},
+		lightFire: function(lightable, cb) {
+			this.approach(lightable, () => this.lighters.tryLight(lightable, cb));
+		},
+		tryLight: function(lightable, cb) {
+			this.thruster.thrust(this.holding("torch"));
+			setTimeout(this.lighters.checkLight, 1000, lightable, cb);
+		},
+		checkLight: function(lightable, cb) {
+			var lz = this.lighters;
+			this.thruster.unthrust(this.holding("torch"));
+			lightable.quenched ? this.say(CT.data.choice(lz.phrases.failed),
+				() => lz.lightFire(lightable, cb)) : (cb && cb());
+		}
+	},
+	light: function(lightable, cb) {
+		var lz = this.lighters, torch = this.holding("torch", true),
+			lightFire = () => lz.lightFire(lightable, cb),
+			lightTorch = () => lz.lightTorch(lightFire);
+		if (torch) {
+			if (torch.fire.quenched)
+				lightTorch();
+			else
+				lightFire();
+		} else
+			lz.getTorch(lightTorch);
 	},
 	bounce: function(amount) {
 		var _ = this._;
