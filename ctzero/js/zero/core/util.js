@@ -223,6 +223,17 @@ zero.core.util = {
 			xyzt = (vec.x * vec.x) + (vec.y * vec.y) + (vec.z * vec.z);
 		return Math.sqrt(xyzt);
 	},
+	closest: function(pos, items) {
+		var item, dist, shortest, best, distance = zero.core.util.distance;
+		for (item of items) {
+			dist = distance(pos, item.position());
+			if (!best || dist < shortest) {
+				best = item;
+				shortest = dist;
+			}
+		}
+		return best;
+	},
 	close2u: function(thingo) {
 		var zcc = zero.core.current, r = zcc.room, you = zcc.person,
 			diameter = r.getBounds().min.distanceTo(r.bounds.max),
