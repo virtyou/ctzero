@@ -143,6 +143,14 @@ zero.core.Room = CT.Class({
 				return obj;
 		}
 	},
+	getFire: function(lit) {
+		for (var item of this.objects) {
+			if (item.opts.state == "plasma") {
+				if (!lit || !item.quenched)
+					return item;
+			}
+		}
+	},
 	getFeaturing: function(feature) {
 		var k, t, item, featurings = [];
 		for (k of this._interactives[feature]) {
