@@ -733,6 +733,30 @@ zero.core.Person = CT.Class({
 			this.name + "'s body"));
 		return ownedOnly ? cz.filter(comp => comp && comp.owners) : cz;
 	},
+	bodyBuilt: function(bod) {
+		var opts = this.opts;
+		this.head = bod.head;
+		bod.person = this.head.person = this;
+		this.thruster = new zero.core.Thruster({ body: bod });
+		if (zero.core.current.room)
+			this.setFriction();
+		if (opts.mods.default)
+			this.mod("default");
+		for (var p in opts.positioners)
+			bod.springs[p].target = bod.springs[p].value = opts.positioners[p];
+		if (opts.positioners.bob)
+			bod.springs.bob.floored = true;
+		opts.gear && this.gear(opts.gear);
+		opts.bag && this.bag(opts.bag);
+		opts.onbuild && opts.onbuild(this);
+		core.config.ctzero.gravity && zero.core.util.onRoomReady(bod.boundAndBob);
+	},
+	buildBody: function() {
+		var opts = this.opts, pz = opts.positioners, oz = { onbuild: this.bodyBuilt };
+		if (pz.bob)
+			oz.position = [pz.weave, pz.bob, pz.slide];
+		this.body = new zero.core.Body(CT.merge(opts.body, oz));
+	},
 	init: function(opts) {
 		this.log("init", opts.name);
 		var thiz = this, cfg = core.config.ctzero;
@@ -763,23 +787,7 @@ zero.core.Person = CT.Class({
 		this.grippy = opts.grippy;
 		this.voice = opts.voice;
 		this.name = opts.name;
-		this.body = new zero.core.Body(CT.merge(opts.body, {
-			onbuild: function(bod) {
-				thiz.head = bod.head;
-				bod.person = thiz.head.person = thiz;
-				thiz.thruster = new zero.core.Thruster({ body: bod });
-				if (zero.core.current.room)
-					thiz.setFriction();
-				if (opts.mods.default)
-					thiz.mod("default");
-				for (var p in opts.positioners)
-					bod.springs[p].target = bod.springs[p].value = opts.positioners[p];
-				opts.gear && thiz.gear(opts.gear);
-				opts.bag && thiz.bag(opts.bag);
-				opts.onbuild && opts.onbuild(thiz);
-				cfg.gravity && zero.core.util.onRoomReady(bod.boundAndBob);
-			}
-		}));
+		this.buildBody();
 		this.brain = new zero.core.Brain({
 			person: this
 		});
