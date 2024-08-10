@@ -143,21 +143,17 @@ zero.core.Room = CT.Class({
 				return obj;
 		}
 	},
-	getFire: function(pos, lit) {
-		var item, dist, shortest, best, distance = zero.core.util.distance;
-		for (item of this.objects) {
-			if (item.opts.state == "plasma") {
-				if (!lit || !item.quenched) {
-					if (!pos) return item;
-					dist = distance(pos, item.position());
-					if (!best || dist < shortest) {
-						best = item;
-						shortest = dist;
-					}
-				}
-			}
-		}
-		return best;
+	getFires: function(quenched, lit) {
+		var fires = this.objects.filter(item => item.opts.state == "plasma");
+		if (quenched)
+			fires = fires.filter(item => item.quenched);
+		else if (lit)
+			fires = fires.filter(item => !item.quenched);
+		return fires;
+	},
+	getFire: function(pos, quenched, lit) {
+		var fires = this.getFires(quenched, lit);
+		return pos ? zero.core.util.closest(pos, fires) : fires[0];
 	},
 	getFeaturing: function(feature) {
 		var k, t, item, featurings = [];
