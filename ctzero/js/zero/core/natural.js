@@ -91,7 +91,7 @@ zero.core.natural = {
 				room: omap
 			};
 		}
-		for (k in Object.keys(omap))
+		for (k of Object.keys(omap))
 			if (!omap[k])
 				delete omap[k];
 		return omap;
