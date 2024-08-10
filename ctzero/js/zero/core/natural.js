@@ -79,7 +79,7 @@ zero.core.natural = {
 		};
 	},
 	omap: function(variety, opts) {
-		var omap, zc = zero.core, nat = zc.natural,
+		var k, omap, zc = zero.core, nat = zc.natural,
 			sname = nat.classes(variety).base.setter;
 		opts = opts || zc.current.room.opts;
 		omap = opts[sname];
@@ -91,6 +91,9 @@ zero.core.natural = {
 				room: omap
 			};
 		}
+		for (k in Object.keys(omap))
+			if (!omap[k])
+				delete omap[k];
 		return omap;
 	},
 	setter: function(variety, area, collection) {
