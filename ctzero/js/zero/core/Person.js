@@ -345,7 +345,7 @@ zero.core.Person = CT.Class({
 			this.get(torch, cb);
 		},
 		lightTorch: function(cb) {
-			var lightable = zero.core.current.room.getFire(this.position(), true), lz = this.lighters;
+			var lightable = zero.core.current.room.getFire(this.position(), false, true), lz = this.lighters;
 			if (!lightable)
 				return this.say(CT.data.choice(lz.phrases.nofire));
 			this.approach(lightable, () => lz.tryLight(this.holding("torch", true).fire, cb));
