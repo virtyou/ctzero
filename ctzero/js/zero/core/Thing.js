@@ -285,7 +285,7 @@ zero.core.Thing = CT.Class({
 			pos = this.placer.position,
 			oz = this.opts, atop;
 		this.homeY = this.radii.y;
-		atop = this.within || r.getSurface(pos, this.radii);
+		this.upon = atop = this.within || r.getSurface(pos, this.radii);
 		this.homeY += atop ? atop.getTop(pos) : r.bounds.min.y;
 		if (oz.swimming)
 			this.homeY += CT.data.random(2 * (atop || r).radii.y);
