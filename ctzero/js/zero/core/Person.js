@@ -443,6 +443,8 @@ zero.core.Person = CT.Class({
 			this.gesture(variety);
 			this.recliners[variety](target);
 			this.body.radSwap(variety);
+			if (this.body.upon == target)
+				this.body.group.position.y -= target.radii.y * 2;
 			cb && setTimeout(cb, 1000);
 		},
 		recline: function(target, variety, cb, instant) {
