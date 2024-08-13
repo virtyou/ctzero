@@ -291,7 +291,7 @@ zero.core.Person = CT.Class({
 		_.chased = subject;
 		_.chaser = setInterval(this.chaser, 500);
 	},
-	approach: function(subject, cb, watch, chase, dur, nobuff) {
+	approach: function(subject, cb, watch, chase, dur, nobuff, jumpy) {
 		var _ = this._, bod = this.body, zc = zero.core, dist,
 			zcu = zc.util, zcc = zc.current, ppl = zcc.people,
 			propel = this.propel, pursue = this.pursue, stop = this.stop,
@@ -331,6 +331,8 @@ zero.core.Person = CT.Class({
 				cb && cb();
 			}, dur);
 		}, 500); // time for orientation...
+		if (!isYou && jumpy && this.obstruction())
+			setTimeout(() => this.doLeap(false, null, 0.05), 300);
 	},
 	lighters: {
 		phrases: {
@@ -345,7 +347,7 @@ zero.core.Person = CT.Class({
 			this.get(torch, cb);
 		},
 		lightTorch: function(cb) {
-			var lightable = zero.core.current.room.getFire(this.position(), false, true), lz = this.lighters;
+			var lightable = zero.core.current.room.getFire(this.body.position(), false, true), lz = this.lighters;
 			if (!lightable)
 				return this.say(CT.data.choice(lz.phrases.nofire));
 			this.approach(lightable, () => lz.tryLight(this.holding("torch", true).fire, cb));
@@ -478,7 +480,7 @@ zero.core.Person = CT.Class({
 				sound = "splash";
 				this.splash();
 				(t % 10) || bod.bubbletrail.release(1);
-			} else if (within.opts.state == "plasma")
+			} else if (within.opts.state == "plasma" && !within.quenched)
 				_.shouldFly = true;
 		}
 		if (_.shouldFly) {
@@ -570,7 +572,7 @@ zero.core.Person = CT.Class({
 		gtp.x = opts.weave;
 		gtp.z = opts.slide;
 		gtp.y = opts.bob || this.body.placer.position.y;
-		this.approach(gotar, cb, watch, false, dur);
+		this.approach(gotar, cb, watch, false, dur, false, true);
 	},
 	snapshot: function() {
 		return {
