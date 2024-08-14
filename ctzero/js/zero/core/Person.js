@@ -346,30 +346,39 @@ zero.core.Person = CT.Class({
 				return this.say(CT.data.choice(this.lighters.phrases.notorch));
 			this.get(torch, cb);
 		},
-		lightTorch: function(cb) {
-			var lightable = zero.core.current.room.getFire(this.body.position(), false, true), lz = this.lighters;
+		lightTorch: function(cb, nobuff) {
+			var lightable = zero.core.current.room.getFire(this.body.position(), false, true), lz = this.lighters,
+				doLight = () => lz.tryLight(this.holding("torch", true).fire, cb, () => lz.lightTorch(cb, true));
 			if (!lightable)
 				return this.say(CT.data.choice(lz.phrases.nofire));
-			this.approach(lightable, () => lz.tryLight(this.holding("torch", true).fire, cb));
+			this.approach(lightable, () => lz.leanAnd(doLight), false, false, null, nobuff);
 		},
-		lightFire: function(lightable, cb) {
-			this.approach(lightable, () => this.lighters.tryLight(lightable, cb));
+		lightFire: function(lightable, cb, nobuff) {
+			var retry = () => this.lighters.lightFire(lightable, cb, true),
+				doLight = () => this.lighters.tryLight(lightable, cb, retry);
+			this.approach(lightable, () => this.lighters.leanAnd(doLight), false, false, null, nobuff);
 		},
-		tryLight: function(lightable, cb) {
+		leanAnd: function(cb) {
+			this.body.springs.bow.target = Math.PI / 8;
+			setTimeout(cb, 1000);
+		},
+		tryLight: function(lightable, cb, fb) {
 			this.thruster.thrust(this.holding("torch"));
-			setTimeout(this.lighters.checkLight, 1000, lightable, cb);
+			setTimeout(this.lighters.checkLight, 1000, lightable, cb, fb);
 		},
-		checkLight: function(lightable, cb) {
+		checkLight: function(lightable, cb, fb) {
 			var lz = this.lighters;
 			this.thruster.unthrust(this.holding("torch"));
-			lightable.quenched ? this.say(CT.data.choice(lz.phrases.failed),
-				() => lz.lightFire(lightable, cb)) : (cb && cb());
+			lightable.quenched ? this.say(CT.data.choice(lz.phrases.failed), fb) : (cb && cb());
 		}
 	},
 	light: function(lightable, cb) {
+		if (typeof lightable == "string")
+			lightable = zero.core.current.room[lightable];
 		var lz = this.lighters, torch = this.holding("torch", true),
 			lightFire = () => lz.lightFire(lightable, cb),
 			lightTorch = () => lz.lightTorch(lightFire);
+		this.thruster.defaultUnthrust();
 		if (torch) {
 			if (torch.fire.quenched)
 				lightTorch();
