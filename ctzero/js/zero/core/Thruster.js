@@ -107,6 +107,16 @@ zero.core.Thruster = CT.Class({
 		this.set("unkick", "legs", side);
 		this.set("unthrust");
 	},
+	touch: function(side) {
+		var held = this.body.person.held(side);
+		held && held.touch();
+	},
+	defaultUnthrust: function() {
+		if (this.ons.unthrust)
+			return this.log("defaultUnthrust(): unthrust already set");
+		this.log("defaultUnthrust(): registering basic touch callback");
+		this.on("unthrust", this.touch);
+	},
 	on: function(move, cb) {
 		this.ons[move] = cb; // just one
 	},
