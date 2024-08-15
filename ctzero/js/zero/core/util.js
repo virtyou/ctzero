@@ -1,6 +1,7 @@
 zero.core.current = {};
 zero.core.util = {
 	ticker: 0,
+	freshtix: 0,
 	elapsed: 0,
 	relapsed: 0,
 	dts: 0.032,
@@ -641,11 +642,11 @@ zero.core.util = {
 		zero.core.util.room(robj);
 	},
 	refresh: function(onready, onperson) {
-		var cfg = core.config.ctzero, people = zero.core.current.people = {},
-			room = zero.core.util.room(cfg.room), loadCount = 0, isLast;
+		var cfg = core.config.ctzero, zc = zero.core, people = zc.current.people = {},
+			zcu = zc.util, room = zcu.room(cfg.room), loadCount = 0, isLast;
 		if (cfg.people.length) {
 			cfg.people.forEach(function(pobj, i) {
-				people[pobj.name] = new zero.core.Person(CT.merge(pobj, {
+				people[pobj.name] = new zc.Person(CT.merge(pobj, {
 					onbuild: function(person) {
 						loadCount += 1;
 						isLast = loadCount == cfg.people.length;
@@ -653,6 +654,7 @@ zero.core.util = {
 						if (isLast) {
 							person.watch(null, true);
 							onready(person, room, i);
+							zcu.freshtix = 0;
 						}
 					}
 				}));
@@ -690,6 +692,7 @@ zero.core.util = {
 	    rdts = zcu.rdts;
 	    zcu.now = now;
 	    zcu.ticker += 1;
+	    zcu.freshtix += 1;
 	    zcu.elapsed += dts;
 	    zcu.relapsed += rdts;
 	    zero.core.springController.tick(dts, rdts);
