@@ -96,6 +96,7 @@ zero.core.Thruster = CT.Class({
 			this.sfx(this.ons[move] && this.ons[move](side) || "whoosh");
 		} else {
 			part.pause();
+			this.ons[move] && this.ons[move](side);
 			flags[(move == "up") ? "swinging" : "thrusting"] = true;
 		}
 	},
@@ -159,11 +160,23 @@ zero.core.Thruster = CT.Class({
 		var held = this.body.person.held(side);
 		held && held.touch();
 	},
-	defaultUnthrust: function() {
+	autotouch: function() {
 		if (this.ons.unthrust)
-			return this.log("defaultUnthrust(): unthrust already set");
-		this.log("defaultUnthrust(): registering basic touch callback");
+			return this.log("autotouch(): unthrust already set");
+		this.log("autotouch(): registering basic touch callback");
 		this.on("unthrust", this.touch);
+	},
+	drinking: function(side) {
+		var held = this.body.person.held(side);
+		if (!held) return;
+		if (held.name == "horn")
+			zero.core.audio.ux("airhorn");
+		else
+			this.sfx("glug");
+	},
+	autodrink: function() {
+		this.log("autodrink(): registering basic drink callback");
+		this.on("drink", this.drinking);
 	},
 	on: function(move, cb) {
 		this.ons[move] = cb; // just one
@@ -171,10 +184,14 @@ zero.core.Thruster = CT.Class({
 	init: function(opts) {
 		this.opts = opts = CT.merge(opts, {
 			// body required; anything else?
+			autotouch: true,
+			autodrink: true
 		});
 		this.body = opts.body;
 		this.torso = this.body.torso;
 		this.spine = this.body.spine;
 		this.sfx = this.body.person.sfx;
+		opts.autotouch && this.autotouch();
+		opts.autodrink && this.autodrink();
 	}
 });
