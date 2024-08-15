@@ -38,6 +38,42 @@ zero.core.Thruster = CT.Class({
 					elbow: {x: -Math.PI},
 					wrist: {x: 0}
 				}
+			},
+			facepalm: {
+				left: {
+					clavicle: {y: -0.5},
+					shoulder: {x: -Math.PI / 2, y: -0.5}
+				},
+				right: {
+					clavicle: {y: 0.5},
+					shoulder: {x: -Math.PI / 2, y: 0.5}
+				},
+				both: {
+					elbow: {x: -Math.PI}
+				}
+			},
+			unfacepalm: {
+				elbow: {x: 0},
+				clavicle: {y: 0},
+				shoulder: {x: 0, y: 0}
+			},
+			drink: {
+				left: {
+					clavicle: {y: -0.5},
+					shoulder: {x: -Math.PI / 4, y: -0.5}
+				},
+				right: {
+					clavicle: {y: 0.5},
+					shoulder: {x: -Math.PI / 4, y: 0.5}
+				},
+				both: {
+					elbow: {x: -Math.PI, y: 1}
+				}
+			},
+			undrink: {
+				clavicle: {y: 0},
+				elbow: {x: 0, y: 0},
+				shoulder: {x: 0, y: 0}
 			}
 		},
 		legs: {
@@ -62,6 +98,18 @@ zero.core.Thruster = CT.Class({
 			part.pause();
 			flags[(move == "up") ? "swinging" : "thrusting"] = true;
 		}
+	},
+	facepalm: function(side) {
+		this.set("facepalm", "arms", side);
+	},
+	unfacepalm: function(side) {
+		this.set("unfacepalm", "arms", side);
+	},
+	drink: function(side) {
+		this.set("drink", "arms", side);
+	},
+	undrink: function(side) {
+		this.set("undrink", "arms", side);
 	},
 	swing: function(side) {
 		if (!this.body.holding(side, "smasher"))
