@@ -390,7 +390,7 @@ zero.core.Person = CT.Class({
 		blow: function(name, cb, wait) {
 			var side = this.holding(name);
 			this.thruster.drink(side);
-			setTimeout(() => this.blowers.unblow(side, cb), wait || 5000);
+			setTimeout(() => this.blowers.unblow(side, cb), wait || 3000);
 		},
 		unblow: function(side, cb) {
 			this.thruster.undrink(side);
@@ -403,8 +403,8 @@ zero.core.Person = CT.Class({
 			horn = this.holding(horn, true) || zero.core.current.room[horn];
 		if (!horn)
 			return this.say("what horn?");
-		var name = horn.name, bz = this.blowers,
-			blowHorn = () => bz.blow(name, cb),
+		var name = horn.name,
+			blowHorn = () => this.blowers.blow(name, cb),
 			getHorn = () => this.get(horn, blowHorn);
 		this.holding(name) ? blowHorn() : getHorn();
 	},
