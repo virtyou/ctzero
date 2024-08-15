@@ -378,7 +378,6 @@ zero.core.Person = CT.Class({
 		var lz = this.lighters, torch = this.holding("torch", true),
 			lightFire = () => lz.lightFire(lightable, cb),
 			lightTorch = () => lz.lightTorch(lightFire);
-		this.thruster.defaultUnthrust();
 		if (torch) {
 			if (torch.fire.quenched)
 				lightTorch();
