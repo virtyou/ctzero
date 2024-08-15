@@ -387,6 +387,20 @@ zero.core.Person = CT.Class({
 		} else
 			lz.getTorch(lightTorch);
 	},
+	blow: function(horn, cb) {
+		horn = horn || "horn";
+		if (typeof horn == "string")
+			horn = this.holding(horn, true) || zero.core.current.room[horn];
+		if (!horn)
+			return this.say("what horn?");
+		var thaz = this, name = horn.name, side, blowHorn = function() {
+			side = thaz.holding(name);
+			thaz.thruster.drink(side);
+			setTimeout(() => thaz.thruster.undrink(side), 5000);
+			cb && setTimeout(cb, 500);
+		}, getHorn = () => this.get(horn, blowHorn);
+		this.holding(name) ? blowHorn() : getHorn();
+	},
 	bounce: function(amount) {
 		var _ = this._;
 		amount *= _.bouncer;
