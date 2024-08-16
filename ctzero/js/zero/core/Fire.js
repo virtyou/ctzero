@@ -5,7 +5,9 @@ zero.core.Fire = CT.Class({
 	vmult: 0.1,
 	tick: function(dts) {
 		var zcu = zero.core.util, oz = this.opts, variety;
-		if (this.quenched || !this.isReady() || zcu.shouldSkip()) return;
+		if (this.quenched || !this.isReady()) return;
+		if (zcu.shouldSkip()) // slow sparks look weird
+			return this.sparks && this.sparks.tick(dts);
 		if (!this.glow || zero.core.camera.visible(this.glow))
 			for (variety of this.tickerz)
 				this[variety] && this[variety].tick(dts);
