@@ -33,13 +33,13 @@ zero.core.Hair = CT.Class({
 			parts[i][func](a1, a2);
 	},
 	tickBatch: function() {
-		var zcu = zero.core.util, rate = zcu.tickRate(),
+		var zcu = zero.core.util, rate = zcu.tickRate() / 8,
 			max = Math.min(this.count, this.cur + parseInt(this.count * rate));
 		this._pass("tick", zcu.dts, null, this.cur, max);
 		this.cur = (max == this.count) ? 0 : max;
 	},
 	tick: function() {
-		var zcu = zero.core.util, r = Math.min(zcu.freshtix / 4, 120);
+		var zcu = zero.core.util, r = Math.min(zcu.freshtix / 4, 20);
 		zcu.shouldSkip(false, r) || this.tickBatch();
 	},
 	vizbit: function() {
