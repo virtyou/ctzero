@@ -296,6 +296,10 @@ zero.core.Person = CT.Class({
 			zcu = zc.util, zcc = zc.current, ppl = zcc.people,
 			propel = this.propel, pursue = this.pursue, stop = this.stop,
 			bso = bod.springs.orientation, bsohard = bso.hard, isYou = this.isYou();
+		if (bod.lying) {
+			setTimeout(this.approach, 300, subject, cb, watch, chase, dur, nobuff, jumpy);
+			return this.stand();
+		}
 		if (typeof subject == "string") {
 			if (subject == "player") {
 				if (!zcc.person) return cb && cb();
