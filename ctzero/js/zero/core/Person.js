@@ -643,6 +643,7 @@ zero.core.Person = CT.Class({
 	},
 	dance: function(dname, duration) {
 		if (this.activeDance == dname) return;
+		clearTimeout(this.dancer);
 		this.activeDance = dname;
 		this._dance();
 		duration && setTimeout(this.undance, duration);
