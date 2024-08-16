@@ -79,7 +79,7 @@ zero.core.Person = CT.Class({
 		this.body.group.__click && this.body.group.__click();
 	},
 	setVolume: function(v) {
-		this._.audio.volume = v;
+		this._.audio.volume = Math.max(0.1, v);
 	},
 	afterSpeech: function(cb) {
 		this._.audio.onended = cb;
