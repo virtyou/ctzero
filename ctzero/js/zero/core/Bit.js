@@ -53,7 +53,7 @@ zero.core.Bit = CT.Class({
 		};
 		this.position(lens.map((v, i) => Math.random() * v - halves[i]));
 		if (this.opts.topobound) {
-			var peak = zero.core.current.room.getPeak(this.safePos(), this.radii),
+			var peak = zero.core.current.room.getPeak(this.safePos(), this.radii, true),
 				diff = peak / scale[1] - this.limits.min[1];
 			this.limits.min[1] += diff;
 			this.limits.max[1] += diff;

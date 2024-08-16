@@ -234,8 +234,8 @@ zero.core.Room = CT.Class({
 		this.shelled && test(this);
 		return winner;
 	},
-	getPeak: function(pos, radii) {
-		return (this.getSurface(pos, radii, true) || this).getTop(pos);
+	getPeak: function(pos, radii, topmost) {
+		return (this.getSurface(pos, radii, topmost) || this).getTop(pos);
 	},
 	ebound: function(spr, bod) {
 		if (!bod.group || !bod.radii) return;

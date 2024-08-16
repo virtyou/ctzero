@@ -503,7 +503,7 @@ zero.core.Thing = CT.Class({
 		g.lookAt(v);
 	},
 	drop: function() {
-		this.adjust("position", "y", zero.core.current.room.getPeak(this.position()));
+		this.adjust("position", "y", zero.core.current.room.getPeak(this.position(), this.radii));
 	},
 	safePos: function() {
 		if (this.placer)
