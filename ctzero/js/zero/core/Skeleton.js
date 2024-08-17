@@ -63,7 +63,8 @@ zero.core.Skeleton = CT.Class({
 		return {
 			springs: aspringz,
 			bsprings: bspringz,
-			hsprings: hspringz
+			hsprings: hspringz,
+			noslow: minors.includes(part)
 		};
 	},
 	setJoint: function(part, dim, jrules) {
