@@ -5,6 +5,7 @@ zero.base.springs.body = function() {
         theta: {
             k: 20,
             damp: 5,
+            rdts: true,
             bounds: {
                 min: -1,
                 max: 1
@@ -12,12 +13,14 @@ zero.base.springs.body = function() {
         },
         phi: {
             k: 20,
-            damp: 5
+            damp: 5,
+            rdts: true
         },
         bob: {
             k: 10,
             damp: 5,
             hard: true,
+            rdts: true,
             floory: true,
             acceleration: -1000,
             floored: !cfg.gravity
@@ -25,14 +28,14 @@ zero.base.springs.body = function() {
         weave: {
             k: 10,
             damp: 5,
-            ebound: true,
-            rdts: cfg.multi
+            rdts: true,
+            ebound: true
         },
         slide: {
             k: 10,
             damp: 5,
-            ebound: true,
-            rdts: cfg.multi
+            rdts: true,
+            ebound: true
         },
 
         orientation: {
