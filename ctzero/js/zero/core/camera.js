@@ -116,6 +116,8 @@ var camera = zero.core.camera = {
 		camera.current = perspective;
 		if (!noPref && _.preferreds.includes(perspective))
 			camera.preferred = perspective;
+		if (pname == "player")
+			pname = null; // heh
 		if (pname)
 			camera.current += " (" + pname + ")";
 		if (perspective == "cycle" || perspective == "stop cycling")
@@ -127,15 +129,17 @@ var camera = zero.core.camera = {
 			}
 			if (perspective in _.lookers) {
 				var person = zcc.people[pname] || zcc.person;
-				if (!person) return;
-				camera.setSprings(200);
-				camera.perspective(person, lookPart || (pol && "head"));
-				if (!pol) {
-					var per = _.lookers[perspective],
-						bl = person.body.watcher, dim;
-					for (dim in per)
-						bl.adjust("position", dim, per[dim]);
-				}
+				if (person) {
+					camera.setSprings(200);
+					camera.perspective(person, lookPart || (pol && "head"));
+					if (!pol) {
+						var per = _.lookers[perspective],
+							bl = person.body.watcher, dim;
+						for (dim in per)
+							bl.adjust("position", dim, per[dim]);
+					}
+				} else
+					CT.log("camera.angle() can't find person: " + pname);
 			} else
 				zcc.room.cut(parseInt(perspective));
 		}
