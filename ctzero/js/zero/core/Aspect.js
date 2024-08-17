@@ -1,6 +1,8 @@
 zero.core.Aspect = CT.Class({
 	CLASSNAME: "zero.core.Aspect",
 	tick: function() {
+		if (this.noslow && zero.core.util.slow)
+			return;
 		var parent = this.parent, bod = parent.body, head = bod && bod.head;
 		this.value = this.base;
 		for (var s in this.springs)
@@ -27,6 +29,7 @@ zero.core.Aspect = CT.Class({
 			max: 1,
 			min: -1,
 			base: 0,
+			noslow: false,
 			aspects: {},
 			springs: {},
 			bsprings: {},
@@ -37,6 +40,7 @@ zero.core.Aspect = CT.Class({
 		this.min = opts.min;
 		this.name = opts.name;
 		this.value = this.base = opts.base;
+		this.noslow = opts.noslow;
 		this.parent = opts.parent;
 		this.aspects = opts.aspects;
 		this.springs = opts.springs;
