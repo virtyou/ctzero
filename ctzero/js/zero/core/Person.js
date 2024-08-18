@@ -165,10 +165,17 @@ zero.core.Person = CT.Class({
 		orient && this.orient(subject);
 	},
 	facing: function(person) {
-		var b = this.body, tb = person.body, dir = b.getDirection(),
-			vec = zero.core.util.vector(b.position(), tb.position(), true),
-			angle = dir.angleTo(vec), facing = angle < 1;
-		console.log("facing:", facing, "angle:", angle);
+		var zcu = zero.core.util, b = this.body, tb = person.body,
+			vec = zcu.vector(b.position(), tb.position(), true),
+			dir = b.getDirection(), angle = dir.angleTo(vec),
+			orientation = dir.x * vec.z - dir.z * vec.x,
+			facing = angle < 1, ss = b.springs.shake;
+		console.log("facing:", facing, "angle:", angle,
+			"orientation:", orientation, dir, vec);
+		if (facing && Math.abs(orientation) > 50)
+			ss.target = orientation > 0 ? -1 : 1;
+		else
+			ss.target = 0;
 		return facing;
 	},
 	orient: function(subject, spos, doafter) {
