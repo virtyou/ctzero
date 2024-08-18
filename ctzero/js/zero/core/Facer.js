@@ -1,12 +1,12 @@
 zero.core.Facer = CT.Class({
 	CLASSNAME: "zero.core.Facer",
 	tick: function() {
+		if (!this.person.body.isReady())
+			return this.log("tick() waiting for body");
 		for (var target of this.ranked())
 			if (this.facing(target))
 				return this.face(target);
-		this.person.unlook();
-		this.log("unface");
-		this.shake();
+		this.face("camera");
 	},
 	ranked: function() {
 		var pz = zero.core.current.people,
@@ -19,7 +19,6 @@ zero.core.Facer = CT.Class({
 			else
 				targets.push(p);
 		}
-		targets.push("camera");
 		return targets;
 	},
 	shake: function(target) {
@@ -51,8 +50,7 @@ zero.core.Facer = CT.Class({
 		return this.person.direction();
 	},
 	pos: function(target) {
-		var tar = target == "camera" ? zero.core.camera : this.target(target);
-		return tar.position();
+		return this.target(target).position();
 	},
 	target: function(target) {
 		var zc = zero.core;
@@ -73,7 +71,7 @@ zero.core.Facer = CT.Class({
 	},
 	init: function(opts) {
 		this.opts = opts = CT.merge(opts, {
-			interval: 2000,
+			interval: 1000,
 			autoface: false
 		});
 		this.person = opts.person;
