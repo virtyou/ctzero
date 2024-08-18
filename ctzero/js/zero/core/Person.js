@@ -164,6 +164,13 @@ zero.core.Person = CT.Class({
 		this.subject = subject;
 		orient && this.orient(subject);
 	},
+	facing: function(person) {
+		var b = this.body, tb = person.body, dir = b.getDirection(),
+			vec = zero.core.util.vector(b.position(), tb.position(), true),
+			angle = dir.angleTo(vec), facing = angle < 1;
+		console.log("facing:", facing, "angle:", angle);
+		return facing;
+	},
 	orient: function(subject, spos, doafter) {
 		var pos = this.body.placer.position;
 		spos = spos || subject.position();
