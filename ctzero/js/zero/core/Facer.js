@@ -1,25 +1,26 @@
 zero.core.Facer = CT.Class({
 	CLASSNAME: "zero.core.Facer",
 	tick: function() {
-		for (var peep of this.ranked())
-			if (this.facing(peep))
-				return this.face(peep);
+		for (var target of this.ranked())
+			if (this.facing(target))
+				return this.face(target);
 		this.person.unlook();
 		this.log("unface");
 		this.shake();
 	},
 	ranked: function() {
 		var pz = zero.core.current.people,
-			me = this.person.name, p, peeps = [];
+			me = this.person.name, p, targets = [];
 		for (p in pz) {
 			if (p == me)
 				continue;
 			if (pz[p].body.talking)
-				peeps.unshift(p);
+				targets.unshift(p);
 			else
-				peeps.push(p);
+				targets.push(p);
 		}
-		return peeps;
+		targets.push("camera");
+		return targets;
 	},
 	shake: function(target) {
 		this.person.body.springs.shake.target = target || 0;
@@ -31,33 +32,37 @@ zero.core.Facer = CT.Class({
 		else
 			this.shake();
 		this.log("face()", target);
-		this.person.look(this.bod(target));
+		this.person.look(this.target(target));
 	},
-	facing: function(person) {
-		return this.angle(person) < 1;
+	facing: function(target) {
+		return this.angle(target) < 1;
 	},
-	angle: function(person) {
-		return this.dir().angleTo(this.vec(person));
+	angle: function(target) {
+		return this.dir().angleTo(this.vec(target));
 	},
-	orientation: function(person) {
-		var dir = this.dir(), vec = this.vec(person);
+	orientation: function(target) {
+		var dir = this.dir(), vec = this.vec(target);
 		return dir.x * vec.z - dir.z * vec.x;
 	},
-	vec: function(person) {
-		return zero.core.util.vector(this.pos(), this.pos(person), true);
+	vec: function(target) {
+		return zero.core.util.vector(this.pos(), this.pos(target), true);
 	},
 	dir: function() {
 		return this.person.direction();
 	},
-	pos: function(person) {
-		return this.bod(person).position();
+	pos: function(target) {
+		var tar = target == "camera" ? zero.core.camera : this.target(target);
+		return tar.position();
 	},
-	bod: function(person) {
-		if (!person)
-			person = this.person;
-		else if (typeof person == "string")
-			person = zero.core.current.people[person];
-		return person.body;
+	target: function(target) {
+		var zc = zero.core;
+		if (target == "camera")
+			return zc.camera;
+		if (!target)
+			target = this.person;
+		else if (typeof target == "string")
+			target = zc.current.people[target];
+		return target.body;
 	},
 	stop: function() {
 		delete this.person;
