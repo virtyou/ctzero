@@ -5,8 +5,6 @@ zero.base.springs.body = function() {
         theta: {
             k: 20,
             damp: 5,
-            rdts: true,
-            noslow: true,
             bounds: {
                 min: -1,
                 max: 1
@@ -14,8 +12,7 @@ zero.base.springs.body = function() {
         },
         phi: {
             k: 20,
-            damp: 5,
-            rdts: true
+            damp: 5
         },
         bob: {
             k: 10,
