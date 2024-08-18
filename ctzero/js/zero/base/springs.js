@@ -6,6 +6,7 @@ zero.base.springs.body = function() {
             k: 20,
             damp: 5,
             rdts: true,
+            noslow: true,
             bounds: {
                 min: -1,
                 max: 1
