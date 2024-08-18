@@ -30,7 +30,7 @@ zero.core.Facer = CT.Class({
 			this.shake(orientation > 0 ? -1 : 1);
 		else
 			this.shake();
-		this.log("face()", target);
+		this.log("face()", this.person.name, target);
 		this.person.look(this.target(target));
 	},
 	facing: function(target) {
