@@ -1,20 +1,24 @@
 zero.core.Facer = CT.Class({
 	CLASSNAME: "zero.core.Facer",
 	tick: function() {
-		if (!this.person.body.isReady())
-			return this.log("tick() waiting for body");
+		var bod = this.person.body;
+		if (!bod.isReady() || !zero.core.camera.visible(bod))
+			return;
 		for (var target of this.ranked())
 			if (this.facing(target))
 				return this.face(target);
 		this.face("camera");
 	},
 	ranked: function() {
-		var pz = zero.core.current.people,
-			me = this.person.name, p, targets = [];
+		var pz = zero.core.current.people, p, bod,
+			me = this.person.name, targets = [];
 		for (p in pz) {
 			if (p == me)
 				continue;
-			if (pz[p].body.talking)
+			bod = pz[p].body;
+			if (!bod.isReady())
+				continue;
+			if (bod.talking)
 				targets.unshift(p);
 			else
 				targets.push(p);
