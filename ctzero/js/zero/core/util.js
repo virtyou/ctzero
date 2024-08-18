@@ -253,15 +253,26 @@ zero.core.util = {
 		vec.y *= factor;
 		vec.z *= factor;
 	},
+	vmult: function(v1, v2, vec) {
+		if (!vec) {
+			CT.log("creating vec!");
+			vec = {};
+		}
+		vec.x = v1.x * v2.x;
+		vec.y = v1.y * v2.y;
+		vec.z = v1.z * v2.z;
+		return vec;
+	},
 	invert: function(vec) {
 		zero.core.util.mult(vec, -1);
 	},
 	d2g: function(dz) {
 		return new THREE.CubeGeometry(dz[0], dz[1], dz[2], dz[3], dz[4]); // ugh
 	},
-	vec: function(xyz) {
+	vec: function(xyz, objStyle) {
 		CT.log("creating vec!");
-		return new THREE.Vector3(xyz[0], xyz[1], xyz[2]);
+		return new THREE.Vector3(objStyle ? xyz.x : xyz[0],
+			objStyle ? xyz.y : xyz[1], objStyle ? xyz.z : xyz[2]);
 	},
 	vector: function(p1, p2, vec) { // p2 - p1
 		if (!vec) {
