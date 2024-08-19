@@ -398,6 +398,7 @@ zero.core.Person = CT.Class({
 		},
 		unblow: function(side, cb) {
 			this.thruster.undrink(side);
+			this.watch();
 			cb && cb();
 		}
 	},
