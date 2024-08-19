@@ -96,7 +96,7 @@ zero.core.Room = CT.Class({
 			sz.bob.target -= dist;
 			pz.bob.min -= dist;
 		}
-		setTimeout(bod[remove ? "remove" : "hide"], 500);
+		setTimeout(remove ? person.remove : bod.hide, 500);
 	},
 	inject: function(person, port) {
 		var bod = person.body, wall, prop = "bob",

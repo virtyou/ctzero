@@ -622,9 +622,9 @@ zero.core.Person = CT.Class({
 		else
 			return this.body.springs.orientation.target;
 	},
-	direction: function(direction) {
+	direction: function(direction, nopo) {
 		var thing = this.body;
-		if (this.isYou() && camera.isPolar)
+		if (this.isYou() && camera.isPolar && !nopo)
 			thing = thing.polar.directors;
 		return thing[direction || "front"].getDirection();
 	},
@@ -758,6 +758,7 @@ zero.core.Person = CT.Class({
 	remove: function() {
 		if (this.body.removed) return this.log("already removed!");
 		var thaz = this;
+		this.facer.stop();
 		this.body.remove();
 		["body", "brain", "energy", "vibe"].forEach(function(prop) {
 			delete thaz[prop];
@@ -807,6 +808,7 @@ zero.core.Person = CT.Class({
 			dances: {},
 			grippy: true,
 			verbose: false, // for audio log()s
+			autoface: true,
 			gestures: {},
 			responses: {},
 			positioners: {},
@@ -827,6 +829,10 @@ zero.core.Person = CT.Class({
 		this.voice = opts.voice;
 		this.name = opts.name;
 		this.buildBody();
+		this.facer = new zero.core.Facer({
+			autoface: opts.autoface,
+			person: this
+		});
 		this.brain = new zero.core.Brain({
 			person: this
 		});
