@@ -7,7 +7,6 @@ zero.core.Facer = CT.Class({
 		for (var target of this.ranked())
 			if (this.facing(target))
 				return this.face(target);
-		this.face("camera");
 	},
 	ranked: function() {
 		var pz = zero.core.current.people, p, bod,
@@ -23,6 +22,7 @@ zero.core.Facer = CT.Class({
 			else
 				targets.push(p);
 		}
+		targets.push("camera");
 		return targets;
 	},
 	shake: function(target) {
@@ -34,7 +34,7 @@ zero.core.Facer = CT.Class({
 			this.shake(orientation > 0 ? -1 : 1);
 		else
 			this.shake();
-		this.log("face()", this.person.name, target);
+		this.opts.verbose && this.log("face()", this.person.name, target);
 		this.person.look(this.target(target));
 	},
 	facing: function(target) {
@@ -51,7 +51,7 @@ zero.core.Facer = CT.Class({
 		return zero.core.util.vector(this.pos(), this.pos(target), true);
 	},
 	dir: function() {
-		return this.person.direction();
+		return this.person.direction("front", true);
 	},
 	pos: function(target) {
 		return this.target(target).position();
@@ -76,6 +76,7 @@ zero.core.Facer = CT.Class({
 	init: function(opts) {
 		this.opts = opts = CT.merge(opts, {
 			interval: 1000,
+			verbose: false,
 			autoface: false
 		});
 		this.person = opts.person;
