@@ -1,10 +1,10 @@
 zero.core.Facer = CT.Class({
 	CLASSNAME: "zero.core.Facer",
 	tick: function() {
-		var bod = this.person.body;
+		var target, bod = this.person.body;
 		if (!bod.isReady() || !zero.core.camera.visible(bod))
 			return;
-		for (var target of this.ranked())
+		for (target of this.ranked())
 			if (this.facing(target))
 				return this.face(target);
 	},
