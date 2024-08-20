@@ -39,7 +39,7 @@ zero.core.Hair = CT.Class({
 		this.cur = (max == this.count) ? 0 : max;
 	},
 	tick: function() {
-		var zcu = zero.core.util, r = Math.min(zcu.freshtix / 4, 20);
+		var zcu = zero.core.util, r = Math.max(1, Math.min(zcu.freshtix / 8, 20));
 		zcu.shouldSkip(false, r) || this.tickBatch();
 	},
 	vizbit: function() {
