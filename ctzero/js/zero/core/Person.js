@@ -473,22 +473,11 @@ zero.core.Person = CT.Class({
 			bod.radSwap("stand");
 	},
 	go: function(dur) {
-		var bod = this.body, within = bod.within,
-			dance = "walk", t = zero.core.util.ticker;
 		this.setCrawling();
 		this.setClimbing();
 		this._.bouncer = 1;
-		if (within && within.opts.state == "liquid") {
-			dance = "swim";
-			(t % 20) || bod.bubbletrail.release(1);
-		} else if (bod.flying)
-			dance = "fly";
-		else if (bod.crawling)
-			dance = "crawl";
-		else if (bod.climbing)
-			dance = "climb";
 		this.stand();
-		bod.riding || this.dance(dance, dur);
+		this.dance(this.body.curDance(), dur);
 	},
 	leave: function(portal, cb) {
 		var me = this, zccr = zero.core.current.room;
