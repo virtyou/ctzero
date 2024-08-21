@@ -406,12 +406,9 @@ zero.core.Body = CT.Class({
 		this.moving = pp.x != pz.weave.value || pp.z != pz.slide.value;
 		if (this.moving || (this.upon && this.upon.shifting("y"))) {
 			var zcc = zero.core.current, mount = this.riding, mp;
-			if (mount) {
-				mp = mount.position();
-				pp.x = mp.x;
-				pp.z = mp.z;
-				pp.y = mp.y + mount.radii.y;
-			} else {
+			if (mount)
+				mount.saddleUp(pp);
+			else {
 				pp.x = pz.weave.value;
 				pp.z = pz.slide.value;
 				this.setBob();
