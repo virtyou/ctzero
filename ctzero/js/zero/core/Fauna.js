@@ -114,6 +114,12 @@ zero.core.Fauna = CT.Class({
 	saddleRadii: function() {
 		return this.getSaddle().getRadii();
 	},
+	saddleUp: function(placerPos) {
+		var sadPos = this.saddlePos();
+		placerPos.x = sadPos.x;
+		placerPos.z = sadPos.z;
+		placerPos.y = sadPos.y + this.saddleRadii().y;
+	},
 	direct: function(amount) {
 		var zc = zero.core, zcu = zc.util, pp;
 		if (this.rider) {
