@@ -8,18 +8,32 @@ zero.core.Fauna = CT.Class({
 		if (this.segment0 && !zero.core.camera.visible(this.segment0)) return;
 		var i, t = zero.core.util.ticker + this.randOff;
 		for (i = 0; i < 4; i++)
-			this.tickers[i] = this.ticker[(t + this.tOffs[i]) % oz.tickSegs];
+			this.uptick(t, i);
 		oz.hairStyle && this.header[oz.hairStyle].tick();
 		this.segment0 && this.segment0.tick();
 		this.bobber && this.adjust("position", "y",
 			this.homeY + this.bobber[t % oz.bobSegs]);
 		this.knocker && this.knocker(this);
 	},
+	uptick: function(basetick, index) {
+		var t = basetick + this.tOffs[index];
+		if (this.running)
+			t *= 2;
+		this.tickers[index] = this.ticker[t % this.opts.tickSegs];
+	},
+	unrun: function() {
+		this.running = false;
+	},
+	run: function() {
+		this.running = true;
+	},
 	unhurry: function() {
+		this.unrun();
 		delete this.urgency;
 		delete this.knocker;
 	},
 	hurry: function(hval, hint) {
+		this.run();
 		this.urgency = hval || 8;
 		setTimeout(this.unhurry, hint || 1000);
 	},
@@ -124,6 +138,7 @@ zero.core.Fauna = CT.Class({
 		var zc = zero.core, zcu = zc.util, pp;
 		if (this.rider) {
 			this.group.rotation.y = Math.PI - this.rider.body.group.rotation.y;
+			this.running = this.rider.running;
 			this.getDirection();
 		} else if (!this.direction || zcu.outBound(null, this.within, this.position(null, true))) {
 			this.look(zcu.randPos(true, this.homeY, this.within));
@@ -131,6 +146,8 @@ zero.core.Fauna = CT.Class({
 		}
 		if (this.urgency)
 			amount *= this.urgency;
+		else if (this.running)
+			amount *= 2;
 		if (this.perch) {
 			this.setPos(this.perch.position(null, true));
 			(this.stuck || zc.current.person.zombified) || this.unperch();
