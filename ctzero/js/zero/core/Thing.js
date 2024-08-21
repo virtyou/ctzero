@@ -249,6 +249,10 @@ zero.core.Thing = CT.Class({
 	getTop: function() {
 		return this.bounds.max.y;
 	},
+	getRadii: function() {
+		this.radii || this._.setBounds();
+		return this.radii;
+	},
 	getBounds: function() {
 		if (!this.bounds)
 			this._.setBounds();
