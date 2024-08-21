@@ -105,6 +105,15 @@ zero.core.Fauna = CT.Class({
 		this.stuck = true;
 		this.perch = perch;
 	},
+	getSaddle: function() {
+		return this.saddle || this.segment0;
+	},
+	saddlePos: function() {
+		return this.getSaddle().position(null, true);
+	},
+	saddleRadii: function() {
+		return this.getSaddle().getRadii();
+	},
 	direct: function(amount) {
 		var zc = zero.core, zcu = zc.util, pp;
 		if (this.rider) {
