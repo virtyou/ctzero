@@ -86,6 +86,26 @@ zero.core.Doer = CT.Class({
 			cb && cb();
 		}
 	},
+	riders: {
+		mount: function(mount) {
+			mount.rider = this.person;
+			this.person.body.riding = mount;
+			zero.core.camera.angle("behind", null, null, true);
+		},
+		dismount: function(mount) {
+			var bod = this.person.body;
+			delete mount.rider;
+			delete bod.riding;
+			bod.setPositioners(mount.position(), false, true);
+			zero.core.camera.angle("preferred");
+		}
+	},
+	ride: function(mount, cb) {
+		this.person.chase(mount, () => this.riders.mount(mount));
+	},
+	unride: function() {
+		this.riders.dismount(this.person.body.riding);
+	},
 	recline: function(target, variety, cb) {
 		this.recliners.recline(target, variety, cb);
 	},
