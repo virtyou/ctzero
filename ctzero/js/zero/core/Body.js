@@ -405,10 +405,17 @@ zero.core.Body = CT.Class({
 		pp.y = pz.bob.value;
 		this.moving = pp.x != pz.weave.value || pp.z != pz.slide.value;
 		if (this.moving || (this.upon && this.upon.shifting("y"))) {
-			pp.x = pz.weave.value;
-			pp.z = pz.slide.value;
-			this.setBob();
-			var zcc = zero.core.current;
+			var zcc = zero.core.current, mount = this.riding, mp;
+			if (mount) {
+				mp = mount.position();
+				pp.x = mp.x;
+				pp.z = mp.z;
+				pp.y = mp.y + mount.radii.y;
+			} else {
+				pp.x = pz.weave.value;
+				pp.z = pz.slide.value;
+				this.setBob();
+			}
 			(this.person == zcc.person) && zero.core.util.roomReady() && zcc.room.setVolumes();
 		}
 	},
