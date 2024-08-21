@@ -335,6 +335,22 @@ zero.core.Body = CT.Class({
 		changed && this.setFriction(this.person.grippy && !wet && !this.flying && (obj || r).grippy,
 			this.flying || wet || !bobber.hard);
 	},
+	curDance: function() {
+		var within = this.within, dance = "walk";
+		if (this.riding)
+			dance = "ride";
+		else if (this.flying)
+			dance = "fly";
+		else if (this.crawling)
+			dance = "crawl";
+		else if (this.climbing)
+			dance = "climb";
+		else if (within && within.opts.state == "liquid") {
+			dance = "swim";
+			(zero.core.util.ticker % 20) || this.bubbletrail.release(1);
+		}
+		return dance;
+	},
 	energy: function() {
 		return this.person && this.person.energy;
 	},
