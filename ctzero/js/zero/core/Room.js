@@ -18,7 +18,7 @@ zero.core.Room = CT.Class({
 		return this.parts.concat(this.objects);
 	},
 	tick: function(dts, rdts) {
-		var obj, men;
+		var obj;
 		for (obj of this.objects)
 			obj.tick && obj.tick(dts, rdts);
 		for (obj of this._tickers)
@@ -29,10 +29,13 @@ zero.core.Room = CT.Class({
 		if (this.swarm)
 			for (obj in this.swarm)
 				this.swarm[obj].tick();
+		this.perMenagerie(men => men.tick(dts));
+		this.jostle();
+	},
+	perMenagerie: function(cb) {
 		if (this.menagerie)
 			for (men in this.menagerie)
-				this.menagerie[men].tick(dts);
-		this.jostle();
+				cb(this.menagerie[men]);
 	},
 	bump: function(b1, b2, moshy) {
 		var axis, s1, s2, v1, v2, vd, axes = this._moshAxes;
