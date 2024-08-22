@@ -490,6 +490,7 @@ zero.core.Fauna.defaultSet = {
 	lizard: 1,
 	cow: 1
 };
+zero.core.Fauna.mounts = ["horse"];
 zero.core.Fauna.hunters = {
 	dog: ["cat", "rat", "snake"],
 	cat: ["rat", "bird", "chicken", "bunny", "lizard"],
@@ -592,6 +593,16 @@ zero.core.Fauna.Menagerie = CT.Class({
 			creature[key] = val;
 		};
 		kinds.forEach(kind => this.each(kind, setit));
+	},
+	mounts: function() {
+		var mounts = [], kinds = zero.core.Fauna.mounts, kind, beast;
+		for (kind of kinds)
+			for (beast in this[kind])
+				mounts.push(this[beast]);
+		return mounts;
+	},
+	perMount: function(cb) {
+		this.mounts().map(cb);
 	},
 	init: function(opts) {
 		this.opts = opts = CT.merge(opts, {
