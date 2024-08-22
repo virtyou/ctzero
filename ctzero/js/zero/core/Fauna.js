@@ -150,6 +150,8 @@ zero.core.Fauna = CT.Class({
 		if (this.urgency)
 			amount *= this.urgency;
 		else if (this.running)
+			amount *= 4;
+		else if (this.rider)
 			amount *= 2;
 		if (this.perch) {
 			this.setPos(this.perch.position(null, true));
