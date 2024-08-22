@@ -347,6 +347,9 @@ zero.core.Person = CT.Class({
 	ride: function(mount, cb) {
 		this.doer.ride(mount, cb);
 	},
+	unride: function() {
+		this.doer.unride();
+	},
 	bounce: function(amount) {
 		var _ = this._;
 		amount *= _.bouncer;
@@ -413,7 +416,7 @@ zero.core.Person = CT.Class({
 		var _ = this._, t = zero.core.util.ticker, bod = this.body,
 			within = bod.within, sound = "whoosh", spr = bod.springs.bob;
 		this.gesture("jump");
-		bod.riding && this.doer.unride();
+		bod.riding && this.unride();
 		if (within) {
 			if (within.opts.state == "liquid") {
 				sound = "splash";
