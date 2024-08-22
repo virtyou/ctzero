@@ -411,17 +411,17 @@ zero.core.Body = CT.Class({
 		return this.getPlacer();
 	},
 	_tickGroup: function() {
-		for (var f in this.flippers)
+		var pp = this.placer.position, pz = this.positioners, mount = this.riding,
+			f, zc = zero.core, zcc = zc.current, zcu = zero.core.util;
+		for (f in this.flippers)
 			this.group.rotation[f] = this.flippers[f].value;
 		this.group.rotation.y += this.springs.orientation.value;
 		this.group.scale.x = this.growers.width.value;
 		this.group.scale.y = this.growers.height.value;
 		this.group.scale.z = this.growers.depth.value;
-		var pp = this.placer.position, pz = this.positioners;
 		pp.y = pz.bob.value;
 		this.moving = pp.x != pz.weave.value || pp.z != pz.slide.value;
-		if (this.moving || (this.upon && this.upon.shifting("y"))) {
-			var zcc = zero.core.current, mount = this.riding, mp;
+		if (mount || this.moving || (this.upon && this.upon.shifting("y"))) {
 			if (mount)
 				mount.saddleUp(pp);
 			else {
@@ -429,7 +429,7 @@ zero.core.Body = CT.Class({
 				pp.z = pz.slide.value;
 				this.setBob();
 			}
-			(this.person == zcc.person) && zero.core.util.roomReady() && zcc.room.setVolumes();
+			(this.person == zcc.person) && zcu.roomReady() && zcc.room.setVolumes();
 		}
 	},
 	_tickPolar: function() {
