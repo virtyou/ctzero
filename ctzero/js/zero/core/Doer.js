@@ -100,7 +100,6 @@ zero.core.Doer = CT.Class({
 			delete mount.rider;
 			delete bod.riding;
 			mount.ambience();
-			bod.setPositioners(mount.position(), false, true);
 			zero.core.camera.angle("preferred");
 		}
 	},
