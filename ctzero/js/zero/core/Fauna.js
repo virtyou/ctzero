@@ -145,24 +145,24 @@ zero.core.Fauna = CT.Class({
 		placerPos.y = sadPos.y + this.saddleRadii().y;
 	},
 	direct: function(amount) {
-		var zc = zero.core, zcu = zc.util, pp, rr, gr = this.group.rotation;
-		if (this.rider) {
-			rr = this.rider.body.group.rotation;
-			this.running = this.rider.running;
-			gr.x = 0;
+		var zc = zero.core, zcu = zc.util, pp, rs, rr,
+			r = this.rider, gr = this.group.rotation;
+		if (r) {
+			rs = r.body.springs;
+			rr = r.body.group.rotation;
+			this.running = r.running;
 			gr.y = rr.y;
-			gr.z = 0;
-			this.getDirection();
-		} else if (!this.direction || zcu.outBound(null, this.within, this.position(null, true))) {
+			gr.x = gr.z = 0;
+			this.adjust("position", "x", rs.weave.value);
+			this.adjust("position", "z", rs.slide.value);
+			return this.getDirection();
+		}
+		if (!this.direction || zcu.outBound(null, this.within, this.position(null, true))) {
 			this.look(zcu.randPos(true, this.homeY, this.within));
 			this.getDirection();
 		}
 		if (this.urgency)
 			amount *= this.urgency;
-		else if (this.running)
-			amount *= 4;
-		else if (this.rider)
-			amount *= 2;
 		if (this.perch) {
 			this.setPos(this.perch.position(null, true));
 			(this.stuck || zc.current.person.zombified) || this.unperch();
