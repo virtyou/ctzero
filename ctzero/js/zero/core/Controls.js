@@ -255,7 +255,7 @@ zero.core.Controls = CT.Class({
 				else
 					target.go();
 			} else if (!going())
-				target.undance();
+				target.body.riding || target.undance();
 			if (smoothy || !isy) {
 				isor = dir == "orientation";
 				if (isor) {
