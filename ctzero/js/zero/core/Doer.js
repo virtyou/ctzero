@@ -87,11 +87,12 @@ zero.core.Doer = CT.Class({
 		}
 	},
 	riders: {
-		mount: function(mount) {
+		mount: function(mount, cb) {
 			mount.rider = this.person;
 			this.person.body.riding = mount;
 			zero.core.camera.angle("behind", null, null, true);
 			this.person.go();
+			cb && cb();
 		},
 		dismount: function(mount) {
 			var bod = this.person.body;
@@ -102,7 +103,7 @@ zero.core.Doer = CT.Class({
 		}
 	},
 	ride: function(mount, cb) {
-		this.person.chase(mount, () => this.riders.mount(mount));
+		this.person.chase(mount, () => this.riders.mount(mount, cb));
 	},
 	unride: function() {
 		this.riders.dismount(this.person.body.riding);
