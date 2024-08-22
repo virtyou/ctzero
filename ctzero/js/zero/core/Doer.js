@@ -91,6 +91,7 @@ zero.core.Doer = CT.Class({
 			mount.rider = this.person;
 			this.person.body.riding = mount;
 			zero.core.camera.angle("behind", null, null, true);
+			mount.ambience("walk");
 			this.person.go();
 			cb && cb();
 		},
@@ -98,6 +99,7 @@ zero.core.Doer = CT.Class({
 			var bod = this.person.body;
 			delete mount.rider;
 			delete bod.riding;
+			mount.ambience();
 			bod.setPositioners(mount.position(), false, true);
 			zero.core.camera.angle("preferred");
 		}

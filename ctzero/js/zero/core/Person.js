@@ -445,12 +445,16 @@ zero.core.Person = CT.Class({
 		this.running = true;
 		this.mood.reset("energy", 2);
 		this.energy.reset("damp", 0.6);
+		var mount = this.body.riding;
+		mount && mount.ambience("gallop");
 	},
 	unrun: function() {
 		if (!this.body) return this.log("aborting unrun() (no body)");
 		this.running = false;
 		this.mood.reset("energy");
 		this.energy.reset("damp");
+		var mount = this.body.riding;
+		mount && mount.ambience("walk");
 	},
 	setClimbing: function() {
 		var bod = this.body, climbing = this.obstruction("climby"),
