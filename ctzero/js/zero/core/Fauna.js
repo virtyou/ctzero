@@ -1,5 +1,6 @@
 zero.core.Fauna = CT.Class({
 	CLASSNAME: "zero.core.Fauna",
+	ambs: {},
 	tick: function(dts) {
 		var oz = this.opts;
 		if (this.homeY == undefined)
@@ -95,6 +96,15 @@ zero.core.Fauna = CT.Class({
 	},
 	glow: function() {
 		zero.core.util.glow(this.materials.body);
+	},
+	ambience: function(name) {
+		if (this.curAmb == name)
+			return;
+		var zc = zero.core, auds = zc.Fauna.audio, k = this.opts.kind, aud = auds[k] && auds[k][name],
+			amb = this.ambs[name] = aud && (this.ambs[name] || zc.audio.ambience(aud));
+		this.curAmb && this.ambs[this.curAmb].pause();
+		this.curAmb = name;
+		amb && zc.util.playMedia(amb);
 	},
 	yelp: function() {
 		var zc = zero.core, aud = zc.Fauna.audio, k = this.opts.kind, vol;
