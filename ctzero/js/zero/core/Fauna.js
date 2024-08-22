@@ -135,10 +135,13 @@ zero.core.Fauna = CT.Class({
 		placerPos.y = sadPos.y + this.saddleRadii().y;
 	},
 	direct: function(amount) {
-		var zc = zero.core, zcu = zc.util, pp;
+		var zc = zero.core, zcu = zc.util, pp, rr, gr = this.group.rotation;
 		if (this.rider) {
-			this.group.rotation.y = Math.PI - this.rider.body.group.rotation.y;
+			rr = this.rider.body.group.rotation;
 			this.running = this.rider.running;
+			gr.x = 0;
+			gr.y = rr.y;
+			gr.z = 0;
 			this.getDirection();
 		} else if (!this.direction || zcu.outBound(null, this.within, this.position(null, true))) {
 			this.look(zcu.randPos(true, this.homeY, this.within));
