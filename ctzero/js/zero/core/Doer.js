@@ -109,8 +109,8 @@ zero.core.Doer = CT.Class({
 	unride: function() {
 		this.riders.dismount(this.person.body.riding);
 	},
-	recline: function(target, variety, cb) {
-		this.recliners.recline(target, variety, cb);
+	recline: function(target, variety, cb, instant) {
+		this.recliners.recline(target, variety, cb, instant);
 	},
 	light: function(lightable, cb) {
 		if (typeof lightable == "string")
