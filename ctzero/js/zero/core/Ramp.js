@@ -25,6 +25,7 @@ zero.core.Ramp = CT.Class({
 			oz.parts.push({
 				name: name,
 				geomult: 1,
+				kind: "wall",
 				coneGeometry: true,
 				scale: [1, 70, 70],
 				position: [px, py, 25],
@@ -40,9 +41,9 @@ zero.core.Ramp = CT.Class({
 		else
 			rx -= pd;
 		if (both || side == "right")
-			doside("rightside", 50);
+			doside("right", 50);
 		if (both || side == "left")
-			doside("leftside", -50);
+			doside("left", -50);
 	},
 	init: function(opts) {
 		this.opts = opts = CT.merge(opts, {
