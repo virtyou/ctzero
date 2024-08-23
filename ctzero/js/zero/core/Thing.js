@@ -284,6 +284,9 @@ zero.core.Thing = CT.Class({
 		this.onbound && this.onbound(this);
 		this._.postboundz.forEach(f => f());
 	},
+	unevenTop: function() {
+		return this.shelled || this.vlower == "ramp" || this.shifting("y");
+	},
 	setHomeY: function() {
 		var r = zero.core.current.room,
 			pos = this.placer.position,
