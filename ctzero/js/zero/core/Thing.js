@@ -241,8 +241,7 @@ zero.core.Thing = CT.Class({
 		}
 	},
 	overlaps: function(pos, radii, checkY) {
-		var bz = this.bounds, check = this._.checkOver;
-		if (!bz) return false;
+		var bz = this.getBounds(), check = this._.checkOver;
 		return check("x", pos, radii) && check("z", pos, radii)
 			&& (!checkY || check("y", pos, radii));
 	},
