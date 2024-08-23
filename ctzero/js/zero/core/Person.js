@@ -397,11 +397,11 @@ zero.core.Person = CT.Class({
 		bod.lying && bod.adjust("position", "y", bod.radii.z, true);
 		bod.lying = bod.sitting = false;
 	},
-	lie: function(bed, cb) {
-		this.doer.recline(bed, "lie", cb);
+	lie: function(bed, cb, instant) {
+		this.doer.recline(bed, "lie", cb, instant);
 	},
-	sit: function(chair, cb) {
-		this.doer.recline(chair, "sit", cb);
+	sit: function(chair, cb, instant) {
+		this.doer.recline(chair, "sit", cb, instant);
 	},
 	doLeap: function(shouldFly, amount, forwardAmount) {
 		shouldFly && this.shouldFly();
