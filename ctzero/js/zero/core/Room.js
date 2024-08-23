@@ -196,12 +196,24 @@ zero.core.Room = CT.Class({
 		return this.getInteractive(overlapper, "flammable");
 	},
 	getObject: function(pos, radii, checkY, kind, prop) {
-		var k, o, obj, obst;
+		var k, o, obj, obst, wobst;
 		for (k of this._bumpers) {
 			for (o in this[k]) {
 				obst = this[k][o];
 				if (obst.overlaps(pos, radii, checkY))
 					return obst;
+			}
+		}
+		if (this.ramp) {
+			for (o in this.ramp) {
+				obst = this[o];
+				if (obst.wall) {
+					for (k in obst.wall) {
+						wobst = obst[k];
+						if (wobst.overlaps(pos, radii, checkY))
+							return wobst;
+					}
+				}
 			}
 		}
 		return this.within(pos, radii, checkY, kind, prop);
