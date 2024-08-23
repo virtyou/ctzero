@@ -200,6 +200,7 @@ zero.core.Body = CT.Class({
 		}
 		this.bounds = bz[posture];
 		this.radii = rz[posture];
+		delete this.homeY;
 		this.setHomeY();
 		this.setBob(true);
 	},

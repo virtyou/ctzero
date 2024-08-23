@@ -287,12 +287,13 @@ zero.core.Thing = CT.Class({
 	unevenTop: function() {
 		return this.shelled || this.vlower == "ramp" || this.shifting("y");
 	},
-	setHomeY: function() {
-		var r = zero.core.current.room,
-			pos = this.placer.position,
-			oz = this.opts, atop;
+	setHomeY: function(notwithin) {
+		var r = zero.core.current.room, pos = this.placer.position, oz = this.opts,
+			atop = (!notwithin && this.within) || r.getSurface(pos, this.radii);
+		if (this.homeY && (atop == this.upon) && !(atop && atop.unevenTop()))
+			return this.log("setHomeY() - already set");
+		this.upon = atop;
 		this.homeY = this.radii.y;
-		this.upon = atop = this.within || r.getSurface(pos, this.radii);
 		this.homeY += atop ? atop.getTop(pos) : r.bounds.min.y;
 		if (oz.swimming)
 			this.homeY += CT.data.random(2 * (atop || r).radii.y);
@@ -311,6 +312,7 @@ zero.core.Thing = CT.Class({
 		if (toeOff)
 			delete this._toeOffset;
 		this._.setBounds();
+		delete this.homeY;
 		this.setHomeY();
 		this.onbound && this.onbound(this);
 		this._.postboundz.forEach(f => f());

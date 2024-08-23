@@ -155,6 +155,7 @@ zero.core.Fauna = CT.Class({
 			gr.x = gr.z = 0;
 			this.adjust("position", "x", rs.weave.value);
 			this.adjust("position", "z", rs.slide.value);
+			this.setHomeY(true);
 			return this.getDirection();
 		}
 		if (!this.direction || zcu.outBound(null, this.within, this.position(null, true))) {
