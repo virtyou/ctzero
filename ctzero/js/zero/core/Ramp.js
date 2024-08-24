@@ -20,18 +20,18 @@ zero.core.Ramp = CT.Class({
 			yper = zper * ydif;
 		return (rx > level) ? (ymax - yper) : (ymin + yper);
 	},
-	preassemble: function() {
-		var oz = this.opts, rr = oz.rotation, doside = function(name, px) {
-			oz.parts.push({
+	onbound: function() {
+		var r = this.rotation(), attach = this.attach, doside = function(name, px) {
+			attach({
 				name: name,
 				geomult: 1,
 				kind: "wall",
 				coneGeometry: true,
 				scale: [1, 70, 70],
 				position: [px, py, 25],
-				rotation: [rx, -rr[1], -rr[2]]
+				rotation: [rx, -r.y, -r.z]
 			});
-		}, rx = rr[0], pd = rx % P4, backtilted = rx < P2, side = oz.side,
+		}, rx = r.x, pd = rx % P4, backtilted = rx < P2, side = this.opts.side,
 			py = backtilted ? 25 : -25, both = side == "both";
 		rx *= -1;
 		if (Math.abs(pd - P4) < 0.1)
