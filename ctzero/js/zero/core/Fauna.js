@@ -1,5 +1,6 @@
 zero.core.Fauna = CT.Class({
 	CLASSNAME: "zero.core.Fauna",
+	ambs: {},
 	tick: function(dts) {
 		var oz = this.opts;
 		if (this.homeY == undefined)
@@ -8,18 +9,32 @@ zero.core.Fauna = CT.Class({
 		if (this.segment0 && !zero.core.camera.visible(this.segment0)) return;
 		var i, t = zero.core.util.ticker + this.randOff;
 		for (i = 0; i < 4; i++)
-			this.tickers[i] = this.ticker[(t + this.tOffs[i]) % oz.tickSegs];
+			this.uptick(t, i);
 		oz.hairStyle && this.header[oz.hairStyle].tick();
 		this.segment0 && this.segment0.tick();
 		this.bobber && this.adjust("position", "y",
 			this.homeY + this.bobber[t % oz.bobSegs]);
 		this.knocker && this.knocker(this);
 	},
+	uptick: function(basetick, index) {
+		var t = basetick + this.tOffs[index];
+		if (this.running)
+			t *= 2;
+		this.tickers[index] = this.ticker[t % this.opts.tickSegs];
+	},
+	unrun: function() {
+		this.running = false;
+	},
+	run: function() {
+		this.running = true;
+	},
 	unhurry: function() {
+		this.unrun();
 		delete this.urgency;
 		delete this.knocker;
 	},
 	hurry: function(hval, hint) {
+		this.run();
 		this.urgency = hval || 8;
 		setTimeout(this.unhurry, hint || 1000);
 	},
@@ -82,6 +97,15 @@ zero.core.Fauna = CT.Class({
 	glow: function() {
 		zero.core.util.glow(this.materials.body);
 	},
+	ambience: function(name) {
+		if (this.curAmb == name)
+			return;
+		var zc = zero.core, auds = zc.Fauna.audio, k = this.opts.kind, aud = auds[k] && auds[k][name],
+			amb = this.ambs[name] = aud && (this.ambs[name] || zc.audio.ambience(aud));
+		this.curAmb && this.ambs[this.curAmb].pause();
+		this.curAmb = name;
+		amb && zc.util.playMedia(amb);
+	},
 	yelp: function() {
 		var zc = zero.core, aud = zc.Fauna.audio, k = this.opts.kind, vol;
 		if (k in aud) {
@@ -105,8 +129,41 @@ zero.core.Fauna = CT.Class({
 		this.stuck = true;
 		this.perch = perch;
 	},
+	getSaddle: function() {
+		return this.saddle || this.segment0;
+	},
+	saddlePos: function() {
+		return this.getSaddle().position(null, true);
+	},
+	saddleRadii: function() {
+		return this.getSaddle().getRadii();
+	},
+	saddleUp: function(placerPos) {
+		var sadPos = this.saddlePos();
+		placerPos.x = sadPos.x;
+		placerPos.z = sadPos.z;
+		placerPos.y = sadPos.y + this.saddleRadii().y;
+	},
+	unmount: function() {
+		this.unrun();
+		this.ambience();
+		delete this.rider;
+		this.within = this.upon;
+	},
 	direct: function(amount) {
-		var zc = zero.core, zcu = zc.util, pp;
+		var zc = zero.core, zcu = zc.util, pp, rs, rr,
+			r = this.rider, gr = this.group.rotation;
+		if (r) {
+			rs = r.body.springs;
+			rr = r.body.group.rotation;
+			this.running = r.running;
+			gr.y = rr.y;
+			gr.x = gr.z = 0;
+			this.adjust("position", "x", rs.weave.value);
+			this.adjust("position", "z", rs.slide.value);
+			this.setHomeY(true);
+			return this.getDirection();
+		}
 		if (!this.direction || zcu.outBound(null, this.within, this.position(null, true))) {
 			this.look(zcu.randPos(true, this.homeY, this.within));
 			this.getDirection();
@@ -450,6 +507,7 @@ zero.core.Fauna.defaultSet = {
 	lizard: 1,
 	cow: 1
 };
+zero.core.Fauna.mounts = ["horse"];
 zero.core.Fauna.hunters = {
 	dog: ["cat", "rat", "snake"],
 	cat: ["rat", "bird", "chicken", "bunny", "lizard"],
@@ -552,6 +610,16 @@ zero.core.Fauna.Menagerie = CT.Class({
 			creature[key] = val;
 		};
 		kinds.forEach(kind => this.each(kind, setit));
+	},
+	mounts: function() {
+		var mounts = [], kinds = zero.core.Fauna.mounts, kind, beast;
+		for (kind of kinds)
+			for (beast in this[kind])
+				mounts.push(this[beast]);
+		return mounts;
+	},
+	perMount: function(cb) {
+		this.mounts().map(cb);
 	},
 	init: function(opts) {
 		this.opts = opts = CT.merge(opts, {

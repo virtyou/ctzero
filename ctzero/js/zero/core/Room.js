@@ -18,7 +18,7 @@ zero.core.Room = CT.Class({
 		return this.parts.concat(this.objects);
 	},
 	tick: function(dts, rdts) {
-		var obj, men;
+		var obj;
 		for (obj of this.objects)
 			obj.tick && obj.tick(dts, rdts);
 		for (obj of this._tickers)
@@ -29,10 +29,13 @@ zero.core.Room = CT.Class({
 		if (this.swarm)
 			for (obj in this.swarm)
 				this.swarm[obj].tick();
+		this.perMenagerie(men => men.tick(dts));
+		this.jostle();
+	},
+	perMenagerie: function(cb) {
 		if (this.menagerie)
 			for (men in this.menagerie)
-				this.menagerie[men].tick(dts);
-		this.jostle();
+				cb(this.menagerie[men]);
 	},
 	bump: function(b1, b2, moshy) {
 		var axis, s1, s2, v1, v2, vd, axes = this._moshAxes;
@@ -193,12 +196,24 @@ zero.core.Room = CT.Class({
 		return this.getInteractive(overlapper, "flammable");
 	},
 	getObject: function(pos, radii, checkY, kind, prop) {
-		var k, o, obj, obst;
+		var k, o, obj, obst, wobst;
 		for (k of this._bumpers) {
 			for (o in this[k]) {
 				obst = this[k][o];
 				if (obst.overlaps(pos, radii, checkY))
 					return obst;
+			}
+		}
+		if (this.ramp) {
+			for (o in this.ramp) {
+				obst = this[o];
+				if (obst.wall) {
+					for (k in obst.wall) {
+						wobst = obst[k];
+						if (wobst.overlaps(pos, radii, checkY))
+							return wobst;
+					}
+				}
 			}
 		}
 		return this.within(pos, radii, checkY, kind, prop);
@@ -238,7 +253,7 @@ zero.core.Room = CT.Class({
 		return (this.getSurface(pos, radii, topmost) || this).getTop(pos);
 	},
 	ebound: function(spr, bod) {
-		if (!bod.group || !bod.radii) return;
+		if (!bod.group || !bod.radii || !this.isReady()) return;
 		var p = zero.core.util.posser(bod.placer.position),
 			sprax = bod.positioner2axis(spr.name);
 		p[sprax] = spr.target;

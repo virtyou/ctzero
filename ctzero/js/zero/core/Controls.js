@@ -238,6 +238,8 @@ zero.core.Controls = CT.Class({
 			dim, speed = _.speed.base * this.target.energy.k;
 		if (soft && !this.going())
 			return;
+		if (this.target.body.riding)
+			speed *= 2;
 		for (dim of _.flats)
 			springz[dim].boost = speed * vec[dim];
 		camera.isPolar && this.face(vec);
@@ -255,7 +257,7 @@ zero.core.Controls = CT.Class({
 				else
 					target.go();
 			} else if (!going())
-				target.undance();
+				target.body.riding || target.undance();
 			if (smoothy || !isy) {
 				isor = dir == "orientation";
 				if (isor) {

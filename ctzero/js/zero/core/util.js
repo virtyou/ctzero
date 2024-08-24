@@ -248,6 +248,15 @@ zero.core.util = {
 			thring._positioner = new THREE.Vector3();
 		return thring.getWorldPosition(thring._positioner);
 	},
+	freeBod: function(bod) {
+		var r = zero.core.current.room, peak,
+			pos = bod.position(), radii = bod.radii;
+		if (!r.getSolid(pos, radii, true))
+			return CT.log("freeBod - already free!");
+		peak = r.getPeak(pos, radii, true) + 100; // shouldn't be necessary...
+		CT.log("freeBod - upshifting to " + peak);
+		bod.adjust("position", "y", peak);
+	},
 	mult: function(vec, factor) {
 		vec.x *= factor;
 		vec.y *= factor;

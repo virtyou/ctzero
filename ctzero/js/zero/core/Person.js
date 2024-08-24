@@ -241,12 +241,15 @@ zero.core.Person = CT.Class({
 		}, side);
 	},
 	chase: function(subject, cb) {
+		this.unchase();
 		this.run();
 		this.approach(subject, cb, false, true);
 	},
 	propel: function(direction) {
 		var bs = this.body.springs, vec = this.direction(direction),
 			booster = this.zombified ? 200 : 100;
+		if (this.running)
+			booster *= 2;
 		bs.weave.boost = booster * vec.x;
 		bs.slide.boost = booster * vec.z;
 	},
@@ -269,11 +272,12 @@ zero.core.Person = CT.Class({
 		if (_.chaser) {
 			clearInterval(_.chaser);
 			delete _.chaser;
+			delete _.chased;
 		}
 	},
 	chaser: function() {
 		var _ = this._, cb = _.postchase, b = this.body;
-		if (!b || b.removed || _.chased.removed)
+		if (!b || b.removed || !_.chased || _.chased.removed)
 			this.unchase();
 		else if (zero.core.util.touching(b, _.chased, 20)) {
 			this.unchase();
@@ -338,80 +342,17 @@ zero.core.Person = CT.Class({
 		if (!isYou && jumpy && this.obstruction())
 			setTimeout(() => this.doLeap(false, null, 0.05), 300);
 	},
-	lighters: {
-		phrases: {
-			nofire: ["i don't see anything to light the torch", "where's the fire?", "i don't see a fire"],
-			notorch: ["i don't see a torch", "i'd need a torch", "i need a torch to light that"],
-			failed: ["dag nab it", "must be wet", "why won't this light", "almost got it"]
-		},
-		getTorch: function(cb) {
-			var torch = zero.core.current.room.torch;
-			if (!torch)
-				return this.say(CT.data.choice(this.lighters.phrases.notorch));
-			this.get(torch, cb);
-		},
-		lightTorch: function(cb, nobuff) {
-			var lightable = zero.core.current.room.getFire(this.body.position(), false, true), lz = this.lighters,
-				doLight = () => lz.tryLight(this.holding("torch", true).fire, cb, () => lz.lightTorch(cb, true));
-			if (!lightable)
-				return this.say(CT.data.choice(lz.phrases.nofire));
-			this.approach(lightable, () => lz.leanAnd(doLight), false, false, null, nobuff);
-		},
-		lightFire: function(lightable, cb, nobuff) {
-			var retry = () => this.lighters.lightFire(lightable, cb, true),
-				doLight = () => this.lighters.tryLight(lightable, cb, retry);
-			this.approach(lightable, () => this.lighters.leanAnd(doLight), false, false, null, nobuff);
-		},
-		leanAnd: function(cb) {
-			this.body.springs.bow.target = Math.PI / 8;
-			setTimeout(cb, 1000);
-		},
-		tryLight: function(lightable, cb, fb) {
-			this.thruster.thrust(this.holding("torch"));
-			setTimeout(this.lighters.checkLight, 1000, lightable, cb, fb);
-		},
-		checkLight: function(lightable, cb, fb) {
-			var lz = this.lighters;
-			this.thruster.unthrust(this.holding("torch"));
-			lightable.quenched ? this.say(CT.data.choice(lz.phrases.failed), fb) : (cb && cb());
-		}
-	},
 	light: function(lightable, cb) {
-		if (typeof lightable == "string")
-			lightable = zero.core.current.room[lightable];
-		var lz = this.lighters, torch = this.holding("torch", true),
-			lightFire = () => lz.lightFire(lightable, cb),
-			lightTorch = () => lz.lightTorch(lightFire);
-		if (torch) {
-			if (torch.fire.quenched)
-				lightTorch();
-			else
-				lightFire();
-		} else
-			lz.getTorch(lightTorch);
-	},
-	blowers: {
-		blow: function(name, cb, wait) {
-			var side = this.holding(name);
-			this.thruster.drink(side);
-			setTimeout(() => this.blowers.unblow(side, cb), wait || 3000);
-		},
-		unblow: function(side, cb) {
-			this.thruster.undrink(side);
-			this.watch();
-			cb && cb();
-		}
+		this.doer.light(lightable, cb);
 	},
 	blow: function(horn, cb) {
-		horn = horn || "horn";
-		if (typeof horn == "string")
-			horn = this.holding(horn, true) || zero.core.current.room[horn];
-		if (!horn)
-			return this.say("what horn?");
-		var name = horn.name,
-			blowHorn = () => this.blowers.blow(name, cb),
-			getHorn = () => this.get(horn, blowHorn);
-		this.holding(name) ? blowHorn() : getHorn();
+		this.doer.blow(horn, cb);
+	},
+	ride: function(mount, cb) {
+		this.doer.ride(mount, cb);
+	},
+	unride: function() {
+		this.doer.unride();
 	},
 	bounce: function(amount) {
 		var _ = this._;
@@ -460,42 +401,11 @@ zero.core.Person = CT.Class({
 		bod.lying && bod.adjust("position", "y", bod.radii.z, true);
 		bod.lying = bod.sitting = false;
 	},
-	recliners: {
-		lie: function(target) {
-			var bod = this.body, tp = target.position();
-			bod.lying = true;
-			bod.adjust("position", "x", tp.x);
-			bod.adjust("position", "z", tp.z);
-		},
-		sit: function(target) {
-			var bod = this.body, tp = target.position(),
-				vec = zero.core.util.vector(bod.position(), tp, true);
-			bod.sitting = true;
-			bod.springs.orientation.target += Math.PI;
-			bod.adjust("position", "x", vec.x * 2 / 3, true);
-			bod.adjust("position", "z", vec.z * 2 / 3, true);
-		},
-		rest: function(target, variety, cb) {
-			variety = variety || "lie";
-			this.gesture(variety);
-			this.recliners[variety](target);
-			this.body.radSwap(variety);
-			if (this.body.upon == target)
-				this.body.group.position.y -= target.radii.y * 2;
-			cb && setTimeout(cb, 1000);
-		},
-		recline: function(target, variety, cb, instant) {
-			if (typeof target == "string")
-				target = zero.core.current.room[target];
-			var recliner = () => this.recliners.rest(target, variety, cb);
-			this.body.onReady(() => instant ? recliner() : this.approach(target, recliner));
-		}
+	lie: function(bed, cb, instant) {
+		this.doer.recline(bed, "lie", cb, instant);
 	},
-	lie: function(bed, cb) {
-		this.recliners.recline(bed, "lie", cb);
-	},
-	sit: function(chair, cb) {
-		this.recliners.recline(chair, "sit", cb);
+	sit: function(chair, cb, instant) {
+		this.doer.recline(chair, "sit", cb, instant);
 	},
 	doLeap: function(shouldFly, amount, forwardAmount) {
 		shouldFly && this.shouldFly();
@@ -510,6 +420,7 @@ zero.core.Person = CT.Class({
 		var _ = this._, t = zero.core.util.ticker, bod = this.body,
 			within = bod.within, sound = "whoosh", spr = bod.springs.bob;
 		this.gesture("jump");
+		bod.riding && this.unride();
 		if (within) {
 			if (within.opts.state == "liquid") {
 				sound = "splash";
@@ -538,12 +449,16 @@ zero.core.Person = CT.Class({
 		this.running = true;
 		this.mood.reset("energy", 2);
 		this.energy.reset("damp", 0.6);
+		var mount = this.body.riding;
+		mount && mount.ambience("gallop");
 	},
 	unrun: function() {
 		if (!this.body) return this.log("aborting unrun() (no body)");
 		this.running = false;
 		this.mood.reset("energy");
 		this.energy.reset("damp");
+		var mount = this.body.riding;
+		mount && mount.ambience("walk");
 	},
 	setClimbing: function() {
 		var bod = this.body, climbing = this.obstruction("climby"),
@@ -569,22 +484,11 @@ zero.core.Person = CT.Class({
 			bod.radSwap("stand");
 	},
 	go: function(dur) {
-		var bod = this.body, within = bod.within,
-			dance = "walk", t = zero.core.util.ticker;
 		this.setCrawling();
 		this.setClimbing();
 		this._.bouncer = 1;
-		if (within && within.opts.state == "liquid") {
-			dance = "swim";
-			(t % 20) || bod.bubbletrail.release(1);
-		} else if (bod.flying)
-			dance = "fly";
-		else if (bod.crawling)
-			dance = "crawl";
-		else if (bod.climbing)
-			dance = "climb";
 		this.stand();
-		this.dance(dance, dur);
+		this.dance(this.body.curDance(), dur);
 	},
 	leave: function(portal, cb) {
 		var me = this, zccr = zero.core.current.room;
@@ -759,6 +663,7 @@ zero.core.Person = CT.Class({
 	remove: function() {
 		if (this.body.removed) return this.log("already removed!");
 		var thaz = this;
+		this.doer.stop();
 		this.facer.stop();
 		this.body.remove();
 		["body", "brain", "energy", "vibe"].forEach(function(prop) {
@@ -830,6 +735,9 @@ zero.core.Person = CT.Class({
 		this.voice = opts.voice;
 		this.name = opts.name;
 		this.buildBody();
+		this.doer = new zero.core.Doer({
+			person: this
+		});
 		this.facer = new zero.core.Facer({
 			autoface: opts.autoface,
 			person: this

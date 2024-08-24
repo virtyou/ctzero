@@ -241,13 +241,16 @@ zero.core.Thing = CT.Class({
 		}
 	},
 	overlaps: function(pos, radii, checkY) {
-		var bz = this.bounds, check = this._.checkOver;
-		if (!bz) return false;
+		var bz = this.getBounds(), check = this._.checkOver;
 		return check("x", pos, radii) && check("z", pos, radii)
 			&& (!checkY || check("y", pos, radii));
 	},
 	getTop: function() {
 		return this.bounds.max.y;
+	},
+	getRadii: function() {
+		this.radii || this._.setBounds();
+		return this.radii;
 	},
 	getBounds: function() {
 		if (!this.bounds)
@@ -280,12 +283,16 @@ zero.core.Thing = CT.Class({
 		this.onbound && this.onbound(this);
 		this._.postboundz.forEach(f => f());
 	},
-	setHomeY: function() {
-		var r = zero.core.current.room,
-			pos = this.placer.position,
-			oz = this.opts, atop;
+	unevenTop: function() {
+		return this.shelled || this.vlower == "ramp" || this.shifting("y");
+	},
+	setHomeY: function(notwithin) {
+		var r = zero.core.current.room, pos = this.placer.position, oz = this.opts,
+			atop = (!notwithin && this.within) || r.getSurface(pos, this.radii);
+		if (this.homeY && (atop == this.upon) && !(atop && atop.unevenTop()))
+			return;// this.log("setHomeY() - already set");
+		this.upon = atop;
 		this.homeY = this.radii.y;
-		this.upon = atop = this.within || r.getSurface(pos, this.radii);
 		this.homeY += atop ? atop.getTop(pos) : r.bounds.min.y;
 		if (oz.swimming)
 			this.homeY += CT.data.random(2 * (atop || r).radii.y);
@@ -304,6 +311,7 @@ zero.core.Thing = CT.Class({
 		if (toeOff)
 			delete this._toeOffset;
 		this._.setBounds();
+		delete this.homeY;
 		this.setHomeY();
 		this.onbound && this.onbound(this);
 		this._.postboundz.forEach(f => f());

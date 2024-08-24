@@ -200,6 +200,7 @@ zero.core.Body = CT.Class({
 		}
 		this.bounds = bz[posture];
 		this.radii = rz[posture];
+		delete this.homeY;
 		this.setHomeY();
 		this.setBob(true);
 	},
@@ -323,7 +324,7 @@ zero.core.Body = CT.Class({
 			for (var ps of ["weave", "bob", "slide"])
 				this.springs[ps].pull = obj && obj.pull && obj.pull[ps];
 			this._.bounder("y", 1, obj && obj.getTop(pos));
-		} else if (rebob || (obj && (obj.shelled || obj.vlower == "ramp" || obj.shifting("y")))) {
+		} else if (rebob || (obj && obj.unevenTop())) {
 			otop = (obj || r).getTop(pos);
 			bobber.floored = otop >= bobber.value - 100;
 			this._.bounder("y", 1, otop, true);
@@ -334,6 +335,22 @@ zero.core.Body = CT.Class({
 		}
 		changed && this.setFriction(this.person.grippy && !wet && !this.flying && (obj || r).grippy,
 			this.flying || wet || !bobber.hard);
+	},
+	curDance: function() {
+		var within = this.within, dance = "walk";
+		if (this.riding)
+			dance = "ride";
+		else if (this.flying)
+			dance = "fly";
+		else if (this.crawling)
+			dance = "crawl";
+		else if (this.climbing)
+			dance = "climb";
+		else if (within && within.opts.state == "liquid") {
+			dance = "swim";
+			(zero.core.util.ticker % 20) || this.bubbletrail.release(1);
+		}
+		return dance;
 	},
 	energy: function() {
 		return this.person && this.person.energy;
@@ -395,21 +412,25 @@ zero.core.Body = CT.Class({
 		return this.getPlacer();
 	},
 	_tickGroup: function() {
-		for (var f in this.flippers)
+		var pp = this.placer.position, pz = this.positioners, mount = this.riding,
+			f, zc = zero.core, zcc = zc.current, zcu = zero.core.util;
+		for (f in this.flippers)
 			this.group.rotation[f] = this.flippers[f].value;
 		this.group.rotation.y += this.springs.orientation.value;
 		this.group.scale.x = this.growers.width.value;
 		this.group.scale.y = this.growers.height.value;
 		this.group.scale.z = this.growers.depth.value;
-		var pp = this.placer.position, pz = this.positioners;
 		pp.y = pz.bob.value;
 		this.moving = pp.x != pz.weave.value || pp.z != pz.slide.value;
-		if (this.moving || (this.upon && this.upon.shifting("y"))) {
-			pp.x = pz.weave.value;
-			pp.z = pz.slide.value;
-			this.setBob();
-			var zcc = zero.core.current;
-			(this.person == zcc.person) && zero.core.util.roomReady() && zcc.room.setVolumes();
+		if (mount || this.moving || (this.upon && this.upon.shifting("y"))) {
+			if (mount)
+				mount.saddleUp(pp);
+			else {
+				pp.x = pz.weave.value;
+				pp.z = pz.slide.value;
+				this.setBob();
+			}
+			(this.person == zcc.person) && zcu.roomReady() && zcc.room.setVolumes();
 		}
 	},
 	_tickPolar: function() {
