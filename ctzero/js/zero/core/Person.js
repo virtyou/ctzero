@@ -241,6 +241,7 @@ zero.core.Person = CT.Class({
 		}, side);
 	},
 	chase: function(subject, cb) {
+		this.unchase();
 		this.run();
 		this.approach(subject, cb, false, true);
 	},
@@ -271,11 +272,12 @@ zero.core.Person = CT.Class({
 		if (_.chaser) {
 			clearInterval(_.chaser);
 			delete _.chaser;
+			delete _.chased;
 		}
 	},
 	chaser: function() {
 		var _ = this._, cb = _.postchase, b = this.body;
-		if (!b || b.removed || _.chased.removed)
+		if (!b || b.removed || !_.chased || _.chased.removed)
 			this.unchase();
 		else if (zero.core.util.touching(b, _.chased, 20)) {
 			this.unchase();
