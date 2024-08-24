@@ -247,6 +247,8 @@ zero.core.Person = CT.Class({
 	propel: function(direction) {
 		var bs = this.body.springs, vec = this.direction(direction),
 			booster = this.zombified ? 200 : 100;
+		if (this.running)
+			booster *= 2;
 		bs.weave.boost = booster * vec.x;
 		bs.slide.boost = booster * vec.z;
 	},

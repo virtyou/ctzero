@@ -101,6 +101,7 @@ zero.core.Doer = CT.Class({
 			delete bod.riding;
 			mount.ambience();
 			zero.core.camera.angle("preferred");
+			bod.adjust("position", "y", mount.position().y);
 		}
 	},
 	ride: function(mount, cb) {
