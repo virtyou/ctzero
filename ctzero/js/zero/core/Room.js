@@ -253,7 +253,7 @@ zero.core.Room = CT.Class({
 		return (this.getSurface(pos, radii, topmost) || this).getTop(pos);
 	},
 	ebound: function(spr, bod) {
-		if (!bod.group || !bod.radii) return;
+		if (!bod.group || !bod.radii || !this.isReady()) return;
 		var p = zero.core.util.posser(bod.placer.position),
 			sprax = bod.positioner2axis(spr.name);
 		p[sprax] = spr.target;
