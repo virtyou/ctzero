@@ -97,9 +97,8 @@ zero.core.Doer = CT.Class({
 		},
 		dismount: function(mount) {
 			var bod = this.person.body;
-			delete mount.rider;
 			delete bod.riding;
-			mount.ambience();
+			mount.unmount();
 			zero.core.camera.angle("preferred");
 			bod.adjust("position", "y", mount.position().y);
 		}
