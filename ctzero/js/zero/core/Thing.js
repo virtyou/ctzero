@@ -290,7 +290,7 @@ zero.core.Thing = CT.Class({
 		var r = zero.core.current.room, pos = this.placer.position, oz = this.opts,
 			atop = (!notwithin && this.within) || r.getSurface(pos, this.radii);
 		if (this.homeY && (atop == this.upon) && !(atop && atop.unevenTop()))
-			return this.log("setHomeY() - already set");
+			return;// this.log("setHomeY() - already set");
 		this.upon = atop;
 		this.homeY = this.radii.y;
 		this.homeY += atop ? atop.getTop(pos) : r.bounds.min.y;
