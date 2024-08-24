@@ -26,13 +26,14 @@ zero.core.Ramp = CT.Class({
 				name: name,
 				geomult: 1,
 				kind: "wall",
+				matinstance: mat,
 				coneGeometry: true,
 				scale: [1, 70, 70],
 				position: [px, py, 25],
 				rotation: [rx, -r.y, -r.z]
 			});
-		}, rx = r.x, pd = rx % P4, backtilted = rx < P2, side = this.opts.side,
-			py = backtilted ? 25 : -25, both = side == "both";
+		}, rx = r.x, pd = rx % P4, backtilted = rx < P2, py = backtilted ? 25 : -25,
+			mat = this.material, side = this.opts.side, both = side == "both";
 		rx *= -1;
 		if (Math.abs(pd - P4) < 0.1)
 			pd -= P4;
