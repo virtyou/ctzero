@@ -37,6 +37,13 @@ zero.core.Room = CT.Class({
 			for (men in this.menagerie)
 				cb(this.menagerie[men]);
 	},
+	getMounts: function() {
+		var mounts = [];
+		this.perMenagerie(function(men) {
+			mounts = mounts.concat(men.mounts());
+		});
+		return mounts;
+	},
 	bump: function(b1, b2, moshy) {
 		var axis, s1, s2, v1, v2, vd, axes = this._moshAxes;
 		moshy = moshy || this.moshiness(b1) || 20;
