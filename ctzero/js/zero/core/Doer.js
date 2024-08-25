@@ -103,8 +103,9 @@ zero.core.Doer = CT.Class({
 			bod.adjust("position", "y", mount.position().y);
 		}
 	},
-	ride: function(mount, cb) {
-		this.person.chase(mount, () => this.riders.mount(mount, cb));
+	ride: function(mount, cb, instant) {
+		var domount = () => this.riders.mount(mount, cb);
+		instant ? domount() : this.person.chase(mount, domount);
 	},
 	unride: function() {
 		this.riders.dismount(this.person.body.riding);
