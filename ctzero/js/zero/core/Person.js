@@ -348,8 +348,8 @@ zero.core.Person = CT.Class({
 	blow: function(horn, cb) {
 		this.doer.blow(horn, cb);
 	},
-	ride: function(mount, cb) {
-		this.doer.ride(mount, cb);
+	ride: function(mount, cb, instant) {
+		this.doer.ride(mount, cb, instant);
 	},
 	unride: function() {
 		this.doer.unride();
