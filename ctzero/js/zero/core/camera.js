@@ -113,6 +113,7 @@ var camera = zero.core.camera = {
 			perspective = camera.preferred || "polar";
 		var zcc = zero.core.current, _ = camera._,
 			pol = camera.isPolar = perspective == "polar";
+		camera.isBehind = perspective == "behind";
 		camera.current = perspective;
 		if (!noPref && _.preferreds.includes(perspective))
 			camera.preferred = perspective;
