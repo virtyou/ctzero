@@ -497,14 +497,14 @@ zero.core.Person = CT.Class({
 			cb && cb();
 		}, true);
 	},
-	wander: function(where, cb, dur) {
+	wander: function(where, cb, watch, dur) {
 		this.lastWhere = where = where || "room";
 		var r = zero.core.current.room, _ = this._, wantar = _.wantar = _.wantar || {},
 			bz = (where == "room") ? r.bounds : r[where].bounds,
 			min = bz.min, max = bz.max;
 		wantar.weave = (min.x + CT.data.random(max.x - min.x, true)) * 0.9;
 		wantar.slide = (min.z + CT.data.random(max.z - min.z, true)) * 0.9;
-		this.move(wantar, cb, false, dur);
+		this.move(wantar, cb, watch, dur);
 	},
 	move: function(opts, cb, watch, dur) {
 		var gotar = this.body.gotar, gtp = gotar.group.position;
