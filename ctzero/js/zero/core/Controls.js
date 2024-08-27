@@ -326,7 +326,7 @@ zero.core.Controls = CT.Class({
 			return this.log("you're not holding anything");
 		if (!(left && right))
 			return drop(left ? "left" : "right");
-		CT.dom.choice({
+		CT.modal.choice({
 			prompt: "drop what?",
 			data: [left.name, right.name],
 			cb: sel => drop((sel == left.name) ? "left" : "right")
