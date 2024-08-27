@@ -94,6 +94,7 @@ zero.core.Doer = CT.Class({
 			mount.ambience("walk");
 			this.person.go();
 			cb && cb();
+			CT.event.emit("mount", mount.name);
 		},
 		dismount: function(mount) {
 			var bod = this.person.body;

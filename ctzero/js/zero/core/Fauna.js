@@ -488,7 +488,8 @@ zero.core.Fauna.sets = {
 		pig: 2,
 		sheep: 1,
 		chicken: 3,
-		bunny: 1
+		bunny: 1,
+		horse: 1
 	},
 	pets: {
 		dog: 2,
