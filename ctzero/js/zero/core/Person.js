@@ -245,8 +245,8 @@ zero.core.Person = CT.Class({
 		this.run();
 		this.approach(subject, cb, false, true);
 	},
-	propel: function(direction) {
-		var bs = this.body.springs, vec = this.direction(direction),
+	propel: function(direction, nopo) {
+		var bs = this.body.springs, vec = this.direction(direction, nopo),
 			booster = this.zombified ? 200 : 100;
 		if (this.running)
 			booster *= 2;
@@ -286,7 +286,7 @@ zero.core.Person = CT.Class({
 			this.doLeap();
 		else {
 			this.orient(_.chased);
-			this.propel();
+			this.propel(null, true);
 		}
 	},
 	pursue: function(subject, cb) {
@@ -322,7 +322,7 @@ zero.core.Person = CT.Class({
 		setTimeout(function() {
 			if (bod.removed)
 				return CT.log("aborting approach - bod removed");
-			propel();
+			propel(null, true);
 			bso.k = 20;
 			bso.hard = bsohard;
 			if (chase)
