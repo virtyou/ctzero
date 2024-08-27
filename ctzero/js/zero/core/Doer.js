@@ -87,12 +87,14 @@ zero.core.Doer = CT.Class({
 		}
 	},
 	riders: {
-		mount: function(mount, cb) {
-			mount.rider = this.person;
-			this.person.body.riding = mount;
+		mount: function(mount, cb, instant) {
+			var p = this.person, b = p.body;
+			instant && b.setPositioners(mount.position(), false, true);
+			mount.rider = p;
+			b.riding = mount;
 			zero.core.camera.angle("behind", null, null, true);
 			mount.ambience("walk");
-			this.person.go();
+			p.go();
 			cb && cb();
 			CT.event.emit("mount", mount.name);
 		},
@@ -105,11 +107,15 @@ zero.core.Doer = CT.Class({
 		}
 	},
 	ride: function(mount, cb, instant) {
-		var domount = () => this.riders.mount(mount, cb);
-		instant ? domount() : this.person.chase(mount, domount);
+		if (typeof mount == "string")
+			mount = zero.core.current.room.getMount(mount);
+		var domount = () => this.riders.mount(mount, cb, instant),
+			mountonready = () => mount.onReady(domount);
+		instant ? mountonready() : this.person.chase(mount, mountonready);
 	},
 	unride: function() {
-		this.riders.dismount(this.person.body.riding);
+		var mount = this.person.body.riding;
+		mount && this.riders.dismount(mount);
 	},
 	recline: function(target, variety, cb, instant) {
 		this.recliners.recline(target, variety, cb, instant);
