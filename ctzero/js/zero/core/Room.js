@@ -44,6 +44,11 @@ zero.core.Room = CT.Class({
 		});
 		return mounts;
 	},
+	getMount: function(name) {
+		for (var mount of this.getMounts())
+			if (!name || mount.name == name)
+				return mount;
+	},
 	bump: function(b1, b2, moshy) {
 		var axis, s1, s2, v1, v2, vd, axes = this._moshAxes;
 		moshy = moshy || this.moshiness(b1) || 20;
@@ -85,6 +90,7 @@ zero.core.Room = CT.Class({
 		var bod = person.body, wall = port && port.opts.wall,
 			sz = bod.springs, pz = bod.positioners, dist = 500; // revise
 		person.body.setFriction(false, true);
+		person.unride();
 		if (wall == 0) {
 			delete sz.slide.bounds;
 			sz.slide.target -= dist;
