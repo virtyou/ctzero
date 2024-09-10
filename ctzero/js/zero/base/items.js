@@ -1,6 +1,30 @@
 var P2 = Math.PI / 2, P4 = P2 / 2, C4 = ["curve4", 3, 0.5, 3];
 
 zero.base.items = {
+	bouquet: {
+		variety: "quest",
+		parts: [{
+			thing: "Flora",
+			kind: "flower",
+			basicBound: false,
+			rotation: [0.2, 0, 0]
+		}, {
+			thing: "Flora",
+			kind: "flower",
+			basicBound: false,
+			rotation: [-0.2, 0, 0]
+		}, {
+			thing: "Flora",
+			kind: "flower",
+			basicBound: false,
+			rotation: [0, 0, 0.2]
+		}, {
+			thing: "Flora",
+			kind: "flower",
+			basicBound: false,
+			rotation: [0, 0, -0.2]
+		}]
+	},
 	kingsfoil: {
 		variety: "quest",
 		parts: [{
