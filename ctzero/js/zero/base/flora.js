@@ -3,7 +3,8 @@ zero.base.flora = {
 		stem: "green",
 		fruits: 0,
 		flowers: 2,
-		levels: 1
+		levels: 1,
+		leafsize: 4
 	},
 	bush: { // stems, leaves, fruit[berry]
 		stems: 4,
