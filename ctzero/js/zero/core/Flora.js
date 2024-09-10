@@ -50,7 +50,10 @@ zero.core.Flora = CT.Class({
 			leaves: 3, // max per segment
 			leafsize: 8,
 			fruitsize: 4,
-			flowersize: 2
+			flowersize: 2,
+			minleaves: 0,
+			minfruits: 0,
+			minflowers: 0
 		}, this.opts);
 		this.buildMaterials();
 	}
@@ -91,8 +94,9 @@ zero.core.Flora.Segment = CT.Class({
 			i, ploz = oz.plant.opts,
 			endz = zero.core.Flora.enders,
 			sing = endz.sings[variety],
-			subclass = endz.subclasses[sing];
-		for (i = 0; i < CT.data.random(ploz[variety] + 1); i ++) {
+			subclass = endz.subclasses[sing],
+			num = Math.max(ploz["min" + variety], CT.data.random(ploz[variety] + 1));
+		for (i = 0; i < num; i ++) {
 			pz.push({
 				subclass: subclass,
 				index: i,
