@@ -1,9 +1,10 @@
 zero.base.flora = {
 	flower: { // stem, leaves, flower
 		stem: "green",
+		levels: 1,
 		fruits: 0,
 		flowers: 2,
-		levels: 1,
+		minflowers: 1,
 		leafsize: 4
 	},
 	bush: { // stems, leaves, fruit[berry]
