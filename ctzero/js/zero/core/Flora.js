@@ -47,7 +47,10 @@ zero.core.Flora = CT.Class({
 			flowers: 1, // max per (outer) segment
 			petals: 8, // max per flower
 			fruits: 1, // max per (outer) segment
-			leaves: 3 // max per segment
+			leaves: 3, // max per segment
+			leafsize: 8,
+			fruitsize: 4,
+			flowersize: 2
 		}, this.opts);
 		this.buildMaterials();
 	}
@@ -139,11 +142,12 @@ zero.core.Flora.Segment = CT.Class({
 zero.core.Flora.Leaf = CT.Class({
 	CLASSNAME: "zero.core.Flora.Leaf",
 	init: function(opts) {
+		var plant = opts.plant;
 		this.opts = CT.merge(opts, {
-			coneGeometry: 8,
+			coneGeometry: plant.opts.leafsize,
 			rotation: [0, CT.data.random(Math.PI, true), 2],
 			scale: [0.3, 1, 1],
-			matinstance: opts.plant.materials.leaf
+			matinstance: plant.materials.leaf
 		}, this.opts);
 	}
 }, zero.core.Thing);
@@ -151,10 +155,11 @@ zero.core.Flora.Leaf = CT.Class({
 zero.core.Flora.Fruit = CT.Class({
 	CLASSNAME: "zero.core.Flora.Fruit",
 	init: function(opts) {
+		var plant = opts.plant;
 		this.opts = CT.merge(opts, {
-			sphereGeometry: 4,
+			sphereGeometry: plant.opts.fruitsize,
 //			rotation: [0, CT.data.random(Math.PI, true), 1],
-			matinstance: opts.plant.materials.fruit
+			matinstance: plant.materials.fruit
 		}, this.opts);
 	}
 }, zero.core.Thing);
@@ -176,9 +181,10 @@ zero.core.Flora.Flower = CT.Class({
 		}
 	},
 	init: function(opts) {
+		var plant = opts.plant;
 		this.opts = CT.merge(opts, {
-			sphereGeometry: 2,
-			matinstance: opts.plant.materials.flower
+			sphereGeometry: plant.opts.flowersize,
+			matinstance: plant.materials.flower
 		}, this.opts);
 	}
 }, zero.core.Thing);
