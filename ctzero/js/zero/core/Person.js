@@ -342,6 +342,9 @@ zero.core.Person = CT.Class({
 		if (!isYou && jumpy && this.obstruction())
 			setTimeout(() => this.doLeap(false, null, 0.05), 300);
 	},
+	give: function(item, recipient, cb) {
+		this.doer.give(item, recipient, cb);
+	},
 	light: function(lightable, cb) {
 		this.doer.light(lightable, cb);
 	},
