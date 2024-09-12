@@ -108,22 +108,28 @@ zero.core.Doer = CT.Class({
 	},
 	givers: {
 		approach: function(item, recip, cb) {
-			this.person.chase(recip, () => this.givers.hand(item, recip, cb));
+			this.person.chase(recip.body, () => this.givers.hand(item, recip, cb));
 		},
 		hand: function(item, recip, cb) {
 			var per = this.person, side = per.holding(item);
+			if (!side)
+				return per.say("i don't have that");
 			per.thruster.thrust(side);
 			this.timeout(() => this.givers.check(item, recip, cb));
 		},
 		check: function(item, recip, cb) {
-			this.person.holding(item) ? this.givers.approach(item, recip, cb) : cb();
+			var per = this.person;
+			per.target = recip.name;
+			per.thruster.unthrust(per.holding(item));
+			delete per.target;
+			per.holding(item) ? this.givers.approach(item, recip, cb) : cb();
 		}
 	},
 	give: function(item, recip, cb) {
 		var cur = zero.core.current;
 		if (typeof recip == "string")
 			recip = (recip == "player") ? cur.person : cur.people[recip];
-		this.givers.approach(item, recip.body, cb);
+		this.givers.approach(item, recip, cb);
 	},
 	ride: function(mount, cb, instant) {
 		if (typeof mount == "string")
