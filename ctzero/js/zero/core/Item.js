@@ -32,31 +32,35 @@ zero.core.Item = CT.Class({
 		else // ignite others
 			other.quenched && other.ignite();
 	},
-	give: function() {
+	give: function(targets) {
 		var receiver = zero.core.current.receiver,
-			recipient = receiver && receiver(this);
+			recipient = receiver && receiver(this, targets);
 		if (recipient) {
 			this.unhold();
 			recipient.hold(this._key(), recipient.freeHand());
-			this.log("you gave", this.name, "to", recipient.name);
-			CT.event.emit("receive", {
-				actor: recipient.name,
-				item: this.name
-			});
+			if (recipient.isYou())
+				this.log("you got", this.name);
+			else {
+				this.log("you gave", this.name, "to", recipient.name);
+				CT.event.emit("receive", {
+					actor: recipient.name,
+					item: this.name
+				});
+			}
 		}
 	},
-	unhold: function() { // assuming holder is player...
-		zero.core.current.person.unhold(this.hand());
+	unhold: function() {
+		this.person.unhold(this.hand());
 	},
-	hand: function() { // assuming holder is player...
+	hand: function() {
 		var side, key = this._key(),
-			held = zero.core.current.person.opts.gear.held;
+			held = this.person.opts.gear.held;
 		for (side in held)
 			if (held[side] == key)
 				return side;
 	},
-	touch: function() {
-		this.quest && this.give();
+	touch: function(targets) {
+		this.quest && this.give(targets);
 		this.smasher && this.smash();
 		if (this.flamer) {
 			this.melt();
@@ -72,6 +76,7 @@ zero.core.Item = CT.Class({
 			castShadow: true,
 			variety: "knocker"
 		}, this.opts);
+		this.person = opts.person;
 		for (var v of this.varieties)
 			this[v] = opts.variety == v;
 	}
