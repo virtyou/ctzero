@@ -219,6 +219,8 @@ zero.core.Person = CT.Class({
 		return "right";
 	},
 	get: function(target, cb) {
+		if (typeof target == "string")
+			target = zero.core.current.room[target];
 		var side = this.freeHand(), g = this.opts.gear,
 			h = g.held, gobj = {}, bod = this.body,
 			to = target.opts, key = to.key || to.fakeKey,
