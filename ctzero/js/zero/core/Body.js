@@ -213,7 +213,8 @@ zero.core.Body = CT.Class({
 	equipper: function(g, held, bagger) { // if held or bagger, g is side.....
 		var az = this.torso.arms, bz = this.bones, bm = this.bmap, xpos = 5,
 			gmap = this.gearmap, gars = this.garments, gthing, propts = {},
-			itemz = this.items, heldz = this.held, bagged = this.bagged;
+			itemz = this.items, heldz = this.held, bagged = this.bagged,
+			per = this.person, isitem;
 		return function(gdata) {
 			if (!("bone" in gdata)) {
 				if (bagger) {
@@ -227,6 +228,9 @@ zero.core.Body = CT.Class({
 			}
 			if (!gdata.thing)
 				gdata.thing = held ? "Item" : "Garment";
+			isitem = gdata.thing == "Item";
+			if (isitem)
+				propts.person = per;
 			gthing = gmap[gdata.key || gdata.fakeKey] = zero.core.util.thing(CT.merge(propts, gdata, {
 				bones: bz,
 				onbuild: held && az[g].hand.grasp,
@@ -236,7 +240,7 @@ zero.core.Body = CT.Class({
 				bagged[bagger][g] = gthing;
 			else if (gdata.thing == "Garment")
 				gars[gdata.name] = gthing;
-			else if (gdata.thing == "Item")
+			else if (isitem)
 				heldz[g] = itemz[gdata.name] = gthing;
 		};
 	},
