@@ -157,8 +157,8 @@ zero.core.Thruster = CT.Class({
 		this.set("unthrust");
 	},
 	touch: function(side) {
-		var held = this.body.person.held(side);
-		held && held.touch();
+		var per = this.body.person, held = per.held(side);
+		held && held.touch(per.target);
 	},
 	autotouch: function() {
 		if (this.ons.unthrust)
