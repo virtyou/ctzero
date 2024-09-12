@@ -123,7 +123,7 @@ zero.core.Doer = CT.Class({
 		var cur = zero.core.current;
 		if (typeof recip == "string")
 			recip = (recip == "player") ? cur.person : cur.people[recip];
-		this.givers.approach(item, recip, cb);
+		this.givers.approach(item, recip.body, cb);
 	},
 	ride: function(mount, cb, instant) {
 		if (typeof mount == "string")
