@@ -186,7 +186,7 @@ zero.core.Room = CT.Class({
 		var name, person, zc = zero.core,
 			peeps = zc.current.people, touching = zc.util.touching;
 		for (name in peeps) {
-			if (allowed && !allowed[name])
+			if (allowed && !allowed[name] && (name != allowed))
 				continue;
 			person = peeps[name];
 			if (touching(thing, person.body, 50, false, true))

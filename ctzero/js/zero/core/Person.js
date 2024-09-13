@@ -219,6 +219,8 @@ zero.core.Person = CT.Class({
 		return "right";
 	},
 	get: function(target, cb) {
+		if (typeof target == "string")
+			target = zero.core.current.room[target];
 		var side = this.freeHand(), g = this.opts.gear,
 			h = g.held, gobj = {}, bod = this.body,
 			to = target.opts, key = to.key || to.fakeKey,
@@ -341,6 +343,9 @@ zero.core.Person = CT.Class({
 		}, 500); // time for orientation...
 		if (!isYou && jumpy && this.obstruction())
 			setTimeout(() => this.doLeap(false, null, 0.05), 300);
+	},
+	give: function(item, recipient, cb) {
+		this.doer.give(item, recipient, cb);
 	},
 	light: function(lightable, cb) {
 		this.doer.light(lightable, cb);
