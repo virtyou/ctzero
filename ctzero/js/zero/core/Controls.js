@@ -316,20 +316,15 @@ zero.core.Controls = CT.Class({
 		return CT.key.down("SHIFT") || zero.core.gamepads.pressed(10);
 	},
 	drop: function() {
-		var p = this.target, zcc = zero.core.current, drop = function(side) {
-			p.unhold(side);
-			iopts = ((side == "left") ? left : right).opts;
-			zcc.dropper && zcc.dropper(p.body.position(),
-				iopts.kind, iopts.variety, iopts.name);
-		}, iopts, left = p.held("left"), right = p.held("right");
+		var p = this.target, left = p.held("left"), right = p.held("right");
 		if (!left && !right)
-			return this.log("you're not holding anything");
+			return p.say("i'm not holding anything");
 		if (!(left && right))
-			return drop(left ? "left" : "right");
+			return p.drop((left || right).name);
 		CT.modal.choice({
 			prompt: "drop what?",
 			data: [left.name, right.name],
-			cb: sel => drop((sel == left.name) ? "left" : "right")
+			cb: p.drop
 		});
 	},
 	upAxes: function(axes) {
