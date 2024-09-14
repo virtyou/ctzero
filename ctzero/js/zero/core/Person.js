@@ -218,6 +218,15 @@ zero.core.Person = CT.Class({
 		}
 		return "right";
 	},
+	drop: function(target, cb) {
+		var dropper = zero.core.current.dropper, iopts,
+			side = this.holding(target), item = this.held(side);
+		if (!side)
+			return this.say(CT.data.choice(["i don't have that", "i'm not holding that", "i don't have one"]));
+		iopts = item.opts;
+		this.unhold(side);
+		dropper && dropper(this.body.position(), iopts.kind, iopts.variety, iopts.name);
+	},
 	get: function(target, cb) {
 		if (typeof target == "string")
 			target = zero.core.current.room[target];
