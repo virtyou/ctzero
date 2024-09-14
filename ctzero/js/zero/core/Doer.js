@@ -129,6 +129,8 @@ zero.core.Doer = CT.Class({
 		var cur = zero.core.current;
 		if (typeof recip == "string")
 			recip = (recip == "player") ? cur.person : cur.people[recip];
+		if (!recip)
+			return this.person.say("i don't see that person");
 		this.givers.approach(item, recip, cb);
 	},
 	ride: function(mount, cb, instant) {
