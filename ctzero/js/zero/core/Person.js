@@ -226,6 +226,7 @@ zero.core.Person = CT.Class({
 		iopts = item.opts;
 		this.unhold(side);
 		dropper && dropper(this.body.position(), iopts.kind, iopts.variety, iopts.name);
+		cb && cb();
 	},
 	get: function(target, cb) {
 		if (typeof target == "string")
