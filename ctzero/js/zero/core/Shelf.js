@@ -86,8 +86,10 @@ zero.core.Shelf = CT.Class({
 	openable: function() {
 		return !!(this.drawers.length || this.lid);
 	},
-	openbutt: function(onopen, approach) {
+	openbutt: function(onopen, approach, lopts) {
 		var open = this.open, close = this.close, toggle = function() {
+			if (lopts && lopts.locked)
+				return per.say("it's locked!");
 			b._opened = !b._opened;
 			b._opened ? open() : close();
 			b.innerHTML = b._opened ? "close" : "open";
@@ -95,7 +97,7 @@ zero.core.Shelf = CT.Class({
 				opened = true;
 				onopen && onopen();
 			}
-		}, atoggle = () => zero.core.current.person.touch(this, toggle),
+		}, per = zero.core.current.person, atoggle = () => per.touch(this, toggle),
 			b = CT.dom.button("open", approach ? atoggle : toggle), opened;
 		return b;
 	},
