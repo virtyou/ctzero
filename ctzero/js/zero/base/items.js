@@ -42,6 +42,37 @@ zero.base.items = {
 			}
 		}, zero.base.body.tail.lizard)]
 	},
+	key: {
+		variety: "key",
+		cylinderGeometry: 0.5,
+		geomult: 20,
+		parts: [{
+			cylinderGeometry: 0.25,
+			geomult: 6,
+			position: [0, 4, 1],
+			rotation: [P2, 0, 0]
+		}, {
+			cylinderGeometry: 0.25,
+			geomult: 8,
+			position: [0, 3, 1],
+			rotation: [P2, 0, 0]
+		}, {
+			cylinderGeometry: 0.25,
+			geomult: 6,
+			position: [0, 2, 1],
+			rotation: [P2, 0, 0]
+		}, {
+			cylinderGeometry: 0.2,
+			geomult: 10,
+			position: [0, -5, 0],
+			rotation: [P2, 0, 0]
+		}, {
+			torusGeometry: true,
+			torusTubeRadius: 4,
+			position: [0, -5, 0],
+			rotation: [0, P2, 0]
+		}]
+	},
 	torch: {
 		variety: "flamer",
 		cylinderGeometry: true,
