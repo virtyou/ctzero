@@ -1,6 +1,6 @@
 zero.core.Item = CT.Class({
 	CLASSNAME: "zero.core.Item",
-	varieties: ["knocker", "smasher", "grabber", "flamer", "quest"],
+	varieties: ["knocker", "smasher", "grabber", "flamer", "quest", "key"],
 	_wreck: function(thing, variety) {
 		if (!thing) return;
 		var zcc = zero.core.current, sploder = zcc.sploder;
@@ -49,6 +49,10 @@ zero.core.Item = CT.Class({
 			}
 		}
 	},
+	unlock: function() {
+		var unlocker = zero.core.current.unlocker;
+		unlocker && unlocker(this) && this.unhold();
+	},
 	unhold: function() {
 		this.person.unhold(this.hand());
 	},
@@ -62,6 +66,7 @@ zero.core.Item = CT.Class({
 	touch: function(targets) {
 		this.quest && this.give(targets);
 		this.smasher && this.smash();
+		this.key && this.unlock();
 		if (this.flamer) {
 			this.melt();
 			this.burn();
