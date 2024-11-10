@@ -122,6 +122,9 @@ zero.core.Person = CT.Class({
 			}, _.playClip, this.prosody, this.voice);
 		}
 	},
+	sayone: function(phrases, cb, watch) {
+		this.say(CT.data.choice(phrases), cb, watch);
+	},
 	respond: function(phrase, cb, watch, nosaycb) {
 		var thaz = this, zcc = zero.core.current;
 		if (watch) { // watch both ways....
