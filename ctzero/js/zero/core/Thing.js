@@ -1052,7 +1052,10 @@ zero.core.Thing = CT.Class({
 			frustumCulled: true,
 			sphereSegs: core.config.ctzero.sphereSegs
 		});
-		if (opts.kind == "portal")
+		this.isport = opts.kind == "portal";
+		this.ischest = opts.variety == "chest";
+		opts.lockable = this.isport || this.ischest;
+		if (this.isport)
 			opts.state = "threshold";
 		if (CT.info.mobile)
 			opts.matcat = "Basic";
