@@ -44,6 +44,8 @@ CT.require("zero.core.Room");
 CT.require("zero.core.Book");
 CT.require("zero.core.Shelf");
 
+CT.require("zero.core.Panel");
+
 CT.require("zero.core.Bit");
 CT.require("zero.core.Particles");
 CT.require("zero.core.Fire");
