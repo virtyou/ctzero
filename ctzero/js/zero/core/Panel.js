@@ -22,6 +22,7 @@ zero.core.Panel = CT.Class({
 					subclass: PC[kind],
 					name: kind + i,
 					kind: kind,
+					panel: this,
 					position: [x, y, zsurface]
 				}));
 				x += xstep;
@@ -43,7 +44,7 @@ zero.core.Panel = CT.Class({
 			pad: 4
 		}, this.opts);
 	}
-}, zero.core.Thing);
+}, zero.core.Appliance);
 
 const PAN = zero.core.Panel, PC = {}, PW = {
 	button: 4, switch: 4, lever: 8
@@ -78,6 +79,7 @@ PAN.Flipper = CT.Class({
 	toggle: function() {
 		this._on = !this._on;
 		this.adjust("rotation", "x", this._on ? -P4 : P4);
+		this.getTarget().setPower(this._on ? this.opts.panel.power : 0);
 	},
 	init: function(opts) {
 		this.opts = CT.merge(opts, {
@@ -92,6 +94,14 @@ PAN.Switch = PC.switch = CT.Class({
 		this.opts.parts.push({
 			boxGeometry: [1, 1, 4]
 		});
+	},
+	getTarget: function() {
+		return zero.core.current.room[this.opts.bulb];
+	},
+	init: function(opts) {
+		this.opts = CT.merge(opts, {
+			bulb: "bulb0"
+		}, this.opts);
 	}
 }, PAN.Flipper);
 
@@ -108,5 +118,13 @@ PAN.Lever = PC.lever = CT.Class({
 			boxGeometry: [6, 2, 1],
 			position: [0, 0, 8]
 		}]);
+	},
+	getTarget: function() {
+		return zero.core.Appliance.circuit(this.opts.circuit);
+	},
+	init: function(opts) {
+		this.opts = CT.merge(opts, {
+			circuit: "default"
+		}, this.opts);
 	}
 }, PAN.Flipper);
