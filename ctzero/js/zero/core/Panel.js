@@ -61,9 +61,9 @@ window.testPan = function() {
 PAN.Button = PC.button = CT.Class({
 	CLASSNAME: "zero.core.Panel.Button",
 	toggle: function() {
-		this.adjust("position", "z", -1);
+		this.adjust("position", "z", -1, true);
 		// trigger something...
-		setTimeout(() => this.adjust("position", "z", 0), 1000);
+		setTimeout(() => this.adjust("position", "z", 1, true), 1000);
 	},
 	init: function(opts) {
 		this.opts = CT.merge(opts, {
