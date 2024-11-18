@@ -3,8 +3,8 @@ zero.core.Panel = CT.Class({
 	kinds: ["button", "switch", "lever"],
 	preassemble: function() {
 		const oz = this.opts, pz = oz.parts, pad = oz.padding,
-			zsurface = -oz.depth / 2, ystep = (oz.height - pad) / 3;
-		let i, kind, items, xstep, x, y = -ystep;
+			zsurface = oz.depth / 2, ystep = (oz.height - pad) / 3;
+		let i, kind, items, xstep, x, y = ystep;
 		pz.push({
 			name: "base",
 			boxGeometry: [oz.width, oz.height, oz.depth]
@@ -22,7 +22,7 @@ zero.core.Panel = CT.Class({
 				}));
 				x += xstep;
 			}
-			y += ystep;
+			y -= ystep;
 		}
 	},
 	init: function(opts) {
@@ -34,23 +34,34 @@ zero.core.Panel = CT.Class({
 			button: [],
 			switch: [],
 			lever: []
-		});
+		}, this.opts);
 	}
 }, zero.core.Thing);
 
-const PAN = zero.core.Panel, PC = PAN.controllers = {}, P8 = Math.PI / 8;
+const PAN = zero.core.Panel, PC = PAN.controllers = {},
+	P = Math.PI, P2 = P / 2, P4 = P / 4;
+
+window.testPan = function() {
+	return zero.core.current.room.attach({
+		thing: "Panel",
+		button: [null, null, null, null],
+		switch: [null, null, null, null],
+		lever: [null]
+	});
+};
 
 PAN.Button = PC.button = CT.Class({
 	CLASSNAME: "zero.core.Panel.Button",
 	toggle: function() {
-		this.adjust("position", "z", -4);
+		this.adjust("position", "z", -1);
 		// trigger something...
 		setTimeout(() => this.adjust("position", "z", 0), 1000);
 	},
 	init: function(opts) {
 		this.opts = CT.merge(opts, {
-			cylinderGeometry: true
-		});
+			cylinderGeometry: true,
+			rotation: [P2, 0, 0]
+		}, this.opts);
 	}
 }, zero.core.Thing);
 
@@ -58,12 +69,12 @@ PAN.Flipper = CT.Class({
 	CLASSNAME: "zero.core.Panel.Flipper",
 	toggle: function() {
 		this._on = !this._on;
-		this.adjust("rotation", "x", this._on ? -P8 : P8);
+		this.adjust("rotation", "x", this._on ? -P4 : P4);
 	},
 	init: function(opts) {
 		this.opts = CT.merge(opts, {
-			rotation: [P8, 0, 0]
-		});
+			rotation: [P4, 0, 0]
+		}, this.opts);
 	}
 }, zero.core.Thing);
 
@@ -71,7 +82,7 @@ PAN.Switch = PC.switch = CT.Class({
 	CLASSNAME: "zero.core.Panel.Switch",
 	preassemble: function() {
 		this.opts.parts.push({
-			boxGeometry: [4, 4, 12]
+			boxGeometry: [1, 1, 4]
 		});
 	}
 }, PAN.Flipper);
@@ -80,14 +91,14 @@ PAN.Lever = PC.lever = CT.Class({
 	CLASSNAME: "zero.core.Panel.Lever",
 	preassemble: function() {
 		this.opts.parts = this.opts.parts.concat([{
-			boxGeometry: [6, 6, 32],
-			position: [-6, 0, 0]
+			boxGeometry: [1, 2, 16],
+			position: [-2, 0, 0]
 		}, {
-			boxGeometry: [6, 6, 32],
-			position: [6, 0, 0]
+			boxGeometry: [1, 2, 16],
+			position: [2, 0, 0]
 		}, {
-			boxGeometry: [18, 8, 6],
-			position: [0, 0, -16]
+			boxGeometry: [6, 2, 1],
+			position: [0, 0, 8]
 		}]);
 	}
 }, PAN.Flipper);
