@@ -18,9 +18,57 @@ zero.core.Appliance = CT.Class({
 		this.opts = CT.merge(opts, {
 			circuit: "default"
 		}, this.opts);
-		this.plug(this.opts.circuit);
+		this.onReady(() => this.plug(this.opts.circuit));
 	}
 }, zero.core.Thing);
+
+zero.core.Appliance.Bulb = CT.Class({
+	CLASSNAME: "zero.core.Appliance.Bulb",
+	setPower: function(p) {
+		this.power = p;
+		this.light.setIntensity(p);
+		this.heart.material.opacity = p * 0.4;
+	},
+	preassemble: function() {
+		const oz = this.opts;
+		oz.parts = oz.parts.concat([{
+			name: "glass",
+			sphereGeometry: 2,
+			material: {
+				opacity: 0.2,
+				alphaTest: 0.2,
+				shininess: 100,
+				transparent: true,
+				side: THREE.BackSide
+			}
+		}, {
+			name: "heart",
+			sphereGeometry: 1,
+			material: {
+				opacity: 0.4,
+				alphaTest: 0.4,
+				color: oz.color,
+				transparent: true,
+				side: THREE.BackSide
+			}
+		}, {
+			name: "base",
+			cylinderGeometry: 1,
+			position: [0, -3, 0]
+		}, {
+			name: "light",
+			thing: "Light",
+			kind: "lighting",
+			variety: "point",
+			color: oz.color
+		}])
+	},
+	init: function(opts) {
+		this.opts = CT.merge(opts, {
+			color: 0xffffaf
+		}, this.opts);
+	}
+}, zero.core.Appliance);
 
 zero.core.Appliance.Circuit = CT.Class({
 	CLASSNAME: "zero.core.Application.Circuit",

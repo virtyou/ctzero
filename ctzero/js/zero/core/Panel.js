@@ -51,7 +51,13 @@ const PAN = zero.core.Panel, PC = {}, PW = {
 }, P = Math.PI, P2 = P / 2, P4 = P / 4;
 
 window.testPan = function() {
-	return zero.core.current.room.attach({
+	const zc = zero.core, r = zc.current.room;
+	r.attach({
+		name: "bulb0",
+		position: [50, 0, 0],
+		subclass: zc.Appliance.Bulb
+	});
+	return r.attach({
 		thing: "Panel",
 		button: [null, null, null, null],
 		switch: [null, null, null, null],
