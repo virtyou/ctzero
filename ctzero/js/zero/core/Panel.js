@@ -2,17 +2,21 @@ zero.core.Panel = CT.Class({
 	CLASSNAME: "zero.core.Panel",
 	kinds: ["button", "switch", "lever"],
 	preassemble: function() {
-		const oz = this.opts, pz = oz.parts, pad = oz.padding,
-			zsurface = oz.depth / 2, ystep = (oz.height - pad) / 3;
-		let i, kind, items, xstep, x, y = ystep;
-		pz.push({
-			name: "base",
-			boxGeometry: [oz.width, oz.height, oz.depth]
-		});
+		const oz = this.opts, pz = oz.parts, pad = oz.pad, zsurface = oz.depth / 2;
+		let i, kind, items, xstep, x, y, kwidth, width, height, rows = 0;
+		for (kind of this.kinds)
+			if (oz[kind].length)
+				rows += 1;
+		height = rows * oz.row;
+		y = (height - oz.row) / 2;
 		for (kind of this.kinds) {
 			items = oz[kind];
-			xstep = (oz.width - pad) / items.length;
-			x = -xstep * items.length / 2;
+			if (!items.length) continue;
+			xstep = PW[kind];
+			kwidth = xstep * items.length;
+			if (!width || kwidth > width)
+				width = kwidth;
+			x = (xstep - kwidth) / 2;
 			for (i = 0; i < items.length; i++) {
 				pz.push(CT.merge(items[i], {
 					subclass: PC[kind],
@@ -22,31 +26,35 @@ zero.core.Panel = CT.Class({
 				}));
 				x += xstep;
 			}
-			y -= ystep;
+			y -= oz.row;
 		}
+		pz.push({
+			name: "base",
+			boxGeometry: [width + pad, height + pad, oz.depth]
+		});
 	},
 	init: function(opts) {
 		this.opts = CT.merge(opts, {
-			depth: 5,
-			width: 20,
-			height: 20,
-			padding: 5,
 			button: [],
 			switch: [],
-			lever: []
+			lever: [],
+			depth: 4,
+			row: 4,
+			pad: 4
 		}, this.opts);
 	}
 }, zero.core.Thing);
 
-const PAN = zero.core.Panel, PC = PAN.controllers = {},
-	P = Math.PI, P2 = P / 2, P4 = P / 4;
+const PAN = zero.core.Panel, PC = {}, PW = {
+	button: 4, switch: 4, lever: 8
+}, P = Math.PI, P2 = P / 2, P4 = P / 4;
 
 window.testPan = function() {
 	return zero.core.current.room.attach({
 		thing: "Panel",
 		button: [null, null, null, null],
 		switch: [null, null, null, null],
-		lever: [null]
+		lever: [null, null]
 	});
 };
 
