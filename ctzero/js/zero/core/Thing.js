@@ -395,6 +395,47 @@ zero.core.Thing = CT.Class({
 		};
 		zero.core.util.ontick(this._.vsplayer);
 	},
+	slide: function(kind, dim, val, dur) {
+		var zcu = zero.core.util, adjust = this.adjust, pk = this.placer[kind],
+			fromVal = pk[dim], diff = val - fromVal, goingUp = diff > 0,
+			step = diff * 1000 / dur;
+		if (!diff) return this.log("i already slid", kind, dim, "to", val);
+		var overval = function() {
+			if (goingUp) {
+				if (pk[dim] >= val)
+					return true;
+			} else if (pk[dim] <= val)
+				return true;
+		}, stepper = function(dts) {
+			adjust(kind, dim, dts * step, true);
+			overval() && zcu.untick(stepper);
+		};
+		zcu.ontick(stepper);
+	},
+	slides: function(tars, cb, dur) {
+		var kind, dims, dim, slide = this.slide;
+		dur = dur || 1000;
+		for (kind in tars) {
+			dims = tars[kind];
+			for (dim in dims)
+				slide(kind, dim, dims[dim], dur);
+		}
+		cb && setTimeout(cb, dur);
+	},
+	backslide: function(tars, cb, dur, wait, useCur) {
+		var kind, dims, dim, kf, bk, bax = {},
+			frommer = this[useCur ? "placer" : "opts"],
+			bslider = () => this.slides(bax, cb, dur),
+			bwaiter = () => setTimeout(bslider, wait || 2000);
+		for (kind in tars) {
+			dims = tars[kind];
+			kf = frommer[kind];
+			bk = bax[kind] = {};
+			for (dim in dims)
+				bk[dim] = kf[useCur ? dim : this._xyz.indexOf(dim)];
+		}
+		this.slides(tars, bwaiter, dur);
+	},
 	setPull: function(pull, axis) {},
 	unscroll: function(clearOpts) {
 		if (this._.scroller) {
