@@ -46,7 +46,7 @@ zero.core.Panel = CT.Class({
 	}
 }, zero.core.Appliance);
 
-const PAN = zero.core.Panel, PC = {}, PW = {
+var PAN = zero.core.Panel, PC = {}, PW = {
 	button: 4, switch: 4, lever: 8
 }, P = Math.PI, P2 = P / 2, P4 = P / 4;
 

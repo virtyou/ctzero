@@ -86,7 +86,7 @@ zero.core.Appliance.Circuit = CT.Class({
 		delete this.appliances[appliance.name];
 	},
 	init: function(opts) {
-		this.opts = CT.merge(opts, {
+		this.opts = opts = CT.merge(opts, {
 			power: 1
 		});
 		this.power = opts.power;
