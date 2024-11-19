@@ -94,6 +94,13 @@ window.testPan = function() {
 	});
 };
 
+window.testEl = function() {
+	var zc = zero.core;
+	return zc.current.room.attach({
+		subclass: zc.Appliance.Elevator
+	});
+}
+
 PAN.Button = PC.button = CT.Class({
 	CLASSNAME: "zero.core.Panel.Button",
 	toggle: function() {

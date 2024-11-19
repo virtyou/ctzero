@@ -19,6 +19,7 @@ zero.core.Appliance = CT.Class({
 	},
 	init: function(opts) {
 		this.opts = CT.merge(opts, {
+			basicBound: true,
 			circuit: "default"
 		}, this.opts);
 		this.onReady(() => this.plug(this.opts.circuit));
@@ -66,6 +67,38 @@ zero.core.Appliance.Gate = CT.Class({
 			width: 100,
 			height: 100,
 			thickness: 10
+		}, this.opts);
+	}
+}, zero.core.Appliance);
+
+zero.core.Appliance.Elevator = CT.Class({
+	CLASSNAME: "zero.core.Appliance.Elevator",
+	do: function(order) {
+		var tar = zero.core.current.room[order];
+		this.slide("position", "y", tar.getTop() + this.radii.y);
+	},
+	preassemble: function() { // TODO: doors, controls, bulb
+		const oz = this.opts, w2 = oz.width / 2;
+		oz.parts = oz.parts.concat([{
+			name: "backwall",
+			position: [0, 0, -oz.depth / 2],
+			boxGeometry: [oz.width, oz.height, oz.thickness]
+		}, {
+			name: "leftwall",
+			position: [-w2, 0, 0],
+			boxGeometry: [oz.thickness, oz.height, oz.depth]
+		}, {
+			name: "rightwall",
+			position: [w2, 0, 0],
+			boxGeometry: [oz.thickness, oz.height, oz.depth]
+		}]);
+	},
+	init: function(opts) {
+		this.opts = CT.merge(opts, {
+			depth: 80,
+			width: 80,
+			height: 100,
+			thickness: 5
 		}, this.opts);
 	}
 }, zero.core.Appliance);
