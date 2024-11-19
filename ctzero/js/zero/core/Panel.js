@@ -99,8 +99,8 @@ PAN.Button = PC.button = CT.Class({
 	toggle: function() {
 		const oz = this.opts;
 		this.adjust("position", "z", -1, true);
-		zero.core.current.room[oz.appliance].do(oz.order);
 		setTimeout(() => this.adjust("position", "z", 1, true), 1000);
+		oz.panel.power && zero.core.current.room[oz.appliance].do(oz.order);
 	},
 	init: function(opts) {
 		this.opts = CT.merge(opts, {
