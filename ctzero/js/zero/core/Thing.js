@@ -397,10 +397,10 @@ zero.core.Thing = CT.Class({
 	},
 	slide: function(kind, dim, val, dur) {
 		var zcu = zero.core.util, adjust = this.adjust, pk = this.placer[kind],
-			fromVal = pk[dim], diff = val - fromVal, goingUp = diff > 0,
-			step = diff * 1000 / dur;
+			fromVal = pk[dim], diff = val - fromVal, goingUp = diff > 0;
 		if (!diff) return this.log("i already slid", kind, dim, "to", val);
-		var overval = function() {
+		dur = dur || 1000;
+		var step = diff * 1000 / dur, overval = function() {
 			if (goingUp) {
 				if (pk[dim] >= val)
 					return true;
