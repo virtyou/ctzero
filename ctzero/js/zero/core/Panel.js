@@ -51,8 +51,8 @@ var PAN = zero.core.Panel, PC = {}, PW = {
 }, P = Math.PI, P2 = P / 2, P4 = P / 4;
 
 window.testPan = function() {
-	const zc = zero.core, r = zc.current.room, appy = zc.Appliance,
-		rcirc = appy.circuit("room");
+	const zc = zero.core, r = zc.current.room,
+		appy = zc.Appliance, rcirc = appy.circuit("room");
 	appy.circuit("default").plug(rcirc);
 	rcirc.plug(appy.circuit("light0"));
 	rcirc.plug(appy.circuit("light1"));
@@ -68,6 +68,12 @@ window.testPan = function() {
 		subclass: appy.Bulb,
 		position: [20, 0, 0]
 	});
+	r.attach({
+		name: "gate0",
+		circuit: "room",
+		subclass: appy.Gate,
+		position: [0, 0, -100]
+	});
 	return r.attach({
 		thing: "Panel",
 		button: [{
@@ -76,6 +82,12 @@ window.testPan = function() {
 			appliance: "bulb0", order: 0x00ff00
 		}, {
 			appliance: "bulb0", order: 0x0000ff
+		}, {
+			appliance: "gate0", order: "swing"
+		}, {
+			appliance: "gate0", order: "slide"
+		}, {
+			appliance: "gate0", order: "squish"
 		}],
 		switch: [{circuit: "light0"}, {circuit: "light1"}],
 		lever: [{circuit: "room"}]

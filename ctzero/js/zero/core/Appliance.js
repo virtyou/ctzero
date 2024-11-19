@@ -25,6 +25,48 @@ zero.core.Appliance = CT.Class({
 	}
 }, zero.core.Thing);
 
+zero.core.Appliance.Gate = CT.Class({
+	CLASSNAME: "zero.core.Appliance.Gate",
+	do: function(order) {
+		const dadj = this.door.adjust;
+		if (order == "swing") {
+			dadj("rotation", "y", Math.PI / 2);
+			dadj("position", "x", -50);
+			dadj("position", "z", 50);
+			setTimeout(function() {
+				dadj("rotation", "y", 0);
+				dadj("position", "x", 0);
+				dadj("position", "z", 0);
+			}, 2000);
+		} else if (order == "slide") {
+			dadj("position", "x", -100);
+			setTimeout(() => dadj("position", "x", 0), 2000);
+		} else if (order == "squish") {
+			dadj("scale", "x", 0.1);
+			dadj("position", "x", -45);
+			setTimeout(function() {
+				dadj("scale", "x", 1);
+				dadj("position", "x", 0);
+			}, 2000);
+		} else
+			this.log("can't do:", order);
+	},
+	preassemble: function() {
+		const oz = this.opts;
+		oz.parts.push({
+			name: "door",
+			boxGeometry: [oz.width, oz.height, oz.thickness]
+		});
+	},
+	init: function(opts) {
+		this.opts = CT.merge(opts, {
+			width: 100,
+			height: 100,
+			thickness: 10
+		}, this.opts);
+	}
+}, zero.core.Appliance);
+
 zero.core.Appliance.Bulb = CT.Class({
 	CLASSNAME: "zero.core.Appliance.Bulb",
 	setPower: function(p) {
