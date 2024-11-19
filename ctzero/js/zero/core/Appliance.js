@@ -72,8 +72,14 @@ zero.core.Appliance.Bulb = CT.Class({
 
 zero.core.Appliance.Circuit = CT.Class({
 	CLASSNAME: "zero.core.Appliance.Circuit",
+	flip: function(isOn, power) {
+		this.isOn = isOn;
+		this.setPower(power);
+	},
 	setPower: function(p) {
 		this.power = p;
+		if (!this.isOn)
+			p = 0;
 		for (let aname in this.appliances)
 			this.appliances[aname].setPower(p);
 	},
@@ -87,9 +93,11 @@ zero.core.Appliance.Circuit = CT.Class({
 	},
 	init: function(opts) {
 		this.opts = opts = CT.merge(opts, {
-			power: 1
+			power: 1,
+			isOn: true
 		});
 		this.power = opts.power;
+		this.isOn = opts.isOn;
 		this.name = opts.name;
 		this.appliances = {};
 	}
