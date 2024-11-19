@@ -70,7 +70,13 @@ window.testPan = function() {
 	});
 	return r.attach({
 		thing: "Panel",
-		button: [null, null, null, null],
+		button: [{
+			appliance: "bulb0", order: 0xff0000
+		}, {
+			appliance: "bulb0", order: 0x00ff00
+		}, {
+			appliance: "bulb0", order: 0x0000ff
+		}],
 		switch: [{circuit: "light0"}, {circuit: "light1"}],
 		lever: [{circuit: "room"}]
 	});
@@ -79,8 +85,9 @@ window.testPan = function() {
 PAN.Button = PC.button = CT.Class({
 	CLASSNAME: "zero.core.Panel.Button",
 	toggle: function() {
+		const oz = this.opts;
 		this.adjust("position", "z", -1, true);
-		// trigger something...
+		zero.core.current.room[oz.appliance].do(oz.order);
 		setTimeout(() => this.adjust("position", "z", 1, true), 1000);
 	},
 	init: function(opts) {
