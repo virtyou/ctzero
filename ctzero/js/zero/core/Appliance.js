@@ -71,7 +71,7 @@ zero.core.Appliance.Bulb = CT.Class({
 }, zero.core.Appliance);
 
 zero.core.Appliance.Circuit = CT.Class({
-	CLASSNAME: "zero.core.Application.Circuit",
+	CLASSNAME: "zero.core.Appliance.Circuit",
 	setPower: function(p) {
 		this.power = p;
 		for (let aname in this.appliances)
