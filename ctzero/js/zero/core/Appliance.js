@@ -11,6 +11,9 @@ zero.core.Appliance = CT.Class({
 		this.circuit.unplug(this);
 		delete this.circuit;
 	},
+	do: function(order) {
+		this.log("do:", order);
+	},
 	onremove: function() {
 		this.unplug();
 	},
@@ -28,6 +31,15 @@ zero.core.Appliance.Bulb = CT.Class({
 		this.power = p;
 		this.light.setIntensity(p);
 		this.heart.material.opacity = p * 0.4;
+	},
+	setColor: function(c) {
+		if (typeof c == "number")
+			c = zero.core.util.int2rgb(c);
+		this.heart.setColor(c);
+		this.light.setColor(c);
+	},
+	do: function(order) {
+		this.setColor(order);
 	},
 	preassemble: function() {
 		const oz = this.opts;
