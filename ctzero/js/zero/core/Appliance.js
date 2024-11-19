@@ -27,29 +27,32 @@ zero.core.Appliance = CT.Class({
 
 zero.core.Appliance.Gate = CT.Class({
 	CLASSNAME: "zero.core.Appliance.Gate",
+	sliders: {
+		swing: {
+			rotation: {
+				y: -Math.PI / 2
+			},
+			position: {
+				z: 50,
+				x: -50
+			}
+		},
+		slide: {
+			position: {
+				x: -100
+			}
+		},
+		squish: {
+			scale: {
+				x: 0.1
+			},
+			position: {
+				x: -45
+			}
+		}
+	},
 	do: function(order) {
-		const dadj = this.door.adjust;
-		if (order == "swing") {
-			dadj("rotation", "y", Math.PI / 2);
-			dadj("position", "x", -50);
-			dadj("position", "z", 50);
-			setTimeout(function() {
-				dadj("rotation", "y", 0);
-				dadj("position", "x", 0);
-				dadj("position", "z", 0);
-			}, 2000);
-		} else if (order == "slide") {
-			dadj("position", "x", -100);
-			setTimeout(() => dadj("position", "x", 0), 2000);
-		} else if (order == "squish") {
-			dadj("scale", "x", 0.1);
-			dadj("position", "x", -45);
-			setTimeout(function() {
-				dadj("scale", "x", 1);
-				dadj("position", "x", 0);
-			}, 2000);
-		} else
-			this.log("can't do:", order);
+		this.door.backslide(this.sliders[order]);
 	},
 	preassemble: function() {
 		const oz = this.opts;
