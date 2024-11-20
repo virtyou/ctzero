@@ -64,10 +64,10 @@ zero.core.Appliance.Gate = CT.Class({
 	},
 	preassemble: function() {
 		const oz = this.opts;
-		oz.parts.push({
+		oz.parts.push(CT.merge(oz.door, {
 			name: "door",
 			boxGeometry: [oz.width, oz.height, oz.thickness]
-		});
+		}));
 	},
 	init: function(opts) {
 		this.opts = CT.merge(opts, {
@@ -102,31 +102,36 @@ zero.core.Appliance.Elevator = CT.Class({
 			return { appliance: name, order: t };
 		});
 	},
-	preassemble: function() { // TODO: controls
+	preassemble: function() {
 		const oz = this.opts, appy = zero.core.Appliance,
 			w2 = oz.width / 2, h2 = oz.height / 2, d2 = oz.depth / 2;
 		if (oz.walls) {
 			oz.parts = oz.parts.concat([{
 				name: "backwall",
+				texture: oz.walltex,
 				position: [0, 0, -d2],
 				boxGeometry: [oz.width, oz.height, oz.thickness]
 			}, {
 				name: "leftwall",
+				texture: oz.walltex,
 				position: [-w2, 0, 0],
 				boxGeometry: [oz.thickness, oz.height, oz.depth]
 			}, {
 				name: "rightwall",
+				texture: oz.walltex,
 				position: [w2, 0, 0],
 				boxGeometry: [oz.thickness, oz.height, oz.depth]
 			}]);
 		}
 		oz.floor && oz.parts.push({
 			name: "floor",
+			texture: oz.floortex,
 			position: [0, -h2, 0],
 			boxGeometry: [oz.width, oz.thickness, oz.depth]
 		});
 		oz.ceiling && oz.parts.push({
 			name: "ceiling",
+			texture: oz.walltex,
 			position: [0, h2, 0],
 			boxGeometry: [oz.width, oz.thickness, oz.depth]
 		});
@@ -144,7 +149,8 @@ zero.core.Appliance.Elevator = CT.Class({
 			thickness: oz.thickness,
 			circuit: oz.circuit,
 			height: oz.height,
-			width: oz.width
+			width: oz.width,
+			door: oz.door
 		});
 		oz.controls && oz.parts.push({
 			thing: "Panel",

@@ -97,7 +97,8 @@ window.testPan = function() {
 window.testEl = function() {
 	var zc = zero.core;
 	return zc.current.room.attach({
-		subclass: zc.Appliance.Elevator
+		subclass: zc.Appliance.Elevator,
+		template: "templates.one.appliance.elevator"
 	});
 }
 
