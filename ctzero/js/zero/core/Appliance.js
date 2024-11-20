@@ -19,7 +19,6 @@ zero.core.Appliance = CT.Class({
 	},
 	init: function(opts) {
 		this.opts = CT.merge(opts, {
-			basicBound: true,
 			circuit: "default"
 		}, this.opts);
 		this.onReady(() => this.plug(this.opts.circuit));
@@ -77,28 +76,52 @@ zero.core.Appliance.Elevator = CT.Class({
 		var tar = zero.core.current.room[order];
 		this.slide("position", "y", tar.getTop() + this.radii.y);
 	},
-	preassemble: function() { // TODO: doors, controls, bulb
-		const oz = this.opts, w2 = oz.width / 2;
-		oz.parts = oz.parts.concat([{
-			name: "backwall",
-			position: [0, 0, -oz.depth / 2],
-			boxGeometry: [oz.width, oz.height, oz.thickness]
-		}, {
-			name: "leftwall",
-			position: [-w2, 0, 0],
-			boxGeometry: [oz.thickness, oz.height, oz.depth]
-		}, {
-			name: "rightwall",
-			position: [w2, 0, 0],
-			boxGeometry: [oz.thickness, oz.height, oz.depth]
-		}]);
+	preassemble: function() { // TODO: doors, controls
+		const oz = this.opts, w2 = oz.width / 2, h2 = oz.height / 2;
+		if (oz.walls) {
+			oz.parts = oz.parts.concat([{
+				name: "backwall",
+				position: [0, 0, -oz.depth / 2],
+				boxGeometry: [oz.width, oz.height, oz.thickness]
+			}, {
+				name: "leftwall",
+				position: [-w2, 0, 0],
+				boxGeometry: [oz.thickness, oz.height, oz.depth]
+			}, {
+				name: "rightwall",
+				position: [w2, 0, 0],
+				boxGeometry: [oz.thickness, oz.height, oz.depth]
+			}]);
+		}
+		oz.floor && oz.parts.push({
+			name: "floor",
+			position: [0, -h2, 0],
+			boxGeometry: [oz.width, oz.thickness, oz.depth]
+		});
+		oz.ceiling && oz.parts.push({
+			name: "ceiling",
+			position: [0, h2, 0],
+			boxGeometry: [oz.width, oz.thickness, oz.depth]
+		});
+		oz.light && oz.parts.push({
+			name: "bulb",
+			circuit: oz.circuit,
+			position: [0, h2 - (oz.thickness + 2), 0],
+			rotation: [Math.PI, 0, 0],
+			subclass: zero.core.Appliance.Bulb
+		});
 	},
 	init: function(opts) {
 		this.opts = CT.merge(opts, {
-			depth: 80,
-			width: 80,
-			height: 100,
-			thickness: 5
+			depth: 120,
+			width: 120,
+			height: 160,
+			thickness: 4,
+			basicBound: true,
+			ceiling: true,
+			floor: true,
+			walls: true,
+			light: true
 		}, this.opts);
 	}
 }, zero.core.Appliance);
