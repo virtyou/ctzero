@@ -73,8 +73,19 @@ zero.core.Appliance.Gate = CT.Class({
 zero.core.Appliance.Elevator = CT.Class({
 	CLASSNAME: "zero.core.Appliance.Elevator",
 	do: function(order) {
-		var tar = zero.core.current.room[order];
+		const r = zero.core.current.room,
+			tar = (order == "bottom") ? r : r[order];
 		this.slide("position", "y", tar.getTop() + this.radii.y);
+	},
+	setTargets: function() {
+		const oz = this.opts, r = zero.core.current.room;
+		if (r.floor)
+			oz.targets = Object.keys(r.floor);
+		else if (r.obstacle)
+			oz.targets = Object.keys(r.obstacle);
+		else
+			oz.targets = r.objects.map(o => o.name);
+		oz.targets.unshift("bottom");
 	},
 	preassemble: function() { // TODO: doors, controls
 		const oz = this.opts, w2 = oz.width / 2, h2 = oz.height / 2;
@@ -121,8 +132,11 @@ zero.core.Appliance.Elevator = CT.Class({
 			ceiling: true,
 			floor: true,
 			walls: true,
-			light: true
+			light: true,
+			targets: []
 		}, this.opts);
+		if (!this.opts.targets.length)
+			zero.core.util.onRoomReady(this.setTargets);
 	}
 }, zero.core.Appliance);
 
