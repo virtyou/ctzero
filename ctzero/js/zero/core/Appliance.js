@@ -54,6 +54,14 @@ zero.core.Appliance.Gate = CT.Class({
 	do: function(order) {
 		this.door.backslide(this.sliders[order]);
 	},
+	setSliders: function() {
+		const oz = this.opts, sz = this.sliders, w = oz.width, sp = w / 2,
+			swip = sz.swing.position, slip = sz.slide.position, squip = sz.squish.position;
+		slip.x = -w;
+		swip.z = sp;
+		swip.x = -sp;
+		squip.x = w / 20 - sp;
+	},
 	preassemble: function() {
 		const oz = this.opts;
 		oz.parts.push({
@@ -67,6 +75,7 @@ zero.core.Appliance.Gate = CT.Class({
 			height: 100,
 			thickness: 10
 		}, this.opts);
+		this.setSliders();
 	}
 }, zero.core.Appliance);
 
@@ -87,12 +96,13 @@ zero.core.Appliance.Elevator = CT.Class({
 			oz.targets = r.objects.map(o => o.name);
 		oz.targets.unshift("bottom");
 	},
-	preassemble: function() { // TODO: doors, controls
-		const oz = this.opts, w2 = oz.width / 2, h2 = oz.height / 2;
+	preassemble: function() { // TODO: controls
+		const oz = this.opts, appy = zero.core.Appliance,
+			w2 = oz.width / 2, h2 = oz.height / 2, d2 = oz.depth / 2;
 		if (oz.walls) {
 			oz.parts = oz.parts.concat([{
 				name: "backwall",
-				position: [0, 0, -oz.depth / 2],
+				position: [0, 0, -d2],
 				boxGeometry: [oz.width, oz.height, oz.thickness]
 			}, {
 				name: "leftwall",
@@ -116,10 +126,19 @@ zero.core.Appliance.Elevator = CT.Class({
 		});
 		oz.light && oz.parts.push({
 			name: "bulb",
+			subclass: appy.Bulb,
 			circuit: oz.circuit,
-			position: [0, h2 - (oz.thickness + 2), 0],
 			rotation: [Math.PI, 0, 0],
-			subclass: zero.core.Appliance.Bulb
+			position: [0, h2 - (oz.thickness + 2), 0]
+		});
+		oz.gate && oz.parts.push({
+			name: "gate",
+			subclass: appy.Gate,
+			position: [0, 0, d2],
+			thickness: oz.thickness,
+			circuit: oz.circuit,
+			height: oz.height,
+			width: oz.width
 		});
 	},
 	init: function(opts) {
@@ -133,6 +152,7 @@ zero.core.Appliance.Elevator = CT.Class({
 			floor: true,
 			walls: true,
 			light: true,
+			gate: true,
 			targets: []
 		}, this.opts);
 		if (!this.opts.targets.length)
