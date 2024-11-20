@@ -96,6 +96,12 @@ zero.core.Appliance.Elevator = CT.Class({
 			oz.targets = r.objects.map(o => o.name);
 		oz.targets.unshift("bottom");
 	},
+	getButtons: function() {
+		const name = this.name;
+		return this.opts.targets.map(function(t) {
+			return { appliance: name, order: t };
+		});
+	},
 	preassemble: function() { // TODO: controls
 		const oz = this.opts, appy = zero.core.Appliance,
 			w2 = oz.width / 2, h2 = oz.height / 2, d2 = oz.depth / 2;
@@ -140,6 +146,12 @@ zero.core.Appliance.Elevator = CT.Class({
 			height: oz.height,
 			width: oz.width
 		});
+		oz.controls && oz.parts.push({
+			thing: "Panel",
+			name: "controls",
+			button: this.getButtons(),
+			position: [0, 0, oz.thickness - d2]
+		});
 	},
 	init: function(opts) {
 		this.opts = CT.merge(opts, {
@@ -148,6 +160,7 @@ zero.core.Appliance.Elevator = CT.Class({
 			height: 160,
 			thickness: 4,
 			basicBound: true,
+			controls: true,
 			ceiling: true,
 			floor: true,
 			walls: true,
