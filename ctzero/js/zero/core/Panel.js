@@ -54,17 +54,15 @@ window.testPan = function() {
 	const zc = zero.core, r = zc.current.room,
 		appy = zc.Appliance, rcirc = appy.circuit("room");
 	appy.circuit("default").plug(rcirc);
-	rcirc.plug(appy.circuit("light0"));
-	rcirc.plug(appy.circuit("light1"));
 	r.attach({
 		name: "bulb0",
-		circuit: "light0",
+		circuit: "room",
 		subclass: appy.Bulb,
 		position: [-20, 0, 0]
 	});
 	r.attach({
 		name: "bulb1",
-		circuit: "light1",
+		circuit: "room",
 		subclass: appy.Bulb,
 		position: [20, 0, 0]
 	});
@@ -89,7 +87,7 @@ window.testPan = function() {
 		}, {
 			appliance: "gate0", order: "squish"
 		}],
-		switch: [{circuit: "light0"}, {circuit: "light1"}],
+		switch: [{circuit: "bulb0"}, {circuit: "bulb1"}],
 		lever: [{circuit: "room"}]
 	});
 };

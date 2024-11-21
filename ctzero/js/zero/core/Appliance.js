@@ -17,11 +17,19 @@ zero.core.Appliance = CT.Class({
 	onremove: function() {
 		this.unplug();
 	},
+	initCircuit: function() {
+		const oz = this.opts, appy = zero.core.Appliance;
+		if (oz.ownCircuit) {
+			appy.circuit(oz.circuit).plug(appy.circuit(this.name));
+			oz.circuit = this.name;
+		}
+		this.plug(oz.circuit);
+	},
 	init: function(opts) {
 		this.opts = CT.merge(opts, {
 			circuit: "default"
 		}, this.opts);
-		this.onReady(() => this.plug(this.opts.circuit));
+		this.onReady(this.initCircuit);
 	}
 }, zero.core.Thing);
 
@@ -231,7 +239,8 @@ zero.core.Appliance.Bulb = CT.Class({
 	},
 	init: function(opts) {
 		this.opts = CT.merge(opts, {
-			color: 0xffffaf
+			color: 0xffffaf,
+			ownCircuit: true
 		}, this.opts);
 	}
 }, zero.core.Appliance);
