@@ -337,6 +337,10 @@ zero.core.Thing = CT.Class({
 		mat.opacity = 0.6;
 		mat.transparent = true;
 	},
+	sfx: function(auds) {
+		var zc = zero.core;
+		zc.audio.sfx(CT.data.choice(auds), zc.util.close2u(this));
+	},
 	playSong: function(song, onPlaySong) {
 		if (!this._audio) {
 			this._audio = CT.dom.audio();
