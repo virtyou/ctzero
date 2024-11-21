@@ -512,6 +512,20 @@ zero.core.Room = CT.Class({
 			}));
 		});
 	},
+	buildElectrical: function() {
+		var oz = this.opts, pz = oz.parts,
+			el = oz.electrical, appy = zero.core.Appliance;
+		let app, p;
+		if (!el) return;
+		el.circuits && appy.initCircuits(el.circuits);
+		if (!el.appliances) return;
+		for (app of el.appliances) {
+			p = CT.merge(app);
+			if (p.appliance)
+				p.subclass = appy[p.appliance];
+			pz.push(p);
+		}
+	},
 	preassemble: function() {
 		var opts = this.opts, os = opts.shell, oso,
 			d2g = zero.core.util.d2g;
@@ -561,6 +575,7 @@ zero.core.Room = CT.Class({
 		});
 		this._structural.forEach(this.buildStruct);
 		["flora", "fauna"].forEach(this.buildNatural);
+		this.buildElectrical();
 	},
 	components: function() {
 		var o, cz = [{

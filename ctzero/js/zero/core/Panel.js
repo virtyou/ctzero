@@ -51,9 +51,8 @@ var PAN = zero.core.Panel, PC = {}, PW = {
 }, P = Math.PI, P2 = P / 2, P4 = P / 4;
 
 window.testPan = function() {
-	const zc = zero.core, r = zc.current.room,
-		appy = zc.Appliance, rcirc = appy.circuit("room");
-	appy.circuit("default").plug(rcirc);
+	const zc = zero.core, r = zc.current.room, appy = zc.Appliance;
+	appy.circuit("default").plug(appy.circuit("room"));
 	r.attach({
 		name: "bulb0",
 		circuit: "room",
