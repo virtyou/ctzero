@@ -60,6 +60,7 @@ zero.core.Appliance.Gate = CT.Class({
 		}
 	},
 	do: function(order) {
+		this.sfx(zero.core.Appliance.audio[order]);
 		this.door.backslide(this.sliders[order]);
 	},
 	setSliders: function() {
@@ -92,7 +93,8 @@ zero.core.Appliance.Elevator = CT.Class({
 	do: function(order) {
 		const r = zero.core.current.room,
 			tar = (order == "bottom") ? r : r[order];
-		this.slide("position", "y", tar.getTop() + this.radii.y);
+		this.sfx(zero.core.Appliance.audio.elevator);
+		this.slide("position", "y", tar.getTop() + this.radii.y, 3000);
 	},
 	setTargets: function() {
 		const oz = this.opts, r = zero.core.current.room;

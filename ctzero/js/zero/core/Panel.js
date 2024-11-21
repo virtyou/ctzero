@@ -102,10 +102,11 @@ window.testEl = function() {
 PAN.Button = PC.button = CT.Class({
 	CLASSNAME: "zero.core.Panel.Button",
 	toggle: function() {
-		const oz = this.opts;
+		const oz = this.opts, zc = zero.core;
+		this.sfx(zc.Appliance.audio.button);
 		this.adjust("position", "z", -1, true);
+		oz.panel.power && zc.current.room[oz.appliance].do(oz.order);
 		setTimeout(() => this.adjust("position", "z", 1, true), 1000);
-		oz.panel.power && zero.core.current.room[oz.appliance].do(oz.order);
 	},
 	init: function(opts) {
 		this.opts = CT.merge(opts, {
@@ -118,10 +119,11 @@ PAN.Button = PC.button = CT.Class({
 PAN.Flipper = CT.Class({
 	CLASSNAME: "zero.core.Panel.Flipper",
 	toggle: function() {
+		const oz = this.opts, appy = zero.core.Appliance;
 		this._on = !this._on;
+		this.sfx(appy.audio[this.vlower]);
 		this.adjust("rotation", "x", this._on ? -P4 : P4);
-		zero.core.Appliance.circuit(this.opts.circuit).flip(this._on,
-			this.opts.panel.power);
+		appy.circuit(oz.circuit).flip(this._on, oz.panel.power);
 	},
 	init: function(opts) {
 		this.opts = CT.merge(opts, {
