@@ -235,7 +235,7 @@ zero.core.Appliance.Bulb = CT.Class({
 			kind: "lighting",
 			variety: "point",
 			color: oz.color
-		}])
+		}]);
 	},
 	init: function(opts) {
 		this.opts = CT.merge(opts, {
@@ -284,4 +284,17 @@ zero.core.Appliance.circuit = function(name) {
 	if (!circs[name])
 		circs[name] = new zero.core.Appliance.Circuit({ name: name });
 	return circs[name];
+};
+
+zero.core.Appliance.initCircuits = function(circs) {
+	const appy = zero.core.Appliance;
+	let c, pcirc, sub, subs;
+	for (c in circs) {
+		subs = circs[c];
+		pcirc = appy.circuit(c);
+		for (sub in subs) {
+			pcirc.plug(appy.circuit(sub));
+			appy.initCircuits(subs[sub]);
+		}
+	}
 };
