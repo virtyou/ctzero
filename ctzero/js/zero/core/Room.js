@@ -8,6 +8,7 @@ zero.core.Room = CT.Class({
 	_structural: ["obstacle", "floor", "wall", "ramp", "boulder", "stala"],
 	_surfaces: ["obstacle", "floor", "ramp", "boulder", "stala", "elevator"],
 	_bumpers: ["wall", "obstacle", "boulder", "stala", "gate"],
+	_wallers: ["ramp", "elevator"],
 	_interactives: {
 		brittle: ["boulder", "stala"],
 		frozen: ["boulder", "stala"],
@@ -217,14 +218,21 @@ zero.core.Room = CT.Class({
 					return obst;
 			}
 		}
-		if (this.ramp) {
-			for (o in this.ramp) {
-				obst = this[o];
-				if (obst.wall) {
-					for (k in obst.wall) {
-						wobst = obst[k];
-						if (wobst.isReady() && wobst.overlaps(pos, radii, checkY))
-							return wobst;
+		for (k of this._wallers) {
+			if (this[k]) {
+				for (o in this[k]) {
+					obst = this[o];
+					if (obst.wall) {
+						for (k in obst.wall) {
+							wobst = obst[k];
+							if (wobst.isReady() && wobst.overlaps(pos, radii, checkY))
+								return wobst;
+						}
+					}
+					if (obst.gate) {
+						obst = obst.gate;
+						if (obst.isReady() && obst.overlaps(pos, radii, checkY))
+							return obst;
 					}
 				}
 			}
