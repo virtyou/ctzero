@@ -399,7 +399,7 @@ zero.core.Thing = CT.Class({
 		};
 		zero.core.util.ontick(this._.vsplayer);
 	},
-	slide: function(kind, dim, val, dur) {
+	slide: function(kind, dim, val, dur, cb) {
 		var zcu = zero.core.util, adjust = this.adjust, pk = this.placer[kind],
 			fromVal = pk[dim], diff = val - fromVal, goingUp = diff > 0;
 		if (!diff) return this.log("i already slid", kind, dim, "to", val);
@@ -412,7 +412,10 @@ zero.core.Thing = CT.Class({
 				return true;
 		}, stepper = function(dts) {
 			adjust(kind, dim, dts * step, true);
-			overval() && zcu.untick(stepper);
+			if (overval()) {
+				zcu.untick(stepper);
+				cb && cb();
+			}
 		};
 		zcu.ontick(stepper);
 	},
@@ -426,11 +429,12 @@ zero.core.Thing = CT.Class({
 		}
 		cb && setTimeout(cb, dur);
 	},
-	backslide: function(tars, cb, dur, wait, useCur) {
-		var kind, dims, dim, kf, bk, bax = {},
-			frommer = this[useCur ? "placer" : "opts"],
-			bslider = () => this.slides(bax, cb, dur),
-			bwaiter = () => setTimeout(bslider, wait || 2000);
+	backslide: function(tars, cb, dur, wait, useCur) { // cb called after each slide
+		var kind, dims, dim, kf, bk, bax = {}, bwaiter = function() {
+			cb && cb();
+			setTimeout(bslider, wait || 5000);
+		}, frommer = this[useCur ? "placer" : "opts"],
+			bslider = () => this.slides(bax, cb, dur);
 		for (kind in tars) {
 			dims = tars[kind];
 			kf = frommer[kind];
