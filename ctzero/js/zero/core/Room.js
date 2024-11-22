@@ -6,7 +6,7 @@ zero.core.Room = CT.Class({
 	},
 	_tickers: [],
 	_structural: ["obstacle", "floor", "wall", "ramp", "boulder", "stala"],
-	_surfaces: ["obstacle", "floor", "ramp", "boulder", "stala"],
+	_surfaces: ["obstacle", "floor", "ramp", "boulder", "stala", "elevator"],
 	_bumpers: ["wall", "obstacle", "boulder", "stala"],
 	_interactives: {
 		brittle: ["boulder", "stala"],
@@ -520,7 +520,9 @@ zero.core.Room = CT.Class({
 		el.circuits && appy.initCircuits(el.circuits);
 		if (!el.appliances) return;
 		for (app of el.appliances) {
-			p = CT.merge(app);
+			p = CT.merge(app, {
+				kind: (app.appliance || app.thing).toLowerCase()
+			});
 			if (p.appliance)
 				p.subclass = appy[p.appliance];
 			pz.push(p);
