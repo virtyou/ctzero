@@ -112,6 +112,10 @@ zero.core.Appliance.Elevator = CT.Class({
 			return { appliance: name, order: t };
 		});
 	},
+	getTop: function() {
+		const oz = this.opts;
+		return this.position().y - (oz.height - oz.thickness) / 2;
+	},
 	preassemble: function() {
 		const oz = this.opts, appy = zero.core.Appliance,
 			w2 = oz.width / 2, h2 = oz.height / 2, d2 = oz.depth / 2;
@@ -133,7 +137,7 @@ zero.core.Appliance.Elevator = CT.Class({
 				boxGeometry: [oz.thickness, oz.height, oz.depth]
 			}]);
 		}
-		oz.floor && oz.parts.push({
+		oz.parts.push({
 			name: "floor",
 			texture: oz.floortex,
 			position: [0, -h2, 0],
@@ -178,7 +182,6 @@ zero.core.Appliance.Elevator = CT.Class({
 			basicBound: true,
 			controls: true,
 			ceiling: true,
-			floor: true,
 			walls: true,
 			light: true,
 			gate: true,
