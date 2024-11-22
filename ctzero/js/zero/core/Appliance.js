@@ -90,9 +90,14 @@ zero.core.Appliance.Gate = CT.Class({
 
 zero.core.Appliance.Elevator = CT.Class({
 	CLASSNAME: "zero.core.Appliance.Elevator",
+	_unmove: function() {
+		this._moving = false;
+	},
 	do: function(order) {
 		const r = zero.core.current.room,
 			tar = (order == "bottom") ? r : r[order];
+		this._moving = true;
+		setTimeout(this._unmove, 3500);
 		this.sfx(zero.core.Appliance.audio.elevator);
 		this.slide("position", "y", tar.getTop() + this.radii.y, 3000);
 	},
@@ -115,6 +120,9 @@ zero.core.Appliance.Elevator = CT.Class({
 	getTop: function() {
 		const oz = this.opts;
 		return this.position().y - (oz.height - oz.thickness) / 2;
+	},
+	shifting: function() {
+		return this._moving;
 	},
 	preassemble: function() {
 		const oz = this.opts, appy = zero.core.Appliance,
