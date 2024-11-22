@@ -132,16 +132,19 @@ zero.core.Appliance.Elevator = CT.Class({
 			w2 = oz.width / 2, h2 = oz.height / 2, d2 = oz.depth / 2;
 		if (oz.walls) {
 			oz.parts = oz.parts.concat([{
+				kind: "wall",
 				name: "backwall",
 				texture: oz.walltex,
 				position: [0, 0, -d2],
 				boxGeometry: [oz.width, oz.height, oz.thickness]
 			}, {
+				kind: "wall",
 				name: "leftwall",
 				texture: oz.walltex,
 				position: [-w2, 0, 0],
 				boxGeometry: [oz.thickness, oz.height, oz.depth]
 			}, {
+				kind: "wall",
 				name: "rightwall",
 				texture: oz.walltex,
 				position: [w2, 0, 0],
