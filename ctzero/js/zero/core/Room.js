@@ -524,9 +524,7 @@ zero.core.Room = CT.Class({
 		var oz = this.opts, pz = oz.parts,
 			el = oz.electrical, appy = zero.core.Appliance;
 		let app, p;
-		if (!el) return;
-		el.circuits && appy.initCircuits(el.circuits);
-		if (!el.appliances) return;
+		appy.initCircuits(el.circuits);
 		for (app of el.appliances) {
 			p = CT.merge(app, {
 				kind: (app.appliance || app.thing).toLowerCase()
@@ -609,6 +607,10 @@ zero.core.Room = CT.Class({
 			objects: [], // regular Things
 			cameras: [],
 			automatons: [],
+			electrical: {
+				circuits: { default: {} },
+				appliances: []
+			},
 			skyscale: 10000,
 			shadows: false
 		});
