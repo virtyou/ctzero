@@ -3,7 +3,7 @@ zero.core.Panel = CT.Class({
 	kinds: ["button", "switch", "lever"],
 	preassemble: function() {
 		const oz = this.opts, pz = oz.parts, pad = oz.pad, zsurface = oz.depth / 2;
-		let i, kind, items, xstep, x, y, kwidth, width, height, rows = 0;
+		let i, kind, items, xstep, x, y, p, kwidth, width, height, rows = 0;
 		for (kind of this.kinds)
 			if (oz[kind].length)
 				rows += 1;
@@ -18,19 +18,27 @@ zero.core.Panel = CT.Class({
 				width = kwidth;
 			x = (xstep - kwidth) / 2;
 			for (i = 0; i < items.length; i++) {
-				pz.push(CT.merge(items[i], {
+				p = CT.merge(items[i], {
 					subclass: PC[kind],
 					name: kind + i,
 					kind: kind,
 					panel: this,
 					position: [x, y, zsurface]
-				}));
+				});
+				if (kind == "button")
+					p.color = oz.buttonColor;
+				else if (kind == "lever")
+					p.color = oz.leverHandleColor;
+				pz.push(p);
 				x += xstep;
 			}
 			y -= oz.row;
 		}
 		pz.push({
 			name: "base",
+			material: {
+				color: oz.baseColor
+			},
 			boxGeometry: [width + pad, height + pad, oz.depth]
 		});
 	},
@@ -41,7 +49,10 @@ zero.core.Panel = CT.Class({
 			lever: [],
 			depth: 4,
 			row: 4,
-			pad: 4
+			pad: 4,
+			baseColor: 0x808080,
+			buttonColor: 0xff0000,
+			leverHandleColor: 0xff0000
 		}, this.opts);
 	}
 }, zero.core.Appliance);
@@ -111,7 +122,10 @@ PAN.Button = PC.button = CT.Class({
 	init: function(opts) {
 		this.opts = CT.merge(opts, {
 			cylinderGeometry: true,
-			rotation: [P2, 0, 0]
+			rotation: [P2, 0, 0],
+			material: {
+				color: opts.color
+			}
 		}, this.opts);
 	}
 }, zero.core.Thing);
@@ -145,7 +159,8 @@ PAN.Switch = PC.switch = CT.Class({
 PAN.Lever = PC.lever = CT.Class({
 	CLASSNAME: "zero.core.Panel.Lever",
 	preassemble: function() {
-		this.opts.parts = this.opts.parts.concat([{
+		const oz = this.opts;
+		oz.parts = oz.parts.concat([{
 			boxGeometry: [1, 2, 16],
 			position: [-2, 0, 0]
 		}, {
@@ -153,7 +168,10 @@ PAN.Lever = PC.lever = CT.Class({
 			position: [2, 0, 0]
 		}, {
 			boxGeometry: [6, 2, 1],
-			position: [0, 0, 8]
+			position: [0, 0, 8],
+			material: {
+				color: oz.color
+			}
 		}]);
 	}
 }, PAN.Flipper);
