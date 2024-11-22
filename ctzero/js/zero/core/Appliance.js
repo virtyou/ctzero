@@ -61,7 +61,7 @@ zero.core.Appliance.Gate = CT.Class({
 	},
 	do: function(order) {
 		this.sfx(zero.core.Appliance.audio[order]);
-		this.door.backslide(this.sliders[order]);
+		this.door.backslide(this.sliders[order], this.basicBound);
 	},
 	setSliders: function() {
 		const oz = this.opts, sz = this.sliders, w = oz.width, sp = w / 2,
@@ -91,15 +91,14 @@ zero.core.Appliance.Gate = CT.Class({
 zero.core.Appliance.Elevator = CT.Class({
 	CLASSNAME: "zero.core.Appliance.Elevator",
 	_unmove: function() {
-		this._moving = false;
+		this._moving = "last";
 	},
 	do: function(order) {
 		const r = zero.core.current.room,
 			tar = (order == "bottom") ? r : r[order];
 		this._moving = true;
-		setTimeout(this._unmove, 3500);
 		this.sfx(zero.core.Appliance.audio.elevator);
-		this.slide("position", "y", tar.getTop() + this.radii.y, 3000);
+		this.slide("position", "y", tar.getTop() + this.radii.y, 3000, this._unmove);
 	},
 	setTargets: function() {
 		const oz = this.opts, r = zero.core.current.room;
@@ -122,6 +121,10 @@ zero.core.Appliance.Elevator = CT.Class({
 		return this.position().y - (oz.height - oz.thickness) / 2;
 	},
 	shifting: function() {
+		if (this._moving == "last") { // too jank?
+			this._moving = false;
+			return true;
+		}
 		return this._moving;
 	},
 	preassemble: function() {
