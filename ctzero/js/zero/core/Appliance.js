@@ -297,7 +297,7 @@ zero.core.Appliance.Circuit = CT.Class({
 	}
 });
 
-const circs = {};
+const circs = zero.core.Appliance.circuitry = {};
 
 zero.core.Appliance.circuit = function(name) {
 	if (!circs[name])
