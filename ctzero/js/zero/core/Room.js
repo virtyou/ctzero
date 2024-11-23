@@ -195,13 +195,19 @@ zero.core.Room = CT.Class({
 				return person;
 		}
 	},
-	getPanel: function(overlapper) {
-		var p, pan, zc = zero.core, touching = zc.util.touching;
+	getKind: function(kind, overlapper) {
+		var name, zc = zero.core, touching = zc.util.touching;
 		overlapper = overlapper || zc.current.person.body;
-		if (!this.panel) return;
-		for (p in this.panel)
-			if (touching(overlapper, this[p], 50))
-				return this[p];
+		if (!this[kind]) return;
+		for (name in this[kind])
+			if (touching(overlapper, this[name], 50))
+				return this[name];
+	},
+	getPanel: function(overlapper) {
+		return this.getKind("panel", overlapper);
+	},
+	getGate: function(overlapper) {
+		return this.getKind("gate", overlapper);
 	},
 	getInteractive: function(overlapper, feature) {
 		var item, touching = zero.core.util.touching;
