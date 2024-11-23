@@ -195,6 +195,14 @@ zero.core.Room = CT.Class({
 				return person;
 		}
 	},
+	getPanel: function(overlapper) {
+		var p, pan, zc = zero.core, touching = zc.util.touching;
+		overlapper = overlapper || zc.current.person.body;
+		if (!this.panel) return;
+		for (p in this.panel)
+			if (touching(overlapper, this[p], 50))
+				return this[p];
+	},
 	getInteractive: function(overlapper, feature) {
 		var item, touching = zero.core.util.touching;
 		for (item of this.getFeaturing(feature))

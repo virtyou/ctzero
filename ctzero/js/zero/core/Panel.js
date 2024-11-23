@@ -42,6 +42,16 @@ zero.core.Panel = CT.Class({
 			boxGeometry: [width + pad, height + pad, oz.depth]
 		});
 	},
+	toggle: function() {
+		const ops = this.options();
+		if (ops.length == 1)
+			return this[ops[0]].toggle();
+		return CT.modal.choice({
+			prompt: "what do you toggle?",
+			data: ops,
+			cb: op => this[op].toggle()
+		});
+	},
 	options: function() {
 		let ops = [], k;
 		for (k of this.kinds)
