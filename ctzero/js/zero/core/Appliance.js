@@ -21,7 +21,7 @@ zero.core.Appliance = CT.Class({
 		const oz = this.opts, appy = zero.core.Appliance;
 		if (oz.ownCircuit) {
 			appy.circuit(oz.circuit).plug(appy.circuit(this.name));
-			oz.circuit = this.name;
+			return this.plug(this.name);
 		}
 		this.plug(oz.circuit);
 	},

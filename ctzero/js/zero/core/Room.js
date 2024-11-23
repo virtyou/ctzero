@@ -5,6 +5,7 @@ zero.core.Room = CT.Class({
 		objects: 0
 	},
 	_tickers: [],
+	_electrical: ["panel", "bulb", "gate", "elevator"],
 	_structural: ["obstacle", "floor", "wall", "ramp", "boulder", "stala"],
 	_surfaces: ["obstacle", "floor", "ramp", "boulder", "stala", "elevator"],
 	_bumpers: ["wall", "obstacle", "boulder", "stala", "gate"],
@@ -520,19 +521,30 @@ zero.core.Room = CT.Class({
 			}));
 		});
 	},
+	buildAppliance: function(cat) {
+		var oz = this.opts, base = oz.electrical.appliances[cat], extra = {
+			circuit: base.circuit || "default"
+		};
+		if (!base || !base.parts || !base.parts.length)
+			return;
+		if (cat == "panel")
+			extra.thing = "Panel";
+		else
+			extra.subclass = zero.core.Appliance[CT.parse.capitalize(cat)];
+		base.parts.forEach(function(app, i) {
+			oz.parts.push(CT.merge(app, {
+				index: i,
+				kind: cat,
+				name: cat + i
+			}, extra));
+		});
+	},
 	buildElectrical: function() {
 		var oz = this.opts, pz = oz.parts,
 			el = oz.electrical, appy = zero.core.Appliance;
 		let app, p;
 		appy.initCircuits(el.circuits);
-		for (app of el.appliances) {
-			p = CT.merge(app, {
-				kind: (app.appliance || app.thing).toLowerCase()
-			});
-			if (p.appliance)
-				p.subclass = appy[p.appliance];
-			pz.push(p);
-		}
+		this._electrical.forEach(this.buildAppliance);
 	},
 	preassemble: function() {
 		var opts = this.opts, os = opts.shell, oso,
@@ -609,7 +621,7 @@ zero.core.Room = CT.Class({
 			automatons: [],
 			electrical: {
 				circuits: { default: {} },
-				appliances: []
+				appliances: {}
 			},
 			skyscale: 10000,
 			shadows: false
