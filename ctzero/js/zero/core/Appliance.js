@@ -63,6 +63,9 @@ zero.core.Appliance.Gate = CT.Class({
 		this.sfx(zero.core.Appliance.audio[order]);
 		this.door.backslide(this.sliders[order], this.basicBound, cb);
 	},
+	open: function() {
+		this.do(this.opts.opener);
+	},
 	setSliders: function() {
 		const oz = this.opts, sz = this.sliders, w = oz.width, sp = w / 2,
 			swip = sz.swing.position, slip = sz.slide.position, squip = sz.squish.position;
@@ -82,7 +85,8 @@ zero.core.Appliance.Gate = CT.Class({
 		this.opts = CT.merge(opts, {
 			width: 100,
 			height: 100,
-			thickness: 10
+			thickness: 10,
+			opener: "swing"
 		}, this.opts);
 		this.setSliders();
 	}
