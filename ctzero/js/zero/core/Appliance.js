@@ -112,8 +112,9 @@ zero.core.Appliance.Elevator = CT.Class({
 		oz.targets.unshift("bottom");
 	},
 	getButtons: function() {
-		const name = this.name;
-		return this.opts.targets.map(function(t) {
+		const name = this.name, oz = this.opts;
+		oz.targets.length || this.setTargets();
+		return oz.targets.map(function(t) {
 			return { appliance: name, order: t };
 		});
 	},
@@ -197,8 +198,6 @@ zero.core.Appliance.Elevator = CT.Class({
 			light: true,
 			targets: []
 		}, this.opts);
-		if (!this.opts.targets.length)
-			zero.core.util.onRoomReady(this.setTargets);
 	}
 }, zero.core.Appliance);
 
