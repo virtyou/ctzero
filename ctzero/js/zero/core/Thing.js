@@ -429,12 +429,13 @@ zero.core.Thing = CT.Class({
 		}
 		cb && setTimeout(cb, dur);
 	},
-	backslide: function(tars, cb, dur, wait, useCur) { // cb called after each slide
+	backslide: function(tars, onboth, onfirst, dur, wait, useCur) {
 		var kind, dims, dim, kf, bk, bax = {}, bwaiter = function() {
-			cb && cb();
+			onboth && onboth();
+			onfirst && onfirst();
 			setTimeout(bslider, wait || 5000);
 		}, frommer = this[useCur ? "placer" : "opts"],
-			bslider = () => this.slides(bax, cb, dur);
+			bslider = () => this.slides(bax, onboth, dur);
 		for (kind in tars) {
 			dims = tars[kind];
 			kf = frommer[kind];
