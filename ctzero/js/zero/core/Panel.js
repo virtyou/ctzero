@@ -151,15 +151,15 @@ PAN.Flipper = CT.Class({
 	CLASSNAME: "zero.core.Panel.Flipper",
 	toggle: function() {
 		const oz = this.opts, appy = zero.core.Appliance;
-		this._on = !this._on;
+		this._off = !this._off;
 		this.sfx(appy.audio[this.vlower]);
-		this.adjust("rotation", "x", this._on ? -P4 : P4);
-		appy.circuit(oz.circuit).flip(this._on, oz.panel.power);
+		this.adjust("rotation", "x", this._off ? P4 : -P4);
+		appy.circuit(oz.circuit).flip(!this._off, oz.panel.power);
 	},
 	init: function(opts) {
 		this.opts = CT.merge(opts, {
 			circuit: "default",
-			rotation: [P4, 0, 0]
+			rotation: [-P4, 0, 0]
 		}, this.opts);
 	}
 }, zero.core.Thing);
