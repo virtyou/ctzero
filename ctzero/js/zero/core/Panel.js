@@ -42,6 +42,13 @@ zero.core.Panel = CT.Class({
 			boxGeometry: [width + pad, height + pad, oz.depth]
 		});
 	},
+	options: function() {
+		let ops = [], k;
+		for (k of this.kinds)
+			if (this[k])
+				ops = ops.concat(Object.keys(this[k]));
+		return ops;
+	},
 	init: function(opts) {
 		this.opts = CT.merge(opts, {
 			button: [],
