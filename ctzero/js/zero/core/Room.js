@@ -535,30 +535,38 @@ zero.core.Room = CT.Class({
 			}));
 		});
 	},
-	buildAppliance: function(cat) {
-		var oz = this.opts, base = oz.electrical.appliances[cat], extra = {
+	elecBase: function(cat) {
+		var appz = this.opts.electrical.appliances;
+		if (!appz[cat])
+			appz[cat] = { parts: [] };
+		return appz[cat];
+	},
+	elecPart: function(cat, app, i) {
+		var base = this.elecBase(cat), pbase = {
+			kind: cat,
 			circuit: base.circuit || "default"
 		};
-		if (!base || !base.parts || !base.parts.length)
-			return;
 		if (cat == "panel")
-			extra.thing = "Panel";
+			pbase.thing = "Panel";
 		else
-			extra.subclass = zero.core.Appliance[CT.parse.capitalize(cat)];
-		base.parts.forEach(function(app, i) {
-			oz.parts.push(CT.merge(app, {
-				index: i,
-				kind: cat,
-				name: cat + i
-			}, extra));
-		});
+			pbase.subclass = zero.core.Appliance[CT.parse.capitalize(cat)];
+		if (typeof i != "number")
+			i = base.parts.length;
+		return CT.merge(app, {
+			index: i,
+			name: cat + i
+		}, pbase);
+	},
+	buildAppliances: function(cat) {
+		var oz = this.opts;
+		oz.parts = oz.parts.concat(this.elecBase(cat).parts.map((a, i) => this.elecPart(cat, a, i)));
 	},
 	buildElectrical: function() {
 		var oz = this.opts, pz = oz.parts,
 			el = oz.electrical, appy = zero.core.Appliance;
 		let app, p;
 		appy.initCircuits(el.circuits);
-		this._electrical.forEach(this.buildAppliance);
+		this._electrical.forEach(this.buildAppliances);
 	},
 	preassemble: function() {
 		var opts = this.opts, os = opts.shell, oso,
