@@ -209,8 +209,11 @@ zero.core.Appliance.Bulb = CT.Class({
 	CLASSNAME: "zero.core.Appliance.Bulb",
 	setPower: function(p) {
 		this.power = p;
-		this.light.setIntensity(p);
-		this.heart.material.opacity = p * 0.4;
+		this.setIntensity();
+	},
+	setIntensity: function() {
+		this.heart.material.opacity = this.power * 0.5;
+		this.light.setIntensity(this.power * this.opts.intensity);
 	},
 	setColor: function(c) {
 		if (typeof c == "number")
@@ -227,8 +230,8 @@ zero.core.Appliance.Bulb = CT.Class({
 			name: "glass",
 			sphereGeometry: 2,
 			material: {
-				opacity: 0.2,
-				alphaTest: 0.2,
+				opacity: 0.3,
+				alphaTest: 0.3,
 				shininess: 100,
 				transparent: true,
 				side: THREE.BackSide
@@ -237,8 +240,8 @@ zero.core.Appliance.Bulb = CT.Class({
 			name: "heart",
 			sphereGeometry: 1,
 			material: {
-				opacity: 0.4,
-				alphaTest: 0.4,
+				opacity: 0.5,
+				alphaTest: 0.5,
 				color: oz.color,
 				transparent: true,
 				side: THREE.BackSide
@@ -257,6 +260,7 @@ zero.core.Appliance.Bulb = CT.Class({
 	},
 	init: function(opts) {
 		this.opts = CT.merge(opts, {
+			intensity: 1,
 			color: 0xffffaf,
 			ownCircuit: true
 		}, this.opts);
