@@ -157,6 +157,9 @@ zero.core.util = {
 			b: parseInt(result[3], 16) / 255
 		} : null;
 	},
+	hex2int: function(c) {
+		return parseInt(c.slice(1), 16);
+	},
 	int2rgb: function(c) {
 		var zcu = zero.core.util,
 			h = zcu.componentToHex(c);
