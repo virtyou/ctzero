@@ -119,18 +119,18 @@ zero.core.Shelf = CT.Class({
 		if (!compartment || compartment._opened) return this.log("nothing to open!");
 		compartment._opened = true;
 		if (compartment.opts.isDrawer)
-			compartment.adjust("position", "z", this.opts.depth, true);
+			compartment.slide("position", "z", this.opts.depth);
 		else // lid
-			compartment.adjust("rotation", "x", -Math.PI / 2);
+			compartment.slide("rotation", "x", -Math.PI / 2);
 	},
 	close: function(compartment) {
 		compartment = this.getCompartment(compartment);
 		if (!compartment || !compartment._opened) return this.log("nothing to close!");
 		compartment._opened = false;
 		if (compartment.opts.isDrawer)
-			compartment.adjust("position", "z", -this.opts.depth, true);
+			compartment.slide("position", "z", 0);
 		else // lid
-			compartment.adjust("rotation", "x", 0);
+			compartment.slide("rotation", "x", 0);
 	},
 	getCompartment: function(compartment) {
 		return this[compartment] || this.lid || (this.drawers[0] && this[this.drawers[0]]);

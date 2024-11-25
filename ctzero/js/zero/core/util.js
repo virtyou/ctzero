@@ -276,7 +276,7 @@ zero.core.util = {
 		zero.core.util.mult(vec, -1);
 	},
 	d2g: function(dz) {
-		return new THREE.CubeGeometry(dz[0], dz[1], dz[2], dz[3], dz[4]); // ugh
+		return new THREE.BoxGeometry(dz[0], dz[1], dz[2], dz[3], dz[4]); // ugh
 	},
 	vec: function(xyz, objStyle) {
 		CT.log("creating vec!");

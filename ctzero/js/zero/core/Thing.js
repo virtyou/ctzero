@@ -337,6 +337,10 @@ zero.core.Thing = CT.Class({
 		mat.opacity = 0.6;
 		mat.transparent = true;
 	},
+	sfx: function(auds) {
+		var zc = zero.core;
+		zc.audio.sfx(CT.data.choice(auds), zc.util.close2u(this));
+	},
 	playSong: function(song, onPlaySong) {
 		if (!this._audio) {
 			this._audio = CT.dom.audio();
@@ -394,6 +398,52 @@ zero.core.Thing = CT.Class({
 			mat.map.offset.y = (vs.height - vs.fheight * (1 + Math.floor(t / max))) / vs.height;
 		};
 		zero.core.util.ontick(this._.vsplayer);
+	},
+	slide: function(kind, dim, val, dur, cb) {
+		var zcu = zero.core.util, adjust = this.adjust, pk = this.placer[kind],
+			fromVal = pk[dim], diff = val - fromVal, goingUp = diff > 0;
+		if (!diff) return this.log("i already slid", kind, dim, "to", val);
+		dur = dur || 1000;
+		var step = diff * 1000 / dur, overval = function() {
+			if (goingUp) {
+				if (pk[dim] >= val)
+					return true;
+			} else if (pk[dim] <= val)
+				return true;
+		}, stepper = function(dts) {
+			adjust(kind, dim, dts * step, true);
+			if (overval()) {
+				zcu.untick(stepper);
+				cb && cb();
+			}
+		};
+		zcu.ontick(stepper);
+	},
+	slides: function(tars, cb, dur) {
+		var kind, dims, dim, slide = this.slide;
+		dur = dur || 1000;
+		for (kind in tars) {
+			dims = tars[kind];
+			for (dim in dims)
+				slide(kind, dim, dims[dim], dur);
+		}
+		cb && setTimeout(cb, dur);
+	},
+	backslide: function(tars, onboth, onfirst, dur, wait, useCur) {
+		var kind, dims, dim, kf, bk, bax = {}, bwaiter = function() {
+			onboth && onboth();
+			onfirst && onfirst();
+			setTimeout(bslider, wait || 5000);
+		}, frommer = this[useCur ? "placer" : "opts"],
+			bslider = () => this.slides(bax, onboth, dur);
+		for (kind in tars) {
+			dims = tars[kind];
+			kf = frommer[kind];
+			bk = bax[kind] = {};
+			for (dim in dims)
+				bk[dim] = kf[useCur ? dim : this._xyz.indexOf(dim)];
+		}
+		this.slides(tars, bwaiter, dur);
 	},
 	setPull: function(pull, axis) {},
 	unscroll: function(clearOpts) {
@@ -750,12 +800,26 @@ zero.core.Thing = CT.Class({
 		if (mti)
 			mti[influence] = mti[influence] ? 0 : 1;
 	},
+	refresh: function() {
+		this.removeParts();
+		this.parts.length = 0;
+		if (this.preassemble) {
+			this.opts.parts.length = 0;
+			this.preassemble();
+		}
+		this.opts.parts.forEach(p => this.attach(p));
+	},
 	removables: function() {
 		return this.parts;
 	},
+	removeParts: function() {
+		var part, remoz = this.removables && this.removables();
+		if (remoz)
+			for (part of remoz)
+				part.remove();
+	},
 	remove: function() {
-		var oz = this.opts, part,
-			remoz = this.removables && this.removables();
+		var oz = this.opts;
 		this.log("remove", oz.name);
 		this.removed = true;
 		(oz.anchor || oz.scene).remove(this.outerGroup());
@@ -766,9 +830,7 @@ zero.core.Thing = CT.Class({
 		this.unimix();
 		if (oz.key)
 			delete zero.core.Thing._things[oz.key];
-		if (remoz)
-			for (part of remoz)
-				part.remove();
+		this.removeParts();
 		this.onremove && this.onremove();
 		oz.onremove && oz.onremove();
 	},

@@ -47,6 +47,7 @@ zero.core.Controls = CT.Class({
 		},
 		flats: ["x", "z"],
 		structs: ["floor", "obstacle", "wall", "ramp", "boulder", "stala"],
+		elecs: ["panel", "bulb", "gate", "elevator"],
 		camdirs: ["UP", "DOWN", "LEFT", "RIGHT"],
 		cdalias: {"LEFT": "q", "RIGHT": "e", "UP": "r", "DOWN": "f"},
 		dirs: ["w", "s", "a", "d"],
@@ -198,8 +199,8 @@ zero.core.Controls = CT.Class({
 	},
 	placer: function(dir, amount, wallshift) {
 		var _ = this._, s = this.springs[dir], target = this.target,
-			wall = target.opts.wall, shifter = this.wallshift,
-			forward = wallshift == 1, nxtval, shifted = this.shifted;
+			topts = target.opts, wall = topts.wall, k = topts.kind, nxtval,
+			forward = wallshift == 1, shifter = this.wallshift, shifted = this.shifted;
 		return function() {
 			if (wallshift) { // poster/portal
 				nxtval = s.value + amount;
@@ -217,7 +218,7 @@ zero.core.Controls = CT.Class({
 						return shifter(wallshift, s);
 				}
 			}
-			if (_.structs.includes(target.opts.kind))
+			if (_.structs.includes(k) || _.elecs.includes(k))
 				target.adjust("position", dir, amount, true); // but fix..
 			else
 				s.boost = shifted() ? amount * 2 : amount;

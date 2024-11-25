@@ -167,14 +167,14 @@ zero.core.Person = CT.Class({
 		this.subject = subject;
 		orient && this.orient(subject);
 	},
-	orient: function(subject, spos, doafter) {
+	orient: function(subject, spos, doafter, glopo) {
 		var pos = this.body.placer.position;
-		spos = spos || subject.position();
+		spos = spos || subject.position(null, glopo);
 		this.orientation(Math.atan2(spos.x
 			- pos.x, spos.z - pos.z));
 		doafter && setTimeout(doafter, 500);
 	},
-	touch: function(subject, cb, arm, approached, handCb, force) {
+	touch: function(subject, cb, arm, approached, handCb, force, glopo) {
 		var zcu = zero.core.util, bod = this.body, bt = bod.torso, spy, contact = function() {
 			cb && cb();
 			handCb && handCb(bt.hands[arm], subject);
@@ -195,7 +195,7 @@ zero.core.Person = CT.Class({
 				bt.arms[arm].point("shoulder", subject);
 				setTimeout(force ? shove : contact, timeout);
 			}, timeout);
-		});
+		}, false, false, null, false, false, glopo);
 	},
 	held: function(side, handFallback) {
 		var og = this.opts.gear, ikey = og.held && og.held[side];
@@ -310,7 +310,7 @@ zero.core.Person = CT.Class({
 		_.chased = subject;
 		_.chaser = setInterval(this.chaser, 500);
 	},
-	approach: function(subject, cb, watch, chase, dur, nobuff, jumpy) {
+	approach: function(subject, cb, watch, chase, dur, nobuff, jumpy, glopo) {
 		var _ = this._, bod = this.body, zc = zero.core, dist,
 			zcu = zc.util, zcc = zc.current, ppl = zcc.people,
 			propel = this.propel, pursue = this.pursue, stop = this.stop,
@@ -332,9 +332,7 @@ zero.core.Person = CT.Class({
 		watch && this.watch(false, true);
 		bso.k = 200;
 		bso.hard = false;
-		this.orient(subject);
-		this.go();
-		setTimeout(function() {
+		this.orient(subject, null, function() {
 			if (bod.removed)
 				return CT.log("aborting approach - bod removed");
 			propel(null, true);
@@ -343,7 +341,7 @@ zero.core.Person = CT.Class({
 			if (chase)
 				return pursue(subject, cb);
 			if (!dur) {
-				dist = zcu.distance(bod.position(), subject.position());
+				dist = zcu.distance(bod.position(), subject.position(null, glopo));
 				if (!nobuff)
 					dist -= zcu.buff(bod, subject);
 				dur = dist * 10;
@@ -353,7 +351,8 @@ zero.core.Person = CT.Class({
 				isYou && camera.angle("preferred");
 				cb && cb();
 			}, dur);
-		}, 500); // time for orientation...
+		}, glopo);
+		this.go();
 		if (!isYou && jumpy && this.obstruction())
 			setTimeout(() => this.doLeap(false, null, 0.05), 300);
 	},

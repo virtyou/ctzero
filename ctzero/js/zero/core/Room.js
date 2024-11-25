@@ -5,9 +5,11 @@ zero.core.Room = CT.Class({
 		objects: 0
 	},
 	_tickers: [],
+	_electrical: ["panel", "bulb", "gate", "elevator"],
 	_structural: ["obstacle", "floor", "wall", "ramp", "boulder", "stala"],
-	_surfaces: ["obstacle", "floor", "ramp", "boulder", "stala"],
-	_bumpers: ["wall", "obstacle", "boulder", "stala"],
+	_surfaces: ["obstacle", "floor", "ramp", "boulder", "stala", "elevator"],
+	_bumpers: ["wall", "obstacle", "boulder", "stala", "gate"],
+	_wallers: ["ramp", "elevator"],
 	_interactives: {
 		brittle: ["boulder", "stala"],
 		frozen: ["boulder", "stala"],
@@ -193,6 +195,20 @@ zero.core.Room = CT.Class({
 				return person;
 		}
 	},
+	getKind: function(kind, overlapper) {
+		var name, zc = zero.core, touching = zc.util.touching;
+		overlapper = overlapper || zc.current.person.body;
+		if (!this[kind]) return;
+		for (name in this[kind])
+			if (touching(overlapper, this[name], 50))
+				return this[name];
+	},
+	getPanel: function(overlapper) {
+		return this.getKind("panel", overlapper);
+	},
+	getGate: function(overlapper) {
+		return this.getKind("gate", overlapper);
+	},
 	getInteractive: function(overlapper, feature) {
 		var item, touching = zero.core.util.touching;
 		for (item of this.getFeaturing(feature))
@@ -209,7 +225,7 @@ zero.core.Room = CT.Class({
 		return this.getInteractive(overlapper, "flammable");
 	},
 	getObject: function(pos, radii, checkY, kind, prop) {
-		var k, o, obj, obst, wobst;
+		var k, o, obst, wobst;
 		for (k of this._bumpers) {
 			for (o in this[k]) {
 				obst = this[k][o];
@@ -217,14 +233,21 @@ zero.core.Room = CT.Class({
 					return obst;
 			}
 		}
-		if (this.ramp) {
-			for (o in this.ramp) {
-				obst = this[o];
-				if (obst.wall) {
-					for (k in obst.wall) {
-						wobst = obst[k];
-						if (wobst.isReady() && wobst.overlaps(pos, radii, checkY))
-							return wobst;
+		for (k of this._wallers) {
+			if (this[k]) {
+				for (o in this[k]) {
+					obst = this[o];
+					if (obst.wall) {
+						for (k in obst.wall) {
+							wobst = obst[k];
+							if (wobst.isReady() && wobst.overlaps(pos, radii, checkY))
+								return wobst;
+						}
+					}
+					if (obst.gate) {
+						obst = obst.gate;
+						if (obst.isReady() && obst.overlaps(pos, radii, checkY))
+							return obst;
 					}
 				}
 			}
@@ -507,10 +530,46 @@ zero.core.Room = CT.Class({
 				texture: tx,
 				material: base.material,
 				geometry: sdz && d2g(sdz),
-//				castShadow: opts.shadows,
+				castShadow: opts.shadows,
 				receiveShadow: opts.shadows
 			}));
 		});
+	},
+	elecBase: function(cat) {
+		var appz = this.opts.electrical.appliances;
+		if (!appz[cat])
+			appz[cat] = { parts: [] };
+		return appz[cat];
+	},
+	elecPart: function(cat, app, i) {
+		var base = this.elecBase(cat), pbase = {
+			kind: cat,
+			circuit: base.circuit || "default"
+		};
+		if (cat == "panel")
+			pbase.thing = "Panel";
+		else
+			pbase.subclass = zero.core.Appliance[CT.parse.capitalize(cat)];
+		if (typeof i != "number")
+			i = base.parts.length;
+		return CT.merge(app, {
+			index: i,
+			name: cat + i
+		}, pbase);
+	},
+	addElec: function(cat, part, index) {
+		return this.attach(this.elecPart(cat, part, index));
+	},
+	buildAppliances: function(cat) {
+		var oz = this.opts;
+		oz.parts = oz.parts.concat(this.elecBase(cat).parts.map((a, i) => this.elecPart(cat, a, i)));
+	},
+	buildElectrical: function() {
+		var oz = this.opts, pz = oz.parts,
+			el = oz.electrical, appy = zero.core.Appliance;
+		let app, p;
+		appy.initCircuits(el.circuits);
+		this._electrical.forEach(this.buildAppliances);
 	},
 	preassemble: function() {
 		var opts = this.opts, os = opts.shell, oso,
@@ -561,6 +620,7 @@ zero.core.Room = CT.Class({
 		});
 		this._structural.forEach(this.buildStruct);
 		["flora", "fauna"].forEach(this.buildNatural);
+		this.buildElectrical();
 	},
 	components: function() {
 		var o, cz = [{
@@ -584,6 +644,10 @@ zero.core.Room = CT.Class({
 			objects: [], // regular Things
 			cameras: [],
 			automatons: [],
+			electrical: {
+				circuits: { default: {} },
+				appliances: {}
+			},
 			skyscale: 10000,
 			shadows: false
 		});
