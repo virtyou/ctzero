@@ -130,51 +130,39 @@ zero.core.Appliance.Elevator = CT.Class({
 		return this._moving;
 	},
 	preassemble: function() {
-		const oz = this.opts, zc = zero.core, roz = zc.current.room.opts,
-			appy = zc.Appliance, w2 = oz.width / 2, h2 = oz.height / 2, d2 = oz.depth / 2;
+		const oz = this.opts, zc = zero.core, roz = zc.current.room.opts, wopts = {
+			texture: oz.walltex,
+			castShadow: roz.shadows,
+			receiveShadow: roz.shadows,
+		}, appy = zc.Appliance, w2 = oz.width / 2, h2 = oz.height / 2, d2 = oz.depth / 2;
 		if (oz.walls) {
 			oz.parts = oz.parts.concat([{
 				kind: "wall",
 				name: "backwall",
-				texture: oz.walltex,
-				castShadow: roz.shadows,
-				receiveShadow: roz.shadows,
 				position: [0, 0, -d2],
 				boxGeometry: [oz.width, oz.height, oz.thickness]
 			}, {
 				kind: "wall",
 				name: "leftwall",
-				texture: oz.walltex,
-				castShadow: roz.shadows,
-				receiveShadow: roz.shadows,
 				position: [-w2, 0, 0],
 				boxGeometry: [oz.thickness, oz.height, oz.depth]
 			}, {
 				kind: "wall",
 				name: "rightwall",
-				texture: oz.walltex,
-				castShadow: roz.shadows,
-				receiveShadow: roz.shadows,
 				position: [w2, 0, 0],
 				boxGeometry: [oz.thickness, oz.height, oz.depth]
-			}]);
+			}].map(o => CT.merge(o, wopts)));
 		}
-		oz.parts.push({
+		oz.parts.push(CT.merge(wopts, {
 			name: "floor",
-			texture: oz.floortex,
-			castShadow: roz.shadows,
-			receiveShadow: roz.shadows,
 			position: [0, -h2, 0],
 			boxGeometry: [oz.width, oz.thickness, oz.depth]
-		});
-		oz.ceiling && oz.parts.push({
+		}));
+		oz.ceiling && oz.parts.push(CT.merge(wopts, {
 			name: "ceiling",
-			texture: oz.walltex,
-			castShadow: roz.shadows,
-			receiveShadow: roz.shadows,
 			position: [0, h2, 0],
 			boxGeometry: [oz.width, oz.thickness, oz.depth]
-		});
+		}));
 		oz.light && oz.parts.push({
 			name: "bulb",
 			subclass: appy.Bulb,
