@@ -557,6 +557,9 @@ zero.core.Room = CT.Class({
 			name: cat + i
 		}, pbase);
 	},
+	addElec: function(cat, part, index) {
+		return this.attach(this.elecPart(cat, part, index));
+	},
 	buildAppliances: function(cat) {
 		var oz = this.opts;
 		oz.parts = oz.parts.concat(this.elecBase(cat).parts.map((a, i) => this.elecPart(cat, a, i)));
