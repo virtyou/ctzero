@@ -800,12 +800,26 @@ zero.core.Thing = CT.Class({
 		if (mti)
 			mti[influence] = mti[influence] ? 0 : 1;
 	},
+	refresh: function() {
+		this.removeParts();
+		this.parts.length = 0;
+		if (this.preassemble) {
+			this.opts.parts.length = 0;
+			this.preassemble();
+		}
+		this.opts.parts.forEach(p => this.attach(p));
+	},
 	removables: function() {
 		return this.parts;
 	},
+	removeParts: function() {
+		var part, remoz = this.removables && this.removables();
+		if (remoz)
+			for (part of remoz)
+				part.remove();
+	},
 	remove: function() {
-		var oz = this.opts, part,
-			remoz = this.removables && this.removables();
+		var oz = this.opts;
 		this.log("remove", oz.name);
 		this.removed = true;
 		(oz.anchor || oz.scene).remove(this.outerGroup());
@@ -816,9 +830,7 @@ zero.core.Thing = CT.Class({
 		this.unimix();
 		if (oz.key)
 			delete zero.core.Thing._things[oz.key];
-		if (remoz)
-			for (part of remoz)
-				part.remove();
+		this.removeParts();
 		this.onremove && this.onremove();
 		oz.onremove && oz.onremove();
 	},
