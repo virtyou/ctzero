@@ -255,7 +255,8 @@ zero.core.Appliance.Bulb = CT.Class({
 			thing: "Light",
 			kind: "lighting",
 			variety: "point",
-			color: oz.color
+			color: oz.color,
+			intensity: oz.intensity
 		}]);
 	},
 	init: function(opts) {
