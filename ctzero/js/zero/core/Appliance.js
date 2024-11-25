@@ -130,25 +130,31 @@ zero.core.Appliance.Elevator = CT.Class({
 		return this._moving;
 	},
 	preassemble: function() {
-		const oz = this.opts, appy = zero.core.Appliance,
-			w2 = oz.width / 2, h2 = oz.height / 2, d2 = oz.depth / 2;
+		const oz = this.opts, zc = zero.core, roz = zc.current.room.opts,
+			appy = zc.Appliance, w2 = oz.width / 2, h2 = oz.height / 2, d2 = oz.depth / 2;
 		if (oz.walls) {
 			oz.parts = oz.parts.concat([{
 				kind: "wall",
 				name: "backwall",
 				texture: oz.walltex,
+				castShadow: roz.shadows,
+				receiveShadow: roz.shadows,
 				position: [0, 0, -d2],
 				boxGeometry: [oz.width, oz.height, oz.thickness]
 			}, {
 				kind: "wall",
 				name: "leftwall",
 				texture: oz.walltex,
+				castShadow: roz.shadows,
+				receiveShadow: roz.shadows,
 				position: [-w2, 0, 0],
 				boxGeometry: [oz.thickness, oz.height, oz.depth]
 			}, {
 				kind: "wall",
 				name: "rightwall",
 				texture: oz.walltex,
+				castShadow: roz.shadows,
+				receiveShadow: roz.shadows,
 				position: [w2, 0, 0],
 				boxGeometry: [oz.thickness, oz.height, oz.depth]
 			}]);
@@ -156,12 +162,16 @@ zero.core.Appliance.Elevator = CT.Class({
 		oz.parts.push({
 			name: "floor",
 			texture: oz.floortex,
+			castShadow: roz.shadows,
+			receiveShadow: roz.shadows,
 			position: [0, -h2, 0],
 			boxGeometry: [oz.width, oz.thickness, oz.depth]
 		});
 		oz.ceiling && oz.parts.push({
 			name: "ceiling",
 			texture: oz.walltex,
+			castShadow: roz.shadows,
+			receiveShadow: roz.shadows,
 			position: [0, h2, 0],
 			boxGeometry: [oz.width, oz.thickness, oz.depth]
 		});
@@ -169,6 +179,7 @@ zero.core.Appliance.Elevator = CT.Class({
 			name: "bulb",
 			subclass: appy.Bulb,
 			circuit: oz.circuit,
+			intensity: oz.bulbIntensity,
 			rotation: [Math.PI, 0, 0],
 			position: [0, h2 - (oz.thickness + 2), 0]
 		});
@@ -201,7 +212,7 @@ zero.core.Appliance.Elevator = CT.Class({
 			walls: true,
 			light: true,
 			targets: []
-		}, this.opts);
+		}, this.opts, { bulbIntensity: 1 });
 	}
 }, zero.core.Appliance);
 
