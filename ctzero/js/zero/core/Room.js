@@ -530,7 +530,7 @@ zero.core.Room = CT.Class({
 				texture: tx,
 				material: base.material,
 				geometry: sdz && d2g(sdz),
-//				castShadow: opts.shadows,
+				castShadow: opts.shadows,
 				receiveShadow: opts.shadows
 			}));
 		});
