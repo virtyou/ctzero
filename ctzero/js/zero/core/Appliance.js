@@ -163,14 +163,13 @@ zero.core.Appliance.Elevator = CT.Class({
 			position: [0, h2, 0],
 			boxGeometry: [oz.width, oz.thickness, oz.depth]
 		}));
-		oz.light && oz.parts.push({
+		oz.light && oz.parts.push(CT.merge(oz.light, {
 			name: "bulb",
 			subclass: appy.Bulb,
 			circuit: oz.circuit,
-			intensity: oz.bulbIntensity,
 			rotation: [Math.PI, 0, 0],
 			position: [0, h2 - (oz.thickness + 2), 0]
-		});
+		}));
 		oz.parts.push({
 			name: "gate",
 			subclass: appy.Gate,
@@ -198,9 +197,9 @@ zero.core.Appliance.Elevator = CT.Class({
 			controls: true,
 			ceiling: true,
 			walls: true,
-			light: true,
+			light: {},
 			targets: []
-		}, this.opts, { bulbIntensity: 1 });
+		}, this.opts);
 	}
 }, zero.core.Appliance);
 
@@ -222,6 +221,14 @@ zero.core.Appliance.Bulb = CT.Class({
 	},
 	do: function(order) {
 		this.setColor(order);
+	},
+	flicker: function() {
+		var oz = this.opts;
+		if (!CT.data.random(oz.invariance)) {
+			this.light.setIntensity(0);
+			setTimeout(this.setIntensity, CT.data.random(oz.flickRate * 50));
+		}
+		oz.flickRate && setTimeout(this.flicker, oz.flickRate * 1000);
 	},
 	preassemble: function() {
 		const oz = this.opts;
@@ -259,11 +266,14 @@ zero.core.Appliance.Bulb = CT.Class({
 		}]);
 	},
 	init: function(opts) {
-		this.opts = CT.merge(opts, {
+		this.opts = opts = CT.merge(opts, {
 			intensity: 1,
+			flickRate: 4,
+			invariance: 10,
 			color: 0xffffaf,
 			ownCircuit: true
 		}, this.opts);
+		opts.flickRate && setTimeout(this.flicker, opts.flickRate * 1000);
 	}
 }, zero.core.Appliance);
 
