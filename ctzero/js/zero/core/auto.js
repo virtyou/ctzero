@@ -4,7 +4,7 @@ zero.core.auto = {
 		return zero.core.current.room.automatons.map(a => a.json());
 	},
 	unload: function() {
-		zero.core.current.room.automatons.forEach(a => a.pause());
+		zero.core.current.room.automatons.forEach(a => a.remove());
 	},
 	init: function(autos, cb) { // [{person(key),program{base,coefficient,randomize},activities[]}]
 		CT.db.multi(autos.map(a=>a.person), function(people) {
@@ -62,6 +62,10 @@ zero.core.auto.Automaton = CT.Class({
 	},
 	pause: function() {
 		clearTimeout(this._.timeout);
+	},
+	remove: function() {
+		this.pause();
+		this.person.remove();
 	},
 	onperson: function(cb) {
 		if (this.person)
