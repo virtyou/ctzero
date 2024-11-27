@@ -678,7 +678,7 @@ zero.core.Person = CT.Class({
 		return side ? bag[side] : bag;
 	},
 	remove: function() {
-		if (this.body.removed) return this.log("already removed!");
+		if (!this.body || this.body.removed) return this.log("already removed!");
 		var thaz = this;
 		this.doer.stop();
 		this.facer.stop();
