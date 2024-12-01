@@ -111,7 +111,8 @@ zero.core.Collection = CT.Class({
 		this.opts = CT.merge(opts, {
 			mode: "random", // |rows|cols
 			count: 1 // fallback count
-		}, this.collect(opts.collection), this.opts);
+		}, this.opts);
+		this.opts = CT.merge(this.opts, this.collect(opts.collection));
 		if (opts.within) {
 			if (typeof opts.within == "string") {
 				this.log("grabbing within...");
