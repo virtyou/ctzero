@@ -63,8 +63,8 @@ zero.core.Appliance.Gate = CT.Class({
 		this.sfx(zero.core.Appliance.audio[order]);
 		this.door.backslide(this.sliders[order], this.basicBound, cb);
 	},
-	open: function() {
-		this.do(this.opts.opener);
+	open: function(cb) {
+		this.do(this.opts.opener, cb);
 	},
 	setSliders: function() {
 		const oz = this.opts, sz = this.sliders, w = oz.width, sp = w / 2,
@@ -97,13 +97,14 @@ zero.core.Appliance.Elevator = CT.Class({
 	_unmove: function() {
 		this._moving = false;
 	},
+	open: function(tar) {
+		const gz = this.gates;
+		gz[tar].open(() => gz.main.open(this._unmove));
+	},
 	do: function(order) {
-		const r = zero.core.current.room,
-			tar = (order == "bottom") ? r : r[order];
 		this._moving = true;
 		this.sfx(zero.core.Appliance.audio.elevator);
-		this.slide("position", "y", tar.getTop() + this.radii.y,
-			3000, () => this.gate.do("squish", this._unmove));
+		this.slide("position", "y", this.getY(order), 3000, () => this.open(order));
 	},
 	setTargets: function() {
 		const oz = this.opts, r = zero.core.current.room;
@@ -126,8 +127,40 @@ zero.core.Appliance.Elevator = CT.Class({
 		const oz = this.opts;
 		return this.position().y - (oz.height - oz.thickness) / 2;
 	},
+	getTar: function(tname) {
+		const r = zero.core.current.room;
+		return (tname == "bottom") ? r : r[tname];
+	},
+	getY: function(tname) {
+		return this.getTar(tname).getTop() + this.getRadii().y;
+	},
 	shifting: function() {
 		return this._moving;
+	},
+	gateOpts: function(goz) {
+		const oz = this.opts;
+		return CT.merge(goz, {
+			kind: "gate",
+			subclass: zero.core.Appliance.Gate,
+			thickness: oz.thickness,
+			circuit: oz.circuit,
+			height: oz.height,
+			width: oz.width
+		});
+	},
+	setGates: function() {
+		const r = zero.core.current.room,
+			oz = this.opts, op = oz.position, px = op[0],
+			pz = op[2] + (oz.depth / 2) + oz.thickness * 2;
+		this.gates = { main: this.maingate };
+		for (let tar of oz.targets) {
+			this.gates[tar] = r.attach(this.gateOpts({
+				name: tar + "gate",
+				opener: "slide",
+				position: [px, this.getY(tar), pz],
+				door: oz.floordoor
+			}));
+		}
 	},
 	preassemble: function() {
 		const oz = this.opts, zc = zero.core, roz = zc.current.room.opts, wopts = {
@@ -170,22 +203,19 @@ zero.core.Appliance.Elevator = CT.Class({
 			rotation: [Math.PI, 0, 0],
 			position: [0, h2 - (oz.thickness + 2), 0]
 		}));
-		oz.parts.push({
-			name: "gate",
-			subclass: appy.Gate,
-			position: [0, 0, d2],
-			thickness: oz.thickness,
-			circuit: oz.circuit,
-			height: oz.height,
-			width: oz.width,
-			door: oz.door
-		});
 		oz.controls && oz.parts.push({
 			thing: "Panel",
 			name: "controls",
 			button: this.getButtons(),
 			position: [0, 0, oz.thickness - d2]
 		});
+		oz.parts.push(this.gateOpts({
+			name: "maingate",
+			opener: "squish",
+			position: [0, 0, d2],
+			door: oz.door
+		}));
+		this.onReady(this.setGates);
 	},
 	init: function(opts) {
 		this.opts = CT.merge(opts, {

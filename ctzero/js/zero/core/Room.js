@@ -10,6 +10,7 @@ zero.core.Room = CT.Class({
 	_surfaces: ["obstacle", "floor", "ramp", "boulder", "stala", "elevator"],
 	_bumpers: ["wall", "obstacle", "boulder", "stala", "gate"],
 	_wallers: ["ramp", "elevator"],
+	_wallerers: ["wall", "gate"],
 	_interactives: {
 		brittle: ["boulder", "stala"],
 		frozen: ["boulder", "stala"],
@@ -225,7 +226,7 @@ zero.core.Room = CT.Class({
 		return this.getInteractive(overlapper, "flammable");
 	},
 	getObject: function(pos, radii, checkY, kind, prop) {
-		var k, o, obst, wobst;
+		var k, w, o, obst, wobst;
 		for (k of this._bumpers) {
 			for (o in this[k]) {
 				obst = this[k][o];
@@ -237,17 +238,14 @@ zero.core.Room = CT.Class({
 			if (this[k]) {
 				for (o in this[k]) {
 					obst = this[o];
-					if (obst.wall) {
-						for (k in obst.wall) {
-							wobst = obst[k];
-							if (wobst.isReady() && wobst.overlaps(pos, radii, checkY))
-								return wobst;
+					for (w of this._wallerers) {
+						if (obst[w]) {
+							for (k in obst[w]) {
+								wobst = obst[k];
+								if (wobst.isReady() && wobst.overlaps(pos, radii, checkY))
+									return wobst;
+							}
 						}
-					}
-					if (obst.gate) {
-						obst = obst.gate;
-						if (obst.isReady() && obst.overlaps(pos, radii, checkY))
-							return obst;
 					}
 				}
 			}
