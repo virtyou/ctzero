@@ -60,6 +60,7 @@ zero.core.Appliance.Gate = CT.Class({
 		}
 	},
 	do: function(order, cb) {
+		if (!this.power) return this.log("do(", order, ") aborted - no power!")
 		this.sfx(zero.core.Appliance.audio[order]);
 		this.door.backslide(this.sliders[order], this.basicBound, cb);
 	},
@@ -102,6 +103,7 @@ zero.core.Appliance.Elevator = CT.Class({
 		gz[tar].open(() => gz.main.open(this._unmove));
 	},
 	do: function(order) {
+		if (!this.power) return this.log("do(", order, ") aborted - no power!")
 		this._moving = true;
 		this.sfx(zero.core.Appliance.audio.elevator);
 		this.slide("position", "y", this.getY(order), 3000, () => this.open(order));
