@@ -78,6 +78,14 @@ var PAN = zero.core.Panel, PC = {}, PW = {
 	button: 4, switch: 4, lever: 8
 }, P = Math.PI, P2 = P / 2, P4 = P / 4;
 
+var testApp = function(variety, template, opts) {
+	const zc = zero.core, r = zc.current.room, appy = zc.Appliance;
+	r.attach(CT.merge(opts, {
+		subclass: appy[variety],
+		template: template
+	}));
+};
+
 window.testPan = function() {
 	const zc = zero.core, r = zc.current.room, appy = zc.Appliance;
 	appy.circuit("default").plug(appy.circuit("room"));
@@ -120,12 +128,18 @@ window.testPan = function() {
 };
 
 window.testEl = function() {
-	var zc = zero.core;
-	return zc.current.room.attach({
-		subclass: zc.Appliance.Elevator,
-		template: "templates.one.appliance.elevator"
+	testApp("Elevator", "templates.one.appliance.elevator.spooky");
+};
+
+window.testComp = function() {
+	const tbase = "templates.one.appliance.computer.";
+	testApp("Computer", tbase + "tablet", {
+		position: [-50, 0, 0]
 	});
-}
+	testApp("Computer", tbase + "lcd", {
+		position: [50, 0, 0]
+	});
+};
 
 PAN.Button = PC.button = CT.Class({
 	CLASSNAME: "zero.core.Panel.Button",
