@@ -324,13 +324,15 @@ zero.core.Appliance.Computer = CT.Class({
 	uncur: function() {
 		this.screen.curprog && this.screen.detach("curprog");
 	},
-	setcur: function(copts) {
-		this.uncur();
-		this.screen.attach(CT.merge(copts, {
+	setcur: function(copts, nogeo) {
+		const bopts = {
 			name: "curprog",
-			position: [0, 0, 1],
-			planeGeometry: this.opts.screenDims
-		}), null, true);
+			position: [0, 0, 1]
+		};
+		if (!nogeo)
+			bopts.planeGeometry = this.opts.screenDims;
+		this.uncur();
+		this.screen.attach(CT.merge(copts, bopts), null, true);
 	},
 	video: function(data) { // supports "fzn:" and "fzn:up:" vlinx
 		this.setcur({ video: data });
@@ -339,7 +341,14 @@ zero.core.Appliance.Computer = CT.Class({
 		this.setcur({ vstrip: data });
 	},
 	text: function(data) {
-		this.setcur({ thing: "Text", text: data.split(" ").join("\n") });
+		this.setcur({
+			center: false,
+			thing: "Text",
+			text: data.split(" ").join("\n"),
+			material: {
+				color: this.opts.textColor
+			}
+		}, true);
 	},
 	message: function(data) {
 		this.text(data);
@@ -383,7 +392,8 @@ zero.core.Appliance.Computer = CT.Class({
 			keyboard: true,
 			screenPos: [0, 0, 0],
 			screenDims: [14, 18],
-			screenColor: 0x000000
+			screenColor: 0x000000,
+			textColor: 0x00ff00
 		});
 		opts.program && opts.data && setTimeout(this.do, 1000, opts);
 	}
