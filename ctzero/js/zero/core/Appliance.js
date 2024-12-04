@@ -329,12 +329,34 @@ zero.core.Appliance.Computer = CT.Class({
 				color: 0x000000
 			}
 		});
+		oz.keyboard && this.buildKeyboard();
+	},
+	_keyrow: function(z) {
+		const pz = [];
+		for (let x = -9; x <=9; x += 3) {
+			pz.push({
+				position: [x, 1, z],
+				boxGeometry: [2, 1, 2]
+			});
+		}
+		return {
+			parts: pz
+		};
+	},
+	buildKeyboard: function() {
+		this.opts.parts.push({
+			name: "keyboard",
+			boxGeometry: [22, 2, 10],
+			position: [0, 0, 20],
+			parts: [-3, 0, 3].map(this._keyrow)
+		});
 	},
 	init: function(opts) {
 		this.opts = CT.merge(opts, {
 			program: null, // video|stream|email|?
 			data: {}
 		}, this.opts, {
+			keyboard: true,
 			screenPos: [0, 0, 0],
 			screenDims: [14, 18]
 		});
