@@ -136,7 +136,8 @@ window.testComp = function() {
 	testApp("Computer", tbase + "tablet", {
 		position: [-50, 0, 0]
 	});
-	testApp("Computer", tbase + "lcd", {
+	testApp("Computer", tbase + "lcd");
+	testApp("Computer", tbase + "crt", {
 		position: [50, 0, 0]
 	});
 };
