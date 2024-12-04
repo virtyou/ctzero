@@ -26,12 +26,19 @@ zero.core.Appliance = CT.Class({
 		this.plug(oz.circuit);
 	},
 	init: function(opts) {
-		this.opts = CT.merge(opts, {
+		this.opts = CT.merge(opts, zero.core.Appliance.tmpopts(this), {
 			circuit: "default"
 		}, this.opts);
 		this.onReady(this.initCircuit);
 	}
 }, zero.core.Thing);
+
+zero.core.Appliance.templates = {}; // filled in by one
+
+zero.core.Appliance.tmpopts = function(app) {
+	const tz = zero.core.Appliance.templates[app.vlower];
+	return tz && tz[app.opts.variety];
+};
 
 zero.core.Appliance.Gate = CT.Class({
 	CLASSNAME: "zero.core.Appliance.Gate",
@@ -399,7 +406,7 @@ zero.core.Appliance.Computer = CT.Class({
 			opts.program = "vstrip";
 			opts.data = "templates.one.vstrip." + opts.screenSaver;
 		}
-		opts.program && opts.data && setTimeout(this.do, 1000, opts);
+		opts.program && opts.data && this.onReady(() => this.do(opts));
 	}
 }, zero.core.Appliance);
 
