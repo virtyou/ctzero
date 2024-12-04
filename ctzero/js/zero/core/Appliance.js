@@ -394,7 +394,11 @@ zero.core.Appliance.Computer = CT.Class({
 			screenDims: [14, 18],
 			screenColor: 0x000000,
 			textColor: 0x00ff00
-		});
+		}); // TODO : avoid direct one references here and elsewhere
+		if (opts.screenSaver) {
+			opts.program = "vstrip";
+			opts.data = "templates.one.vstrip." + opts.screenSaver;
+		}
 		opts.program && opts.data && setTimeout(this.do, 1000, opts);
 	}
 }, zero.core.Appliance);
