@@ -80,7 +80,7 @@ var PAN = zero.core.Panel, PC = {}, PW = {
 
 var testApp = function(variety, template, opts) {
 	const zc = zero.core, r = zc.current.room, appy = zc.Appliance;
-	r.attach(CT.merge(opts, {
+	return r.attach(CT.merge(opts, {
 		subclass: appy[variety],
 		template: template
 	}));
@@ -128,18 +128,21 @@ window.testPan = function() {
 };
 
 window.testEl = function() {
-	testApp("Elevator", "templates.one.appliance.elevator.spooky");
+	return testApp("Elevator", "templates.one.appliance.elevator.spooky");
+};
+
+var compy = function(cname, x) {
+	const tbase = "templates.one.appliance.computer.";
+	return testApp("Computer", tbase + cname, {
+		name: cname,
+		position: [x || 0, 0, 0]
+	});
 };
 
 window.testComp = function() {
-	const tbase = "templates.one.appliance.computer.";
-	testApp("Computer", tbase + "tablet", {
-		position: [-50, 0, 0]
-	});
-	testApp("Computer", tbase + "lcd");
-	testApp("Computer", tbase + "crt", {
-		position: [50, 0, 0]
-	});
+	compy("tablet", -50);
+	compy("lcd");
+	compy("crt", 50);
 };
 
 PAN.Button = PC.button = CT.Class({
