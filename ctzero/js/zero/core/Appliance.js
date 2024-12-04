@@ -333,7 +333,7 @@ zero.core.Appliance.Computer = CT.Class({
 	},
 	_keyrow: function(z) {
 		const pz = [];
-		for (let x = -9; x <=9; x += 3) {
+		for (let x = -9; x <= 9; x += 3) {
 			pz.push({
 				position: [x, 1, z],
 				boxGeometry: [2, 1, 2]
