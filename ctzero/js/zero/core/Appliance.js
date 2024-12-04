@@ -309,6 +309,38 @@ zero.core.Appliance.Bulb = CT.Class({
 	}
 }, zero.core.Appliance);
 
+zero.core.Appliance.Computer = CT.Class({
+	CLASSNAME: "zero.core.Appliance.Computer",
+	do: function(order) {
+		if (!this.power) return this.log("do(", order, ") aborted - no power!")
+		this.setProgram(order);
+	},
+	setProgram: function(order) {
+		this.opts.program = order;
+		// TODO
+	},
+	preassemble: function() {
+		const oz = this.opts;
+		oz.parts.push({
+			name: "screen",
+			planeGeometry: oz.screenDims,
+			position: oz.screenPos,
+			material: {
+				color: 0x000000
+			}
+		});
+	},
+	init: function(opts) {
+		this.opts = CT.merge(opts, {
+			program: null, // video|stream|email|?
+			data: {}
+		}, this.opts, {
+			screenPos: [0, 0, 0],
+			screenDims: [14, 18]
+		});
+	}
+}, zero.core.Appliance);
+
 zero.core.Appliance.Circuit = CT.Class({
 	CLASSNAME: "zero.core.Appliance.Circuit",
 	flip: function(isOn, power) {
