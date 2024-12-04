@@ -311,13 +311,39 @@ zero.core.Appliance.Bulb = CT.Class({
 
 zero.core.Appliance.Computer = CT.Class({
 	CLASSNAME: "zero.core.Appliance.Computer",
-	do: function(order) {
+	messages: [],
+	do: function(order) { // {program,data}
 		if (!this.power) return this.log("do(", order, ") aborted - no power!")
-		this.setProgram(order);
+		this.setProgram(order.program, order.data);
 	},
-	setProgram: function(order) {
-		this.opts.program = order;
-		// TODO
+	setProgram: function(program, data) {
+		this.opts.program = program;
+		this.opts.data = data;
+		this[program](data);
+	},
+	uncur: function() {
+		this.screen.curprog && this.screen.detach("curprog");
+	},
+	setcur: function(copts) {
+		this.uncur();
+		this.screen.attach(CT.merge(copts, {
+			name: "curprog",
+			position: [0, 0, 1],
+			planeGeometry: this.opts.screenDims
+		}), null, true);
+	},
+	video: function(data) { // supports "fzn:" and "fzn:up:" vlinx
+		this.setcur({ video: data });
+	},
+	vstrip: function(data) {
+		this.setcur({ vstrip: data });
+	},
+	text: function(data) {
+		this.setcur({ thing: "Text", text: data.split(" ").join("\n") });
+	},
+	message: function(data) {
+		this.text(data);
+		this.messages.push(data);
 	},
 	preassemble: function() {
 		const oz = this.opts;
@@ -326,7 +352,7 @@ zero.core.Appliance.Computer = CT.Class({
 			planeGeometry: oz.screenDims,
 			position: oz.screenPos,
 			material: {
-				color: 0x000000
+				color: oz.screenColor
 			}
 		});
 		oz.keyboard && this.buildKeyboard();
@@ -339,9 +365,7 @@ zero.core.Appliance.Computer = CT.Class({
 				boxGeometry: [2, 1, 2]
 			});
 		}
-		return {
-			parts: pz
-		};
+		return { parts: pz };
 	},
 	buildKeyboard: function() {
 		this.opts.parts.push({
@@ -352,14 +376,16 @@ zero.core.Appliance.Computer = CT.Class({
 		});
 	},
 	init: function(opts) {
-		this.opts = CT.merge(opts, {
-			program: null, // video|stream|email|?
-			data: {}
+		this.opts = opts = CT.merge(opts, {
+			data: null,   // ""
+			program: null // video|vstrip|text|message|?
 		}, this.opts, {
 			keyboard: true,
 			screenPos: [0, 0, 0],
-			screenDims: [14, 18]
+			screenDims: [14, 18],
+			screenColor: 0x000000
 		});
+		opts.program && opts.data && setTimeout(this.do, 1000, opts);
 	}
 }, zero.core.Appliance);
 

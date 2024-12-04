@@ -131,18 +131,21 @@ window.testEl = function() {
 	return testApp("Elevator", "templates.one.appliance.elevator.spooky");
 };
 
-var compy = function(cname, x) {
+var compy = function(name, program, data, x) {
 	const tbase = "templates.one.appliance.computer.";
-	return testApp("Computer", tbase + cname, {
-		name: cname,
+	return testApp("Computer", tbase + name, {
+		name: name,
+		data: data,
+		program: program,
 		position: [x || 0, 0, 0]
 	});
 };
 
 window.testComp = function() {
-	compy("tablet", -50);
-	compy("lcd");
-	compy("crt", 50);
+	compy("tablet", "vstrip", "templates.one.vstrip.flu", -50);
+//	compy("lcd", "video", "fzn:up:yohoho"); // werx
+	compy("lcd", "text", "alongword isagreat goodword");
+	compy("crt", "text", "how's it going there?", 50);
 };
 
 PAN.Button = PC.button = CT.Class({
