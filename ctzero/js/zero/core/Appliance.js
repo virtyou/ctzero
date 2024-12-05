@@ -25,6 +25,11 @@ zero.core.Appliance = CT.Class({
 		}
 		this.plug(oz.circuit);
 	},
+	rebuild: function() {
+		this.opts = CT.merge(zero.core.Appliance.tmpopts(this), this.opts);
+		this.refresh();
+		this.start && setTimeout(this.start, 200);
+	},
 	init: function(opts) {
 		this.opts = CT.merge(opts, zero.core.Appliance.tmpopts(this), {
 			circuit: "default"
