@@ -391,6 +391,14 @@ zero.core.Appliance.Computer = CT.Class({
 			parts: [-3, 0, 3].map(this._keyrow)
 		});
 	},
+	start: function() { // TODO : avoid direct one references here and elsewhere
+		const oz = this.opts;
+		if (oz.screenSaver) {
+			oz.program = "vstrip";
+			oz.data = "templates.one.vstrip." + oz.screenSaver;
+		}
+		oz.program && oz.data && this.do(oz);
+	},
 	init: function(opts) {
 		this.opts = opts = CT.merge(opts, {
 			data: null,   // ""
@@ -401,12 +409,8 @@ zero.core.Appliance.Computer = CT.Class({
 			screenDims: [14, 18],
 			screenColor: 0x000000,
 			textColor: 0x00ff00
-		}); // TODO : avoid direct one references here and elsewhere
-		if (opts.screenSaver) {
-			opts.program = "vstrip";
-			opts.data = "templates.one.vstrip." + opts.screenSaver;
-		}
-		opts.program && opts.data && this.onReady(() => this.do(opts));
+		});
+		this.onReady(this.start);
 	}
 }, zero.core.Appliance);
 
