@@ -601,6 +601,15 @@ zero.core.util = {
 			}
 			v = svids[chan].video;
 		} else {
+			if (src.startsWith("tlchan:")) {
+				CT.require("CT.stream", true); // just in case
+				CT.stream.util.tl.rand(src.slice(7), function(r) {
+					v.setAttribute('crossorigin', 'anonymous');
+					v.src = r;
+					v.play();
+				});
+				src = null;
+			}
 			v = zero.core.util.vidNode(src, vclass,
 				zero.core.current.room.opts.autovid);
 			document.body.appendChild(v);
