@@ -352,6 +352,9 @@ zero.core.Appliance.Computer = CT.Class({
 	vstrip: function(data) {
 		this.setcur({ vstrip: data });
 	},
+	screenSaver: function(vsname) {
+		this.vstrip("templates.one.vstrip." + vsname);
+	},
 	text: function(data) {
 		this.setcur({
 			center: false,
@@ -399,15 +402,15 @@ zero.core.Appliance.Computer = CT.Class({
 	start: function() { // TODO : avoid direct one references here and elsewhere
 		const oz = this.opts;
 		if (oz.screenSaver) {
-			oz.program = "vstrip";
-			oz.data = "templates.one.vstrip." + oz.screenSaver;
+			oz.program = "screenSaver";
+			oz.data = oz.screenSaver;
 		}
 		oz.program && oz.data && this.do(oz);
 	},
 	init: function(opts) {
 		this.opts = opts = CT.merge(opts, {
 			data: null,   // ""
-			program: null // video|vstrip|text|message|?
+			program: null // video|vstrip|screenSaver|text|message|?
 		}, this.opts, {
 			keyboard: true,
 			screenPos: [0, 0, 0],
