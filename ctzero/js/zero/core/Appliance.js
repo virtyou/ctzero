@@ -352,7 +352,7 @@ zero.core.Appliance.Computer = CT.Class({
 	vstrip: function(data) {
 		this.setcur({ vstrip: data });
 	},
-	screenSaver: function(vsname) {
+	screenSaver: function(vsname) { // TODO : avoid direct one references here and elsewhere
 		this.vstrip("templates.one.vstrip." + vsname);
 	},
 	text: function(data) {
@@ -368,6 +368,19 @@ zero.core.Appliance.Computer = CT.Class({
 	message: function(data) {
 		this.text(data);
 		this.messages.push(data);
+	},
+	browse: function() {
+		const mz = this.messages, ml = mz.length,
+			msg = "you have " + ml + " messages";
+		this.text(msg);
+		ml && CT.modal.choice({
+			prompt: msg,
+			data: mz,
+			cb: this.text
+		});
+	},
+	use: function() {
+		zero.core.Appliance.Computer.selectors.program(this.do, this.browse);
 	},
 	preassemble: function() {
 		const oz = this.opts;
@@ -399,7 +412,7 @@ zero.core.Appliance.Computer = CT.Class({
 			parts: [-3, 0, 3].map(this._keyrow)
 		});
 	},
-	start: function() { // TODO : avoid direct one references here and elsewhere
+	start: function() {
 		const oz = this.opts;
 		if (oz.screenSaver) {
 			oz.program = "screenSaver";
@@ -421,6 +434,57 @@ zero.core.Appliance.Computer = CT.Class({
 		this.onReady(this.start);
 	}
 }, zero.core.Appliance);
+
+zero.core.Appliance.Computer.selectors = {
+	prompt: function(prop, data, cb) {
+		CT.modal.choice({
+			prompt: "what's the " + prop + "?",
+			data: data,
+			cb: cb
+		});
+	},
+	program: function(cb, browser) {
+		const csz = zero.core.Appliance.Computer.selectors,
+			ops = ["video", "screenSaver", "message"];
+		browser && ops.push("browse");
+		csz.prompt("program", ops, function(program) {
+			let cbwrap = data => cb({ program: program, data: data });
+			if (program == "message") {
+				CT.modal.prompt({
+					prompt: "what's the message?",
+					cb: cbwrap
+				});
+			} else if (program == "screenSaver") // TODO : avoid direct one reference!
+				csz.prompt("screenSaver", Object.keys(templates.one.vstrip), cbwrap);
+			else if (program == "browse")
+				browser();
+			else // video
+				csz.video(cbwrap);
+		});
+	},
+	video: function(cb) {
+		let fpref = "fzn:";
+		CT.modal.choice({
+			prompt: "what kind of video program?",
+			data: ["channel", "stream (down)", "stream (up)"],
+			cb: function(sel) {
+				if (sel == "channel") { // tl channel
+					return CT.modal.choice({
+						prompt: "what channel?", // TODO : avoid direct ctvu reference
+						data: core.config.ctvu.loaders.tlchans,
+						cb: chan => cb("tlchan:" + chan)
+					});
+				} // fzn stream
+				if (sel.includes("up"))
+					fpref += "up:";
+				CT.modal.prompt({
+					prompt: "ok, what's the name of the stream?",
+					cb: name => cb(fpref + name)
+				});
+			}
+		});
+	}
+};
 
 zero.core.Appliance.Circuit = CT.Class({
 	CLASSNAME: "zero.core.Appliance.Circuit",
