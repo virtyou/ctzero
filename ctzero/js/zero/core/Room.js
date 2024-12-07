@@ -210,6 +210,9 @@ zero.core.Room = CT.Class({
 	getGate: function(overlapper) {
 		return this.getKind("gate", overlapper);
 	},
+	getComputer: function(overlapper) {
+		return this.getKind("computer", overlapper);
+	},
 	getInteractive: function(overlapper, feature) {
 		var item, touching = zero.core.util.touching;
 		for (item of this.getFeaturing(feature))

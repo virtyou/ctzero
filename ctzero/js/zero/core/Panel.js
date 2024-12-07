@@ -46,7 +46,7 @@ zero.core.Panel = CT.Class({
 		const ops = this.options();
 		if (ops.length == 1)
 			return this[ops[0]].toggle();
-		return CT.modal.choice({
+		CT.modal.choice({
 			prompt: "what do you toggle?",
 			data: ops,
 			cb: op => this[op].toggle()
