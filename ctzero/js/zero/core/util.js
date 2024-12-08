@@ -239,8 +239,9 @@ zero.core.util = {
 		return best;
 	},
 	close2u: function(thingo) {
-		var zcc = zero.core.current, r = zcc.room, you = zcc.person,
-			diameter = r.getBounds().min.distanceTo(r.bounds.max),
+		var zcc = zero.core.current, r = zcc.room, you = zcc.person;
+		if (!you) return 1;
+		var diameter = r.getBounds().min.distanceTo(r.bounds.max),
 			dist = thingo.position().distanceTo(you.body.position());
 		return Math.max(0.001, 1 - dist / diameter); // <0 bounding error?
 	},
