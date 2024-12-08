@@ -46,7 +46,7 @@ zero.core.Panel = CT.Class({
 		const ops = this.options();
 		if (ops.length == 1)
 			return this[ops[0]].toggle();
-		return CT.modal.choice({
+		CT.modal.choice({
 			prompt: "what do you toggle?",
 			data: ops,
 			cb: op => this[op].toggle()
@@ -77,6 +77,14 @@ zero.core.Panel = CT.Class({
 var PAN = zero.core.Panel, PC = {}, PW = {
 	button: 4, switch: 4, lever: 8
 }, P = Math.PI, P2 = P / 2, P4 = P / 4;
+
+var testApp = function(variety, template, opts) {
+	const zc = zero.core, r = zc.current.room, appy = zc.Appliance;
+	return r.attach(CT.merge(opts, {
+		subclass: appy[variety],
+		template: template
+	}));
+};
 
 window.testPan = function() {
 	const zc = zero.core, r = zc.current.room, appy = zc.Appliance;
@@ -120,12 +128,28 @@ window.testPan = function() {
 };
 
 window.testEl = function() {
-	var zc = zero.core;
-	return zc.current.room.attach({
-		subclass: zc.Appliance.Elevator,
-		template: "templates.one.appliance.elevator"
+	return testApp("Elevator", "templates.one.appliance.elevator.spooky");
+};
+
+var compy = function(name, screenSaver, program, data, x) {
+	const tbase = "templates.one.appliance.computer.";
+	return testApp("Computer", tbase + name, {
+		name: name,
+		data: data,
+		program: program,
+		screenSaver: screenSaver,
+		position: [x || 0, 0, 0]
 	});
-}
+};
+
+window.testComp = function() {
+	compy("tablet", "portal", null, null, -50);
+	compy("lcd", "vr");
+	compy("crt", "chickens", null, null, 50);
+//	compy("lcd", "video", "fzn:up:yohoho"); // werx
+//	compy("lcd", "text", "alongword isagreat goodword");
+//	compy("crt", "text", "how's it going there?", 50);
+};
 
 PAN.Button = PC.button = CT.Class({
 	CLASSNAME: "zero.core.Panel.Button",

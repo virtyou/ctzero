@@ -930,6 +930,10 @@ zero.core.Thing = CT.Class({
 			oz.cylinderGeometry = [g, g, g * (oz.geomult || 2), oz.geoSegs,
 				oz.geoHeightSegs, oz.geoOpen, oz.geoThetaStart, Math.PI];
 		}
+		if (oz.halfSphere) {
+			oz.sphereGeometry = (typeof oz.halfSphere == "number") ? oz.halfSphere : 1;
+			oz.geoThetaLength = Math.PI / 2;
+		}
 		if (oz.boxGeometry) {
 			g = oz.boxGeometry; // better way?
 			if (g == true)

@@ -239,8 +239,9 @@ zero.core.util = {
 		return best;
 	},
 	close2u: function(thingo) {
-		var zcc = zero.core.current, r = zcc.room, you = zcc.person,
-			diameter = r.getBounds().min.distanceTo(r.bounds.max),
+		var zcc = zero.core.current, r = zcc.room, you = zcc.person;
+		if (!you) return 1;
+		var diameter = r.getBounds().min.distanceTo(r.bounds.max),
 			dist = thingo.position().distanceTo(you.body.position());
 		return Math.max(0.001, 1 - dist / diameter); // <0 bounding error?
 	},
@@ -601,6 +602,15 @@ zero.core.util = {
 			}
 			v = svids[chan].video;
 		} else {
+			if (src.startsWith("tlchan:")) {
+				CT.require("CT.stream", true); // just in case
+				CT.stream.util.tl.rand(src.slice(7), function(r) {
+					v.setAttribute('crossorigin', 'anonymous');
+					v.src = r;
+					v.play();
+				});
+				src = null;
+			}
 			v = zero.core.util.vidNode(src, vclass,
 				zero.core.current.room.opts.autovid);
 			document.body.appendChild(v);

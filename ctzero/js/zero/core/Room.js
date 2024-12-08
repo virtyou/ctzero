@@ -5,7 +5,7 @@ zero.core.Room = CT.Class({
 		objects: 0
 	},
 	_tickers: [],
-	_electrical: ["panel", "bulb", "gate", "elevator"],
+	_electrical: ["panel", "bulb", "gate", "elevator", "computer"],
 	_structural: ["obstacle", "floor", "wall", "ramp", "boulder", "stala"],
 	_surfaces: ["obstacle", "floor", "ramp", "boulder", "stala", "elevator"],
 	_bumpers: ["wall", "obstacle", "boulder", "stala", "gate"],
@@ -209,6 +209,9 @@ zero.core.Room = CT.Class({
 	},
 	getGate: function(overlapper) {
 		return this.getKind("gate", overlapper);
+	},
+	getComputer: function(overlapper) {
+		return this.getKind("computer", overlapper);
 	},
 	getInteractive: function(overlapper, feature) {
 		var item, touching = zero.core.util.touching;
