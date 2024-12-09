@@ -198,8 +198,8 @@ zero.core.Controls = CT.Class({
 		this.setKeys();
 	},
 	placer: function(dir, amount, wallshift) {
-		var _ = this._, s = this.springs[dir], target = this.target,
-			topts = target.opts, wall = topts.wall, k = topts.kind, nxtval,
+		var _ = this._, s = this.springs[dir], target = this.target, nxtval,
+			topts = target.opts, wall = topts.wall, k = topts.kind, shamount,
 			forward = wallshift == 1, shifter = this.wallshift, shifted = this.shifted;
 		return function() {
 			if (wallshift) { // poster/portal
@@ -218,10 +218,11 @@ zero.core.Controls = CT.Class({
 						return shifter(wallshift, s);
 				}
 			}
+			shamount = shifted() ? amount * 2 : amount;
 			if (_.structs.includes(k) || _.elecs.includes(k))
-				target.adjust("position", dir, amount, true); // but fix..
+				target.adjust("position", dir, shamount / 4, true); // but fix..
 			else
-				s.boost = shifted() ? amount * 2 : amount;
+				s.boost = shamount;
 		};
 	},
 	face: function(vec) {
