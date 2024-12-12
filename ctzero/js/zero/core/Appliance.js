@@ -164,8 +164,10 @@ zero.core.Appliance.Elevator = CT.Class({
 		});
 	},
 	setGates: function() {
-		const r = zero.core.current.room,
-			oz = this.opts, op = oz.position, px = op[0],
+		const r = zero.core.current.room, roz = r.opts, oz = this.opts, dopts = CT.merge({
+			castShadow: roz.shadows,
+			receiveShadow: roz.shadows,
+		}, oz.floordoor), op = oz.position, px = op[0],
 			pz = op[2] + (oz.depth / 2) + oz.thickness * 2;
 		this.gates = { main: this.maingate };
 		for (let tar of oz.targets) {
@@ -173,7 +175,7 @@ zero.core.Appliance.Elevator = CT.Class({
 				name: tar + "gate",
 				opener: "slide",
 				position: [px, this.getY(tar), pz],
-				door: oz.floordoor
+				door: dopts
 			}));
 		}
 	},
