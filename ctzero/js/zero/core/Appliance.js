@@ -177,6 +177,31 @@ zero.core.Appliance.Elevator = CT.Class({
 			}));
 		}
 	},
+	setCage: function() {
+		const r = zero.core.current.room, oz = this.opts, cadd = function(coz) {
+			r.attach(CT.merge({
+				kind: "wall"
+			}, coz, oz.door));
+		}, op = oz.position, px = op[0], pz = op[2],
+			h = r.bounds.max.y - r.bounds.min.y,
+			xo = (oz.width / 2) + oz.thickness * 3,
+			zo = (oz.depth / 2) + oz.thickness * 3;
+		cadd({
+			name: "backcage",
+			position: [px, 0, pz - zo],
+			boxGeometry: [oz.width, h, oz.thickness]
+		});
+		cadd({
+			name: "leftcage",
+			position: [px - xo, 0, pz],
+			boxGeometry: [oz.thickness, h, oz.depth]
+		});
+		cadd({
+			name: "rightcage",
+			position: [px + xo, 0, pz],
+			boxGeometry: [oz.thickness, h, oz.depth]
+		});
+	},
 	preassemble: function() {
 		const oz = this.opts, zc = zero.core, roz = zc.current.room.opts, wopts = {
 			texture: oz.walltex,
@@ -231,6 +256,7 @@ zero.core.Appliance.Elevator = CT.Class({
 			door: oz.door
 		}));
 		this.onReady(this.setGates);
+		oz.cage && this.onReady(this.setCage);
 	},
 	init: function(opts) {
 		this.opts = CT.merge(opts, {
@@ -242,6 +268,7 @@ zero.core.Appliance.Elevator = CT.Class({
 			controls: true,
 			ceiling: true,
 			walls: true,
+			cage: true,
 			light: {},
 			targets: []
 		}, this.opts);
