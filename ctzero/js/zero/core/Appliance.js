@@ -186,8 +186,8 @@ zero.core.Appliance.Elevator = CT.Class({
 			}, coz, oz.door));
 		}, op = oz.position, px = op[0], pz = op[2],
 			h = r.bounds.max.y - r.bounds.min.y,
-			xo = (oz.width / 2) + oz.thickness * 3,
-			zo = (oz.depth / 2) + oz.thickness * 3;
+			xo = (oz.width / 2) + oz.thickness * 2,
+			zo = (oz.depth / 2) + oz.thickness * 2;
 		cadd({
 			name: "backcage",
 			position: [px, 0, pz - zo],
