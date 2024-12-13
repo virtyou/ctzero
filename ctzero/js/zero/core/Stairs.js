@@ -2,7 +2,7 @@ zero.core.Stairs = CT.Class({
 	CLASSNAME: "zero.core.Stairs",
 	getTop: function(pos) {
 		const step = this.getKind("step", pos, true), bz = this.bounds;
-		return step ? step.getTop(pos) : (bz.max.y + bz.min.y) / 2;
+		return step ? step.getTop(pos) : bz.min.y;
 	},
 	preassemble: function() {
 		const oz = this.opts, pz = oz.parts, sm1 = oz.steps - 1,
@@ -23,7 +23,7 @@ zero.core.Stairs = CT.Class({
 	},
 	init: function(opts) {
 		this.opts = opts = CT.merge(opts, {
-			steps: 8,
+			steps: 7,
 			depth: 20,
 			width: 80,
 			height: 10
