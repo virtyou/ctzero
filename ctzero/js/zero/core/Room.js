@@ -225,7 +225,7 @@ zero.core.Room = CT.Class({
 		for (k of this._bumpers) {
 			for (o in this[k]) {
 				obst = this[k][o];
-				if (obst.overlaps(pos, radii, checkY))
+				if (obst.opts[prop] == kind && obst.overlaps(pos, radii, checkY))
 					return obst;
 			}
 		}
