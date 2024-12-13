@@ -284,7 +284,7 @@ zero.core.Thing = CT.Class({
 		this._.postboundz.forEach(f => f());
 	},
 	unevenTop: function() {
-		return this.shelled || this.vlower == "ramp" || this.shifting("y");
+		return this.shelled || this.vlower == "ramp" || this.vlower == "stairs" || this.shifting("y");
 	},
 	setHomeY: function(notwithin) {
 		var r = zero.core.current.room, pos = this.placer.position, oz = this.opts,
@@ -875,6 +875,14 @@ zero.core.Thing = CT.Class({
 	assembled: function() {
 		this.opts.basicBound && (this.within || zero.core.current.room).bounds && this.basicBound();
 		this._.built();
+	},
+	getKind: function(kind, overlapper, justover) {
+		var name, zc = zero.core, touching = zc.util.touching;
+		overlapper = overlapper || zc.current.person.body;
+		if (!this[kind]) return;
+		for (name in this[kind])
+			if (justover ? this[name].overlaps(overlapper) : touching(overlapper, this[name], 50))
+				return this[name];
 	},
 	getGroup: function() {
 		this.group = this.group || this.placer;
