@@ -96,12 +96,12 @@ zero.core.Appliance.Gate = CT.Class({
 		}));
 	},
 	init: function(opts) {
-		this.opts = CT.merge(opts, {
+		this.opts = CT.merge(opts, this.opts, {
 			width: 100,
 			height: 100,
 			thickness: 10,
 			opener: "swing"
-		}, this.opts);
+		});
 		this.setSliders();
 	}
 }, zero.core.Appliance);
