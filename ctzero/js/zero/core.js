@@ -38,6 +38,7 @@ CT.require("zero.core.gamepads");
 CT.require("zero.core.Thing");
 CT.require("zero.core.Light");
 CT.require("zero.core.Floor");
+CT.require("zero.core.Stairs");
 CT.require("zero.core.Ramp");
 CT.require("zero.core.Pool");
 CT.require("zero.core.Room");
