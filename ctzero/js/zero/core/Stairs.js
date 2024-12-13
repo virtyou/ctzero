@@ -1,14 +1,14 @@
 zero.core.Stairs = CT.Class({
 	CLASSNAME: "zero.core.Stairs",
 	getTop: function(pos) {
-		const step = this.getKind("step", pos, true);
-		return step ? step.getTop(pos) : this.bounds.min.y;
+		const step = this.getKind("step", pos, true), bz = this.bounds;
+		return step ? step.getTop(pos) : (bz.max.y + bz.min.y) / 2;
 	},
 	preassemble: function() {
-		const oz = this.opts, pz = oz.parts,
+		const oz = this.opts, pz = oz.parts, sm1 = oz.steps - 1,
 			sbg = [oz.width, oz.height, oz.depth];
-		let i, y = -oz.steps * oz.height / 2,
-			z = oz.steps * oz.depth / 2;
+		let i, y = -sm1 * oz.height / 2,
+			z = sm1 * oz.depth / 2;
 		for (i = 0; i < oz.steps; i++) {
 			pz.push({
 				kind: "step",
