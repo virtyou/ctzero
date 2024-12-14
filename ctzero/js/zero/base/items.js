@@ -119,6 +119,7 @@ zero.base.items = {
 			regTick: true,
 			faceUp: true,
 			quenched: true,
+			loudIgnite: true,
 			burnRate: 30,
 			lightIntensity: 0.2,
 			position: [0, 3, 0],

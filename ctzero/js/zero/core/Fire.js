@@ -32,6 +32,8 @@ zero.core.Fire = CT.Class({
 		delete this._audio;
 	},
 	ignite: function() {
+		if (this.opts.loudIgnite)
+			zero.core.audio.sfx(zero.core.Fire.audio.lighter);
 		this._audio.volume = 0.1;
 		this.quenched = false;
 		this.show();
@@ -176,6 +178,7 @@ zero.core.Fire = CT.Class({
 			moths: true,
 			flicker: true,
 			quenched: false,
+			loudIgnite: false,
 			lightIntensity: 1,
 			burnRate: 0,
 			fuel: 1000
