@@ -138,7 +138,8 @@ zero.core.Fire = CT.Class({
 			thing: "Light",
 			kind: "lighting",
 			variety: "point",
-			color: 0xffaaaa
+			color: 0xffaaaa,
+			intensity: oz.lightIntensity
 		});
 		oz.moths && oz.parts.push({
 			within: oz.glow && "glow" || this,
@@ -166,7 +167,8 @@ zero.core.Fire = CT.Class({
 			light: true,
 			moths: true,
 			flicker: true,
-			quenched: false
+			quenched: false,
+			lightIntensity: 1
 		}, this.opts);
 		this.quenched = opts.quenched;
 		if (opts.light) {
