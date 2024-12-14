@@ -78,7 +78,7 @@ zero.core.Appliance.Gate = CT.Class({
 	do: function(order, cb) {
 		if (!this.power) return this.log("do(", order, ") aborted - no power!")
 		this.sound(order);
-		this.door.backslide(this.sliders[order], this.basicBound, cb);
+		this.door.backslide(this.sliders[order], this.simpleBound, cb);
 	},
 	open: function(cb) {
 		this.do(this.opts.opener, cb);

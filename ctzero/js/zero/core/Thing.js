@@ -306,6 +306,10 @@ zero.core.Thing = CT.Class({
 			this.homeY += oz.bob * Math.PI;
 		this.adjust("position", "y", this.homeY);
 	},
+	simpleBound: function() { // bound ONLY
+		this.log("simpleBound");
+		setTimeout(this._.setBounds, 200);
+	},
 	basicBound: function(toeOff) { // bare bones
 		this._.preboundz.forEach(f => f());
 		if (toeOff)
