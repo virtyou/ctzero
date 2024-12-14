@@ -89,6 +89,7 @@ zero.base.items = {
 			regTick: true,
 			faceUp: true,
 			quenched: true,
+			burnRate: 20,
 			lightIntensity: 0.4,
 			position: [0, 5, 0],
 			scale: [0.1, 0.1, 0.1]
@@ -118,6 +119,7 @@ zero.base.items = {
 			regTick: true,
 			faceUp: true,
 			quenched: true,
+			burnRate: 30,
 			lightIntensity: 0.2,
 			position: [0, 3, 0],
 			scale: [0.08, 0.08, 0.08]

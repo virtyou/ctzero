@@ -77,6 +77,9 @@ zero.core.Item = CT.Class({
 			this.ignite();
 		}
 	},
+	setWicker: function() {
+		this.fire.burner = f => this.adjust("scale", "y", f);
+	},
 	init: function(opts) {
 		var tmp = zero.base.items[this.opts.name];
 		if (tmp && tmp.parts && opts.parts)
@@ -88,5 +91,6 @@ zero.core.Item = CT.Class({
 		this.person = opts.person;
 		for (var v of this.varieties)
 			this[v] = opts.variety == v;
+		opts.wicker && this.onReady(this.setWicker);
 	}
 }, zero.core.Thing);
