@@ -68,6 +68,10 @@ zero.core.Item = CT.Class({
 		this.smasher && this.smash();
 		this.key && this.unlock();
 		if (this.flamer) {
+			if (this.opts.clicker && this.fire.quenched) {
+				this.fire.ignite();
+				// TODO : click sfx
+			}
 			this.melt();
 			this.burn();
 			this.ignite();
