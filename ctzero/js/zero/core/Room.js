@@ -508,7 +508,8 @@ zero.core.Room = CT.Class({
 		if (!base || !base.parts || !base.parts.length)
 			return;
 		var dz = base.dimensions, sdz,
-			tx = base.texture || opts.texture;
+			tx = base.texture || opts.texture,
+			stepper = base.stepper || opts.stepper,
 			thing = "Thing", d2g = zero.core.util.d2g;
 		if (["floor", "ramp", "stairs"].includes(cat))
 			thing = CT.parse.capitalize(cat);
@@ -519,6 +520,7 @@ zero.core.Room = CT.Class({
 				kind: cat,
 				thing: thing,
 				texture: tx,
+				stepper: stepper,
 				material: base.material,
 				geometry: sdz && d2g(sdz),
 				castShadow: opts.shadows,

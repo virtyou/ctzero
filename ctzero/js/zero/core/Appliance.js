@@ -282,6 +282,7 @@ zero.core.Appliance.Elevator = CT.Class({
 
 zero.core.Appliance.Bulb = CT.Class({
 	CLASSNAME: "zero.core.Appliance.Bulb",
+	vmult: 0.02,
 	setPower: function(p) {
 		this.power = p;
 		this.setIntensity();
@@ -307,6 +308,10 @@ zero.core.Appliance.Bulb = CT.Class({
 			setTimeout(this.setIntensity, CT.data.random(oz.flickRate * 50));
 		}
 		oz.flickRate && setTimeout(this.flicker, oz.flickRate * 1000);
+	},
+	onremove: function() {
+		this.unplug();
+		this.opts.flickRate = 0;
 	},
 	preassemble: function() {
 		const oz = this.opts;
