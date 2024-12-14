@@ -237,7 +237,7 @@ zero.core.Room = CT.Class({
 						if (obst[w]) {
 							for (k in obst[w]) {
 								wobst = obst[k];
-								if (wobst.isReady() && wobst.overlaps(pos, radii, checkY))
+								if (wobst.overlaps(pos, radii, checkY))
 									return wobst;
 							}
 						}
