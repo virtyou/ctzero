@@ -311,7 +311,7 @@ zero.core.Appliance.Bulb = CT.Class({
 	},
 	flicker: function() {
 		var oz = this.opts;
-		if (!CT.data.random(oz.invariance)) {
+		if (this.power && !CT.data.random(oz.invariance)) {
 			this.sound("zap");
 			this.light.setIntensity(0);
 			setTimeout(this.setIntensity, CT.data.random(oz.flickRate * 50));
