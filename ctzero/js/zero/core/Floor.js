@@ -15,6 +15,14 @@ zero.core.Floor = CT.Class({
 	getTop: function() {
 		return this.group.position.y;
 	},
+	onupon: function() {
+		var zc = zero.core, onup = this.opts.onupon;
+		if (!onup) return;
+		if (onup.circuit)
+			zc.Appliance.circuit(onup.circuit).turnOn();
+		else
+			zc.current.room[onup.appliance].do(onup.order);
+	},
 	init: function(opts) {
 		this.opts = opts = CT.merge(opts, {
 			repeat: [1, 1],
