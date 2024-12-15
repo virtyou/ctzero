@@ -283,12 +283,18 @@ zero.core.Appliance.Elevator = CT.Class({
 zero.core.Appliance.Bulb = CT.Class({
 	CLASSNAME: "zero.core.Appliance.Bulb",
 	vmult: 0.02,
-	setPower: function(p) {
+	_setPower: function(p) {
 		const t = this.opts.timeout;
 		this.power = p;
-		this.sound("zap");
+		this.sound("click");
 		this.setIntensity();
 		p && t && setTimeout(() => this.setPower(0), t * 1000);
+	},
+	setPower: function(p) {
+		const d = this.opts.delay;
+		if (p && d)
+			return setTimeout(() => this._setPower(p), d);
+		this._setPower(p);
 	},
 	setIntensity: function() {
 		this.heart.material.opacity = this.power * 0.5;
