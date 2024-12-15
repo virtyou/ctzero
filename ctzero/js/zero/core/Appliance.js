@@ -286,6 +286,7 @@ zero.core.Appliance.Bulb = CT.Class({
 	setPower: function(p) {
 		const t = this.opts.timeout;
 		this.power = p;
+		this.sound("zap");
 		this.setIntensity();
 		p && t && setTimeout(() => this.setPower(0), t * 1000);
 	},
