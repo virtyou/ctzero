@@ -7,16 +7,16 @@ zero.core.Stairs = CT.Class({
 	preassemble: function() {
 		const oz = this.opts, pz = oz.parts, sm1 = oz.steps - 1,
 			sbg = [oz.width, oz.height, oz.depth],
-			roz = zero.core.current.room.opts;
+			roz = zero.core.current.room.opts, mat = this.getMaterial();
 		let i, y = -sm1 * oz.height / 2,
 			z = sm1 * oz.depth / 2;
 		for (i = 0; i < oz.steps; i++) {
 			pz.push({
 				kind: "step",
 				name: "step" + i,
+				matinstance: mat,
 				boxGeometry: sbg,
 				position: [0, y, z],
-				texture: oz.texture,
 				castShadow: roz.shadows,
 				receiveShadow: roz.shadows,
 			});
