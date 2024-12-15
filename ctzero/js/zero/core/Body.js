@@ -328,6 +328,7 @@ zero.core.Body = CT.Class({
 			for (var ps of ["weave", "bob", "slide"])
 				this.springs[ps].pull = obj && obj.pull && obj.pull[ps];
 			this._.bounder("y", 1, obj && obj.getTop(pos));
+			obj && obj.onupon && obj.onupon();
 		} else if (rebob || (obj && obj.unevenTop())) {
 			otop = (obj || r).getTop(pos);
 			bobber.floored = otop >= bobber.value - 100;
