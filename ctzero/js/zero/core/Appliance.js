@@ -284,8 +284,10 @@ zero.core.Appliance.Bulb = CT.Class({
 	CLASSNAME: "zero.core.Appliance.Bulb",
 	vmult: 0.02,
 	setPower: function(p) {
+		const t = this.opts.timeout;
 		this.power = p;
 		this.setIntensity();
+		p && t && setTimeout(() => this.setPower(0), t * 1000);
 	},
 	setIntensity: function() {
 		this.heart.material.opacity = this.power * 0.5;
@@ -349,13 +351,14 @@ zero.core.Appliance.Bulb = CT.Class({
 		}]);
 	},
 	init: function(opts) {
-		this.opts = opts = CT.merge(opts, {
+		this.opts = opts = CT.merge(opts, this.opts, {
 			intensity: 1,
 			flickRate: 4,
 			invariance: 10,
 			color: 0xffffaf,
-			ownCircuit: true
-		}, this.opts);
+			ownCircuit: true,
+			timeout: 0 // for motion detection type setups
+		});
 		opts.flickRate && setTimeout(this.flicker, opts.flickRate * 1000);
 	}
 }, zero.core.Appliance);
@@ -527,6 +530,9 @@ zero.core.Appliance.Computer.selectors = {
 
 zero.core.Appliance.Circuit = CT.Class({
 	CLASSNAME: "zero.core.Appliance.Circuit",
+	turnOn: function() {
+		this.flip(true, this.circuit ? this.circuit.power : this.opts.power);
+	},
 	flip: function(isOn, power) {
 		this.isOn = isOn;
 		this.setPower(power);
