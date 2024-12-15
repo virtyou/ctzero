@@ -6,8 +6,8 @@ zero.core.Room = CT.Class({
 	},
 	_tickers: [],
 	_electrical: ["panel", "bulb", "gate", "elevator", "computer"],
-	_structural: ["obstacle", "floor", "wall", "ramp", "boulder", "stala"],
-	_surfaces: ["obstacle", "floor", "ramp", "boulder", "stala", "elevator"],
+	_structural: ["obstacle", "floor", "wall", "ramp", "stairs", "boulder", "stala"],
+	_surfaces: ["obstacle", "floor", "ramp", "stairs", "boulder", "stala", "elevator"],
 	_bumpers: ["wall", "obstacle", "boulder", "stala", "gate"],
 	_wallers: ["ramp", "elevator"],
 	_wallerers: ["wall", "gate"],
@@ -196,14 +196,6 @@ zero.core.Room = CT.Class({
 				return person;
 		}
 	},
-	getKind: function(kind, overlapper) {
-		var name, zc = zero.core, touching = zc.util.touching;
-		overlapper = overlapper || zc.current.person.body;
-		if (!this[kind]) return;
-		for (name in this[kind])
-			if (touching(overlapper, this[name], 50))
-				return this[name];
-	},
 	getPanel: function(overlapper) {
 		return this.getKind("panel", overlapper);
 	},
@@ -233,7 +225,7 @@ zero.core.Room = CT.Class({
 		for (k of this._bumpers) {
 			for (o in this[k]) {
 				obst = this[k][o];
-				if (obst.overlaps(pos, radii, checkY))
+				if (obst.opts[prop] == kind && obst.overlaps(pos, radii, checkY))
 					return obst;
 			}
 		}
@@ -245,7 +237,7 @@ zero.core.Room = CT.Class({
 						if (obst[w]) {
 							for (k in obst[w]) {
 								wobst = obst[k];
-								if (wobst.isReady() && wobst.overlaps(pos, radii, checkY))
+								if (wobst.overlaps(pos, radii, checkY))
 									return wobst;
 							}
 						}
@@ -516,12 +508,11 @@ zero.core.Room = CT.Class({
 		if (!base || !base.parts || !base.parts.length)
 			return;
 		var dz = base.dimensions, sdz,
-			tx = base.texture || opts.texture;
+			tx = base.texture || opts.texture,
+			stepper = base.stepper || opts.stepper,
 			thing = "Thing", d2g = zero.core.util.d2g;
-		if (cat == "floor")
-			thing = "Floor";
-		else if (cat == "ramp")
-			thing = "Ramp";
+		if (["floor", "ramp", "stairs"].includes(cat))
+			thing = CT.parse.capitalize(cat);
 		base.parts.forEach(function(side, i) {
 			sdz = side.dimensions || dz;
 			opts.parts.push(CT.merge(side, {
@@ -529,6 +520,7 @@ zero.core.Room = CT.Class({
 				kind: cat,
 				thing: thing,
 				texture: tx,
+				stepper: stepper,
 				material: base.material,
 				geometry: sdz && d2g(sdz),
 				castShadow: opts.shadows,

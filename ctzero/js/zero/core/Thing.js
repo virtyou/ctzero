@@ -241,6 +241,7 @@ zero.core.Thing = CT.Class({
 		}
 	},
 	overlaps: function(pos, radii, checkY) {
+		if (!this.isReady()) return;
 		var bz = this.getBounds(), check = this._.checkOver;
 		return check("x", pos, radii) && check("z", pos, radii)
 			&& (!checkY || check("y", pos, radii));
@@ -284,7 +285,7 @@ zero.core.Thing = CT.Class({
 		this._.postboundz.forEach(f => f());
 	},
 	unevenTop: function() {
-		return this.shelled || this.vlower == "ramp" || this.shifting("y");
+		return this.shelled || this.vlower == "ramp" || this.vlower == "stairs" || this.shifting("y");
 	},
 	setHomeY: function(notwithin) {
 		var r = zero.core.current.room, pos = this.placer.position, oz = this.opts,
@@ -305,6 +306,10 @@ zero.core.Thing = CT.Class({
 		if (oz.bob)
 			this.homeY += oz.bob * Math.PI;
 		this.adjust("position", "y", this.homeY);
+	},
+	simpleBound: function() { // bound ONLY
+		this.log("simpleBound");
+		setTimeout(this._.setBounds, 200);
 	},
 	basicBound: function(toeOff) { // bare bones
 		this._.preboundz.forEach(f => f());
@@ -339,7 +344,7 @@ zero.core.Thing = CT.Class({
 	},
 	sfx: function(auds) {
 		var zc = zero.core;
-		zc.audio.sfx(CT.data.choice(auds), zc.util.close2u(this));
+		zc.audio.sfx(CT.data.choice(auds), this.vmult * zc.util.close2u(this));
 	},
 	playSong: function(song, onPlaySong) {
 		if (!this._audio) {
@@ -875,6 +880,14 @@ zero.core.Thing = CT.Class({
 	assembled: function() {
 		this.opts.basicBound && (this.within || zero.core.current.room).bounds && this.basicBound();
 		this._.built();
+	},
+	getKind: function(kind, overlapper, justover) {
+		var name, zc = zero.core, touching = zc.util.touching;
+		overlapper = overlapper || zc.current.person.body;
+		if (!this[kind]) return;
+		for (name in this[kind])
+			if (justover ? this[name].overlaps(overlapper) : touching(overlapper, this[name], 50))
+				return this[name];
 	},
 	getGroup: function() {
 		this.group = this.group || this.placer;

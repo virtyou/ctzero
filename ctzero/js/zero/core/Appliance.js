@@ -14,6 +14,9 @@ zero.core.Appliance = CT.Class({
 	do: function(order) {
 		this.log("do:", order);
 	},
+	sound: function(name) {
+		this.sfx(zero.core.Appliance.audio[name]);
+	},
 	onremove: function() {
 		this.unplug();
 	},
@@ -74,8 +77,8 @@ zero.core.Appliance.Gate = CT.Class({
 	},
 	do: function(order, cb) {
 		if (!this.power) return this.log("do(", order, ") aborted - no power!")
-		this.sfx(zero.core.Appliance.audio[order]);
-		this.door.backslide(this.sliders[order], this.basicBound, cb);
+		this.sound(order);
+		this.door.backslide(this.sliders[order], this.simpleBound, cb);
 	},
 	open: function(cb) {
 		this.do(this.opts.opener, cb);
@@ -89,19 +92,21 @@ zero.core.Appliance.Gate = CT.Class({
 		squip.x = w / 20 - sp;
 	},
 	preassemble: function() {
-		const oz = this.opts;
+		const oz = this.opts, roz = zero.core.current.room.opts;
 		oz.parts.push(CT.merge(oz.door, {
 			name: "door",
+			castShadow: roz.shadows,
+			receiveShadow: roz.shadows,
 			boxGeometry: [oz.width, oz.height, oz.thickness]
 		}));
 	},
 	init: function(opts) {
-		this.opts = CT.merge(opts, {
+		this.opts = CT.merge(opts, this.opts, {
 			width: 100,
 			height: 100,
 			thickness: 10,
 			opener: "swing"
-		}, this.opts);
+		});
 		this.setSliders();
 	}
 }, zero.core.Appliance);
@@ -118,7 +123,7 @@ zero.core.Appliance.Elevator = CT.Class({
 	do: function(order) {
 		if (!this.power) return this.log("do(", order, ") aborted - no power!")
 		this._moving = true;
-		this.sfx(zero.core.Appliance.audio.elevator);
+		this.sound("elevator");
 		this.slide("position", "y", this.getY(order), 3000, () => this.open(order));
 	},
 	setTargets: function() {
@@ -164,10 +169,8 @@ zero.core.Appliance.Elevator = CT.Class({
 		});
 	},
 	setGates: function() {
-		const r = zero.core.current.room, roz = r.opts, oz = this.opts, dopts = CT.merge({
-			castShadow: roz.shadows,
-			receiveShadow: roz.shadows,
-		}, oz.floordoor), op = oz.position, px = op[0],
+		const r = zero.core.current.room, oz = this.opts,
+			op = oz.position, px = op[0],
 			pz = op[2] + (oz.depth / 2) + oz.thickness * 2;
 		this.gates = { main: this.maingate };
 		for (let tar of oz.targets) {
@@ -175,7 +178,7 @@ zero.core.Appliance.Elevator = CT.Class({
 				name: tar + "gate",
 				opener: "slide",
 				position: [px, this.getY(tar), pz],
-				door: dopts
+				door: oz.floordoor
 			}));
 		}
 	},
@@ -186,8 +189,8 @@ zero.core.Appliance.Elevator = CT.Class({
 			}, coz, oz.door));
 		}, op = oz.position, px = op[0], pz = op[2],
 			h = r.bounds.max.y - r.bounds.min.y,
-			xo = (oz.width / 2) + oz.thickness * 3,
-			zo = (oz.depth / 2) + oz.thickness * 3;
+			xo = (oz.width / 2) + oz.thickness * 2,
+			zo = (oz.depth / 2) + oz.thickness * 2;
 		cadd({
 			name: "backcage",
 			position: [px, 0, pz - zo],
@@ -279,6 +282,7 @@ zero.core.Appliance.Elevator = CT.Class({
 
 zero.core.Appliance.Bulb = CT.Class({
 	CLASSNAME: "zero.core.Appliance.Bulb",
+	vmult: 0.02,
 	setPower: function(p) {
 		this.power = p;
 		this.setIntensity();
@@ -299,10 +303,15 @@ zero.core.Appliance.Bulb = CT.Class({
 	flicker: function() {
 		var oz = this.opts;
 		if (!CT.data.random(oz.invariance)) {
+			this.sound("zap");
 			this.light.setIntensity(0);
 			setTimeout(this.setIntensity, CT.data.random(oz.flickRate * 50));
 		}
 		oz.flickRate && setTimeout(this.flicker, oz.flickRate * 1000);
+	},
+	onremove: function() {
+		this.unplug();
+		this.opts.flickRate = 0;
 	},
 	preassemble: function() {
 		const oz = this.opts;

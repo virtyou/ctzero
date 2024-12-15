@@ -73,6 +73,83 @@ zero.base.items = {
 			rotation: [0, P2, 0]
 		}]
 	},
+	candle: {
+		variety: "flamer",
+		cylinderGeometry: true,
+		wicker: true,
+		geomult: 10,
+//		rotation: [P2, 0, 0],
+		position: [0, -1, 2],
+		material: {
+			color: "#ffffff"
+		},
+		parts: [{
+			thing: "Fire",
+			name: "fire",
+			regTick: true,
+			faceUp: true,
+			quenched: true,
+			burnRate: 20,
+			lightIntensity: 0.4,
+			position: [0, 5, 0],
+			scale: [0.1, 0.1, 0.1]
+		}, {
+			name: "wick",
+			cylinderGeometry: 0.1,
+			geomult: 10,
+			position: [0, 5, 0],
+			material: {
+				color: "#000000"
+			}
+		}]
+	},
+	lighter: {
+		variety: "flamer",
+		cylinderGeometry: 0.5,
+		clicker: true,
+		geomult: 10,
+		rotation: [P2, 0, 0],
+		position: [0, -1, 2],
+		material: {
+			color: "#000000"
+		},
+		parts: [{
+			thing: "Fire",
+			name: "fire",
+			regTick: true,
+			faceUp: true,
+			quenched: true,
+			loudIgnite: true,
+			burnRate: 30,
+			lightIntensity: 0.2,
+			position: [0, 3, 0],
+			scale: [0.08, 0.08, 0.08]
+		}, {
+			name: "handle",
+			boxGeometry: [0.8, 3, 1],
+			position: [0, -3, 0.1],
+			material: {
+				color: "#ff0000"
+			}
+		}, {
+			name: "guard",
+			torusGeometry: 0.5,
+			torusTubeRadius: 0.1,
+			position: [0, -1.3, 0.5],
+			rotation: [0, P2, 0],
+			material: {
+				color: "#ff0000"
+			}
+		}, {
+			name: "trig",
+			boxGeometry: [0.2, 1.5, 0.05],
+			position: [0, -1.5, 0],
+			rotation: [Math.PI * 3 / 8, 0, 0],
+			material: {
+				color: "#000000"
+			}
+		}]
+	},
 	torch: {
 		variety: "flamer",
 		cylinderGeometry: true,

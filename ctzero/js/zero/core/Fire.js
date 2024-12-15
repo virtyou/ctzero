@@ -14,6 +14,14 @@ zero.core.Fire = CT.Class({
 		this.light && this.light.setIntensity((this.flick ? 0.4 : 0.5) + this.flicker[(this.foff + zcu.ticker) % 60]);
 		this.tickPos();
 		oz.faceUp && this.group.rotation.setFromQuaternion(oz.scene.getWorldQuaternion(zcu._quatter).inverse());
+		if (oz.burnRate) {
+			this.fuel -= oz.burnRate * dts;
+			this.burner && this.burner(this.fuel / oz.fuel);
+			if (this.fuel < 0) {
+				this.log("ran out of fuel!");
+				this.quench();
+			}
+		}
 	},
 	onremove: function() {
 		this.smoke && this.smoke.undrip();
@@ -24,6 +32,8 @@ zero.core.Fire = CT.Class({
 		delete this._audio;
 	},
 	ignite: function() {
+		if (this.opts.loudIgnite)
+			zero.core.audio.sfx(zero.core.Fire.audio.lighter);
 		this._audio.volume = 0.1;
 		this.quenched = false;
 		this.show();
@@ -138,7 +148,8 @@ zero.core.Fire = CT.Class({
 			thing: "Light",
 			kind: "lighting",
 			variety: "point",
-			color: 0xffaaaa
+			color: 0xffaaaa,
+			intensity: oz.lightIntensity
 		});
 		oz.moths && oz.parts.push({
 			within: oz.glow && "glow" || this,
@@ -166,9 +177,14 @@ zero.core.Fire = CT.Class({
 			light: true,
 			moths: true,
 			flicker: true,
-			quenched: false
+			quenched: false,
+			loudIgnite: false,
+			lightIntensity: 1,
+			burnRate: 0,
+			fuel: 1000
 		}, this.opts);
 		this.quenched = opts.quenched;
+		this.fuel = opts.fuel;
 		if (opts.light) {
 			this.flicker = zero.core.trig.segs(60, 0.05);
 			this.foff = CT.data.random(60);

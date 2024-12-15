@@ -67,9 +67,13 @@ zero.core.Person = CT.Class({
 		delete this._.sfx;
 	},
 	sfx: function(sound) {
-		var afiles = this._.sfx && this._.sfx[sound], vol = 1;
+		var zcc = zero.core.current, r = zcc.room, vol = 1,
+			curper = zcc.person, upon = this.body.upon, afiles,
+			stepper = upon && upon.opts.stepper || r.opts.stepper;
+		if (sound == "walk" && stepper)
+			sound = stepper;
+		afiles = this._.sfx && this._.sfx[sound];
 		if (!afiles) return;
-		var curper = zero.core.current.person;
 		if (curper && this.body && this != curper)
 			vol = zero.core.util.close2u(this.body);
 		this.opts.verbose && this.log("playing", sound, "at", vol);
