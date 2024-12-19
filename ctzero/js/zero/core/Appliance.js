@@ -350,6 +350,7 @@ zero.core.Appliance.Bulb = CT.Class({
 			position: [0, -2, 0],
 			scale: [0.04, 0.04, 0.04],
 			material: {
+				shininess: 100,
 				color: 0xffffff
 			}
 		}, {
