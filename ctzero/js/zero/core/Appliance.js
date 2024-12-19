@@ -345,6 +345,14 @@ zero.core.Appliance.Bulb = CT.Class({
 				side: THREE.BackSide
 			}
 		}, {
+			name: "coil",
+			tubeGeometry: ["spring"],
+			position: [0, -2, 0],
+			scale: [0.04, 0.04, 0.04],
+			material: {
+				color: 0xffffff
+			}
+		}, {
 			name: "base",
 			cylinderGeometry: 1,
 			position: [0, -3, 0]
