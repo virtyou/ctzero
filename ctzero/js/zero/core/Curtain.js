@@ -19,6 +19,9 @@ zero.core.Curtain = CT.Class({
 			texture: oz.texture
 		});
 	},
+	setTexture: function(tx) {
+		this.drape.setTexture(tx);
+	},
 	init: function(opts) {
 		this.opts = CT.merge(opts, {
 			width: 50,
