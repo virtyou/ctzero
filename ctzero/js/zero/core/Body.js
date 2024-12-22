@@ -120,15 +120,22 @@ zero.core.Body = CT.Class({
 			position: [0, -100, 0]
 		});
 		pz.push({
-			name: "kine",
+			name: "topkin",
 			kind: "kinebody",
 			boxGeometry: true,
-			scale: [20, 110, 10],
-			position: [0, -30, 0]
+			scale: [20, 50, 10]
+		});
+		pz.push({
+			name: "botkin",
+			kind: "kinebody",
+			boxGeometry: true,
+			scale: [20, 50, 10],
+			position: [0, -60, 0]
 		});
 	},
 	_ammoize: function() {
-		zero.core.ammo.kbody(this.kine);
+		zero.core.ammo.kbody(this.topkin);
+		zero.core.ammo.kbody(this.botkin);
 	},
 	ammoize: function() {
 		if (this._ammoized) return;
