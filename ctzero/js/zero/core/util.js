@@ -696,9 +696,9 @@ zero.core.util = {
 			room.opts.onbuild = function(room) { onready(null, room); };
 	},
 	ammoize: function() {
-		var zcc = zero.core.current;
-		zcc.room.ammoize();
-		zcc.person && zcc.person.body.ammoize();
+		var zc = zero.core;
+		zc.current.room.ammoize();
+		zc.util.onCurPer(p => p.body.ammoize());
 	},
 	init: function(onperson, onbuild) {
 		var cfg = core.config.ctzero;
