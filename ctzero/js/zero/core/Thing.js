@@ -23,6 +23,7 @@ zero.core.Thing = CT.Class({
 				this.posRotScale(this.opts.thringopts, this.thring);
 			if (this.opts.autoplay)
 				this.playPause();
+			this.onready && this.onready();
 			for (cb of _.readycbs)
 				cb();
 		},
