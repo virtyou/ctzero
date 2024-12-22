@@ -72,6 +72,16 @@ zero.core.util = {
 			color: zero.core.util.randHue(color)
 		}, mcfg));
 	},
+	transMat: function() {
+		var zcu = zero.core.util;
+		if (!zcu.tmat) {
+			zcu.tmat = new THREE.MeshBasicMaterial({
+				transparent: true,
+				opacity: 0
+			});
+		}
+		return zcu.tmat;
+	},
 	outBound: function(thing, bounder, p, inner) {
 		var rb = (bounder || zero.core.current.room)[inner ?
 			"innerBounds" : "bounds"], min = rb.min, max = rb.max;
