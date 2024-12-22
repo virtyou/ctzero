@@ -8,8 +8,8 @@ zero.core.Clutter = CT.Class({
 	},
 	buildLayer: function(layer) {
 		const oz = this.opts, p = this.safePos(),
-			s = oz.size, s2 = s / 2, s5 = s / 5,
-			rz = oz.rows, cz = oz.cols, y = p.y + s * layer,
+			rz = oz.rows, cz = oz.cols,
+			s = oz.size, s2 = s / 2, y = p.y + s * layer,
 			r0 = p.z - s2 * rz, c0 = p.x - s2 * cz,
 			ran = () => s2 - CT.data.random(2 * s2);
 		let r, c;
