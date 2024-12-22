@@ -708,7 +708,10 @@ zero.core.util = {
 	ammoize: function() {
 		var zc = zero.core;
 		zc.current.room.ammoize();
-		zc.util.onCurPer(p => p.body.ammoize());
+		zc.util.ammoper();
+	},
+	ammoper: function() {
+		zero.core.util.onCurPer(p => p.body.ammoize());
 	},
 	init: function(onperson, onbuild) {
 		var cfg = core.config.ctzero;
