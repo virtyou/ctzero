@@ -29,5 +29,6 @@ zero.core.Curtain = CT.Class({
 			rodSize: 2,
 			segLen: 10
 		}, this.opts);
+		zero.core.util.ammoper();
 	}
 }, zero.core.Thing);
