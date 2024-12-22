@@ -119,6 +119,21 @@ zero.core.Body = CT.Class({
 			thing: "Particles",
 			position: [0, -100, 0]
 		});
+		pz.push({
+			name: "kine",
+			kind: "kinebody",
+			boxGeometry: true,
+			scale: [20, 110, 10],
+			position: [0, -30, 0]
+		});
+	},
+	_ammoize: function() {
+		zero.core.ammo.kbody(this.kine);
+	},
+	ammoize: function() {
+		if (this._ammoized) return;
+		this._ammoized = true;
+		this.onReady(this._ammoize);
 	},
 	boundOnRoom: function() {
 		var zcc = zero.core.current;

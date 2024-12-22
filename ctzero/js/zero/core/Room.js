@@ -6,7 +6,7 @@ zero.core.Room = CT.Class({
 	},
 	_tickers: [],
 	_electrical: ["panel", "bulb", "gate", "elevator", "computer"],
-	_structural: ["obstacle", "floor", "wall", "ramp", "stairs", "boulder", "stala"],
+	_structural: ["obstacle", "floor", "wall", "ramp", "stairs", "boulder", "stala", "clutter"],
 	_surfaces: ["obstacle", "floor", "ramp", "stairs", "boulder", "stala", "elevator"],
 	_bumpers: ["wall", "obstacle", "boulder", "stala", "gate"],
 	_wallers: ["ramp", "elevator"],
@@ -469,6 +469,7 @@ zero.core.Room = CT.Class({
 	unload: function() {
 		this.log("UNLOADING!");
 		zero.core.auto.unload();
+		this.unammoize();
 		this.remove();
 	},
 	getPlacer: function() {
@@ -511,7 +512,7 @@ zero.core.Room = CT.Class({
 			tx = base.texture || opts.texture,
 			stepper = base.stepper || opts.stepper,
 			thing = "Thing", d2g = zero.core.util.d2g;
-		if (["floor", "ramp", "stairs"].includes(cat))
+		if (["floor", "ramp", "stairs", "clutter"].includes(cat))
 			thing = CT.parse.capitalize(cat);
 		base.parts.forEach(function(side, i) {
 			sdz = side.dimensions || dz;
@@ -614,6 +615,47 @@ zero.core.Room = CT.Class({
 		this._structural.forEach(this.buildStruct);
 		["flora", "fauna"].forEach(this.buildNatural);
 		this.buildElectrical();
+	},
+	_ammoize: function() {
+		var bz = this.bounds, bmin = bz.min, bmax = bz.max,
+			rz = this.radii, rigid = zero.core.ammo.rigid,
+			x2 = rz.x * 2, y2 = rz.y * 2, z2 = rz.z * 2;
+		this.asurfs = [
+			rigid(0, {
+				x: 0, y: bmin.y, z: 0
+			}, {
+				x: x2, y: 1, z: z2
+			}),
+			rigid(0, {
+				x: bmin.x, y: 0, z: 0
+			}, {
+				x: 1, y: y2, z: z2
+			}),
+			rigid(0, {
+				x: bmax.x, y: 0, z: 0
+			}, {
+				x: 1, y: y2, z: z2
+			}),
+			rigid(0, {
+				x: 0, y: 0, z: bmin.z
+			}, {
+				x: x2, y: y2, z: 1
+			}),
+			rigid(0, {
+				x: 0, y: 0, z: bmax.z
+			}, {
+				x: x2, y: y2, z: 1
+			})
+		];
+	},
+	ammoize: function() {
+		if (this._ammoized) return;
+		this._ammoized = true;
+		this.onReady(() => zero.core.ammo.onReady(this._ammoize));
+	},
+	unammoize: function() {
+		if (!this._ammoized) return; // TODO : unRigid() as well?
+		this.asurfs.forEach(s => zero.core.camera.scene.remove(s));
 	},
 	components: function() {
 		var o, cz = [{
