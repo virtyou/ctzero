@@ -617,31 +617,34 @@ zero.core.Room = CT.Class({
 		this.buildElectrical();
 	},
 	_ammoize: function() {
-		var bz = this.bounds, bmin = bz.min, bmax = bz.max,
-			rz = this.radii, rigid = zero.core.ammo.rigid,
-			x2 = rz.x * 2, y2 = rz.y * 2, z2 = rz.z * 2;
+		var zc = zero.core, rigid = zc.ammo.rigid,
+			bz = this.bounds, rz = this.radii,
+			bmin = bz.min, bmax = bz.max,
+			x2 = rz.x * 2, y2 = rz.y * 2, z2 = rz.z * 2,
+			tmat = zc.util.transMat(),
+			rig = (p, s) => rigid(0, p, s, null, tmat);
 		this.asurfs = [
-			rigid(0, {
+			rig({
 				x: 0, y: bmin.y, z: 0
 			}, {
 				x: x2, y: 1, z: z2
 			}),
-			rigid(0, {
+			rig({
 				x: bmin.x, y: 0, z: 0
 			}, {
 				x: 1, y: y2, z: z2
 			}),
-			rigid(0, {
+			rig({
 				x: bmax.x, y: 0, z: 0
 			}, {
 				x: 1, y: y2, z: z2
 			}),
-			rigid(0, {
+			rig({
 				x: 0, y: 0, z: bmin.z
 			}, {
 				x: x2, y: y2, z: 1
 			}),
-			rigid(0, {
+			rig({
 				x: 0, y: 0, z: bmax.z
 			}, {
 				x: x2, y: y2, z: 1

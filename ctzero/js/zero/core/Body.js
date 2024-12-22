@@ -101,6 +101,21 @@ zero.core.Body = CT.Class({
 			lopts.bone = 4;
 		this.opts.parts.push(lopts);
 	},
+	kpart: function(name, pos) {
+		var oz = {
+			name: name,
+			kind: "kinebody",
+			boxGeometry: true,
+			scale: [20, 50, 10],
+			material: {
+				transparent: true,
+				opacity: 0
+			}
+		};
+		if (pos)
+			oz.position = pos;
+		return oz;
+	},
 	preassemble: function() {
 		var pz = zero.core.util.directorize(this.opts.parts);
 		Object.keys(this._lookers).forEach(this._looker);
@@ -119,19 +134,8 @@ zero.core.Body = CT.Class({
 			thing: "Particles",
 			position: [0, -100, 0]
 		});
-		pz.push({
-			name: "topkin",
-			kind: "kinebody",
-			boxGeometry: true,
-			scale: [20, 50, 10]
-		});
-		pz.push({
-			name: "botkin",
-			kind: "kinebody",
-			boxGeometry: true,
-			scale: [20, 50, 10],
-			position: [0, -60, 0]
-		});
+		pz.push(this.kpart("topkin"));
+		pz.push(this.kpart("botkin", [0, -60, 0]));
 	},
 	_ammoize: function() {
 		zero.core.ammo.kbody(this.topkin);
