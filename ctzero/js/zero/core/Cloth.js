@@ -24,9 +24,8 @@ zero.core.Cloth = CT.Class({
 			this.frame = oz.garment[this.frame].thring;
 		this.resetter();
 	},
-	postassemble: function() {
-		setTimeout(this.setsoft, 500);
-//		core.config.ctzero.gravity ? setTimeout(this.setsoft, 1000) : this.setsoft();
+	onready: function() {
+		zero.core.ammo.onReady(() => setTimeout(this.setsoft, 500)); // meh
 	},
 	init: function(opts) { // should translate geometry?
 		opts.segLen = opts.segLen || 4;
