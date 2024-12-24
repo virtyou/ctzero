@@ -6,7 +6,7 @@ zero.core.Room = CT.Class({
 	},
 	_tickers: [],
 	_electrical: ["panel", "bulb", "gate", "elevator", "computer"],
-	_structural: ["obstacle", "floor", "wall", "ramp", "stairs", "boulder", "stala", "clutter"],
+	_structural: ["obstacle", "floor", "wall", "ramp", "stairs", "curtain", "boulder", "stala", "clutter"],
 	_surfaces: ["obstacle", "floor", "ramp", "stairs", "boulder", "stala", "elevator"],
 	_bumpers: ["wall", "obstacle", "boulder", "stala", "gate"],
 	_wallers: ["ramp", "elevator"],
@@ -512,7 +512,7 @@ zero.core.Room = CT.Class({
 			tx = base.texture || opts.texture,
 			stepper = base.stepper || opts.stepper,
 			thing = "Thing", d2g = zero.core.util.d2g;
-		if (["floor", "ramp", "stairs", "clutter"].includes(cat))
+		if (["floor", "ramp", "stairs", "curtain", "clutter"].includes(cat))
 			thing = CT.parse.capitalize(cat);
 		base.parts.forEach(function(side, i) {
 			sdz = side.dimensions || dz;
