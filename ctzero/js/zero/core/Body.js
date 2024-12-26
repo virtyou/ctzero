@@ -107,6 +107,7 @@ zero.core.Body = CT.Class({
 			kind: "kinebody",
 			boxGeometry: true,
 			scale: [20, 50, 10],
+			onbuild: zero.core.ammo.kbody,
 			material: {
 				transparent: true,
 				opacity: 0
@@ -134,12 +135,10 @@ zero.core.Body = CT.Class({
 			thing: "Particles",
 			position: [0, -100, 0]
 		});
-		pz.push(this.kpart("topkin"));
-		pz.push(this.kpart("botkin", [0, -60, 0]));
 	},
 	_ammoize: function() {
-		zero.core.ammo.kbody(this.topkin);
-		zero.core.ammo.kbody(this.botkin);
+		this.attach(this.kpart("topkin"));
+		this.attach(this.kpart("botkin", [0, -60, 0]));
 	},
 	ammoize: function() {
 		if (this._ammoized) return;
