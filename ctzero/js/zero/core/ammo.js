@@ -8,6 +8,7 @@ zero.core.ammo = {
 		softs: [],
 		rigids: [],
 		kinematics: [],
+		onreadies: [],
 		consts: {
 			margin: 0.05,
 			damping: 0,//.01,
@@ -122,6 +123,10 @@ zero.core.ammo = {
 	unKinematic: function(k) {
 		zero.core.ammo.unBody(k, "kinematics");
 	},
+	delRigid: function(r) {
+		zero.core.ammo.unRigid(r);
+		zero.core.camera.scene.remove(r);
+	},
 	tick: function(dt) {
 		const ammo = zero.core.ammo, _ = ammo._;
 		if (_.paused || !(_.softs.length || _.rigids.length || _.kinematics.length)) return;
@@ -177,6 +182,8 @@ zero.core.ammo = {
 	},
 	rigid: function(mass, p, s, q, mat, friction) { // creates thring
 		const _ = zero.core.ammo._;
+		p = p || { x: 0, y: 0, z: 0 };
+		s = s || { x: 50, y: 50, z: 50 };
 		q = q || _.defQuat;
 		mat = mat || new THREE.MeshPhongMaterial( { color: 0xFFFFFF } );
 		_.positioner.set(p.x, p.y, p.z);
@@ -208,6 +215,10 @@ zero.core.ammo = {
 		};
 		thring.userData.resetter();
 		return thring.userData.physicsBody;
+	},
+	kbody: function(thing) {
+		const ammo = zero.core.ammo;
+		ammo.onReady(() => ammo.kineBody(thing.thring, thing.opts.friction));
 	},
 	hinge: function(r1, r2, p1, p2, axis) {
 		const ammo = zero.core.ammo;
@@ -311,6 +322,13 @@ zero.core.ammo = {
 		_.aQuatter.setValue(_.quatter.x, _.quatter.y, _.quatter.z, _.quatter.w);
 		return ammo.transform(_.transformer, _.aPositioner, _.aQuatter);
 	},
+	onReady: function(cb) {
+		const _ = zero.core.ammo._;
+		_.ready ? cb() : _.onreadies.push(cb);
+	},
+	isReady: function() {
+		return zero.core.ammo._.ready;
+	},
 	load: function(AmmoLib) {
 		const ammo = zero.core.ammo, _ = ammo._;
 		Ammo = AmmoLib;
@@ -334,6 +352,8 @@ zero.core.ammo = {
 		_.aPositioner = new Ammo.btVector3();
 		_.aQuatter = new Ammo.btQuaternion();
 		_.softBodyHelpers = new Ammo.btSoftBodyHelpers();
+		_.ready = true;
+		_.onreadies.forEach(cb => cb());
 		_.onload && _.onload();
 	},
 	unload: function() {

@@ -11,7 +11,7 @@ zero.core.Garment = CT.Class({
 			if (oz.texture && (!otz || otz.includes(p.name)))
 				p.texture = oz.texture;
 			if (rz.includes(p.name))
-				p.onbuild = (thing) => ammo.kineBody(thing.thring, thing.opts.friction);
+				p.onbuild = ammo.kbody;
 			if (p.thing == "Cloth")
 				this.cloths.push(p.name);
 		}
