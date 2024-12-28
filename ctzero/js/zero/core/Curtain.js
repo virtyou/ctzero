@@ -24,10 +24,10 @@ zero.core.Curtain = CT.Class({
 	},
 	init: function(opts) {
 		this.opts = CT.merge(opts, {
-			width: 50,
+			width: 80,
 			height: 100,
 			rodSize: 2,
-			segLen: 10
+			segLen: 20
 		}, this.opts);
 		zero.core.util.ammoper();
 	}
