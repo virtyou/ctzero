@@ -123,6 +123,10 @@ zero.core.ammo = {
 	unKinematic: function(k) {
 		zero.core.ammo.unBody(k, "kinematics");
 	},
+	delRigid: function(r) {
+		zero.core.ammo.unRigid(r);
+		zero.core.camera.scene.remove(r);
+	},
 	tick: function(dt) {
 		const ammo = zero.core.ammo, _ = ammo._;
 		if (_.paused || !(_.softs.length || _.rigids.length || _.kinematics.length)) return;

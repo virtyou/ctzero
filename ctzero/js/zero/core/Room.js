@@ -657,11 +657,7 @@ zero.core.Room = CT.Class({
 		this.onReady(() => zero.core.ammo.onReady(this._ammoize));
 	},
 	unammoize: function() {
-		this._ammoized && this.asurfs.forEach(this.unloadAmmo);
-	},
-	unloadAmmo: function(s) {
-		zero.core.ammo.unRigid(s);
-		zero.core.camera.scene.remove(s);
+		this._ammoized && this.asurfs.forEach(zero.core.ammo.delRigid);
 	},
 	components: function() {
 		var o, cz = [{

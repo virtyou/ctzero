@@ -33,7 +33,7 @@ zero.core.Clutter = CT.Class({
 		zero.core.ammo.onReady(() => setTimeout(this.buildPile, 500)); // meh
 	},
 	onremove: function() {
-		this.pile.forEach(p => zero.core.camera.scene.remove(p));
+		this.pile.forEach(zero.core.ammo.delRigid);
 	},
 	init: function(opts) {
 		this.opts = CT.merge(opts, {
