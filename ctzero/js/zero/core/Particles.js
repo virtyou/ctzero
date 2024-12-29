@@ -36,7 +36,7 @@ zero.core.Particles = CT.Class({
 		return this.opts.floorbound && (thing.position().y < this._floor);
 	},
 	release: function(number, pos) {
-		var activated, oz = this.opts, zcu = zero.core.util;
+		var activated, oz = this.opts;
 		if (!this.active) {
 			this.active = [];
 			this.pool = Object.values(this.particle);
@@ -114,6 +114,7 @@ zero.core.Particles = CT.Class({
 	},
 	onremove: function() {
 		this._audio && this._audio.pause();
+		this.dripper && this.undrip();
 		delete this._audio;
 	},
 	init: function(opts) {
@@ -129,7 +130,7 @@ zero.core.Particles = CT.Class({
 				opts.pmat = {};
 			opts.pmat.color = opts.pcolor;
 		}
-		if (opts.drip) // TODO: cancel interval at some point?
+		if (opts.drip)
 			this.dripper = setInterval(this.release, 1000 / (opts.count * opts.dissolve || 1), 1);
 		var PA = zero.core.Particles.audio;
 		if (PA && PA[opts.name])
