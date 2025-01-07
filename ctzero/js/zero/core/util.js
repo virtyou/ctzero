@@ -596,7 +596,8 @@ zero.core.util = {
 	svids: {},
 	videoTexture: function(src, thing) {
 		var chan, sup, v, vt, svids = zero.core.util.svids,
-			vclass = "w100p transparent notouch below", xo = src.startsWith("http");
+			vclass = "w100p transparent notouch below", xo = src.startsWith("http"),
+			r = zero.core.current.room, av = r ? r.opts.autovid : true;
 		if (src.startsWith("fzn:")) {
 			chan = src.slice(4);
 			if (chan.startsWith("up:")) {
@@ -620,8 +621,7 @@ zero.core.util = {
 				});
 				src = null;
 			}
-			v = zero.core.util.vidNode(src, vclass,
-				zero.core.current.room.opts.autovid);
+			v = zero.core.util.vidNode(src, vclass, av);
 			if (xo || !src)
 				v.setAttribute('crossorigin', 'anonymous');
 			xo && v.play(); // is this right?
