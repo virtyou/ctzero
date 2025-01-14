@@ -19,6 +19,11 @@ zero.core.Curtain = CT.Class({
 			texture: oz.texture
 		});
 	},
+	onready: function() {
+		var g = this.drape.thring.geometry,
+			p = this.position, up = zero.core.util.update;
+		setTimeout(() => up(p(), g.boundingSphere.center), 500); // MEH
+	},
 	setTexture: function(tx) {
 		this.drape.setTexture(tx);
 	},
