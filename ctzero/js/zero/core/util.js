@@ -616,6 +616,11 @@ zero.core.util = {
 			if (src.startsWith("tlchan:")) {
 				CT.require("CT.stream", true); // just in case
 				CT.stream.util.tl.rand(src.slice(7), function(r) {
+					CT.event.emit("program", {
+						data: r,
+						program: "video",
+						name: thing.opts.comp
+					});
 					v.src = r;
 					v.play();
 				});

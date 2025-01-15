@@ -383,8 +383,14 @@ zero.core.Appliance.Computer = CT.Class({
 	CLASSNAME: "zero.core.Appliance.Computer",
 	messages: [],
 	do: function(order) { // {program,data}
-		if (!this.power) return this.log("do(", order, ") aborted - no power!")
-		this.setProgram(order.program, order.data);
+		if (!this.power) return this.log("do(", order, ") aborted - no power!");
+		const program = order.program, data = order.data;
+		data.startsWith("tlchan:") || CT.event.emit("program", {
+			name: this.name, // tlchan->zcu.videoTexture()
+			program: program,
+			data: data.replace("fzn:up:", "fzn:")
+		});
+		this.setProgram(program, data);
 	},
 	setProgram: function(program, data) {
 		this.opts.program = program;
@@ -395,14 +401,17 @@ zero.core.Appliance.Computer = CT.Class({
 		this.screen.curprog && this.screen.detach("curprog");
 	},
 	setcur: function(copts, nogeo) {
-		const bopts = {
+		const uncur = this.uncur, screen = this.screen, bopts = {
 			name: "curprog",
+			comp: this.name,
 			position: [0, 0, 1]
-		};
+		}, setter = function() {
+			uncur();
+			screen.attach(CT.merge(copts, bopts), null, true);
+		}, curprog = screen.curprog;
 		if (!nogeo)
 			bopts.planeGeometry = this.opts.screenDims;
-		this.uncur();
-		this.screen.attach(CT.merge(copts, bopts), null, true);
+		curprog ? curprog.onReady(setter) : setter();
 	},
 	video: function(data) { // supports "fzn:" and "fzn:up:" vlinx
 		this.setcur({ video: data });
