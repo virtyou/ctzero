@@ -7,7 +7,9 @@ zero.core.ar = {
 				scale: [1, 1, 1],
 				position: [0, 0, 0],
 				onbound: zero.core.util.fit
-			}, thopts), function() {
+			}, thopts, {
+				name: thopts.kind + marker
+			}), function() {
 				mopts = {};// changeMatrixMode: "cameraTransformMatrix" };
 				if (isNaN(parseInt(marker))) {
 					mopts.type = "pattern";

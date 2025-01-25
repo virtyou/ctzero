@@ -598,6 +598,7 @@ zero.core.util = {
 		var chan, sup, v, vt, svids = zero.core.util.svids,
 			vclass = "w100p transparent notouch below", xo = src.startsWith("http"),
 			r = zero.core.current.room, av = r ? r.opts.autovid : true;
+		thing.log("videoTexture(", src, ")");
 		if (src.startsWith("fzn:")) {
 			chan = src.slice(4);
 			if (chan.startsWith("up:")) {
@@ -629,7 +630,7 @@ zero.core.util = {
 			v = zero.core.util.vidNode(src, vclass, av);
 			if (xo || !src)
 				v.setAttribute('crossorigin', 'anonymous');
-			xo && v.play(); // is this right?
+//			xo && v.play(); // is this right?
 			document.body.appendChild(v);
 		}
 		vt = new THREE.VideoTexture(v);
