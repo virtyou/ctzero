@@ -585,7 +585,6 @@ zero.core.util = {
 				zero.core.util.playMedia(v);
 			}
 		});
-
 		return v;
 	},
 	video: function(src) {
@@ -593,11 +592,38 @@ zero.core.util = {
 		zero.core.util.back(v);
 		v.play();
 	},
+	vidProg: function(cb) {
+		let fpref = "fzn:";
+		CT.modal.choice({
+			prompt: "what kind of video program?",
+			data: ["channel", "video", "stream (down)", "stream (up)"],
+			cb: function(sel) {
+				if (sel.startsWith("stream")) { // fzn stream
+					if (sel.includes("up"))
+						fpref += "up:";
+					return CT.modal.prompt({
+						prompt: "ok, what's the name of the stream?",
+						cb: name => cb(fpref + name)
+					});
+				} // tl video or channel
+				CT.modal.choice({
+					prompt: "what channel?", // TODO : avoid direct ctvu reference
+					data: core.config.ctvu.loaders.tlchans,
+					cb: function(chan) {
+						if (sel == "channel" || chan == "surf")
+							return cb("tlchan:" + chan);
+						CT.stream.util.tl.pick(chan, cb);
+					}
+				});
+			}
+		});
+	},
 	svids: {},
 	videoTexture: function(src, thing) {
 		var chan, sup, v, vt, svids = zero.core.util.svids,
 			vclass = "w100p transparent notouch below", xo = src.startsWith("http"),
 			r = zero.core.current.room, av = r ? r.opts.autovid : true;
+		thing.log("videoTexture(", src, ")");
 		if (src.startsWith("fzn:")) {
 			chan = src.slice(4);
 			if (chan.startsWith("up:")) {
@@ -629,7 +655,7 @@ zero.core.util = {
 			v = zero.core.util.vidNode(src, vclass, av);
 			if (xo || !src)
 				v.setAttribute('crossorigin', 'anonymous');
-			xo && v.play(); // is this right?
+//			xo && v.play(); // is this right?
 			document.body.appendChild(v);
 		}
 		vt = new THREE.VideoTexture(v);
