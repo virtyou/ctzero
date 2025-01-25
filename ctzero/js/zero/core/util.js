@@ -585,13 +585,38 @@ zero.core.util = {
 				zero.core.util.playMedia(v);
 			}
 		});
-
 		return v;
 	},
 	video: function(src) {
 		var v = zero.core.util.vidNode(src);
 		zero.core.util.back(v);
 		v.play();
+	},
+	vidProg: function(cb) {
+		let fpref = "fzn:";
+		CT.modal.choice({
+			prompt: "what kind of video program?",
+			data: ["channel", "video", "stream (down)", "stream (up)"],
+			cb: function(sel) {
+				if (sel.startsWith("stream")) { // fzn stream
+					if (sel.includes("up"))
+						fpref += "up:";
+					return CT.modal.prompt({
+						prompt: "ok, what's the name of the stream?",
+						cb: name => cb(fpref + name)
+					});
+				} // tl video or channel
+				CT.modal.choice({
+					prompt: "what channel?", // TODO : avoid direct ctvu reference
+					data: core.config.ctvu.loaders.tlchans,
+					cb: function(chan) {
+						if (sel == "channel" || chan == "surf")
+							return cb("tlchan:" + chan);
+						CT.stream.util.tl.pick(chan, cb);
+					}
+				});
+			}
+		});
 	},
 	svids: {},
 	videoTexture: function(src, thing) {
