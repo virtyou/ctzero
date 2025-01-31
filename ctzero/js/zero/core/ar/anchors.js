@@ -1,8 +1,8 @@
-zero.core.ar = {
+zero.core.ar.anchors = {
 	_: {},
 	markers: {
 		marker: function(marker, thopts) {
-			var _ = zero.core.ar._, mopts, thing = _.things[marker] = zero.core.util.thing(CT.merge({
+			var _ = zero.core.ar.anchors._, mopts, thing = _.things[marker] = zero.core.util.thing(CT.merge({
 				centered: true, // for bound/fit
 				scale: [1, 1, 1],
 				position: [0, 0, 0],
@@ -28,10 +28,10 @@ zero.core.ar = {
 		build: function() {
 			var mcfg = core.config.ctzero.camera.ar.markers, m;
 			for (m in mcfg)
-				zero.core.ar.markers.marker(m, mcfg[m]);
+				zero.core.ar.anchors.markers.marker(m, mcfg[m]);
 		},
 		init: function() {
-			var zcar = zero.core.ar, _ = zcar._,
+			var zcar = zero.core.ar.anchors, _ = zcar._,
 				mcfg = core.config.ctzero.camera.ar.markers, m,
 				keys = Object.values(mcfg).filter(i => typeof i == "string");
 			_.markers = {};
@@ -50,7 +50,7 @@ zero.core.ar = {
 		}
 	},
 	build: function() {
-		var zcar = zero.core.ar, _ = zcar._, cam = zero.core.camera;
+		var zcar = zero.core.ar.anchors, _ = zcar._, cam = zero.core.camera;
 		_.source = new THREEx.ArToolkitSource({
 			sourceType: "webcam"
 		});
@@ -68,12 +68,12 @@ zero.core.ar = {
 		});
 	},
 	tick: function() {
-		var _ = zero.core.ar._;
+		var _ = zero.core.ar.anchors._;
 		if (!_.source.ready) return;
 		_.context.update(_.source.domElement);
 	},
 	resize: function(renderer) {
-		var _ = zero.core.ar._;
+		var _ = zero.core.ar.anchors._;
 		_.source.onResizeElement();
 		_.source.copyElementSizeTo(renderer.domElement);
 		_.context.arController && _.source.copyElementSizeTo(_.context.arController.canvas);
@@ -92,8 +92,5 @@ zero.core.ar = {
 		core.config.ctzero.camera.ar = CT.merge(ar); // avoids modding original
 		zero.core.camera.init();
 		requestAnimationFrame(zero.core.util.animate);
-	},
-	init: function() {
-		CT.scriptImport(core.config.ctzero.lib.ar);
 	}
 };
