@@ -334,6 +334,9 @@ const MathUtils = {
 	denormalize: denormalize
 };
 
+// changes below
+THREE.MathUtils = MathUtils;
+/*
 export {
 	DEG2RAD,
 	RAD2DEG,
@@ -361,3 +364,4 @@ export {
 	denormalize,
 	MathUtils
 };
+*/
