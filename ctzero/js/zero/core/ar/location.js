@@ -7,11 +7,12 @@ zero.core.ar.location = {
 		fakeGPS: true,
 		thing: function(t, i) {
 			var _ = zero.core.ar.location._, c = _.coords,
+				lng = c.longitude + t.longitude, lat = c.latitude + t.latitude,
 				name = t.name || ("thing" + i);
+			CT.log(name + " at " + lng + " lng and " + lat + " lat");
 			_.things[name] = zero.core.util.thing(CT.merge(t, {
 				name: name,
-				adder: outerGroup => _.locar.add(outerGroup,
-					c.longitude + t.longitude, c.latitude + t.latitude)
+				adder: outerGroup => _.locar.add(outerGroup, lng, lat)
 			}));
 		},
 		build: function() {
