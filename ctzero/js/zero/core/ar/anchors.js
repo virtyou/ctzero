@@ -31,22 +31,10 @@ zero.core.ar.anchors = {
 				zero.core.ar.anchors.markers.marker(m, mcfg[m]);
 		},
 		init: function() {
-			var zcar = zero.core.ar.anchors, _ = zcar._,
-				mcfg = core.config.ctzero.camera.ar.markers, m,
-				keys = Object.values(mcfg).filter(i => typeof i == "string");
+			var zcar = zero.core.ar, zcan = zcar.anchors, _ = zcan._;
 			_.markers = {};
 			_.things = {};
-			if (!keys.length)
-				return zcar.markers.build();
-			CT.db.multi(keys, function(things) {
-				things.forEach(function(thing) {
-					for (m in mcfg)
-						if (mcfg[m] == thing.key)
-							mcfg[m] = thing;
-				});
-				zcar.markers.build();
-				CT.cc.views(zcar.components());
-			}, "json");
+			zcar.populate("markers", zcan.markers.build);
 		}
 	},
 	build: function() {
@@ -77,16 +65,6 @@ zero.core.ar.anchors = {
 		_.source.onResizeElement();
 		_.source.copyElementSizeTo(renderer.domElement);
 		_.context.arController && _.source.copyElementSizeTo(_.context.arController.canvas);
-	},
-	components: function() {
-		var aug = core.config.ctzero.camera.ar, compz = [{
-			identifier: "Augmentation: " + aug.name,
-			owners: aug.owners
-		}];
-		Object.values(aug.markers).forEach(function(thing) {
-			compz = compz.concat(zero.core.util.components(thing, aug.name));
-		});
-		return compz;
 	},
 	start: function(ar) {
 		core.config.ctzero.camera.ar = CT.merge(ar); // avoids modding original
