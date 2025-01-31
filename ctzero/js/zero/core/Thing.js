@@ -908,8 +908,12 @@ zero.core.Thing = CT.Class({
 			iterator = function() {
 				i += 1;
 				if (i >= oz.parts.length) {
-					if (i == oz.parts.length)
-						(oz.anchor || oz.scene).add(outer);
+					if (i == oz.parts.length) {
+						if (oz.adder)
+							oz.adder(outer);
+						else
+							(oz.anchor || oz.scene).add(outer);
+					}
 					thiz._.assembled = true;
 					thiz.assembled();
 				}
