@@ -30,7 +30,6 @@ CT.require("zero.core.shaders");
 CT.require("zero.core.morphs");
 CT.require("zero.core.audio");
 CT.require("zero.core.auto");
-CT.require("zero.core.ar");
 CT.require("zero.core.knocker");
 CT.require("zero.core.natural");
 CT.require("zero.core.gamepads");
