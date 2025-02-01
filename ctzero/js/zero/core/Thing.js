@@ -956,6 +956,8 @@ zero.core.Thing = CT.Class({
 			g = oz.boxGeometry; // better way?
 			if (g == true)
 				g = [1, 1, 1, 1, 1, 1];
+			else if (!isNaN(g))
+				g = [g, g, g, 1, 1, 1];
 			oz.geometry = new THREE.BoxGeometry(g[0],
 				g[1], g[2], g[3], g[4], g[5]);
 		}
