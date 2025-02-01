@@ -8,8 +8,8 @@ zero.core.ar = {
 		zcar[zcar.mode].build();
 	},
 	resize: function(renderer) {
-		var zcar = zero.core.ar;
-		zcar[zcar.mode].resize(renderer);
+		var zcar = zero.core.ar, resizer = zcar[zcar.mode].resize;
+		resizer && resizer(renderer);
 	},
 	load: function(augmentation) {
 		var zcar = zero.core.ar;
