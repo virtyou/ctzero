@@ -50,15 +50,16 @@ zero.core.ar.location = {
 	},
 	tick: function() {
 		var zcarlo = zc.ar.location, _ = zcarlo._;
-		_.orcon.update();
+		_.orcon && _.orcon.update();
 		_.cam.update();
 	},
 	build: function() {
 		var zc = zero.core, cam = zc.camera, camcam = cam.get(),
 			zcarlo = zc.ar.location, _ = zcarlo._;
 		_.locar = new THREEx.LocationBased(cam.scene, camcam);
-		_.orcon = new THREEx.DeviceOrientationControls(camcam);
 		_.cam = new THREEx.WebcamRenderer(cam.get("renderer"));
+		if (CT.info.mobile)
+			_.orcon = new THREEx.DeviceOrientationControls(camcam);
 		_.lights = core.config.ctzero.camera.ar.lights.map(zero.core.util.light);
 		_.init();
 	},
