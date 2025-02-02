@@ -20,29 +20,28 @@ zero.core.ar.location = {
 		},
 		gps: function(dobuild) {
 			var zcar = zero.core.ar, _ = zcar.location._, cz = _.coords;
-			if (_.fakeGPS) {
-				_.locar.fakeGps(cz.longitude, cz.latitude);
+			_.locar.on("gpsupdate", function(pos) {
+				cz.latitude = pos.coords.latitude;
+				cz.longitude = pos.coords.longitude;
+				CT.log("GPS: " + cz.longitude + " lon; " + cz.latitude + " lat");
 				dobuild();
-			} else {
-				_.locar.on("gpsupdate", function(pos) {
-					cz.latitude = pos.coords.latitude;
-					cz.longitude = pos.coords.longitude;
-					CT.log("GPS: " + cz.longitude + " lon; " + cz.latitude + " lat");
-					dobuild();
-				});
-				_.locar.on("gpserror", function(code) {
-					CT.log("GPS error: " + code);
-					dobuild();
-				});
+			});
+			_.locar.on("gpserror", function(code) {
+				CT.log("GPS error: " + code);
+				dobuild();
+			});
+			CT.log("starting GPS - fake: " + _.fakeGPS);
+			if (_.fakeGPS)
+				_.locar.fakeGps(cz.longitude, cz.latitude);
+			else
 				_.locar.startGps();
-			}
 		},
 		init: function() {
-			var zcar = zero.core.ar, _ = zcar.location._, waiting = true;
+			var zcar = zero.core.ar, _ = zcar.location._, starting = true;
 			_.things = {};
 			_.gps(function() {
-				if (waiting) {
-					waiting = false;
+				if (starting) {
+					starting = false;
 					zcar.populate("things", _.build);
 				}
 			});
