@@ -4,19 +4,23 @@ zero.core.ar.location = {
 			latitude: 0,
 			longitude: 0
 		},
-		fakeGPS: true,
+		fakeGPS: false,
 		thing: function(t, i) {
-			var _ = zero.core.ar.location._, c = _.coords,
-				lng = c.longitude + t.longitude, lat = c.latitude + t.latitude,
-				name = t.name || ("thing" + i);
+			var zc = zero.core, zcar = zc.ar, _ = zcar.location._, c = _.coords,
+				lng = t.longitude, lat = t.latitude, name = t.name || ("thing" + i);
+			if (zcar.aug.relative) {
+				lng += c.longitude;
+				lat += c.latitude;
+			}
 			CT.log(name + " at " + lng + " lng and " + lat + " lat");
-			_.things[name] = zero.core.util.thing(CT.merge(t, {
+			_.things[name] = zc.util.thing(CT.merge(t, {
 				name: name,
 				adder: outerGroup => _.locar.add(outerGroup, lng, lat)
 			}));
 		},
 		build: function() {
-			core.config.ctzero.camera.ar.things.forEach(zero.core.ar.location._.thing);
+			var zcar = zero.core.ar;
+			zcar.aug.things.forEach(zcar.location._.thing);
 		},
 		gps: function(dobuild) {
 			var zcar = zero.core.ar, _ = zcar.location._, cz = _.coords;
@@ -54,17 +58,12 @@ zero.core.ar.location = {
 	},
 	build: function() {
 		var zc = zero.core, cam = zc.camera, camcam = cam.get(),
-			zcarlo = zc.ar.location, _ = zcarlo._;
+			zcar = zc.ar, zcarlo = zcar.location, _ = zcarlo._;
 		_.locar = new THREEx.LocationBased(cam.scene, camcam);
 		_.cam = new THREEx.WebcamRenderer(cam.get("renderer"));
 		if (CT.info.mobile)
 			_.orcon = new THREEx.DeviceOrientationControls(camcam);
-		_.lights = core.config.ctzero.camera.ar.lights.map(zero.core.util.light);
+		_.lights = zcar.aug.lights.map(zero.core.util.light);
 		_.init();
-	},
-	start: function(ar) { // probs consolidate start()s
-		core.config.ctzero.camera.ar = CT.merge(ar); // avoids modding original
-		zero.core.camera.init();
-		requestAnimationFrame(zero.core.util.animate);
 	}
 };

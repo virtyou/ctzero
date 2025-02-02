@@ -11,11 +11,15 @@ zero.core.ar = {
 		var zcar = zero.core.ar, resizer = zcar[zcar.mode].resize;
 		resizer && resizer(renderer);
 	},
-	load: function(augmentation) {
-		var zcar = zero.core.ar;
-		zcar.mode = augmentation.variety;
-		CT.scriptImport(core.config.ctzero.lib.ar[zcar.mode],
-			() => zcar[zcar.mode].start(augmentation));
+	run: function() {
+		zero.core.camera.init();
+		requestAnimationFrame(zero.core.util.animate);
+	},
+	load: function(aug) {
+		var zcar = zero.core.ar, zcfg = core.config.ctzero;
+		zcar.mode = aug.variety;
+		zcar.aug = zcfg.camera.ar = CT.merge(aug); // necessary?
+		CT.scriptImport(zcfg.lib.ar[zcar.mode], zcar.run);
 	},
 	populate: function(collection, builder) {
 		var zcar = zero.core.ar,

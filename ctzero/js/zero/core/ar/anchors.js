@@ -65,10 +65,5 @@ zero.core.ar.anchors = {
 		_.source.onResizeElement();
 		_.source.copyElementSizeTo(renderer.domElement);
 		_.context.arController && _.source.copyElementSizeTo(_.context.arController.canvas);
-	},
-	start: function(ar) {
-		core.config.ctzero.camera.ar = CT.merge(ar); // avoids modding original
-		zero.core.camera.init();
-		requestAnimationFrame(zero.core.util.animate);
 	}
 };
