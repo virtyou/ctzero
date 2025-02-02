@@ -46,11 +46,12 @@ zero.core.ar = {
 	start: function(akey) {
 		var zcar = zero.core.ar;
 		if (akey)
-			CT.db.one(akey, zcar.load);
-		else // avoid direct one reference
-//			zcar.load(templates.one.ar.location);
-			zcar.load(templates.one.ar.anchors);
-//			zcar.load(templates.one.ar[CT.data.choice(["anchors", "location"])]);
+			return CT.db.one(akey, zcar.load);
+		CT.modal.choice({
+			prompt: "anchors or location?",
+			data: ["location", "anchors"],
+			cb: arvar => zcar.load(templates.one.ar[arvar])
+		});
 	}
 };
 
