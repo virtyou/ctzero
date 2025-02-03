@@ -26,14 +26,32 @@ zero.core.ar.location = {
 				t.name = "thing" + i;
 			_.things[t.name] = zc.util.thing(_.placed(t));
 		},
+		fromPeople: function(name, cb) {
+			var p, zc = zero.core, _ = zc.ar.location._,
+				ranPer = () => CT.data.choice(Object.values(_.people)),
+				byName = () => cb(_.people[name] || ranPer());
+			if (_.people)
+				return byName();
+			CT.db.get("person", function(pz) {
+				_.people = {};
+				for (p of pz)
+					_.people[p.name] = p;
+				byName();
+			}, null, null, null, null, false, false, "json");
+		},
+		getPerson: function(persig, cb) {
+			if (persig.length > 40)
+				return CT.db.one(persig, cb, "json");
+			zero.core.ar.location._.fromPeople(persig, cb);
+		},
 		person: function(p) {
 			var zc = zero.core, _ = zc.ar.location._;
-			CT.db.one(p.person, function(person) {
+			_.getPerson(p.person, function(person) {
 				person.body.longitude = p.longitude;
 				person.body.latitude = p.latitude;
 				_.placed(person.body);
-				zc.join(person, null, true);
-			}, "json");
+				zc.util.join(person, null, true);
+			});
 		},
 		manifestation: function(m, i) {
 			var _ = zero.core.ar.location._;
