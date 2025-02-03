@@ -1,4 +1,5 @@
 zero.core.ar = {
+	_: {},
 	tick: function() {
 		var zcar = zero.core.ar;
 		zcar[zcar.mode].tick();
@@ -22,6 +23,35 @@ zero.core.ar = {
 		zcar.mode = aug.variety;
 		zcar.aug = zcfg.camera.ar = CT.merge(aug); // necessary?
 		CT.scriptImport(zcfg.lib.ar[zcar.mode], zcar.run);
+	},
+	fromPeople: function(name, cb) {
+		var p, zc = zero.core, _ = zc.ar._,
+			ranPer = () => CT.data.choice(Object.values(_.people)),
+			byName = () => cb(_.people[name] || ranPer());
+		if (_.people)
+			return byName();
+		CT.db.get("person", function(pz) {
+			_.people = {};
+			for (p of pz)
+				_.people[p.name] = p;
+			byName();
+		}, null, null, null, null, false, false, "json");
+	},
+	getPerson: function(persig, cb) {
+		if (persig.length > 40)
+			return CT.db.one(persig, cb, "json");
+		zero.core.ar.fromPeople(persig, cb);
+	},
+	person: function(p, bprep) {
+		var zc = zero.core, zcar = zc.ar, gotPer;
+		zcar.getPerson(p, function(per) {
+			bprep(per.body);
+			per.body.onclick = function() {
+				zc.audio.ux("blipon");
+				gotPer.engage();
+			};
+			gotPer = zc.util.join(per, null, true);
+		});
 	},
 	populate: function(collection, builder) {
 		var zcar = zero.core.ar,
