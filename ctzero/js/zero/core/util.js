@@ -849,6 +849,7 @@ zero.core.util = {
 				onready && onready(person);
 			}
 		}));
+		return person;
 	},
 	person: function(body_generator, name, pos, opts, bopts) {
 		var body = CT.merge(body_generator(bopts), bopts);

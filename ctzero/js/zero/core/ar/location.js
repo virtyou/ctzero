@@ -45,12 +45,16 @@ zero.core.ar.location = {
 			zero.core.ar.location._.fromPeople(persig, cb);
 		},
 		person: function(p) {
-			var zc = zero.core, _ = zc.ar.location._;
-			_.getPerson(p.person, function(person) {
-				person.body.longitude = p.longitude;
-				person.body.latitude = p.latitude;
-				_.placed(person.body);
-				zc.util.join(person, null, true);
+			var zc = zero.core, _ = zc.ar.location._, gotPer;
+			_.getPerson(p.person, function(per) {
+				per.body.longitude = p.longitude;
+				per.body.latitude = p.latitude;
+				per.body.onclick = function() {
+					zc.audio.ux("blipon");
+					gotPer.respond("hello");
+				};
+				_.placed(per.body);
+				gotPer = zc.util.join(per, null, true);
 			});
 		},
 		manifestation: function(m, i) {
