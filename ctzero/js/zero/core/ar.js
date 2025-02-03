@@ -12,7 +12,9 @@ zero.core.ar = {
 		resizer && resizer(renderer);
 	},
 	run: function() {
-		zero.core.camera.init();
+		var zc = zero.core;
+		zc.camera.init();
+		zc.current.people = {}; // normally in zcu.refresh()
 		requestAnimationFrame(zero.core.util.animate);
 	},
 	load: function(aug) {
