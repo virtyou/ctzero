@@ -38,12 +38,12 @@ zero.core.ar = {
 		}, "json");
 	},
 	components: function() {
-		var aug = core.config.ctzero.camera.ar, compz = [{
+		var zc = zero.core, aug = zc.ar.aug, compz = [{
 			identifier: "Augmentation: " + aug.name,
 			owners: aug.owners
 		}];
 		Object.values(aug.markers).forEach(function(thing) {
-			compz = compz.concat(zero.core.util.components(thing, aug.name));
+			compz = compz.concat(zc.util.components(thing, aug.name));
 		});
 		return compz;
 	},
