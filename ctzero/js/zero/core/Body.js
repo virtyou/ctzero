@@ -473,7 +473,7 @@ zero.core.Body = CT.Class({
 		this.head.tick();
 		this.torso.tick();
 		this.spine.tick();
-		this._tickGroup();
+		this.opts.nogo || this._tickGroup();
 		this._tickPolar();
 		zero.core.morphs.tick(this);
 		var skeleton = this.thring.skeleton;
