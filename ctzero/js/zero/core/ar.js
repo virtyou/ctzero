@@ -42,15 +42,15 @@ zero.core.ar = {
 			return CT.db.one(persig, cb, "json");
 		zero.core.ar.fromPeople(persig, cb);
 	},
-	person: function(p, bprep) {
+	person: function(p, bprep, onjoin) {
 		var zc = zero.core, zcar = zc.ar, gotPer;
 		zcar.getPerson(p, function(per) {
-			bprep(per.body);
+			bprep && bprep(per.body);
 			per.body.onclick = function() {
 				zc.audio.ux("blipon");
 				gotPer.engage();
 			};
-			gotPer = zc.util.join(per, null, true);
+			gotPer = zc.util.join(per, onjoin, true);
 		});
 	},
 	populate: function(collection, builder) {
