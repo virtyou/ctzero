@@ -851,13 +851,18 @@ zero.core.util = {
 		}));
 	},
 	person: function(body_generator, name, pos, opts, bopts) {
-		var body = CT.merge(body_generator(bopts), bopts);
+		var body = CT.merge(body_generator && body_generator(bopts), bopts);
 		if (pos)
 			body.position = pos;
-		return CT.merge({
+		return zero.core.util.spawn(name, opts, body);
+	},
+	spawn: function(name, popts, bopts, onjoin, nolook, watch, current) {
+		var pobj = CT.merge({
 			name: name,
-			body: body
-		}, opts);
+			body: bopts
+		}, popts);
+		if (!onjoin) return pobj;
+		zero.core.util.join(pobj, onjoin, !watch, !nolook, current);
 	},
 	frameCount: function(className) {
 		var zcu = zero.core.util;
