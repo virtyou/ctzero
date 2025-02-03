@@ -51,7 +51,7 @@ zero.core.ar.location = {
 				per.body.latitude = p.latitude;
 				per.body.onclick = function() {
 					zc.audio.ux("blipon");
-					gotPer.respond("hello");
+					gotPer.engage();
 				};
 				_.placed(per.body);
 				gotPer = zc.util.join(per, null, true);
