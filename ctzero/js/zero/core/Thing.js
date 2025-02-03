@@ -1064,7 +1064,7 @@ zero.core.Thing = CT.Class({
 				}
 				var zcfg = core.config.ctzero;
 				if (!oz.noAlphaTest && zcfg.alphaTest && meshopts.transparent && !meshopts.alphaTest) {
-					this.log("setting alphaTest");
+//					this.log("setting alphaTest");
 					meshopts.alphaTest = zcfg.alphaTest;
 				}
 				this.material = new THREE[meshname](meshopts);
