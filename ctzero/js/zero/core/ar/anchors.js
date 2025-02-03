@@ -1,15 +1,28 @@
 zero.core.ar.anchors = {
 	_: {},
 	markers: {
-		marker: function(marker, thopts) {
-			var _ = zero.core.ar.anchors._, mopts, thing = _.things[marker] = zero.core.util.thing(CT.merge({
+		entity: function(thopts, thextra, onready) {
+			var zc = zero.core, zcu = zc.util, zcar = zc.ar;
+			if (thopts.person) {
+				return zcar.person(thopts.person, function(body) {
+					body.nogo = true;
+				}, onready);
+			}
+			zcu.thing(CT.merge({
 				centered: true, // for bound/fit
 				scale: [1, 1, 1],
 				position: [0, 0, 0],
-				onbound: zero.core.util.fit
-			}, thopts, {
+				onbound: zcu.fit
+			}, thopts, thextra), onready);
+		},
+		marker: function(marker, thopts) {
+			var zc = zero.core, zcu = zc.util, zcar = zc.ar,
+				zcan = zcar.anchors, amarx = zcan.markers, _ = zcan._;
+			amarx.entity(thopts, {
 				name: thopts.kind + marker
-			}), function() {
+			}, function(thing) {
+				_.things[marker] = thing;
+				CT.log(thing.name + " on " + marker);
 				mopts = {};// changeMatrixMode: "cameraTransformMatrix" };
 				if (isNaN(parseInt(marker))) {
 					mopts.type = "pattern";
@@ -18,15 +31,19 @@ zero.core.ar.anchors = {
 					mopts.type = "barcode";
 					mopts.barcodeValue = parseInt(marker);
 				}
-				if (thopts.kind != "video") {
-					zero.core.util.fit(thing);
-					(thopts.kind == "swarm") && zero.core.util.ontick(thing.tick);
+				if (thing.body)
+					thing.body.setCoords(0.05, "scale", false, thing.body.group);
+				else if (!["video", "program"].includes(thopts.kind)) {
+					zcu.fit(thing);
+					(thopts.kind == "swarm") && zcu.ontick(thing.tick);
 				}
-				_.markers[marker] = new THREEx.ArMarkerControls(_.context, thing.group, mopts);
+				_.markers[marker] = new THREEx.ArMarkerControls(_.context,
+					thing.body ? thing.body.placer : thing.group, mopts);
 			});
 		},
 		build: function() {
 			var mcfg = core.config.ctzero.camera.ar.markers, m;
+			CT.log("loading " + Object.keys(mcfg));
 			for (m in mcfg)
 				zero.core.ar.anchors.markers.marker(m, mcfg[m]);
 		},
