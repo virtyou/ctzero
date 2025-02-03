@@ -5,22 +5,43 @@ zero.core.ar.location = {
 			longitude: 0
 		},
 		fakeGPS: false,
-		thing: function(t, i) {
+		latlng: function(t) {
 			var zc = zero.core, zcar = zc.ar, _ = zcar.location._, c = _.coords,
-				lng = t.longitude, lat = t.latitude, name = t.name || ("thing" + i);
+				lng = t.longitude, lat = t.latitude;
 			if (zcar.aug.relative) {
 				lng += c.longitude;
 				lat += c.latitude;
 			}
-			CT.log(name + " at " + lng + " lng and " + lat + " lat");
-			_.things[name] = zc.util.thing(CT.merge(t, {
-				name: name,
-				adder: outerGroup => _.locar.add(outerGroup, lng, lat)
-			}));
+			CT.log(t.name + " at " + lng + " lng and " + lat + " lat");
+			return { lat: lat, lng: lng };
+		},
+		placed: function(t) {
+			var _ = zero.core.ar.location._, ll = _.latlng(t);
+			t.adder = outerGroup => _.locar.add(outerGroup, ll.lng, ll.lat);
+			return t;
+		},
+		thing: function(t, i) {
+			var zc = zero.core, _ = zc.ar.location._;
+			if (!t.name)
+				t.name = "thing" + i;
+			_.things[t.name] = zc.util.thing(_.placed(t));
+		},
+		person: function(p) {
+			var zc = zero.core, _ = zc.ar.location._;
+			CT.db.one(p.person, function(person) {
+				person.body.longitude = p.longitude;
+				person.body.latitude = p.latitude;
+				_.placed(person.body);
+				zc.join(person, null, true);
+			}, "json");
+		},
+		manifestation: function(m, i) {
+			var _ = zero.core.ar.location._;
+			m.person ? _.person(m) : _.thing(m, i);
 		},
 		build: function() {
 			var zcar = zero.core.ar;
-			zcar.aug.things.forEach(zcar.location._.thing);
+			zcar.aug.things.forEach(zcar.location._.manifestation);
 		},
 		gps: function(dobuild) {
 			var zcar = zero.core.ar, _ = zcar.location._, cz = _.coords;
