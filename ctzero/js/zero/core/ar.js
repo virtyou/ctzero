@@ -20,6 +20,10 @@ zero.core.ar = {
 	},
 	load: function(aug) {
 		var zcar = zero.core.ar, zcfg = core.config.ctzero;
+		if (aug.variety == "relocation") {
+			aug.variety = "location";
+			aug.relative = true;
+		}
 		zcar.mode = aug.variety;
 		zcar.aug = zcfg.camera.ar = CT.merge(aug); // necessary?
 		CT.scriptImport(zcfg.lib.ar[zcar.mode], zcar.run);
