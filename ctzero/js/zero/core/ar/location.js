@@ -32,7 +32,7 @@ zero.core.ar.location = {
 				body.longitude = p.longitude;
 				body.latitude = p.latitude;
 				_.placed(body);
-			});
+			}, person => person.body.setCoords(0.2, "scale"));
 		},
 		manifestation: function(m, i) {
 			var _ = zero.core.ar.location._;
