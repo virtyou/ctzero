@@ -1143,6 +1143,13 @@ zero.core.Thing = CT.Class({
 		opts.lockable = this.isport || this.ischest;
 		if (this.isport)
 			opts.state = "threshold";
+		if (opts.autoplay == "tap") {
+			var playPause = this.playPause;
+			opts.onclick = function() {
+				zc.audio.ux("blipon");
+				playPause();
+			};
+		}
 		if (CT.info.mobile)
 			opts.matcat = "Basic";
 		var cnparts = this.CLASSNAME.split(".");
