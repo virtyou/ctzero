@@ -21,10 +21,12 @@ zero.core.ar.location = {
 			return t;
 		},
 		thing: function(t, i) {
-			var zc = zero.core, _ = zc.ar.location._;
+			var zc = zero.core, zcu = zc.util, _ = zc.ar.location._, ticker;
+			if (t.kind == "swarm")
+				ticker = thing => zcu.ontick(thing.tick);
 			if (!t.name)
 				t.name = "thing" + i;
-			_.things[t.name] = zc.util.thing(_.placed(t));
+			_.things[t.name] = zcu.thing(_.placed(t), ticker);
 		},
 		person: function(p) {
 			var zcar = zero.core.ar, _ = zcar.location._;
