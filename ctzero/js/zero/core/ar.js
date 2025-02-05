@@ -90,7 +90,7 @@ zero.core.ar = {
 		CT.modal.choice({
 			prompt: "anchors or location?",
 			data: ["location", "anchors"],
-			cb: arvar => zcar.load(templates.one.ar[arvar])
+			cb: arvar => zcar.load(CT.module("templates.one.ar")[arvar])
 		});
 	}
 };
