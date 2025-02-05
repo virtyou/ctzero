@@ -908,8 +908,12 @@ zero.core.Thing = CT.Class({
 			iterator = function() {
 				i += 1;
 				if (i >= oz.parts.length) {
-					if (i == oz.parts.length)
-						(oz.anchor || oz.scene).add(outer);
+					if (i == oz.parts.length) {
+						if (oz.adder)
+							oz.adder(outer);
+						else
+							(oz.anchor || oz.scene).add(outer);
+					}
 					thiz._.assembled = true;
 					thiz.assembled();
 				}
@@ -952,6 +956,8 @@ zero.core.Thing = CT.Class({
 			g = oz.boxGeometry; // better way?
 			if (g == true)
 				g = [1, 1, 1, 1, 1, 1];
+			else if (!isNaN(g))
+				g = [g, g, g, 1, 1, 1];
 			oz.geometry = new THREE.BoxGeometry(g[0],
 				g[1], g[2], g[3], g[4], g[5]);
 		}
@@ -1058,7 +1064,7 @@ zero.core.Thing = CT.Class({
 				}
 				var zcfg = core.config.ctzero;
 				if (!oz.noAlphaTest && zcfg.alphaTest && meshopts.transparent && !meshopts.alphaTest) {
-					this.log("setting alphaTest");
+//					this.log("setting alphaTest");
 					meshopts.alphaTest = zcfg.alphaTest;
 				}
 				this.material = new THREE[meshname](meshopts);
@@ -1137,6 +1143,13 @@ zero.core.Thing = CT.Class({
 		opts.lockable = this.isport || this.ischest;
 		if (this.isport)
 			opts.state = "threshold";
+		if (opts.autoplay == "tap") {
+			var playPause = this.playPause;
+			opts.onclick = function() {
+				zc.audio.ux("blipon");
+				playPause();
+			};
+		}
 		if (CT.info.mobile)
 			opts.matcat = "Basic";
 		var cnparts = this.CLASSNAME.split(".");

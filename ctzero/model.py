@@ -14,6 +14,8 @@ class Member(CTUser):
 class Augmentation(db.TimeStampedBase):
     owners = db.ForeignKey(kind=Member, repeated=True)
     name = db.String()
+    variety = db.String(default="anchors") # or location or relocation
+    things = db.JSON(default=[])
     markers = db.JSON(default={})
     lights = db.JSON(default=[{"variety": "ambient"}])
 

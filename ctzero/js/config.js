@@ -1,6 +1,9 @@
 {
 	"lib": {
-		"ar": "https://raw.githack.com/AR-js-org/AR.js/master/three.js/build/ar.js"
+		"ar": {
+			"anchors": "https://raw.githack.com/AR-js-org/AR.js/master/three.js/build/ar-threex.js",
+			"location": "https://raw.githack.com/AR-js-org/AR.js/master/three.js/build/ar-threex-location-only.js"
+		}
 	},
 	"helpers": false,
 	"shadows": false,

@@ -144,6 +144,22 @@ zero.core.Person = CT.Class({
 			}) : thaz._.chain(cb);
 		});
 	},
+	engage: function() {
+		var rez = this.respond;
+		rez("hello");
+		CT.modal.choice({
+			prompt: "talk or type?",
+			data: ["talk", "type"],
+			cb: function(pref) {
+				if (pref == "talk")
+					return zero.core.rec.listen(rez);
+				CT.modal.prompt({
+					prompt: "say what?",
+					cb: rez
+				});
+			}
+		});
+	},
 	tick: function(dts) {
 		if (!this.head)
 			return this.log("tick() w/o head!");
