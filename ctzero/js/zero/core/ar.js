@@ -51,6 +51,7 @@ zero.core.ar = {
 		zcar.getPerson(p, function(per) {
 			bprep && bprep(per.body);
 			per.body.onclick = function() {
+				gotPer.orient(zc.camera);
 				zc.audio.ux("blipon");
 				gotPer.engage();
 			};
