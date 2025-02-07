@@ -2,6 +2,7 @@
 import os, string, json, time
 from cantools.util import read, write, cmd, output
 from cantools.web import log, post, read_file
+from cantools.util.admin import ai as ddgchat
 from model import Translation
 from .spcfg import *
 from string import digits
@@ -11,6 +12,7 @@ except: # py38
     from string import ascii_letters as letters
 
 goodchars = letters + digits
+DUX = ["o3-mini", "gpt-4o-mini", "claude-3-haiku", "llama-3.1-70b", "mixtral-8x7b"]
 
 def load_token(now):
     cfg = config.ctzero.asr
@@ -42,6 +44,8 @@ def trans(words, sourceLang, targetLang):
 def chat(question, identity=None, mood=None, options=None, name=None, asker=None):
     cfg = config.ctzero.chat
     aicfg = AIZ[cfg.mode]
+    if identity in DUX:
+        return ddgchat(question, identity)
     if cfg.mode == "aiio":
         return post("%s://%s/%s"%(aicfg["proto"], aicfg["host"], aicfg["path"]), data={
             "identity": identity or cfg.botname,
