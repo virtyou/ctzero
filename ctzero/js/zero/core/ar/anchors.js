@@ -16,7 +16,7 @@ zero.core.ar.anchors = {
 			}, thopts, thextra), onready);
 		},
 		marker: function(marker, thopts) {
-			var zc = zero.core, zcu = zc.util, zcar = zc.ar,
+			var zc = zero.core, zcu = zc.util, zcar = zc.ar, tbg,
 				zcan = zcar.anchors, amarx = zcan.markers, _ = zcan._;
 			amarx.entity(thopts, {
 				name: thopts.kind + marker
@@ -31,9 +31,11 @@ zero.core.ar.anchors = {
 					mopts.type = "barcode";
 					mopts.barcodeValue = parseInt(marker);
 				}
-				if (thing.body)
-					thing.body.setCoords(0.05, "scale", false, thing.body.group);
-				else if (!["video", "program"].includes(thopts.kind)) {
+				if (thing.body) {
+					tbg = thing.body.group;
+					tbg.rotation.x = Math.PI * 9 / 8;
+					thing.body.setCoords(0.05, "scale", false, tbg);
+				} else if (!["video", "program"].includes(thopts.kind)) {
 					zcu.fit(thing);
 					(thopts.kind == "swarm") && zcu.ontick(thing.tick);
 				}
