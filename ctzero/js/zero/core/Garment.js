@@ -12,8 +12,10 @@ zero.core.Garment = CT.Class({
 				p.texture = oz.texture;
 			if (rz.includes(p.name))
 				p.onbuild = ammo.kbody;
-			if (p.thing == "Cloth")
+			if (p.thing == "Cloth") {
+				p.adder = oz.clothAdder;
 				this.cloths.push(p.name);
+			}
 		}
 	},
 	onremove: function() {
