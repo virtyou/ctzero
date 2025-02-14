@@ -46,7 +46,7 @@ def chat(question, identity=None, mood=None, options=None, name=None, asker=None
     aicfg = AIZ[cfg.mode]
     if identity in DUX:
         log("ddgchat(%s) -> %s"%(identity, question))
-        return ddgchat(question, identity, shorten="PHRASE")
+        return ddgchat(question, identity, shorten="PHRASE", strip=True)
     if cfg.mode == "aiio":
         return post("%s://%s/%s"%(aicfg["proto"], aicfg["host"], aicfg["path"]), data={
             "identity": identity or cfg.botname,
