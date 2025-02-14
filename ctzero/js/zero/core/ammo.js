@@ -62,7 +62,7 @@ zero.core.ammo = {
 			_.physicsWorld.addRigidBody(body);
 			return body;
 		},
-		patch: function(cloth, anchor, anchorPoints) {
+		patch: function(cloth, anchor) {
 			const ammo = zero.core.ammo, _ = ammo._, coz = cloth.opts,
 				width = coz.width, height = coz.height,
 				winfo = _.physicsWorld.getWorldInfo(),
@@ -277,7 +277,7 @@ zero.core.ammo = {
 	},
 	softBody: function(cloth, anchor, anchorPoints, afriction) {
 		const ammo = zero.core.ammo, _ = ammo._, consts = _.consts,
-			softBody = _.patch(cloth, anchor, anchorPoints), udata = cloth.thring.userData,
+			softBody = _.patch(cloth, anchor), udata = cloth.thring.userData,
 			sbcfg = softBody.get_m_cfg(), m = cloth.opts.margin || consts.margin;
 
 		sbcfg.set_viterations(10);
