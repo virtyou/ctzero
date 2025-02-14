@@ -45,7 +45,7 @@ def chat(question, identity=None, mood=None, options=None, name=None, asker=None
     cfg = config.ctzero.chat
     aicfg = AIZ[cfg.mode]
     if identity in DUX:
-        return ddgchat(question, identity)
+        return ddgchat(question, identity).replace("\n", " ")
     if cfg.mode == "aiio":
         return post("%s://%s/%s"%(aicfg["proto"], aicfg["host"], aicfg["path"]), data={
             "identity": identity or cfg.botname,
