@@ -62,18 +62,22 @@ zero.core.ar = {
 		zcar.aug = zcfg.camera.ar = CT.merge(aug); // necessary?
 		CT.scriptImport(zcfg.lib.ar[zcar.mode], zcar.run);
 	},
-	fromPeople: function(name, cb) {
-		var p, zc = zero.core, _ = zc.ar._,
-			ranPer = () => CT.data.choice(Object.values(_.people)),
-			byName = () => cb(_.people[name] || ranPer());
+	getPeople: function(cb) {
+		var p, _ = zero.core.ar._;
 		if (_.people)
-			return byName();
+			return cb(_.people);
 		CT.db.get("person", function(pz) {
 			_.people = {};
 			for (p of pz)
 				_.people[p.name] = p;
-			byName();
+			cb(_.people);
 		}, null, null, null, null, false, false, "json");
+	},
+	fromPeople: function(name, cb) {
+		var zcar = zero.core.ar, _ = zcar._,
+			ranPer = () => CT.data.choice(Object.values(_.people)),
+			byName = () => cb(_.people[name] || ranPer());
+		zcar.getPeople(byName);
 	},
 	getPerson: function(persig, cb) {
 		if (persig.length > 40)
@@ -90,6 +94,16 @@ zero.core.ar = {
 				gotPer.engage();
 			};
 			gotPer = zc.util.join(per, onjoin, true);
+		});
+	},
+	loadPerson: function() {
+		var zcar = zero.core.ar;
+		zcar.getPeople(function(pz) {
+			CT.modal.choice({
+				prompt: "select someone",
+				data: Object.keys(pz),
+				cb: name => zcar.load(zcar._.qs2aug("person=" + name))
+			});
 		});
 	},
 	populate: function(collection, builder) {
@@ -139,15 +153,17 @@ zero.core.ar = {
 		return item;
 	},
 	start: function(akey) {
-		var zcar = zero.core.ar, pair, key, val, aug;
-		if (akey) {
-			return (akey.includes("=")) ? zcar.load(zcar._.qs2aug(akey))
-				: CT.db.one(akey, zcar.load);
-		}
+		var zcar = zero.core.ar, qload = qs => zcar.load(zcar._.qs2aug(qs));
+		if (akey)
+			return akey.includes("=") ? qload(akey) : CT.db.one(akey, zcar.load);
 		CT.modal.choice({
-			prompt: "anchors or location?",
-			data: ["location", "anchors"],
-			cb: arvar => zcar.load(CT.module("templates.one.ar")[arvar])
+			prompt: "anchors or location or person?",
+			data: ["location", "anchors", "person"],
+			cb: function(arvar) {
+				if (arvar == "person")
+					return zcar.loadPerson();
+				zcar.load(CT.module("templates.one.ar")[arvar]);
+			}
 		});
 	}
 };
