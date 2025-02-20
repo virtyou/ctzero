@@ -22,7 +22,7 @@ zero.core.ar = {
 				lights: [{}],
 				name: "custom",
 				variety: "relocation"
-			}, latlng = zcar._.latlng, kind, val;
+			}, latlng = zcar._.latlng, pair, kind, val;
 			for (pair of aqs.split("&")) {
 				[kind, val] = pair.split("=");
 				aug.things.push(CT.merge(zcar.item(kind, val), latlng()));
