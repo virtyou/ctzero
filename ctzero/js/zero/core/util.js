@@ -592,11 +592,13 @@ zero.core.util = {
 		zero.core.util.back(v);
 		v.play();
 	},
-	vidProg: function(cb) {
+	vidProg: function(cb, noup) {
+		const kinds = ["channel", "video", "stream (down)", "stream (up)"];
 		let fpref = "fzn:";
+		noup && kinds.pop();
 		CT.modal.choice({
 			prompt: "what kind of video program?",
-			data: ["channel", "video", "stream (down)", "stream (up)"],
+			data: kinds,
 			cb: function(sel) {
 				if (sel.startsWith("stream")) { // fzn stream
 					if (sel.includes("up"))
@@ -612,6 +614,7 @@ zero.core.util = {
 					cb: function(chan) {
 						if (sel == "channel" || chan == "surf")
 							return cb("tlchan:" + chan);
+						CT.require("CT.stream", true);
 						CT.stream.util.tl.pick(chan, cb);
 					}
 				});
@@ -631,7 +634,7 @@ zero.core.util = {
 				chan = chan.slice(3);
 			}
 			if (!svids[chan]) {
-				CT.require("CT.stream", true); // just in case
+				CT.require("CT.stream", true);
 				svids[chan] = CT.stream.util.fzn.video(chan, vclass, function() {
 					CT.log("FZN Video Update");
 					thing.update({ video: src });
@@ -640,7 +643,7 @@ zero.core.util = {
 			v = svids[chan].video;
 		} else {
 			if (src.startsWith("tlchan:")) {
-				CT.require("CT.stream", true); // just in case
+				CT.require("CT.stream", true);
 				CT.stream.util.tl.rand(src.slice(7), function(r) {
 					CT.event.emit("program", {
 						data: r,
@@ -651,6 +654,9 @@ zero.core.util = {
 					v.play();
 				});
 				src = null;
+			} else if (src.startsWith("tl:")) {
+				src = "https://tl.fzn.party/v/" + src.slice(3) + ".mp4";
+				xo = true;
 			}
 			v = zero.core.util.vidNode(src, vclass, av);
 			if (xo || !src)
