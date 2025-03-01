@@ -11,10 +11,13 @@ zero.core.ar = {
 			}
 			return kz;
 		},
-		latlng: function() {
-			var zcar = zero.core.ar,
-				llpos = () => CT.data.choice([-zcar.unit, zcar.unit]);
-			return { latitude: llpos(), longitude: llpos() };
+		latlng: function(fronter) {
+			var u = zero.core.ar.unit,
+				llpos = () => CT.data.choice([-u, u]);
+			return {
+				latitude: fronter && u || llpos(),
+				longitude: !fronter && llpos() || 0
+			};
 		},
 		qs2aug: function(aqs) {
 			var zcar = zero.core.ar, aug = {
@@ -25,7 +28,8 @@ zero.core.ar = {
 			}, latlng = zcar._.latlng, pair, kind, val;
 			for (pair of aqs.split("&")) {
 				[kind, val] = pair.split("=");
-				aug.things.push(CT.merge(zcar.item(kind, val), latlng()));
+				aug.things.push(CT.merge(zcar.item(kind, val),
+					latlng(zcar.viddy(kind) || !CT.info.mobile)));
 			}
 			return aug;
 		}
@@ -153,16 +157,19 @@ zero.core.ar = {
 		return item;
 	},
 	start: function(akey) {
-		var zcar = zero.core.ar, qload = qs => zcar.load(zcar._.qs2aug(qs));
+		var zc = zero.core, zcar = zc.ar, qload = qs => zcar.load(zcar._.qs2aug(qs));
 		if (akey)
 			return akey.includes("=") ? qload(akey) : CT.db.one(akey, zcar.load);
 		CT.modal.choice({
-			prompt: "anchors or location or person?",
-			data: ["location", "anchors", "person"],
+			prompt: "person or video or location or anchors?",
+			data: ["person", "video", "location", "anchors"],
 			cb: function(arvar) {
 				if (arvar == "person")
-					return zcar.loadPerson();
-				zcar.load(CT.module("templates.one.ar")[arvar]);
+					zcar.loadPerson();
+				else if (arvar == "video")
+					zc.util.vidProg(v => qload("video=" + v), true);
+				else
+					zcar.load(CT.module("templates.one.ar")[arvar]);
 			}
 		});
 	}
