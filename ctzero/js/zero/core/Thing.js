@@ -217,6 +217,14 @@ zero.core.Thing = CT.Class({
 			if (sz[axis])
 				gp[axis] = sz[axis].value;
 	},
+	regTicker: function() {
+		var zc = zero.core, r = zc.current.room;
+		r ? r.regTicker(this) : zc.util.ontick(this.tick);
+	},
+	unregTicker: function() {
+		var zc = zero.core, r = zc.current.room;
+		r ? r.unregTicker(this) : zc.util.untick(this.tick);
+	},
 	autoRot: function() {
 		if (["poster", "screen", "stream", "portal"].indexOf(this.opts.kind) != -1 && "wall" in this.opts)
 			this.adjust("rotation", "y", -this.opts.wall * Math.PI / 2);
@@ -290,19 +298,21 @@ zero.core.Thing = CT.Class({
 	},
 	setHomeY: function(notwithin) {
 		var r = zero.core.current.room, pos = this.placer.position, oz = this.opts,
-			atop = (!notwithin && this.within) || r.getSurface(pos, this.radii);
+			atop = (!notwithin && this.within) || (r && r.getSurface(pos, this.radii));
 		if (this.homeY && (atop == this.upon) && !(atop && atop.unevenTop()))
 			return;// this.log("setHomeY() - already set");
 		this.upon = atop;
 		this.homeY = this.radii.y;
-		this.homeY += atop ? atop.getTop(pos) : r.bounds.min.y;
-		if (oz.swimming)
-			this.homeY += CT.data.random(2 * (atop || r).radii.y);
-		if (oz.flying) {
-			if (this.within)
-				this.homeY -= CT.data.random(atop.radii.y);
-			else
-				this.homeY += CT.data.random(r.radii.y);
+		if (atop || r) {
+			this.homeY += atop ? atop.getTop(pos) : r.bounds.min.y;
+			if (oz.swimming)
+				this.homeY += CT.data.random(2 * (atop || r).radii.y);
+			if (oz.flying) {
+				if (this.within)
+					this.homeY -= CT.data.random(atop.radii.y);
+				else
+					this.homeY += CT.data.random(r.radii.y);
+			}
 		}
 		if (oz.bob)
 			this.homeY += oz.bob * Math.PI;
@@ -879,7 +889,11 @@ zero.core.Thing = CT.Class({
 		return thing;
 	},
 	assembled: function() {
-		this.opts.basicBound && (this.within || zero.core.current.room).bounds && this.basicBound();
+		if (this.opts.basicBound) {
+			var container = this.within || zero.core.current.room;
+			if (!container || container.bounds)
+				this.basicBound();
+		}
 		this._.built();
 	},
 	getKind: function(kind, overlapper, justover) {
