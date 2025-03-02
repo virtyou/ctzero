@@ -125,3 +125,25 @@ zero.core.Collection = CT.Class({
 		this.members = [];
 	}
 }, zero.core.Thing);
+
+zero.core.ColBox = CT.Class({
+	CLASSNAME: "zero.core.ColBox",
+	preassemble: function() {
+		var oz = this.opts, pz = oz.parts;
+		pz.push({
+			name: "floor",
+			thing: "Floor",
+			basicBound: true,
+			planeGeometry: [500, 500],
+			material: {
+				transparent: true,
+				opacity: 0.3
+			}
+		});
+		pz.push(CT.merge(oz.colopts, {
+			subclass: oz.colclass,
+			within: "floor",
+			withiner: this
+		}));
+	}
+}, zero.core.Thing);
