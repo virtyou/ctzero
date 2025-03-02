@@ -2,6 +2,7 @@ zero.core.ar = {
 	_: {
 		vidsies: ["video", "program"],
 		flofies: ["flora", "fauna"],
+		garmies: ["garden", "menagerie"],
 		m2k: function(mcfg) {
 			var m, kz = [];
 			for (m of Object.values(mcfg)) {
@@ -40,6 +41,9 @@ zero.core.ar = {
 		}
 	},
 	unit: 0.00004,
+	garmen: function(variety) {
+		return zero.core.ar._.garmies.includes(variety);
+	},
 	flofa: function(variety) {
 		return zero.core.ar._.flofies.includes(variety);
 	},
@@ -126,11 +130,19 @@ zero.core.ar = {
 		});
 	},
 	loadFlofa: function(variety) {
-		var zc = zero.core, _ = zc.ar._;
+		var zc = zero.core, _ = zc.ar._, fclass = zc[CT.parse.capitalize(variety)];
 		CT.modal.choice({
 			prompt: "select " + variety,
-			data: zc[CT.parse.capitalize(variety)].kinds,
-			cb: name => _.qload(variety, name)
+			data: [fclass.setter].concat(fclass.kinds),
+			cb: function(name) {
+				if (name != fclass.setter)
+					return _.qload(variety, name);
+				CT.modal.choice({
+					prompt: "select " + name,
+					data: Object.keys(fclass.sets),
+					cb: sname => _.qload(name, sname)
+				});
+			}
 		});
 	},
 	populate: function(collection, builder) {
@@ -161,7 +173,7 @@ zero.core.ar = {
 		return compz;
 	},
 	item: function(kind, val) {
-		var zcar = zero.core.ar, item = { kind: kind };
+		var zc = zero.core, zcar = zc.ar, item = { kind: kind };
 		if (zcar.viddy(kind)) {
 			item.autoplay = "tap";
 			item.planeGeometry = [3, 3];
@@ -180,6 +192,10 @@ zero.core.ar = {
 		else if (zcar.flofa(kind)) {
 			item.kind = val;
 			item.thing = CT.parse.capitalize(kind);
+		} else if (zcar.garmen(kind)) {
+			item.colclass = (kind == "garden") ? zc.Flora.Garden : zc.Fauna.Menagerie;
+			item.colopts = { collection: val, regTick: true };
+			item.thing = "ColBox";
 		} else
 			item.justkey = val.key || val;
 		return item;
