@@ -533,7 +533,7 @@ zero.core.Fauna.Menagerie = CT.Class({
 				this[kind][name].tick(dts);
 	},
 	onremove: function() {
-		this.opts.regTick && zero.core.current.room.unregTicker(this);
+		this.opts.regTick && this.unregTicker();
 		clearTimeout(this.yelper);
 		clearInterval(this.hunter);
 	},
@@ -630,6 +630,6 @@ zero.core.Fauna.Menagerie = CT.Class({
 		if (zero.core.Fauna.audio) // set by ctone...
 			this.yelper = setTimeout(this.yelp, 3000 + CT.data.random(10000));
 		this.hunter = setInterval(this.hunt, 3000);
-		this.opts.regTick && zero.core.current.room.regTicker(this);
+		this.opts.regTick && this.regTicker();
 	}
 }, zero.core.Collection);
