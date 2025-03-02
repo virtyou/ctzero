@@ -26,7 +26,7 @@ zero.core.Fire = CT.Class({
 	onremove: function() {
 		this.smoke && this.smoke.undrip();
 		this.sparks && this.sparks.undrip();
-		this.opts.regTick && zero.core.current.room.unregTicker(this);
+		this.opts.regTick && this.regTicker();
 		this._audio && this._audio.pause();
 		clearTimeout(this.flickerer);
 		delete this._audio;
@@ -53,8 +53,8 @@ zero.core.Fire = CT.Class({
 		var r = zero.core.current.room;
 		this._.built();
 		this.quenched && this.quench();
-		this.opts.glow && r.onbounded(this.glow.setBounds);
-		this.opts.regTick && r.regTicker(this);
+		this.opts.glow && r && r.onbounded(this.glow.setBounds);
+		this.opts.regTick && this.regTicker();
 	},
 	preassemble: function() {
 		var oz = this.opts, variety;
