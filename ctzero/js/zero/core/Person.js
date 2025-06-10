@@ -512,7 +512,7 @@ zero.core.Person = CT.Class({
 		}
 	},
 	setCrawling: function() {
-		var bod = this.body, crawling = CT.key.capslocked;
+		var bod = this.body, crawling = zero.core.current.controls.crawling();
 		if (bod.crawling == crawling) return;
 		bod.crawling = crawling;
 		if (crawling)

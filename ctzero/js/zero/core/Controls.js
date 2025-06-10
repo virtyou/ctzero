@@ -175,6 +175,18 @@ zero.core.Controls = CT.Class({
 			else if (diff < -0.2)
 				outer();
 		},
+		caswipe: function(direction, distance, dx, dy, pixelsPerSecond) {
+			var _ = this._;
+			if (direction == "up") {
+				if (_.crawling)
+					_.crawling = false;
+				else {
+					this.jump();
+					setTimeout(this.unjump, 500);
+				}
+			} else if (direction == "down")
+				_.crawling = true;
+		},
 		cazoomers: function() {
 			var _ = this._, zoomIn = () => _.cawheel(null, -300),
 				zoomOut = () => _.cawheel(null, 300);
@@ -189,6 +201,7 @@ zero.core.Controls = CT.Class({
 		camouse: function() {
 			var node = CT.dom.id("vnode") || CT.dom.id("ctmain");
 			CT.gesture.listen("wheel", node, this._.cawheel);
+			CT.gesture.listen("swipe", node, this._.caswipe);
 			CT.gesture.listen("joy", node, this._.cajoy);
 		},
 		movers: {
@@ -410,6 +423,9 @@ zero.core.Controls = CT.Class({
 	},
 	down: function() {
 		this.target.body.climbing ? this.descend() : this.backward();
+	},
+	crawling: function() {
+		return this._.crawling || CT.key.capslocked;
 	},
 	setNav: function() {
 		this.on("w", 12, this.stop, this.up);
