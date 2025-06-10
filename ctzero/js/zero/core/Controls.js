@@ -133,8 +133,8 @@ zero.core.Controls = CT.Class({
 			var _ = this._, d = 10, fast,
 				caco = zero.core.camera.container();
 			if (startPos.y < caco.clientHeight / 2) {
-				dy && _.look("UP", dy / 800);
-				dx && _.look("LEFT", dx / 800);
+				dy && _.look("UP", dy / 1200);
+				dx && _.look("LEFT", dx / 1200);
 			} else if (this.target.thruster) { // person
 				fast = Math.max(Math.abs(dx), Math.abs(dy)) >= 30;
 				this.target[fast ? "run" : "unrun"]();
