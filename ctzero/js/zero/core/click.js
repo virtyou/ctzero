@@ -2,9 +2,10 @@ zero.core.click = {
     targets: [],
     init: function() {
         // adapted from: https://stemkoski.github.io/Three.js/Mouse-Click.html
-        if (zero.core.click._ready) return;
-        zero.core.click._ready = true;
-        var mouse = {}, cam = zero.core.camera.get(),
+        var zc = zero.core, click = zc.click;
+        if (click._ready) return;
+        click._ready = true;
+        var mouse = {}, cam = zc.camera.get(),
             can = document.getElementsByTagName("canvas")[0],
             offset = CT.align.offset(can), vector, ray, intersects, i;
         CT.gesture.listen("tap", CT.dom.id("vnode") || CT.dom.id("ctmain"), function(tapCount, pos) {
@@ -14,7 +15,7 @@ zero.core.click = {
             vector = new THREE.Vector3(mouse.x, mouse.y, 0.5);
             vector.unproject(cam);
             ray = new THREE.Raycaster(cam.position, vector.sub(cam.position).normalize());
-            intersects = ray.intersectObjects(zero.core.click.targets, true);
+            intersects = ray.intersectObjects(click.targets, true);
 
             for (i = 0; i < intersects.length; i++) {
                 var obj = intersects[i].object;
@@ -24,6 +25,8 @@ zero.core.click = {
                     obj = obj.parent;
                 }
             }
+
+            zc.current.controls && zc.current.controls.tap(pos);
         });
     },
     target: function(thing) {
