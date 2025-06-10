@@ -130,14 +130,16 @@ zero.core.Controls = CT.Class({
 		},
 		cajoy: function(dx, dy, startPos, lastPos) {
 //			this.log("cajoy", dx, dy, startPos, lastPos);
-			var _ = this._, d = 8,
+			var _ = this._, d = 8, fast,
 				caco = zero.core.camera.container();
 			if (startPos.y < caco.clientHeight / 2) {
 				dy && _.look("UP", dy / 800);
 				dx && _.look("LEFT", dx / 800);
-			} else if (this.target.thruster) // person
+			} else if (this.target.thruster) { // person
+				fast = Math.max(Math.abs(dx), Math.abs(dy)) >= 20;
+				this.target[fast ? "run" : "unrun"]();
 				_.xygo(dx, dy);
-			else {
+			} else {
 				if (dx < -d)
 					CT.key.trig("LEFT", true);
 				else if (dx > d)
