@@ -240,6 +240,19 @@ zero.core.Controls = CT.Class({
 		cfg.cardboard && _.xlrometer();
 		cfg.mouse && _.camouse();
 	},
+	tap: function(pos) {
+		var t = this.target, tt = t && t.thruster, caco, side;
+		if (!tt) return;
+		caco = zero.core.camera.container();
+		side = pos.x < caco.clientWidth / 2 ? "left" : "right";
+		if (pos.y < caco.clientHeight / 2) {
+			tt.swing(side);
+			setTimeout(() => tt.unthrust(side), 500);
+		} else {
+			tt.kick(side);
+			setTimeout(() => tt.unkick(side), 500);
+		}
+	},
 	wallshift: function(shift, prev_spring) {
 		var target = this.target;
 		prev_spring.boost = 0;
@@ -520,5 +533,6 @@ zero.core.Controls = CT.Class({
 		opts.cb && this.setCb(opts.cb);
 		opts.moveCb && this.setMoveCb(opts.moveCb);
 		opts.target && this.setTarget(opts.target, opts.cams);
+		zero.core.current.controls = this;
 	}
 });
