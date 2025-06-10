@@ -1,5 +1,6 @@
 // probs move elsewhere
 CT.require("CT.gesture");
+CT.gesture.setJoy(true);
 CT.gesture.setThreshold("tap", "maxCount", 1);
 
 zero.core.Controls = CT.Class({
@@ -106,7 +107,56 @@ zero.core.Controls = CT.Class({
 			});
 			_.acl.start();
 		},
-		cadrag: function(direction, distance, dx, dy, pixelsPerSecond) {
+		xygo: function(x, y) {
+			var _ = this._, gpd = _.gpdir, d = 8;
+			if (x > d) {
+				gpd.strafe = "right";
+				this.rightStrafe(x);
+			} else if (x < -d) {
+				gpd.strafe = "left";
+				this.leftStrafe(-x);
+			} else
+				gpd.strafe = false;
+			if (y < -d) {
+				gpd.drive = "forward";
+				this.forward(-y);
+			} else if (y > d) {
+				gpd.drive = "backward";
+				this.backward(y);
+			} else
+				gpd.drive = false;
+			this.gpgoing = gpd.drive || gpd.strafe;
+			this.gpgoing || this.stop();
+		},
+		cajoy: function(dx, dy, startPos, lastPos) {
+//			this.log("cajoy", dx, dy, startPos, lastPos);
+			var _ = this._, d = 8,
+				caco = zero.core.camera.container();
+			if (startPos.y < caco.clientHeight / 2) {
+				dy && _.look("UP", dy / 400);
+				dx && _.look("LEFT", dx / 800);
+			} else if (this.target.thruster) // person
+				_.xygo(dx, dy);
+			else {
+				if (dx < -d)
+					CT.key.trig("LEFT", true);
+				else if (dx > d)
+					CT.key.trig("RIGHT", true);
+				else {
+					CT.key.trig("LEFT");
+					CT.key.trig("RIGHT");
+				}
+				if (dy < -d)
+					CT.key.trig("UP", true);
+				else if (dy > d)
+					CT.key.trig("DOWN", true);
+				else {
+					CT.key.trig("UP");
+					CT.key.trig("DOWN");
+				}
+			}
+		},
+		cadrag: function(direction, distance, dx, dy, pixelsPerSecond) { // depped - now using cajoy()
 			var _ = this._;
 			dy && _.look("UP", dy / 200);
 			dx && _.look("LEFT", dx / 400);
@@ -138,8 +188,8 @@ zero.core.Controls = CT.Class({
 		},
 		camouse: function() {
 			var node = CT.dom.id("vnode") || CT.dom.id("ctmain");
-			CT.gesture.listen("drag", node, this._.cadrag);
 			CT.gesture.listen("wheel", node, this._.cawheel);
+			CT.gesture.listen("joy", node, this._.cajoy);
 		},
 		movers: {
 			forward: {
@@ -331,26 +381,9 @@ zero.core.Controls = CT.Class({
 	},
 	upAxes: function(axes) {
 		var _ = this._, gpd = _.gpdir, x = axes[0], y = axes[1];
-		_.look("DOWN", axes[3]);
 		_.look("RIGHT", axes[2]);
-		if (x > 0) {
-			gpd.strafe = "right";
-			this.rightStrafe(x);
-		} else if (x < 0) {
-			gpd.strafe = "left";
-			this.leftStrafe(-x);
-		} else
-			gpd.strafe = false;
-		if (y < 0) {
-			gpd.drive = "forward";
-			this.forward(-y);
-		} else if (y > 0) {
-			gpd.drive = "backward";
-			this.backward(y);
-		} else
-			gpd.drive = false;
-		this.gpgoing = x || y;
-		this.gpgoing || this.stop();
+		_.look("DOWN", axes[3]);
+		_.xygo(x, y);
 	},
 	initGamepads: function() {
 		if (this._gamepadsReady) return;
