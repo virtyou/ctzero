@@ -177,17 +177,22 @@ zero.core.Controls = CT.Class({
 			else if (diff < -0.2)
 				outer();
 		},
-		caswipe: function(direction, distance, dx, dy, pixelsPerSecond) {
-			var _ = this._;
-			if (direction == "up") {
+		caswipe: function(direction, distance, dx, dy, pixelsPerSecond, v) {
+			var _ = this._, caco = zero.core.camera.container(), checker;
+			if (direction == "down")
+				_.crawling = true;
+			else if (direction == "up") {
 				if (_.crawling)
 					_.crawling = false;
 				else {
 					this.jump();
 					setTimeout(this.unjump, 500);
 				}
-			} else if (direction == "down")
-				_.crawling = true;
+			} else { // right/left
+				checker = () => v.startPos.y < caco.clientHeight / 2;
+				this.holster(direction, checker);
+				this.setTimeout(this.unholster, 500, direction, checker);
+			}
 		},
 		cazoomers: function() {
 			var _ = this._, zoomIn = () => _.cawheel(null, -300),
@@ -470,8 +475,8 @@ zero.core.Controls = CT.Class({
 		this.still = mover(0, "orientation");
 		this.left = mover(ospeed, "orientation");
 		this.right = mover(-ospeed, "orientation");
-		this.holster = side => tt[this.shifted() ? "back" : "hip"](side);
-		this.unholster = side => tt[this.shifted() ? "unback" : "unhip"](side);
+		this.holster = (side, checker) => tt[(checker || this.shifted)() ? "back" : "hip"](side);
+		this.unholster = (side, checker) => tt[(checker || this.shifted)() ? "unback" : "unhip"](side);
 		this.gparm = side => tt[this.shifted() ? "back" : "swing"](side);
 		this.gpunarm = side => tt[this.shifted() ? "unback" : "unthrust"](side);
 		this.gpleg = side => tt[this.shifted() ? "hip" : "kick"](side);
