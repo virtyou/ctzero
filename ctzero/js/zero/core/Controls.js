@@ -133,7 +133,7 @@ zero.core.Controls = CT.Class({
 			var _ = this._, d = 8,
 				caco = zero.core.camera.container();
 			if (startPos.y < caco.clientHeight / 2) {
-				dy && _.look("UP", dy / 400);
+				dy && _.look("UP", dy / 800);
 				dx && _.look("LEFT", dx / 800);
 			} else if (this.target.thruster) // person
 				_.xygo(dx, dy);
