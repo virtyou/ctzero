@@ -239,7 +239,7 @@ zero.core.xr = { // https://01.org/blogs/darktears/2019/rendering-immersive-web-
 			if (isit) {
 				CT.modal.choice({
 					prompt: "enter immersive vr?",
-					data: ["yah", "nah"],
+					data: ["nah", "yah"],
 					cb: function(answer) {
 						affirmative = answer == "yah";
 						opts.ondecide(affirmative);
