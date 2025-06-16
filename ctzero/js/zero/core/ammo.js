@@ -180,21 +180,33 @@ zero.core.ammo = {
 			r.quaternion.set(q.x(), q.y(), q.z(), q.w());
 		}
 	},
-	rigid: function(mass, p, s, q, mat, friction) { // creates thring
-		const _ = zero.core.ammo._;
+	geo: function(s, oz) {
+		oz = oz || {};
+		const geo = oz.geo || "BoxGeometry", gclass = THREE[geo];
+		if (geo == "ConeGeometry") {
+			return new gclass(s.x, s.y, oz.geoRadialSegs,
+				oz.geoHeightSegs, oz.geoOpen, oz.geoThetaStart, oz.geoThetaLength);
+		} else if (geo == "SphereGeometry") {
+			return new gclass(s.x, oz.sphereSegs, oz.sphereSegs,
+				oz.geoPhiStart, oz.geoPhiLength, oz.geoThetaStart, oz.geoThetaLength);
+		} else // BoxGeometry
+			return new gclass(s.x, s.y, s.z, 1, 1, 1);
+	},
+	rigid: function(mass, p, s, q, mat, friction, geopts) { // creates thring
+		const zc = zero.core, zca = zc.ammo, _ = zero.core.ammo._;
 		p = p || { x: 0, y: 0, z: 0 };
 		s = s || { x: 50, y: 50, z: 50 };
 		q = q || _.defQuat;
 		mat = mat || new THREE.MeshPhongMaterial( { color: 0xFFFFFF } );
 		_.positioner.set(p.x, p.y, p.z);
 		_.quatter.set(q.x, q.y, q.z, q.w);
-		const thring = new THREE.Mesh(new THREE.BoxGeometry(s.x, s.y, s.z, 1, 1, 1), mat);
+		const thring = new THREE.Mesh(zca.geo(s, geopts), mat);
 
 		thring.position.copy(p);
 		thring.quaternion.copy(q);
 
 		thring.userData.physicsBody = _.rigid(thring, s, mass, friction);
-		zero.core.camera.scene.add(thring);
+		zc.camera.scene.add(thring);
 		mass && _.rigids.push(thring);
 		return thring;
 	},
