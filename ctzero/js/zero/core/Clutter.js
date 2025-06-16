@@ -1,10 +1,15 @@
 zero.core.Clutter = CT.Class({
 	CLASSNAME: "zero.core.Clutter",
+	geos: {
+		box: "BoxGeometry",
+		cone: "ConeGeometry",
+		sphere: "SphereGeometry"
+//		cylinder: "CylinderGeometry" // "Faceless geometries are not supported" :'(
+	},
 	rig: function(p) {
 		const oz = this.opts;
-		return zero.core.ammo.rigid(oz.mass, p, {
-			x: oz.size, y: oz.size, z: oz.size
-		}, null, this.getMaterial());
+		return zero.core.ammo.rigid(oz.mass, p, this.getDims(), null,
+			this.getMaterial(), oz.friction, this.getGeopts());
 	},
 	buildLayer: function(layer) {
 		const oz = this.opts, p = this.safePos(),
@@ -28,6 +33,23 @@ zero.core.Clutter = CT.Class({
 		for (let i = 0; i < this.opts.layers; i++)
 			this.buildLayer(i);
 	},
+	getGeopts: function() {
+		return CT.merge({
+			geo: this.getGeo()
+		}, this.opts.geopts);
+	},
+	getGeo: function() {
+		return this.geos[this.opts.geotype] || CT.data.choice(Object.values(this.geos));
+	},
+	getDims: function() {
+		const oz = this.opts, s = oz.size, s4 = s / 4,
+			r = () => s4 + CT.data.random(s);
+		return oz.ransize && {
+			x: r(), y: r(), z: r()
+		} || {
+			x: s, y: s, z: s
+		};
+	},
 	onready: function() {
 		this.material = this.getMaterial();
 		zero.core.ammo.onReady(() => setTimeout(this.buildPile, 500)); // meh
@@ -37,11 +59,14 @@ zero.core.Clutter = CT.Class({
 	},
 	init: function(opts) {
 		this.opts = CT.merge(opts, {
-			size: 50,
+			ransize: false,
+			size: 40,
 			mass: 1,
 			rows: 2,
 			cols: 3,
-			layers: 2
+			layers: 2,
+			friction: 0,
+			geotype: "box" // box|cone|sphere|random
 		}, this.opts);
 		zero.core.util.ammoize();
 	}
