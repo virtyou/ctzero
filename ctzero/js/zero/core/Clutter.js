@@ -60,7 +60,7 @@ zero.core.Clutter = CT.Class({
 	init: function(opts) {
 		this.opts = CT.merge(opts, {
 			ransize: false,
-			size: 40,
+			size: 50,
 			mass: 1,
 			rows: 2,
 			cols: 3,
