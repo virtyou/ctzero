@@ -191,7 +191,7 @@ zero.core.Controls = CT.Class({
 			} else { // right/left
 				checker = () => v.startPos.y < caco.clientHeight / 2;
 				this.holster(direction, checker);
-				this.setTimeout(this.unholster, 500, direction, checker);
+				setTimeout(this.unholster, 500, direction, checker);
 			}
 		},
 		cazoomers: function() {
