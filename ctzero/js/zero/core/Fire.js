@@ -26,14 +26,15 @@ zero.core.Fire = CT.Class({
 	onremove: function() {
 		this.smoke && this.smoke.undrip();
 		this.sparks && this.sparks.undrip();
-		this.opts.regTick && this.regTicker();
+		this.opts.regTick && this.unregTicker();
 		this._audio && this._audio.pause();
 		clearTimeout(this.flickerer);
 		delete this._audio;
+		delete this._audios;
 	},
 	ignite: function() {
 		if (this.opts.loudIgnite)
-			zero.core.audio.sfx(zero.core.Fire.audio.lighter);
+			this.sfx(zero.core.Fire.audio.lighter);
 		this._audio.volume = 0.1;
 		this.quenched = false;
 		this.show();
@@ -181,7 +182,8 @@ zero.core.Fire = CT.Class({
 			loudIgnite: false,
 			lightIntensity: 1,
 			burnRate: 0,
-			fuel: 1000
+			fuel: 1000,
+			ambients: ["crackle"]
 		}, this.opts);
 		this.quenched = opts.quenched;
 		this.fuel = opts.fuel;
@@ -189,8 +191,6 @@ zero.core.Fire = CT.Class({
 			this.flicker = zero.core.trig.segs(60, 0.05);
 			this.foff = CT.data.random(60);
 		}
-		if (zero.core.Fire.audio)
-			this._audio = zero.core.audio.ambience(zero.core.Fire.audio.crackle[0], 0.1, true);
 		if (opts.flicker)
 			this.flickerer = setTimeout(this.flickeroo);
 	}
