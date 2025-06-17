@@ -8,7 +8,7 @@ zero.core.Appliance.Elevator = CT.Class({
 		gz[tar].open(() => gz.main.open(this._unmove));
 	},
 	do: function(order) {
-		if (!this.power) return this.log("do(", order, ") aborted - no power!")
+		if (!this.power) return this.log("do(", order, ") aborted - no power!");
 		this._moving = true;
 		this.sound("elevator");
 		this.slide("position", "y", this.getY(order), 3000, () => this.open(order));
