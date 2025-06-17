@@ -11,6 +11,7 @@ zero.core.Room = CT.Class({
 	_bumpers: ["wall", "obstacle", "boulder", "stala", "gate", "waterheater"],
 	_wallers: ["ramp", "elevator"],
 	_wallerers: ["wall", "gate"],
+	_togglable: ["waterheater"],
 	_interactives: {
 		brittle: ["boulder", "stala"],
 		frozen: ["boulder", "stala"],
@@ -204,6 +205,14 @@ zero.core.Room = CT.Class({
 	},
 	getComputer: function(overlapper) {
 		return this.getKind("computer", overlapper);
+	},
+	getTogglable: function(overlapper) {
+		var kind, item;
+		for (kind of this._togglable) {
+			item = this.getKind(kind, overlapper);
+			if (item)
+				return item;
+		}
 	},
 	getInteractive: function(overlapper, feature) {
 		var item, touching = zero.core.util.touching;
