@@ -11,7 +11,10 @@ zero.core.Room = CT.Class({
 	_bumpers: ["wall", "obstacle", "boulder", "stala", "gate", "waterheater"],
 	_wallers: ["ramp", "elevator"],
 	_wallerers: ["wall", "gate"],
+	_controllable: ["elevator", "waterheater"],
 	_togglable: ["waterheater"],
+	_usable: ["computer"],
+	_openable: ["gate"],
 	_interactives: {
 		brittle: ["boulder", "stala"],
 		frozen: ["boulder", "stala"],
@@ -36,10 +39,23 @@ zero.core.Room = CT.Class({
 		this.perMenagerie(men => men.tick(dts));
 		this.jostle();
 	},
+	perControllable: function(cb) {
+		this.perKinds(this._controllable, cb);
+	},
+	perTogglable: function(cb) {
+		this.perKinds(this._togglable, cb);
+	},
+	perOpenable: function(cb) {
+		this.perKinds(this._openable, cb);
+	},
+	perUsable: function(cb) {
+		this.perKinds(this._usable, cb);
+	},
+	perPanel: function(cb) {
+		this.perKind("panel", cb);
+	},
 	perMenagerie: function(cb) {
-		if (this.menagerie)
-			for (men in this.menagerie)
-				cb(this.menagerie[men]);
+		this.perKind("menagerie", cb);
 	},
 	getMounts: function() {
 		var mounts = [];
