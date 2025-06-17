@@ -922,6 +922,15 @@ zero.core.Thing = CT.Class({
 		}
 		this._.built();
 	},
+	perKind: function(kind, cb) {
+		if (this[kind])
+			for (var item in this[kind])
+				cb(this[kind][item]);
+	},
+	perKinds: function(kinds, cb) {
+		for (var kind of kinds)
+			this.perKind(kind, cb);
+	},
 	getKind: function(kind, overlapper, justover) {
 		var name, zc = zero.core, touching = zc.util.touching;
 		overlapper = overlapper || zc.current.person.body;
