@@ -131,6 +131,10 @@ window.testEl = function() {
 	return testApp("Elevator", "templates.one.appliance.elevator.spooky");
 };
 
+window.testWaHe = function() {
+	return testApp("WaterHeater", "templates.one.appliance.waterheater.rusty");
+};
+
 var compy = function(name, screenSaver, program, data, x) {
 	const tbase = "templates.one.appliance.computer.";
 	return testApp("Computer", tbase + name, {

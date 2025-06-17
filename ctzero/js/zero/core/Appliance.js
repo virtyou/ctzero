@@ -41,7 +41,7 @@ zero.core.Appliance = CT.Class({
 	}
 }, zero.core.Thing);
 
-zero.core.Appliance.varieties = ["panel", "bulb", "gate", "elevator", "computer"];
+zero.core.Appliance.varieties = ["panel", "bulb", "gate", "elevator", "computer", "waterheater"];
 zero.core.Appliance.templates = {}; // filled in by one
 
 zero.core.Appliance.tmpopts = function(app) {

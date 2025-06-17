@@ -5,7 +5,7 @@ zero.core.Room = CT.Class({
 		objects: 0
 	},
 	_tickers: [],
-	_electrical: ["panel", "bulb", "gate", "elevator", "computer"],
+	_electrical: ["panel", "bulb", "gate", "elevator", "computer", "waterheater"],
 	_structural: ["obstacle", "floor", "wall", "ramp", "stairs", "curtain", "boulder", "stala", "clutter"],
 	_surfaces: ["obstacle", "floor", "ramp", "stairs", "boulder", "stala", "elevator"],
 	_bumpers: ["wall", "obstacle", "boulder", "stala", "gate"],
@@ -539,11 +539,13 @@ zero.core.Room = CT.Class({
 		var base = this.elecBase(cat), pbase = {
 			kind: cat,
 			circuit: base.circuit || "default"
-		};
+		}, zca = zero.core.Appliance;
 		if (cat == "panel")
 			pbase.thing = "Panel";
+		else if (cat == "waterheater")
+			pbase.subclass = zca.WaterHeater;
 		else
-			pbase.subclass = zero.core.Appliance[CT.parse.capitalize(cat)];
+			pbase.subclass = zca[CT.parse.capitalize(cat)];
 		if (typeof i != "number")
 			i = base.parts.length;
 		return CT.merge(app, {
@@ -561,7 +563,6 @@ zero.core.Room = CT.Class({
 	buildElectrical: function() {
 		var oz = this.opts, pz = oz.parts,
 			el = oz.electrical, appy = zero.core.Appliance;
-		let app, p;
 		appy.initCircuits(el.circuits);
 		this._electrical.forEach(this.buildAppliances);
 	},
