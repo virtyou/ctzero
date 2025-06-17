@@ -8,7 +8,7 @@ zero.core.Room = CT.Class({
 	_electrical: ["panel", "bulb", "gate", "elevator", "computer", "waterheater"],
 	_structural: ["obstacle", "floor", "wall", "ramp", "stairs", "curtain", "boulder", "stala", "clutter"],
 	_surfaces: ["obstacle", "floor", "ramp", "stairs", "boulder", "stala", "elevator"],
-	_bumpers: ["wall", "obstacle", "boulder", "stala", "gate"],
+	_bumpers: ["wall", "obstacle", "boulder", "stala", "gate", "waterheater"],
 	_wallers: ["ramp", "elevator"],
 	_wallerers: ["wall", "gate"],
 	_interactives: {
