@@ -5,7 +5,7 @@ zero.core.Appliance.Elevator = CT.Class({
 	},
 	open: function(tar) {
 		const gz = this.gates;
-		gz[tar].open(() => gz.main.open(this._unmove));
+		gz[tar || "main"].open(() => gz.main.open(this._unmove));
 	},
 	do: function(order) {
 		if (!this.power) return this.log("do(", order, ") aborted - no power!");
