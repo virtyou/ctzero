@@ -319,7 +319,7 @@ zero.core.Thing = CT.Class({
 		this.adjust("position", "y", this.homeY);
 	},
 	simpleBound: function() { // bound ONLY
-		this.log("simpleBound");
+//		this.log("simpleBound");
 		setTimeout(this._.setBounds, 200);
 	},
 	basicBound: function(toeOff) { // bare bones
