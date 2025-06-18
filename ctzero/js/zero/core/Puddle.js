@@ -3,6 +3,11 @@ zero.core.Puddle = CT.Class({
 	getTop: function() {
 		return this.bounds.min.y;
 	},
+	drip: function(size) {
+		this.adjust("scale", "x", size, true);
+		this.adjust("scale", "z", size, true);
+		this.simpleBound();
+	},
 	init: function(opts) {
 		this.opts = CT.merge(opts, {
 			vstrip: "templates.one.vstrip.water",
