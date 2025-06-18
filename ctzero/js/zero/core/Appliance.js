@@ -18,6 +18,9 @@ zero.core.Appliance = CT.Class({
 		this.sfx(zero.core.Appliance.audio[name]);
 	},
 	onremove: function() {
+		this._audio && this._audio.pause();
+		delete this._audios;
+		delete this._audio;
 		this.unplug();
 	},
 	initCircuit: function() {
