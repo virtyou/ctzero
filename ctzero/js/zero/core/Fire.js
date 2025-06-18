@@ -24,13 +24,11 @@ zero.core.Fire = CT.Class({
 		}
 	},
 	onremove: function() {
+		this.unambient();
 		this.smoke && this.smoke.undrip();
 		this.sparks && this.sparks.undrip();
 		this.opts.regTick && this.unregTicker();
-		this._audio && this._audio.pause();
 		clearTimeout(this.flickerer);
-		delete this._audio;
-		delete this._audios;
 	},
 	ignite: function() {
 		if (this.opts.loudIgnite)

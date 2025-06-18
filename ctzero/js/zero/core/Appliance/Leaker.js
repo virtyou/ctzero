@@ -17,11 +17,9 @@ zero.core.Appliance.Leaker = CT.Class({
 		this.puddle.onReady(this.drip);
 	},
 	onremove: function() {
-		this._audio && this._audio.pause();
-		clearTimeout(this.dripper);
-		delete this._audios;
-		delete this._audio;
 		this.unplug();
+		this.unambient();
+		clearTimeout(this.dripper);
 	},
 	init: function(opts) {
 		this.opts = CT.merge(opts, {

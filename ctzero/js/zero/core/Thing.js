@@ -871,10 +871,19 @@ zero.core.Thing = CT.Class({
 		this.onremove && this.onremove();
 		oz.onremove && oz.onremove();
 	},
+	unambient: function() {
+		if (this._audio) {
+			this._audio.pause();
+			delete this._audio;
+		}
+		if (this._audios) {
+			for (var a in this._audios)
+				delete this._audios[a];
+			delete this._audios;
+		}
+	},
 	onremove: function() {
-		this._audio && this._audio.pause();
-		delete this._audio;
-		delete this._audios;
+		this.unambient();
 	},
 	detach: function(cname) {
 		var thing = this[cname];
