@@ -146,18 +146,6 @@ zero.core.Pool = CT.Class({
 			rotation: [Math.PI / 2, 0, 0]
 		});
 	},
-	ambience: function(sound) { // within/without
-		if (!this._audios) return;
-		this.log("playing", sound);
-		this._audio && this._audio.pause();
-		this._audio = this._audios[sound];
-		zero.core.util.playMedia(this._audio);
-	},
-	onremove: function() {
-		this._audio && this._audio.pause();
-		delete this._audio;
-		delete this._audios;
-	},
 	init: function(opts) {
 		if (opts.lava) {
 			opts = CT.merge(opts, {
@@ -183,6 +171,7 @@ zero.core.Pool = CT.Class({
 			fog: false,
 			smoke: false,
 			glow: false,
+			ambients: ["without", "within"],
 			plane: [800, 800, 22, 44],
 			cam: [1, 1000000, 512],
 			camPos: {
@@ -211,13 +200,5 @@ zero.core.Pool = CT.Class({
 			cubeCam = this.cam = new THREE.CubeCamera(c[0], c[1], c[2]);
 		zero.core.util.update(opts.camPos, cubeCam.position);
 		opts.material.envMap = this.cam.renderTarget.texture;
-		var PA = zero.core.Pool.audio;
-		if (PA) {
-			this._audios = {
-				within: zero.core.audio.ambience(PA.within, 0.1),
-				without: zero.core.audio.ambience(PA.without, 0.1, true)
-			};
-			this._audio = this._audios.without;
-		}
 	}
 }, zero.core.Thing);

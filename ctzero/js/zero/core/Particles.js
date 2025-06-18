@@ -113,9 +113,8 @@ zero.core.Particles = CT.Class({
 		delete this.dripper;
 	},
 	onremove: function() {
-		this._audio && this._audio.pause();
+		this.unambient();
 		this.dripper && this.undrip();
-		delete this._audio;
 	},
 	init: function(opts) {
 		this.opts = opts = CT.merge(opts, core.config.ctzero.env[opts.name], zero.base.particles[opts.name], {
@@ -123,7 +122,8 @@ zero.core.Particles = CT.Class({
 			size: 5,
 			sizeVariance: 5,
 			velocity: [0, 0, 0],
-			variance: [0, 0, 0]
+			variance: [0, 0, 0],
+			ambients: [opts.name]
 		}, this.opts);
 		if (opts.pcolor) {
 			if (!opts.pmat)
@@ -132,8 +132,5 @@ zero.core.Particles = CT.Class({
 		}
 		if (opts.drip)
 			this.dripper = setInterval(this.release, 1000 / (opts.count * opts.dissolve || 1), 1);
-		var PA = zero.core.Particles.audio;
-		if (PA && PA[opts.name])
-			this._audio = zero.core.audio.ambience(PA[opts.name], 0.1, true);
 	}
 }, zero.core.Thing);

@@ -319,7 +319,7 @@ zero.core.Thing = CT.Class({
 		this.adjust("position", "y", this.homeY);
 	},
 	simpleBound: function() { // bound ONLY
-		this.log("simpleBound");
+//		this.log("simpleBound");
 		setTimeout(this._.setBounds, 200);
 	},
 	basicBound: function(toeOff) { // bare bones
@@ -356,6 +356,27 @@ zero.core.Thing = CT.Class({
 	sfx: function(auds) {
 		var zc = zero.core;
 		zc.audio.sfx(CT.data.choice(auds), this.vmult * zc.util.close2u(this));
+	},
+	ambience: function(sound) {
+		if (!this._audios) return;
+		this.log("playing", sound);
+		this._audio && this._audio.pause();
+		if (sound) {
+			this._audio = CT.data.choice(this._audios[sound]);
+			zero.core.util.playMedia(this._audio);
+		}
+	},
+	setAmbs: function() {
+		var aud, myauds, oz = this.opts,
+			auds = CT.module(oz.audroot + ".audio");
+		if (!auds) return;
+		myauds = oz.ambients.filter(a => a in auds);
+		if (!myauds.length) return;
+		this._audios = {};
+		for (aud in auds)
+			if (myauds.includes(aud))
+				this._audios[aud] = auds[aud].map(a => zero.core.audio.ambience(a, 0.1));
+		this.ambience(myauds[0]);
 	},
 	playSong: function(song, onPlaySong) {
 		if (!this._audio) {
@@ -850,6 +871,20 @@ zero.core.Thing = CT.Class({
 		this.onremove && this.onremove();
 		oz.onremove && oz.onremove();
 	},
+	unambient: function() {
+		if (this._audio) {
+			this._audio.pause();
+			delete this._audio;
+		}
+		if (this._audios) {
+			for (var a in this._audios)
+				delete this._audios[a];
+			delete this._audios;
+		}
+	},
+	onremove: function() {
+		this.unambient();
+	},
 	detach: function(cname) {
 		var thing = this[cname];
 		if (!(thing.thring || thing.group)) { // kind map!
@@ -895,6 +930,15 @@ zero.core.Thing = CT.Class({
 				this.basicBound();
 		}
 		this._.built();
+	},
+	perKind: function(kind, cb) {
+		if (this[kind])
+			for (var item in this[kind])
+				cb(this[kind][item]);
+	},
+	perKinds: function(kinds, cb) {
+		for (var kind of kinds)
+			this.perKind(kind, cb);
 	},
 	getKind: function(kind, overlapper, justover) {
 		var name, zc = zero.core, touching = zc.util.touching;
@@ -1120,6 +1164,8 @@ zero.core.Thing = CT.Class({
 			scene: zc.camera.scene,
 			parts: [],
 			bones: [],
+			ambients: [],
+			audroot: this.CLASSNAME,
 			texture: "",
 			stripset: "",
 			loader: "JSONLoader",
@@ -1186,6 +1232,7 @@ zero.core.Thing = CT.Class({
 				thiz[iz][name] = zc[influence + "Controller"].add(opts[iz][name], name, thiz);
 		});
 		setTimeout(function() {
+			thiz.setAmbs();
 			thiz.opts.credit && zcc.creditor && zcc.creditor(opts.name, thiz.opts.credit);
 			thiz.opts.deferBuild || thiz.build();
 		}); // next post-init tick

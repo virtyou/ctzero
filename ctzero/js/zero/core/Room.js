@@ -5,12 +5,16 @@ zero.core.Room = CT.Class({
 		objects: 0
 	},
 	_tickers: [],
-	_electrical: ["panel", "bulb", "gate", "elevator", "computer"],
+	_electrical: ["panel", "bulb", "gate", "elevator", "computer", "waterheater"],
 	_structural: ["obstacle", "floor", "wall", "ramp", "stairs", "curtain", "boulder", "stala", "clutter"],
 	_surfaces: ["obstacle", "floor", "ramp", "stairs", "boulder", "stala", "elevator"],
-	_bumpers: ["wall", "obstacle", "boulder", "stala", "gate"],
+	_bumpers: ["wall", "obstacle", "boulder", "stala", "gate", "waterheater"],
 	_wallers: ["ramp", "elevator"],
 	_wallerers: ["wall", "gate"],
+	_controllable: ["elevator", "waterheater"],
+	_togglable: ["waterheater"],
+	_usable: ["computer"],
+	_openable: ["gate"],
 	_interactives: {
 		brittle: ["boulder", "stala"],
 		frozen: ["boulder", "stala"],
@@ -35,10 +39,23 @@ zero.core.Room = CT.Class({
 		this.perMenagerie(men => men.tick(dts));
 		this.jostle();
 	},
+	perControllable: function(cb) {
+		this.perKinds(this._controllable, cb);
+	},
+	perTogglable: function(cb) {
+		this.perKinds(this._togglable, cb);
+	},
+	perOpenable: function(cb) {
+		this.perKinds(this._openable, cb);
+	},
+	perUsable: function(cb) {
+		this.perKinds(this._usable, cb);
+	},
+	perPanel: function(cb) {
+		this.perKind("panel", cb);
+	},
 	perMenagerie: function(cb) {
-		if (this.menagerie)
-			for (men in this.menagerie)
-				cb(this.menagerie[men]);
+		this.perKind("menagerie", cb);
 	},
 	getMounts: function() {
 		var mounts = [];
@@ -204,6 +221,14 @@ zero.core.Room = CT.Class({
 	},
 	getComputer: function(overlapper) {
 		return this.getKind("computer", overlapper);
+	},
+	getTogglable: function(overlapper) {
+		var kind, item;
+		for (kind of this._togglable) {
+			item = this.getKind(kind, overlapper);
+			if (item)
+				return item;
+		}
 	},
 	getInteractive: function(overlapper, feature) {
 		var item, touching = zero.core.util.touching;
@@ -436,6 +461,10 @@ zero.core.Room = CT.Class({
 		this._assembled.objects -= 1;
 		this.detach(obj.name);
 	},
+	getObjects: function(secondaries) {
+		var obz = this.objects;
+		return secondaries ? obz : obz.filter(o => !o.opts.secondary);
+	},
 	clear: function(retain_lights, unload) {
 		if (retain_lights) {
 			if (this.thring) {
@@ -524,8 +553,8 @@ zero.core.Room = CT.Class({
 				stepper: stepper,
 				material: base.material,
 				geometry: sdz && d2g(sdz),
-				castShadow: opts.shadows,
-				receiveShadow: opts.shadows
+				castShadow: opts.shadows && !side.noshad,
+				receiveShadow: opts.shadows && !side.noshad
 			}));
 		});
 	},
@@ -539,11 +568,13 @@ zero.core.Room = CT.Class({
 		var base = this.elecBase(cat), pbase = {
 			kind: cat,
 			circuit: base.circuit || "default"
-		};
+		}, zca = zero.core.Appliance;
 		if (cat == "panel")
 			pbase.thing = "Panel";
+		else if (cat == "waterheater")
+			pbase.subclass = zca.WaterHeater;
 		else
-			pbase.subclass = zero.core.Appliance[CT.parse.capitalize(cat)];
+			pbase.subclass = zca[CT.parse.capitalize(cat)];
 		if (typeof i != "number")
 			i = base.parts.length;
 		return CT.merge(app, {
@@ -561,7 +592,6 @@ zero.core.Room = CT.Class({
 	buildElectrical: function() {
 		var oz = this.opts, pz = oz.parts,
 			el = oz.electrical, appy = zero.core.Appliance;
-		let app, p;
 		appy.initCircuits(el.circuits);
 		this._electrical.forEach(this.buildAppliances);
 	},

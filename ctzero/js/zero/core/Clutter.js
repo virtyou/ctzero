@@ -63,7 +63,7 @@ zero.core.Clutter = CT.Class({
 			size: 50,
 			mass: 1,
 			rows: 2,
-			cols: 3,
+			cols: 2,
 			layers: 2,
 			friction: 0,
 			geotype: "box" // box|cone|sphere|random
