@@ -1,5 +1,8 @@
 zero.core.Puddle = CT.Class({
 	CLASSNAME: "zero.core.Puddle",
+	getTop: function() {
+		return this.bounds.min.y;
+	},
 	init: function(opts) {
 		this.opts = CT.merge(opts, {
 			vstrip: "templates.one.vstrip.water",
