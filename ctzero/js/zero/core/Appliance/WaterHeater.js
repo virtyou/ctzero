@@ -57,4 +57,4 @@ zero.core.Appliance.WaterHeater = CT.Class({
 			audroot: "zero.core.Appliance"
 		}, this.opts);
 	}
-}, zero.core.Appliance);
+}, zero.core.Appliance.Leaker);

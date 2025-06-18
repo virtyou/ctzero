@@ -7,4 +7,5 @@ CT.require("zero.core.Appliance.Gate");
 CT.require("zero.core.Appliance.Elevator");
 CT.require("zero.core.Appliance.Computer");
 
+CT.require("zero.core.Appliance.Leaker");
 CT.require("zero.core.Appliance.WaterHeater");
