@@ -461,6 +461,10 @@ zero.core.Room = CT.Class({
 		this._assembled.objects -= 1;
 		this.detach(obj.name);
 	},
+	getObjects: function(secondaries) {
+		var obz = this.objects;
+		return secondaries ? obz : obz.filter(o => !o.opts.secondary);
+	},
 	clear: function(retain_lights, unload) {
 		if (retain_lights) {
 			if (this.thring) {
