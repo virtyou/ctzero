@@ -36,7 +36,10 @@ def trans(words, sourceLang, targetLang):
     t = Translation.query(Translation.words == words,
         Translation.source == sourceLang, Translation.target == targetLang).get()
     if not t:
-        res = output(CMDS["trans"]%(words, sourceLang, targetLang)).split(": ")[-1]
+        tmode = config.ctzero.trans
+        res = output(CMDS["trans"][tmode]%(sourceLang, targetLang, words))
+        if tmode == "gcloud":
+            res = res.split(": ")[-1]
         t = Translation(words=words, source=sourceLang, target=targetLang, result=res)
         t.put()
     return t.result
@@ -99,7 +102,10 @@ def rec(language, data):
     cfg = config.ctzero.asr
     lng = LANG[language]
     intcom = comz["interpret"][cfg.mode]
-    if cfg.mode == "baidu":
+    if cfg.mode == "vosk": # language code?
+        cmd(intcom%(spath, spath))
+        res = read("%s.txt"%(spath,)).replace("\n", " ")
+    elif cfg.mode == "baidu":
         baidu_token()
         cmd(intcom%(spath, lng.split("-")[0], cfg.token, spath))
         res = read("%s.json"%(spath,), isjson=True)["result"][0]

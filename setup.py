@@ -13,6 +13,8 @@ setup(
     ],
     zip_safe = False,
     install_requires = [
+        "vosk >= 0.3.45",
+        "argostranslate >= 1.9.6"
     ],
     entry_points = '''''',
     classifiers = [

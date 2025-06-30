@@ -24,9 +24,10 @@ routes = {
 	"/ardata": "ardata"
 }
 cfg = {
+	"trans": "argos",       # or gcloud
 	"asr": {
 		"audlib": "ffmpeg", # or avconv (certain older distros)
-		"mode": "gcloud",   # or "baidu" -- default "gcloud" mode requires gcloud to be installed and configured
+		"mode": "vosk",     # or "gcloud" or "baidu"
 		"id": None,         # baidu only
 		"secret": None      # baidu only
 	},
