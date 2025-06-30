@@ -21,7 +21,7 @@ CMDS = {
 }
 AIZ = {
     "aiio": {
-        "host": "ai.samsaravr.io",
+        "host": "ai.fzn.party",
         "path": "_respond",
         "proto": "https"
     },
