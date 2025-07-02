@@ -1,8 +1,8 @@
 # coding=utf-8
 import os, string, json, time
-from cantools.util import read, write, cmd, output
+from cantools.util.ai import tox, vox, kvoices
+from cantools.util import read, write, cmd, output, repitch
 from cantools.web import log, post, read_file
-from cantools.util.admin import ai as ddgchat
 from model import Translation
 from .spcfg import *
 from string import digits
@@ -13,6 +13,11 @@ except: # py38
 
 goodchars = letters + digits
 DUX = ["o3-mini", "gpt-4o-mini", "claude-3-haiku", "llama-3.1-70b", "mixtral-8x7b"]
+rates = ["x-slow", "slow", "medium", "fast", "x-fast"]
+pitches = ["x-low", "low", "medium", "high", "x-high"]
+
+def name2val(item, items):
+    return 0.2 + 0.4 * items.index(item)
 
 def load_token(now):
     cfg = config.ctzero.asr
@@ -48,8 +53,8 @@ def chat(question, identity=None, mood=None, options=None, name=None, asker=None
     cfg = config.ctzero.chat
     aicfg = AIZ[cfg.mode]
     if identity in DUX:
-        log("ddgchat(%s) -> %s"%(identity, question))
-        return ddgchat(question, identity, shorten="PHRASE", strip=True)
+        log("tox(%s) -> %s"%(identity, question))
+        return tox(question, identity, shorten="PHRASE", strip=True)
     if cfg.mode == "aiio":
         return post("%s://%s/%s"%(aicfg["proto"], aicfg["host"], aicfg["path"]), data={
             "identity": identity or cfg.botname,
@@ -78,14 +83,20 @@ def say(language, voice, words, prosody):
     fpjson = "%s.json"%(fpath,)
     if not os.path.exists(fpjson):
         fullwords = words.replace('"', '')
-        fullfpath = fpath
-        start = "<speak><prosody"
-        for key, val in prosody.items():
-            start += " %s='%s'"%(key, val)
-        fullwords = "%s>%s</prosody></speak>"%(start, fullwords)
-        fullfpath = "--text-type ssml %s"%(fpath,)
-        for command in comz:
-            cmd(command%(voice, fullwords, fullfpath))
+        if voice in kvoices:
+            # TODO : language code conversion! (replace "a")
+            vox(fullwords, voice, name2val(rate, rates), "a", fpath)
+            pitchval = name2val(pitch, pitches)
+            if pitchval != 1:
+                repitch(fpath, pitchval)
+        else:
+            start = "<speak><prosody"
+            for key, val in prosody.items():
+                start += " %s='%s'"%(key, val)
+            fullwords = "%s>%s</prosody></speak>"%(start, fullwords)
+            fullfpath = "--text-type ssml %s"%(fpath,)
+            for command in comz:
+                cmd(command%(voice, fullwords, fullfpath))
     data = read(fpjson)
     robj = {}
     robj["url"] = "/%s.mp3"%(fpath,)
