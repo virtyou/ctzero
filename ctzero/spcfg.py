@@ -9,7 +9,7 @@ CMDS = {
         "argos": 'argos-translate --from %s --to %s "%s"',
         "gcloud": 'gcloud alpha ml translate translate-text --source-language=%s --target-language=%s --content="%s"'
     },
-    "say": [
+    "say": [ # polly - kokoro uses ctutil ai vox
         'aws polly synthesize-speech --output-format mp3 --voice-id %s --text "%s" %s.mp3',
         'aws polly synthesize-speech --output-format json --voice-id %s --text "%s" --speech-mark-types=\'["viseme"]\' %s.json'
     ],
