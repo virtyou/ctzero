@@ -1,5 +1,6 @@
+import random
 from cantools.web import respond, succeed, cgi_get, local
-from ctzero.speech import chat, say, rec, trans
+from ctzero.speech import chat, say, rec, trans, kvoices
 
 def response():
     action = cgi_get("action", choices=["say", "rec", "chat", "trans"])
@@ -13,7 +14,7 @@ def response():
             cgi_get("name", required=False),
             cgi_get("asker", default=addr)))
     language = cgi_get("language")
-    voice = cgi_get("voice", default="Joanna")
+    voice = cgi_get("voice", default=random.choice(kvoices))
     if action == "say":
         words = cgi_get("words")
         prosody = cgi_get("prosody", default={

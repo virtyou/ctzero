@@ -755,7 +755,7 @@ zero.core.Person = CT.Class({
 			gestures: {},
 			responses: {},
 			positioners: {},
-			voice: "Joanna"
+			voice: "af_heart"
 		});
 		this.opts.gestures = CT.merge(this.opts.gestures, zero.base.body.gestures);
 		this.opts.dances = CT.merge(this.opts.dances, zero.base.body.dances);
