@@ -24,6 +24,7 @@ routes = {
 	"/ardata": "ardata"
 }
 cfg = {
+	"threadspeech": False,
 	"trans": "argos",       # or gcloud
 	"asr": {
 		"audlib": "ffmpeg", # or avconv (certain older distros)

@@ -1,6 +1,7 @@
 import random
 from cantools.web import respond, succeed, cgi_get, local
 from ctzero.speech import chat, say, rec, trans, kvoices
+from cantools import config
 
 def response():
     action = cgi_get("action", choices=["say", "rec", "chat", "trans"])
@@ -27,4 +28,4 @@ def response():
     elif action == "trans":
         succeed(trans(cgi_get("words"), language, cgi_get("target")))
 
-respond(response, threaded=True)
+respond(response, threaded=config.ctzero.threadspeech)
