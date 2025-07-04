@@ -1,8 +1,8 @@
 # coding=utf-8
 import os, string, json, time
-from cantools.util.ai import tox, vox, kvoices
+from cantools.util.ai import vox, kvoices, tox, pb
 from cantools.util import read, write, cmd, output, repitch
-from cantools.web import log, post, read_file
+from cantools.web import log, read_file
 from model import Translation
 from .spcfg import *
 from string import digits
@@ -12,7 +12,6 @@ except: # py38
     from string import ascii_letters as letters
 
 goodchars = letters + digits
-DUX = ["o3-mini", "gpt-4o-mini", "claude-3-haiku", "llama-3.1-70b", "mixtral-8x7b"]
 rates = ["x-slow", "slow", "medium", "fast", "x-fast"]
 pitches = ["x-low", "low", "medium", "high", "x-high"]
 
@@ -51,22 +50,12 @@ def trans(words, sourceLang, targetLang):
 
 def chat(question, identity=None, mood=None, options=None, name=None, asker=None):
     cfg = config.ctzero.chat
-    aicfg = AIZ[cfg.mode]
-    if identity in DUX:
-        log("tox(%s) -> %s"%(identity, question))
-        return tox(question, identity, shorten="PHRASE", strip=True)
-    if cfg.mode == "aiio":
-        return post("%s://%s/%s"%(aicfg["proto"], aicfg["host"], aicfg["path"]), data={
-            "identity": identity or cfg.botname,
-            "statement": question,
-            "options": options,
-            "mood": mood,
-            "name": name,
-            "asker": asker
-        }, ctjson=True)
-    from pb_py import main as PB
-    resp = PB.talk(cfg.userkey, cfg.appid, aicfg["host"], cfg.botname, question)["response"]
-    return resp.split("[URL]")[0]
+    if cfg.mode == "pandorabots":
+        log("pb(%s - using %s) -> %s"%(identity, cfg.botname, question))
+        return pb(question, cfg.botname, cfg.appid, cfg.userkey)
+    identity = identity or cfg.botname
+    log("tox(%s) -> %s"%(identity, question))
+    return tox(question, identity, name, mood, asker, options)
 
 def say(language, voice, words, prosody):
     comz = CMDS["say"]

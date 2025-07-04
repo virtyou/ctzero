@@ -23,14 +23,4 @@ CMDS = {
     },
     "baidu_token": 'wget "https://openapi.baidu.com/oauth/2.0/token?grant_type=client_credentials&client_id=%s&client_secret=%s&" -O baidu.token' # id, secret
 }
-AIZ = {
-    "aiio": {
-        "host": "ai.fzn.party",
-        "path": "_respond",
-        "proto": "https"
-    },
-    "pandorabots": {
-        "host": "aiaas.pandorabots.com"
-    }
-}
 BAIDU_TOKEN_LIFE = 2592000
