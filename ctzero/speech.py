@@ -16,7 +16,7 @@ rates = ["x-slow", "slow", "medium", "fast", "x-fast"]
 pitches = ["x-low", "low", "medium", "high", "x-high"]
 
 def name2val(item, items):
-    return 0.2 + 0.4 * items.index(item)
+    return 0.6 + 0.2 * items.index(item)
 
 def load_token(now):
     cfg = config.ctzero.asr
