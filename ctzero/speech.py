@@ -12,11 +12,22 @@ except: # py38
     from string import ascii_letters as letters
 
 goodchars = letters + digits
-rates = ["x-slow", "slow", "medium", "fast", "x-fast"]
-pitches = ["x-low", "low", "medium", "high", "x-high"]
+transformers = {
+    "rate": {
+        "base": 0.6,
+        "unit": 0.2,
+        "varieties": ["x-slow", "slow", "medium", "fast", "x-fast"]
+    },
+    "pitch": {
+        "base": 0.8,
+        "unit": 0.1,
+        "varieties": ["x-low", "low", "medium", "high", "x-high"]
+    }
+}
 
-def name2val(item, items):
-    return 0.6 + 0.2 * items.index(item)
+def name2val(item, variety):
+    cfg = transformers[variety]
+    return cfg["base"] + cfg["unit"] * cfg["varieties"].index(item)
 
 def load_token(now):
     cfg = config.ctzero.asr
@@ -74,8 +85,8 @@ def say(language, voice, words, prosody):
         fullwords = words.replace('"', '')
         if voice in kvoices:
             # TODO : language code conversion! (replace "a")
-            vox(fullwords, voice, name2val(rate, rates), "a", fpath)
-            pitchval = name2val(pitch, pitches)
+            vox(fullwords, voice, name2val(rate, "rate"), "a", fpath)
+            pitchval = name2val(pitch, "pitch")
             if pitchval != 1:
                 repitch(fpath, pitchval)
         else:
