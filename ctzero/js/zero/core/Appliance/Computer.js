@@ -32,6 +32,9 @@ zero.core.Appliance.Computer = CT.Class({
 			bopts.planeGeometry = this.opts.screenDims;
 		curprog ? curprog.onReady(setter) : setter();
 	},
+	iframe: function(url) {
+		CT.modal.iframe(url);
+	},
 	video: function(data) { // supports "fzn:" and "fzn:up:" vlinx
 		this.setcur({ video: data });
 	},
@@ -109,7 +112,7 @@ zero.core.Appliance.Computer = CT.Class({
 	init: function(opts) {
 		this.opts = opts = CT.merge(opts, {
 			data: null,   // ""
-			program: null // video|vstrip|screenSaver|text|message|?
+			program: null // video|vstrip|screenSaver|text|message|iframe|?
 		}, this.opts, {
 			keyboard: true,
 			screenPos: [0, 0, 0],
@@ -131,7 +134,7 @@ zero.core.Appliance.Computer.selectors = {
 	},
 	program: function(cb, browser) {
 		const csz = zero.core.Appliance.Computer.selectors,
-			ops = ["video", "screenSaver", "message"];
+			ops = ["video", "screenSaver", "chess", "message"];
 		browser && ops.push("browse");
 		csz.prompt("program", ops, function(program) {
 			let cbwrap = data => cb({ program: program, data: data });
@@ -144,6 +147,8 @@ zero.core.Appliance.Computer.selectors = {
 				csz.prompt("screenSaver", Object.keys(templates.one.vstrip), cbwrap);
 			else if (program == "browse")
 				browser();
+			else if (program == "chess")
+				cb({ program: "iframe", data: "https://mariobalibrera.com/playmics/play.html#auto" });
 			else // video
 				zero.core.util.vidProg(cbwrap);
 		});
