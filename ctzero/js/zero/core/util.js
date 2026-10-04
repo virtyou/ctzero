@@ -795,6 +795,7 @@ zero.core.util = {
 	    	t(dts, rdts);
 	    zero.core.ammo.tick(zcu.dt);
 	    zero.core.camera.tick();
+	    zero.core.Reflector.renderAll();
 	    zero.core.camera.render();
 	},
 	ontick: function(cb) {
