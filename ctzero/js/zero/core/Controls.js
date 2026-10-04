@@ -498,7 +498,7 @@ zero.core.Controls = CT.Class({
 				this.setNum(num + 1, gestures[num], dances[num]);
 				num += 1;
 			}
-		} else if (["poster", "portal", "screen", "stream"].indexOf(this.target.opts.kind) != -1) {
+		} else if (zero.core.util.wallstickers.includes(this.target.opts.kind)) {
 			CT.key.on("UP", placer("y", 0), placer("y", speed));
 			CT.key.on("DOWN", placer("y", 0), placer("y", -speed));
 			wall = this.target.opts.wall;

@@ -26,7 +26,7 @@ zero.core.Mirror = CT.Class({
 			part: {}
 		};
 		this.opts = opts = CT.merge(opts, {
-			kind: "poster",
+			kind: "mirror",
 			width: 40,
 			height: 60,
 			textureWidth: 1024,
