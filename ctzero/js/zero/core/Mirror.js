@@ -37,7 +37,7 @@ zero.core.Mirror = CT.Class({
 			opts.frame = CT.merge(opts.frame, frameDefaults);
 		// Reflector.init() already ran (and derived planeGeometry from ITS width/height
 		// defaults) before this - redo it now that width/height reflect Mirror's own defaults
-		if (!this.min_opts.planeGeometry)
+		if (!this.min_opts.planeGeometry && !this.min_opts.geometry)
 			opts.planeGeometry = [opts.width, opts.height];
 	}
 }, zero.core.Reflector);

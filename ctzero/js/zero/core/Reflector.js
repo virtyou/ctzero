@@ -144,8 +144,11 @@ zero.core.Reflector = CT.Class({
 		}, this.opts);
 		// min_opts is the pristine pre-merge opts (set once by the base Thing.init()) - checking
 		// it rather than opts.planeGeometry matters because a subclass (e.g. Mirror) can still
-		// override width/height in its own init(), which runs after this one
-		if (!this.min_opts.planeGeometry)
+		// override width/height in its own init(), which runs after this one. Also skip when an
+		// explicit geometry was passed in (e.g. Pool sharing its own wave-animated geometry so
+		// the reflection distorts with the waves for free) - planeGeometry would otherwise
+		// clobber it in initGeo().
+		if (!this.min_opts.planeGeometry && !this.min_opts.geometry)
 			opts.planeGeometry = [opts.width, opts.height];
 
 		this.renderTarget = new THREE.WebGLRenderTarget(opts.textureWidth, opts.textureHeight, {

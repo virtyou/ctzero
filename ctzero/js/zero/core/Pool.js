@@ -19,6 +19,7 @@ zero.core.Pool = CT.Class({
 		geo.computeFaceNormals();
 		geo.computeVertexNormals();
 		geo.verticesNeedUpdate = true;
+		geo.normalsNeedUpdate = true; // separate dirty flag - without it the GPU normals never refresh
 		this.bubbles && this.bubbles.tick(dts);
 		this.smoke && this.smoke.tick(dts);
 		this.fog && this.fog.tick(dts);
@@ -140,8 +141,10 @@ zero.core.Pool = CT.Class({
 			partz.push({
 				thing: "Reflector",
 				name: "reflector",
-				width: oz.plane[0],
-				height: oz.plane[1],
+				// shares the water's own wave-animated geometry (see tick() above) instead of
+				// building a flat plane, so the projective reflection lookup - which samples
+				// per actual vertex position - distorts with the waves for free
+				geometry: this.thring.geometry,
 				position: [0, 0, 0.1], // tiny nudge off the water plane to avoid z-fighting
 				color: oz.watermat ? 0xccccff : 0x7f7f7f,
 				opacity: 0.7,
