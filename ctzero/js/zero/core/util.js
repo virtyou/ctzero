@@ -17,6 +17,7 @@ zero.core.util = {
 	_quatter: new THREE.Quaternion(),
 	rates: ["x-slow", "slow", "medium", "fast", "x-fast"],
 	pitches: ["x-low", "low", "medium", "high", "x-high"],
+	wallstickers: ["poster", "portal", "screen", "stream", "mirror"],
 	worns: [
 		"aura", "pelvis", "lumbar", "ribs", "neck", "head", "finger",
 		"hip", "knee", "ankle", "toe", "clavicle", "shoulder", "elbow", "wrist"
@@ -795,6 +796,7 @@ zero.core.util = {
 	    	t(dts, rdts);
 	    zero.core.ammo.tick(zcu.dt);
 	    zero.core.camera.tick();
+	    zero.core.Reflector.renderAll();
 	    zero.core.camera.render();
 	},
 	ontick: function(cb) {

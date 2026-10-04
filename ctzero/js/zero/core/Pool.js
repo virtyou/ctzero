@@ -8,7 +8,7 @@ zero.core.Pool = CT.Class({
 		if (zcu.shouldSkip() || !zero.core.camera.visible(this)) return;
 		var rate = zcu.tickRate(), smap = this.smap, t = zcu.ticker, i,
 			geo = this.thring.geometry, vertices = geo.vertices, vl = vertices.length,
-			mainCam, campos, max = Math.min(vl, this.cur + vl * rate);
+			max = Math.min(vl, this.cur + vl * rate);
 		if (this.opts.lava)
 			t = parseInt(t / 4);
 		for (i = this.cur; i < max; i++)
@@ -19,14 +19,7 @@ zero.core.Pool = CT.Class({
 		geo.computeFaceNormals();
 		geo.computeVertexNormals();
 		geo.verticesNeedUpdate = true;
-		if (!this.opts.lava && !(t % 50)) {
-			mainCam = zero.core.camera;
-			campos = mainCam.position();
-			this.cam.position.y = -campos.y - 80;
-			this.cam.position.z = campos.z;//+22;
-			this.cam.position.x = campos.x;
-			this.cam.update(mainCam.get("renderer"), mainCam.scene);
-		}
+		geo.normalsNeedUpdate = true; // separate dirty flag - without it the GPU normals never refresh
 		this.bubbles && this.bubbles.tick(dts);
 		this.smoke && this.smoke.tick(dts);
 		this.fog && this.fog.tick(dts);
@@ -86,7 +79,6 @@ zero.core.Pool = CT.Class({
 			[ph, 0, 0],
 			[ph, ph, 0]
 		], partz = oz.parts, matty = CT.merge(oz.material);
-		delete matty.envMap;
 		matty.side = THREE.DoubleSide;
 		if (oz.sides) {
 			this.topDown = true;
@@ -145,6 +137,20 @@ zero.core.Pool = CT.Class({
 			count: 3,
 			rotation: [Math.PI / 2, 0, 0]
 		});
+		if (!oz.lava) { // lava doesn't reflect
+			partz.push({
+				thing: "Reflector",
+				name: "reflector",
+				// shares the water's own wave-animated geometry (see tick() above) instead of
+				// building a flat plane, so the projective reflection lookup - which samples
+				// per actual vertex position - distorts with the waves for free
+				geometry: this.thring.geometry,
+				position: [0, 0, 0.1], // tiny nudge off the water plane to avoid z-fighting
+				color: oz.watermat ? 0xccccff : 0x7f7f7f,
+				opacity: 0.7,
+				frameSkip: 2
+			});
+		}
 	},
 	init: function(opts) {
 		if (opts.lava) {
@@ -173,10 +179,6 @@ zero.core.Pool = CT.Class({
 			glow: false,
 			ambients: ["without", "within"],
 			plane: [800, 800, 22, 44],
-			cam: [1, 1000000, 512],
-			camPos: {
-//				z: -66
-			},
 			pull: { bob: 600 }
 		}, this.opts);
 		this.cur = 0;
@@ -187,18 +189,12 @@ zero.core.Pool = CT.Class({
 			opts.geometry = new THREE.PlaneGeometry(p[0], p[1], p[2], p[3]);
 		}
 		this.smap = zero.core.trig.segs(60, opts.amplitude);
-		if (opts.lava) return this.log("skipping cam stuff for lava");
 		if (opts.watermat) {
 			opts.material = CT.merge(opts.material, {
 				transparent: true,
 				color: 0xccccff,
-				opacity: 0.92,
-				reflectivity: 0.87
+				opacity: 0.92
 			});
 		}
-		var c = opts.cam,
-			cubeCam = this.cam = new THREE.CubeCamera(c[0], c[1], c[2]);
-		zero.core.util.update(opts.camPos, cubeCam.position);
-		opts.material.envMap = this.cam.renderTarget.texture;
 	}
 }, zero.core.Thing);

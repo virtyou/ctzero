@@ -42,6 +42,8 @@ CT.require("zero.core.Stairs");
 CT.require("zero.core.Curtain");
 CT.require("zero.core.Clutter");
 CT.require("zero.core.Ramp");
+CT.require("zero.core.Reflector");
+CT.require("zero.core.Mirror");
 CT.require("zero.core.Pool");
 CT.require("zero.core.Room");
 CT.require("zero.core.Book");

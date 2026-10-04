@@ -131,7 +131,7 @@ zero.core.Thing = CT.Class({
 			if (this._.shouldMin(pname, dim))
 				sz[pname].target = pz[pname].min;
 		},
-		nomins: ["poster", "screen", "stream", "portal", "body"],
+		nomins: zero.core.util.wallstickers.concat(["body"]),
 		shouldMin: function(pname, dim) { // fix multifloor-zone portals!
 			if (!core.config.ctzero.gravity) return false;
 			return dim == "y" && this.vlower != "pool" && !this.opts.position[1] &&
@@ -226,11 +226,11 @@ zero.core.Thing = CT.Class({
 		r ? r.unregTicker(this) : zc.util.untick(this.tick);
 	},
 	autoRot: function() {
-		if (["poster", "screen", "stream", "portal"].indexOf(this.opts.kind) != -1 && "wall" in this.opts)
+		if (zero.core.util.wallstickers.includes(this.opts.kind) && "wall" in this.opts)
 			this.adjust("rotation", "y", -this.opts.wall * Math.PI / 2);
 	},
 	wallStick: function() {
-		if (["poster", "screen", "stream", "portal"].indexOf(this.opts.kind) != -1 && "wall" in this.opts) {
+		if (zero.core.util.wallstickers.includes(this.opts.kind) && "wall" in this.opts) {
 			var w = this.opts.wall, sz = this.springs;
 			if (w == 0) {
 				sz.z.bounds.min += 1;
